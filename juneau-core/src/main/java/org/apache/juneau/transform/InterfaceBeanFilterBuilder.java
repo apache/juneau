@@ -12,7 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Simple bean filter that simply identifies a class to be used as an interface
@@ -31,5 +37,39 @@ public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
 	public InterfaceBeanFilterBuilder(Class<?> interfaceClass) {
 		super(interfaceClass);
 		interfaceClass(interfaceClass);
+		Map<Class<?>,Bean> annotations = ReflectionUtils.findAnnotationsMap(Bean.class, interfaceClass);
+
+		ListIterator<Bean> li = new ArrayList<Bean>(annotations.values()).listIterator(annotations.size());
+		while (li.hasPrevious()) {
+			Bean b = li.previous();
+
+			if (! b.properties().isEmpty())
+				properties(split(b.properties(), ','));
+
+			if (! b.typeName().isEmpty())
+				typeName(b.typeName());
+
+			if (b.sort())
+				sortProperties(true);
+
+			if (! b.excludeProperties().isEmpty())
+				excludeProperties(split(b.excludeProperties(), ','));
+
+			try {
+				if (b.propertyNamer() != PropertyNamerDefault.class)
+					propertyNamer(b.propertyNamer());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+
+			if (b.interfaceClass() != Object.class)
+				interfaceClass(b.interfaceClass());
+
+			if (b.stopClass() != Object.class)
+				stopClass(b.stopClass());
+
+			if (b.beanDictionary().length > 0)
+				beanDictionary(b.beanDictionary());
+		}
 	}
 }

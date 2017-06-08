@@ -558,9 +558,9 @@ public abstract class Parser extends CoreObject {
 	 * @throws Exception
 	 */
 	protected void setParent(ClassMeta<?> cm, Object o, Object parent) throws Exception {
-		Method m = cm.getParentProperty();
+		Setter m = cm.getParentProperty();
 		if (m != null)
-			m.invoke(o, parent);
+			m.set(o, parent);
 	}
 
 	/**
@@ -574,9 +574,9 @@ public abstract class Parser extends CoreObject {
 	 */
 	protected void setName(ClassMeta<?> cm, Object o, Object name) throws Exception {
 		if (cm != null) {
-			Method m = cm.getNameProperty();
+			Setter m = cm.getNameProperty();
 			if (m != null)
-				m.invoke(o, name);
+				m.set(o, name);
 		}
 	}
 

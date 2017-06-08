@@ -53,7 +53,11 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>)
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>
+	 * 		)
+	 * 	)
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
@@ -82,7 +86,11 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>)
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>
+	 * 		)
+	 * 	)
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
@@ -133,7 +141,11 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>)
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>
+	 * 		)
+	 * 	)
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
@@ -162,7 +174,11 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>)
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>
+	 * 		)
+	 * 	)
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").

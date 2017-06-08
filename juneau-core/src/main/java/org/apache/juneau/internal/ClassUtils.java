@@ -781,4 +781,146 @@ public final class ClassUtils {
 			throw new FormattedRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
 		}
 	}
+
+	/**
+	 * Returns all the fields in the specified class and all parent classes.
+	 *
+	 * @param c The class to get all fields on.
+	 * @param parentFirst Order them in parent-class-to-child-class order, otherwise child-class-to-parent-class order.
+	 * @return An iterable of all fields in the specified class.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Iterable<Field> getAllFields(final Class c, final boolean parentFirst) {
+		return new Iterable<Field>() {
+			@Override
+			public Iterator<Field> iterator() {
+				return new Iterator<Field>(){
+					final Iterator<Class<?>> classIterator = getParentClasses(c, parentFirst, false);
+					Field[] fields = classIterator.hasNext() ? classIterator.next().getDeclaredFields() : new Field[0];
+					int fIndex = 0;
+					Field next;
+
+					@Override
+					public boolean hasNext() {
+						prime();
+						return next != null;
+					}
+
+					private void prime() {
+						if (next == null) {
+							while (fIndex >= fields.length) {
+								if (classIterator.hasNext()) {
+									fields = classIterator.next().getDeclaredFields();
+									fIndex = 0;
+								} else {
+									fIndex = -1;
+								}
+			 				}
+							if (fIndex != -1)
+								next = fields[fIndex++];
+						}
+					}
+
+					@Override
+					public Field next() {
+						prime();
+						Field f = next;
+						next = null;
+						return f;
+					}
+
+					@Override
+					public void remove() {
+					}
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns all the methods in the specified class and all parent classes.
+	 *
+	 * @param c The class to get all methods on.
+	 * @param parentFirst Order them in parent-class-to-child-class order, otherwise child-class-to-parent-class order.
+	 * @return An iterable of all methods in the specified class.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Iterable<Method> getAllMethods(final Class c, final boolean parentFirst) {
+		return new Iterable<Method>() {
+			@Override
+			public Iterator<Method> iterator() {
+				return new Iterator<Method>(){
+					final Iterator<Class<?>> classIterator = getParentClasses(c, parentFirst, true);
+					Method[] methods = classIterator.hasNext() ? classIterator.next().getDeclaredMethods() : new Method[0];
+					int mIndex = 0;
+					Method next;
+
+					@Override
+					public boolean hasNext() {
+						prime();
+						return next != null;
+					}
+
+					private void prime() {
+						if (next == null) {
+							while (mIndex >= methods.length) {
+								if (classIterator.hasNext()) {
+									methods = classIterator.next().getDeclaredMethods();
+									mIndex = 0;
+								} else {
+									mIndex = -1;
+								}
+			 				}
+							if (mIndex != -1)
+								next = methods[mIndex++];
+						}
+					}
+
+					@Override
+					public Method next() {
+						prime();
+						Method m = next;
+						next = null;
+						return m;
+					}
+
+					@Override
+					public void remove() {
+					}
+				};
+			}
+		};
+	}
+
+	/**
+	 * Returns a list of all the parent classes of the specified class including the class itself.
+	 *
+	 * @param c The class to retrieve the parent classes.
+	 * @param parentFirst In parent-to-child order, otherwise child-to-parent.
+	 * @param includeInterfaces Include interfaces.
+	 * @return An iterator of parent classes in the class hierarchy.
+	 */
+	public static Iterator<Class<?>> getParentClasses(final Class<?> c, boolean parentFirst, boolean includeInterfaces) {
+		List<Class<?>> l = getParentClasses(new ArrayList<Class<?>>(), c, parentFirst, includeInterfaces);
+		return l.iterator();
+	}
+
+	private static List<Class<?>> getParentClasses(List<Class<?>> l, Class<?> c, boolean parentFirst, boolean includeInterfaces) {
+		if (parentFirst) {
+			if (includeInterfaces)
+				for (Class<?> i : c.getInterfaces())
+					l.add(i);
+			if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
+				getParentClasses(l, c.getSuperclass(), parentFirst, includeInterfaces);
+			l.add(c);
+		} else {
+			l.add(c);
+			if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
+				getParentClasses(l, c.getSuperclass(), parentFirst, includeInterfaces);
+			if (includeInterfaces)
+				for (Class<?> i : c.getInterfaces())
+					l.add(i);
+		}
+		return l;
+	}
 }

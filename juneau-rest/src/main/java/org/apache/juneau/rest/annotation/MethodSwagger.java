@@ -16,7 +16,7 @@ package org.apache.juneau.rest.annotation;
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.
  */
 public @interface MethodSwagger {
-	
+
 	/**
 	 * Optional external documentation information for the exposed API.
 	 * <p>
@@ -35,7 +35,11 @@ public @interface MethodSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>)
+	 * 	<ja>@RestMethod</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			<js>"{url:'http://juneau.apache.org'}"</js>
+	 * 		)
+	 * 	)
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
@@ -57,7 +61,11 @@ public @interface MethodSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(tags=<js>"foo,bar"</js>)
+	 * 	<ja>@RestMethod</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			tags=<js>"foo,bar"</js>
+	 * 		)
+	 * 	)
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
@@ -76,7 +84,11 @@ public @interface MethodSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(deprecated=<jk>true</jk>)
+	 * 	<ja>@RestMethod</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			deprecated=<jk>true</jk>
+	 * 		)
+	 * 	)
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
@@ -96,12 +108,14 @@ public @interface MethodSwagger {
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"POST"</js>, path=<js>"/{a}"</js>,
 	 * 		description=<js>"This is my method."</js>,
-	 * 		parameters={
-	 * 			<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"a"</js>, description=<js>"The 'a' attribute"</js>),
-	 * 			<ja>@Parameter</ja>(in=<js>"query"</js>, name=<js>"b"</js>, description=<js>"The 'b' parameter"</js>, required=<jk>true</jk>),
-	 * 			<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The HTTP content"</js>),
-	 * 			<ja>@Parameter</ja>(in=<js>"header"</js>, name=<js>"D"</js>, description=<js>"The 'D' header"</js>),
-	 * 		}
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			parameters={
+	 * 				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"a"</js>, description=<js>"The 'a' attribute"</js>),
+	 * 				<ja>@Parameter</ja>(in=<js>"query"</js>, name=<js>"b"</js>, description=<js>"The 'b' parameter"</js>, required=<jk>true</jk>),
+	 * 				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The HTTP content"</js>),
+	 * 				<ja>@Parameter</ja>(in=<js>"header"</js>, name=<js>"D"</js>, description=<js>"The 'D' header"</js>),
+	 * 			}
+	 * 		)
 	 * 	)
 	 * </p>
 	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
@@ -132,16 +146,18 @@ public @interface MethodSwagger {
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"GET"</js>, path=<js>"/"</js>,
-	 * 		responses={
-	 * 			<ja>@Response</ja>(200),
-	 * 			<ja>@Response</ja>(
-	 * 				value=302,
-	 * 				description=<js>"Thing wasn't found here"</js>,
-	 * 				headers={
-	 * 					<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The place to find the thing"</js>)
-	 * 				}
-	 * 			)
-	 * 		}
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			responses={
+	 * 				<ja>@Response</ja>(200),
+	 * 				<ja>@Response</ja>(
+	 * 					value=302,
+	 * 					description=<js>"Thing wasn't found here"</js>,
+	 * 					headers={
+	 * 						<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The place to find the thing"</js>)
+	 * 					}
+	 * 				)
+	 * 			}
+	 * 		)
 	 * 	)
 	 * </p>
 	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case

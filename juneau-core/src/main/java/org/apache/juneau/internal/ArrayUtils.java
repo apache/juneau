@@ -215,7 +215,7 @@ public final class ArrayUtils {
 
 	/**
 	 * Converts the specified array to an <code>ArrayList</code>
-	 * 
+	 *
 	 * @param array The array to convert.
 	 * @param componentType The type of objects in the array.
 	 * 	It must match the actual component type in the array.
@@ -349,5 +349,18 @@ public final class ArrayUtils {
 		for (int i = 0; i < l; i++)
 			Array.set(a, i, Array.get(o, i));
 		return a;
+	}
+
+	/**
+	 * Converts an Iterable to a list.
+	 * @param i The iterable to convert.
+	 * @return A new list of objects copied from the iterable.
+	 */
+	public static List<?> toList(Iterable<?> i) {
+		List<Object> l = new ArrayList<Object>();
+		Iterator<?> i2 = i.iterator();
+		while (i2.hasNext())
+			l.add(i2.next());
+		return l;
 	}
 }

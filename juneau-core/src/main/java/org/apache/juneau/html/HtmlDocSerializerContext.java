@@ -197,7 +197,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav=<js>"&lt:p class='special-navigation'&gt;This is my special navigation content&lt:/p&gt;"</js>
+	 * 			nav=<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
 	 * 		)
 	 * 	)
 	 * </p>
@@ -228,7 +228,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * For example, if the servlet path is <js>"http://localhost/myContext/myServlet"</js>, and the
 	 * 	URL is <js>"foo"</js>, the link becomes <js>"http://localhost/myContext/myServlet/foo"</js>.
 	 * Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
-	 * 	can also be used.
+	 * 	can also be used in addition to various other protocols specified by {@link UriResolver} such as <js>"servlet:/..."</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
@@ -282,7 +282,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav=<js>"&lt:p class='special-navigation'&gt;This is my special navigation content&lt:/p&gt;"</js>
+	 * 			nav=<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
 	 * 		)
 	 * 	)
 	 * </p>
@@ -314,7 +314,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			aside=<js>"&lt:ul&gt;&lt:li&gt;Item 1&lt:li&gt;Item 2&lt:li&gt;Item 3&lt:/ul&gt;"</js>
+	 * 			aside=<js>"&lt;ul&gt;&lt;li&gt;Item 1&lt;li&gt;Item 2&lt;li&gt;Item 3&lt;/ul&gt;"</js>
 	 * 		)
 	 * 	)
 	 * </p>

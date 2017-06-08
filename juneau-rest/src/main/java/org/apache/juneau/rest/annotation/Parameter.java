@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * 			parameters={
  * 				<ja>@Parameter</ja>(in=<js>"header"</js>, name=<js>"Range"</js>, description=<js>"$L{ContentRange.description}"</js>)
  * 			}
- *			)
+ * 		)
  * 	)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res, <ja>@Method</ja> String method) {
  * 		...

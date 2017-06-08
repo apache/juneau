@@ -26,8 +26,26 @@ import org.apache.juneau.ini.*;
  * For example, the {@link Section} class cannot exist outside the scope of a parent
  * {@link ConfigFileImpl} class, so parsers will add a reference to the config file
  * using the {@link Section#setParent(ConfigFileImpl)} method.
+ * <p>
+ * A commonly-used case is when you're parsing beans, and a child bean has a reference to a parent bean.
+ * <p class='bcode'>
+ * 	<jk>public class</jk> AddressBook {
+ * 		<jk>public</jk> List&lt;Person&gt; <jf>people</jf>;
+ * 	}
+ *
+ * 	<jk>public class</jk> Person {
+ * 		<ja>@ParentProperty</ja> <jk>public</jk> AddressBook <jf>addressBook</jf>;
+ * 		<jk>public</jk> String <jf>name</jf>;
+ * 		<jk>public char</jk> <jf>sex</jf>;
+ * 	}
+ * </p>
+ * <p>
+ * <h5 class='section'>Notes:</h5>
+ * <ul>
+ * 	<li>The annotated field or method does not need to be public.
+ * </ul>
  */
-@Target({METHOD})
+@Target({METHOD,FIELD})
 @Retention(RUNTIME)
 @Inherited
 public @interface ParentProperty {}

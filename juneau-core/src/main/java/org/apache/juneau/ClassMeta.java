@@ -76,7 +76,8 @@ public final class ClassMeta<T> implements Type {
 		numberConstructorType;
 	private final Method
 		swapMethod,                                          // The swap() method (if it has one).
-		unswapMethod,                                        // The unswap() method (if it has one).
+		unswapMethod;                                        // The unswap() method (if it has one).
+	private final Setter
 		namePropertyMethod,                                  // The method to set the name on an object (if it has one).
 		parentPropertyMethod;                                // The method to set the parent on an object (if it has one).
 	private final boolean
@@ -307,7 +308,8 @@ public final class ClassMeta<T> implements Type {
 		Method
 			fromStringMethod = null,
 			swapMethod = null,
-			unswapMethod = null,
+			unswapMethod = null;
+		Setter
 			parentPropertyMethod = null,
 			namePropertyMethod = null;
 		Constructor<T>
@@ -473,15 +475,26 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
+			for (Field f : getAllFields(c, true)) {
+				if (f.isAnnotationPresent(ParentProperty.class)) {
+					f.setAccessible(true);
+					parentPropertyMethod = new Setter.FieldSetter(f);
+				}
+				if (f.isAnnotationPresent(NameProperty.class)) {
+					f.setAccessible(true);
+					namePropertyMethod = new Setter.FieldSetter(f);
+				}
+			}
+
 			// Find @NameProperty and @ParentProperty methods if present.
-			for (Method m : c.getDeclaredMethods()) {
+			for (Method m : getAllMethods(c, true)) {
 				if (m.isAnnotationPresent(ParentProperty.class) && m.getParameterTypes().length == 1) {
 					m.setAccessible(true);
-					parentPropertyMethod = m;
+					parentPropertyMethod = new Setter.MethodSetter(m);
 				}
 				if (m.isAnnotationPresent(NameProperty.class) && m.getParameterTypes().length == 1) {
 					m.setAccessible(true);
-					namePropertyMethod = m;
+					namePropertyMethod = new Setter.MethodSetter(m);
 				}
 			}
 
@@ -1357,20 +1370,20 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the method annotated with {@link NameProperty @NameProperty}.
+	 * Returns the method or field annotated with {@link NameProperty @NameProperty}.
 	 *
-	 * @return The method annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not exist.
+	 * @return The method or field  annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not exist.
 	 */
-	public Method getNameProperty() {
+	public Setter getNameProperty() {
 		return namePropertyMethod;
 	}
 
 	/**
-	 * Returns the method annotated with {@link ParentProperty @ParentProperty}.
+	 * Returns the method or field  annotated with {@link ParentProperty @ParentProperty}.
 	 *
-	 * @return The method annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not exist.
+	 * @return The method or field  annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not exist.
 	 */
-	public Method getParentProperty() {
+	public Setter getParentProperty() {
 		return parentPropertyMethod;
 	}
 

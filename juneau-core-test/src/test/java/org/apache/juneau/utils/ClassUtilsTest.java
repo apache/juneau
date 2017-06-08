@@ -16,9 +16,13 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.util.*;
 
+import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -196,5 +200,114 @@ public class ClassUtilsTest {
 	@Retention(RUNTIME)
 	public @interface TestAnnotation {
 		String value() default "";
+	}
+
+	//====================================================================================================
+	// getParentClassesParentFirst()
+	//====================================================================================================
+	@Test
+	public void getParentClassesParentFirst() throws Exception {
+		Set<String> s = new TreeSet<String>();
+		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, true, true); i.hasNext();) {
+			Class<?> c = i.next();
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
+		
+		s = new TreeSet<String>();
+		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, true, false); i.hasNext();) {
+			Class<?> c = i.next();
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CB','CC','CD']", s);
+
+		s = new TreeSet<String>();
+		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, false, true); i.hasNext();) {
+			Class<?> c = i.next();
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
+		
+		s = new TreeSet<String>();
+		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, false, false); i.hasNext();) {
+			Class<?> c = i.next();
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CB','CC','CD']", s);
+	}
+	
+	static interface CA1 {}
+	static interface CA2 extends CA1 {}
+	static interface CA3 {}
+	static interface CA4 {}
+	static class CB implements CA1, CA2 {}
+	static class CC extends CB implements CA3 {}
+	static class CD extends CC {}
+
+	//====================================================================================================
+	// getAllMethodsParentFirst()
+	//====================================================================================================
+	@Test
+	public void getParentMethodsParentFirst() throws Exception {
+		Set<String> s = new TreeSet<String>();
+		for (Method m : ClassUtils.getAllMethods(DD.class, true)) 
+			if (! m.getName().startsWith("$"))
+				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
+		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
+
+		s = new TreeSet<String>();
+		for (Method m : ClassUtils.getAllMethods(DD.class, false)) 
+			if (! m.getName().startsWith("$"))
+				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
+		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
+	}
+	
+	static interface DA1 {
+		void da1();
+	}
+	static interface DA2 extends DA1 {
+		void da2();
+	}
+	static interface DA3 {}
+	static interface DA4 {}
+	static abstract class DB implements DA1, DA2 {
+		public void da1() {}
+		public void db() {}
+	}
+	static class DC extends DB implements DA3 {
+		public void da2() {}
+		public void dc() {}
+	}
+	static class DD extends DC {
+		public void da2() {}
+		public void dd() {}
+	}
+
+	//====================================================================================================
+	// getAllFieldsParentFirst()
+	//====================================================================================================
+	@Test
+	public void getParentFieldsParentFirst() throws Exception {
+		Set<String> s = new TreeSet<String>();
+		for (Field f : ClassUtils.getAllFields(EB.class, true)) {
+			if (! f.getName().startsWith("$"))
+				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
+		}
+		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
+
+		s = new TreeSet<String>();
+		for (Field f : ClassUtils.getAllFields(EB.class, false)) {
+			if (! f.getName().startsWith("$"))
+				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
+		}
+		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
+	}
+	
+	static class EA {
+		int a1;
+	}
+	static class EB extends EA {
+		int a1;
+		int b1;
 	}
 }

@@ -438,7 +438,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
 	 * 	<li><code>{servletClass}.title</code> resource bundle value.
 	 * 	<li><code>info/title</code> entry in swagger file.
-	 * <ol>
+	 * </ol>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>
@@ -485,7 +485,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<li><code>summary</code> entry in swagger file for method.
 	 * 	<li><code>{servletClass}.description</code> resource bundle value.
 	 * 	<li><code>info/description</code> entry in swagger file.
-	 * <ol>
+	 * </ol>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>

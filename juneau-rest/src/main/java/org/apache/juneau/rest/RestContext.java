@@ -543,6 +543,8 @@ public final class RestContext extends Context {
 				if (r instanceof RestServlet) {
 					RestServlet rs = (RestServlet)r;
 					rs.init(childConfig);
+					if (rs.getContext() == null)
+						throw new RestException(SC_INTERNAL_SERVER_ERROR, "Servlet {0} not initialized.  init(RestConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", rs.getClass().getName());
 					path = childConfig.path;
 					childResources.put(path, rs.getContext());
 				} else {

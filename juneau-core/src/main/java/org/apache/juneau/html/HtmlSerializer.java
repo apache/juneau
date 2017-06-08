@@ -555,7 +555,7 @@ public class HtmlSerializer extends XmlSerializer {
 						ClassMeta<?> cMeta = session.getClassMetaForObject(value);
 
 						HtmlRender render = hpMeta.getRender();
-						if (render == null)
+						if (render == null && cMeta != null)
 							render = cMeta.getExtendedMeta(HtmlClassMeta.class).getRender();
 
 						out.oTag(i+2, "td");

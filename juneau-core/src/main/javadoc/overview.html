@@ -3670,7 +3670,7 @@
 		<jd>/** GET request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
 		<jk>public</jk> HttpServletRequest doGet(RestRequest req, RestResponse res, <ja>@Properties</ja> ObjectMap properties) {
-			<jc>// Set the HtmlDocSerializer title programmatically.
+			<jc>// Set the HtmlDocSerializer title programmatically.</jc>
 			res.setPageTitle(req.getPathInfo());
 			
 			<jc>// Just echo the request back as the response.</jc>
@@ -6307,6 +6307,8 @@
 						of HTML produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
 					
 				</ul>
+			<li>{@link org.apache.juneau.annotation.NameProperty @NameProperty} and {@link org.apache.juneau.annotation.ParentProperty @ParentProperty}
+				can now be applied to fields.  
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -6512,8 +6514,9 @@
 		<h6 class='topic'>org.apache.juneau.examples.rest</h6>
 		<ul class='spaced-list'>
 			<li>Many code enhancements make to examples to reflect new functionality.
-				<li>All pages now render aside comments to help explain what feature they're trying to explain.
-				<br><img class='bordered' src='doc-files/NewExamplesPage.png'>
+				<li>All pages now render aside comments to help explain what feature they're trying to explain using the 
+					new features that allow you to customize various elements of the page.
+				<br><img class='bordered' width="50%" src='doc-files/NewExamplesPage.png'>
 		</ul>
 	</div>
 

@@ -26,8 +26,29 @@ import org.apache.juneau.ini.*;
  * For example, the {@link Section} class must know the name it's known by it's parent
  * {@link ConfigFileImpl} class, so parsers will call this method with the section name
  * using the {@link Section#setName(String)} method.
+ * <p>
+ * A commonly-used case is when you're parsing a JSON map containing beans where one of the bean properties
+ * 	is the key used in the map.  For example:
+ * <p class='bcode'>
+ * 	{
+ * 		id1: {name: <js>'John Smith'</js>, sex:<js>'M'</js>},
+ * 		id2: {name: <js>'Jane Doe'</js>, sex:<js>'F'</js>}
+ * 	}
+ * </p>
+ * <p class='bcode'>
+ * 	<jk>public class</jk> Person {
+ * 		<ja>@NameProperty</ja> <jk>public</jk> String <jf>id</jf>;
+ * 		<jk>public</jk> String <jf>name</jf>;
+ * 		<jk>public char</jk> <jf>sex</jf>;
+ * 	}
+ * </p>
+ * <p>
+ * <h5 class='section'>Notes:</h5>
+ * <ul>
+ * 	<li>The annotated field or method does not need to be public.
+ * </ul>
  */
-@Target({METHOD})
+@Target({METHOD,FIELD})
 @Retention(RUNTIME)
 @Inherited
 public @interface NameProperty {}
