@@ -843,7 +843,7 @@ class CallMethod implements Comparable<CallMethod>  {
 					if (k.equals(REST_servletPath))
 						return req.getServletPath();
 					if (k.equals(REST_servletURI))
-						return req.getServletURI();
+						return req.getUriContext().getRootRelativeServletPath();
 					if (k.equals(REST_relativeServletURI))
 						return req.getRelativeServletURI();
 					if (k.equals(REST_pathInfo))

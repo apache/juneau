@@ -215,7 +215,7 @@ public final class RestContext extends Context {
 	/**
 	 * The request servlet URI.
 	 * <p>
-	 * Equivalent to the value returned by {@link RestRequest#getServletURI()}
+	 * Equivalent to the value returned by {@link UriContext#getRootRelativeServletPath()}
 	 */
 	public static final String REST_servletURI = "RestServlet.servletURI";
 

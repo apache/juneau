@@ -33,7 +33,7 @@ import org.apache.juneau.svl.*;
  * 	<li><code>$R{servletTitle}</code> - Value returned by {@link RestRequest#getServletTitle()}.
  * 	<li><code>$R{servletParentURI}</code> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}.
  * 	<li><code>$R{servletPath}</code> - Value returned by {@link RestRequest#getServletPath()}.
- * 	<li><code>$R{servletURI}</code> - Value returned by {@link RestRequest#getServletURI()}.
+ * 	<li><code>$R{servletURI}</code> - Value returned by {@link UriContext#getRootRelativeServletPath()}.
  * 	<li><code>$R{trimmedRequestURI}</code> - Value returned by {@link RestRequest#getTrimmedRequestURI()}.
  * </ul>
  * <p>
@@ -106,7 +106,7 @@ public class RequestVar extends SimpleVar {
 					if (key.equals("servletPath"))
 						return req.getServletPath();
 					if (key.equals("servletURI"))
-						return req.getServletURI();
+						return req.getUriContext().getRootRelativeServletPath();
 					if (key.equals("servletParentURI"))
 						return req.getUriContext().getRootRelativeServletPathParent();
 					if (key.equals("servletTitle"))

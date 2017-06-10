@@ -56,7 +56,7 @@ public class UrlEncodedFormResource extends Resource {
 				+"\n		document.getElementById('results').innerHTML = buffBody.innerHTML;"
 				+"\n	}"
 			),
-			form().id("form").action(req.getServletURI()).method("POST").target("buff").children(
+			form().id("form").action("servlet:/").method("POST").target("buff").children(
 				table(
 					tr(
 						th(req.getMessage("aString")),

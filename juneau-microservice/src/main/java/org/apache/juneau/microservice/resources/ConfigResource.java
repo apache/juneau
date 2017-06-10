@@ -60,7 +60,7 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="GET", path="/edit", description="Edit config file.")
 	public Form getConfigEditForm(RestRequest req) throws Exception {
-		return form().id("form").action(req.getServletURI()).method("POST").enctype("application/x-www-form-urlencoded").children(
+		return form().id("form").action("servlet:/").method("POST").enctype("application/x-www-form-urlencoded").children(
 			div()._class("data").children(
 				table(
 					tr(td().style("text-align:right").children(button("submit","Submit"),button("reset","Reset"))),

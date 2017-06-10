@@ -23,7 +23,6 @@ import org.junit.*;
  */
 public class UrisTest extends RestTestcase {
 
-	private static String URL2 = TestMicroservice.getURI() + "/testuris";           // /jazz/juneau/sample/testuris
 	private static int port = TestMicroservice.getURI().getPort();                  // 9443
 	private static String path = TestMicroservice.getURI().getPath();              // /jazz/juneau/sample
 
@@ -46,7 +45,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/foo
@@ -60,7 +59,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/foo/bar
@@ -74,7 +73,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test2
@@ -88,7 +87,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test2"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test2/foo
@@ -102,7 +101,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test2/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test2/foo/bar
@@ -116,7 +115,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test2/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test4/test4
@@ -130,7 +129,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test4/test4"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test4/test4/foo
@@ -144,7 +143,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test4/test4/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test4/test4/foo/bar
@@ -158,7 +157,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test4/test4/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
+		assertEquals(path + "/testuris", r.getString("servletURI"));
 	}
 
 	//====================================================================================================
@@ -181,7 +180,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/foo
@@ -195,7 +194,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/foo/bar
@@ -209,7 +208,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2
@@ -223,7 +222,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test2"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2/foo
@@ -237,7 +236,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test2/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2/foo/bar
@@ -251,7 +250,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test2/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4
@@ -265,7 +264,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test4/test4"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4/foo
@@ -279,7 +278,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test4/test4/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4/foo/bar
@@ -293,7 +292,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test4/test4/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child", r.getString("servletURI"));
 	}
 
 	//====================================================================================================
@@ -316,7 +315,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/foo
@@ -330,7 +329,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/foo/bar
@@ -344,7 +343,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2
@@ -358,7 +357,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test2"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2/foo
@@ -372,7 +371,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test2/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2/foo/bar
@@ -386,7 +385,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test2/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4
@@ -400,7 +399,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test4/test4"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4/foo
@@ -414,7 +413,7 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test4/test4/foo"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4/foo/bar
@@ -428,6 +427,6 @@ public class UrisTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test4/test4/foo/bar"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
+		assertEquals(path + "/testuris/child/grandchild", r.getString("servletURI"));
 	}
 }

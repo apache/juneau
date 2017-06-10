@@ -82,7 +82,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private RequestPathMatch pathParams;
 	private boolean isPost;
 	private UriContext uriContext;
-	private String servletURI, relativeServletURI;
+	private String relativeServletURI;
 	private String charset, defaultCharset;
 	private RequestHeaders headers;
 	private ConfigFile cf;
@@ -509,21 +509,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Gets the URI of the servlet (e.g. <js>"https://localhost:9080/contextPath/servletPath"</js>).
-	 *
-	 * @return The servlet URI.
-	 */
-	public String getServletURI() {
-		if (servletURI == null) {
-			// Note that we can't use getPathInfo() to calculate this since it replaces
-			// URL-encoded chars (e.g. %2F) which throws off the length calculation
-			// because getRequestURL() does not replace those chars.
-			servletURI = getServletURIBuilder().toString();
-		}
-		return servletURI;
-	}
-
-	/**
 	 * Gets the path-absolute relative URI of the servlet (e.g. <js>"/contextPath/servletPath"</js>).
 	 *
 	 * @return The relative servlet URI.
@@ -532,15 +517,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (relativeServletURI == null)
 			relativeServletURI = getContextPath() + getServletPath();
 		return relativeServletURI;
-	}
-
-	/**
-	 * Returns a <code>StringBuffer</code> prefilled with the string <code><js>"/[contextPath]/[servletPath]"</js></code>.
-	 *
-	 * @return The servlet URI string builder.
-	 */
-	public StringBuffer getServletURIBuilder() {
-		return RestUtils.trimPathInfo(getRequestURL(), getContextPath(), getServletPath());
 	}
 
 
