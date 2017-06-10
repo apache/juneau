@@ -34,7 +34,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths]
 		//	{
 		//		pathInfo:null,
-		//		pathInfoUndecoded:null,
 		//		pathInfoParts:[],
 		//		pathRemainder:null,
 		//		pathRemainderUndecoded:null,
@@ -48,8 +47,6 @@ public class PathsTest extends RestTestcase {
 		url = URL;
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertNull(r.getString("pathInfo"));
-		assertNull(r.getString("pathInfoUndecoded"));
-		assertEquals("[]", r.getObjectList("pathInfoParts").toString());
 		assertNull(r.getString("pathRemainder"));
 		assertNull(r.getString("pathRemainderUndecoded"));
 		assertNull(r.getString("pathRemainder2"));
@@ -65,9 +62,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/]
 		//		{
 		//			pathInfo: '/',
-		//			pathInfoUndecoded: '/',
-		//			pathInfoParts: [
-		//			],
 		//			pathRemainder: '',
 		//			pathRemainderUndecoded: '',
 		//			requestURI: '/jazz/juneau/test/testPaths/',
@@ -80,8 +74,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + '/';
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/", r.getString("pathInfo"));
-		assertEquals("/", r.getString("pathInfoUndecoded"));
-		assertEquals("[]", r.getObjectList("pathInfoParts").toString());
 		assertEquals("", r.getString("pathRemainder"));
 		assertEquals("", r.getString("pathRemainderUndecoded"));
 		assertEquals("", r.getString("pathRemainder2"));
@@ -96,7 +88,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths//]
 		//		{
 		//			pathInfo: '//',
-		//			pathInfoParts: [''],
 		//			pathRemainder: '/',
 		//			requestURI: '/jazz/juneau/test/testPaths//',
 		//			requestParentURI: '/jazz/juneau/test',
@@ -108,7 +99,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("//", r.getString("pathInfo"));
-		assertEquals("['']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/", r.getString("pathRemainder"));
 		assertEquals("/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths//"));
@@ -122,7 +112,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths///]
 		//		{
 		//			pathInfo: '///',
-		//			pathInfoParts: ['',''],
 		//			pathRemainder: '//',
 		//			requestURI: '/jazz/juneau/test/testPaths///',
 		//			requestParentURI: '/jazz/juneau/test',
@@ -134,7 +123,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "///";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("///", r.getString("pathInfo"));
-		assertEquals("['','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("//", r.getString("pathRemainder"));
 		assertEquals("//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths///"));
@@ -148,10 +136,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/foo/bar]
 		//		{
 		//			pathInfo: '/foo/bar',
-		//			pathInfoParts: [
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar',
 		//			requestURI: '/jazz/juneau/test/testPaths/foo/bar',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/foo',
@@ -163,7 +147,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/foo/bar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/foo/bar", r.getString("pathInfo"));
-		assertEquals("['foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar", r.getString("pathRemainder"));
 		assertEquals("foo/bar", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/foo/bar"));
@@ -177,10 +160,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/foo/bar/]
 		//		{
 		//			pathInfo: '/foo/bar/',
-		//			pathInfoParts: [
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar/',
 		//			requestURI: '/jazz/juneau/test/testPaths/foo/bar/',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/foo',
@@ -192,7 +171,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/foo/bar/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/foo/bar/", r.getString("pathInfo"));
-		assertEquals("['foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar/", r.getString("pathRemainder"));
 		assertEquals("foo/bar/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/foo/bar/"));
@@ -206,13 +184,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths//foo//bar//]
 		//		{
 		//			pathInfo: '//foo//bar//',
-		//			pathInfoParts: [
-		//				'',
-		//				'foo',
-		//				'',
-		//				'bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			requestURI: '/jazz/juneau/test/testPaths//foo//bar//',
 		//			requestParentURI: '/jazz/juneau/test/testPaths//foo',
@@ -224,7 +195,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "//foo//bar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("//foo//bar//", r.getString("pathInfo"));
-		assertEquals("['','foo','','bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths//foo//bar//"));
@@ -238,10 +208,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/foo%2Fbar]
 		//		{
 		//			pathInfo: '/foo//bar',
-		//			pathInfoUndecoded: '/foo%2F%2Fbar',
-		//			pathInfoParts: [
-		//				'foo//bar'
-		//			],
 		//			pathRemainder: 'foo//bar',
 		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
 		//			requestURI: '/jazz/juneau/test/testPaths/foo%2F%2Fbar',
@@ -257,8 +223,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/foo%2F%2Fbar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/foo//bar", r.getString("pathInfo"));
-		assertEquals("/foo%2F%2Fbar", r.getString("pathInfoUndecoded"));
-		assertEquals("['foo//bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo//bar", r.getString("pathRemainder"));
 		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
 		assertEquals("foo//bar", r.getString("pathRemainder2"));
@@ -273,12 +237,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths//foo%2Fbar//]
 		//		{
 		//			pathInfo: '//foo//bar//',
-		//			pathInfoUndecoded: '//foo%2F%2Fbar//',
-		//			pathInfoParts: [
-		//				'',
-		//				'foo//bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
 		//			requestURI: '/jazz/juneau/test/testPaths//foo%2F%2Fbar//',
@@ -294,8 +252,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "//foo%2F%2Fbar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("//foo//bar//", r.getString("pathInfo"));
-		assertEquals("//foo%2F%2Fbar//", r.getString("pathInfoUndecoded"));
-		assertEquals("['','foo//bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
@@ -310,9 +266,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2]
 		//		{
 		//			pathInfo: '/test2',
-		//			pathInfoParts: [
-		//				'test2'
-		//			],
 		//			pathRemainder: null,
 		//			requestURI: '/jazz/juneau/test/testPaths/test2',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -327,7 +280,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2", r.getString("pathInfo"));
-		assertEquals("['test2']", r.getObjectList("pathInfoParts").toString());
 		assertNull(r.getString("pathRemainder"));
 		assertNull(r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2"));
@@ -342,9 +294,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2/]
 		//		{
 		//			pathInfo: '/test2/',
-		//			pathInfoParts: [
-		//				'test2'
-		//			],
 		//			pathRemainder: '',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2/',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -359,7 +308,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/", r.getString("pathInfo"));
-		assertEquals("['test2']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("", r.getString("pathRemainder"));
 		assertEquals("", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2/"));
@@ -373,10 +321,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2//]
 		//		{
 		//			pathInfo: '/test2//',
-		//			pathInfoParts: [
-		//				'test2',
-		//				''
-		//			],
 		//			pathRemainder: '/',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2//',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -391,7 +335,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2//", r.getString("pathInfo"));
-		assertEquals("['test2','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/", r.getString("pathRemainder"));
 		assertEquals("/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2//"));
@@ -405,11 +348,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2///]
 		//		{
 		//			pathInfo: '/test2///',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'',
-		//				''
-		//			],
 		//			pathRemainder: '//',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2///',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -424,7 +362,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2///";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2///", r.getString("pathInfo"));
-		assertEquals("['test2','','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("//", r.getString("pathRemainder"));
 		assertEquals("//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2///"));
@@ -438,11 +375,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2/foo/bar]
 		//		{
 		//			pathInfo: '/test2/foo/bar',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2/foo/bar',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/test2/foo',
@@ -457,7 +389,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2/foo/bar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/foo/bar", r.getString("pathInfo"));
-		assertEquals("['test2','foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar", r.getString("pathRemainder"));
 		assertEquals("foo/bar", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2/foo/bar"));
@@ -471,11 +402,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2/foo/bar/]
 		//		{
 		//			pathInfo: '/test2/foo/bar/',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar/',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2/foo/bar/',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/test2/foo',
@@ -490,7 +416,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2/foo/bar/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/foo/bar/", r.getString("pathInfo"));
-		assertEquals("['test2','foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar/", r.getString("pathRemainder"));
 		assertEquals("foo/bar/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2/foo/bar/"));
@@ -504,14 +429,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2//foo//bar//]
 		//		{
 		//			pathInfo: '/test2//foo//bar//',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'',
-		//				'foo',
-		//				'',
-		//				'bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2//foo//bar//',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/test2//foo/',
@@ -526,7 +443,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2//foo//bar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2//foo//bar//", r.getString("pathInfo"));
-		assertEquals("['test2','','foo','','bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2//foo//bar//"));
@@ -540,11 +456,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2/foo%2Fbar]
 		//		{
 		//			pathInfo: '/test2/foo//bar',
-		//			pathInfoUndecoded: '/test2/foo%2F%2Fbar',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'foo//bar'
-		//			],
 		//			pathRemainder: 'foo//bar',
 		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2/foo%2F%2Fbar',
@@ -560,8 +471,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2/foo%2F%2Fbar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/foo//bar", r.getString("pathInfo"));
-		assertEquals("/test2/foo%2F%2Fbar", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2','foo//bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo//bar", r.getString("pathRemainder"));
 		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
 		assertEquals("foo//bar", r.getString("pathRemainder2"));
@@ -576,13 +485,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/test2//foo%2Fbar//]
 		//		{
 		//			pathInfo: '/test2//foo//bar//',
-		//			pathInfoUndecoded: '/test2//foo%2F%2Fbar//',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'',
-		//				'foo//bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
 		//			requestURI: '/jazz/juneau/test/testPaths/test2//foo%2F%2Fbar//',
@@ -598,8 +500,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2//foo%2F%2Fbar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2//foo//bar//", r.getString("pathInfo"));
-		assertEquals("/test2//foo%2F%2Fbar//", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2','','foo//bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
@@ -614,8 +514,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a]
 		//		{
 		//			pathInfo: null,
-		//			pathInfoParts: [
-		//			],
 		//			pathRemainder: null,
 		//			requestURI: '/jazz/juneau/test/testPaths/a',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -630,7 +528,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertNull(r.getString("pathInfo"));
-		assertEquals("[]", r.getObjectList("pathInfoParts").toString());
 		assertNull(r.getString("pathRemainder"));
 		assertNull(r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a"));
@@ -645,8 +542,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/]
 		//		{
 		//			pathInfo: '/',
-		//			pathInfoParts: [
-		//			],
 		//			pathRemainder: '',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -661,7 +556,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/", r.getString("pathInfo"));
-		assertEquals("[]", r.getObjectList("pathInfoParts").toString());
 		assertEquals("", r.getString("pathRemainder"));
 		assertEquals("", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/"));
@@ -676,9 +570,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a//]
 		//		{
 		//			pathInfo: '//',
-		//			pathInfoParts: [
-		//				''
-		//			],
 		//			pathRemainder: '/',
 		//			requestURI: '/jazz/juneau/test/testPaths/a//',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -693,7 +584,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("//", r.getString("pathInfo"));
-		assertEquals("['']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/", r.getString("pathRemainder"));
 		assertEquals("/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a//"));
@@ -708,10 +598,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a///]
 		//		{
 		//			pathInfo: '///',
-		//			pathInfoParts: [
-		//				'',
-		//				''
-		//			],
 		//			pathRemainder: '//',
 		//			requestURI: '/jazz/juneau/test/testPaths/a///',
 		//			requestParentURI: '/jazz/juneau/test/testPaths',
@@ -726,7 +612,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a///";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("///", r.getString("pathInfo"));
-		assertEquals("['','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("//", r.getString("pathRemainder"));
 		assertEquals("//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a///"));
@@ -741,10 +626,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/foo/bar]
 		//		{
 		//			pathInfo: '/foo/bar',
-		//			pathInfoParts: [
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/foo/bar',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a/foo',
@@ -759,7 +640,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/foo/bar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/foo/bar", r.getString("pathInfo"));
-		assertEquals("['foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar", r.getString("pathRemainder"));
 		assertEquals("foo/bar", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/foo/bar"));
@@ -774,10 +654,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/foo/bar/]
 		//		{
 		//			pathInfo: '/foo/bar/',
-		//			pathInfoParts: [
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar/',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/foo/bar/',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a/foo',
@@ -792,7 +668,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/foo/bar/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/foo/bar/", r.getString("pathInfo"));
-		assertEquals("['foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar/", r.getString("pathRemainder"));
 		assertEquals("foo/bar/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/foo/bar/"));
@@ -807,13 +682,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a//foo//bar//]
 		//		{
 		//			pathInfo: '//foo//bar//',
-		//			pathInfoParts: [
-		//				'',
-		//				'foo',
-		//				'',
-		//				'bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			requestURI: '/jazz/juneau/test/testPaths/a//foo//bar//',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a//foo/',
@@ -828,7 +696,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a//foo//bar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("//foo//bar//", r.getString("pathInfo"));
-		assertEquals("['','foo','','bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a//foo//bar//"));
@@ -843,10 +710,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/foo%2Fbar]
 		//		{
 		//			pathInfo: '/foo//bar',
-		//			pathInfoUndecoded: '/foo%2F%2Fbar',
-		//			pathInfoParts: [
-		//				'foo//bar'
-		//			],
 		//			pathRemainder: 'foo//bar',
 		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/foo%2F%2Fbar',
@@ -862,8 +725,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/foo%2F%2Fbar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/foo//bar", r.getString("pathInfo"));
-		assertEquals("/foo%2F%2Fbar", r.getString("pathInfoUndecoded"));
-		assertEquals("['foo//bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo//bar", r.getString("pathRemainder"));
 		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
 		assertEquals("foo//bar", r.getString("pathRemainder2"));
@@ -879,12 +740,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a//foo%2Fbar//]
 		//		{
 		//			pathInfo: '//foo//bar//',
-		//			pathInfoUndecoded: '//foo%2F%2Fbar//',
-		//			pathInfoParts: [
-		//				'',
-		//				'foo//bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
 		//			requestURI: '/jazz/juneau/test/testPaths/a//foo%2F%2Fbar//',
@@ -900,8 +755,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a//foo%2F%2Fbar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("//foo//bar//", r.getString("pathInfo"));
-		assertEquals("//foo%2F%2Fbar//", r.getString("pathInfoUndecoded"));
-		assertEquals("['','foo//bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
@@ -918,9 +771,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2]
 		//		{
 		//			pathInfo: '/test2',
-		//			pathInfoParts: [
-		//				'test2'
-		//			],
 		//			pathRemainder: null,
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a',
@@ -935,7 +785,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2", r.getString("pathInfo"));
-		assertEquals("['test2']", r.getObjectList("pathInfoParts").toString());
 		assertNull(r.getString("pathRemainder"));
 		assertNull(r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2"));
@@ -950,9 +799,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2/]
 		//		{
 		//			pathInfo: '/test2/',
-		//			pathInfoParts: [
-		//				'test2'
-		//			],
 		//			pathRemainder: '',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2/',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a',
@@ -967,7 +813,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/", r.getString("pathInfo"));
-		assertEquals("['test2']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("", r.getString("pathRemainder"));
 		assertEquals("", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2/"));
@@ -982,10 +827,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2//]
 		//		{
 		//			pathInfo: '/test2//',
-		//			pathInfoParts: [
-		//				'test2',
-		//				''
-		//			],
 		//			pathRemainder: '/',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2//',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a',
@@ -1000,7 +841,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2//", r.getString("pathInfo"));
-		assertEquals("['test2','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/", r.getString("pathRemainder"));
 		assertEquals("/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2//"));
@@ -1015,11 +855,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2///]
 		//		{
 		//			pathInfo: '/test2///',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'',
-		//				''
-		//			],
 		//			pathRemainder: '//',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2///',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a',
@@ -1034,7 +869,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2///";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2///", r.getString("pathInfo"));
-		assertEquals("['test2','','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("//", r.getString("pathRemainder"));
 		assertEquals("//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2///"));
@@ -1049,11 +883,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2/foo/bar]
 		//		{
 		//			pathInfo: '/test2/foo/bar',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2/foo/bar',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a/test2/foo',
@@ -1068,7 +897,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2/foo/bar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/foo/bar", r.getString("pathInfo"));
-		assertEquals("['test2','foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar", r.getString("pathRemainder"));
 		assertEquals("foo/bar", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2/foo/bar"));
@@ -1083,11 +911,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2/foo/bar/]
 		//		{
 		//			pathInfo: '/test2/foo/bar/',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'foo',
-		//				'bar'
-		//			],
 		//			pathRemainder: 'foo/bar/',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2/foo/bar/',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a/test2/foo',
@@ -1102,7 +925,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2/foo/bar/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/foo/bar/", r.getString("pathInfo"));
-		assertEquals("['test2','foo','bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo/bar/", r.getString("pathRemainder"));
 		assertEquals("foo/bar/", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2/foo/bar/"));
@@ -1117,14 +939,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2//foo//bar//]
 		//		{
 		//			pathInfo: '/test2//foo//bar//',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'',
-		//				'foo',
-		//				'',
-		//				'bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2//foo//bar//',
 		//			requestParentURI: '/jazz/juneau/test/testPaths/a/test2//foo/',
@@ -1139,7 +953,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2//foo//bar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2//foo//bar//", r.getString("pathInfo"));
-		assertEquals("['test2','','foo','','bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2//foo//bar//"));
@@ -1154,11 +967,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2/foo%2Fbar]
 		//		{
 		//			pathInfo: '/test2/foo//bar',
-		//			pathInfoUndecoded: '/test2/foo%2F%2Fbar',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'foo//bar'
-		//			],
 		//			pathRemainder: 'foo//bar',
 		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2/foo%2F%2Fbar',
@@ -1174,8 +982,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2/foo%2F%2Fbar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/foo//bar", r.getString("pathInfo"));
-		assertEquals("/test2/foo%2F%2Fbar", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2','foo//bar']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("foo//bar", r.getString("pathRemainder"));
 		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
 		assertEquals("foo//bar", r.getString("pathRemainder2"));
@@ -1191,13 +997,6 @@ public class PathsTest extends RestTestcase {
 		// [/test/testPaths/a/test2//foo%2Fbar//]
 		//		{
 		//			pathInfo: '/test2//foo//bar//',
-		//			pathInfoUndecoded: '/test2//foo%2F%2Fbar//',
-		//			pathInfoParts: [
-		//				'test2',
-		//				'',
-		//				'foo//bar',
-		//				''
-		//			],
 		//			pathRemainder: '/foo//bar//',
 		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
 		//			requestURI: '/jazz/juneau/test/testPaths/a/test2//foo%2F%2Fbar//',
@@ -1213,8 +1012,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2//foo%2F%2Fbar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2//foo//bar//", r.getString("pathInfo"));
-		assertEquals("/test2//foo%2F%2Fbar//", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2','','foo//bar','']", r.getObjectList("pathInfoParts").toString());
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
@@ -1233,8 +1030,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/%20";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/ ", r.getString("pathInfo"));
-		assertEquals("/%20", r.getString("pathInfoUndecoded"));
-		assertEquals("[' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("%20", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));
@@ -1249,8 +1044,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2/%20";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/ ", r.getString("pathInfo"));
-		assertEquals("/test2/%20", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2',' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("%20", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));
@@ -1265,8 +1058,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/%20";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/ ", r.getString("pathInfo"));
-		assertEquals("/%20", r.getString("pathInfoUndecoded"));
-		assertEquals("[' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("%20", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));
@@ -1282,8 +1073,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2/%20";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/ ", r.getString("pathInfo"));
-		assertEquals("/test2/%20", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2',' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("%20", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));
@@ -1299,8 +1088,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/+";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/ ", r.getString("pathInfo"));
-		assertEquals("/+", r.getString("pathInfoUndecoded"));
-		assertEquals("[' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("+", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));
@@ -1315,8 +1102,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/test2/+";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/ ", r.getString("pathInfo"));
-		assertEquals("/test2/+", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2',' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("+", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));
@@ -1331,8 +1116,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/+";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/ ", r.getString("pathInfo"));
-		assertEquals("/+", r.getString("pathInfoUndecoded"));
-		assertEquals("[' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("+", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));
@@ -1348,8 +1131,6 @@ public class PathsTest extends RestTestcase {
 		url = URL + "/a/test2/+";
 		r = client.doGet(url).getResponse(ObjectMap.class);
 		assertEquals("/test2/ ", r.getString("pathInfo"));
-		assertEquals("/test2/+", r.getString("pathInfoUndecoded"));
-		assertEquals("['test2',' ']", r.getObjectList("pathInfoParts").toString());
 		assertEquals(" ", r.getString("pathRemainder"));
 		assertEquals("+", r.getString("pathRemainderUndecoded"));
 		assertEquals(" ", r.getString("pathRemainder2"));

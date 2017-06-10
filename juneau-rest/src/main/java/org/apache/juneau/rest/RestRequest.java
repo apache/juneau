@@ -488,43 +488,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link HttpServletRequest#getPathInfo()} except returns the path undecoded.
-	 *
-	 * @return The undecoded portion of the URL after the resource URL path pattern match.
-	 */
-	public String getPathInfoUndecoded() {
-		return RestUtils.getPathInfoUndecoded(this);
-	}
-
-	/**
-	 * Returns the value {@link #getPathInfo()} split on the <js>'/'</js> character.
-	 * <p>
-	 * If path info is <jk>null</jk>, returns an empty list.
-	 * <p>
-	 * URL-encoded characters in segments are automatically decoded by this method.
-	 *
-	 * @return The decoded segments, or an empty list if path info is <jk>null</jk>.
-	 */
-	public String[] getPathInfoParts() {
-		String s = getPathInfoUndecoded();
-		if (s == null || s.isEmpty() || s.equals("/"))
-			return new String[0];
-		s = s.substring(1);
-		if (s.endsWith("/"))
-			s = s.substring(0, s.length()-1);
-		boolean needsDecode = (s.indexOf('%') != -1 || s.indexOf('+') != -1);
-		String[] l = s.split("/", Integer.MAX_VALUE);
-		try {
-			if (needsDecode)
-				for (int i = 0; i < l.length; i++)
-					l[i] = URLDecoder.decode(l[i], "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();  // Won't happen.
-		}
-		return l;
-	}
-
-	/**
 	 * Returns a resolved URL.
 	 * <p>
 	 * <ul class='spaced-list'>

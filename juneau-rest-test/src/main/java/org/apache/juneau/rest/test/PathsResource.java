@@ -57,8 +57,6 @@ public class PathsResource extends RestServletDefault {
 	private static ObjectMap getPaths(RestRequest req) {
 		return new ObjectMap()
 			.append("pathInfo", req.getPathInfo())
-			.append("pathInfoUndecoded", req.getPathInfoUndecoded())
-			.append("pathInfoParts", req.getPathInfoParts())
 			.append("pathRemainder", req.getPathMatch().getRemainder())
 			.append("pathRemainderUndecoded", req.getPathMatch().getRemainderUndecoded())
 			.append("requestURI", req.getRequestURI())
