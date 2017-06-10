@@ -14,8 +14,6 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.URI;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -223,7 +221,7 @@ public class Link extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Link base(URI base) {
+	public Link base(Object base) {
 		super.base(base);
 		return this;
 	}

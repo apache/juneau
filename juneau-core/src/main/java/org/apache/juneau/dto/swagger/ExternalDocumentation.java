@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.net.*;
+import java.net.URI;
+
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -39,7 +45,7 @@ import org.apache.juneau.annotation.*;
 public class ExternalDocumentation extends SwaggerElement {
 
 	private String description;
-	private String url;
+	private URI url;
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -78,34 +84,42 @@ public class ExternalDocumentation extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>url</property>.
 	 * <p>
-	 * Required. The URL for the target documentation. Value MUST be in the format of a URL.
+	 * Required. The URL for the target documentation.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getUrl() {
+	public URI getUrl() {
 		return url;
 	}
 
 	/**
 	 * Bean property setter:  <property>url</property>.
 	 * <p>
-	 * Required. The URL for the target documentation. Value MUST be in the format of a URL.
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocumentation setUrl(String url) {
-		this.url = url;
+	public ExternalDocumentation setUrl(Object url) {
+		this.url = toURI(url);
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setUrl(String)}.
+	 * Synonym for {@link #setUrl(Object)}.
 	 *
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocumentation url(String url) {
+	public ExternalDocumentation url(Object url) {
 		return setUrl(url);
 	}
 }

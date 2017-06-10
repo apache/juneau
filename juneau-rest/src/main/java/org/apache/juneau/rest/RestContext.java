@@ -304,6 +304,7 @@ public final class RestContext extends Context {
 		fullPath,
 		htmlTitle,
 		htmlDescription,
+		htmlBranding,
 		htmlHeader,
 		htmlLinks,
 		htmlNav,
@@ -417,6 +418,7 @@ public final class RestContext extends Context {
 
 			this.htmlTitle = b.htmlTitle;
 			this.htmlDescription = b.htmlDescription;
+			this.htmlBranding = b.htmlBranding;
 			this.htmlHeader = b.htmlHeader;
 			this.htmlLinks = b.htmlLinks;
 			this.htmlNav = b.htmlNav;
@@ -600,8 +602,8 @@ public final class RestContext extends Context {
 		UrlEncodingSerializer urlEncodingSerializer;
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
-		String clientVersionHeader = "", defaultCharset, paramFormat, htmlTitle, htmlDescription, htmlHeader, htmlLinks,
-			htmlNav, htmlAside, htmlCss, htmlCssUrl, htmlFooter, htmlNoResultsMessage;
+		String clientVersionHeader = "", defaultCharset, paramFormat, htmlTitle, htmlDescription, htmlBranding,
+			htmlHeader, htmlLinks, htmlNav, htmlAside, htmlCss, htmlCssUrl, htmlFooter, htmlNoResultsMessage;
 		boolean htmlNoWrap;
 		HtmlDocTemplate htmlTemplate;
 
@@ -753,6 +755,7 @@ public final class RestContext extends Context {
 
 			htmlTitle = sc.htmlTitle;
 			htmlDescription = sc.htmlDescription;
+			htmlBranding = sc.htmlBranding;
 			htmlHeader = sc.htmlHeader;
 			htmlLinks = sc.htmlLinks;
 			htmlNav = sc.htmlNav;
@@ -1003,6 +1006,17 @@ public final class RestContext extends Context {
 	 */
 	public String getHtmlDescription() {
 		return htmlDescription;
+	}
+
+	/**
+	 * The HTML page branding.
+	 * <p>
+	 * Defined by the {@link HtmlDoc#branding()} annotation or {@link RestConfig#setHtmlBranding(String)} method.
+	 *
+	 * @return The HTML page description.
+	 */
+	public String getHtmlBranding() {
+		return htmlBranding;
 	}
 
 	/**

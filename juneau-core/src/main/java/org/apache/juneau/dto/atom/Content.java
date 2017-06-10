@@ -12,10 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.net.*;
 import java.net.URI;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -108,13 +111,18 @@ public class Content extends Text {
 
 	/**
 	 * Sets the source URI.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param src The source URI.
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("src")
-	public Content src(URI src) {
-		this.src = src;
+	public Content src(Object src) {
+		this.src = toURI(src);
 		return this;
 	}
 
@@ -136,17 +144,10 @@ public class Content extends Text {
 	}
 
 	@Override /* Common */
-	public Content base(URI base) {
+	public Content base(Object base) {
 		super.base(base);
 		return this;
 	}
-
-	@Override /* Common */
-	public Content base(String base) {
-		super.base(base);
-		return this;
-	}
-
 	@Override /* Common */
 	public Content lang(String lang) {
 		super.lang(lang);

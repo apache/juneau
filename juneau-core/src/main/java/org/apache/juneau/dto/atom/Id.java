@@ -14,8 +14,6 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.URI;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -90,7 +88,7 @@ public class Id extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Id base(URI base) {
+	public Id base(Object base) {
 		super.base(base);
 		return this;
 	}

@@ -36,7 +36,7 @@ public class ContentTypeLinksWidget extends Widget {
 
 	@Override /* Widget */
 	public String resolve(RestRequest req) throws Exception {
-		UriResolver uriResolver = req.getUriResolver(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE);
+		UriResolver uriResolver = req.getUriResolver();
 		P p = p();
 		List<MediaType> l = new ArrayList<MediaType>(req.getSerializerGroup().getSupportedMediaTypes());
 		Collections.sort(l);

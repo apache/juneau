@@ -12,11 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.dto.atom.Utils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.net.*;
 import java.net.URI;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -63,23 +65,17 @@ public abstract class Common {
 
 	/**
 	 * Sets the URI base of this object.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param base The URI base of this object.
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("base")
-	public Common base(URI base) {
-		this.base = base;
-		return this;
-	}
-
-	/**
-	 * Sets the URI base of this object.
-	 *
-	 * @param base The URI base of this object.
-	 * @return This object (for method chaining).
-	 */
-	public Common base(String base) {
+	public Common base(Object base) {
 		this.base = toURI(base);
 		return this;
 	}

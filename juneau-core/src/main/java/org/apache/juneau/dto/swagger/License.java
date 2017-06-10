@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.net.*;
+import java.net.URI;
+
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -39,7 +45,7 @@ import org.apache.juneau.annotation.*;
 public class License extends SwaggerElement {
 
 	private String name;
-	private String url;
+	private URI url;
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -78,34 +84,42 @@ public class License extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>url</property>.
 	 * <p>
-	 * A URL to the license used for the API. MUST be in the format of a URL.
+	 * A URL to the license used for the API.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getUrl() {
+	public URI getUrl() {
 		return url;
 	}
 
 	/**
 	 * Bean property setter:  <property>url</property>.
 	 * <p>
-	 * A URL to the license used for the API. MUST be in the format of a URL.
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public License setUrl(String url) {
-		this.url = url;
+	public License setUrl(Object url) {
+		this.url = toURI(url);
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setUrl(String)}.
+	 * Synonym for {@link #setUrl(Object)}.
 	 *
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public License url(String url) {
+	public License url(Object url) {
 		return setUrl(url);
 	}
 }

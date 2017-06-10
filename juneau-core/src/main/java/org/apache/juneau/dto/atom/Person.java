@@ -12,9 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.dto.atom.Utils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
+import java.net.*;
 import java.net.URI;
+
+import org.apache.juneau.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -97,24 +100,17 @@ public class Person extends Common {
 
 	/**
 	 * Sets the URI of the person.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param uri The URI of the person.
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("uri")
-	public Person uri(URI uri) {
-		this.uri = uri;
-		return this;
-	}
-
-	/**
-	 * Sets the URI of the person.
-	 *
-	 * @param uri The URI of the person.
-	 * @return This object (for method chaining).
-	 */
-	@BeanProperty("uri")
-	public Person uri(String uri) {
+	public Person uri(Object uri) {
 		this.uri = toURI(uri);
 		return this;
 	}
@@ -146,7 +142,7 @@ public class Person extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Person base(URI base) {
+	public Person base(Object base) {
 		super.base(base);
 		return this;
 	}

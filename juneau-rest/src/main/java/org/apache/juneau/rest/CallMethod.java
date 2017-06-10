@@ -66,8 +66,8 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final org.apache.juneau.rest.annotation.Parameter[] parameters;
 	private final Response[] responses;
 	private final RestContext context;
-	private final String htmlTitle, htmlDescription, htmlHeader, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlCss,
-		htmlCssUrl, htmlNoResultsMessage;
+	private final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlLinks, htmlNav, htmlAside,
+		htmlFooter, htmlCss, htmlCssUrl, htmlNoResultsMessage;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> widgets;
@@ -103,6 +103,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.responses = b.responses;
 		this.htmlTitle = b.htmlTitle;
 		this.htmlDescription = b.htmlDescription;
+		this.htmlBranding = b.htmlBranding;
 		this.htmlHeader = b.htmlHeader;
 		this.htmlLinks = b.htmlLinks;
 		this.htmlNav = b.htmlNav;
@@ -118,7 +119,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 	private static class Builder  {
 		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlTitle, htmlDescription,
-			htmlLinks, htmlNav, htmlAside, htmlFooter, htmlCssUrl, htmlCss, htmlHeader, htmlNoResultsMessage;
+			htmlBranding, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlCssUrl, htmlCss, htmlHeader, htmlNoResultsMessage;
 		private boolean htmlNoWrap;
 		private HtmlDocTemplate htmlTemplate;
 		private UrlPathPattern pathPattern;
@@ -173,6 +174,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				HtmlDoc hd = m.htmldoc();
 				htmlTitle = hd.title().isEmpty() ? context.getHtmlTitle() : hd.title();
 				htmlDescription = hd.description().isEmpty() ? context.getHtmlDescription() : hd.description();
+				htmlBranding = hd.branding().isEmpty() ? context.getHtmlBranding() : hd.branding();
 				htmlHeader = hd.header().isEmpty() ? context.getHtmlHeader() : hd.header();
 				htmlLinks = hd.links().isEmpty() ? context.getHtmlLinks() : hd.links();
 				htmlNav = hd.nav().isEmpty() ? context.getHtmlNav() : hd.nav();
@@ -875,6 +877,8 @@ class CallMethod implements Comparable<CallMethod>  {
 					}
 					if (k.equals(HTMLDOC_header))
 						return htmlHeader == null ? null : req.resolveVars(htmlHeader);
+					if (k.equals(HTMLDOC_branding))
+						return htmlBranding == null ? null : req.resolveVars(htmlBranding);
 					if (k.equals(HTMLDOC_links))
 						return htmlLinks == null ? null : req.resolveVars(htmlLinks);
 					if (k.equals(HTMLDOC_nav))

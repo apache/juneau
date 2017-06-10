@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -231,7 +230,7 @@ public class Source extends CommonEntry {
 	}
 
 	@Override /* Common */
-	public Source base(URI base) {
+	public Source base(Object base) {
 		super.base(base);
 		return this;
 	}

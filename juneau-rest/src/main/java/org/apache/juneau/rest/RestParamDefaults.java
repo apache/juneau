@@ -108,6 +108,8 @@ class RestParamDefaults {
 			RequestPathMatchObject.class,
 			RequestBodyObject.class,
 			ConfigFileObject.class,
+			UriContextObject.class,
+			UriResolverObject.class,
 		};
 
 		for (Class<?> c : r) {
@@ -935,6 +937,30 @@ class RestParamDefaults {
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getConfigFile();
+		}
+	}
+
+	static final class UriContextObject extends RestParam {
+
+		protected UriContextObject() {
+			super(OTHER, null, UriContext.class);
+		}
+
+		@Override /* RestParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getUriContext();
+		}
+	}
+
+	static final class UriResolverObject extends RestParam {
+
+		protected UriResolverObject() {
+			super(OTHER, null, UriResolver.class);
+		}
+
+		@Override /* RestParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getUriResolver();
 		}
 	}
 

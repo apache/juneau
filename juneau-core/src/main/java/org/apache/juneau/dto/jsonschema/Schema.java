@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.jsonschema;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.net.*;
 import java.net.URI;
 import java.util.*;
 
@@ -126,24 +129,18 @@ public class Schema {
 
 	/**
 	 * Bean property setter:  <property>id</property>.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param id The new value for the <property>id</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setId(URI id) {
-		this.id = id;
+	public Schema setId(Object id) {
+		this.id = toURI(id);
 		return this;
-	}
-
-	/**
-	 * Bean property setter:  <property>id</property>.
-	 *
-	 * @param id The new value for the <property>id</property> property on this bean.
-	 * The parameter must be a valid URI.  It can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Schema setId(String id) {
-		return setId(id == null ? null : URI.create(id));
 	}
 
 	/**
@@ -158,25 +155,19 @@ public class Schema {
 
 	/**
 	 * Bean property setter:  <property>$schema</property>.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param schemaVersion The new value for the <property>schemaVersion</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("$schema")
-	public Schema setSchemaVersionUri(URI schemaVersion) {
-		this.schemaVersion = schemaVersion;
+	public Schema setSchemaVersionUri(Object schemaVersion) {
+		this.schemaVersion = toURI(schemaVersion);
 		return this;
-	}
-
-	/**
-	 * Bean property setter:  <property>schemaVersion</property>.
-	 *
-	 * @param schemaVersion The new value for the <property>schemaVersion</property> property on this bean.
-	 * The parameter must be a valid URI.  It can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Schema setSchemaVersionUri(String schemaVersion) {
-		return setSchemaVersionUri(schemaVersion == null ? null : URI.create(schemaVersion));
 	}
 
 	/**
@@ -1287,13 +1278,18 @@ public class Schema {
 
 	/**
 	 * Bean property setter:  <property>$ref</property>.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param ref The new value for the <property>$ref</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("$ref")
-	public Schema setRef(URI ref) {
-		this.ref = ref;
+	public Schema setRef(Object ref) {
+		this.ref = toURI(ref);
 		return this;
 	}
 
@@ -1364,19 +1360,6 @@ public class Schema {
 		if (not != null)
 			not.setMaster(master);
 	}
-
-
-	/**
-	 * Bean property setter:  <property>$ref</property>.
-	 *
-	 * @param ref The new value for the <property>$ref</property> property on this bean.
-	 * The parameter must be a valid URI.  It can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Schema setRef(String ref) {
-		return setRef(ref == null ? null : URI.create(ref));
-	}
-
 	/**
 	 * If this schema is a reference to another schema (i.e. has its <property>$ref</property> property set),
 	 * 	this method will retrieve the referenced schema from the schema map registered with this schema.

@@ -12,10 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.net.*;
 import java.net.URI;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -99,13 +102,18 @@ public class Category extends Common {
 
 	/**
 	 * Sets the category scheme.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param scheme The category scheme.
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("scheme")
-	public Category scheme(URI scheme) {
-		this.scheme = scheme;
+	public Category scheme(Object scheme) {
+		this.scheme = toURI(scheme);
 		return this;
 	}
 
@@ -137,7 +145,7 @@ public class Category extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Category base(URI base) {
+	public Category base(Object base) {
 		super.base(base);
 		return this;
 	}

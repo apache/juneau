@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import java.net.*;
+
+import org.apache.juneau.*;
+
 /**
  * Various useful static methods for creating Swagger elements.
  *
@@ -44,13 +48,16 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link Contact} element with the specified {@link Contact#name(String)}, {@link Contact#url(String)}, and {@link Contact#email(String)}, attributes.
+	 * Creates an {@link Contact} element with the specified {@link Contact#name(String)}, {@link Contact#url(Object)}, and {@link Contact#email(String)}, attributes.
 	 * @param name The {@link Contact#name(String)} attribute.
-	 * @param url The {@link Contact#url(String)} attribute.
+	 * @param url The {@link Contact#url(Object)} attribute.
+	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	<br>Strings must be valid URIs.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @param email The {@link Contact#email(String)} attribute.
 	 * @return The new element.
 	 */
-	public static final Contact contact(String name, String url, String email) {
+	public static final Contact contact(String name, Object url, String email) {
 		return contact().name(name).url(url).email(email);
 	}
 
@@ -63,21 +70,27 @@ public class SwaggerBuilder {
 	}
 
 	/**
-	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(String)} attribute.
-	 * @param url The {@link ExternalDocumentation#url(String)} attribute.
+	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)} attribute.
+	 * @param url The {@link ExternalDocumentation#url(Object)} attribute.
+	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	<br>Strings must be valid URIs.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @return The new element.
 	 */
-	public static final ExternalDocumentation externalDocumentation(String url) {
+	public static final ExternalDocumentation externalDocumentation(Object url) {
 		return externalDocumentation().url(url);
 	}
 
 	/**
-	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(String)} and {@link ExternalDocumentation#description(String)} attributes.
-	 * @param url The {@link ExternalDocumentation#url(String)} attribute.
+	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)} and {@link ExternalDocumentation#description(String)} attributes.
+	 * @param url The {@link ExternalDocumentation#url(Object)} attribute.
+	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	<br>Strings must be valid URIs.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @param description The {@link ExternalDocumentation#description(String)} attribute.
 	 * @return The new element.
 	 */
-	public static final ExternalDocumentation externalDocumentation(String url, String description) {
+	public static final ExternalDocumentation externalDocumentation(Object url, String description) {
 		return externalDocumentation().url(url).description(description);
 	}
 

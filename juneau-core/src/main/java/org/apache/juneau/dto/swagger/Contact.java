@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.net.*;
+import java.net.URI;
+
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -40,7 +46,7 @@ import org.apache.juneau.annotation.*;
 public class Contact extends SwaggerElement {
 
 	private String name;
-	private String url;
+	private URI url;
 	private String email;
 
 	/**
@@ -84,31 +90,34 @@ public class Contact extends SwaggerElement {
 	 *
 	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getUrl() {
+	public URI getUrl() {
 		return url;
 	}
 
 	/**
 	 * Bean property setter:  <property>url</property>.
 	 * <p>
-	 * The URL pointing to the contact information. MUST be in the format of a URL.
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Contact setUrl(String url) {
-		this.url = url;
+	public Contact setUrl(Object url) {
+		this.url = toURI(url);
 		return this;
 	}
 
 	/**
-	 * Synonym for {@link #setUrl(String)}.
+	 * Synonym for {@link #setUrl(Object)}.
 	 *
 	 * @param url The new value for the <property>url</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Contact url(String url) {
-		return setName(url);
+	public Contact url(Object url) {
+		return setUrl(url);
 	}
 
 	/**

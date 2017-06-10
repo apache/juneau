@@ -12,11 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.dto.atom.Utils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.net.*;
 import java.net.URI;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -49,19 +51,15 @@ public class Icon extends Common {
 
 	/**
 	 * Normal constructor.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param uri The URI of the icon.
 	 */
-	public Icon(URI uri) {
-		uri(uri);
-	}
-
-	/**
-	 * Normal constructor.
-	 *
-	 * @param uri The URI of the icon.
-	 */
-	public Icon(String uri) {
+	public Icon(Object uri) {
 		uri(uri);
 	}
 
@@ -85,24 +83,17 @@ public class Icon extends Common {
 
 	/**
 	 * Sets the URI of this icon.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param uri The URI of this icon.
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("uri")
-	public Icon uri(URI uri) {
-		this.uri = uri;
-		return this;
-	}
-
-	/**
-	 * Sets the URI of this icon.
-	 *
-	 * @param uri The URI of this icon.
-	 * @return This object (for method chaining).
-	 */
-	@BeanProperty("uri")
-	public Icon uri(String uri) {
+	public Icon uri(Object uri) {
 		this.uri = toURI(uri);
 		return this;
 	}
@@ -113,7 +104,7 @@ public class Icon extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Icon base(URI base) {
+	public Icon base(Object base) {
 		super.base(base);
 		return this;
 	}

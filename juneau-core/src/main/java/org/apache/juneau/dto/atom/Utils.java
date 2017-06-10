@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import java.net.*;
 import java.util.*;
 
 import javax.xml.bind.*;
@@ -30,20 +29,6 @@ import javax.xml.bind.*;
  * </ul>
  */
 class Utils {
-
-	/**
-	 * Converts a string to a URI without a {@link URISyntaxException}
-	 *
-	 * @param uri The URI string to convert.
-	 * @return A new URI object.
-	 */
-	static final URI toURI(String uri) {
-		try {
-			return new URI(uri);
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	/**
 	 * Converts an ISO8601 date-time string to a {@link Calendar}.

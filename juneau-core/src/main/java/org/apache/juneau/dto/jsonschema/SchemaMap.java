@@ -12,10 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.jsonschema;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -40,30 +42,30 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 
 	private static final long serialVersionUID = 1L;
 
-	@Override /* Map */
-	public Schema get(Object uri) {
-		if (uri == null)
-			return null;
-		return get(URI.create(uri.toString()));
-	}
-
 	/**
 	 * Return the {@link Schema} object at the specified URI.
 	 * If this schema object has not been loaded yet, calls {@link #load(URI)}.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param uri The URI of the schema to retrieve.
 	 * @return The Schema, or <jk>null</jk> if schema was not located and could not be loaded.
 	 */
-	public Schema get(URI uri) {
-		Schema s = super.get(uri);
+	@Override /* Map */
+	public Schema get(Object uri) {
+		URI u = toURI(uri);
+		Schema s = super.get(u);
 		if (s != null)
 			return s;
 		synchronized(this) {
-			s = load(uri);
+			s = load(u);
 			if (s != null) {
 				// Note:  Can't use add(Schema...) since the ID property may not be set.
 				s.setSchemaMap(this);
-				put(uri, s);
+				put(u, s);
 			}
 			return s;
 		}

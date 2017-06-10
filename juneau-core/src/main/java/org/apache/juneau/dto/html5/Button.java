@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+import java.net.URI;
+
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -67,11 +71,17 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction">formaction</a> attribute.
 	 * URL to use for form submission.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
 	 * @param formaction The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button formaction(String formaction) {
-		attr("formaction", formaction);
+		attrUri("formaction", formaction);
 		return this;
 	}
 

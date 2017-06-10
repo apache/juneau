@@ -14,11 +14,16 @@ package org.apache.juneau.dto.html5;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.net.*;
+import java.net.URI;
 import java.util.*;
+import java.util.Map.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.ObjectUtils;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -56,6 +61,11 @@ public abstract class HtmlElement {
 	 */
 	@BeanProperty("a")
 	public HtmlElement setAttrs(LinkedHashMap<String,Object> attrs) {
+		for (Entry<String,Object> e : attrs.entrySet()) {
+			String key = e.getKey();
+			if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
+				e.setValue(StringUtils.toURI(e.getValue()));
+		}
 		this.attrs = attrs;
 		return this;
 	}
@@ -70,7 +80,31 @@ public abstract class HtmlElement {
 	public HtmlElement attr(String key, Object val) {
 		if (this.attrs == null)
 			this.attrs = new LinkedHashMap<String,Object>();
+		if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
+			val = StringUtils.toURI(val);
 		this.attrs.put(key, val);
+		return this;
+	}
+
+	/**
+	 * Adds an arbitrary URI attribute to this element.
+	 * <p>
+	 * Same as {@link #attr(String, Object)}, except if the value is
+	 * a string that appears to be a URI (e.g. <js>"servlet:/xxx"</js>).
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param key The attribute name.
+	 * @param val The attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlElement attrUri(String key, Object val) {
+		if (this.attrs == null)
+			this.attrs = new LinkedHashMap<String,Object>();
+		this.attrs.put(key, StringUtils.toURI(val));
 		return this;
 	}
 

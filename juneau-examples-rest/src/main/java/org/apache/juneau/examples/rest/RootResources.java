@@ -36,10 +36,11 @@ import org.apache.juneau.rest.widget.*;
 			+ "	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties.</p>"
 			+ "	<p>Other features (such as this aside) are added through annotations.</p>"
 			+ "</div>",
-		footer="$W{poweredByJuneau}"
+		footer="$W{poweredByApache}"
 	),
 	widgets={
 		PoweredByJuneauWidget.class,
+		PoweredByApacheWidget.class,
 		ContentTypeLinksWidget.class
 	},
 	children={

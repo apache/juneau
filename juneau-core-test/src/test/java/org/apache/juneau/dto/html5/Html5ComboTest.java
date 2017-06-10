@@ -56,9 +56,9 @@ public class Html5ComboTest extends ComboTest {
 					/* UrlEncR */	"_type=a\n&a=(\n\thref=http://foo\n)\n&c=@(\n\tbar\n)",
 					/* MsgPack */	"83A55F74797065A161A16181A468726566AA687474703A2F2F666F6FA16391A3626172",
 					/* MsgPackT */	"83A174A161A16181A468726566AA687474703A2F2F666F6FA16391A3626172",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href>http://foo</jp:href>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
 					public void verify(A o) {
@@ -89,9 +89,9 @@ public class Html5ComboTest extends ComboTest {
 					/* UrlEncR */	"_type=a\n&a=(\n\thref=http://foo\n)\n&c=@(\n\tbar,\n\t(\n\t\t_type=b,\n\t\tc=@(\n\t\t\tbbb\n\t\t)\n\t),\n\tbaz\n)",
 					/* MsgPack */	"83A55F74797065A161A16181A468726566AA687474703A2F2F666F6FA16393A362617282A55F74797065A162A16391A3626262A362617A",
 					/* MsgPackT */	"83A174A161A16181A468726566AA687474703A2F2F666F6FA16393A362617282A174A162A16391A3626262A362617A",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href>http://foo</jp:href>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
 					public void verify(A o) {
@@ -122,9 +122,9 @@ public class Html5ComboTest extends ComboTest {
 					/* UrlEncR */	"_type=a\n&a=(\n\thref=http://foo\n)\n&c=@(\n\t''\n)",
 					/* MsgPack */	"83A55F74797065A161A16181A468726566AA687474703A2F2F666F6FA16391A0",
 					/* MsgPackT */	"83A174A161A16181A468726566AA687474703A2F2F666F6FA16391A0",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href>http://foo</jp:href>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li></rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li></rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
 					public void verify(A o) {
@@ -155,9 +155,9 @@ public class Html5ComboTest extends ComboTest {
 					/* UrlEncR */	"_type=a\n&a=(\n\thref=http://foo\n)\n&c=@(\n\t'+'\n)",
 					/* MsgPack */	"83A55F74797065A161A16181A468726566AA687474703A2F2F666F6FA16391A120",
 					/* MsgPackT */	"83A174A161A16181A468726566AA687474703A2F2F666F6FA16391A120",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>_x0020_</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>_x0020_</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href>http://foo</jp:href>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>_x0020_</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>_x0020_</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>_x0020_</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>_x0020_</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
 					public void verify(A o) {
@@ -188,9 +188,9 @@ public class Html5ComboTest extends ComboTest {
 					/* UrlEncR */	"_type=a\n&a=(\n\thref=http://foo\n)",
 					/* MsgPack */	"82A55F74797065A161A16181A468726566AA687474703A2F2F666F6F",
 					/* MsgPackT */	"82A174A161A16181A468726566AA687474703A2F2F666F6F",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>http://foo</jp:href>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href>http://foo</jp:href>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
 					public void verify(A o) {

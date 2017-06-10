@@ -521,7 +521,7 @@ public class BeanPropertyMeta {
 
 					Map valueMap = (Map)value;
 					Map propMap = (Map)r;
-						ClassMeta<?> valueType = rawTypeMeta.getValueType();
+					ClassMeta<?> valueType = rawTypeMeta.getValueType();
 
 					// If the property type is abstract, then we either need to reuse the existing
 					// map (if it's not null), or try to assign the value directly.
@@ -546,7 +546,6 @@ public class BeanPropertyMeta {
 					} else {
 						if (propMap == null) {
 							propMap = newInstance(Map.class, propertyClass);
-							invokeSetter(bean, pName, propMap);
 						} else {
 							propMap.clear();
 						}
@@ -560,6 +559,8 @@ public class BeanPropertyMeta {
 							v = session.convertToType(v, valueType);
 						propMap.put(k, v);
 					}
+					if (setter != null || field != null)
+						invokeSetter(bean, pName, propMap);
 
 				} else if (isCollection) {
 

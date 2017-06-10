@@ -1395,6 +1395,56 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Efficiently determines whether a URL is of the pattern "xxx:/xxx".
+	 * <p>
+	 * The pattern matched is: <code>[a-z]{2,}\:\/.*</code>
+	 * <p>
+	 * Note that this excludes filesystem paths such as <js>"C:/temp"</js>.
+	 *
+	 * @param s The string to test.
+	 * @return <jk>true</jk> if it's an absolute path.
+	 */
+	public static boolean isUri(String s) {
+
+		if (isEmpty(s))
+			return false;
+
+		// Use a state machine for maximum performance.
+
+		int S1 = 1;  // Looking for protocol char 1
+		int S2 = 2;  // Found protocol char 1, looking for protocol char 2
+		int S3 = 3;  // Found protocol char 2, looking for :
+		int S4 = 4;  // Found :, looking for /
+
+
+		int state = S1;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (state == S1) {
+				if (c >= 'a' && c <= 'z')
+					state = S2;
+				else
+					return false;
+			} else if (state == S2) {
+				if (c >= 'a' && c <= 'z')
+					state = S3;
+				else
+					return false;
+			} else if (state == S3) {
+				if (c == ':')
+					state = S4;
+				else if (c < 'a' || c > 'z')
+					return false;
+			} else if (state == S4) {
+				if (c == '/')
+					return true;
+				return false;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Given an absolute URI, returns just the authority portion (e.g. <js>"http://hostname:port"</js>)
 	 *
 	 * @param s The URI string.
@@ -1445,5 +1495,21 @@ public final class StringUtils {
 			}
 		}
 		return s;
+	}
+
+	/**
+	 * Converts the specified object to a URI.
+	 *
+	 * @param o The object to convert to a URI.
+	 * @return A new URI, or the same object if the object was already a URI, or
+	 */
+	public static URI toURI(Object o) {
+		if (o == null || o instanceof URI)
+			return (URI)o;
+		try {
+			return new URI(o.toString());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -14,8 +14,6 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.URI;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -133,13 +131,7 @@ public class Text extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Text base(URI base) {
-		super.base(base);
-		return this;
-	}
-
-	@Override /* Common */
-	public Text base(String base) {
+	public Text base(Object base) {
 		super.base(base);
 		return this;
 	}

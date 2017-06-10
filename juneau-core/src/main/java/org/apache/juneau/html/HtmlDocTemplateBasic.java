@@ -94,10 +94,13 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 		} else {
 			String title = session.getTitle();
 			String description = session.getDescription();
+			String branding = session.getBranding();
 			if (exists(title))
 				w.oTag(1, "h3").attr("class", "title").append('>').text(title).eTag("h3").nl();
 			if (exists(description))
 				w.oTag(1, "h5").attr("class", "description").append('>').text(description).eTag("h5").nl();
+			if (exists(branding))
+				w.append(branding).nl();
 		}
 	}
 

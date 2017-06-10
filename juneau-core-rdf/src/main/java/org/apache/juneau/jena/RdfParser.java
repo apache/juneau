@@ -273,7 +273,7 @@ public class RdfParser extends ReaderParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
-
+		
 		if (! sType.canCreateNewInstance(outer)) {
 			if (n.isResource()) {
 				Statement st = n.asResource().getProperty(session.getTypeProperty());

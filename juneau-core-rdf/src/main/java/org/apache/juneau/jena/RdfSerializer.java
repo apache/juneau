@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -261,7 +262,12 @@ public class RdfSerializer extends WriterSerializer {
 			}
 
 		} else if (sType.isUri() || isURI) {
-			n = m.createResource(getUri(session, o, null));
+			// Note that RDF URIs must be absolute to be valid!
+			String uri = getUri(session, o, null);
+			if (StringUtils.isAbsoluteUri(uri))
+				n = m.createResource(uri);
+			else
+				n = m.createLiteral(session.encodeTextInvalidChars(uri));
 
 		} else if (sType.isCharSequence() || sType.isChar()) {
 			n = m.createLiteral(session.encodeTextInvalidChars(o));

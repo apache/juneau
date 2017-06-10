@@ -13,7 +13,9 @@
 package org.apache.juneau.dto.html5;
 
 import java.net.*;
+import java.net.URI;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -46,12 +48,18 @@ public class Embed extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-src">src</a> attribute.
 	 * Address of the resource.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
 	 * @param src The new value for this attribute.
 	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Embed src(Object src) {
-		attr("src", src);
+		attrUri("src", src);
 		return this;
 	}
 

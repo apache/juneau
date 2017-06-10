@@ -15,6 +15,8 @@ package org.apache.juneau.dto.atom;
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.*;
+
 /**
  * Various useful static methods for creating ATOM elements.
  * <p>
@@ -130,22 +132,17 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates an {@link Icon} element with the specified {@link Icon#uri(URI)} attribute.
+	 * Creates an {@link Icon} element with the specified {@link Icon#uri(Object)} attribute.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The {@link Icon#uri(URI)} attribute.
+	 * @param uri The {@link Icon#uri(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Icon icon(String uri) {
-		return new Icon(uri);
-	}
-
-	/**
-	 * Creates an {@link Icon} element with the specified {@link Icon#uri(URI)} attribute.
-	 *
-	 * @param uri The {@link Icon#uri(URI)} attribute.
-	 * @return The new element.
-	 */
-	public static final Icon icon(URI uri) {
+	public static final Icon icon(Object uri) {
 		return new Icon(uri);
 	}
 
@@ -172,22 +169,17 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Logo} element with the specified {@link Logo#uri(URI)} attribute.
+	 * Creates a {@link Logo} element with the specified {@link Logo#uri(Object)} attribute.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The {@link Logo#uri(URI)} attribute.
+	 * @param uri The {@link Logo#uri(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Logo logo(String uri) {
-		return new Logo(uri);
-	}
-
-	/**
-	 * Creates a {@link Logo} element with the specified {@link Logo#uri(URI)} attribute.
-	 *
-	 * @param uri The {@link Logo#uri(URI)} attribute.
-	 * @return The new element.
-	 */
-	public static final Logo logo(URI uri) {
+	public static final Logo logo(Object uri) {
 		return new Logo(uri);
 	}
 

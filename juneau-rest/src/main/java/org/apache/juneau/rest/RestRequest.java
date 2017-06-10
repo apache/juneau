@@ -479,6 +479,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
+	 * Shortcut for calling {@link #getUriResolver()} using {@link UriResolution#ROOT_RELATIVE} and {@link UriRelativity#RESOURCE}
+	 *
+	 * @return The URI resolver for this request.
+	 */
+	public UriResolver getUriResolver() {
+		return new UriResolver(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, getUriContext());
+	}
+
+	/**
 	 * Same as {@link HttpServletRequest#getPathInfo()} except returns the path undecoded.
 	 *
 	 * @return The undecoded portion of the URL after the resource URL path pattern match.

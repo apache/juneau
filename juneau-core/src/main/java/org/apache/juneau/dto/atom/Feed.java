@@ -14,7 +14,6 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -286,7 +285,7 @@ public class Feed extends CommonEntry {
 	}
 
 	@Override /* Common */
-	public Feed base(URI base) {
+	public Feed base(Object base) {
 		super.base(base);
 		return this;
 	}

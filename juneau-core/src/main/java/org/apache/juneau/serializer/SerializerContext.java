@@ -238,7 +238,7 @@ public class SerializerContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution"</js>
 	 * 	<li><b>Data type:</b> {@link UriResolution}
-	 * 	<li><b>Default:</b> {@link UriResolution#ROOT_RELATIVE}
+	 * 	<li><b>Default:</b> {@link UriResolution#NONE}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
@@ -392,7 +392,7 @@ public class SerializerContext extends BeanContext {
 		abridged = ps.getProperty(SERIALIZER_abridged, boolean.class, false);
 		quoteChar = ps.getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
 		uriContext = ps.getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
-		uriResolution = ps.getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
+		uriResolution = ps.getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
 		uriRelativity = ps.getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 		listener = ps.getProperty(SERIALIZER_listener, Class.class, null);
 	}
