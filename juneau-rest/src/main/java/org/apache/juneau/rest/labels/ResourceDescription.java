@@ -12,58 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.labels;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
-import org.apache.juneau.dto.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.html.annotation.*;
 
 /**
  * Shortcut label for child resources.  Typically used in router resources.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<jc>// Instead of this...</jc>
- * 	<jk>new</jk> NameDescription(<jk>new</jk> Link(<js>"httpTool"</js>, uri + <js>"/httpTool"</js>), <js>"HTTP request test client"</js>);
- *
- * 	<jc>// ...use this simpler equivalent...</jc>
- * 	<jk>new</jk> ResourceLink(uri, <js>"httpTool"</js>, <js>"HTTP request test client"</js>);
+ * 	<jk>new</jk> ResourceLink(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
  */
 public final class ResourceDescription extends NameDescription implements Comparable<ResourceDescription> {
-
-	/**
-	 * Constructor.
-	 *
-	 * @param rootUrl The root URI of the child resource (e.g. the URI of the parent resource).
-	 * Must not end with <js>'/'</js>.
-	 * Must be URL-Encoded.
-	 * @param name The name of the child resource.
-	 * This will be URL-encoded and appended onto the root URL to create the hyperlink for the resource.
-	 * @param description The description of the child resource.
-	 */
-	public ResourceDescription(String rootUrl, String name, String description) {
-		super(new Link(name, (rootUrl.equals("/") || rootUrl.isEmpty() ? "/" : rootUrl + "/") + urlEncode(name)), description);
-	}
-
-	/**
-	 * Constructor for resources that are children of a REST resource.
-	 *
-	 * @param req The HTTP request.
-	 * @param childPath The childPath The path of the child resource relative to the servlet.
-	 * @param description The description of the child resource.
-	 */
-	public ResourceDescription(RestRequest req, String childPath, String description) {
-		super(new Link(calcName(childPath), calcHref(req, childPath)), description);
-	}
-
-	private static String calcName(String childPath) {
-		return urlDecode(childPath.indexOf('/') == -1 ? childPath : childPath.substring(childPath.lastIndexOf('/')+1));
-	}
-
-	// TODO
-	private static String calcHref(RestRequest req, String childPath) {
-		return req.getServletURIBuilder().append('/').append(childPath).toString();
-	}
 
 	/**
 	 * Constructor.
@@ -72,29 +31,21 @@ public final class ResourceDescription extends NameDescription implements Compar
 	 * @param description The description of the child resource.
 	 */
 	public ResourceDescription(String name, String description) {
-		super(new Link(name, name), description);
+		super(name, description);
 	}
 
 	/** No-arg constructor.  Used for JUnit testing of OPTIONS pages. */
 	public ResourceDescription() {}
 
 	@Override /* NameDescription */
-	public Link getName() {
-		return (Link)super.getName();
-	}
-
-	/**
-	 * Overridden setter.
-	 *
-	 * @param name The new name.
-	 */
-	public void setName(Link name) {
-		super.setName(name);
+	@Html(link="servlet:/{name}")
+	public Object getName() {
+		return super.getName();
 	}
 
 	@Override /* Comparable */
 	public int compareTo(ResourceDescription o) {
-		return getName().compareTo(o.getName());
+		return getName().toString().compareTo(o.getName().toString());
 	}
 
 	@Override /* Object */

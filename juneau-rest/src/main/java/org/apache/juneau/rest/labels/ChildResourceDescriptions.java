@@ -45,9 +45,8 @@ public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
 	 * Default is to maintain the order as specified in the annotation.
 	 */
 	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
-		String uri = req.getTrimmedRequestURI();
 		for (Map.Entry<String,RestContext> e : context.getChildResources().entrySet())
-			add(new ResourceDescription(uri, e.getKey(), e.getValue().getInfoProvider().getTitle(req)));
+			add(new ResourceDescription(e.getKey(), e.getValue().getInfoProvider().getTitle(req)));
 		if (sort)
 			Collections.sort(this);
 	}

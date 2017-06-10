@@ -63,7 +63,7 @@ public class DockerRegistryResource extends Resource {
 	@RestMethod(name="GET", path="/")
 	public ResourceDescription[] getChildren(RestRequest req) {
 		return new ResourceDescription[] {
-			new ResourceDescription(req, "search", "Search Registry")
+			new ResourceDescription("search", "Search Registry")
 		};
 	}
 

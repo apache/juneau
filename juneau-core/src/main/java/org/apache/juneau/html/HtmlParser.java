@@ -134,7 +134,7 @@ public class HtmlParser extends XmlParser {
 			else
 				isValid = false;
 
-		} else if (tag == STRING) {
+		} else if (tag == STRING || (tag == A && pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getLink() != null)) {
 			String text = session.getElementText(r);
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
@@ -146,7 +146,7 @@ public class HtmlParser extends XmlParser {
 				o = sType.newInstanceFromNumber(session, outer, parseNumber(text, sType.getNewInstanceFromNumberClass()));
 			else
 				isValid = false;
-			skipTag(r, xSTRING);
+			skipTag(r, tag == STRING ? xSTRING : xA);
 
 		} else if (tag == NUMBER) {
 			String text = session.getElementText(r);

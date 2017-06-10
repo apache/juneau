@@ -25,7 +25,6 @@ import org.junit.*;
 
 public class RootResourcesTest extends RestTestcase {
 
-	private static String path = SamplesMicroservice.getURI().getPath();              // /jazz/juneau/sample
 	private static boolean debug = false;
 
 	private RestClient jsonClient = SamplesMicroservice.DEFAULT_CLIENT;
@@ -39,8 +38,7 @@ public class RootResourcesTest extends RestTestcase {
 		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
 		RestCall r = client.doGet("");
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
-		assertEquals("helloWorld", x[0].getName().getName());
-		assertEquals(path + "/helloWorld", x[0].getName().getHref());
+		assertEquals("helloWorld", x[0].getName());
 		assertEquals("Hello World", x[0].getDescription());
 
 		r = jsonClient.doOptions("");
@@ -58,8 +56,7 @@ public class RootResourcesTest extends RestTestcase {
 		RestClient client = SamplesMicroservice.client().parser(XmlParser.DEFAULT).build();
 		RestCall r = client.doGet("");
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
-		assertEquals("helloWorld", x[0].getName().getName());
-		assertEquals(path + "/helloWorld", x[0].getName().getHref());
+		assertEquals("helloWorld", x[0].getName());
 		assertEquals("Hello World", x[0].getDescription());
 
 		r = jsonClient.doOptions("");
@@ -79,8 +76,7 @@ public class RootResourcesTest extends RestTestcase {
 		RestClient client = SamplesMicroservice.client().parser(HtmlParser.DEFAULT).accept("text/html+stripped").build();
 		RestCall r = client.doGet("");
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
-		assertEquals("helloWorld", x[0].getName().getName());
-		assertTrue(x[0].getName().getHref().endsWith("/helloWorld"));
+		assertEquals("helloWorld", x[0].getName());
 		assertEquals("Hello World", x[0].getDescription());
 
 		r = jsonClient.doOptions("").accept("text/json");
