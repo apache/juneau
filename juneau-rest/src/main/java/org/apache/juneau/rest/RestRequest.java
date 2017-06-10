@@ -20,7 +20,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.net.*;
 import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
@@ -485,27 +484,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriResolver getUriResolver() {
 		return new UriResolver(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, getUriContext());
-	}
-
-	/**
-	 * Returns a resolved URL.
-	 * <p>
-	 * <ul class='spaced-list'>
-	 * 	<li>Fully-qualified absolute URLs (e.g. <js>"http://..."</js>, <js>"https://"</js>) are simply converted to a URL.
-	 * 	<li>Absolute URLs (e.g. <js>"/foo/..."</js>) are interpreted as relative to the server hostname.
-	 * 	<li>Relative URLs (e.g. <js>"foo/..."</js>) are interpreted as relative to this servlet path.
-	 * </ul>
-	 *
-	 * @param path The URL path to resolve.
-	 * @return The resolved URL.
-	 * @throws MalformedURLException If path is not a valid URL component.
-	 */
-	public URL getURL(String path) throws MalformedURLException {
-		if (path.startsWith("http://") || path.startsWith("https://"))
-			return new URL(path);
-		if (startsWith(path, '/'))
-			return new URL(getScheme(), getLocalName(), getLocalPort(), path);
-		return new URL(getScheme(), getLocalName(), getLocalPort(), getContextPath() + getServletPath() + (isEmpty(path) ? "" : ('/' + path)));
 	}
 
 	/**

@@ -113,9 +113,6 @@ public class UrisResource extends RestServletDefault {
 		m.put("requestURL", req.getRequestURL());
 		m.put("servletPath", req.getServletPath());
 		m.put("servletURI", req.getServletURI());
-		m.put("testURL1", req.getURL("testURL"));
-		m.put("testURL2", req.getURL("/testURL"));
-		m.put("testURL3", req.getURL("http://testURL"));
 		return m;
 	}
 }
