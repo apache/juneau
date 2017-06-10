@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import java.io.*;
+import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
@@ -555,8 +556,10 @@ public class XmlWriter extends SerializerWriter {
 	private XmlWriter attrValue(Object o, boolean needsEncoding) throws IOException {
 		if (needsEncoding)
 			XmlUtils.encodeAttrValue(out, o, this.trimStrings);
+		else if (o instanceof URI || o instanceof URL)
+			append(uriResolver.resolve(o));
 		else
-			append(o.toString());
+			append(o);
 		return this;
 	}
 

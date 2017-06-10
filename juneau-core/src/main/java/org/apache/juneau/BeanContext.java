@@ -904,7 +904,7 @@ public class BeanContext extends Context {
 		implKeyClasses = implClasses.keySet().toArray(new Class[0]);
 		implValueClasses = implClasses.values().toArray(new Class[0]);
 
-		locale = pm.get(BEAN_locale, Locale.class, Locale.getDefault());
+		locale = pm.get(BEAN_locale, Locale.class, null);
 		timeZone = pm.get(BEAN_timeZone, TimeZone.class, null);
 		mediaType = pm.get(BEAN_mediaType, MediaType.class, null);
 

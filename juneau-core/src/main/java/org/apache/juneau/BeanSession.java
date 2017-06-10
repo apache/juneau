@@ -58,17 +58,19 @@ public class BeanSession extends Session {
 	protected BeanSession(BeanContext ctx, ObjectMap op, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op);
 		this.ctx = ctx;
+		Locale _locale = null;
 		if (op == null || op.isEmpty()) {
-			this.locale = (locale != null ? locale : ctx.locale);
+			_locale = (locale != null ? locale : ctx.locale);
 			this.timeZone = (timeZone != null ? timeZone : ctx.timeZone);
 			this.debug = ctx.debug;
 			this.mediaType = mediaType != null ? mediaType : ctx.mediaType;
 		} else {
-			this.locale = (locale == null ? op.get(Locale.class, BEAN_locale, ctx.locale) : locale);
+			_locale = (locale == null ? op.get(Locale.class, BEAN_locale, ctx.locale) : locale);
 			this.timeZone = (timeZone == null ? op.get(TimeZone.class, BEAN_timeZone, ctx.timeZone) : timeZone);
 			this.debug = op.getBoolean(BEAN_debug, false);
 			this.mediaType = (mediaType == null ? op.get(MediaType.class, BEAN_mediaType, ctx.mediaType) : mediaType);
 		}
+		this.locale = _locale == null ? Locale.getDefault() : _locale;
 	}
 
 	/**
