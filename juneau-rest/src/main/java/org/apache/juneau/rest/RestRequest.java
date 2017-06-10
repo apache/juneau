@@ -82,7 +82,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private RequestPathMatch pathParams;
 	private boolean isPost;
 	private UriContext uriContext;
-	private String relativeServletURI;
 	private String charset, defaultCharset;
 	private RequestHeaders headers;
 	private ConfigFile cf;
@@ -506,17 +505,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public StringBuffer getTrimmedRequestURL() {
 		return trimTrailingSlashes(getRequestURL());
-	}
-
-	/**
-	 * Gets the path-absolute relative URI of the servlet (e.g. <js>"/contextPath/servletPath"</js>).
-	 *
-	 * @return The relative servlet URI.
-	 */
-	public String getRelativeServletURI() {
-		if (relativeServletURI == null)
-			relativeServletURI = getContextPath() + getServletPath();
-		return relativeServletURI;
 	}
 
 
