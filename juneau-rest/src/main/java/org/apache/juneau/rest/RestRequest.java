@@ -498,15 +498,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return trimTrailingSlashes(getRequestURI());
 	}
 
-	/**
-	 * Same as {@link #getRequestURL()} but trims trailing slashes from the result.
-	 *
-	 * @return The trimmed request URL.
-	 */
-	public StringBuffer getTrimmedRequestURL() {
-		return trimTrailingSlashes(getRequestURL());
-	}
-
 
 	//--------------------------------------------------------------------------------
 	// Labels

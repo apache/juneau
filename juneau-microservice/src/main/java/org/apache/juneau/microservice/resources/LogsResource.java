@@ -18,7 +18,7 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
-import java.net.*;
+import java.net.URI;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -103,7 +103,7 @@ public class LogsResource extends Resource {
 			File[] files = f.listFiles(filter);
 			if (files != null) {
 				for (File fc : files) {
-					URL fUrl = new URL(req.getTrimmedRequestURL().append('/').append(fc.getName()).toString());
+					URI fUrl = new URI("servlet:/" + fc.getName());
 					l.add(new FileResource(fc, fUrl));
 				}
 			}
@@ -113,7 +113,7 @@ public class LogsResource extends Resource {
 		}
 
 		res.setHtmlDescription(new StringMessage("File details on {0}", f.getAbsolutePath()));
-		return new FileResource(f, new URL(req.getTrimmedRequestURL().toString()));
+		return new FileResource(f, new URI("servlet:/"));
 	}
 
 	/**
@@ -307,20 +307,20 @@ public class LogsResource extends Resource {
 		public Object name;
 		public Long size;
 		@BeanProperty(swap=DateSwap.DateTimeMedium.class) public Date lastModified;
-		public URL view, highlighted, parsed, download, delete;
+		public URI view, highlighted, parsed, download, delete;
 
-		public FileResource(File f, URL url) throws IOException {
+		public FileResource(File f, URI uri) throws Exception {
 			this.f = f;
 			this.type = (f.isDirectory() ? "dir" : "file");
-			this.name = f.isDirectory() ? new Link(f.getName(), url.toString()) : f.getName();
+			this.name = f.isDirectory() ? new Link(f.getName(), uri.toString()) : f.getName();
 			this.size = f.isDirectory() ? null : f.length();
 			this.lastModified = new Date(f.lastModified());
 			if (f.canRead() && ! f.isDirectory()) {
-				this.view = new URL(url + "?method=VIEW");
-				this.highlighted = new URL(url + "?method=VIEW&highlight=true");
-				this.parsed = new URL(url + "?method=PARSE");
-				this.download = new URL(url + "?method=DOWNLOAD");
-				this.delete = new URL(url + "?method=DELETE");
+				this.view = new URI(uri + "?method=VIEW");
+				this.highlighted = new URI(uri + "?method=VIEW&highlight=true");
+				this.parsed = new URI(uri + "?method=PARSE");
+				this.download = new URI(uri + "?method=DOWNLOAD");
+				this.delete = new URI(uri + "?method=DELETE");
 			}
 		}
 	}
