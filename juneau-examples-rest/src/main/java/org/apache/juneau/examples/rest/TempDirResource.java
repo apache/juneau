@@ -53,9 +53,9 @@ public class TempDirResource extends DirectoryResource {
 	 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
 	 */
 	@RestMethod(name="GET", path="/upload")
-	public Form getUploadForm(RestRequest req) {
+	public Form getUploadForm() {
 		return
-			form().id("form").action(req.getServletURI() + "/upload").method("POST").enctype("multipart/form-data")
+			form().id("form").action("servlet:/upload").method("POST").enctype("multipart/form-data")
 			.children(
 				input().name("contents").type("file"),
 				button("submit", "Submit")

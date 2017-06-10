@@ -195,7 +195,7 @@ public class SystemPropertiesResource extends Resource {
 		)
 	)
 	public Form getFormPage() {
-		return form().method("POST").action("formPagePost").children(
+		return form().method("POST").action("servlet:/formPagePost").children(
 			h4("Set system property"),
 			"Name: ", input("text").name("name"), br(),
 			"Value: ", input("text").name("value"), br(), br(),

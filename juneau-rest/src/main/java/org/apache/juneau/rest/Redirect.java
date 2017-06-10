@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import java.net.*;
 import java.text.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -67,14 +67,13 @@ import org.apache.juneau.urlencoding.*;
 public final class Redirect {
 
 	private final int httpResponseCode;
-	private final String url;
-	private final Object[] args;
+	private final URI uri;
 
 	/**
 	 * Redirect to the specified URL.
 	 * Relative paths are interpreted as relative to the servlet path.
 	 *
-	 * @param url The URL to redirect to.
+	 * @param uri The URL to redirect to.
 	 * <br>Can be any of the following:
 	 * <ul>
 	 * 	<li><code>URL</code>
@@ -83,15 +82,15 @@ public final class Redirect {
 	 * </ul>
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public Redirect(Object url, Object...args) {
-		this(0, url, args);
+	public Redirect(Object uri, Object...args) {
+		this(0, uri, args);
 	}
 
 	/**
 	 * Convenience method for redirecting to instance of {@link URL} and {@link URI}.
 	 * Same as calling <code>toString()</code> on the object and using the other constructor.
 	 *
-	 * @param url The URL to redirect to.
+	 * @param uri The URL to redirect to.
 	 * <br>Can be any of the following:
 	 * <ul>
 	 * 	<li><code>URL</code>
@@ -99,8 +98,8 @@ public final class Redirect {
 	 * 	<li><code>CharSequence</code>
 	 * </ul>
 	 */
-	public Redirect(Object url) {
-		this(0, url, (Object[])null);
+	public Redirect(Object uri) {
+		this(0, uri, (Object[])null);
 	}
 
 	/**
@@ -119,8 +118,12 @@ public final class Redirect {
 	 */
 	public Redirect(int httpResponseCode, Object url, Object...args) {
 		this.httpResponseCode = httpResponseCode;
-		this.url = (url == null ? null : url.toString());
-		this.args = args;
+		if (url == null)
+			url = "";
+		if (args != null && args.length > 0)
+			this.uri = StringUtils.toURI(MessageFormat.format(url.toString(), args));
+		else
+			this.uri = StringUtils.toURI(url);
 	}
 
 	/**
@@ -131,26 +134,20 @@ public final class Redirect {
 	}
 
 	/**
-	 * Calculates the URL to redirect to.
-	 *
-	 * @param s Use this serializer to encode arguments using the {@link UrlEncodingSerializer#serialize(PartType,Object)} method.
-	 * @return The URL to redirect to.
-	 */
-	public String toUrl(UrlEncodingSerializer s) {
-		if (url != null && args != null && args.length > 0) {
-			for (int i = 0; i < args.length; i++)
-				args[i] = s.serialize(PartType.PATH, args[i]);
-			return MessageFormat.format(url, args);
-		}
-		return url;
-	}
-
-	/**
 	 * Returns the response code passed in through the constructor.
 	 *
 	 * @return The response code passed in through the constructor, or <code>0</code> if response code wasn't specified.
 	 */
 	public int getHttpResponseCode() {
 		return httpResponseCode;
+	}
+
+	/**
+	 * Returns the URI to redirect to.
+	 *
+	 * @return The URI to redirect to.
+	 */
+	public URI getURI() {
+		return uri;
 	}
 }

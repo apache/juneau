@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.io.*;
 
 import org.apache.juneau.rest.*;
@@ -27,14 +25,7 @@ public final class RedirectHandler implements ResponseHandler {
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
 		if (output instanceof Redirect) {
 			Redirect r = (Redirect)output;
-			String uri = r.toUrl(res.getUrlEncodingSerializer());
-			if (isEmpty(uri))
-				uri = req.getServletURI();
-			else {
-				char c = (uri.length() > 0 ? uri.charAt(0) : 0);
-				if (c != '/' && uri.indexOf("://") == -1)
-					uri = req.getServletURIBuilder().append('/').append(uri).toString();
-			}
+			String uri = req.getUriResolver().resolve(r.getURI());
 			int rc = r.getHttpResponseCode();
 			if (rc != 0)
 				res.setStatus(rc);   // TODO - This may get ignored by the call below.

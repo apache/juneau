@@ -60,6 +60,7 @@ public final class ResourceDescription extends NameDescription implements Compar
 		return urlDecode(childPath.indexOf('/') == -1 ? childPath : childPath.substring(childPath.lastIndexOf('/')+1));
 	}
 
+	// TODO
 	private static String calcHref(RestRequest req, String childPath) {
 		return req.getServletURIBuilder().append('/').append(childPath).toString();
 	}
