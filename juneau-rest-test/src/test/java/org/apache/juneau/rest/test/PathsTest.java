@@ -41,8 +41,6 @@ public class PathsTest extends RestTestcase {
 		//		requestParentURI:'/jazz/juneau/test',
 		//		requestURL:'https://localhost:9443/jazz/juneau/test/testPaths',
 		//		servletPath:'/juneau/test/testPaths',
-		//		relativeServletURI:'/jazz/juneau/test/testPaths',
-		//		pathRemainder2:null
 		//	}
 		url = URL;
 		r = client.doGet(url).getResponse(ObjectMap.class);
@@ -55,7 +53,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 
@@ -68,8 +65,6 @@ public class PathsTest extends RestTestcase {
 		//			requestParentURI: '/jazz/juneau/test',
 		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/',
 		//			servletPath: '/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: ''
 		//		}
 		url = URL + '/';
 		r = client.doGet(url).getResponse(ObjectMap.class);
@@ -82,7 +77,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		// [/test/testPaths//]
@@ -93,8 +87,6 @@ public class PathsTest extends RestTestcase {
 		//			requestParentURI: '/jazz/juneau/test',
 		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths//',
 		//			servletPath: '/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '/'
 		//		}
 		url = URL + "//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
@@ -106,7 +98,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths//"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		// [/test/testPaths///]
@@ -117,8 +108,6 @@ public class PathsTest extends RestTestcase {
 		//			requestParentURI: '/jazz/juneau/test',
 		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths///',
 		//			servletPath: '/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '//'
 		//		}
 		url = URL + "///";
 		r = client.doGet(url).getResponse(ObjectMap.class);
@@ -130,7 +119,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths///"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		// [/test/testPaths/foo/bar]
@@ -141,8 +129,6 @@ public class PathsTest extends RestTestcase {
 		//			requestParentURI: '/jazz/juneau/test/testPaths/foo',
 		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/foo/bar',
 		//			servletPath: '/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: 'foo/bar'
 		//		}
 		url = URL + "/foo/bar";
 		r = client.doGet(url).getResponse(ObjectMap.class);
@@ -154,7 +140,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/foo/bar"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		// [/test/testPaths/foo/bar/]
@@ -165,8 +150,6 @@ public class PathsTest extends RestTestcase {
 		//			requestParentURI: '/jazz/juneau/test/testPaths/foo',
 		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/foo/bar/',
 		//			servletPath: '/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: 'foo/bar/'
 		//		}
 		url = URL + "/foo/bar/";
 		r = client.doGet(url).getResponse(ObjectMap.class);
@@ -178,7 +161,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/foo/bar/"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		// [/test/testPaths//foo//bar//]
@@ -189,8 +171,6 @@ public class PathsTest extends RestTestcase {
 		//			requestParentURI: '/jazz/juneau/test/testPaths//foo',
 		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths//foo//bar//',
 		//			servletPath: '/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '/foo//bar//'
 		//		}
 		url = URL + "//foo//bar//";
 		r = client.doGet(url).getResponse(ObjectMap.class);
@@ -202,7 +182,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths//foo//bar//"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		// [/test/testPaths/test2]
@@ -215,8 +194,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: null,
 		//			method: 2
 		//		}
 		url = URL + "/test2";
@@ -229,7 +206,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 
@@ -243,8 +219,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '',
 		//			method: 2
 		//		}
 		url = URL + "/test2/";
@@ -257,7 +231,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2/"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		// [/test/testPaths/test2//]
@@ -270,8 +243,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '/',
 		//			method: 2
 		//		}
 		url = URL + "/test2//";
@@ -284,7 +255,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2//"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		// [/test/testPaths/test2///]
@@ -297,8 +267,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '//',
 		//			method: 2
 		//		}
 		url = URL + "/test2///";
@@ -311,7 +279,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2///"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		// [/test/testPaths/test2/foo/bar]
@@ -324,8 +291,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: 'foo/bar',
 		//			method: 2
 		//		}
 		url = URL + "/test2/foo/bar";
@@ -338,7 +303,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2/foo/bar"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		// [/test/testPaths/test2/foo/bar/]
@@ -351,8 +315,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: 'foo/bar/',
 		//			method: 2
 		//		}
 		url = URL + "/test2/foo/bar/";
@@ -365,7 +327,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2/foo/bar/"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		// [/test/testPaths/test2//foo//bar//]
@@ -378,8 +339,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '/foo//bar//',
 		//			method: 2
 		//		}
 		url = URL + "/test2//foo//bar//";
@@ -392,7 +351,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2//foo//bar//"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		// [/test/testPaths/a]
@@ -405,8 +363,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: null,
 		//			method: 3
 		//		}
 		url = URL + "/a";
@@ -420,7 +376,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/]
@@ -433,8 +388,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '',
 		//			method: 3
 		//		}
 		url = URL + "/a/";
@@ -448,7 +401,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		// [/test/testPaths/a//]
@@ -461,8 +413,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '/',
 		//			method: 3
 		//		}
 		url = URL + "/a//";
@@ -476,7 +426,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		// [/test/testPaths/a///]
@@ -489,8 +438,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '//',
 		//			method: 3
 		//		}
 		url = URL + "/a///";
@@ -504,7 +451,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/foo/bar]
@@ -517,8 +463,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: 'foo/bar',
 		//			method: 3
 		//		}
 		url = URL + "/a/foo/bar";
@@ -532,7 +476,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/foo/bar/]
@@ -545,8 +488,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: 'foo/bar/',
 		//			method: 3
 		//		}
 		url = URL + "/a/foo/bar/";
@@ -560,7 +501,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		// [/test/testPaths/a//foo//bar//]
@@ -573,8 +513,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '/foo//bar//',
 		//			method: 3
 		//		}
 		url = URL + "/a//foo//bar//";
@@ -588,7 +526,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/test2]
@@ -601,8 +538,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: null,
 		//			method: 4
 		//		}
 		url = URL + "/a/test2";
@@ -616,7 +551,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/test2/]
@@ -629,8 +563,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '',
 		//			method: 4
 		//		}
 		url = URL + "/a/test2/";
@@ -644,7 +576,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/test2//]
@@ -657,8 +588,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '/',
 		//			method: 4
 		//		}
 		url = URL + "/a/test2//";
@@ -672,7 +601,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/test2///]
@@ -685,8 +613,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '//',
 		//			method: 4
 		//		}
 		url = URL + "/a/test2///";
@@ -700,7 +626,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/test2/foo/bar]
@@ -713,8 +638,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: 'foo/bar',
 		//			method: 4
 		//		}
 		url = URL + "/a/test2/foo/bar";
@@ -728,7 +651,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/test2/foo/bar/]
@@ -741,8 +663,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: 'foo/bar/',
 		//			method: 4
 		//		}
 		url = URL + "/a/test2/foo/bar/";
@@ -756,7 +676,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		// [/test/testPaths/a/test2//foo//bar//]
@@ -769,8 +688,6 @@ public class PathsTest extends RestTestcase {
 		//			servletPath: '/juneau/test/testPaths/a',
 		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
 		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '/foo//bar//',
 		//			method: 4
 		//		}
 		url = URL + "/a/test2//foo//bar//";
@@ -784,7 +701,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		//--------------------------------------------------------------------------------
@@ -801,7 +717,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/%20"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		url = URL + "/test2/%20";
@@ -815,7 +730,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2/%20"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		url = URL + "/a/%20";
@@ -830,7 +744,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		url = URL + "/a/test2/%20";
@@ -845,7 +758,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 
 		url = URL + "/+";
@@ -859,7 +771,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/+"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(1, (int)r.getInt("method"));
 
 		url = URL + "/test2/+";
@@ -873,7 +784,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2/+"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
 		url = URL + "/a/+";
@@ -888,7 +798,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
 
 		url = URL + "/a/test2/+";
@@ -903,7 +812,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(4, (int)r.getInt("method"));
 	}
 }

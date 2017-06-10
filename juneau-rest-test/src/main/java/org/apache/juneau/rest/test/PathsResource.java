@@ -64,8 +64,7 @@ public class PathsResource extends RestServletDefault {
 			.append("requestURL", req.getRequestURL())
 			.append("servletPath", req.getServletPath())
 			.append("servletURI", req.getUriContext().getRootRelativeServletPath())
-			.append("servletParentURI", req.getUriContext().getRootRelativeServletPathParent())
-			.append("relativeServletURI", req.getRelativeServletURI());
+			.append("servletParentURI", req.getUriContext().getRootRelativeServletPathParent());
 
 	}
 }

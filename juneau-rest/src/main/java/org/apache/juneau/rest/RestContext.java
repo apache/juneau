@@ -220,13 +220,6 @@ public final class RestContext extends Context {
 	public static final String REST_servletURI = "RestServlet.servletURI";
 
 	/**
-	 * The request servlet URI.
-	 * <p>
-	 * Equivalent to the value returned by {@link RestRequest#getRelativeServletURI()}
-	 */
-	public static final String REST_relativeServletURI = "RestServlet.relativeServletURI";
-
-	/**
 	 * The request URI path info.
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.

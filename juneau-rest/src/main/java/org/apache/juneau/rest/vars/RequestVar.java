@@ -98,8 +98,6 @@ public class RequestVar extends SimpleVar {
 				} else if (c == 'r') {
 					if (key.equals("requestURI"))
 						return req.getRequestURI();
-					if (key.equals("relativeServletURI"))
-						return req.getRelativeServletURI();
 					if (key.equals("requestParentURI"))
 						return req.getUriContext().getRootRelativePathInfoParent();
 				} else if (c == 's') {
