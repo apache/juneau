@@ -198,66 +198,8 @@ public class PathsTest extends RestTestcase {
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths//foo//bar//"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths//foo/"));
+		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/foo/"));
 		assertTrue(r.getString("requestURL").endsWith("/testPaths//foo//bar//"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
-		assertEquals(1, (int)r.getInt("method"));
-
-		// [/test/testPaths/foo%2Fbar]
-		//		{
-		//			pathInfo: '/foo//bar',
-		//			pathRemainder: 'foo//bar',
-		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
-		//			requestURI: '/jazz/juneau/test/testPaths/foo%2F%2Fbar',
-		//			requestParentURI: '/jazz/juneau/test/testPaths',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/foo%2F%2Fbar',
-		//			servletPath: '/juneau/test/testPaths',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: 'foo//bar',
-		//			method: 1
-		//		}
-		url = URL + "/foo%2F%2Fbar";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("/foo//bar", r.getString("pathInfo"));
-		assertEquals("foo//bar", r.getString("pathRemainder"));
-		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
-		assertEquals("foo//bar", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths/foo%2F%2Fbar"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths/foo%2F%2Fbar"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
-		assertEquals(1, (int)r.getInt("method"));
-
-		// [/test/testPaths//foo%2Fbar//]
-		//		{
-		//			pathInfo: '//foo//bar//',
-		//			pathRemainder: '/foo//bar//',
-		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
-		//			requestURI: '/jazz/juneau/test/testPaths//foo%2F%2Fbar//',
-		//			requestParentURI: '/jazz/juneau/test/testPaths/',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths//foo%2F%2Fbar//',
-		//			servletPath: '/juneau/test/testPaths',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '/foo//bar//',
-		//			method: 1
-		//		}
-		url = URL + "//foo%2F%2Fbar//";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("//foo//bar//", r.getString("pathInfo"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder"));
-		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths//foo%2F%2Fbar//"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths//foo%2F%2Fbar//"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
 		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
@@ -453,64 +395,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
 		assertEquals(2, (int)r.getInt("method"));
 
-		// [/test/testPaths/test2/foo%2Fbar]
-		//		{
-		//			pathInfo: '/test2/foo//bar',
-		//			pathRemainder: 'foo//bar',
-		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
-		//			requestURI: '/jazz/juneau/test/testPaths/test2/foo%2F%2Fbar',
-		//			requestParentURI: '/jazz/juneau/test/testPaths/test2',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/test2/foo%2F%2Fbar',
-		//			servletPath: '/juneau/test/testPaths',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: 'foo//bar',
-		//			method: 2
-		//		}
-		url = URL + "/test2/foo%2F%2Fbar";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("/test2/foo//bar", r.getString("pathInfo"));
-		assertEquals("foo//bar", r.getString("pathRemainder"));
-		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
-		assertEquals("foo//bar", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2/foo%2F%2Fbar"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/test2"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2/foo%2F%2Fbar"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
-		assertEquals(2, (int)r.getInt("method"));
-
-		// [/test/testPaths/test2//foo%2Fbar//]
-		//		{
-		//			pathInfo: '/test2//foo//bar//',
-		//			pathRemainder: '/foo//bar//',
-		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
-		//			requestURI: '/jazz/juneau/test/testPaths/test2//foo%2F%2Fbar//',
-		//			requestParentURI: '/jazz/juneau/test/testPaths/test2/',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/test2//foo%2F%2Fbar//',
-		//			servletPath: '/juneau/test/testPaths',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths',
-		//			pathRemainder2: '/foo//bar//',
-		//			method: 2
-		//		}
-		url = URL + "/test2//foo%2F%2Fbar//";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("/test2//foo//bar//", r.getString("pathInfo"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder"));
-		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths/test2//foo%2F%2Fbar//"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/test2/"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths/test2//foo%2F%2Fbar//"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths"));
-		assertEquals(2, (int)r.getInt("method"));
-
 		// [/test/testPaths/a]
 		//		{
 		//			pathInfo: null,
@@ -699,74 +583,13 @@ public class PathsTest extends RestTestcase {
 		assertEquals("/foo//bar//", r.getString("pathRemainder"));
 		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a//foo//bar//"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/a//foo/"));
+		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/a/foo/"));
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/a//foo//bar//"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
 		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
 		assertEquals(3, (int)r.getInt("method"));
-
-		// [/test/testPaths/a/foo%2Fbar]
-		//		{
-		//			pathInfo: '/foo//bar',
-		//			pathRemainder: 'foo//bar',
-		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
-		//			requestURI: '/jazz/juneau/test/testPaths/a/foo%2F%2Fbar',
-		//			requestParentURI: '/jazz/juneau/test/testPaths/a',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/a/foo%2F%2Fbar',
-		//			servletPath: '/juneau/test/testPaths/a',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: 'foo//bar',
-		//			method: 3
-		//		}
-		url = URL + "/a/foo%2F%2Fbar";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("/foo//bar", r.getString("pathInfo"));
-		assertEquals("foo//bar", r.getString("pathRemainder"));
-		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
-		assertEquals("foo//bar", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/foo%2F%2Fbar"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/a"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths/a/foo%2F%2Fbar"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
-		assertEquals(3, (int)r.getInt("method"));
-
-		// [/test/testPaths/a//foo%2Fbar//]
-		//		{
-		//			pathInfo: '//foo//bar//',
-		//			pathRemainder: '/foo//bar//',
-		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
-		//			requestURI: '/jazz/juneau/test/testPaths/a//foo%2F%2Fbar//',
-		//			requestParentURI: '/jazz/juneau/test/testPaths/a/',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/a//foo%2F%2Fbar//',
-		//			servletPath: '/juneau/test/testPaths/a',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '/foo//bar//',
-		//			method: 3
-		//		}
-		url = URL + "/a//foo%2F%2Fbar//";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("//foo//bar//", r.getString("pathInfo"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder"));
-		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths/a//foo%2F%2Fbar//"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/a/"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths/a//foo%2F%2Fbar//"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
-		assertEquals(3, (int)r.getInt("method"));
-
 
 		// [/test/testPaths/a/test2]
 		//		{
@@ -958,66 +781,6 @@ public class PathsTest extends RestTestcase {
 		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2//foo//bar//"));
 		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/a/test2//foo/"));
 		assertTrue(r.getString("requestURL").endsWith("/testPaths/a/test2//foo//bar//"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
-		assertEquals(4, (int)r.getInt("method"));
-
-		// [/test/testPaths/a/test2/foo%2Fbar]
-		//		{
-		//			pathInfo: '/test2/foo//bar',
-		//			pathRemainder: 'foo//bar',
-		//			pathRemainderUndecoded: 'foo%2F%2Fbar',
-		//			requestURI: '/jazz/juneau/test/testPaths/a/test2/foo%2F%2Fbar',
-		//			requestParentURI: '/jazz/juneau/test/testPaths/a/test2',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/a/test2/foo%2F%2Fbar',
-		//			servletPath: '/juneau/test/testPaths/a',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: 'foo//bar',
-		//			method: 4
-		//		}
-		url = URL + "/a/test2/foo%2F%2Fbar";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("/test2/foo//bar", r.getString("pathInfo"));
-		assertEquals("foo//bar", r.getString("pathRemainder"));
-		assertEquals("foo%2F%2Fbar", r.getString("pathRemainderUndecoded"));
-		assertEquals("foo//bar", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2/foo%2F%2Fbar"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/a/test2"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths/a/test2/foo%2F%2Fbar"));
-		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
-		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));
-		assertTrue(r.getString("relativeServletURI").endsWith("/testPaths/a"));
-		assertEquals(4, (int)r.getInt("method"));
-
-		// [/test/testPaths/a/test2//foo%2Fbar//]
-		//		{
-		//			pathInfo: '/test2//foo//bar//',
-		//			pathRemainder: '/foo//bar//',
-		//			pathRemainderUndecoded: '/foo%2F%2Fbar//',
-		//			requestURI: '/jazz/juneau/test/testPaths/a/test2//foo%2F%2Fbar//',
-		//			requestParentURI: '/jazz/juneau/test/testPaths/a/test2/',
-		//			requestURL: 'https://localhost:9443/jazz/juneau/test/testPaths/a/test2//foo%2F%2Fbar//',
-		//			servletPath: '/juneau/test/testPaths/a',
-		//			servletURI: 'https://localhost:9443/jazz/juneau/test/testPaths/a',
-		//			servletParentURI: 'https://localhost:9443/jazz/juneau/test/testPaths',
-		//			relativeServletURI: '/jazz/juneau/test/testPaths/a',
-		//			pathRemainder2: '/foo//bar//',
-		//			method: 4
-		//		}
-		url = URL + "/a/test2//foo%2F%2Fbar//";
-		r = client.doGet(url).getResponse(ObjectMap.class);
-		assertEquals("/test2//foo//bar//", r.getString("pathInfo"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder"));
-		assertEquals("/foo%2F%2Fbar//", r.getString("pathRemainderUndecoded"));
-		assertEquals("/foo//bar//", r.getString("pathRemainder2"));
-		assertTrue(r.getString("requestURI").endsWith("/testPaths/a/test2//foo%2F%2Fbar//"));
-		assertTrue(r.getString("requestParentURI").endsWith("/testPaths/a/test2/"));
-		assertTrue(r.getString("requestURL").endsWith("/testPaths/a/test2//foo%2F%2Fbar//"));
 		assertTrue(r.getString("servletPath").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletURI").endsWith("/testPaths/a"));
 		assertTrue(r.getString("servletParentURI").endsWith("/testPaths"));

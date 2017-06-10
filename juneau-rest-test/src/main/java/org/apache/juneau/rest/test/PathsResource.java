@@ -60,11 +60,11 @@ public class PathsResource extends RestServletDefault {
 			.append("pathRemainder", req.getPathMatch().getRemainder())
 			.append("pathRemainderUndecoded", req.getPathMatch().getRemainderUndecoded())
 			.append("requestURI", req.getRequestURI())
-			.append("requestParentURI", req.getRequestParentURI())
+			.append("requestParentURI", req.getUriContext().getRootRelativePathInfoParent())
 			.append("requestURL", req.getRequestURL())
 			.append("servletPath", req.getServletPath())
 			.append("servletURI", req.getServletURI())
-			.append("servletParentURI", req.getServletParentURI())
+			.append("servletParentURI", req.getUriContext().getRootRelativeServletPathParent())
 			.append("relativeServletURI", req.getRelativeServletURI());
 
 	}

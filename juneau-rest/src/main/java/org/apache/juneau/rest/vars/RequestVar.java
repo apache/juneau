@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -26,11 +27,11 @@ import org.apache.juneau.svl.*;
  * 	<li><code>$R{method}</code> - Value returned by {@link RestRequest#getMethod()}.
  * 	<li><code>$R{methodDescription}</code> - Value returned by {@link RestRequest#getMethodDescription()}.
  * 	<li><code>$R{pathInfo}</code> - Value returned by {@link RestRequest#getPathInfo()}.
- * 	<li><code>$R{requestParentURI}</code> - Value returned by {@link RestRequest#getRequestParentURI()}.
+ * 	<li><code>$R{requestParentURI}</code> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}.
  * 	<li><code>$R{requestURI}</code> - Value returned by {@link RestRequest#getRequestURI()}.
  * 	<li><code>$R{servletDescription}</code> - Value returned by {@link RestRequest#getServletDescription()}.
  * 	<li><code>$R{servletTitle}</code> - Value returned by {@link RestRequest#getServletTitle()}.
- * 	<li><code>$R{servletParentURI}</code> - Value returned by {@link RestRequest#getServletParentURI()}.
+ * 	<li><code>$R{servletParentURI}</code> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}.
  * 	<li><code>$R{servletPath}</code> - Value returned by {@link RestRequest#getServletPath()}.
  * 	<li><code>$R{servletURI}</code> - Value returned by {@link RestRequest#getServletURI()}.
  * 	<li><code>$R{trimmedRequestURI}</code> - Value returned by {@link RestRequest#getTrimmedRequestURI()}.
@@ -100,14 +101,14 @@ public class RequestVar extends SimpleVar {
 					if (key.equals("relativeServletURI"))
 						return req.getRelativeServletURI();
 					if (key.equals("requestParentURI"))
-						return req.getRequestParentURI();
+						return req.getUriContext().getRootRelativePathInfoParent();
 				} else if (c == 's') {
 					if (key.equals("servletPath"))
 						return req.getServletPath();
 					if (key.equals("servletURI"))
 						return req.getServletURI();
 					if (key.equals("servletParentURI"))
-						return req.getServletParentURI();
+						return req.getUriContext().getRootRelativeServletPathParent();
 					if (key.equals("servletTitle"))
 						return req.getServletTitle();
 					if (key.equals("servletDescription"))

@@ -77,20 +77,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(URL2, r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("root.test1", r.getString("testMethod"));
-		assertEquals("/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test2
 		//--------------------------------------------------------------------------------
 		r = client.doGet("/testuris/test2").getResponse(ObjectMap.class);
@@ -133,62 +119,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(URL2, r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/test3%2Ftest3
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/test3%2Ftest3").getResponse(ObjectMap.class);
-		assertEquals("root.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3", r.getString("pathInfo"));
-		assertNull(r.getString("pathRemainder"));
-		assertEquals(path + "/testuris", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/test3%2Ftest3", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test3%2Ftest3"));
-		// Same for servlet
-		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/test3%2Ftest3/foo
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/test3%2Ftest3/foo").getResponse(ObjectMap.class);
-		assertEquals("root.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo", r.getString("pathInfo"));
-		assertEquals("foo", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/test3%2Ftest3", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/test3%2Ftest3/foo", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test3%2Ftest3/foo"));
-		// Same for servlet
-		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/test3%2Ftest3/foo/bar
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/test3%2Ftest3/foo/bar").getResponse(ObjectMap.class);
-		assertEquals("root.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo/bar", r.getString("pathInfo"));
-		assertEquals("foo/bar", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/test3%2Ftest3/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/test3%2Ftest3/foo/bar", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test3%2Ftest3/foo/bar"));
-		// Same for servlet
-		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/test3%2Ftest3/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/test3%2Ftest3/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("root.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/test3%2Ftest3/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/test3%2Ftest3/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test3%2Ftest3/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/test4/test4
 		//--------------------------------------------------------------------------------
 		r = client.doGet("/testuris/test4/test4").getResponse(ObjectMap.class);
@@ -226,20 +156,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(path + "/testuris/test4/test4/foo", r.getString("requestParentURI"));
 		assertEquals(path + "/testuris/test4/test4/foo/bar", r.getString("requestURI"));
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test4/test4/foo/bar"));
-		// Same for servlet
-		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2, r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/test4/test4/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/test4/test4/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("root.test4", r.getString("testMethod"));
-		assertEquals("/test4/test4/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/test4/test4/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/test4/test4/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/test4/test4/foo/bar%2Fbaz"));
 		// Same for servlet
 		assertEquals(path + "/testuris", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
 		assertEquals(URL2, r.getString("servletURI"));
@@ -296,20 +212,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(URL2 + "/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("child.test1", r.getString("testMethod"));
-		assertEquals("/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2
 		//--------------------------------------------------------------------------------
 		r = client.doGet("/testuris/child/test2").getResponse(ObjectMap.class);
@@ -352,76 +254,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(URL2 + "/child", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test2/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/test2/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("child.test2", r.getString("testMethod"));
-		assertEquals("/test2/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/test2/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/test2/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test2/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/test3%2Ftest3").getResponse(ObjectMap.class);
-		assertEquals("child.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3", r.getString("pathInfo"));
-		assertNull(r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/test3%2Ftest3", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test3%2Ftest3"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3/foo
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/test3%2Ftest3/foo").getResponse(ObjectMap.class);
-		assertEquals("child.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo", r.getString("pathInfo"));
-		assertEquals("foo", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/test3%2Ftest3", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/test3%2Ftest3/foo", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test3%2Ftest3/foo"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3/foo/bar
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/test3%2Ftest3/foo/bar").getResponse(ObjectMap.class);
-		assertEquals("child.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo/bar", r.getString("pathInfo"));
-		assertEquals("foo/bar", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/test3%2Ftest3/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/test3%2Ftest3/foo/bar", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test3%2Ftest3/foo/bar"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/test3%2Ftest3/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("child.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/test3%2Ftest3/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/test3%2Ftest3/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test3%2Ftest3/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4
 		//--------------------------------------------------------------------------------
 		r = client.doGet("/testuris/child/test4/test4").getResponse(ObjectMap.class);
@@ -459,20 +291,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(path + "/testuris/child/test4/test4/foo", r.getString("requestParentURI"));
 		assertEquals(path + "/testuris/child/test4/test4/foo/bar", r.getString("requestURI"));
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test4/test4/foo/bar"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test4/test4/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/test4/test4/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("child.test4", r.getString("testMethod"));
-		assertEquals("/test4/test4/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/test4/test4/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/test4/test4/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/test4/test4/foo/bar%2Fbaz"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
 		assertEquals(URL2 + "/child", r.getString("servletURI"));
@@ -529,20 +347,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/grandchild/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("grandchild.test1", r.getString("testMethod"));
-		assertEquals("/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/grandchild/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/grandchild/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test2
 		//--------------------------------------------------------------------------------
 		r = client.doGet("/testuris/child/grandchild/test2").getResponse(ObjectMap.class);
@@ -585,76 +389,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
 
 		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test2/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/grandchild/test2/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("grandchild.test2", r.getString("testMethod"));
-		assertEquals("/test2/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/grandchild/test2/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/grandchild/test2/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test2/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/grandchild/test3%2Ftest3").getResponse(ObjectMap.class);
-		assertEquals("grandchild.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3", r.getString("pathInfo"));
-		assertNull(r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/grandchild", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/grandchild/test3%2Ftest3", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test3%2Ftest3"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3/foo
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/grandchild/test3%2Ftest3/foo").getResponse(ObjectMap.class);
-		assertEquals("grandchild.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo", r.getString("pathInfo"));
-		assertEquals("foo", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/grandchild/test3%2Ftest3", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/grandchild/test3%2Ftest3/foo", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test3%2Ftest3/foo"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3/foo/bar
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/grandchild/test3%2Ftest3/foo/bar").getResponse(ObjectMap.class);
-		assertEquals("grandchild.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo/bar", r.getString("pathInfo"));
-		assertEquals("foo/bar", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/grandchild/test3%2Ftest3/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/grandchild/test3%2Ftest3/foo/bar", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test3%2Ftest3/foo/bar"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test3%2Ftest3/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/grandchild/test3%2Ftest3/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("grandchild.test3", r.getString("testMethod"));
-		assertEquals("/test3/test3/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/grandchild/test3%2Ftest3/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/grandchild/test3%2Ftest3/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test3%2Ftest3/foo/bar%2Fbaz"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
 		// http://localhost:8080/sample/testuris/child/test4/test4
 		//--------------------------------------------------------------------------------
 		r = client.doGet("/testuris/child/grandchild/test4/test4").getResponse(ObjectMap.class);
@@ -692,20 +426,6 @@ public class UrisTest extends RestTestcase {
 		assertEquals(path + "/testuris/child/grandchild/test4/test4/foo", r.getString("requestParentURI"));
 		assertEquals(path + "/testuris/child/grandchild/test4/test4/foo/bar", r.getString("requestURI"));
 		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test4/test4/foo/bar"));
-		// Same for servlet
-		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
-		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));
-
-		//--------------------------------------------------------------------------------
-		// http://localhost:8080/sample/testuris/child/test4/test4/foo/bar%2Fbaz
-		//--------------------------------------------------------------------------------
-		r = client.doGet("/testuris/child/grandchild/test4/test4/foo/bar%2Fbaz").getResponse(ObjectMap.class);
-		assertEquals("grandchild.test4", r.getString("testMethod"));
-		assertEquals("/test4/test4/foo/bar/baz", r.getString("pathInfo"));
-		assertEquals("foo/bar/baz", r.getString("pathRemainder"));
-		assertEquals(path + "/testuris/child/grandchild/test4/test4/foo", r.getString("requestParentURI"));
-		assertEquals(path + "/testuris/child/grandchild/test4/test4/foo/bar%2Fbaz", r.getString("requestURI"));
-		assertTrue(r.getString("requestURL").endsWith(port + path + "/testuris/child/grandchild/test4/test4/foo/bar%2Fbaz"));
 		// Same for servlet
 		assertEquals(path + "/testuris/child/grandchild", r.getString("contextPath") + r.getString("servletPath"));  // App may not have context path, but combination should always equal path.
 		assertEquals(URL2 + "/child/grandchild", r.getString("servletURI"));

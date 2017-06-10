@@ -460,8 +460,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriContext getUriContext() {
 		if (uriContext == null) {
-			String authority = getAuthorityUri(super.getRequestURL().toString());
-			uriContext = new UriContext(authority, super.getContextPath(), super.getServletPath(), super.getPathInfo());
+			String scheme = getScheme();
+			int port = getServerPort();
+			StringBuilder authority = new StringBuilder(getScheme()).append("://").append(getServerName());
+			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
+				authority.append(':').append(port);
+			uriContext = new UriContext(authority.toString(), super.getContextPath(), super.getServletPath(), super.getPathInfo());
 		}
 		return uriContext;
 	}
@@ -484,65 +488,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriResolver getUriResolver() {
 		return new UriResolver(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, getUriContext());
-	}
-
-	/**
-	 * Returns the URI of the parent of this servlet.
-	 *
-	 * @return The URI of the parent of this servlet.
-	 */
-	public String getServletParentURI() {
-		String s = getServletURI();
-		return s.substring(0, s.lastIndexOf('/'));
-	}
-
-	/**
-	 * Returns the URI of the parent resource.
-	 * <p>
-	 * Trailing slashes in the path are ignored by this method.
-	 * <p>
-	 * The behavior is shown below:
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th>getRequestURI</th>
-	 * 		<th>getRequestParentURI</th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo/bar</code></td>
-	 * 		<td><code>/foo</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo/bar?baz=bing</code></td>
-	 * 		<td><code>/foo</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo/bar/</code></td>
-	 * 		<td><code>/foo</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo/bar//</code></td>
-	 * 		<td><code>/foo</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo//bar//</code></td>
-	 * 		<td><code>/foo/</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo</code></td>
-	 * 		<td>/</td>
-	 * 	</tr>
-	 * </table>
-	 *
-	 * @return The request parent URI.
-	 */
-	public String getRequestParentURI() {
-		String uri = getRequestURI();
-		while (endsWith(uri, '/'))
-			uri = uri.substring(0, uri.length()-1);
-		int i = uri.lastIndexOf('/');
-		if (i <= 0)
-			return "/";
-		return uri.substring(0, i);
 	}
 
 	/**
