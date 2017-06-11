@@ -19,6 +19,8 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Method;
+import org.apache.juneau.rest.labels.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Sample REST resource that shows how to define REST methods.
@@ -31,17 +33,24 @@ import org.apache.juneau.rest.annotation.Method;
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>Shows the different methods for retrieving HTTP query/form-data parameters, headers, and path variables.</p>"
-			+ "	<p>The top-level path simply redirects to the first example method and spits out the results as a string.</p>"
+			+ "	<p>Each method is functionally equivalent but demonstrate different ways to accomplish the same tasks.</p>"
 			+ "</div>"
 	)
 )
 public class MethodExampleResource extends Resource {
 	private static final long serialVersionUID = 1L;
+	
+	private static final UUID SAMPLE_UUID = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
+	private static final String SAMPLE_UUID_STRING = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
 
 	/** Example GET request that redirects to our example method */
 	@RestMethod(name="GET", path="/")
-	public Redirect doExample() throws Exception {
-		return new Redirect("example1/xxx/123/{0}/xRemainder?q1=123&q2=yyy", UUID.randomUUID());
+	public ResourceDescription[] doExample() throws Exception {
+		return new ResourceDescription[] {
+			new ResourceDescription("example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", "Example 1 - Annotated method attributes."),
+			new ResourceDescription("example2/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", "Example 2 - Low-level RestRequest/RestResponse objects."),
+			new ResourceDescription("example3/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", "Example 3 - Intermediate-level APIs.")
+		};
 	}
 
 	/** 
@@ -49,25 +58,33 @@ public class MethodExampleResource extends Resource {
 	 * This approach uses annotated parameters for retrieving input.
 	 */
 	@RestMethod(name="GET", path="/example1/{p1}/{p2}/{p3}/*")
-	public String example1(
+	public Map<String,Object> example1(
 			@Method String method,                  // HTTP method.
 			@Path String p1,                        // Path variables.
 			@Path int p2,
 			@Path UUID p3,
 			@Query("q1") int q1,                    // Query parameters.
 			@Query("q2") String q2,
-			@Query("q3") UUID q3,
+			@Query(name="q3",def=SAMPLE_UUID_STRING) UUID q3,
 			@PathRemainder String remainder,        // Path remainder after pattern match.
 			@Header("Accept-Language") String lang, // Headers.
 			@Header("Accept") String accept,
-			@Header("DNT") Integer doNotTrack
+			@Header(name="DNT",def="1") Integer doNotTrack
 		) {
 
-		// Send back a simple String response
-		String output = String.format(
-				"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d",
-				method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
-		return output;
+		// Send back a simple Map response
+		return new AMap<String,Object>()
+			.append("method", method)
+			.append("path-p1", p1)
+			.append("path-p2", p2)
+			.append("path-p3", p3)
+			.append("remainder", remainder)
+			.append("query-q1", q1)
+			.append("query-q2", q2)
+			.append("query-q3", q3)
+			.append("header-lang", lang)
+			.append("header-accept", accept)
+			.append("header-doNotTrack", doNotTrack);
 	}
 
 	/** 
@@ -93,7 +110,7 @@ public class MethodExampleResource extends Resource {
 		RequestQuery query = req.getQuery();
 		int q1 = query.get("q1", 0, int.class);
 		String q2 = query.get("q2", String.class);
-		UUID q3 = query.get("q3", UUID.class);
+		UUID q3 = query.get("q3", SAMPLE_UUID, UUID.class);
 
 		// Path remainder after pattern match.
 		String remainder = req.getPathMatch().getRemainder();
@@ -101,13 +118,22 @@ public class MethodExampleResource extends Resource {
 		// Headers.
 		String lang = req.getHeader("Accept-Language");
 		String accept = req.getHeader("Accept");
-		int doNotTrack = req.getHeaders().get("DNT", int.class);
+		int doNotTrack = req.getHeaders().get("DNT", 1, int.class);
 
-		// Send back a simple String response
-		String output = String.format(
-				"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d",
-				method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
-		res.setOutput(output);
+		// Send back a simple Map response
+		Map<String,Object> m = new AMap<String,Object>()
+			.append("method", method)
+			.append("path-p1", p1)
+			.append("path-p2", p2)
+			.append("path-p3", p3)
+			.append("remainder", remainder)
+			.append("query-q1", q1)
+			.append("query-q2", q2)
+			.append("query-q3", q3)
+			.append("header-lang", lang)
+			.append("header-accept", accept)
+			.append("header-doNotTrack", doNotTrack);
+		res.setOutput(m);
 	}
 
 	/** 
@@ -116,7 +142,7 @@ public class MethodExampleResource extends Resource {
 	 * The framework recognizes the parameter types and knows how to resolve them.
 	 */
 	@RestMethod(name="GET", path="/example3/{p1}/{p2}/{p3}/*")
-	public String example3(
+	public Map<String,Object> example3(
 		HttpMethod method,           // HTTP method.
 		RequestPathMatch path,       // Path variables.
 		RequestQuery query,          // Query parameters.
@@ -133,18 +159,26 @@ public class MethodExampleResource extends Resource {
 		// Query parameters.
 		int q1 = query.get("q1", 0, int.class);
 		String q2 = query.get("q2", String.class);
-		UUID q3 = query.get("q3", UUID.class);
+		UUID q3 = query.get("q3", SAMPLE_UUID, UUID.class);
 
 		// Path remainder after pattern match.
 		String remainder = path.getRemainder();
 
 		// Headers.
-		int doNotTrack = headers.get("DNT", int.class);
+		int doNotTrack = headers.get("DNT", 1, int.class);
 
-		// Send back a simple String response
-		String output = String.format(
-				"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d",
-				method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
-		return output;
+		// Send back a simple Map response
+		return new AMap<String,Object>()
+			.append("method", method)
+			.append("path-p1", p1)
+			.append("path-p2", p2)
+			.append("path-p3", p3)
+			.append("remainder", remainder)
+			.append("query-q1", q1)
+			.append("query-q2", q2)
+			.append("query-q3", q3)
+			.append("header-lang", lang)
+			.append("header-accept", accept)
+			.append("header-doNotTrack", doNotTrack);
 	}	
 }
