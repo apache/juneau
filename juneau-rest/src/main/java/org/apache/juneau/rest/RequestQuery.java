@@ -305,7 +305,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	private <T> T parseValue(String val, ClassMeta<T> c) throws ParseException {
-		return parser.parsePart(val, c);
+		return parser.parse(PartType.QUERY, val, c);
 	}
 
 	/**

@@ -10,10 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.serializer;
+package org.apache.juneau;
+
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 
 /**
- * Represents possible enum values that can be passed to the {@link PartSerializer#serialize(PartType, Object)} method.
+ * Represents possible enum values that can be passed to the {@link PartSerializer#serialize(PartType, Object)}
+ * and {@link PartParser#parse(PartType, String, ClassMeta)} methods.
  */
 public enum PartType {
 

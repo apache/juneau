@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 

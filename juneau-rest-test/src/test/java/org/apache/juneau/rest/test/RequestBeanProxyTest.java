@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.remoteable.*;

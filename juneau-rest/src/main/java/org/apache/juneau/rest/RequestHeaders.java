@@ -202,9 +202,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException If the header could not be converted to the specified type.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
 		String h = getFirst(name);
-		return parser.parsePart(h, type, args);
+		return (T)parser.parse(PartType.HEADER, h, beanSession.getClassMeta(type, args));
 	}
 
 	/**

@@ -14,8 +14,8 @@ package org.apache.juneau.dto;
 
 import java.text.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 

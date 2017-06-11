@@ -452,7 +452,7 @@ public class UrlEncodingSerializerTest {
 	public void testParseParameterObjectMap() throws Exception {
 		String in = "(name='foo bar')";
 		
-		ObjectMap r =  UrlEncodingParser.DEFAULT.parsePart(in, ObjectMap.class);
+		ObjectMap r =  UrlEncodingParser.DEFAULT.parse(PartType.QUERY, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
 	
 		assertEquals("{name:'foo bar'}", JsonSerializer.DEFAULT_LAX.toString(r));
 	}

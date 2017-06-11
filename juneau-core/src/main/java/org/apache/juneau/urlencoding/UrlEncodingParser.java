@@ -51,7 +51,7 @@ import org.apache.juneau.uon.*;
  */
 @SuppressWarnings({ "rawtypes", "unchecked", "hiding" })
 @Consumes("application/x-www-form-urlencoded")
-public class UrlEncodingParser extends UonParser {
+public class UrlEncodingParser extends UonParser implements PartParser {
 
 	/** Reusable instance of {@link UrlEncodingParser}. */
 	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore.create());
@@ -417,48 +417,8 @@ public class UrlEncodingParser extends UonParser {
 		}
 	}
 
-	/**
-	 * Parses a single query parameter or header value into the specified class type.
-	 *
-	 * @param in The input query string value.
-	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return A new instance of the specified type.
-	 * @throws ParseException
-	 */
-	public <T> T parsePart(String in, Type type, Type...args) throws ParseException {
-		if (in == null)
-			return null;
-		return (T)parsePart(in, getBeanContext().getClassMeta(type, args));
-	}
-
-	/**
-	 * Parses a single query parameter or header value into the specified class type.
-	 *
-	 * @param in The input query string value.
-	 * @param type The class type of the object to create.
-	 * @return A new instance of the specified type.
-	 * @throws ParseException
-	 */
-	public <T> T parsePart(String in, Class<T> type) throws ParseException {
-		if (in == null)
-			return null;
-		return parsePart(in, getBeanContext().getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #parsePart(String, Type, Type...)} except the type has already
-	 * been converted to a {@link ClassMeta} object.
-	 *
-	 * @param in The input query string value.
-	 * @param type The class type of the object to create.
-	 * @return A new instance of the specified type.
-	 * @throws ParseException
-	 */
-	public <T> T parsePart(String in, ClassMeta<T> type) throws ParseException {
+	@Override /* PartParser */
+	public <T> T parse(PartType partType, String in, ClassMeta<T> type) throws ParseException {
 		if (in == null)
 			return null;
 		if (type.isString() && in.length() > 0) {

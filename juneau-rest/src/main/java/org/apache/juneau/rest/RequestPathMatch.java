@@ -138,7 +138,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 		Object attr = get(name);
 		T t = null;
 		if (attr != null)
-			t = parser.parsePart(attr.toString(), cm);
+			t = parser.parse(PartType.PATH, attr.toString(), cm);
 		if (t == null && cm.isPrimitive())
 			return cm.getPrimitiveDefault();
 		return t;

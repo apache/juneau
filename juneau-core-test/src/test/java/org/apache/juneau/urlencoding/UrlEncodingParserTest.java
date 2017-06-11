@@ -25,6 +25,7 @@ import org.junit.*;
 public class UrlEncodingParserTest {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+	static BeanSession bs = p.getBeanContext().createSession();
 
 	//====================================================================================================
 	// Basic test
@@ -48,13 +49,13 @@ public class UrlEncodingParserTest {
 		assertEquals("a", p.parse(t, String.class));
 
 		t = "a";
-		assertEquals("a", p.parsePart(t, Object.class));
-		assertEquals("a", p.parsePart(t, String.class));
+		assertEquals("a", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("a", p.parse(PartType.HEADER, t, bs.string()));
 		t = "'a'";
-		assertEquals("a", p.parsePart(t, String.class));
-		assertEquals("a", p.parsePart(t, Object.class));
+		assertEquals("a", p.parse(PartType.HEADER, t, bs.string()));
+		assertEquals("a", p.parse(PartType.HEADER, t, bs.object()));
 		t = " 'a' ";
-		assertEquals("a", p.parsePart(t, String.class));
+		assertEquals("a", p.parse(PartType.HEADER, t, bs.string()));
 
 		// 2nd level
 		t = "?a=a";
@@ -74,7 +75,7 @@ public class UrlEncodingParserTest {
 		assertNull(m.get("f"));
 
 		t = "(a=b,c=123,d=false,e=true,f=%00)";
-		m = p.parsePart(t, Map.class);
+		m = p.parse(PartType.HEADER, t, bs.getClassMeta(Map.class));
 		assertEquals("b", m.get("a"));
 		assertTrue(m.get("c") instanceof Number);
 		assertEquals(123, m.get("c"));
@@ -85,7 +86,7 @@ public class UrlEncodingParserTest {
 		assertEquals("%00", m.get("f"));
 
 		t = "(a=b,c=123,d=false,e=true,f=null)";
-		m = p.parsePart(t, Map.class);
+		m = p.parse(PartType.HEADER, t, bs.getClassMeta(Map.class));
 		assertTrue(m.containsKey("f"));
 		assertNull(m.get("f"));
 
@@ -99,7 +100,7 @@ public class UrlEncodingParserTest {
 		t = "_value=null";
 		assertNull(p.parse(t, Object.class));
 		t = "null";
-		assertNull(p.parsePart(t, Object.class));
+		assertNull(p.parse(PartType.HEADER, t, bs.object()));
 
 		// 2nd level
 		t = "?null=null";
@@ -121,10 +122,10 @@ public class UrlEncodingParserTest {
 		// Empty array
 		// Top level
 		t = "@()";
-		l = (List)p.parsePart(t, Object.class);
+		l = (List)p.parse(PartType.HEADER, t, bs.object());
 		assertTrue(l.isEmpty());
 		t = " @( ) ";
-		l = p.parsePart(t, List.class);
+		l = p.parse(PartType.HEADER, t, bs.getClassMeta(List.class));
 		assertTrue(l.isEmpty());
 
 		// 2nd level in map
@@ -152,12 +153,12 @@ public class UrlEncodingParserTest {
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "@(@())";
-		l = (List)p.parsePart(t, Object.class);
+		l = (List)p.parse(PartType.HEADER, t, bs.object());
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "@(@())";
-		l = (List)p.parsePart(t, LinkedList.class, List.class);
+		l = (List)p.parse(PartType.HEADER, t, bs.getClassMeta(LinkedList.class, List.class));
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
@@ -173,11 +174,11 @@ public class UrlEncodingParserTest {
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 		t = "@('')";
-		l = (List)p.parsePart(t, Object.class);
+		l = (List)p.parse(PartType.HEADER, t, bs.object());
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 		t = "@('')";
-		l = (List)p.parsePart(t, List.class, String.class);
+		l = (List)p.parse(PartType.HEADER, t, bs.getClassMeta(List.class, String.class));
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 
@@ -203,13 +204,13 @@ public class UrlEncodingParserTest {
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "@('','','')";
-		l = (List)p.parsePart(t, Object.class);
+		l = (List)p.parse(PartType.HEADER, t, bs.object());
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "@('','','')";
-		l = (List)p.parsePart(t, List.class, Object.class);
+		l = (List)p.parse(PartType.HEADER, t, bs.getClassMeta(List.class, Object.class));
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
@@ -223,10 +224,10 @@ public class UrlEncodingParserTest {
 		assertEquals("\u0000", p.parse(t, String.class));
 		assertEquals("\u0000", p.parse(t, Object.class));
 		t = "'\u0000'";
-		assertEquals("\u0000", p.parsePart(t, Object.class));
+		assertEquals("\u0000", p.parse(PartType.HEADER, t, bs.object()));
 		t = "'\u0000'";
-		assertEquals("\u0000", p.parsePart(t, String.class));
-		assertEquals("\u0000", p.parsePart(t, Object.class));
+		assertEquals("\u0000", p.parse(PartType.HEADER, t, bs.string()));
+		assertEquals("\u0000", p.parse(PartType.HEADER, t, bs.object()));
 
 		// 2nd level
 		t = "?'\u0000'='\u0000'";
@@ -248,12 +249,12 @@ public class UrlEncodingParserTest {
 		b = p.parse(t, Boolean.class);
 		assertEquals(Boolean.FALSE, b);
 		t = "false";
-		b = (Boolean)p.parsePart(t, Object.class);
+		b = (Boolean)p.parse(PartType.HEADER, t, bs.object());
 		assertEquals(Boolean.FALSE, b);
-		b = p.parsePart(t, Boolean.class);
+		b = p.parse(PartType.HEADER, t, bs.getClassMeta(Boolean.class));
 		assertEquals(Boolean.FALSE, b);
 		t = "false";
-		b = p.parsePart(t, Boolean.class);
+		b = p.parse(PartType.HEADER, t, bs.getClassMeta(Boolean.class));
 		assertEquals(Boolean.FALSE, b);
 
 		// 2nd level
@@ -279,16 +280,16 @@ public class UrlEncodingParserTest {
 		i = p.parse(t, Integer.class);
 		assertEquals(123, i.intValue());
 		t = "123";
-		i = (Integer)p.parsePart(t, Object.class);
+		i = (Integer)p.parse(PartType.HEADER, t, bs.object());
 		assertEquals(123, i.intValue());
-		i = p.parsePart(t, Integer.class);
+		i = p.parse(PartType.HEADER, t, bs.getClassMeta(Integer.class));
 		assertEquals(123, i.intValue());
-		d = p.parsePart(t, Double.class);
+		d = p.parse(PartType.HEADER, t, bs.getClassMeta(Double.class));
 		assertEquals(123, d.intValue());
-		f = p.parsePart(t, Float.class);
+		f = p.parse(PartType.HEADER, t, bs.getClassMeta(Float.class));
 		assertEquals(123, f.intValue());
 		t = "123";
-		i = p.parsePart(t, Integer.class);
+		i = p.parse(PartType.HEADER, t, bs.getClassMeta(Integer.class));
 		assertEquals(123, i.intValue());
 
 		// 2nd level
@@ -303,7 +304,7 @@ public class UrlEncodingParserTest {
 		t = "_value=x;/?:@-_.!*'";
 		assertEquals("x;/?:@-_.!*'", p.parse(t, Object.class));
 		t = "x;/?:@-_.!*'";
-		assertEquals("x;/?:@-_.!*'", p.parsePart(t, Object.class));
+		assertEquals("x;/?:@-_.!*'", p.parse(PartType.HEADER, t, bs.object()));
 
 		// 2nd level
 		t = "?x;/?:@-_.!*'=x;/?:@-_.!*'";
@@ -327,10 +328,10 @@ public class UrlEncodingParserTest {
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, Object.class));
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, String.class));
 		t = "x{}|\\^[]`<>#%\"&+";
-		assertEquals("x{}|\\^[]`<>#%\"&+", p.parsePart(t, Object.class));
+		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(PartType.HEADER, t, bs.object()));
 		t = "x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B";
-		assertEquals("x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B", p.parsePart(t, Object.class));
-		assertEquals("x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B", p.parsePart(t, String.class));
+		assertEquals("x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B", p.parse(PartType.HEADER, t, bs.string()));
 
 		// 2nd level
 		t = "?x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+";
@@ -350,11 +351,11 @@ public class UrlEncodingParserTest {
 		t = "_value='x$,()'";
 		assertEquals("x$,()", p.parse(t, Object.class));
 		t = "'x$,()'";
-		assertEquals("x$,()", p.parsePart(t, Object.class));
+		assertEquals("x$,()", p.parse(PartType.HEADER, t, bs.object()));
 		t = "_value='x~~$~~,~~(~~)'";
 		assertEquals("x~$~,~(~)", p.parse(t, Object.class));
 		t = "'x~~$~~,~~(~~)'";
-		assertEquals("x~$~,~(~)", p.parsePart(t, Object.class));
+		assertEquals("x~$~,~(~)", p.parse(PartType.HEADER, t, bs.object()));
 
 		// At secondary levels, these characters are escaped and not encoded.
 		// 2nd level
@@ -373,9 +374,9 @@ public class UrlEncodingParserTest {
 		t = "_value='x%3D'";
 		assertEquals("x=", p.parse(t, Object.class));
 		t = "'x='";
-		assertEquals("x=", p.parsePart(t, Object.class));
+		assertEquals("x=", p.parse(PartType.HEADER, t, bs.object()));
 		t = "'x%3D'";
-		assertEquals("x%3D", p.parsePart(t, Object.class));
+		assertEquals("x%3D", p.parse(PartType.HEADER, t, bs.object()));
 
 		// 2nd level
 		t = "?'x%3D'='x%3D'";
@@ -394,8 +395,8 @@ public class UrlEncodingParserTest {
 		assertEquals("()", p.parse(t, Object.class));
 		assertEquals("()", p.parse(t, String.class));
 		t = "'()'";
-		assertEquals("()", p.parsePart(t, Object.class));
-		assertEquals("()", p.parsePart(t, String.class));
+		assertEquals("()", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("()", p.parse(PartType.HEADER, t, bs.string()));
 
 		// 2nd level
 		t = "?'()'='()'";
@@ -412,9 +413,9 @@ public class UrlEncodingParserTest {
 		t = "_value=$a";
 		assertEquals("$a", p.parse(t, Object.class));
 		t = "$a";
-		assertEquals("$a", p.parsePart(t, Object.class));
+		assertEquals("$a", p.parse(PartType.HEADER, t, bs.object()));
 		t = "$a";
-		assertEquals("$a", p.parsePart(t, Object.class));
+		assertEquals("$a", p.parse(PartType.HEADER, t, bs.object()));
 
 		// 2nd level
 		t = "?$a=$a";
@@ -428,7 +429,7 @@ public class UrlEncodingParserTest {
 		t = "_value=";
 		assertEquals("", p.parse(t, Object.class));
 		t = "";
-		assertEquals("", p.parsePart(t, Object.class));
+		assertEquals("", p.parse(PartType.HEADER, t, bs.object()));
 
 		// 2nd level
 		t = "?=";
@@ -450,9 +451,9 @@ public class UrlEncodingParserTest {
 		t = "_value='%0A'";
 		assertEquals("\n", p.parse(t, Object.class));
 		t = "'%0A'";
-		assertEquals("%0A", p.parsePart(t, Object.class));
+		assertEquals("%0A", p.parse(PartType.HEADER, t, bs.object()));
 		t = "'\n'";
-		assertEquals("\n", p.parsePart(t, Object.class));
+		assertEquals("\n", p.parse(PartType.HEADER, t, bs.object()));
 
 		// 2nd level
 		t = "?'%0A'='%0A'";
@@ -482,11 +483,11 @@ public class UrlEncodingParserTest {
 		assertEquals("¢", p.parse(t, Object.class));
 		assertEquals("¢", p.parse(t, String.class));
 		t = "¢";
-		assertEquals("¢", p.parsePart(t, Object.class));
-		assertEquals("¢", p.parsePart(t, String.class));
+		assertEquals("¢", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("¢", p.parse(PartType.HEADER, t, bs.string()));
 		t = "%C2%A2";
-		assertEquals("%C2%A2", p.parsePart(t, Object.class));
-		assertEquals("%C2%A2", p.parsePart(t, String.class));
+		assertEquals("%C2%A2", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("%C2%A2", p.parse(PartType.HEADER, t, bs.string()));
 
 		// 2nd level
 		t = "?%C2%A2=%C2%A2";
@@ -507,11 +508,11 @@ public class UrlEncodingParserTest {
 		assertEquals("€", p.parse(t, Object.class));
 		assertEquals("€", p.parse(t, String.class));
 		t = "€";
-		assertEquals("€", p.parsePart(t, Object.class));
-		assertEquals("€", p.parsePart(t, String.class));
+		assertEquals("€", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("€", p.parse(PartType.HEADER, t, bs.string()));
 		t = "%E2%82%AC";
-		assertEquals("%E2%82%AC", p.parsePart(t, Object.class));
-		assertEquals("%E2%82%AC", p.parsePart(t, String.class));
+		assertEquals("%E2%82%AC", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("%E2%82%AC", p.parse(PartType.HEADER, t, bs.string()));
 
 		// 2nd level
 		t = "?%E2%82%AC=%E2%82%AC";
@@ -532,11 +533,11 @@ public class UrlEncodingParserTest {
 		assertEquals("𤭢", p.parse(t, Object.class));
 		assertEquals("𤭢", p.parse(t, String.class));
 		t = "𤭢";
-		assertEquals("𤭢", p.parsePart(t, Object.class));
-		assertEquals("𤭢", p.parsePart(t, String.class));
+		assertEquals("𤭢", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("𤭢", p.parse(PartType.HEADER, t, bs.string()));
 		t = "%F0%A4%AD%A2";
-		assertEquals("%F0%A4%AD%A2", p.parsePart(t, Object.class));
-		assertEquals("%F0%A4%AD%A2", p.parsePart(t, String.class));
+		assertEquals("%F0%A4%AD%A2", p.parse(PartType.HEADER, t, bs.object()));
+		assertEquals("%F0%A4%AD%A2", p.parse(PartType.HEADER, t, bs.string()));
 
 		// 2nd level
 		t = "?%F0%A4%AD%A2=%F0%A4%AD%A2";
@@ -563,12 +564,12 @@ public class UrlEncodingParserTest {
 		assertEquals(123, t.f2);
 
 		s = "(f1=foo,f2=123)";
-		t = p.parsePart(s, A.class);
+		t = p.parse(PartType.HEADER, s, bs.getClassMeta(A.class));
 		assertEquals("foo", t.f1);
 		assertEquals(123, t.f2);
 
 		s = "('f1'='foo','f2'=123)";
-		t = p.parsePart(s, A.class);
+		t = p.parse(PartType.HEADER, s, bs.getClassMeta(A.class));
 		assertEquals("foo", t.f1);
 		assertEquals(123, t.f2);
 	}

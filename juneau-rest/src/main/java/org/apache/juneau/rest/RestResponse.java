@@ -25,6 +25,7 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -76,8 +77,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		try {
 			String passThroughHeaders = req.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
-				UrlEncodingParser p = context.getUrlEncodingParser();
-				ObjectMap m = p.parsePart(passThroughHeaders, p.getBeanContext().getClassMeta(ObjectMap.class));
+				PartParser p = context.getUrlEncodingParser();
+				ObjectMap m = p.parse(PartType.HEADER, passThroughHeaders, context.getBeanContext().getClassMeta(ObjectMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					setHeader(e.getKey(), e.getValue().toString());
 			}
