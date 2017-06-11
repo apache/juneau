@@ -16,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
@@ -331,15 +332,15 @@ class CallMethod implements Comparable<CallMethod>  {
 						if (a instanceof Header) {
 							Header h = (Header)a;
 							if (! h.def().isEmpty())
-								defaultRequestHeaders.put(h.value(), h.def());
+								defaultRequestHeaders.put(firstNonEmpty(h.name(), h.value()), h.def());
 						} else if (a instanceof Query) {
 							Query q = (Query)a;
 							if (! q.def().isEmpty())
-								defaultQuery.put(q.value(), q.def());
+								defaultQuery.put(firstNonEmpty(q.name(), q.value()), q.def());
 						} else if (a instanceof FormData) {
 							FormData f = (FormData)a;
 							if (! f.def().isEmpty())
-								defaultFormData.put(f.value(), f.def());
+								defaultFormData.put(firstNonEmpty(f.name(), f.value()), f.def());
 						}
 					}
 				}

@@ -1512,4 +1512,17 @@ public final class StringUtils {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Returns the first non-null, non-empty string in the list.
+	 *
+	 * @param s The strings to test.
+	 * @return The first non-empty string in the list, or <jk>null</jk> if they were all <jk>null</jk> or empty.
+	 */
+	public static String firstNonEmpty(String...s) {
+		for (String ss : s)
+			if (! isEmpty(ss))
+				return ss;
+		return null;
+	}
 }

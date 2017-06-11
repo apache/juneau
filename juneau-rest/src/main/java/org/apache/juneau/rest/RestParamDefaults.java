@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
 import java.io.*;
@@ -559,7 +560,7 @@ class RestParamDefaults {
 	static final class HeaderObject extends RestParam {
 
 		protected HeaderObject(Header a, Type type) {
-			super(HEADER, a.value(), type);
+			super(HEADER, firstNonEmpty(a.name(), a.value()), type);
 		}
 
 		@Override /* RestParam */
@@ -586,7 +587,7 @@ class RestParamDefaults {
 		private final boolean multiPart, plainParams;
 
 		protected FormDataObject(Method method, FormData a, Type type, boolean methodPlainParams) throws ServletException {
-			super(FORMDATA, a.value(), type);
+			super(FORMDATA, firstNonEmpty(a.name(), a.value()), type);
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
@@ -608,7 +609,7 @@ class RestParamDefaults {
 		private final boolean multiPart, plainParams;
 
 		protected QueryObject(Method method, Query a, Type type, boolean methodPlainParams) throws ServletException {
-			super(QUERY, a.value(), type);
+			super(QUERY, firstNonEmpty(a.name(), a.value()), type);
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
@@ -629,7 +630,7 @@ class RestParamDefaults {
 	static final class HasFormDataObject extends RestParam {
 
 		protected HasFormDataObject(Method method, HasFormData a, Type type) throws ServletException {
-			super(FORMDATA, a.value(), type);
+			super(FORMDATA, firstNonEmpty(a.name(), a.value()), type);
 			if (type != Boolean.class && type != boolean.class)
 				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", method);
 	}
@@ -644,7 +645,7 @@ class RestParamDefaults {
 	static final class HasQueryObject extends RestParam {
 
 		protected HasQueryObject(Method method, HasQuery a, Type type) throws ServletException {
-			super(QUERY, a.value(), type);
+			super(QUERY, firstNonEmpty(a.name(), a.value()), type);
 			if (type != Boolean.class && type != boolean.class)
 				throw new RestServletException("Use of @HasQuery annotation on parameter that is not a boolean on method ''{0}''", method);
 		}

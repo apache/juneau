@@ -6498,6 +6498,15 @@
 			<li><code>devops.css</code> cleaned up.
 			<li>Removed a bunch of URL-related methods from {@link org.apache.juneau.rest.RestRequest}.  
 				These all have equivalents in {@link org.apache.juneau.rest.RestRequest#getUriContext()}.
+			<li>New annotation attributes:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.Query#name() @Query.name()}
+					<li>{@link org.apache.juneau.rest.annotation.FormData#name() @FormData.name()}
+					<li>{@link org.apache.juneau.rest.annotation.Header#name() @Header.name()}
+					<li>{@link org.apache.juneau.rest.annotation.Path#name() @Path.name()}
+					<li>{@link org.apache.juneau.rest.annotation.HasQuery#name() @HasQuery.name()}
+					<li>{@link org.apache.juneau.rest.annotation.HasFormData#name() @HasFormData.name()}
+				</ul>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>

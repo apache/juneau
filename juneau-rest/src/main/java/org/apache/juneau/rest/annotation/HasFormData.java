@@ -88,7 +88,14 @@ import org.apache.juneau.rest.*;
 public @interface HasFormData {
 
 	/**
-	 * URL parameter name.
+	 * FORM parameter name.
 	 */
-	String value();
+	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+	String value() default "";
 }

@@ -56,9 +56,16 @@ import org.apache.juneau.rest.*;
 public @interface Query {
 
 	/**
-	 * URL parameter name.
+	 * URL query parameter name.
 	 */
-	String value();
+	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+	String value() default "";
 
 	/**
 	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.

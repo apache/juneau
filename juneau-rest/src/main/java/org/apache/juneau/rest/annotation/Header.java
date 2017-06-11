@@ -48,7 +48,14 @@ public @interface Header {
 	/**
 	 * HTTP header name.
 	 */
-	String value();
+	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+	String value() default "";
 
 	/**
 	 * The default value for this header if it's not present in the request.

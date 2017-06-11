@@ -73,9 +73,16 @@ import java.lang.annotation.*;
 public @interface Path {
 
 	/**
-	 * URL variable name.
+	 * URL path variable name.
 	 * <p>
 	 * Optional if the attributes are specified in the same order as in the URL path pattern.
+	 */
+	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
 	 */
 	String value() default "";
 }

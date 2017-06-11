@@ -1493,9 +1493,9 @@ public final class RestContext extends Context {
 					if (a instanceof Path)
 						p = (Path)a;
 
-				String name = (p == null ? "" : p.value());
+				String name = (p == null ? "" : firstNonEmpty(p.name(), p.value()));
 
-				if (name.isEmpty()) {
+				if (isEmpty(name)) {
 					int idx = attrIndex++;
 					String[] vars = pathPattern.getVars();
 					if (vars.length <= idx)
@@ -1507,7 +1507,7 @@ public final class RestContext extends Context {
 						if (isNumeric(vars[j]) && vars[j].equals(idxs))
 							name = vars[j];
 
-					if (name.isEmpty())
+					if (isEmpty(name))
 						name = pathPattern.getVars()[idx];
 				}
 				rp[i] = new RestParamDefaults.PathParameterObject(name, t);
