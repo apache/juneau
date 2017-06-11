@@ -16,7 +16,6 @@ import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -487,15 +486,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriResolver getUriResolver() {
 		return new UriResolver(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, getUriContext());
-	}
-
-	/**
-	 * Same as {@link #getRequestURI()} but trims trailing slashes from the result.
-	 *
-	 * @return The trimmed request URI.
-	 */
-	public String getTrimmedRequestURI() {
-		return trimTrailingSlashes(getRequestURI());
 	}
 
 

@@ -34,7 +34,6 @@ import org.apache.juneau.svl.*;
  * 	<li><code>$R{servletParentURI}</code> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}.
  * 	<li><code>$R{servletPath}</code> - Value returned by {@link RestRequest#getServletPath()}.
  * 	<li><code>$R{servletURI}</code> - Value returned by {@link UriContext#getRootRelativeServletPath()}.
- * 	<li><code>$R{trimmedRequestURI}</code> - Value returned by {@link RestRequest#getTrimmedRequestURI()}.
  * </ul>
  * <p>
  * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
@@ -111,9 +110,6 @@ public class RequestVar extends SimpleVar {
 						return req.getServletTitle();
 					if (key.equals("servletDescription"))
 						return req.getServletDescription();
-				} else if (c == 't') {
-					if (key.equals("trimmedRequestURI"))
-						return req.getTrimmedRequestURI();
 				}
 				Object o = req.getProperties().get(key);
 				if (o != null)
