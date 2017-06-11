@@ -30,11 +30,11 @@ import org.apache.juneau.rest.widget.*;
 		aside=""
 			+ "<div style='min-width:200px' class='text'>"
 			+ "	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>"
-			+ "	<p>$W{contentTypeLinks}</p>"
+			+ "	<p>$W{contentTypeLinksColumn}</p>"
 			+ "</div>"
 	),
 	widgets={
-		ContentTypeLinksWidget.class
+		ContentTypeLinksColumnWidget.class
 	}
 )
 public class JsonSchemaResource extends ResourceJena {

@@ -37,7 +37,7 @@ import org.apache.juneau.rest.widget.*;
 		aside=""
 			+ "<div style='min-width:200px' class='text'>"
 			+ "	<p>Shows how to produce ATOM feeds in a variety of languages.</p>"
-			+ "	<p>$W{contentTypeLinks}</p>"
+			+ "	<p>$W{contentTypeLinksRow}</p>"
 			+ "</div>",
 		css="aside {display:table-caption;}"
 	),
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.widget.*;
 		@Property(name=RDF_addRootProperty, value="true")
 	},
 	widgets={
-		ContentTypeLinksWidget.class
+		ContentTypeLinksRowWidget.class
 	},
 	encoders=GzipEncoder.class
 )

@@ -40,8 +40,7 @@ import org.apache.juneau.rest.widget.*;
 	),
 	widgets={
 		PoweredByJuneauWidget.class,
-		PoweredByApacheWidget.class,
-		ContentTypeLinksWidget.class
+		PoweredByApacheWidget.class
 	},
 	children={
 		HelloWorldResource.class,

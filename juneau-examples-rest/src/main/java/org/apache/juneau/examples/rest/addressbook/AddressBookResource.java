@@ -59,7 +59,7 @@ import org.apache.juneau.utils.*;
 				+ "			<li>Widgets"
 				+ "		</ul>"
 				+ "	<p style='text-weight:bold;text-decoration:underline;'>Available Content Types</p>"
-				+ "	$W{contentTypeLinks}"
+				+ "	$W{contentTypeLinksColumn}"
 				+ "</div>",
 		footer="$W{poweredByJuneau}"
 	),
@@ -67,7 +67,7 @@ import org.apache.juneau.utils.*;
 	// Widgets for $W variables above.
 	widgets={
 		PoweredByJuneauWidget.class,
-		ContentTypeLinksWidget.class
+		ContentTypeLinksColumnWidget.class
 	},
 	
 	// Properties that get applied to all serializers and parsers.
