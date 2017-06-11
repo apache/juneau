@@ -2099,14 +2099,13 @@
 						<li><ck>$R{path.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}.
 						<li><ck>$R{pathInfo}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
 						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestQuery#getFirst(String)}.
-						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestParentURI()}.
+						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}.
 						<li><ck>$R{requestURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
 						<li><ck>$R{servletDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
 						<li><ck>$R{servletTitle}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletTitle()}.
-						<li><ck>$R{servletParentURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletParentURI()}.
+						<li><ck>$R{servletParentURI}</ck> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}.
 						<li><ck>$R{servletPath}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletPath()}.
-						<li><ck>$R{servletURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletURI()}.
-						<li><ck>$R{trimmedRequestURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}.
+						<li><ck>$R{servletURI}</ck> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}.
 					</ul>
 				</td>
 			</tr>

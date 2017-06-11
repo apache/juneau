@@ -6496,6 +6496,8 @@
 					<li>{@link org.apache.juneau.rest.widget.ContentTypeLinksWidget}
 				</ul>
 			<li><code>devops.css</code> cleaned up.
+			<li>Removed a bunch of URL-related methods from {@link org.apache.juneau.rest.RestRequest}.  
+				These all have equivalents in {@link org.apache.juneau.rest.RestRequest#getUriContext()}.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
@@ -7660,7 +7662,7 @@
 				pick up <code>JsonProvider</code> as well.  It's easy enough to create your own implementation if needed.
 			<li>OPTIONS pages now specify <code>consumes</code> and <code>produces</code> fields instead of <code>accept</code> and <code>contentType</code> which was confusing.  
 			<li>Eliminated <code>properties</code> from OPTIONS pages. 
-			<li>New {@link org.apache.juneau.rest.labels.ResourceLink#ResourceLink(String,RestRequest,String,Object[])} constructor.
+			<li>New <code><del>ResourceLink.ResourceLink(String,RestRequest,String,Object[])</del></code> constructor.
 			<li>New response handlers:
 				<ul>
 					<li>{@link org.apache.juneau.rest.response.StreamableHandler} - Allows REST Java methods to return instances of {@link org.apache.juneau.Streamable}.
@@ -7805,7 +7807,7 @@
 				{@link org.apache.juneau.rest.annotation.RestMethod#inheritEncoders() @RestMethod.inheritEncoders} annotations.  
 				Allows encoders to be fine-tuned at the method level.
 			<li>New {@link org.apache.juneau.rest.annotation.RestResource#config() @RestResource.config()} annotation for associating external {@link org.apache.juneau.ini.ConfigFile} config files with servlets.
-			<li>Fixed bugs in {@link org.apache.juneau.rest.labels.ResourceLink}.
+			<li><code><del>ResourceLink</del></code>.
 			<li>New <a class='doclink' href='org/apache/juneau/rest/matchers/package-summary.html#TOC'>org.apache.juneau.rest.matchers</a> package for commonly-used {@link org.apache.juneau.rest.RestMatcher RestMatchers}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.matchers#MultipartFormDataMatcher}
@@ -7860,7 +7862,7 @@
 				on all JVMs.  On IBM JVMs this is unnecessary because the order of the properties as defined in the class
 				are stored in the bytecode.  Other JVMs such as OpenJRE do not implement this feature causing the bean
 				properties to be in random order.
-			<li>New {@link org.apache.juneau.rest.labels.ResourceDescription#ResourceDescription(RestRequest,String,String)} constructor.
+			<li>New <code><del>ResourceDescription.ResourceDescription(RestRequest,String,String)</del></code> constructor.
 		</ul>
 	</div>
 	
@@ -7945,10 +7947,10 @@
 						<ul>
 							<li><code><del>RestRequest.getQueryParameterMap()</del></code>
 							<li><code><del>RestRequest.getQueryParameterNames()</del></code>
-							<li>{@link org.apache.juneau.rest.RestRequest#getPathInfoUndecoded()}
+							<li><code><del>RestRequest.getPathInfoUndecoded()</del></code>
 							<li><code><del>RestRequest.getPathRemainderUndecoded()</del></code>
-							<li>{@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}
-							<li>{@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURL()}
+							<li><code><del>RestRequest.getTrimmedRequestURI()</del></code>
+							<li><code><del>RestRequest.getTrimmedRequestURL()</del></code>
 							<li>{@link org.apache.juneau.rest.RestRequest#getServletTitle()}
 							<li>{@link org.apache.juneau.rest.RestRequest#getServletDescription()}
 							<li>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
@@ -7957,8 +7959,8 @@
 						Returns <jk>null</jk> instead of blank for no path info.
 					<li><code><del>RestRequest.getPathRemainder()</del></code> now automatically decodes the path remainder. 
 						Use <code><del>RestRequest.getPathRemainderUndecoded()</del></code> to get the unencoded path remainder.
-					<li>Bug fixes in {@link org.apache.juneau.rest.RestRequest#getRequestParentURI()} when servlet is mapped to <js>"/*"</js>.
-					<li>Bug fixes in {@link org.apache.juneau.rest.RestRequest#getServletURI()} when servlet is mapped to <js>"/*"</js>.
+					<li>Bug fixes in <code><del>RestRequest.getRequestParentURI()</del></code> when servlet is mapped to <js>"/*"</js>.
+					<li>Bug fixes in <code><del>RestRequest.getServletURI()</del></code> when servlet is mapped to <js>"/*"</js>.
 				</ul>
 			<li>New string replacement variables:
 				<ul>
@@ -7966,7 +7968,7 @@
 					<li><code>$R{methodDescription}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
 					<li><code>$R{servletTitle}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getServletTitle()}
 					<li><code>$R{servletDescription}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getServletDescription()}
-					<li><code>$R{trimmedRequestURI}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}
+					<li><code>$R{trimmedRequestURI}</code> - Returns value from <code><del>RestRequest.getTrimmedRequestURI()</del></code>
 					<li><code>$E{var}</code> - Environment variables.
 				</ul>
 			<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <del><code>RestServlet.getLabel(RestRequest)</code></del>.
@@ -8047,7 +8049,7 @@
 
 		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
-			<li>New {@link org.apache.juneau.rest.RestRequest#getServletParentURI()} method.
+			<li>New <code><del>RestRequest.getServletParentURI()</del></code> method.
 			<li>New <code>$R{servletParentURI}</code> variable.
 			<li>Removed final modifier from {@link org.apache.juneau.rest.labels.ChildResourceDescriptions}.
 		</ul>
@@ -8499,7 +8501,7 @@
 			<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers()} annotation
 				for defining customer response handlers for special kinds of POJOs.
 			<li>New method <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
-			<li>New method {@link org.apache.juneau.rest.RestRequest#getServletURIBuilder()} for construcing servlet-based URLs more efficiently.
+			<li>New method <code><del>RestRequest.getServletURIBuilder()</del></code> for construcing servlet-based URLs more efficiently.
 			<li>New method {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
 				and {@link org.apache.juneau.rest.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
 			<li>Fixed bug where some properties were not being propagated correctly when using <code><del>CoreObject.setProperties(ObjectMap)</del></code>
@@ -8687,7 +8689,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>Implemented <code>org.apache.juneau.urlencoding.UrlEncodingParser.parseArgs(Reader,int,ClassMeta[])</code>.
-			<li><code>name</code> parameter of {@link org.apache.juneau.rest.labels.ResourceDescription#ResourceDescription(String,String,String)} 
+			<li><code>name</code> parameter of <code><del>ResourceDescription#ResourceDescription(String,String,String)</del></code>. 
 				is now automatically URL-encoded so that the name can contain special characters (e.g. <js>"foo/bar(baz)"</js>).
 			<li>Support for URL-matching and path info containing encoded characters (e.g. <js>'/'</js>) now supported.	
 			<li>Removed some lazy-initialization of bean information in {@link org.apache.juneau.ClassMeta} that allowed the removal of
@@ -8743,8 +8745,8 @@
 				New methods on {@link org.apache.juneau.rest.RestRequest}:
 				<ul>
 					<li><del><code>RestRequest.getVarResolver()</code></del></li>
-					<li>{@link org.apache.juneau.rest.RestRequest#getServletURI()}</li>
-					<li>{@link org.apache.juneau.rest.RestRequest#getRequestParentURI()}</li>
+					<li><code><del>RestRequest.getServletURI()</del></code></li>
+					<li><code><del>RestRequest.getRequestParentURI()</del></code></li>
 				</ul>
 			</li>
 			<li>

@@ -661,14 +661,13 @@
 			 			<li><l>$R{path.X}</l> - Value returned by {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}.
 			 			<li><l>$R{pathInfo}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
 			 			<li><l>$R{query.X}</l> - Value returned by {@link org.apache.juneau.rest.RequestQuery#getFirst(String)}.
-			 			<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestParentURI()}.
+			 			<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}.
 			 			<li><l>$R{requestURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
 			 			<li><l>$R{servletDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
 			 			<li><l>$R{servletTitle}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletTitle()}.
-			 			<li><l>$R{servletParentURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletParentURI()}.
+			 			<li><l>$R{servletParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}.
 			 			<li><l>$R{servletPath}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletPath()}.
-			 			<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletURI()}.
-			 			<li><l>$R{trimmedRequestURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}.
+			 			<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}.
 					</ul>
 					<li><l>$SA{key,mediaType}</l> - Object returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string using the serializer registered to handle the specified media type.
 					<li><l>$UE{...}</l> - URL-Encode the specified value.
