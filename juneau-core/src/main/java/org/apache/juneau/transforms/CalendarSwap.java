@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.DateUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -133,7 +134,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 			try {
 				if (isEmpty(o))
 					return null;
-				return convert(DatatypeConverter.parseDateTime(o), hint);
+				return convert(DatatypeConverter.parseDateTime(toValidISO8601DT(o)), hint);
 			} catch (Exception e) {
 				throw new ParseException(e);
 			}
@@ -164,7 +165,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 			try {
 				if (isEmpty(o))
 					return null;
-				return convert(DatatypeConverter.parseDateTime(o), hint);
+				return convert(DatatypeConverter.parseDateTime(toValidISO8601DT(o)), hint);
 			} catch (Exception e) {
 				throw new ParseException(e);
 			}

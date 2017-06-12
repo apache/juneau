@@ -16,6 +16,8 @@ import java.lang.ref.*;
 import java.text.*;
 import java.util.*;
 
+import javax.xml.bind.*;
+
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and
  * other headers.  This class handles dates as defined by RFC 2616 section
@@ -181,6 +183,64 @@ public final class DateUtils {
 
 		public static void clearThreadLocal() {
 			THREADLOCAL_FORMATS.remove();
+		}
+	}
+
+	/**
+	 * Pads out an ISO8601 string so that it can be parsed using {@link DatatypeConverter#parseDateTime(String)}.
+	 * <ul>
+	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js> --&gt; <js>"2001-07-04T15:30:45-05:00"</js>
+	 * 	<li><js>"2001-07-04T15:30:45Z"</js> --&gt; <js>"2001-07-04T15:30:45Z"</js>
+	 * 	<li><js>"2001-07-04T15:30:45.1Z"</js> --&gt; <js>"2001-07-04T15:30:45.1Z"</js>
+	 * 	<li><js>"2001-07-04T15:30Z"</js> --&gt; <js>"2001-07-04T15:30:00Z"</js>
+	 * 	<li><js>"2001-07-04T15:30"</js> --&gt; <js>"2001-07-04T15:30:00"</js>
+	 * 	<li><js>"2001-07-04"</js> --&gt; <li><js>"2001-07-04T00:00:00"</js>
+	 * 	<li><js>"2001-07"</js> --&gt; <js>"2001-07-01T00:00:00"</js>
+	 * 	<li><js>"2001"</js> --&gt; <js>"2001-01-01T00:00:00"</js>
+	 * </ul>
+	 *
+	 * @param in The string to pad.
+	 * @return The padded string.
+	 */
+	public static final String toValidISO8601DT(String in) {
+
+		// "2001-07-04T15:30:45Z"
+		final int
+			S1 = 1, // Looking for -
+			S2 = 2, // Found -, looking for -
+			S3 = 3, // Found -, looking for T
+			S4 = 4, // Found T, looking for :
+			S5 = 5, // Found :, looking for :
+			S6 = 6; // Found :
+
+		int state = 1;
+		for (int i = 0; i < in.length(); i++) {
+			char c = in.charAt(i);
+			if (state == S1) {
+				if (c == '-')
+					state = S2;
+			} else if (state == S2) {
+				if (c == '-')
+					state = S3;
+			} else if (state == S3) {
+				if (c == 'T')
+					state = S4;
+			} else if (state == S4) {
+				if (c == ':')
+					state = S5;
+			} else if (state == S5) {
+				if (c == ':')
+					state = S6;
+			}
+		}
+
+		switch(state) {
+			case S1: return in + "-01-01T00:00:00";
+			case S2: return in + "-01T00:00:00";
+			case S3: return in + "T00:00:00";
+			case S4: return in + ":00:00";
+			case S5: return in + ":00";
+			default: return in;
 		}
 	}
 }

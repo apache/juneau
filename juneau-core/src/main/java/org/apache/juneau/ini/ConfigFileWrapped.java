@@ -252,8 +252,8 @@ public final class ConfigFileWrapped extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	public String put(String sectionName, String sectionKey, Object value, boolean encoded) throws SerializeException {
-		return cf.put(sectionName, sectionKey, value, encoded);
+	public String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded) throws SerializeException {
+		return cf.put(sectionName, sectionKey, value, serializer, encoded);
 	}
 
 	@Override /* ConfigFile */
@@ -277,12 +277,12 @@ public final class ConfigFileWrapped extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	protected String serialize(Object o) throws SerializeException {
-		return cf.serialize(o);
+	protected String serialize(Object o, Serializer s) throws SerializeException {
+		return cf.serialize(o, s);
 	}
 
 	@Override /* ConfigFile */
-	protected <T> T parse(String s, Type type, Type... args) throws ParseException {
-		return cf.parse(s, type, args);
+	protected <T> T parse(String s, Parser parser, Type type, Type... args) throws ParseException {
+		return cf.parse(s, parser, type, args);
 	}
 }

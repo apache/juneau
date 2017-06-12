@@ -363,4 +363,25 @@ public final class ArrayUtils {
 			l.add(i2.next());
 		return l;
 	}
+
+	/**
+	 * Returns the first object in the specified collection or array.
+	 *
+	 * @param val The collection or array object.
+	 * @return The first object, or <jk>null</jk> if the collection or array is empty or <jk>null</jk> or the value
+	 * 	isn't a collection or array.
+	 */
+	public static Object getFirst(Object val) {
+		if (val != null) {
+			if (val instanceof Collection) {
+				Collection<?> c = (Collection<?>)val;
+				if (c.isEmpty())
+					return null;
+				return c.iterator().next();
+			}
+			if (val.getClass().isArray())
+				return Array.getLength(val) == 0 ? null : Array.get(val, 0);
+		}
+		return null;
+	}
 }

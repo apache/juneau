@@ -1319,13 +1319,10 @@ public final class StringUtils {
 	 * @return The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed of only whitespace.
 	 */
 	public static char firstNonWhitespaceChar(String s) {
-		if (s != null) {
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
-				if (! Character.isWhitespace(c))
-					return c;
-			}
-		}
+		if (s != null)
+			for (int i = 0; i < s.length(); i++)
+				if (! Character.isWhitespace(s.charAt(i)))
+					return s.charAt(i);
 		return 0;
 	}
 

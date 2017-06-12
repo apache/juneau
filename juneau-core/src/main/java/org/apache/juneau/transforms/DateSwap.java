@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.DateUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
@@ -132,7 +133,7 @@ public class DateSwap extends StringSwap<Date> {
 			try {
 				if (isEmpty(o))
 					return null;
-				return convert(DatatypeConverter.parseDateTime(o).getTime(), hint);
+				return convert(DatatypeConverter.parseDateTime(toValidISO8601DT(o)).getTime(), hint);
 			} catch (Exception e) {
 				throw new ParseException(e);
 			}
@@ -165,7 +166,7 @@ public class DateSwap extends StringSwap<Date> {
 			try {
 				if (isEmpty(o))
 					return null;
-				return convert(DatatypeConverter.parseDateTime(o).getTime(), hint);
+				return convert(DatatypeConverter.parseDateTime(toValidISO8601DT(o)).getTime(), hint);
 			} catch (Exception e) {
 				throw new ParseException(e);
 			}

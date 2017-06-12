@@ -197,22 +197,46 @@ public final class ConfigFileImpl extends ConfigFile {
 		return this;
 	}
 
+	@SuppressWarnings("hiding")
 	@Override /* ConfigFile */
-	protected String serialize(Object value) throws SerializeException {
+	protected String serialize(Object value, Serializer serializer) throws SerializeException {
 		if (value == null)
 			return "";
+		if (serializer == null)
+			serializer = this.serializer;
 		Class<?> c = value.getClass();
 		if (isSimpleType(c))
 			return value.toString();
-		String s = serializer.toString(value);
-		if (s.startsWith("'"))
-			return s.substring(1, s.length()-1);
-		return s;
+
+		BeanContext bc = serializer.getBeanContext();
+		ClassMeta<?> cm = bc.getClassMetaForObject(value);
+		String r = null;
+
+		// For arrays of bean/collections, we have special formatting.
+		if (cm.isCollectionOrArray()) {
+			Object v1 = ArrayUtils.getFirst(value);
+			if (bc.getClassMetaForObject(v1).isMapOrBean()) {
+				List<Object> l = new ArrayList<Object>();
+				if (cm.isCollection()) {
+					for (Object o : (Collection<?>)value)
+						l.add(serializer.serialize(o));
+				} else {
+					for (int i = 0; i < Array.getLength(value); i++)
+						l.add(serializer.serialize(Array.get(value, i)));
+				}
+				return "\n[\n\t" + StringUtils.join(l, ",\n\t") + "\n]";
+			}
+		}
+
+		r = (String)serializer.serialize(value);
+		if (r.startsWith("'"))
+			return r.substring(1, r.length()-1);
+		return r;
 	}
 
 	@Override /* ConfigFile */
-	@SuppressWarnings({ "unchecked" })
-	protected <T> T parse(String s, Type type, Type...args) throws ParseException {
+	@SuppressWarnings({ "unchecked", "hiding" })
+	protected <T> T parse(String s, Parser parser, Type type, Type...args) throws ParseException {
 
 		if (StringUtils.isEmpty(s))
 			return null;
@@ -220,9 +244,12 @@ public final class ConfigFileImpl extends ConfigFile {
 		if (isSimpleType(type))
 			return (T)pBeanSession.convertToType(s, (Class<?>)type);
 
-		char s1 = charAt(s, 0);
+		char s1 = firstNonWhitespaceChar(s);
 		if (s1 != '[' && s1 != '{' && ! "null".equals(s))
 			s = '\'' + s + '\'';
+
+		if (parser == null)
+			parser = this.parser;
 
 		return parser.parse(s, type, args);
 	}
@@ -469,11 +496,12 @@ public final class ConfigFileImpl extends ConfigFile {
 		return (s2 == null ? null : s2.toString());
 	}
 
+	@SuppressWarnings("hiding")
 	@Override /* ConfigFile */
-	public String put(String sectionName, String sectionKey, Object value, boolean encoded) throws SerializeException {
+	public String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded) throws SerializeException {
 		assertFieldNotNull(sectionKey, "sectionKey");
 		Section s = getSection(sectionName, true);
-		return s.put(sectionKey, serialize(value), encoded);
+		return s.put(sectionKey, serialize(value, serializer), encoded);
 	}
 
 	@Override /* ConfigFile */

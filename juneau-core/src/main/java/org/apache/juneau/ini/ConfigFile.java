@@ -57,15 +57,17 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param value The new value.
+	 * @param serializer The serializer to use for serializing the object.
+	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
 	 * @param encoded
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException If the object value could not be converted to a JSON string for some reason.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public abstract String put(String sectionName, String sectionKey, Object value, boolean encoded) throws SerializeException;
+	public abstract String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded) throws SerializeException;
 
 	/**
-	 * Identical to {@link #put(String, String, Object, boolean)} except used when the value is a simple string
+	 * Identical to {@link #put(String, String, Object, Serializer, boolean)} except used when the value is a simple string
 	 * to avoid having to catch a {@link SerializeException}.
 	 *
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
@@ -192,21 +194,25 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * </ul>
 	 *
 	 * @param o The object to serialize.
+	 * @param serializer The serializer to use for serializing the object.
+	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
 	 * @return The serialized object.
 	 * @throws SerializeException
 	 */
-	protected abstract String serialize(Object o) throws SerializeException;
+	protected abstract String serialize(Object o, Serializer serializer) throws SerializeException;
 
 	/**
 	 * Converts the specified string to an object of the specified type.
 	 *
 	 * @param s The string to parse.
+	 * @param parser The parser to use for parsing the object.
+	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param type The data type to create.
 	 * @param args The generic type arguments if the type is a {@link Collection} or {@link Map}
 	 * @return The parsed object.
 	 * @throws ParseException
 	 */
-	protected abstract <T> T parse(String s, Type type, Type...args) throws ParseException;
+	protected abstract <T> T parse(String s, Parser parser, Type type, Type...args) throws ParseException;
 
 	/**
 	 * Places a read lock on this config file.
@@ -301,9 +307,28 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public final <T> T getObject(String key, Type type, Type...args) throws ParseException {
+		return getObject(key, (Parser)null, type, args);
+	}
+
+	/**
+	 * Same as {@link #getObject(String, Type, Type...)} but allows you to specify the parser to use to parse the value.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param parser The parser to use for parsing the object.
+	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 */
+	public final <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException {
 		assertFieldNotNull(key, "key");
 		assertFieldNotNull(type, "type");
-		return parse(getString(key), type, args);
+		return parse(getString(key), parser, type, args);
 	}
 
 	/**
@@ -338,11 +363,26 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T getObject(String key, Class<T> type) throws ParseException {
-		assertFieldNotNull(key, "key");
-		assertFieldNotNull(type, "c");
-		return parse(getString(key), type);
+		return getObject(key, (Parser)null, type);
 	}
 
+	/**
+	 * Same as {@link #getObject(String, Class)} but allows you to specify the parser to use to parse the value.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param parser The parser to use for parsing the object.
+	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	public final <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException {
+		assertFieldNotNull(key, "key");
+		assertFieldNotNull(type, "c");
+		return parse(getString(key), parser, type);
+	}
 
 	/**
 	 * Gets the entry with the specified key and converts it to the specified value.
@@ -357,9 +397,25 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public final <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException {
+		return getObjectWithDefault(key, null, def, type);
+	}
+
+	/**
+	 * Same as {@link #getObjectWithDefault(String, Object, Class)} but allows you to specify the parser to use to parse the value.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param parser The parser to use for parsing the object.
+	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * @param def The default value if section or key does not exist.
+	 * @param type The class to convert the value to.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 */
+	public final <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException {
 		assertFieldNotNull(key, "key");
 		assertFieldNotNull(type, "c");
-		T t = parse(getString(key), type);
+		T t = parse(getString(key), parser, type);
 		return (t == null ? def : t);
 	}
 
@@ -380,9 +436,29 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public final <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException {
+		return getObjectWithDefault(key, null, def, type, args);
+	}
+
+	/**
+	 * Same as {@link #getObjectWithDefault(String, Object, Type, Type...)} but allows you to specify the parser to use to parse the value.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param parser The parser to use for parsing the object.
+	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * @param def The default value if section or key does not exist.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 */
+	public final <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException {
 		assertFieldNotNull(key, "key");
 		assertFieldNotNull(type, "type");
-		T t = parse(getString(key), type, args);
+		T t = parse(getString(key), parser, type, args);
 		return (t == null ? def : t);
 	}
 
@@ -399,9 +475,25 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @return The value, or the default value if the section or value doesn't exist.
 	 */
 	public final <T> T getObject(String sectionName, String sectionKey, Class<T> c) throws ParseException {
+		return getObject(sectionName, sectionKey, null, c);
+	}
+
+	/**
+	 * Same as {@link #getObject(String, String, Class)} but allows you to specify the parser to use to parse the value.
+	 *
+	 * @param sectionName The section name.  Must not be <jk>null</jk>.
+	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
+	 * @param parser The parser to use for parsing the object.
+	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * @param c The class to convert the value to.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or the default value if the section or value doesn't exist.
+	 */
+	public final <T> T getObject(String sectionName, String sectionKey, Parser parser, Class<T> c) throws ParseException {
 		assertFieldNotNull(sectionName, "sectionName");
 		assertFieldNotNull(sectionKey, "sectionKey");
-		return parse(get(sectionName, sectionKey), c);
+		return parse(get(sectionName, sectionKey), parser, c);
 	}
 
 	/**
@@ -421,9 +513,29 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
 	public final <T> T getObject(String sectionName, String sectionKey, Type type, Type...args) throws ParseException {
+		return getObject(sectionName, sectionKey, null, type, args);
+	}
+
+	/**
+	 * Same as {@link #getObject(String, String, Type, Type...)} but allows you to specify the parser to use to parse the value.
+	 *
+	 * @param sectionName The section name.  Must not be <jk>null</jk>.
+	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
+	 * @param parser The parser to use for parsing the object.
+	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 */
+	public final <T> T getObject(String sectionName, String sectionKey, Parser parser, Type type, Type...args) throws ParseException {
 		assertFieldNotNull(sectionName, "sectionName");
 		assertFieldNotNull(sectionKey, "sectionKey");
-		return parse(get(sectionName, sectionKey), type, args);
+		return parse(get(sectionName, sectionKey), parser, type, args);
 	}
 
 	/**
@@ -533,7 +645,22 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value) throws SerializeException {
-		return put(key, value, isEncoded(key));
+		return put(key, value, null, isEncoded(key));
+	}
+
+	/**
+	 * Same as {@link #put(String, Object)} but allows you to specify the serializer to use to serialize the value.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param value The new value POJO.
+	 * @param serializer The serializer to use for serializing the object.
+	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws UnsupportedOperationException If config file is read only.
+	 */
+	public final String put(String key, Object value, Serializer serializer) throws SerializeException {
+		return put(key, value, serializer, isEncoded(key));
 	}
 
 	/**
@@ -556,8 +683,24 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value, boolean encoded) throws SerializeException {
+		return put(key, value, null, encoded);
+	}
+
+	/**
+	 * Same as {@link #put(String, Object, boolean)} but allows you to specify the serializer to use to serialize the value.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param value The new value.
+	 * @param serializer The serializer to use for serializing the object.
+	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * @param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted to disk.
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws UnsupportedOperationException If config file is read only.
+	 */
+	public final String put(String key, Object value, Serializer serializer, boolean encoded) throws SerializeException {
 		assertFieldNotNull(key, "key");
-		return put(getSectionName(key), getSectionKey(key), serialize(value), encoded);
+		return put(getSectionName(key), getSectionKey(key), serialize(value, serializer), encoded);
 	}
 
 	/**
@@ -770,7 +913,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 					if (method.equals(rm))
 						return ConfigFile.this.getObject(sectionName, pd.getName(), rm.getGenericReturnType());
 					if (method.equals(wm))
-						return ConfigFile.this.put(sectionName, pd.getName(), args[0], false);
+						return ConfigFile.this.put(sectionName, pd.getName(), args[0], null, false);
 				}
 				throw new UnsupportedOperationException("Unsupported interface method.  method=[ " + method + " ]");
 			}
