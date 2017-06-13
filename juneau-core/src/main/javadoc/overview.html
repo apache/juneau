@@ -6191,8 +6191,8 @@
 				</p>
 			<li>New/modified methods on {@link org.apache.juneau.ini.ConfigFile}:
 				<ul>
-					<li>{@link org.apache.juneau.ini.ConfigFile#put(String,String,Object,boolean) put(String,String,Object,boolean)} 
-					<li>{@link org.apache.juneau.ini.ConfigFile#put(String,String,Object,Serializer,boolean) put(String,String,Object,boolean)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#put(String,String,String,boolean) put(String,String,String,boolean)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#put(String,String,Object,Serializer,boolean,boolean) put(String,String,Object,boolean,boolean)} 
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,Type,Type...) getObject(String,Type,Type...)} 
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,Parser,Type,Type...) getObject(String,Parser,Type,Type...)} 
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,Class) getObject(String,Class)} 
@@ -6202,9 +6202,9 @@
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,String,Class) getObject(String,String,Class)} 
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,String,Parser,Class) getObject(String,String,Parser,Class)} 
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,Object,Type,Type)} 
-					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Object,Parser,Type,Type...) getObjectWithDefault(String,Object,Type,Type)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Parser,Object,Type,Type...) getObjectWithDefault(String,Parser,Object,Type,Type)} 
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,Object,Class)} 
-					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Object,Parser,Class) getObjectWithDefault(String,Object,Parser,Class)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Parser,Object,Class) getObjectWithDefault(String,Parser,Object,Class)} 
 				</ul>
 			<li>New ability to interact with config file sections with proxy interfaces with new method {@link org.apache.juneau.ini.ConfigFile#getSectionAsInterface(String,Class)}.
 			<li>{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation can now be applied to getters
@@ -6501,7 +6501,8 @@
 				<ul>
 					<li>{@link org.apache.juneau.rest.widget.Widget}
 					<li>{@link org.apache.juneau.rest.widget.PoweredByJuneauWidget}
-					<li>{@link org.apache.juneau.rest.widget.ContentTypeLinksWidget}
+					<li>{@link org.apache.juneau.rest.widget.ContentTypeLinksColumnWidget}
+					<li>{@link org.apache.juneau.rest.widget.ContentTypeLinksRowWidget}
 				</ul>
 			<li><code>devops.css</code> cleaned up.
 			<li>Removed a bunch of URL-related methods from {@link org.apache.juneau.rest.RestRequest}.  
