@@ -67,10 +67,10 @@ public final class SoapXmlSerializer extends XmlSerializer {
 		w.oTag("soap", "Envelope")
 			.attr("xmlns", "soap", s.getProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
 			.appendln(">");
-		w.sTag(1, "soap", "Body").nl();
+		w.sTag(1, "soap", "Body").nl(1);
 		super.doSerialize(s, o);
-		w.eTag(1, "soap", "Body").nl();
-		w.eTag("soap", "Envelope").nl();
+		w.ie(1).eTag("soap", "Body").nl(1);
+		w.eTag("soap", "Envelope").nl(0);
 	}
 
 	@Override /* Serializer */

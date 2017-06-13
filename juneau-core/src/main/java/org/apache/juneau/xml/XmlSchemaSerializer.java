@@ -267,7 +267,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			this.defaultNs = defaultNs;
 			this.targetNs = targetNs;
 			this.session = session;
-			w = new XmlWriter(sw, session.isUseWhitespace(), session.isTrimStrings(), session.getQuoteChar(), null, true, null);
+			w = new XmlWriter(sw, session.isUseWhitespace(), session.getMaxIndent(), session.isTrimStrings(), session.getQuoteChar(), null, true, null);
 			int i = session.getIndent();
 			w.oTag(i, "schema");
 			w.attr("xmlns", xs.getUri());
@@ -277,13 +277,13 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				w.attr("attributeFormDefault", "qualified");
 			for (Namespace ns2 : allNs)
 				w.attr("xmlns", ns2.name, ns2.uri);
-			w.append('>').nl();
+			w.append('>').nl(i);
 			for (Namespace ns : allNs) {
 				if (ns != targetNs) {
 					w.oTag(i+1, "import")
 						.attr("namespace", ns.getUri())
 						.attr("schemaLocation", ns.getName()+".xsd")
-						.append("/>").nl();
+						.append("/>").nl(i+1);
 				}
 			}
 		}
@@ -303,7 +303,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			w.oTag(i, "element")
 				.attr("name", XmlUtils.encodeElementName(name))
 				.attr("type", type)
-				.append('/').append('>').nl();
+				.append('/').append('>').nl(i);
 
 			schemas.queueType(ns, null, ft);
 			schemas.processQueue();
@@ -321,7 +321,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			w.oTag(i, "attribute")
 				.attr("name", name)
 				.attr("type", type)
-				.append('/').append('>').nl();
+				.append('/').append('>').nl(i);
 
 			return true;
 		}
@@ -345,10 +345,10 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			if ((xbm != null && (xbm.getContentFormat() != null && xbm.getContentFormat().isOneOf(TEXT,TEXT_PWS,MIXED,MIXED_PWS,XMLTEXT))) || ! cm.isMapOrBean())
 				w.attr("mixed", "true");
 
-			w.cTag().nl();
+			w.cTag().nl(i);
 
 			if (! (cm.isMapOrBean() || cm.isCollectionOrArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
-				w.oTag(i+1, "attribute").attr("name", session.getBeanTypePropertyName(cm)).attr("type", "string").ceTag().nl();
+				w.oTag(i+1, "attribute").attr("name", session.getBeanTypePropertyName(cm)).attr("type", "string").ceTag().nl(i+1);
 
 			} else {
 
@@ -366,12 +366,12 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 					XmlBeanMeta xbm2 = bm.getExtendedMeta(XmlBeanMeta.class);
 					if (xbm2.getContentProperty() != null && xbm2.getContentFormat() == ELEMENTS) {
-						w.sTag(i+1, "sequence").nl();
+						w.sTag(i+1, "sequence").nl(i+1);
 						w.oTag(i+2, "any")
 							.attr("processContents", "skip")
 							.attr("minOccurs", 0)
-							.ceTag().nl();
-						w.eTag(i+1, "sequence").nl();
+							.ceTag().nl(i+2);
+						w.eTag(i+1, "sequence").nl(i+1);
 
 					} else if (hasChildElements) {
 
@@ -396,15 +396,15 @@ public class XmlSchemaSerializer extends XmlSerializer {
 						if (hasOtherNsElement || hasCollapsed) {
 							// If this bean has any child elements in another namespace,
 							// we need to add an <any> element.
-							w.oTag(i+1, "choice").attr("maxOccurs", "unbounded").cTag().nl();
+							w.oTag(i+1, "choice").attr("maxOccurs", "unbounded").cTag().nl(i+1);
 							w.oTag(i+2, "any")
 								.attr("processContents", "skip")
 								.attr("minOccurs", 0)
-								.ceTag().nl();
-							w.eTag(i+1, "choice").nl();
+								.ceTag().nl(i+2);
+							w.eTag(i+1, "choice").nl(i+1);
 
 						} else {
-							w.sTag(i+1, "all").nl();
+							w.sTag(i+1, "all").nl(i+1);
 							for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
 								XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
 								if (xmlMeta.getXmlFormat() != ATTR) {
@@ -423,7 +423,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 											.attr("type", getXmlType(cNs, ct2))
 											.attr("minOccurs", 0);
 
-										w.ceTag().nl();
+										w.ceTag().nl(i+2);
 									} else {
 										// Child element is in another namespace.
 										schemas.queueElement(cNs, pMeta.getName(), ct2);
@@ -432,7 +432,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 								}
 							}
-							w.eTag(i+1, "all").nl();
+							w.eTag(i+1, "all").nl(i+1);
 						}
 
 					}
@@ -447,9 +447,9 @@ public class XmlSchemaSerializer extends XmlSerializer {
 						if (pNs != targetNs) {
 							schemas.queueAttribute(pNs, pMeta.getName(), pMeta.getClassMeta());
 							w.oTag(i+1, "attribute")
-							//.attr("name", pMeta.getName(), true)
-							.attr("ref", pNs.getName() + ':' + pMeta.getName())
-							.ceTag().nl();
+								//.attr("name", pMeta.getName(), true)
+								.attr("ref", pNs.getName() + ':' + pMeta.getName())
+								.ceTag().nl(i+1);
 						}
 
 						// Otherwise, it's just a plain attribute of this bean.
@@ -457,7 +457,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 							w.oTag(i+1, "attribute")
 								.attr("name", pMeta.getName(), true)
 								.attr("type", getXmlAttrType(pMeta.getClassMeta()))
-								.ceTag().nl();
+								.ceTag().nl(i+1);
 						}
 					}
 
@@ -465,43 +465,43 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				} else if (cm.isCollectionOrArray()) {
 					ClassMeta<?> elementType = cm.getElementType();
 					if (elementType.isObject()) {
-						w.sTag(i+1, "sequence").nl();
+						w.sTag(i+1, "sequence").nl(i+1);
 						w.oTag(i+2, "any")
 							.attr("processContents", "skip")
 							.attr("maxOccurs", "unbounded")
 							.attr("minOccurs", "0")
-							.ceTag().nl();
-						w.eTag(i+1, "sequence").nl();
+							.ceTag().nl(i+2);
+						w.eTag(i+1, "sequence").nl(i+1);
 					} else {
 						Namespace cNs = first(elementType.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
 						schemas.queueType(cNs, null, elementType);
-						w.sTag(i+1, "sequence").nl();
+						w.sTag(i+1, "sequence").nl(i+1);
 						w.oTag(i+2, "any")
 							.attr("processContents", "skip")
 							.attr("maxOccurs", "unbounded")
 							.attr("minOccurs", "0")
-							.ceTag().nl();
-						w.eTag(i+1, "sequence").nl();
+							.ceTag().nl(i+2);
+						w.eTag(i+1, "sequence").nl(i+1);
 					}
 
 				//----- Map -----
 				} else if (cm.isMap() || cm.isAbstract() || cm.isObject()) {
-					w.sTag(i+1, "sequence").nl();
+					w.sTag(i+1, "sequence").nl(i+1);
 					w.oTag(i+2, "any")
 						.attr("processContents", "skip")
 						.attr("maxOccurs", "unbounded")
 						.attr("minOccurs", "0")
-						.ceTag().nl();
-					w.eTag(i+1, "sequence").nl();
+						.ceTag().nl(i+2);
+					w.eTag(i+1, "sequence").nl(i+1);
 				}
 
 				w.oTag(i+1, "attribute")
 					.attr("name", session.getBeanTypePropertyName(null))
 					.attr("type", "string")
-					.ceTag().nl();
+					.ceTag().nl(i+1);
 			}
 
-			w.eTag(i, "complexType").nl();
+			w.eTag(i, "complexType").nl(i);
 			schemas.processQueue();
 
 			return true;
@@ -529,7 +529,8 @@ public class XmlSchemaSerializer extends XmlSerializer {
 		@Override /* Object */
 		public String toString() {
 			try {
-				w.eTag(session.getIndent(), "schema").nl();
+				int i = session.getIndent();
+				w.eTag(i, "schema").nl(i);
 			} catch (IOException e) {
 				throw new RuntimeException(e); // Shouldn't happen.
 			}

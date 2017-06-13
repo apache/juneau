@@ -201,6 +201,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return "HTTP " + getMethod() + " " + getRequestURI() + (qs == null ? "" : "?" + qs);
 	}
 
+	/**
+	 * Same as {@link #getAttribute(String)} but returns a default value if not found.
+	 *
+	 * @param name The request attribute name.
+	 * @param def The default value if the attribute doesn't exist.
+	 * @return The request attribute value.
+	 */
+	public Object getAttribute(String name, Object def) {
+		Object o = super.getAttribute(name);
+		return (o == null ? def : o);
+	}
+
 
 	//--------------------------------------------------------------------------------
 	// Properties

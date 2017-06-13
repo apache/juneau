@@ -203,6 +203,31 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	}
 
 	/**
+	 * <b>Configuration property:</b>  Maximum indentation.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.maxIndent"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>100</code>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_maxIndent</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_maxIndent
+	 */
+	public SerializerBuilder maxIndent(int value) {
+		return property(SERIALIZER_maxIndent, value);
+	}
+
+	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 * <p>
 	 * <ul>

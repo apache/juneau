@@ -37,14 +37,15 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param out The wrapped writer.
 	 * @param useWhitespace If <jk>true</jk> XML elements will be indented.
+	 * @param maxIndent The maximum indentation level.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The quote character to use for attributes.  Should be <js>'\''</js> or <js>'"'</js>.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 * @param enableNs Flag to indicate if XML namespaces are enabled.
 	 * @param defaultNamespace The default namespace if XML namespaces are enabled.
 	 */
-	public XmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
-		super(out, useWhitespace, trimStrings, quoteChar, uriResolver);
+	public XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
+		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.enableNs = enableNs;
 		this.defaultNsPrefix = defaultNamespace == null ? null : defaultNamespace.name;
 	}
@@ -570,6 +571,12 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	@Override /* SerializerWriter */
+	public XmlWriter cre(int depth) throws IOException {
+		super.cre(depth);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
 	public XmlWriter appendln(int indent, String text) throws IOException {
 		super.appendln(indent, text);
 		return this;
@@ -612,8 +619,14 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter nl() throws IOException {
-		super.nl();
+	public XmlWriter ie(int indent) throws IOException {
+		super.ie(indent);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public XmlWriter nl(int indent) throws IOException {
+		super.nl(indent);
 		return this;
 	}
 

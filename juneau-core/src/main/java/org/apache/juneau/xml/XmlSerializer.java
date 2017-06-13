@@ -512,7 +512,7 @@ public class XmlSerializer extends WriterSerializer {
 				out.append('>');
 
 			if (cr && ! (sType.isMapOrBean()))
-				out.nl();
+				out.nl(indent+1);
 		}
 
 		ContentResult rc = CR_ELEMENTS;
@@ -568,9 +568,9 @@ public class XmlSerializer extends WriterSerializer {
 				out.append('/').append('>');
 			}
 			else
-				out.i(cr && rc != CR_MIXED ? indent : 0).eTag(elementNs, en, encodeEn);
+				out.ie(cr && rc != CR_MIXED ? indent : 0).eTag(elementNs, en, encodeEn);
 			if (! isMixed)
-				out.nl();
+				out.nl(indent);
 		}
 
 		return out;
@@ -600,7 +600,7 @@ public class XmlSerializer extends WriterSerializer {
 
 			if (! hasChildren) {
 				hasChildren = true;
-				out.append('>').nlIf(! isMixed);
+				out.append('>').nlIf(! isMixed, session.getIndent());
 			}
 			serializeAnything(session, out, value, valueType, session.toString(k), null, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
@@ -704,7 +704,7 @@ public class XmlSerializer extends WriterSerializer {
 
 				if (! hasChildren) {
 					hasChildren = true;
-					out.appendIf(! isCollapsed, '>').nlIf(! isMixed);
+					out.appendIf(! isCollapsed, '>').nlIf(! isMixed, session.getIndent());
 				}
 
 				XmlBeanPropertyMeta xbpm = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
@@ -713,7 +713,7 @@ public class XmlSerializer extends WriterSerializer {
 		}
 		if (! hasContent)
 			return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);
-		out.append('>').nlIf(! isMixed);
+		out.append('>').nlIf(! isMixed, session.getIndent());
 
 		// Serialize XML content.
 		if (content != null) {
@@ -739,7 +739,7 @@ public class XmlSerializer extends WriterSerializer {
 					out.i(session.indent);
 				out.text(content);
 				if (! isMixed)
-					out.nl();
+					out.nl(session.indent);
 			}
 		}
 		return isMixed ? CR_MIXED : CR_ELEMENTS;

@@ -299,7 +299,7 @@ public class HtmlSerializer extends XmlSerializer {
 				cr = CR_SIMPLE;
 
 			} else if (sType.isMap() || (wType != null && wType.isMap())) {
-				out.nlIf(! isRoot);
+				out.nlIf(! isRoot, indent+1);
 				if (o instanceof BeanMap)
 					serializeBeanMap(session, out, (BeanMap)o, eType, pMeta);
 				else
@@ -315,12 +315,12 @@ public class HtmlSerializer extends XmlSerializer {
 					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");
 					cr = CR_SIMPLE;
 				} else {
-					out.nlIf(! isRoot);
+					out.nlIf(! isRoot, indent+2);
 					serializeBeanMap(session, out, m, eType, pMeta);
 				}
 
 			} else if (sType.isCollection() || sType.isArray() || (wType != null && wType.isCollection())) {
-				out.nlIf(! isRoot);
+				out.nlIf(! isRoot, indent+1);
 				serializeCollection(session, out, o, sType, eType, name, pMeta);
 
 			} else if (session.isUri(sType, pMeta, o)) {
@@ -365,12 +365,12 @@ public class HtmlSerializer extends XmlSerializer {
 		if (typeName != null && ppMeta != null && ppMeta.getClassMeta() != aType)
 			out.attr(session.getBeanTypePropertyName(sType), typeName);
 
-		out.appendln(">");
+		out.append(">").nl(i+1);
 		if (session.isAddKeyValueTableHeaders() && ! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
-			out.sTag(i+1, "tr").nl();
-			out.sTag(i+2, "th").append("key").eTag("th").nl();
-			out.sTag(i+2, "th").append("value").eTag("th").nl();
-			out.eTag(i+1, "tr").nl();
+			out.sTag(i+1, "tr").nl(i+2);
+			out.sTag(i+2, "th").append("key").eTag("th").nl(i+3);
+			out.sTag(i+2, "th").append("value").eTag("th").nl(i+3);
+			out.ie(i+1).eTag("tr").nl(i+2);
 		}
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
 
@@ -384,20 +384,20 @@ public class HtmlSerializer extends XmlSerializer {
 				session.onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), t.getLocalizedMessage());
 			}
 
-			out.sTag(i+1, "tr").nl();
+			out.sTag(i+1, "tr").nl(i+2);
 			out.sTag(i+2, "td");
 			ContentResult cr = serializeAnything(session, out, key, keyType, null, 2, null, false);
 			if (cr == CR_NORMAL)
 				out.i(i+2);
-			out.eTag("td").nl();
+			out.eTag("td").nl(i+2);
 			out.sTag(i+2, "td");
 			cr = serializeAnything(session, out, value, valueType, (key == null ? "_x0000_" : session.toString(key)), 2, null, false);
 			if (cr == CR_NORMAL)
-				out.i(i+2);
-			out.eTag("td").nl();
-			out.eTag(i+1, "tr").nl();
+				out.ie(i+2);
+			out.eTag("td").nl(i+2);
+			out.ie(i+1).eTag("tr").nl(i+1);
 		}
-		out.eTag(i, "table").nl();
+		out.ie(i).eTag("table").nl(i);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -410,12 +410,12 @@ public class HtmlSerializer extends XmlSerializer {
 		if (typeName != null && eType != m.getClassMeta())
 			out.attr(session.getBeanTypePropertyName(m.getClassMeta()), typeName);
 
-		out.append('>').nl();
+		out.append('>').nl(i);
 		if (session.isAddKeyValueTableHeaders() && ! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
-			out.sTag(i+1, "tr").nl();
-			out.sTag(i+2, "th").append("key").eTag("th").nl();
-			out.sTag(i+2, "th").append("value").eTag("th").nl();
-			out.eTag(i+1, "tr").nl();
+			out.sTag(i+1, "tr").nl(i+1);
+			out.sTag(i+2, "th").append("key").eTag("th").nl(i+2);
+			out.sTag(i+2, "th").append("value").eTag("th").nl(i+2);
+			out.ie(i+1).eTag("tr").nl(i+1);
 		}
 
 		for (BeanPropertyValue p : m.getValues(session.isTrimNulls())) {
@@ -436,8 +436,8 @@ public class HtmlSerializer extends XmlSerializer {
 			if (session.canIgnoreValue(cMeta, key, value))
 				continue;
 
-			out.sTag(i+1, "tr").nl();
-			out.sTag(i+2, "td").text(key).eTag("td").nl();
+			out.sTag(i+1, "tr").nl(i+1);
+			out.sTag(i+2, "td").text(key).eTag("td").nl(i+2);
 			out.oTag(i+2, "td");
 			String style = render == null ? null : render.getStyle(session, value);
 			if (style != null)
@@ -460,10 +460,10 @@ public class HtmlSerializer extends XmlSerializer {
 				e.printStackTrace();
 				session.onBeanGetterException(pMeta, e);
 			}
-			out.eTag("td").nl();
-			out.eTag(i+1, "tr").nl();
+			out.eTag("td").nl(i+2);
+			out.ie(i+1).eTag("tr").nl(i+1);
 		}
-		out.eTag(i, "table").nl();
+		out.ie(i).eTag("table").nl(i);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -499,14 +499,14 @@ public class HtmlSerializer extends XmlSerializer {
 
 		if (th != null) {
 
-			out.oTag(i, "table").attr(btpn, type2).append('>').nl();
-			out.sTag(i+1, "tr").nl();
+			out.oTag(i, "table").attr(btpn, type2).append('>').nl(i+1);
+			out.sTag(i+1, "tr").nl(i+2);
 			for (Object key : th) {
 				out.sTag(i+2, "th");
 				out.text(session.convertToType(key, String.class));
-				out.eTag("th").nl();
+				out.eTag("th").nl(i+2);
 			}
-			out.eTag(i+1, "tr").nl();
+			out.ie(i+1).eTag("tr").nl(i+1);
 
 			for (Object o : c) {
 				ClassMeta<?> cm = session.getClassMetaForObject(o);
@@ -523,7 +523,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 				if (typeName != null && eType.getElementType() != cm)
 					out.attr(typeProperty, typeName);
-				out.cTag().nl();
+				out.cTag().nl(i+2);
 
 				if (cm == null) {
 					serializeAnything(session, out, o, null, null, 1, null, false);
@@ -536,7 +536,7 @@ public class HtmlSerializer extends XmlSerializer {
 						ContentResult cr = serializeAnything(session, out, m2.get(k), eType.getElementType(), session.toString(k), 2, null, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
-						out.eTag("td").nl();
+						out.eTag("td").nl(i+2);
 					}
 				} else {
 					BeanMap m2 = null;
@@ -570,26 +570,26 @@ public class HtmlSerializer extends XmlSerializer {
 							out.i(i+2);
 						if (link != null)
 							out.eTag("a");
-						out.eTag("td").nl();
+						out.eTag("td").nl(i+2);
 					}
 				}
-				out.eTag(i+1, "tr").nl();
+				out.ie(i+1).eTag("tr").nl(i+1);
 			}
-			out.eTag(i, "table").nl();
+			out.ie(i).eTag("table").nl(i);
 
 		} else {
 			out.oTag(i, "ul");
 			if (! type2.equals("array"))
 				out.attr(btpn, type2);
-			out.append('>').nl();
+			out.append('>').nl(i+1);
 			for (Object o : c) {
 				out.sTag(i+1, "li");
 				ContentResult cr = serializeAnything(session, out, o, eType.getElementType(), name, 1, null, false);
 				if (cr == CR_NORMAL)
-					out.i(i+1);
-				out.eTag("li").nl();
+					out.ie(i+1);
+				out.eTag("li").nl(i+1);
 			}
-			out.eTag(i, "ul").nl();
+			out.ie(i).eTag("ul").nl(i);
 		}
 	}
 

@@ -303,7 +303,7 @@ public class UonSerializer extends WriterSerializer {
 		}
 
 		if (m.size() > 0)
-			out.cr(depth-1);
+			out.cre(depth-1);
 
 		if (! session.isPlainTextParams())
 			out.append(')');
@@ -343,7 +343,7 @@ public class UonSerializer extends WriterSerializer {
 		}
 
 		if (m.size() > 0)
-			out.cr(depth-1);
+			out.cre(depth-1);
 		if (! session.isPlainTextParams())
 			out.append(')');
 
@@ -370,7 +370,7 @@ public class UonSerializer extends WriterSerializer {
 		}
 
 		if (c.size() > 0)
-			out.cr(depth-1);
+			out.cre(depth-1);
 		if (! session.isPlainTextParams())
 			out.append(')');
 

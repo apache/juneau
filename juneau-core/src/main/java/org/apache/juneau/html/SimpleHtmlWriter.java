@@ -28,7 +28,7 @@ public class SimpleHtmlWriter extends HtmlWriter {
 	 * Constructor.
 	 */
 	public SimpleHtmlWriter() {
-		super(new StringWriter(), true, false, '\'', null);
+		super(new StringWriter(), true, 100, false, '\'', null);
 	}
 
 	@Override /* Object */

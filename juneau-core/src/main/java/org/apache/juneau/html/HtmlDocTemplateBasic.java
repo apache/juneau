@@ -26,9 +26,9 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	@Override /* HtmlDocTemplate */
 	public void head(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
 		if (hasCss(session)) {
-			w.oTag(1, "style").attr("type", "text/css").appendln(">").nl();
+			w.oTag(1, "style").attr("type", "text/css").appendln(">").nl(1);
 			css(session, w, s, o);
-			w.eTag(1, "style").nl();
+			w.ie(1).eTag("style").nl(1);
 		}
 	}
 
@@ -52,35 +52,35 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	public void body(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
 
 		if (hasHeader(session)) {
-			w.sTag(1, "header").nl();
+			w.sTag(1, "header").nl(1);
 			header(session, w, s, o);
-			w.eTag(1, "header").nl();
+			w.ie(1).eTag("header").nl(1);
 		}
 
 		if (hasNav(session)) {
-			w.sTag(1, "nav").nl();
+			w.sTag(1, "nav").nl(1);
 			nav(session, w, s, o);
-			w.eTag(1, "nav").nl();
+			w.ie(1).eTag("nav").nl(1);
 		}
 
-		w.sTag(1, "section").nl();
+		w.sTag(1, "section").nl(1);
 
-		w.sTag(2, "article").nl();
+		w.sTag(2, "article").nl(2);
 		article(session, w, s, o);
-		w.eTag(2, "article").nl();
+		w.ie(2).eTag("article").nl(2);
 
 		if (hasAside(session)) {
-			w.sTag(2, "aside").nl();
+			w.sTag(2, "aside").nl(2);
 			aside(session, w, s, o);
-			w.eTag(2, "aside").nl();
+			w.ie(2).eTag("aside").nl(2);
 		}
 
-		w.eTag(1, "section").nl();
+		w.ie(1).eTag("section").nl(1);
 
 		if (hasFooter(session)) {
-			w.sTag(1, "footer").nl();
+			w.sTag(1, "footer").nl(1);
 			footer(session, w, s, o);
-			w.eTag(1, "footer").nl();
+			w.ie(1).eTag("footer").nl(1);
 		}
 	}
 
@@ -90,17 +90,17 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 		String header = session.getHeader();
 		if (header != null) {
 			if (exists(header))
-				w.append(header).nl();
+				w.append(2, header).nl(2);
 		} else {
 			String title = session.getTitle();
 			String description = session.getDescription();
 			String branding = session.getBranding();
 			if (exists(title))
-				w.oTag(1, "h3").attr("class", "title").append('>').text(title).eTag("h3").nl();
+				w.oTag(3, "h3").attr("class", "title").append('>').text(title).eTag("h3").nl(3);
 			if (exists(description))
-				w.oTag(1, "h5").attr("class", "description").append('>').text(description).eTag("h5").nl();
+				w.oTag(3, "h5").attr("class", "description").append('>').text(description).eTag("h5").nl(3);
 			if (exists(branding))
-				w.append(branding).nl();
+				w.append(3, branding).nl(3);
 		}
 	}
 
@@ -110,14 +110,14 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 		String nav = session.getNav();
 		if (nav != null) {
 			if (exists(nav))
-				w.append(nav).nl();
+				w.append(2, nav).nl(2);
 		} else {
 			Map<String,String> htmlLinks = session.getLinks();
 			boolean first = true;
 			if (htmlLinks != null) {
 				for (Map.Entry<String,String> e : htmlLinks.entrySet()) {
 					if (! first)
-						w.append(3, " - ").nl();
+						w.append(3, " - ").nl(3);
 					first = false;
 					w.oTag("a").attr("class", "link").attr("href", session.resolveUri(e.getValue()), true).cTag().text(e.getKey(), true).eTag("a");
 				}
@@ -136,21 +136,21 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	public void article(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
 		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
 		// <div class='outerdata'><div class='data' id='data'>...</div></div>
-		w.oTag(3, "div").attr("class","outerdata").append('>').nl();
-		w.oTag(4, "div").attr("class","data").attr("id", "data").append('>').nl();
+		w.oTag(3, "div").attr("class","outerdata").append('>').nl(3);
+		w.oTag(4, "div").attr("class","data").attr("id", "data").append('>').nl(4);
 
 		if (o == null) {
-			w.append("<null/>").nl();
+			w.append(5, "<null/>").nl(5);
 		} else if (ObjectUtils.isEmpty(o)){
 			String m = session.getNoResultsMessage();
 			if (exists(m))
-				w.append(m).nl();
+				w.append(5, m).nl(5);
 		} else {
 			s.parentSerialize(session, o);
 		}
 
-		w.eTag(4, "div").nl();
-		w.eTag(3, "div").nl();
+		w.ie(4).eTag("div").nl(4);
+		w.ie(4).eTag("div").nl(3);
 	}
 
 	@Override /* HtmlDocTemplate */

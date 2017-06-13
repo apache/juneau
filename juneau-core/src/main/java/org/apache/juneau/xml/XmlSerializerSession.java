@@ -201,6 +201,6 @@ public class XmlSerializerSession extends SerializerSession {
 		Object output = getOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
-		return new XmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), getDefaultNamespace());
+		return new XmlWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), getDefaultNamespace());
 	}
 }

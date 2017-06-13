@@ -41,7 +41,7 @@ import org.apache.juneau.transform.*;
  */
 public class SerializerSession extends BeanSession {
 
-	private final int maxDepth, initialDepth;
+	private final int maxDepth, initialDepth, maxIndent;
 	private final boolean
 		detectRecursions,
 		ignoreRecursions,
@@ -113,6 +113,7 @@ public class SerializerSession extends BeanSession {
 			detectRecursions = ctx.detectRecursions;
 			ignoreRecursions = ctx.ignoreRecursions;
 			useWhitespace = ctx.useWhitespace;
+			maxIndent = ctx.maxIndent;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 			trimNulls = ctx.trimNulls;
 			trimEmptyCollections = ctx.trimEmptyCollections;
@@ -131,6 +132,7 @@ public class SerializerSession extends BeanSession {
 			detectRecursions = op.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
 			ignoreRecursions = op.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
 			useWhitespace = op.getBoolean(SERIALIZER_useWhitespace, ctx.useWhitespace);
+			maxIndent = op.getInt(SERIALIZER_maxIndent, ctx.maxIndent);
 			addBeanTypeProperties = op.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
 			trimNulls = op.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
 			trimEmptyCollections = op.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
@@ -305,6 +307,15 @@ public class SerializerSession extends BeanSession {
 	 */
 	public final boolean isUseWhitespace() {
 		return useWhitespace;
+	}
+
+	/**
+	 * Returns the {@link SerializerContext#SERIALIZER_maxIndent} setting value for this session.
+	 *
+	 * @return The {@link SerializerContext#SERIALIZER_maxIndent} setting value for this session.
+	 */
+	public final int getMaxIndent() {
+		return maxIndent;
 	}
 
 	/**

@@ -59,15 +59,16 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param value The new value.
 	 * @param serializer The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @param encoded
+	 * @param encoded If <jk>true</jk>, then encode the value using the encoder associated with this config file.
+	 * @param newline If <jk>true</jk>, then put serialized output on a separate line from the key.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException If the object value could not be converted to a JSON string for some reason.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public abstract String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded) throws SerializeException;
+	public abstract String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded, boolean newline) throws SerializeException;
 
 	/**
-	 * Identical to {@link #put(String, String, Object, Serializer, boolean)} except used when the value is a simple string
+	 * Identical to {@link #put(String, String, Object, Serializer, boolean, boolean)} except used when the value is a simple string
 	 * to avoid having to catch a {@link SerializeException}.
 	 *
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
@@ -196,10 +197,11 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param o The object to serialize.
 	 * @param serializer The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * @param newline If <jk>true</jk>, add a newline at the beginning of the value.
 	 * @return The serialized object.
 	 * @throws SerializeException
 	 */
-	protected abstract String serialize(Object o, Serializer serializer) throws SerializeException;
+	protected abstract String serialize(Object o, Serializer serializer, boolean newline) throws SerializeException;
 
 	/**
 	 * Converts the specified string to an object of the specified type.
@@ -645,7 +647,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value) throws SerializeException {
-		return put(key, value, null, isEncoded(key));
+		return put(key, value, null, isEncoded(key), false);
 	}
 
 	/**
@@ -660,7 +662,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value, Serializer serializer) throws SerializeException {
-		return put(key, value, serializer, isEncoded(key));
+		return put(key, value, serializer, isEncoded(key), false);
 	}
 
 	/**
@@ -683,7 +685,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value, boolean encoded) throws SerializeException {
-		return put(key, value, null, encoded);
+		return put(key, value, null, encoded, false);
 	}
 
 	/**
@@ -694,13 +696,14 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param serializer The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
 	 * @param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted to disk.
+	 * @param newline If <jk>true</jk>, a newline is added to the beginning of the input.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public final String put(String key, Object value, Serializer serializer, boolean encoded) throws SerializeException {
+	public final String put(String key, Object value, Serializer serializer, boolean encoded, boolean newline) throws SerializeException {
 		assertFieldNotNull(key, "key");
-		return put(getSectionName(key), getSectionKey(key), serialize(value, serializer), encoded);
+		return put(getSectionName(key), getSectionKey(key), serialize(value, serializer, newline), encoded);
 	}
 
 	/**
@@ -913,7 +916,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 					if (method.equals(rm))
 						return ConfigFile.this.getObject(sectionName, pd.getName(), rm.getGenericReturnType());
 					if (method.equals(wm))
-						return ConfigFile.this.put(sectionName, pd.getName(), args[0], null, false);
+						return ConfigFile.this.put(sectionName, pd.getName(), args[0], null, false, false);
 				}
 				throw new UnsupportedOperationException("Unsupported interface method.  method=[ " + method + " ]");
 			}

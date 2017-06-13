@@ -51,13 +51,14 @@ public final class UonWriter extends SerializerWriter {
 	 * @param session The session that created this writer.
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
+	 * @param maxIndent The maximum indentation level.
 	 * @param encodeChars If <jk>true</jk>, special characters should be encoded.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param plainTextParams If <jk>true</jk>, don't use UON notation for values.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, boolean encodeChars, boolean trimStrings, boolean plainTextParams, UriResolver uriResolver) {
-		super(out, useWhitespace, trimStrings, '\'', uriResolver);
+	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent, boolean encodeChars, boolean trimStrings, boolean plainTextParams, UriResolver uriResolver) {
+		super(out, useWhitespace, maxIndent, trimStrings, '\'', uriResolver);
 		this.session = session;
 		this.encodeChars = encodeChars;
 		this.plainTextParams = plainTextParams;
@@ -180,6 +181,12 @@ public final class UonWriter extends SerializerWriter {
 	}
 
 	@Override /* SerializerWriter */
+	public UonWriter cre(int depth) throws IOException {
+		super.cre(depth);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
 	public UonWriter appendln(int indent, String text) throws IOException {
 		super.appendln(indent, text);
 		return this;
@@ -216,8 +223,8 @@ public final class UonWriter extends SerializerWriter {
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter nl() throws IOException {
-		super.nl();
+	public UonWriter nl(int indent) throws IOException {
+		super.nl(indent);
 		return this;
 	}
 

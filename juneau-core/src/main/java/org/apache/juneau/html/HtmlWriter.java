@@ -29,12 +29,13 @@ public class HtmlWriter extends XmlWriter {
 	 *
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
+	 * @param maxIndent The maximum indentation level.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public HtmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
-		super(out, useWhitespace, trimStrings, quoteChar, uriResolver, false, null);
+	public HtmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
+		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver, false, null);
 	}
 
 	/**
@@ -283,6 +284,13 @@ public class HtmlWriter extends XmlWriter {
 	}
 
 	@Override /* SerializerWriter */
+	public HtmlWriter cre(int depth) throws IOException {
+		if (depth > 0)
+			super.cre(depth);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
 	public HtmlWriter appendln(int indent, String text) throws IOException {
 		super.appendln(indent, text);
 		return this;
@@ -325,8 +333,8 @@ public class HtmlWriter extends XmlWriter {
 	}
 
 	@Override /* SerializerWriter */
-	public HtmlWriter nl() throws IOException {
-		super.nl();
+	public HtmlWriter nl(int indent) throws IOException {
+		super.nl(indent);
 		return this;
 	}
 

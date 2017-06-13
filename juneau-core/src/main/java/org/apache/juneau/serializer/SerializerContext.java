@@ -108,8 +108,26 @@ public class SerializerContext extends BeanContext {
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 * <p>
+	 * This setting does not apply to the MessagePack serializer.
 	 */
 	public static final String SERIALIZER_useWhitespace = "Serializer.useWhitespace";
+
+	/**
+	 * <b>Configuration property:</b>  Maximum indentation.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.maxIndent"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>100</code>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
+	 * <p>
+	 * This setting does not apply to the MessagePack or RDF serializers.
+	 */
+	public static final String SERIALIZER_maxIndent = "Serializer.maxIndent";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
@@ -138,6 +156,8 @@ public class SerializerContext extends BeanContext {
 	 * </ul>
 	 * <p>
 	 * This is the character used for quoting attributes and values.
+	 * <p>
+	 * This setting does not apply to the MessagePack or RDF serializers.
 	 */
 	public static final String SERIALIZER_quoteChar = "Serializer.quoteChar";
 
@@ -350,7 +370,7 @@ public class SerializerContext extends BeanContext {
 	public static final String SERIALIZER_listener = "Serializer.listener";
 
 
-	final int maxDepth, initialDepth;
+	final int maxDepth, initialDepth, maxIndent;
 	final boolean
 		detectRecursions,
 		ignoreRecursions,
@@ -382,6 +402,7 @@ public class SerializerContext extends BeanContext {
 		detectRecursions = ps.getProperty(SERIALIZER_detectRecursions, boolean.class, false);
 		ignoreRecursions = ps.getProperty(SERIALIZER_ignoreRecursions, boolean.class, false);
 		useWhitespace = ps.getProperty(SERIALIZER_useWhitespace, boolean.class, false);
+		maxIndent = ps.getProperty(SERIALIZER_maxIndent, int.class, 100);
 		addBeanTypeProperties = ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true);
 		trimNulls = ps.getProperty(SERIALIZER_trimNullProperties, boolean.class, true);
 		trimEmptyCollections = ps.getProperty(SERIALIZER_trimEmptyCollections, boolean.class, false);
@@ -406,6 +427,7 @@ public class SerializerContext extends BeanContext {
 				.append("detectRecursions", detectRecursions)
 				.append("ignoreRecursions", ignoreRecursions)
 				.append("useWhitespace", useWhitespace)
+				.append("maxIndent", maxIndent)
 				.append("addBeanTypeProperties", addBeanTypeProperties)
 				.append("trimNulls", trimNulls)
 				.append("trimEmptyCollections", trimEmptyCollections)

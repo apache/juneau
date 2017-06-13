@@ -273,6 +273,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;

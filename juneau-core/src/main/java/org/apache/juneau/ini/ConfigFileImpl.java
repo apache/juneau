@@ -199,7 +199,7 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	@SuppressWarnings("hiding")
 	@Override /* ConfigFile */
-	protected String serialize(Object value, Serializer serializer) throws SerializeException {
+	protected String serialize(Object value, Serializer serializer, boolean newline) throws SerializeException {
 		if (value == null)
 			return "";
 		if (serializer == null)
@@ -208,27 +208,12 @@ public final class ConfigFileImpl extends ConfigFile {
 		if (isSimpleType(c))
 			return value.toString();
 
-		BeanContext bc = serializer.getBeanContext();
-		ClassMeta<?> cm = bc.getClassMetaForObject(value);
 		String r = null;
+		if (newline)
+			r = "\n" + (String)serializer.serialize(value);
+		else
+			r = (String)serializer.serialize(value);
 
-		// For arrays of bean/collections, we have special formatting.
-		if (cm.isCollectionOrArray()) {
-			Object v1 = ArrayUtils.getFirst(value);
-			if (bc.getClassMetaForObject(v1).isMapOrBean()) {
-				List<Object> l = new ArrayList<Object>();
-				if (cm.isCollection()) {
-					for (Object o : (Collection<?>)value)
-						l.add(serializer.serialize(o));
-				} else {
-					for (int i = 0; i < Array.getLength(value); i++)
-						l.add(serializer.serialize(Array.get(value, i)));
-				}
-				return "\n[\n\t" + StringUtils.join(l, ",\n\t") + "\n]";
-			}
-		}
-
-		r = (String)serializer.serialize(value);
 		if (r.startsWith("'"))
 			return r.substring(1, r.length()-1);
 		return r;
@@ -498,10 +483,10 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	@SuppressWarnings("hiding")
 	@Override /* ConfigFile */
-	public String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded) throws SerializeException {
+	public String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded, boolean newline) throws SerializeException {
 		assertFieldNotNull(sectionKey, "sectionKey");
 		Section s = getSection(sectionName, true);
-		return s.put(sectionKey, serialize(value, serializer), encoded);
+		return s.put(sectionKey, serialize(value, serializer, newline), encoded);
 	}
 
 	@Override /* ConfigFile */

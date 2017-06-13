@@ -268,6 +268,17 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
+	 * Sets the {@link SerializerContext#SERIALIZER_maxIndent} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_maxIndent
+	 */
+	public SerializerGroupBuilder maxIndent(boolean value) {
+		return property(SERIALIZER_maxIndent, value);
+	}
+
+	/**
 	 * Sets the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.

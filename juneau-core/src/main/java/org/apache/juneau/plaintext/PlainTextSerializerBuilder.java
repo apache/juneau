@@ -85,6 +85,12 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public PlainTextSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public PlainTextSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;

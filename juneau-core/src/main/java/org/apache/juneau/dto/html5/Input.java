@@ -315,6 +315,19 @@ public class Input extends HtmlElementVoid {
 		return this;
 	}
 
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
+	 * Whether to allow the value to be edited by the user.
+	 * @param readonly If <jk>true</jk>, adds <code>readonly="readonly"</code>.
+	 * @return This object (for method chaining).
+	 */
+	public final Input readonly(boolean readonly) {
+		if (readonly)
+			readonly("readonly");
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">required</a> attribute.
 	 * Whether the control is required for form submission.

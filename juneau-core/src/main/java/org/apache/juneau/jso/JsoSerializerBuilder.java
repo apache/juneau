@@ -85,6 +85,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;

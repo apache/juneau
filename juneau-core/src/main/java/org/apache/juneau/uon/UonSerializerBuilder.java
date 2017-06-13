@@ -127,6 +127,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UonSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UonSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;

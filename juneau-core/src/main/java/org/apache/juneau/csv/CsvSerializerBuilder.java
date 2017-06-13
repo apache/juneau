@@ -85,6 +85,12 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public CsvSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public CsvSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;

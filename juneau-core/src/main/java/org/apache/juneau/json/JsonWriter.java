@@ -57,14 +57,15 @@ public final class JsonWriter extends SerializerWriter {
 	 * Constructor.
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs and spaces will be used in output.
+	 * @param maxIndent The maximum indentation level.
 	 * @param escapeSolidus If <jk>true</jk>, forward slashes should be escaped in the output.
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param laxMode If <jk>true</jk>, JSON attributes will only be quoted when necessary.
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected JsonWriter(Writer out, boolean useWhitespace, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, UriResolver uriResolver) {
-		super(out, useWhitespace, trimStrings, quoteChar, uriResolver);
+	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, UriResolver uriResolver) {
+		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.laxMode = laxMode;
 		this.escapeSolidus = escapeSolidus;
 		this.ec = escapeSolidus ? encodedChars2 : encodedChars;
@@ -185,6 +186,25 @@ public final class JsonWriter extends SerializerWriter {
 	}
 
 	@Override /* SerializerWriter */
+	public JsonWriter cre(int depth) throws IOException {
+		super.cre(depth);
+		return this;
+	}
+
+	/**
+	 * Performs an indentation only if we're currently past max indentation.
+	 *
+	 * @param depth The current indentation depth.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 */
+	public JsonWriter smi(int depth) throws IOException {
+		if (depth > maxIndent)
+			super.s();
+		return this;
+	}
+
+	@Override /* SerializerWriter */
 	public JsonWriter appendln(int indent, String text) throws IOException {
 		super.appendln(indent, text);
 		return this;
@@ -214,6 +234,19 @@ public final class JsonWriter extends SerializerWriter {
 		return this;
 	}
 
+	/**
+	 * Adds a space only if the current indentation level is below maxIndent.
+	 * 
+	 * @param indent
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 */
+	public JsonWriter s(int indent) throws IOException {
+		if (indent <= maxIndent)
+			super.s();
+		return this;
+	}
+
 	@Override /* SerializerWriter */
 	public JsonWriter q() throws IOException {
 		super.q();
@@ -227,8 +260,8 @@ public final class JsonWriter extends SerializerWriter {
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter nl() throws IOException {
-		super.nl();
+	public JsonWriter nl(int indent) throws IOException {
+		super.nl(indent);
 		return this;
 	}
 

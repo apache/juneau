@@ -90,7 +90,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Object output = getOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
-		return new HtmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getUriResolver());
+		return new HtmlWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
 	}
 
 	/**

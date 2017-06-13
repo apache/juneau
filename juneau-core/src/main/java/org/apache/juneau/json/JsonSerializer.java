@@ -241,7 +241,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 		if (wrapperAttr != null) {
-			out.append('{').cr(session.indent).attr(wrapperAttr).append(':').s();
+			out.append('{').cr(session.indent).attr(wrapperAttr).append(':').s(session.indent);
 			session.indent++;
 		}
 
@@ -271,7 +271,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		if (wrapperAttr != null) {
 			session.indent--;
-			out.cr(session.indent-1).append('}');
+			out.cre(session.indent-1).append('}');
 		}
 
 		if (! isRecursion)
@@ -286,7 +286,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		m = session.sort(m);
 
-		int depth = session.getIndent();
+		int i = session.getIndent();
 		out.append('{');
 
 		Iterator mapEntries = m.entrySet().iterator();
@@ -297,21 +297,21 @@ public class JsonSerializer extends WriterSerializer {
 
 			Object key = session.generalize(e.getKey(), keyType);
 
-			out.cr(depth).attr(session.toString(key)).append(':').s();
+			out.cr(i).attr(session.toString(key)).append(':').s(i);
 
 			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null);
 
 			if (mapEntries.hasNext())
-				out.append(',');
+				out.append(',').smi(i);
 		}
 
-		out.cr(depth-1).append('}');
+		out.cre(i-1).append('}');
 
 		return out;
 	}
 
 	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m, String typeName) throws Exception {
-		int depth = session.getIndent();
+		int i = session.getIndent();
 		out.append('{');
 
 		boolean addComma = false;
@@ -328,15 +328,15 @@ public class JsonSerializer extends WriterSerializer {
 				continue;
 
 			if (addComma)
-				out.append(',');
+				out.append(',').smi(i);
 
-			out.cr(depth).attr(key).append(':').s();
+			out.cr(i).attr(key).append(':').s(i);
 
 			serializeAnything(session, out, value, cMeta, key, pMeta);
 
 			addComma = true;
 		}
-		out.cr(depth-1).append('}');
+		out.cre(i-1).append('}');
 		return out;
 	}
 
@@ -359,9 +359,9 @@ public class JsonSerializer extends WriterSerializer {
 			serializeAnything(session, out, value, elementType, "<iterator>", null);
 
 			if (i.hasNext())
-				out.append(',');
+				out.append(',').smi(depth);
 		}
-		out.cr(depth-1).append(']');
+		out.cre(depth-1).append(']');
 		return out;
 	}
 

@@ -182,7 +182,7 @@ public class ConfigFileInterfaceTest {
 	public void testBeanList() throws Exception {
 		proxy.setBeanList(Arrays.asList(new ABean().init()));
 		assertObjectEquals("[{a:1,b:'foo'}]", proxy.getBeanList());
-		assertEquals("\n[\n\t{a:1,b:'foo'}\n]", cf.get("A", "beanList"));
+		assertEquals("[{a:1,b:'foo'}]", cf.get("A", "beanList"));
 		assertType(ABean.class, proxy.getBeanList().get(0));
 	}
 
@@ -248,7 +248,7 @@ public class ConfigFileInterfaceTest {
 	public void testTypedBeanList() throws Exception {
 		proxy.setTypedBeanList(Arrays.asList((TypedBean)new TypedBeanImpl().init()));
 		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", proxy.getTypedBeanList());
-		assertEquals("\n[\n\t{_type:'TypedBeanImpl',a:1,b:'foo'}\n]", cf.get("A", "typedBeanList"));
+		assertEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", cf.get("A", "typedBeanList"));
 		assertType(TypedBeanImpl.class, proxy.getTypedBeanList().get(0));
 	}
 

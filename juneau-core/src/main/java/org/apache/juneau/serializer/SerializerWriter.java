@@ -36,6 +36,9 @@ public class SerializerWriter extends Writer {
 	/** Use-whitespace flag. */
 	protected final boolean useWhitespace;
 
+	/** Max indentation levels. */
+	protected final int maxIndent;
+
 	/** Trim strings flag. */
 	protected final boolean trimStrings;
 
@@ -49,13 +52,15 @@ public class SerializerWriter extends Writer {
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling
 	 * 	{@link #s()} will write a space character.
+	 * @param maxIndent The maximum indentation level.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The character to write when {@link #q()} is called.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public SerializerWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
+	public SerializerWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
 		this.out = out;
 		this.useWhitespace = useWhitespace;
+		this.maxIndent = maxIndent;
 		this.trimStrings = trimStrings;
 		this.quoteChar = quoteChar;
 		this.uriResolver = uriResolver;
@@ -71,8 +76,23 @@ public class SerializerWriter extends Writer {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerWriter cr(int depth) throws IOException {
-		if (useWhitespace)
-			return nl().i(depth);
+		if (useWhitespace && depth <= maxIndent)
+			return nl(depth).i(depth);
+		return this;
+	}
+
+	/**
+	 * Performs a carriage return at the end of a line.
+	 * <p>
+	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
+	 *
+	 * @param depth The indentation.
+	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerWriter cre(int depth) throws IOException {
+		if (useWhitespace && depth <= maxIndent-1)
+			return nl(depth).i(depth);
 		return this;
 	}
 
@@ -138,7 +158,7 @@ public class SerializerWriter extends Writer {
 		i(indent);
 		out.write(text);
 		if (newline)
-			nl();
+			nl(indent);
 		return this;
 	}
 
@@ -149,9 +169,9 @@ public class SerializerWriter extends Writer {
 	 * or any other type that returns a URI via it's <code>toString()</code> method.
 	 * <p>
 	 * The URI is resolved based on the {@link SerializerContext#SERIALIZER_uriRelativity} and
-	 * {@link SerializerContext#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the 
+	 * {@link SerializerContext#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the
 	 * session.
-	 * 
+	 *
 	 * @param uri The URI to serialize.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -205,7 +225,21 @@ public class SerializerWriter extends Writer {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerWriter i(int indent) throws IOException {
-		if (useWhitespace)
+		if (useWhitespace && indent <= maxIndent)
+			for (int i = 0; i < indent; i++)
+				out.write('\t');
+		return this;
+	}
+
+	/**
+	 * Writes an end-of-line indent to the writer if the {@code useWhitespace} setting is enabled.
+	 *
+	 * @param indent The number of tabs to indent.
+	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerWriter ie(int indent) throws IOException {
+		if (useWhitespace && indent <= maxIndent-1)
 			for (int i = 0; i < indent; i++)
 				out.write('\t');
 		return this;
@@ -214,11 +248,12 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled.
 	 *
+	 * @param indent The current indentation level.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerWriter nl() throws IOException {
-		if (useWhitespace)
+	public SerializerWriter nl(int indent) throws IOException {
+		if (useWhitespace && indent <= maxIndent)
 			out.write('\n');
 		return this;
 	}
@@ -227,11 +262,12 @@ public class SerializerWriter extends Writer {
 	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled and the boolean flag is true.
 	 *
 	 * @param b The boolean flag.
+	 * @param indent The current indentation level.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
-	public SerializerWriter nlIf(boolean b) throws IOException {
-		if (b && useWhitespace)
+	public SerializerWriter nlIf(boolean b, int indent) throws IOException {
+		if (b && useWhitespace && indent <= maxIndent)
 			out.write('\n');
 		return this;
 	}

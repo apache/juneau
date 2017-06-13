@@ -78,14 +78,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		HtmlWriter w = s.getWriter();
 		HtmlDocTemplate t = s.getTemplate();
 
-		w.sTag("html").nl();
-		w.sTag(1, "head").nl();
+		w.sTag("html").nl(0);
+		w.sTag(1, "head").nl(1);
 		t.head(s, w, this, o);
-		w.eTag(1, "head").nl();
-		w.sTag(1, "body").nl();
+		w.eTag(1, "head").nl(1);
+		w.sTag(1, "body").nl(1);
 		t.body(s, w, this, o);
-		w.eTag(1, "body").nl();
-		w.eTag("html").nl();
+		w.eTag(1, "body").nl(1);
+		w.eTag("html").nl(0);
 	}
 
 	/**
