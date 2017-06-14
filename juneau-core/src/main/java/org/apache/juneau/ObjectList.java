@@ -162,7 +162,20 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectList(Reader r, Parser p) throws ParseException, IOException {
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
 		parseReader(r, p);
+	}
+
+	/**
+	 * Shortcut for <code><jk>new</jk> ObjectList(reader, JsonParser.<jsf>DEFAULT</jsf>)</code>.
+	 *
+	 * @param r The reader to read from.  The reader will be wrapped in a {@link BufferedReader} if it isn't already.
+	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public ObjectList(Reader r) throws ParseException, IOException {
+		this(BeanContext.DEFAULT.createSession());
+		parseReader(r, JsonParser.DEFAULT);
 	}
 
 	private void parseReader(Reader r, Parser p) throws ParseException {

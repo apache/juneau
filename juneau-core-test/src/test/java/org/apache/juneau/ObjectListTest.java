@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.junit.*;
@@ -95,5 +97,13 @@ public class ObjectListTest {
 
 		l.deleteAt("2");
 		assertEquals("[{foo:'bing'},{baz:123}]", l.toString());
+	}
+
+	//====================================================================================================
+	// ObjectList(Reader)
+	//====================================================================================================
+	@Test
+	public void testFromReader() throws Exception {
+		assertObjectEquals("[1,2,3]", new ObjectList(new StringReader("[1,2,3]")));
 	}
 }

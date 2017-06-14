@@ -173,6 +173,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectMap(Reader r, Parser p) throws ParseException, IOException {
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
 		parseReader(r, p);
 	}
 
@@ -184,6 +185,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectMap(Reader r) throws ParseException, IOException {
+		this(BeanContext.DEFAULT.createSession());
 		parseReader(r, JsonParser.DEFAULT);
 	}
 
@@ -206,7 +208,6 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param session The bean session to use for creating beans.
 	 */
 	public ObjectMap(BeanSession session) {
-		super();
 		this.session = session;
 	}
 

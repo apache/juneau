@@ -15,6 +15,8 @@ package org.apache.juneau;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
+import java.io.*;
+
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -310,5 +312,13 @@ public class ObjectMapTest {
 
 		m.deleteAt("a/1");
 		assertEquals("{a:[{b:'d'}]}", m.toString());
+	}
+
+	//====================================================================================================
+	// ObjectMap(Reader)
+	//====================================================================================================
+	@Test
+	public void testFromReader() throws Exception {
+		assertObjectEquals("{foo:'bar'}", new ObjectMap(new StringReader("{foo:'bar'}")));
 	}
 }
