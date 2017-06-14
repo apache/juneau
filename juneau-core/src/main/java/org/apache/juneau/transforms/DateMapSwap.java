@@ -29,6 +29,8 @@ public class DateMapSwap extends PojoSwap<Date,Map> {
 	 */
 	@Override /* PojoSwap */
 	public Map swap(BeanSession session, Date o) {
+		if (o == null)
+			return null;
 		ObjectMap m = new ObjectMap();
 		m.put("time", o.getTime());
 		return m;

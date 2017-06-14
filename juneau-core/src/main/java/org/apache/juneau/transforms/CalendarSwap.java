@@ -142,6 +142,8 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Calendar o) {
+			if (o == null)
+				return null;
 			o = setTimeZone(session, o);
 			return DatatypeConverter.printDateTime(o);
 		}
@@ -173,6 +175,8 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Calendar o) {
+			if (o == null)
+				return null;
 			if (o.getTimeZone().getRawOffset() != 0) {
 				Calendar c = Calendar.getInstance(GMT);
 				c.setTime(o.getTime());
@@ -192,6 +196,8 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Calendar o) {
+			if (o == null)
+				return null;
 			String s = super.swap(session, o);
 			return String.format("%s.%03d%s", s.substring(0, 19), o.get(Calendar.MILLISECOND), s.substring(19));
 		}
@@ -207,6 +213,8 @@ public class CalendarSwap extends StringSwap<Calendar> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Calendar o) {
+			if (o == null)
+				return null;
 			String s = super.swap(session, o);
 			return String.format("%s.%03d%s", s.substring(0, 19), o.get(Calendar.MILLISECOND), s.substring(19));
 		}
@@ -552,6 +560,8 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 */
 	@Override /* PojoSwap */
 	public String swap(BeanSession session, Calendar o) {
+		if (o == null)
+			return null;
 		return getDateFormat(session, o).format(o.getTime());
 	}
 

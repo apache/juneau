@@ -28,6 +28,8 @@ public class DateLongSwap extends PojoSwap<Date,Long> {
 	 */
 	@Override /* PojoSwap */
 	public Long swap(BeanSession session, Date o) {
+		if (o == null)
+			return null;
 		return o.getTime();
 	}
 

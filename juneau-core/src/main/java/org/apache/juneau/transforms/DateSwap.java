@@ -141,6 +141,8 @@ public class DateSwap extends StringSwap<Date> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Date o) {
+			if (o == null)
+				return null;
 			Calendar c = new GregorianCalendar();
 			c.setTime(o);
 			c = setTimeZone(session, c);
@@ -174,6 +176,8 @@ public class DateSwap extends StringSwap<Date> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Date o) {
+			if (o == null)
+				return null;
 			Calendar c = new GregorianCalendar();
 			c.setTime(o);
 			if (c.getTimeZone().getRawOffset() != 0) {
@@ -195,6 +199,8 @@ public class DateSwap extends StringSwap<Date> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Date o) {
+			if (o == null)
+				return null;
 			Calendar c = new GregorianCalendar();
 			c.setTime(o);
 			String s = super.swap(session, o);
@@ -212,6 +218,8 @@ public class DateSwap extends StringSwap<Date> {
 
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Date o) {
+			if (o == null)
+				return null;
 			Calendar c = new GregorianCalendar();
 			c.setTime(o);
 			String s = super.swap(session, o);
@@ -553,6 +561,8 @@ public class DateSwap extends StringSwap<Date> {
 	 */
 	@Override /* PojoSwap */
 	public String swap(BeanSession session, Date o) {
+		if (o == null)
+			return null;
 		return getDateFormat(session).format(o.getTime());
 	}
 
