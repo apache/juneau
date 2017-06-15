@@ -74,8 +74,8 @@ public class RemoteableMethodMeta {
 			RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 
 			httpMethod = rm == null ? "POST" : rm.httpMethod();
-			if (! isOneOf(httpMethod, "GET", "POST"))
-				throw new RemoteableMetadataException(m, "Invalid value specified for @RemoteMethod.httpMethod() annotation.  Valid values are [GET,POST].");
+			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT"))
+				throw new RemoteableMetadataException(m, "Invalid value specified for @RemoteMethod.httpMethod() annotation.  Valid values are [DELTE,GET,POST,PUT].");
 
 			String path = rm == null || rm.path().isEmpty() ? null : rm.path();
 			String methodPaths = r == null ? "NAME" : r.methodPaths();

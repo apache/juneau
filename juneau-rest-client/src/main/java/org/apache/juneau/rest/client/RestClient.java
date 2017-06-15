@@ -547,7 +547,18 @@ public class RestClient extends CoreObject {
 						try {
 							String url = rmm.getUrl();
 							String httpMethod = rmm.getHttpMethod();
-							RestCall rc = (httpMethod.equals("POST") ? doPost(url) : doGet(url));
+							RestCall rc;
+							// this could be a switch at language level 7
+							if( httpMethod.equals("DELETE")) {
+								rc = doCall(HttpMethod.DELETE, url, false);
+							} else if( httpMethod.equals("POST")) {
+								rc = doPost(url);
+							} else if( httpMethod.equals("GET")) {
+								rc = doGet(url);
+							} else if( httpMethod.equals("PUT")) {
+								rc = doCall(HttpMethod.PUT, url, true);
+							} else throw new RuntimeException("Unsupported method.");
+
 							rc.serializer(serializer).parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
