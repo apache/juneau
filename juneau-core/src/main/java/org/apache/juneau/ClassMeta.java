@@ -420,7 +420,7 @@ public final class ClassMeta<T> implements Type {
 			// valueOf() is used by enums.
 			// parse() is used by the java logging Level class.
 			// forName() is used by Class and Charset
-			for (String methodName : new String[]{"fromString","valueOf","parse","parseString","forName","forString"}) {
+			for (String methodName : new String[]{"fromString","fromValue","valueOf","parse","parseString","forName","forString"}) {
 				if (fromStringMethod == null) {
 					for (Method m : c.getMethods()) {
 						if (isStatic(m) && isPublic(m) && isNotDeprecated(m)) {
