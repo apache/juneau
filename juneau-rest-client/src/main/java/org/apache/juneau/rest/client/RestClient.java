@@ -207,6 +207,21 @@ public class RestClient extends CoreObject {
 	}
 
 	/**
+	 * Same as {@link #doPut(Object, Object)} but don't specify the input yet.
+	 * <p>
+	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)}
+	 * to set the contents on the result object.
+	 *
+	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return A {@link RestCall} object that can be further tailored before executing the request
+	 * 	and getting the response as a parsed object.
+	 * @throws RestCallException
+	 */
+	public RestCall doPut(Object url) throws RestCallException {
+		return doCall("PUT", url, true);
+	}
+
+	/**
 	 * Perform a <code>POST</code> request against the specified URL.
 	 *
 	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
@@ -547,7 +562,18 @@ public class RestClient extends CoreObject {
 						try {
 							String url = rmm.getUrl();
 							String httpMethod = rmm.getHttpMethod();
-							RestCall rc = (httpMethod.equals("POST") ? doPost(url) : doGet(url));
+							RestCall rc;
+							// this could be a switch at language level 7
+							if (httpMethod.equals("DELETE")) {
+								rc = doDelete(url);
+							} else if (httpMethod.equals("POST")) {
+								rc = doPost(url);
+							} else if (httpMethod.equals("GET")) {
+								rc = doGet(url);
+							} else if (httpMethod.equals("PUT")) {
+								rc = doPut(url);
+							} else throw new RuntimeException("Unsupported method.");
+
 							rc.serializer(serializer).parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
