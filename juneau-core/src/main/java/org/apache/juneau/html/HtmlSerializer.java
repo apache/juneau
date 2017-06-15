@@ -645,19 +645,25 @@ public class HtmlSerializer extends XmlSerializer {
 			}
 			th = set.toArray(new Object[set.size()]);
 		} else {
-			Set<Object> set = new LinkedHashSet<Object>();
+			Map<String,Boolean> m = new LinkedHashMap<String,Boolean>();
 			for (Object o : c) {
 				if (! session.canIgnoreValue(cm, null, o)) {
 					if (! cm.isInstance(o))
 						return null;
 					BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : session.toBeanMap(o));
 					for (Map.Entry<String,Object> e : bm.entrySet()) {
+						String key = e.getKey();
 						if (e.getValue() != null)
-							set.add(e.getKey());
+							m.put(key, true);
+						else if (! m.containsKey(key))
+							m.put(key, false);
 					}
 				}
 			}
-			th = set.toArray(new Object[set.size()]);
+			for (Iterator<Boolean> i = m.values().iterator(); i.hasNext();)
+				if (! i.next())
+					i.remove();
+			th = m.keySet().toArray(new Object[m.size()]);
 		}
 		prevC.add(cm);
 		boolean isSortable = true;
