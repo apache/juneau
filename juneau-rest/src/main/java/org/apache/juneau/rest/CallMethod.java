@@ -141,6 +141,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		private Response[] responses;
 		private Map<String,Widget> widgets;
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			try {
 
@@ -194,7 +195,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				ParserGroupBuilder pgb = null;
 				UrlEncodingParserBuilder uepb = null;
 
-				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.beanFilters().length > 0 || m.pojoSwaps().length > 0) {
+				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpIncludes().length() > 0 || m.bpExcludes().length() > 0) {
 					sgb = new SerializerGroupBuilder();
 					pgb = new ParserGroupBuilder();
 					uepb = new UrlEncodingParserBuilder(urlEncodingParser.createPropertyStore());
@@ -254,6 +255,10 @@ class CallMethod implements Comparable<CallMethod>  {
 						sgb.properties(properties);
 					for (Property p1 : m.properties())
 						sgb.property(p1.name(), p1.value());
+					if (! m.bpIncludes().isEmpty())
+						sgb.includeProperties((Map)JsonParser.DEFAULT.parse(m.bpIncludes(), Map.class, String.class, String.class));
+					if (! m.bpExcludes().isEmpty())
+						sgb.excludeProperties((Map)JsonParser.DEFAULT.parse(m.bpExcludes(), Map.class, String.class, String.class));
 					sgb.beanFilters(m.beanFilters());
 					sgb.pojoSwaps(m.pojoSwaps());
 				}

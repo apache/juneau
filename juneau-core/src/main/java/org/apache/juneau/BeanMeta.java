@@ -234,17 +234,22 @@ public class BeanMeta<T> {
 
 				// Explicitly defined property names in @Bean annotation.
 				Set<String> fixedBeanProps = new LinkedHashSet<String>();
+				String[] includeProperties = ctx.getIncludeProperties(c);
+				String[] excludeProperties = ctx.getExcludeProperties(c);
 
 				if (beanFilter != null) {
 
 					// Get the 'properties' attribute if specified.
-					if (beanFilter.getProperties() != null)
+					if (beanFilter.getProperties() != null && includeProperties == null)
 						for (String p : beanFilter.getProperties())
 							fixedBeanProps.add(p);
 
 					if (beanFilter.getPropertyNamer() != null)
 						propertyNamer = beanFilter.getPropertyNamer();
 				}
+
+				if (includeProperties != null)
+					fixedBeanProps.addAll(Arrays.asList(includeProperties));
 
 				if (propertyNamer == null)
 					propertyNamer = new PropertyNamerDefault();
@@ -367,7 +372,7 @@ public class BeanMeta<T> {
 					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
 					String[] includeKeys = beanFilter.getProperties();
 					String[] excludeKeys = beanFilter.getExcludeProperties();
-					if (excludeKeys != null) {
+					if (excludeKeys != null && excludeProperties == null) {
 						for (String k : excludeKeys)
 							properties.remove(k);
 
@@ -382,6 +387,10 @@ public class BeanMeta<T> {
 						properties = properties2;
 					}
 				}
+
+				if (excludeProperties != null)
+					for (String ep : excludeProperties)
+						properties.remove(ep);
 
 				if (pNames != null) {
 					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();

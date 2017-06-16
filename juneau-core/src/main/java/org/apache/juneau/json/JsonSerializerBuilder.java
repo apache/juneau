@@ -498,6 +498,42 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
+	public JsonSerializerBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSerializerBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSerializerBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSerializerBuilder excludeProperties(String beanClassName, String properties) {
+		super.excludeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
 	public JsonSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;

@@ -475,6 +475,42 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
+	public UonSerializerBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UonSerializerBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UonSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UonSerializerBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UonSerializerBuilder excludeProperties(String beanClassName, String properties) {
+		super.excludeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UonSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
 	public UonSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;

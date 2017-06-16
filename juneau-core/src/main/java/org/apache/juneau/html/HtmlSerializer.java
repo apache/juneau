@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -272,6 +273,10 @@ public class HtmlSerializer extends XmlSerializer {
 			}
 
 			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
+			HtmlRender render = html.getRender();
+
+			if (o != null && render != null)
+				return serializeAnything(session, out, render.getContent(session, o), null, typeName, 2, pMeta, false);
 
 			if (html.isAsXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsXml())) {
 				super.serializeAnything(session, out, o, null, null, null, false, XmlFormat.MIXED, false, false, null);
@@ -384,9 +389,19 @@ public class HtmlSerializer extends XmlSerializer {
 				session.onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), t.getLocalizedMessage());
 			}
 
+			String link = getLink(ppMeta);
+			String style = getStyle(session, ppMeta, value);
+
 			out.sTag(i+1, "tr").nl(i+2);
-			out.sTag(i+2, "td");
+			out.oTag(i+2, "td");
+			if (style != null)
+				out.attr("style", style);
+			out.cTag();
+			if (link != null)
+				out.oTag(i+3, "a").attrUri("href", link.replace("{#}", StringUtils.toString(value))).cTag();
 			ContentResult cr = serializeAnything(session, out, key, keyType, null, 2, null, false);
+			if (link != null)
+				out.eTag("a");
 			if (cr == CR_NORMAL)
 				out.i(i+2);
 			out.eTag("td").nl(i+2);
@@ -400,7 +415,6 @@ public class HtmlSerializer extends XmlSerializer {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws Exception {
 		int i = session.getIndent();
 
@@ -421,11 +435,6 @@ public class HtmlSerializer extends XmlSerializer {
 		for (BeanPropertyValue p : m.getValues(session.isTrimNulls())) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
-			HtmlBeanPropertyMeta hbpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
-			String link = hbpMeta.getLink();
-			HtmlRender render = hbpMeta.getRender();
-			if (render == null)
-				render = cMeta.getExtendedMeta(HtmlClassMeta.class).getRender();
 
 			String key = p.getName();
 			Object value = p.getValue();
@@ -436,10 +445,12 @@ public class HtmlSerializer extends XmlSerializer {
 			if (session.canIgnoreValue(cMeta, key, value))
 				continue;
 
+			String link = cMeta.isCollectionOrArray() ? null : getLink(pMeta);
+
 			out.sTag(i+1, "tr").nl(i+1);
 			out.sTag(i+2, "td").text(key).eTag("td").nl(i+2);
 			out.oTag(i+2, "td");
-			String style = render == null ? null : render.getStyle(session, value);
+			String style = getStyle(session, pMeta, value);
 			if (style != null)
 				out.attr("style", style);
 			out.cTag();
@@ -447,7 +458,7 @@ public class HtmlSerializer extends XmlSerializer {
 			try {
 				if (link != null)
 					out.oTag(i+3, "a").attrUri("href", m.resolveVars(link)).cTag();
-				ContentResult cr = serializeAnything(session, out, render == null ? value : render.getContent(session, value), cMeta, key, 2, pMeta, false);
+				ContentResult cr = serializeAnything(session, out, value, cMeta, key, 2, pMeta, false);
 				if (cr == CR_NORMAL)
 					out.i(i+2);
 				if (link != null)
@@ -548,24 +559,16 @@ public class HtmlSerializer extends XmlSerializer {
 					for (Object k : th) {
 						BeanMapEntry p = m2.getProperty(session.toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
-						HtmlBeanPropertyMeta hpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
-						String link = hpMeta.getLink();
-
+						String link = pMeta.getClassMeta().isCollectionOrArray() ? null : getLink(pMeta);
 						Object value = p.getValue();
-						ClassMeta<?> cMeta = session.getClassMetaForObject(value);
-
-						HtmlRender render = hpMeta.getRender();
-						if (render == null && cMeta != null)
-							render = cMeta.getExtendedMeta(HtmlClassMeta.class).getRender();
-
+						String style = getStyle(session, pMeta, value);
 						out.oTag(i+2, "td");
-						String style = render == null ? null : render.getStyle(session, value);
 						if (style != null)
 							out.attr("style", style);
 						out.cTag();
 						if (link != null)
 							out.oTag(i+3, "a").attrUri("href", m2.resolveVars(link)).cTag();
-						ContentResult cr = serializeAnything(session, out, render == null ? value : render.getContent(session, value), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
+						ContentResult cr = serializeAnything(session, out, value, pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
 						if (link != null)
@@ -583,14 +586,45 @@ public class HtmlSerializer extends XmlSerializer {
 				out.attr(btpn, type2);
 			out.append('>').nl(i+1);
 			for (Object o : c) {
-				out.sTag(i+1, "li");
+				out.oTag(i+1, "li");
+				String style = getStyle(session, ppMeta, o);
+				String link = getLink(ppMeta);
+				if (style != null)
+					out.attr("style", style);
+				out.cTag();
+				if (link != null)
+					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", StringUtils.toString(o))).cTag();
 				ContentResult cr = serializeAnything(session, out, o, eType.getElementType(), name, 1, null, false);
+				if (link != null)
+					out.eTag("a");
 				if (cr == CR_NORMAL)
 					out.ie(i+1);
 				out.eTag("li").nl(i+1);
 			}
 			out.ie(i).eTag("ul").nl(i);
 		}
+	}
+
+	private static HtmlRender<?> getRender(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
+		if (pMeta == null)
+			return null;
+		HtmlBeanPropertyMeta hpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
+		HtmlRender<?> render = hpMeta.getRender();
+		if (render != null)
+			return render;
+		ClassMeta<?> cMeta = session.getClassMetaForObject(value);
+		render = cMeta == null ? null : cMeta.getExtendedMeta(HtmlClassMeta.class).getRender();
+		return render;
+	}
+
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private static String getStyle(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
+		HtmlRender render = getRender(session, pMeta, value);
+		return render == null ? null : render.getStyle(session, value);
+	}
+
+	private static String getLink(BeanPropertyMeta pMeta) {
+		return pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getLink();
 	}
 
 	/*

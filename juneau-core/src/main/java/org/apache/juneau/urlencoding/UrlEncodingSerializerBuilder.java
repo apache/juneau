@@ -532,6 +532,42 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
+	public UrlEncodingSerializerBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UrlEncodingSerializerBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UrlEncodingSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UrlEncodingSerializerBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UrlEncodingSerializerBuilder excludeProperties(String beanClassName, String properties) {
+		super.excludeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public UrlEncodingSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
 	public UrlEncodingSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;

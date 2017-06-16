@@ -445,6 +445,42 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
+	public JsonSchemaSerializerBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSchemaSerializerBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSchemaSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSchemaSerializerBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSchemaSerializerBuilder excludeProperties(String beanClassName, String properties) {
+		super.excludeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public JsonSchemaSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
 	public JsonSchemaSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;

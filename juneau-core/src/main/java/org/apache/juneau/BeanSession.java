@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -486,6 +487,8 @@ public class BeanSession extends Session {
 					return (T)toArray(type, Arrays.asList((Object[])value));
 				else if (startsWith(value.toString(), '['))
 					return (T)toArray(type, new ObjectList(value.toString()).setBeanSession(this));
+				else
+					return (T)toArray(type, new ObjectList((Object[])StringUtils.split(value.toString(), ',')).setBeanSession(this));
 			}
 
 			// Target type is some sort of Map that needs to be converted.

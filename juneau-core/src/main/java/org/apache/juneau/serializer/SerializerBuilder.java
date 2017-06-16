@@ -861,6 +861,42 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
+	public CoreObjectBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public CoreObjectBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public CoreObjectBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public CoreObjectBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public CoreObjectBuilder excludeProperties(String beanClassName, String properties) {
+		super.excludeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
+	public CoreObjectBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* CoreObjectBuilder */
 	public SerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;

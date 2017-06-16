@@ -30,6 +30,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -222,6 +223,8 @@ public class BeanPropertyMeta {
 		}
 
 		private static PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
+			if (! p.format().isEmpty())
+				return newInstance(PojoSwap.class, StringFormatSwap.class, p.format());
 			Class<?> c = p.swap();
 			if (c == Null.class)
 				return null;

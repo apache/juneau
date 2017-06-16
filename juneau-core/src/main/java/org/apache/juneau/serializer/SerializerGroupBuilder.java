@@ -907,6 +907,80 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
+	 * Sets the {@link BeanContext#BEAN_includeProperties} property on all serializers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_includeProperties
+	 */
+	public SerializerGroupBuilder includeProperties(Map<String,String> values) {
+		return property(BEAN_includeProperties, values);
+	}
+
+	/**
+	 * Sets the {@link BeanContext#BEAN_includeProperties_put} property on all serializers in this group.
+	 *
+	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_includeProperties
+	 * @see BeanContext#BEAN_includeProperties_put
+	 */
+	public SerializerGroupBuilder includeProperties(String beanClassName, String properties) {
+		return putToProperty(BEAN_includeProperties, beanClassName, properties);
+	}
+
+	/**
+	 * Sets the {@link BeanContext#BEAN_includeProperties_put} property on all serializers in this group.
+	 *
+	 * @param beanClass The bean class.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_includeProperties
+	 * @see BeanContext#BEAN_includeProperties_put
+	 */
+	public SerializerGroupBuilder includeProperties(Class<?> beanClass, String properties) {
+		return putToProperty(BEAN_includeProperties, beanClass.getName(), properties);
+	}
+
+	/**
+	 * Sets the {@link BeanContext#BEAN_excludeProperties} property on all serializers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_excludeProperties
+	 */
+	public SerializerGroupBuilder excludeProperties(Map<String,String> values) {
+		return property(BEAN_excludeProperties, values);
+	}
+
+	/**
+	 * Sets the {@link BeanContext#BEAN_excludeProperties_put} property on all serializers in this group.
+	 *
+	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_excludeProperties
+	 * @see BeanContext#BEAN_excludeProperties_put
+	 */
+	public SerializerGroupBuilder excludeProperties(String beanClassName, String properties) {
+		return putToProperty(BEAN_excludeProperties, beanClassName, properties);
+	}
+
+	/**
+	 * Sets the {@link BeanContext#BEAN_excludeProperties_put} property on all serializers in this group.
+	 *
+	 * @param beanClass The bean class.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_excludeProperties
+	 * @see BeanContext#BEAN_excludeProperties_put
+	 */
+	public SerializerGroupBuilder excludeProperties(Class<?> beanClass, String properties) {
+		return putToProperty(BEAN_excludeProperties, beanClass.getName(), properties);
+	}
+
+	/**
 	 * Sets the {@link BeanContext#BEAN_beanDictionary_add} property on all serializers in this group.
 	 *
 	 * @param values The new value for this property.

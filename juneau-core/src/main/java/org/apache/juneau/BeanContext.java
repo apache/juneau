@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -610,6 +611,62 @@ public class BeanContext extends Context {
 	public static final String BEAN_implClasses_put = "BeanContext.implClasses.map.put";
 
 	/**
+	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> <code>{}</code>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies to only include the specified list of properties for the specified bean classes.
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * 	names.
+	 * The key <js>"*"</js> means all bean classes.
+	 * <p>
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <code>foo</code> and <code>bar</code>
+	 * 	properties on the specified bean.
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 */
+	public static final String BEAN_includeProperties = "BeanContext.includeProperties.map";
+
+	/**
+	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 */
+	public static final String BEAN_includeProperties_put = "BeanContext.includeProperties.map.put";
+
+	/**
+	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> <code>{}</code>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean class.
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
+	 * <p>
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <code>foo</code> and <code>bar</code>
+	 * 	properties on the specified bean.
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 */
+	public static final String BEAN_excludeProperties = "BeanContext.excludeProperties.map";
+
+	/**
+	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 */
+	public static final String BEAN_excludeProperties_put = "BeanContext.excludeProperties.map.put";
+
+	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
 	 * <p>
 	 * <ul>
@@ -814,6 +871,7 @@ public class BeanContext extends Context {
 	final Locale locale;
 	final TimeZone timeZone;
 	final MediaType mediaType;
+	final Map<String,String[]> includeProperties, excludeProperties;
 
 	final Map<Class,ClassMeta> cmCache;
 	final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
@@ -903,6 +961,11 @@ public class BeanContext extends Context {
 				implClasses.put(e.getKey(), e.getValue());
 		implKeyClasses = implClasses.keySet().toArray(new Class[0]);
 		implValueClasses = implClasses.values().toArray(new Class[0]);
+
+		Map<String,String[]> m2 = pm.getMap(BEAN_includeProperties, String.class, String[].class, null);
+		includeProperties = m2 == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(m2);
+		m2 = pm.getMap(BEAN_excludeProperties, String.class, String[].class, null);
+		excludeProperties = m2 == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(m2);
 
 		locale = pm.get(BEAN_locale, Locale.class, null);
 		timeZone = pm.get(BEAN_timeZone, TimeZone.class, null);
@@ -1469,6 +1532,50 @@ public class BeanContext extends Context {
 			cc = cc.getSuperclass();
 		}
 		return null;
+	}
+
+	/**
+	 * Returns the {@link #BEAN_includeProperties} setting for the specified class.
+	 *
+	 * @param c The class.
+	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
+	 */
+	public String[] getIncludeProperties(Class<?> c) {
+		if (includeProperties.isEmpty())
+			return null;
+		String[] s = null;
+		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(c, false, true); i.hasNext();) {
+			Class<?> c2 = i.next();
+			s = includeProperties.get(c2.getName());
+			if (s != null)
+				return s;
+			s = includeProperties.get(c2.getSimpleName());
+			if (s != null)
+				return s;
+		}
+		return includeProperties.get("*");
+	}
+
+	/**
+	 * Returns the {@link #BEAN_excludeProperties} setting for the specified class.
+	 *
+	 * @param c The class.
+	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
+	 */
+	public String[] getExcludeProperties(Class<?> c) {
+		if (excludeProperties.isEmpty())
+			return null;
+		String[] s = null;
+		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(c, false, true); i.hasNext();) {
+			Class<?> c2 = i.next();
+			s = excludeProperties.get(c2.getName());
+			if (s != null)
+				return s;
+			s = excludeProperties.get(c2.getSimpleName());
+			if (s != null)
+				return s;
+		}
+		return excludeProperties.get("*");
 	}
 
 	/**

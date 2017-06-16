@@ -6318,6 +6318,12 @@
 				</ul>
 			<li>{@link org.apache.juneau.annotation.NameProperty @NameProperty} and {@link org.apache.juneau.annotation.ParentProperty @ParentProperty}
 				can now be applied to fields.  
+			<li>New properties on {@link org.apache.juneau.BeanContext}:
+				<ul>
+					<li>{@link org.apache.juneau.BeanContext#BEAN_includeProperties BEAN_includeProperties}
+					<li>{@link org.apache.juneau.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
+				</ul>
+			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#format()}.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -6433,8 +6439,10 @@
 				at the end of the HTTP call.
 			<li>New anntotations added to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultQuery defaultQuery()}
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultFormData defaultFormData()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultQuery() defaultQuery()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultFormData() defaultFormData()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpIncludes() bpIncludes()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpExcludes() bpExcludes()}
 				</ul>
 			<li>Default values on header, query, and form-data annotations:
 				<ul>

@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
@@ -267,6 +268,77 @@ public @interface RestMethod {
 	 * Appends the specified POJO swaps to all serializers and parsers used by this method.
 	 */
 	Class<?>[] pojoSwaps() default {};
+
+	/**
+	 * Shortcut for specifying the {@link BeanContext#BEAN_includeProperties} property on all serializers.
+	 * <p>
+	 * The typical use case is when you're rendering summary and details views of the same bean in a resource and
+	 * 	you want to expose or hide specific properties depending on the level of detail you want.
+	 * <p>
+	 * In the example below, our 'summary' view is a list of beans where we only want to show the ID property,
+	 * 	and our detail view is a single bean where we want to expose different fields:
+	 * <p class='bcode'>
+	 *	<jc>// Our bean</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 
+	 * 		<jc>// Summary properties</jc>
+	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
+	 * 		<jk>public</jk> String <jf>id</jf>;
+	 *
+	 * 		<jc>// Detail properties</jc>
+	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
+	 * 	}
+	 *
+	 *	<jc>// Only render "id" property.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpIncludes=<js>"{MyBean:'id'}"</js>)
+	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
+	 *
+	 *	<jc>// Only render "a" and "b" properties.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>, bpIncludes=<js>"{MyBean:'a,b'}"</js>)
+	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
+	 * </p>
+	 * <p>
+	 * The format of this value is a lax JSON object.
+	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * <br>Values are comma-delimited lists of bean property names.
+	 * <br>Properties apply to specified class and all subclasses.
+	 */
+	String bpIncludes() default "";
+
+	/**
+	 * Shortcut for specifying the {@link BeanContext#BEAN_excludeProperties} property on all serializers.
+	 * <p>
+	 * Same as {@link #bpIncludes()} except you specify a list of bean property names that you want to exclude from
+	 * 	serialization.
+	 * <p>
+	 * In the example below, our 'summary' view is a list of beans where we want to exclude some properties:
+	 * <p class='bcode'>
+	 *	<jc>// Our bean</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<jc>// Summary properties</jc>
+	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
+	 * 		<jk>public</jk> String <jf>id</jf>;
+	 *
+	 * 		<jc>// Detail properties</jc>
+	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
+	 * 	}
+	 *
+	 *	<jc>// Don't show "a" and "b" properties.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpExcludes=<js>"{MyBean:'a,b'}"</js>)
+	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
+	 *
+	 *	<jc>// Render all properties.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>)
+	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
+	 * </p>
+	 * <p>
+	 * The format of this value is a lax JSON object.
+	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * <br>Values are comma-delimited lists of bean property names.
+	 * <br>Properties apply to specified class and all subclasses.
+	 */
+	String bpExcludes() default "";
 
 	/**
 	 * Specifies default values for request headers.

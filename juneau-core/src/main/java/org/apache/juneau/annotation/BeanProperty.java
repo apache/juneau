@@ -249,4 +249,20 @@ public @interface BeanProperty {
 	 * </ul>
 	 */
 	Class<?>[] beanDictionary() default {};
+
+	/**
+	 * Specifies a String format for converting the bean property value to a formatted string.
+	 * <p>
+	 * Note that this is usually a one-way conversion during serialization.
+	 * <p>
+	 * During parsing, we will attempt to convert the value to the original form by using the {@link BeanSession#convertToType(Object, Class)}
+	 * 	but there is no guarantee that this will succeed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
+	 * 	<jk>public float</jk> <jf>price</jf>;
+	 * </p>
+	 */
+	String format() default "";
 }

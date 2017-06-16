@@ -1153,6 +1153,146 @@ public abstract class CoreObjectBuilder {
 	}
 
 	/**
+	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> <code>{}</code>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies to only include the specified list of properties for the specified bean classes.
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
+	 * <p>
+	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means only serialize the <code>foo</code> and <code>bar</code>
+	 * 	properties on the specified bean.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_includeProperties</jsf>, values)</code>.
+	 * </ul>
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_includeProperties
+	 */
+	public CoreObjectBuilder includeProperties(Map<String,String> values) {
+		return property(BEAN_includeProperties, values);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_includeProperties</jsf>, beanClassName, properties)</code>
+	 * 		or <code>property(<jsf>BEAN_includeProperties_put</jsf>, beanClassName, properties)</code>.
+	 * </ul>
+	 *
+	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_includeProperties
+	 * @see BeanContext#BEAN_includeProperties_put
+	 */
+	public CoreObjectBuilder includeProperties(String beanClassName, String properties) {
+		return putToProperty(BEAN_includeProperties, beanClassName, properties);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_includeProperties</jsf>, beanClass.getName(), properties)</code>
+	 * 		or <code>property(<jsf>BEAN_includeProperties_put</jsf>, beanClass.getName(), properties)</code>.
+	 * </ul>
+	 *
+	 * @param beanClass The bean class.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_includeProperties
+	 * @see BeanContext#BEAN_includeProperties_put
+	 */
+	public CoreObjectBuilder includeProperties(Class<?> beanClass, String properties) {
+		return putToProperty(BEAN_includeProperties, beanClass.getName(), properties);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> <code>{}</code>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean classes.
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
+	 * <p>
+	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means don't serialize the <code>foo</code> and <code>bar</code>
+	 * 	properties on the specified bean.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_excludeProperties</jsf>, values)</code>.
+	 * </ul>
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_excludeProperties
+	 */
+	public CoreObjectBuilder excludeProperties(Map<String,String> values) {
+		return property(BEAN_excludeProperties, values);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_excludeProperties</jsf>, beanClassName, properties)</code>
+	 * 		or <code>property(<jsf>BEAN_excludeProperties_put</jsf>, beanClassName, properties)</code>.
+	 * </ul>
+	 *
+	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_excludeProperties
+	 * @see BeanContext#BEAN_excludeProperties_put
+	 */
+	public CoreObjectBuilder excludeProperties(String beanClassName, String properties) {
+		return putToProperty(BEAN_excludeProperties, beanClassName, properties);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_excludeProperties</jsf>, beanClass.getName(), properties)</code>
+	 * 		or <code>property(<jsf>BEAN_excludeProperties_put</jsf>, beanClass.getName(), properties)</code>.
+	 * </ul>
+	 *
+	 * @param beanClass The bean class.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_excludeProperties
+	 * @see BeanContext#BEAN_excludeProperties_put
+	 */
+	public CoreObjectBuilder excludeProperties(Class<?> beanClass, String properties) {
+		return putToProperty(BEAN_excludeProperties, beanClass.getName(), properties);
+	}
+
+	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
 	 * <p>
 	 * <ul>

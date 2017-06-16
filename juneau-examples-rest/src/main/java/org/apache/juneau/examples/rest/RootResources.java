@@ -44,6 +44,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	children={
 		HelloWorldResource.class,
+		PetStoreResource.class,
 		SystemPropertiesResource.class,
 		MethodExampleResource.class,
 		RequestEchoResource.class,
