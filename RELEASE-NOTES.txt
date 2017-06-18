@@ -11,6 +11,18 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 6.3.0
+
+** Bug
+    * [JUNEAU-38] - Testcase failure in UK
+    * [JUNEAU-45] - Rebrand web pages with new incubator logo.
+    * [JUNEAU-47] - Fix RAT check failure with logs generated during build
+    * [JUNEAU-51] - properties added to rest client, serializer, and parser are not available during pojo swap and unswap methods
+
+** Improvement
+    * [JUNEAU-57] - seamless serialization and parsing of string fields to/from enum
+
+
 Release Notes - Juneau - Version 6.2.0
 
 ** Bug
