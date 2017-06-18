@@ -39,6 +39,14 @@ public class SearchArgs {
 	}
 
 	/**
+	 * Creates a new builder for {@link SearchArgs}
+	 * @return A new builder for {@link SearchArgs}
+	 */
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	/**
 	 * Builder for {@link SearchArgs} class.
 	 */
 	@SuppressWarnings("hiding")
