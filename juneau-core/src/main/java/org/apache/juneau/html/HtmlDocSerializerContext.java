@@ -277,6 +277,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
+	 * <p>
+	 * Values that start with <js>'&lt;'</js> are assumed to be HTML and rendered as-is. 
 	 */
 	public static final String HTMLDOC_links = "HtmlDocSerializer.links.map";
 
@@ -496,7 +498,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 
 
 	final String[] css;
-	final Map<String,String> links;
+	final Map<String,Object> links;
 	final String title, description, branding, header, nav, aside, footer, cssUrl, noResultsMessage;
 	final boolean nowrap;
 	final HtmlDocTemplate template;
@@ -520,7 +522,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		footer = ps.getProperty(HTMLDOC_footer, String.class, null);
 		cssUrl = ps.getProperty(HTMLDOC_cssUrl, String.class, null);
 		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
-		links = ps.getMap(HTMLDOC_links, String.class, String.class, null);
+		links = ps.getMap(HTMLDOC_links, String.class, Object.class, null);
 		noResultsMessage = ps.getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");
 		template = ps.getTypedProperty(HTMLDOC_template, HtmlDocTemplate.class, HtmlDocTemplateBasic.class);
 	}

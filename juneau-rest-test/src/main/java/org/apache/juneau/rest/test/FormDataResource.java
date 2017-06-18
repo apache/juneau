@@ -44,9 +44,9 @@ public class FormDataResource extends RestServletDefault {
 	@RestMethod(name="POST", path="/defaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 	public ObjectMap defaultFormData(RequestFormData formData) {
 		return new ObjectMap()
-			.append("f1", formData.getFirst("f1"))
-			.append("f2", formData.getFirst("f2"))
-			.append("f3", formData.getFirst("f3"));
+			.append("f1", formData.getString("f1"))
+			.append("f2", formData.getString("f2"))
+			.append("f3", formData.getString("f3"));
 	}
 
 	@RestMethod(name="POST", path="/annotatedFormData")

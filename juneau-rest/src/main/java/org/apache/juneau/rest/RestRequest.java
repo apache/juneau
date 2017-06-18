@@ -110,7 +110,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			// Can be overridden through a "method" GET attribute.
 			String _method = super.getMethod();
 
-			String m = getQuery().getFirst("method");
+			String m = getQuery().getString("method");
 			if (context.allowMethodParam(m))
 				_method = m;
 
@@ -125,7 +125,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			body = new RequestBody(this);
 
 			if (context.isAllowBodyParam()) {
-				String b = getQuery().getFirst("body");
+				String b = getQuery().getString("body");
 				if (b != null) {
 					headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 					body.load(b.getBytes(UTF8));
@@ -135,7 +135,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (context.isAllowHeaderParams())
 				headers.setQueryParams(queryParams);
 
-			debug = "true".equals(getQuery().getFirst("debug", "false")) || "true".equals(getHeaders().getFirst("Debug", "false"));
+			debug = "true".equals(getQuery().getString("debug", "false")) || "true".equals(getHeaders().getString("Debug", "false"));
 
 			this.pathParams = new RequestPathMatch();
 
@@ -153,11 +153,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
 			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset,
 			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,
-			EncoderGroup encoders, Map<String,Widget> widgets) {
+			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets) {
 		this.javaMethod = javaMethod;
 		this.properties = properties;
 		this.urlEncodingParser = mUrlEncodingParser;
-		this.beanSession = urlEncodingParser.getBeanContext().createSession();
+		this.beanSession = beanContext.createSession();
 		this.pathParams
 			.setParser(urlEncodingParser)
 			.setBeanSession(beanSession);
@@ -253,7 +253,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* ServletRequest */
 	public String getHeader(String name) {
-		return getHeaders().getFirst(name);
+		return getHeaders().getString(name);
 	}
 
 	@Override /* ServletRequest */
@@ -306,7 +306,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* ServletRequest */
 	public Locale getLocale() {
-		String h = headers.getFirst("Accept-Language");
+		String h = headers.getString("Accept-Language");
 		if (h != null) {
 			MediaTypeRange[] mr = MediaTypeRange.parse(h);
 			if (mr.length > 0)
@@ -317,7 +317,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* ServletRequest */
 	public Enumeration<Locale> getLocales() {
-		String h = headers.getFirst("Accept-Language");
+		String h = headers.getString("Accept-Language");
 		if (h != null) {
 			MediaTypeRange[] mr = MediaTypeRange.parse(h);
 			if (mr.length > 0) {
@@ -349,12 +349,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getQuery().getFirst(name)</code>.
+	 * Shortcut for calling <code>getQuery().getString(name)</code>.
 	 * @param name The query parameter name.
 	 * @return The query parameter value, or <jk>null<jk> if not found.
 	 */
 	public String getQuery(String name) {
-		return getQuery().getFirst(name);
+		return getQuery().getString(name);
 	}
 
 
@@ -389,12 +389,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getFormData().getFirst(name)</code>.
+	 * Shortcut for calling <code>getFormData().getString(name)</code>.
 	 * @param name The form data parameter name.
 	 * @return The form data parameter value, or <jk>null<jk> if not found.
 	 */
 	public String getFormData(String name) {
-		return getFormData().getFirst(name);
+		return getFormData().getString(name);
 	}
 
 
@@ -613,7 +613,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
-		return "true".equals(getQuery().getFirst("plainText", "false"));
+		return "true".equals(getQuery().getString("plainText", "false"));
 	}
 
 	/**

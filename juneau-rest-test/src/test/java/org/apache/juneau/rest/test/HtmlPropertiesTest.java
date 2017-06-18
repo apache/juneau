@@ -31,7 +31,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/Normal/test1").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("Normal-title"));
 		assertTrue(s.contains("Normal-text"));
-		assertTrue(s.contains("Normal-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -43,7 +42,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/Normal/test2").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("Normal.test2-title"));
 		assertTrue(s.contains("Normal.test2-text"));
-		assertTrue(s.contains("Normal.test2-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -55,7 +53,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/Normal/test3").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("Normal.test3-title"));
 		assertTrue(s.contains("Normal.test3-text"));
-		assertTrue(s.contains("Normal.test3-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -67,7 +64,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/Normal/test4").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("Normal.test4-title"));
 		assertTrue(s.contains("Normal.test4-text"));
-		assertTrue(s.contains("Normal.test4-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -79,7 +75,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalInit/test1").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("NormalInit-title"));
 		assertTrue(s.contains("NormalInit-text"));
-		assertTrue(s.contains("NormalInit-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -91,7 +86,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalInit/test2").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("NormalInit.test2-title"));
 		assertTrue(s.contains("NormalInit.test2-text"));
-		assertTrue(s.contains("NormalInit.test2-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -103,7 +97,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalInit/test3").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("NormalInit.test3-title"));
 		assertTrue(s.contains("NormalInit.test3-text"));
-		assertTrue(s.contains("NormalInit.test3-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -115,7 +108,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalInit/test4").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("NormalInit.test4-title"));
 		assertTrue(s.contains("NormalInit.test4-text"));
-		assertTrue(s.contains("NormalInit.test4-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -171,7 +163,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalSubclassed1/test1").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("Normal-title"));
 		assertTrue(s.contains("Normal-text"));
-		assertTrue(s.contains("Normal-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -183,7 +174,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalSubclassed1/test2").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("NormalSubclassed1.test2-title"));
 		assertTrue(s.contains("NormalSubclassed1.test2-text"));
-		assertTrue(s.contains("NormalSubclassed1.test2-links"));
 
 	}
 
@@ -196,7 +186,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalSubclassed2/test1").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("NormalSubclassed2-title"));
 		assertTrue(s.contains("NormalSubclassed2-text"));
-		assertTrue(s.contains("NormalSubclassed2-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -208,7 +197,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/NormalSubclassed2/test2").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("NormalSubclassed2.test2-title"));
 		assertTrue(s.contains("NormalSubclassed2.test2-text"));
-		assertTrue(s.contains("NormalSubclassed2.test2-links"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -220,7 +208,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/LocalizedExplicit/test1").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("LocalizedExplicit.nls.pageTitle"));
 		assertTrue(s.contains("LocalizedExplicit.nls.pageText"));
-		assertTrue(s.contains("LocalizedExplicit.nls.pageLinks"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -232,7 +219,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/LocalizedExplicit/test2").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("LocalizedExplicit.test2.nls.pageTitle"));
 		assertTrue(s.contains("LocalizedExplicit.test2.nls.pageText"));
-		assertTrue(s.contains("LocalizedExplicit.test2.nls.pageLinks"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -244,7 +230,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/LocalizedExplicit/test3").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("LocalizedExplicit.test3.nls.pageTitle"));
 		assertTrue(s.contains("LocalizedExplicit.test3.nls.pageText"));
-		assertTrue(s.contains("LocalizedExplicit.test3.nls.pageLinks"));
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -256,6 +241,5 @@ public class HtmlPropertiesTest extends RestTestcase {
 		String s = client.doGet("/testHtmlProperties/LocalizedExplicit/test4").accept("text/html").getResponseAsString();
 		assertTrue(s.contains("LocalizedExplicit.test4.nls.pageTitle"));
 		assertTrue(s.contains("LocalizedExplicit.test4.nls.pageText"));
-		assertTrue(s.contains("LocalizedExplicit.test4.nls.pageLinks"));
 	}
 }

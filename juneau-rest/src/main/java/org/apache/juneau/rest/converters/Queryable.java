@@ -12,14 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converters;
 
-import static javax.servlet.http.HttpServletResponse.*;
-
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -30,21 +24,26 @@ import org.apache.juneau.utils.*;
  * <p>
  * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps}, arrays of beans, etc...):
  * <ul class='spaced-list'>
- * 	<li><b>&amp;q=<i>JSON-object</i></b> - Query parameter.  Only return rows that match the specified search string. <br>
- * 			The JSON object keys are column names, and the values are search parameter strings.<br>
- * 			Example:  <code>&amp;s=(name=Bill*,birthDate=&gt;2000)</code>
- * 	<li><b>&amp;v=<i>JSON-array or comma-delimited list</i></b> - View parameter.  Only return the specified columns.<br>
- * 			Example:  <code>&amp;v=(name,birthDate)</code>
- * 	<li><b>&amp;s=<i>JSON-object</i></b> - Sort parameter.  Sort the results by the specified columns.<br>
- * 			The JSON object keys are the column names, and the values are either {@code 'A'} for ascending or {@code 'D'} for descending.
- * 			Example:  <code>&amp;s=(name=A,birthDate=D)</code>
- * 	<li><b>&amp;i=<i>true/false</i></b> - Case-insensitive parameter.  Specify <jk>true</jk> for case-insensitive matching on the {@code &amp;q} parameter.
- * 	<li><b>&amp;p=<i>number</i></b> - Position parameter.  Only return rows starting at the specified index position (zero-indexed).  Default is {@code 0}.
- * 	<li><b>&amp;q=<i>number</i></b> - Limit parameter.  Only return the specified number of rows. Default is {@code 0} (meaning return all rows).
+ * 	<li><code>&amp;s=</code> Search arguments.
+ * 			<br>Comma-delimited list of key/value pairs representing column names and search tokens.
+ * 			<br>Example:  <js>"&amp;s=name=Bill*,birthDate&gt;2000"</js>
+ * 	<li><code>&amp;v=</code> Visible columns.
+ * 			<br>Comma-delimited list of column names to display.
+ * 			<br>Example:  <js>"&amp;v=name,birthDate"</js>
+ * 	<li><code>&amp;o=</code> Sort commands.
+ * 			<br>Comma-delimited list of columns to sort by.
+ * 			<br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
+ * 			<br>The default is ascending order.
+ * 			<br>Example:  <js>"&amp;o=name,birthDate-"</js>
+ * 	<li><code>&amp;i=</code> Case-insensitive parameter.
+ * 			<br>Boolean flag for case-insensitive matching on the search parameters.
+ * 	<li><code>&amp;p=</code> - Position parameter.
+ * 			<br>Only return rows starting at the specified index position (zero-indexed).
+ * 			<br>Default is {@code 0}.
+ * 	<li><code>&amp;l=</code> Limit parameter.
+ * 			<br>Only return the specified number of rows.
+ * 			<br>Default is {@code 0} (meaning return all rows).
  * </ul>
- *
- * <p>
- * The <b>&amp;v</b> parameter can also be used on {@code Maps} and beans.
  *
  * <p>
  * See {@link PojoQuery} for additional information on filtering POJO models.
@@ -52,43 +51,12 @@ import org.apache.juneau.utils.*;
 public final class Queryable implements RestConverter {
 
 	@Override /* RestConverter */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Object convert(RestRequest req, Object o, ClassMeta cm) {
+	public Object convert(RestRequest req, Object o, ClassMeta<?> cm) {
 		if (o == null)
 			return null;
-
-		try {
-			RequestQuery q = req.getQuery();
-
-			// If no actual filtering parameters have been passed in, and there is no map augmenter specified,
-			// then just pass the original object back.
-			if (q.containsAnyKeys("q","v","s","g","i","p","l")) {
-				BeanSession session = req.getBeanSession();
-
-				if (cm.getPojoSwap() != null)
-					o = cm.getPojoSwap().swap(session, o);
-
-				PojoQuery f = new PojoQuery(o, session);
-
-				if (o instanceof Collection || o.getClass().isArray()) {
-					ObjectMap query = q.get("q", ObjectMap.class);
-					List<String> view = q.get("v", List.class, String.class);
-					List sort = q.get("s", List.class, String.class);
-					boolean ignoreCase = q.get("i", false, Boolean.class);
-					int pos = q.get("p", 0, Integer.class);
-					int limit = q.get("l", 0, Integer.class);
-					o = f.filterCollection(query, view, sort, pos, limit, ignoreCase);
-
-				} else {
-					List<String> view = q.get("v", List.class, String.class);
-					o = f.filterMap(view);
-				}
-			}
+		SearchArgs searchArgs = req.getQuery().getSearchArgs();
+		if (searchArgs == null)
 			return o;
-		} catch (SerializeException e) {
-			throw new RestException(SC_BAD_REQUEST, e);
-		} catch (ParseException e) {
-			throw new RestException(SC_BAD_REQUEST, e);
-		}
+		return new PojoQuery(o, req.getBeanSession()).filter(searchArgs);
 	}
 }

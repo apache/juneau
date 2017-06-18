@@ -38,7 +38,7 @@ public class DefaultHandler implements ResponseHandler {
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
 		SerializerGroup g = res.getSerializerGroup();
-		String accept = req.getHeaders().getFirst("Accept", "");
+		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 		if (sm != null) {
 			Serializer s = sm.getSerializer();
@@ -87,7 +87,7 @@ public class DefaultHandler implements ResponseHandler {
 		} else {
 			throw new RestException(SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
-				req.getHeaders().getFirst("Accept", ""), g.getSupportedMediaTypes()
+				req.getHeaders().getString("Accept", ""), g.getSupportedMediaTypes()
 			);
 		}
 		return true;

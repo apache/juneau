@@ -94,7 +94,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param name The form data parameter name.
 	 * @return The parameter value, or <jk>null</jk> if parameter does not exist.
 	 */
-	public String getFirst(String name) {
+	public String getString(String name) {
 		String[] v = get(name);
 		if (v == null || v.length == 0)
 			return null;
@@ -109,15 +109,59 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getFirst(String)} except returns a default value if <jk>null</jk> or empty.
+	 * Same as {@link #getString(String)} except returns a default value if <jk>null</jk> or empty.
 	 *
 	 * @param name The form data parameter name.
 	 * @param def The default value.
-	 * @return The parameter value, or the default value if <jk>null</jk> or empty.
+	 * @return The parameter value, or the default value if parameter does not exist or is <jk>null</jk> or empty.
 	 */
-	public String getFirst(String name, String def) {
-		String s = getFirst(name);
+	public String getString(String name, String def) {
+		String s = getString(name);
 		return StringUtils.isEmpty(s) ? def : s;
+	}
+
+	/**
+	 * Same as {@link #getString(String)} but converts the value to an integer.
+	 *
+	 * @param name The form data parameter name.
+	 * @return The parameter value, or <code>0</code> if parameter does not exist or is <jk>null</jk> or empty.
+	 */
+	public int getInt(String name) {
+		return getInt(name, 0);
+	}
+
+	/**
+	 * Same as {@link #getString(String,String)} but converts the value to an integer.
+	 *
+	 * @param name The form data parameter name.
+	 * @param def The default value.
+	 * @return The parameter value, or the default value if parameter does not exist or is <jk>null</jk> or empty.
+	 */
+	public int getInt(String name, int def) {
+		String s = getString(name);
+		return StringUtils.isEmpty(s) ? def : Integer.parseInt(s);
+	}
+
+	/**
+	 * Same as {@link #getString(String)} but converts the value to a boolean.
+	 *
+	 * @param name The form data parameter name.
+	 * @return The parameter value, or <jk>false</jk> if parameter does not exist or is <jk>null</jk> or empty.
+	 */
+	public boolean getBoolean(String name) {
+		return getBoolean(name, false);
+	}
+
+	/**
+	 * Same as {@link #getString(String,String)} but converts the value to a boolean.
+	 *
+	 * @param name The form data parameter name.
+	 * @param def The default value.
+	 * @return The parameter value, or the default value if parameter does not exist or is <jk>null</jk> or empty.
+	 */
+	public boolean getBoolean(String name, boolean def) {
+		String s = getString(name);
+		return StringUtils.isEmpty(s) ? def : Boolean.parseBoolean(s);
 	}
 
 	/**
@@ -245,7 +289,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 
 	/* Workhorse method */
 	<T> T parse(String name, T def, ClassMeta<T> cm) throws ParseException {
-		String val = getFirst(name);
+		String val = getString(name);
 		if (val == null)
 			return def;
 		return parseValue(val, cm);
@@ -253,7 +297,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 
 	/* Workhorse method */
 	<T> T parse(String name, ClassMeta<T> cm) throws ParseException {
-		String val = getFirst(name);
+		String val = getString(name);
 		if (cm.isPrimitive() && (val == null || val.isEmpty()))
 			return cm.getPrimitiveDefault();
 		return parseValue(val, cm);

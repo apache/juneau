@@ -23,7 +23,10 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transforms.*;
 
 /**
  * Sample REST resource that renders summary and detail views of the same bean.
@@ -32,13 +35,17 @@ import org.apache.juneau.serializer.*;
 	title="Pet Store",
 	description="An example of a typical REST resource where beans are rendered in summary and details views.",
 	path="/petstore",
+	widgets={
+		QueryWidget.class
+	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{query}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}",
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>This page shows a standard REST resource that renders bean summaries and details.</p>"
 			+ "	<p>It shows how different properties can be rendered on the same bean in different views.</p>"
 			+ "	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>"
+			+ "	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>"
 			+ "</div>"
 	)
 )
@@ -56,7 +63,13 @@ public class PetStoreResource extends Resource {
 	}
 	
 	// Exclude the 'breed' and 'getsAlongWith' properties from the beans.
-	@RestMethod(name="GET", path="/", summary="The complete list of pets in the store", bpExcludes="{Pet:'breed,getsAlongWith'}")
+	@RestMethod(
+		name="GET", 
+		path="/", 
+		summary="The complete list of pets in the store", 
+		bpExcludes="{Pet:'breed,getsAlongWith'}",
+		converters=Queryable.class
+	)
 	public Collection<Pet> getPets() {
 		return petDB.values();
 	}
@@ -81,6 +94,15 @@ public class PetStoreResource extends Resource {
 		
 		@BeanProperty(format="$%.2f")  // Renders price in dollars.
 		public float price;
+		
+		@BeanProperty(swap=DateSwap.RFC2822D.class)  // Renders dates in RFC2822 format.
+		public Date birthDate;
+	
+		public int getAge() {
+			Calendar c = new GregorianCalendar();
+			c.setTime(birthDate);
+			return new GregorianCalendar().get(Calendar.YEAR) - c.get(Calendar.YEAR); 
+		}
 	}
 	
 	@Html(render=KindRender.class)  // Render as an icon in HTML.

@@ -600,7 +600,7 @@ class RestParamDefaults {
 			if (multiPart)
 				return req.getFormData().getAll(name, type);
 			if (plainParams)
-				return bs.convertToType(req.getFormData().getFirst(name), bs.getClassMeta(type));
+				return bs.convertToType(req.getFormData().getString(name), bs.getClassMeta(type));
 			return req.getFormData().get(name, type);
 		}
 	}
@@ -622,7 +622,7 @@ class RestParamDefaults {
 			if (multiPart)
 				return req.getQuery().getAll(name, type);
 			if (plainParams)
-				return bs.convertToType(req.getQuery().getFirst(name), bs.getClassMeta(type));
+				return bs.convertToType(req.getQuery().getString(name), bs.getClassMeta(type));
 			return req.getQuery().get(name, type);
 		}
 	}

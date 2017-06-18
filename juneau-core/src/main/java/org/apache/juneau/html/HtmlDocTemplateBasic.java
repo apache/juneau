@@ -112,14 +112,18 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 			if (exists(nav))
 				w.append(2, nav).nl(2);
 		} else {
-			Map<String,String> htmlLinks = session.getLinks();
+			Map<String,Object> htmlLinks = session.getLinks();
 			boolean first = true;
 			if (htmlLinks != null) {
-				for (Map.Entry<String,String> e : htmlLinks.entrySet()) {
+				for (Map.Entry<String,Object> e : htmlLinks.entrySet()) {
+					String v = e.getValue().toString();
 					if (! first)
 						w.append(3, " - ").nl(3);
 					first = false;
-					w.oTag("a").attr("class", "link").attr("href", session.resolveUri(e.getValue()), true).cTag().text(e.getKey(), true).eTag("a");
+					if (v.startsWith("<"))
+						w.append(v);
+					else
+						w.oTag("a").attr("class", "link").attr("href", session.resolveUri(v), true).cTag().text(e.getKey(), true).eTag("a");
 				}
 			}
 		}

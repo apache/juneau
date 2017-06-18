@@ -1664,6 +1664,8 @@ public class BeanContext extends Context {
 				.append("locale", locale)
 				.append("timeZone", timeZone)
 				.append("mediaType", mediaType)
+				.append("includeProperties", includeProperties)
+				.append("excludeProperties", excludeProperties)
 			);
 	}
 }

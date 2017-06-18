@@ -36,7 +36,7 @@ public class TestMicroservice {
 	static URI microserviceURI;
 
 	// Reusable HTTP clients that get created and shut down with the microservice.
-	public static RestClient DEFAULT_CLIENT;
+	public static RestClient DEFAULT_CLIENT, DEFAULT_CLIENT_DEBUG;
 	public static RestClient DEFAULT_CLIENT_PLAINTEXT;
 
 	/**
@@ -56,6 +56,7 @@ public class TestMicroservice {
 				);
 			microserviceURI = microservice.start().getURI();
 			DEFAULT_CLIENT = client().build();
+			DEFAULT_CLIENT_DEBUG = client().debug().build();
 			DEFAULT_CLIENT_PLAINTEXT = client(PlainTextSerializer.class, PlainTextParser.class).build();
 			return true;
 		} catch (Throwable e) {

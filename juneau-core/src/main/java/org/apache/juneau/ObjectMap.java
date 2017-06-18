@@ -150,8 +150,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		if (! StringUtils.isEmpty(s))
-			p.parseIntoMap(s, this, session.string(), session.object());
+		try {
+			if (! StringUtils.isEmpty(s))
+				p.parseIntoMap(s, this, session.string(), session.object());
+		} catch (ParseException e) {
+			throw new ParseException("Invalid input for {0} parser.\n---start---\n{1}\n---end---", p.getClass().getSimpleName(), s).initCause(e);
+		}
 	}
 
 	/**

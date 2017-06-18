@@ -2091,14 +2091,14 @@
 					<ul>
 						<li><ck>$R{attribute.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
 						<li><ck>$R{contextPath}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getContextPath()}.
-						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestFormData#getFirst(String)}.
-						<li><ck>$R{header.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestHeaders#getFirst(String)}.
+						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestFormData#getString(String)}.
+						<li><ck>$R{header.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestHeaders#getString(String)}.
 						<li><ck>$R{method}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}.
 						<li><ck>$R{methodSummary}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}.
 						<li><ck>$R{methodDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}.
 						<li><ck>$R{path.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}.
 						<li><ck>$R{pathInfo}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
-						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestQuery#getFirst(String)}.
+						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestQuery#getString(String)}.
 						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}.
 						<li><ck>$R{requestURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
 						<li><ck>$R{servletDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.

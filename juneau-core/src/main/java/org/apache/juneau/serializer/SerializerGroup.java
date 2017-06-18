@@ -68,6 +68,7 @@ public final class SerializerGroup {
 	private final Serializer[] mediaTypeSerializers;
 	private final List<Serializer> serializers;
 	private final PropertyStore propertyStore;
+	private final BeanContext beanContext;
 
 	/**
 	 * Constructor.
@@ -80,6 +81,7 @@ public final class SerializerGroup {
 	 */
 	public SerializerGroup(PropertyStore propertyStore, Serializer[] serializers) {
 		this.propertyStore = PropertyStore.create(propertyStore);
+		this.beanContext = propertyStore.getBeanContext();
 		this.serializers = Collections.unmodifiableList(new ArrayList<Serializer>(Arrays.asList(serializers)));
 
 		List<MediaType> lmt = new ArrayList<MediaType>();
@@ -203,5 +205,14 @@ public final class SerializerGroup {
 	 */
 	public List<Serializer> getSerializers() {
 		return serializers;
+	}
+
+	/**
+	 * Returns a bean context with the same properties as this group.
+	 *
+	 * @return The bean context.
+	 */
+	public BeanContext getBeanContext() {
+		return beanContext;
 	}
 }

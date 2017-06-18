@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Designed to provide query/view/sort/paging filtering on tabular in-memory POJO models.
+ * Designed to provide search/view/sort/paging filtering on tabular in-memory POJO models.
  * <p>
  * It can also perform just view filtering on beans/maps.
  * <p>
@@ -38,47 +38,40 @@ import org.apache.juneau.internal.*;
  * Tabular POJO models can be thought of as tables of data.  For example, a list of the following beans...
  * <p class='bcode'>
  * 	<jk>public</jk> MyBean {
- * 		<jk>public int</jk> fi;
- * 		<jk>public</jk> String fs;
- * 		<jk>public</jk> Date fd;
+ * 		<jk>public int</jk> myInt;
+ * 		<jk>public</jk> String myString;
+ * 		<jk>public</jk> Date myDate;
  * 	}
  * <p>
  * 	... can be thought of a table containing the following columns...
  * <p>
  * 	<table class='styled code'>
- * 		<tr><th>fi</th><th>fs</th><th>fd</th></tr>
+ * 		<tr><th>myInt</th><th>myString</th><th>myDate</th></tr>
  * 		<tr><td>123</td><td>'foobar'</td><td>yyyy/MM/dd HH:mm:ss</td></tr>
  * 		<tr><td colspan=3>...</td></tr>
  * 	</table>
  * <p>
  * From this table, you can perform the following functions:
  * 	<ul class='spaced-list'>
- * 		<li>Query - Return only rows where a search pattern matches.
+ * 		<li>Search - Return only rows where a search pattern matches.
  * 		<li>View - Return only the specified subset of columns in the specified order.
  * 		<li>Sort - Sort the table by one or more columns.
- * 		<li>Page - Only return a subset of rows.
+ * 		<li>Position/limit - Only return a subset of rows.
  * 	</ul>
  *
- * <h5 class='topic'>Query</h5>
+ * <h5 class='topic'>Search</h5>
  * <p>
- * The query capabilites allow you to filter based on query patterns against
+ * The search capabilities allow you to filter based on query patterns against
  * 	strings, dates, and numbers.  Queries take the form of a Map with column names
  * 	as keys, and search patterns as values.  <br>
- * Search patterns can be either {@code Strings} or {@code Maps}.<br>
  * Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
  *
  * <h5 class='section'>Example:</h5>
  * <ul class='spaced-list'>
- * 	<li><tt>{fi:'123'}</tt> - Return only rows where the <tt>fi</tt> column is 123.
- * 	<li><tt>{fs:'foobar'}</tt> - Return only rows where the <tt>fs</tt> column is 'foobar'.
- * 	<li><tt>{fd:'2001'}</tt> - Return only rows where the <tt>fd</tt> column have dates in the year 2001.
- * 	<li><tt>{fs:'foobar'}</tt> - Return only rows where the <tt>fs</tt> column is 'foobar'.
- * 		and the <tt>fs</tt> column starts with <tt>"foo"</tt>.
+ * 	<li><tt>{myInt:'123'}</tt> - Return only rows where the <tt>myInt</tt> column is 123.
+ * 	<li><tt>{myString:'foobar'}</tt> - Return only rows where the <tt>myString</tt> column is 'foobar'.
+ * 	<li><tt>{myDate:'2001'}</tt> - Return only rows where the <tt>myDate</tt> column have dates in the year 2001.
  * </ul>
- * <p>
- * Search patterns can also be applied to lower level fields.  For example, the search term
- * 	<tt>{f1:{f2:{f3{'foobar'}}}</tt> means only return top level rows where the <tt>f1.getF2().getF3()</tt>
- * 	property is <tt>'foobar'</tt>.
  *
  * <h5 class='topic'>String Patterns</h5>
  * <p>
@@ -163,37 +156,28 @@ import org.apache.juneau.internal.*;
  *
  * <h6 class='topic'>Example view parameters:</h6>
  * <ul>
- * 	<li><tt>['f1']</tt> - Return only column 'f1'.
- * 	<li><tt>['f2','f1']</tt> - Return only columns 'f2' and 'f1'.
- * 	<li><tt>['f1',{f2:'f3'}]</tt> - Return only columns 'f1' and 'f2', but for 'f2' objects,
- * 		only show the 'f3' property.
+ * 	<li><tt>column1</tt> - Return only column 'column1'.
+ * 	<li><tt>column2, column1</tt> - Return only columns 'column2' and 'column1' in that order.
  * </ul>
  *
  * <h5 class='topic'>Sort</h5>
  * <p>
  * The sort capability allows you to sort values by the specified rows.<br>
- * The sort parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.<br>
- * 	<tt>Strings</tt> represent column names to sort ascending.  If you want
- * 	to sort descending, you need to specify a <tt>Map</tt> of the form <tt>{colname:'d'}</tt>
+ * The sort parameter is a list of strings with an optional <js>'+'</js> or <js>'-'</js> suffix representing
+ * 	ascending and descending order accordingly.
  *
  * <h6 class='topic'>Example sort parameters:</h6>
  * <ul>
- * 	<li><tt>['f1']</tt> - Sort rows by column 'f1' ascending.
- * 	<li><tt>[{f1:'a'}]</tt> - Sort rows by column 'f1' ascending.
- * 	<li><tt>[{f1:'d'}]</tt> - Sort rows by column 'f1' descending.
- * 	<li><tt>[{f1:'a'},{f2:'d'}]</tt> - Sort rows by column 'f1' ascending, then 'f2' descending.
+ * 	<li><tt>column1</tt> - Sort rows by column 'column1' ascending.
+ * 	<li><tt>column1+</tt> - Sort rows by column 'column1' ascending.
+ * 	<li><tt>column1-</tt> - Sort rows by column 'column1' descending.
+ * 	<li><tt>column1, column2-</tt> - Sort rows by column 'column1' ascending, then 'column2' descending.
  * </ul>
  *
  * <h5 class='topic'>Paging</h5>
  * <p>
- * Use the <tt>pos</tt> and <tt>limit</tt> parameters to specify a subset of rows to
+ * Use the <tt>position</tt> and <tt>limit</tt> parameters to specify a subset of rows to
  * 	return.
- *
- * <h5 class='topic'>Other Notes</h5>
- * <ul class='spaced-list'>
- * 	<li>Calling <tt>filterMap()</tt> or <tt>filterCollection()</tt> always returns a new data
- * 		structure, so the methods can be called multiple times against the same input.
- * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public final class PojoQuery {
@@ -215,37 +199,13 @@ public final class PojoQuery {
 	}
 
 	/**
-	 * Filters the input object as a map.
-	 *
-	 * @param view The list and order of properties to return from the map.  Values must be of type {@code String} or {@code Map}.
-	 * @return The filtered map
-	 */
-	public Map filterMap(List view) {
-
-		if (input == null)
-			return null;
-
-		if (! type.isMapOrBean())
-			throw new RuntimeException("Cannot call filterMap() on class type " + type);
-
-		Map m = (Map)replaceWithMutables(input);
-		doView(m, view);
-
-		return m;
-	}
-
-	/**
 	 * Filters the input object as a collection of maps.
 	 *
-	 * @param query The query attributes.  Keys must be column names and values must be of type {@code String} or {@code Map}.
-	 * @param view The view attributes.  Values must be of type {@code String} or {@code Map}.
-	 * @param sort The sort attributes.  Values must be of type {@code String} or {@code Map}.
-	 * @param pos The index into the list to start returning results from.  Default is {@code 0}.
-	 * @param limit The number of rows to return.  Default is all rows.
-	 * @param ignoreCase If <jk>true</jk>, then querying is case insensitive.  Default is <jk>false</jk>.
+	 * @param args The search arguments.
 	 * @return The filtered collection.
+	 * 	<br>Returns the unaltered input if the input is not a collection or array of objects.
 	 */
-	public List filterCollection(Map query, List view, List sort, int pos, int limit, boolean ignoreCase) {
+	public List filter(SearchArgs args) {
 
 		if (input == null)
 			return null;
@@ -253,31 +213,28 @@ public final class PojoQuery {
 		if (! type.isCollectionOrArray())
 			throw new RuntimeException("Cannot call filterCollection() on class type " + type);
 
-		if (view == null)
-			view = Collections.EMPTY_LIST;
-
-		if (sort == null)
-			sort = Collections.EMPTY_LIST;
-
 		// Create a new ObjectList
 		ObjectList l = (ObjectList)replaceWithMutables(input);
 
 		// Do the search
-		CollectionFilter filter = new CollectionFilter(query, ignoreCase);
+		CollectionFilter filter = new CollectionFilter(args.getSearch(), args.isIgnoreCase());
 		filter.doQuery(l);
 
 		// If sort or view isn't empty, then we need to make sure that all entries in the
 		// list are maps.
-		if ((! sort.isEmpty()) || (! view.isEmpty())) {
+		Map<String,Boolean> sort = args.getSort();
+		List<String> view = args.getView();
 
+		if ((! sort.isEmpty()) || (! view.isEmpty())) {
 			if (! sort.isEmpty())
 				doSort(l, sort);
-
 			if (! view.isEmpty())
 				doView(l, view);
 		}
 
 		// Do the paging.
+		int pos = args.getPosition();
+		int limit = args.getLimit();
 		if (pos != 0 || limit != 0) {
 			int end = (limit == 0 || limit+pos >= l.size()) ? l.size() : limit + pos;
 			ObjectList l2 = new DelegateList(((DelegateList)l).getClassMeta());
@@ -304,39 +261,22 @@ public final class PojoQuery {
 		if (cm.isMap() && o instanceof BeanMap) {
 			BeanMap bm = (BeanMap)o;
 			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
-			for (BeanMapEntry e : (Set<BeanMapEntry>)bm.entrySet()) {
-				ClassMeta ct1 = e.getMeta().getClassMeta();
-				if (ct1.isCollectionOrArray() || ct1.isMapOrBean() || ct1.isObject())
-					dbm.put(e.getKey(), replaceWithMutables(e.getValue()));
-				else
-					dbm.addKey(e.getKey());
-			}
+			for (Object key : bm.keySet())
+				dbm.addKey(key.toString());
 			return dbm;
 		}
 		if (cm.isBean()) {
 			BeanMap bm = session.toBeanMap(o);
 			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
-			for (BeanMapEntry e : (Set<BeanMapEntry>)bm.entrySet()) {
-				ClassMeta ct1 = e.getMeta().getClassMeta();
-				if (ct1.isCollectionOrArray() || ct1.isMapOrBean() || ct1.isObject()) {
-					Object val = null;
-					try {
-						val = e.getValue();
-					} catch (BeanRuntimeException ex) {
-						// Ignore.
-					}
-					dbm.put(e.getKey(), replaceWithMutables(val));
-				}
-				else
-					dbm.addKey(e.getKey());
-			}
+			for (Object key : bm.keySet())
+				dbm.addKey(key.toString());
 			return dbm;
 		}
 		if (cm.isMap()) {
 			Map m = (Map)o;
 			DelegateMap dm = new DelegateMap(session.getClassMetaForObject(m));
 			for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-				dm.put(e.getKey().toString(), replaceWithMutables(e.getValue()));
+				dm.put(e.getKey().toString(), e.getValue());
 			return dm;
 		}
 		if (cm.isArray()) {
@@ -348,24 +288,15 @@ public final class PojoQuery {
 	/*
 	 * Sorts the specified list by the sort list.
 	 */
-	private static void doSort(List list, List sortList) {
+	private static void doSort(List list, Map<String,Boolean> sortList) {
 
-		Map sort = new LinkedHashMap();
-		for (Object s : sortList) {
-			if (s instanceof String)
-				sort.put(s, "a");
-			else if (s instanceof Map) {
-				Map sm = (Map)s;
-				for (Map.Entry e : (Set<Map.Entry>)sm.entrySet())
-					sort.put(e.getKey(), e.getValue().toString().toLowerCase(Locale.ENGLISH));
-			}
-		}
-
-		// Do the sort.
-		List<String> columns = new ArrayList<String>(sort.keySet());
+		// We reverse the list and sort last to first.
+		List<String> columns = new ArrayList<String>(sortList.keySet());
 		Collections.reverse(columns);
+
 		for (final String c : columns) {
-			final boolean isDesc = startsWith(sort.get(c).toString(), 'd');
+			final boolean isDesc = sortList.get(c);
+
 			Comparator comp = new Comparator<Map>() {
 				@Override /* Comparator */
 				public int compare(Map m1, Map m2) {
@@ -386,8 +317,7 @@ public final class PojoQuery {
 	/*
 	 * Filters all but the specified view columns on all entries in the specified list.
 	 */
-	private void doView(List list, List view) {
-
+	private static void doView(List list, List<String> view) {
 		for (ListIterator i = list.listIterator(); i.hasNext();) {
 			Object o = i.next();
 			Map m = (Map)o;
@@ -398,47 +328,14 @@ public final class PojoQuery {
 	/*
 	 * Creates a new Map with only the entries specified in the view list.
 	 */
-	private void doView(Map m, List view) {
-		List<String> filterKeys = new LinkedList<String>();
-		for (Object v : view) {
-			if (v instanceof String) {
-				filterKeys.add(v.toString());
-			} else if (v instanceof ObjectMap) {
-				ObjectMap vm = (ObjectMap)v;
-				for (Map.Entry<String,Object> e : vm.entrySet()) {
-					String vmKey = e.getKey();
-					Object vmVal = e.getValue();
-					Object mv = m.get(vmKey);
-					filterKeys.add(vmKey);
-					if (vmVal instanceof List) {
-						List l = (List)vmVal;
-						if (mv instanceof List)
-							doView((List)mv, l);
-						else if (mv instanceof Map)
-							doView((Map)mv, l);
-					}
-				}
-			}
-		}
+	private static Map doView(Map m, List<String> view) {
 		if (m instanceof DelegateMap)
-			((DelegateMap)m).filterKeys(filterKeys);
+			((DelegateMap)m).filterKeys(view);
 		else
-			((DelegateBeanMap)m).filterKeys(filterKeys);
+			((DelegateBeanMap)m).filterKeys(view);
+		return m;
 	}
 
-
-	/*
-	 * Returns the appropriate IMatcher for the specified class type.
-	 */
-	private IMatcher getObjectMatcherForType(String queryString, boolean ignoreCase, ClassMeta cm) {
-		if (cm.isDate())
-			return new DateMatcher(queryString);
-		if (cm.isNumber())
-			return new NumberMatcher(queryString);
-		if (cm.isObject())
-			return new ObjectMatcher(queryString, ignoreCase);
-		return new StringMatcher(queryString, ignoreCase);
-	}
 
 	//====================================================================================================
 	// CollectionFilter
@@ -480,18 +377,9 @@ public final class PojoQuery {
 		Map<String,IMatcher> entryMatchers = new HashMap<String,IMatcher>();
 
 		public MapMatcher(Map query, boolean ignoreCase) {
-			for (Map.Entry e : (Set<Map.Entry>)query.entrySet()) {
-				String key = e.getKey().toString();
-				Object value = e.getValue();
-				IMatcher matcher = null;
-				if (value instanceof String)
-					matcher = getObjectMatcherForType((String)value, ignoreCase, session.object());
-				else if (value instanceof ObjectMap)
-					matcher = new MapMatcher((ObjectMap)value, ignoreCase);
-				else
-					throw new RuntimeException("Invalid value type: " + value);
-				entryMatchers.put(key, matcher);
-			}
+			for (Map.Entry e : (Set<Map.Entry>)query.entrySet())
+				if (e.getKey() != null && e.getValue() != null)
+					entryMatchers.put(e.getKey().toString(), new ObjectMatcher(e.getValue().toString(), ignoreCase));
 		}
 
 		@Override /* IMatcher */
@@ -500,7 +388,12 @@ public final class PojoQuery {
 				return false;
 			for (Map.Entry<String,IMatcher> e : entryMatchers.entrySet()) {
 				String key = e.getKey();
-				Object val = m.get(key);
+				Object val = null;
+				if (m instanceof BeanMap) {
+					val = ((BeanMap)m).getRaw(key);
+				} else {
+					val = m.get(key);
+				}
 				if (! e.getValue().matches(val))
 					return false;
 			}
@@ -912,7 +805,7 @@ public final class PojoQuery {
 	 * @param pp Where parsing last left off.
 	 * @return An object represening a timestamp.
 	 */
-	protected CalendarP parseDate(String seg, ParsePosition pp) {
+	private CalendarP parseDate(String seg, ParsePosition pp) {
 
 		CalendarP cal = null;
 

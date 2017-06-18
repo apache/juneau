@@ -41,8 +41,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		path="/Normal",
 		htmldoc=@HtmlDoc(
 			title="Normal-title",
-			description="Normal-text",
-			links="{link:'Normal-links'}"
+			description="Normal-text"
 		)
 	)
 	public static class Normal extends RestServletDefault {
@@ -62,8 +61,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 			path="/test2",
 			htmldoc=@HtmlDoc(
 				title="Normal.test2-title",
-				description="Normal.test2-text",
-				links="{link:'Normal.test2-links'}"
+				description="Normal.test2-text"
 			)
 		)
 		public String test2() {
@@ -77,7 +75,6 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		public String test3(RestResponse res) {
 			res.setHtmlTitle("Normal.test3-title");
 			res.setHtmlDescription("Normal.test3-text");
-			res.setHtmlLinks("{link:'Normal.test3-links'}");
 			return "OK";
 		}
 
@@ -88,7 +85,6 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		public String test4(RestResponse res) {
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_title, "Normal.test4-title");
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_description, "Normal.test4-text");
-			res.setProperty(HtmlDocSerializerContext.HTMLDOC_links, "{link:'Normal.test4-links'}");
 			return "OK";
 		}
 	}
@@ -102,7 +98,6 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		public void init(RestConfig config) throws Exception {
 			config.setHtmlTitle("NormalInit-title");
 			config.setHtmlDescription("NormalInit-text");
-			config.setHtmlLinks("{link:'NormalInit-links'}");
 			super.init(config);
 		}
 
@@ -121,8 +116,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 			path="/test2",
 			htmldoc=@HtmlDoc(
 				title="NormalInit.test2-title",
-				description="NormalInit.test2-text",
-				links="{link:'NormalInit.test2-links'}"
+				description="NormalInit.test2-text"
 			)
 		)
 		public String test2() {
@@ -136,7 +130,6 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		public String test3(RestResponse res) {
 			res.setHtmlTitle("NormalInit.test3-title");
 			res.setHtmlDescription("NormalInit.test3-text");
-			res.setHtmlLinks("{link:'NormalInit.test3-links'}");
 			return "OK";
 		}
 
@@ -147,7 +140,6 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		public String test4(RestResponse res) {
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_title, "NormalInit.test4-title");
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_description, "NormalInit.test4-text");
-			res.setProperty(HtmlDocSerializerContext.HTMLDOC_links, "{link:'NormalInit.test4-links'}");
 			return "OK";
 		}
 	}
@@ -219,8 +211,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 			path="/test2",
 			htmldoc=@HtmlDoc(
 				title="NormalSubclassed1.test2-title",
-				description="NormalSubclassed1.test2-text",
-				links="{link:'NormalSubclassed1.test2-links'}"
+				description="NormalSubclassed1.test2-text"
 			)
 		)
 		public String test2() {
@@ -232,8 +223,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		path="/NormalSubclassed2",
 		htmldoc=@HtmlDoc(
 			title="NormalSubclassed2-title",
-			description="NormalSubclassed2-text",
-			links="{link:'NormalSubclassed2-links'}"
+			description="NormalSubclassed2-text"
 		)
 	)
 	public static class NormalSubclassed2 extends Normal {
@@ -255,8 +245,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 			path="/test2",
 			htmldoc=@HtmlDoc(
 				title="NormalSubclassed2.test2-title",
-				description="NormalSubclassed2.test2-text",
-				links="{link:'NormalSubclassed2.test2-links'}"
+				description="NormalSubclassed2.test2-text"
 			)
 		)
 		public String test2() {
@@ -269,8 +258,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		messages="HtmlPropertiesResource",
 		htmldoc=@HtmlDoc(
 			title="$L{pageTitle}",
-			description="$L{pageText}",
-			links="$L{pageLinks}"
+			description="$L{pageText}"
 		)
 	)
 	public static class LocalizedExplicit extends RestServletDefault {
@@ -289,7 +277,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		@RestMethod(
 			path="/test2",
 			htmldoc=@HtmlDoc(
-				title="$L{test2.pageTitle}", description="$L{test2.pageText}", links="$L{test2.pageLinks}"
+				title="$L{test2.pageTitle}", description="$L{test2.pageText}"
 			)
 		)
 		public String test2() {
@@ -303,7 +291,6 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		public String test3(RestResponse res) {
 			res.setHtmlTitle("$L{test3.pageTitle}");
 			res.setHtmlDescription("$L{test3.pageText}");
-			res.setHtmlLinks("$L{test3.pageLinks}");
 			return "OK";
 		}
 
@@ -314,7 +301,6 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		public String test4(RestResponse res) {
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_title, "$L{test4.pageTitle}");
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_description, "$L{test4.pageText}");
-			res.setProperty(HtmlDocSerializerContext.HTMLDOC_links, "$L{test4.pageLinks}");
 			return "OK";
 		}
 	}

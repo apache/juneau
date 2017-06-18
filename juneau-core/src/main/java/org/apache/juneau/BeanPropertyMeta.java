@@ -417,9 +417,33 @@ public class BeanPropertyMeta {
 			if (bean == null)
 				return m.propertyCache.get(name);
 
-			Object o = invokeGetter(bean, pName);
+			return toSerializedForm(m.getBeanSession(), getRaw(m, pName));
 
-			return toSerializedForm(m.getBeanSession(), o);
+		} catch (Throwable e) {
+			if (beanContext.ignoreInvocationExceptionsOnGetters) {
+				if (rawTypeMeta.isPrimitive())
+					return rawTypeMeta.getPrimitiveDefault();
+				return null;
+			}
+			throw new BeanRuntimeException(beanMeta.c, "Exception occurred while getting property ''{0}''", name).initCause(e);
+		}
+	}
+
+	/**
+	 * Equivalent to calling {@link BeanMap#getRaw(Object)}, but is faster since it avoids looking up the property meta.
+	 *
+	 * @param m The bean map to get the transformed value from.
+	 * @param pName The property name.
+	 * @return The raw property value.
+	 */
+	public Object getRaw(BeanMap<?> m, String pName) {
+		try {
+			// Read-only beans have their properties stored in a cache until getBean() is called.
+			Object bean = m.bean;
+			if (bean == null)
+				return m.propertyCache.get(name);
+
+			return invokeGetter(bean, pName);
 
 		} catch (Throwable e) {
 			if (beanContext.ignoreInvocationExceptionsOnGetters) {

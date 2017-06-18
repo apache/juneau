@@ -283,6 +283,21 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
+	 * Same as {@link #get(Object)} except bypasses the POJO filter associated with the bean property or
+	 * 	bean filter associated with the bean class.
+	 *
+	 * @param property The name of the property to get.
+	 * @return The raw property value.
+	 */
+	public Object getRaw(Object property) {
+		String pName = StringUtils.toString(property);
+		BeanPropertyMeta p = getPropertyMeta(pName);
+		if (p == null)
+			return null;
+		return p.getRaw(this, pName);
+	}
+
+	/**
 	 * Convenience method for setting multiple property values by passing in JSON (or other) text.
 	 * <p>
 	 * Typically the input is going to be JSON, although the actual data type

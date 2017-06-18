@@ -199,17 +199,17 @@ public class HeadersResource extends RestServlet {
 	@RestMethod(name="GET", path="/defaultRequestHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 	public ObjectMap defaultRequestHeaders(RequestHeaders headers) {
 		return new ObjectMap()
-			.append("h1", headers.getFirst("H1"))
-			.append("h2", headers.getFirst("H2"))
-			.append("h3", headers.getFirst("H3"));
+			.append("h1", headers.getString("H1"))
+			.append("h2", headers.getString("H2"))
+			.append("h3", headers.getString("H3"));
 	}
 
 	@RestMethod(name="GET", path="/defaultRequestHeadersCaseInsensitive", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 	public ObjectMap defaultRequestHeadersCaseInsensitive(RequestHeaders headers) {
 		return new ObjectMap()
-			.append("h1", headers.getFirst("h1"))
-			.append("h2", headers.getFirst("h2"))
-			.append("h3", headers.getFirst("h3"));
+			.append("h1", headers.getString("h1"))
+			.append("h2", headers.getString("h2"))
+			.append("h3", headers.getString("h3"));
 	}
 
 	@RestMethod(name="GET", path="/annotatedHeaders")

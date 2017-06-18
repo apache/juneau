@@ -1,0 +1,139 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ *
+ ***************************************************************************************************************************/
+ -->
+<a class='link' href='javascript:document.getElementById("query").classList.remove("hidden")'>query</a>
+<style>
+	.queryInput, .queryInput table {
+		padding:3px;
+		border: 1px solid black;
+		border-radius:3px;
+		background-color:#fefefe;
+		box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+		position: fixed;
+		font-size: 9pt;
+    	color: #26343F;
+    	white-space: nowrap;
+    	text-align: left;
+    	margin:20px;
+	}
+
+	.hidden {
+		display:none;
+	}
+	
+	.tooltip {
+	    position: relative;
+	    display: inline-block;	    
+	}
+
+	.tooltip .tooltiptext {
+	    visibility: hidden;
+	    background-color: #FEF9E7;
+	    color: black;
+	    padding: 5px;
+	    border-radius: 6px;
+	    position: absolute;
+	    z-index: 1;
+	    top: 0;
+	    left: 0;
+	    margin-left: 30px;
+		box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+	    opacity: 0;
+	    transition: opacity 0.5s;
+	    font-weight: normal;
+	}
+
+	.tooltip:hover .tooltiptext {
+	    visibility: visible;
+	    opacity: 1;
+	}	
+	
+	.tooltiptext {
+		white-space: nowrap;
+		float: left;
+	}
+}
+
+</style>
+<form id='queryForm' style='display:inline'>
+	<table id='query' class='queryInput hidden'>
+		<tr>
+			<th>
+				<div class="tooltip">
+					Search <small>(?)</small>:
+					<span class="tooltiptext">
+						Comma-delimited list of key/value pair search terms.
+						<br>Keys are column names.
+						<br>Values are search terms.
+						<br>Refer to the <code>Queryable</code> javadocs for a full explanation of possible search terms.
+						<br>Example: <code>column1=foo*, column2&lt;100, column3=2013-2016.06.30</code>
+					</span>
+				</div>
+			</th>
+			<td>
+				<input name="s" size="50">
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<div class="tooltip">
+					View <small>(?)</small>:
+					<span class="tooltiptext">
+						Comma-delimited list of columns to display.
+						<br>Example: <code>column1, column2</code>
+					</span>
+				</div>
+			</th>
+			<td>
+				<input name="v" size="50">
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<div class="tooltip">
+					Sort <small>(?)</small>:
+					<span class="tooltiptext">
+						Comma-delimited list of columns to sort by.
+						<br>Columns can be suffixed with '-' to indicate descending order.
+						<br>Example: <code>column1, column2-</code>
+					</span>
+				</div>
+			</th>
+			<td>
+				<input name="o" size="50">
+			</td>
+		</tr>
+		<tr>
+			<th>
+				Page:
+			</th>
+			<td>
+				Position: <input name='p' type='number' style='width:50px' step=20 min=0 value='0'>
+				Limit: <input name='l' type='number' style='width:50px' step=20 min=0 value='0'>
+				Ignore-case: <input name='i' type='checkbox' value='true'>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<td style='float:right'>
+				<input type='button' value='Cancel' onclick='getElementById("query").classList.add("hidden")'>
+				<input type="submit" value='Submit'>
+			</td>
+		</tr>
+	</table>
+</form>
+

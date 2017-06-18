@@ -67,6 +67,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final org.apache.juneau.rest.annotation.Parameter[] parameters;
 	private final Response[] responses;
 	private final RestContext context;
+	private final BeanContext beanContext;
 	private final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlLinks, htmlNav, htmlAside,
 		htmlFooter, htmlCss, htmlCssUrl, htmlNoResultsMessage;
 	private final boolean htmlNoWrap;
@@ -89,6 +90,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.encoders = b.encoders;
 		this.urlEncodingParser = b.urlEncodingParser;
 		this.urlEncodingSerializer = b.urlEncodingSerializer;
+		this.beanContext = b.beanContext;
 		this.properties = b.properties;
 		this.defaultRequestHeaders = b.defaultRequestHeaders;
 		this.defaultQuery = b.defaultQuery;
@@ -133,6 +135,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		private EncoderGroup encoders;
 		private UrlEncodingParser urlEncodingParser;
 		private UrlEncodingSerializer urlEncodingSerializer;
+		private BeanContext beanContext;
 		private ObjectMap properties;
 		private Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
 		private boolean plainParams, deprecated;
@@ -165,6 +168,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				parsers = context.getParsers();
 				urlEncodingSerializer = context.getUrlEncodingSerializer();
 				urlEncodingParser = context.getUrlEncodingParser();
+				beanContext = context.getBeanContext();
 				encoders = context.getEncoders();
 				properties = context.getProperties();
 				widgets = new HashMap<String,Widget>(context.getWidgets());
@@ -358,8 +362,10 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				params = context.findParams(method, plainParams, pathPattern);
 
-				if (sgb != null)
+				if (sgb != null) {
 					serializers = sgb.build();
+					beanContext = serializers.getBeanContext();
+				}
 				if (pgb != null)
 					parsers = pgb.build();
 				if (uepb != null)
@@ -746,7 +752,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 		ObjectMap requestProperties = createRequestProperties(properties, req);
 		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
-			serializers, parsers, urlEncodingParser, encoders, widgets);
+			serializers, parsers, urlEncodingParser, beanContext, encoders, widgets);
 		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards
@@ -798,7 +804,7 @@ class CallMethod implements Comparable<CallMethod>  {
 			if (res.hasOutput()) {
 				output = res.getOutput();
 				for (RestConverter converter : converters)
-					output = converter.convert(req, output, context.getBeanContext().getClassMetaForObject(output));
+					output = converter.convert(req, output, beanContext.getClassMetaForObject(output));
 				res.setOutput(output);
 			}
 		} catch (IllegalArgumentException e) {
@@ -883,8 +889,18 @@ class CallMethod implements Comparable<CallMethod>  {
 						return htmlHeader == null ? null : req.resolveVars(htmlHeader);
 					if (k.equals(HTMLDOC_branding))
 						return htmlBranding == null ? null : req.resolveVars(htmlBranding);
-					if (k.equals(HTMLDOC_links))
-						return htmlLinks == null ? null : req.resolveVars(htmlLinks);
+					if (k.equals(HTMLDOC_links)) {
+						if (htmlLinks == null)
+							return null;
+						try {
+							ObjectMap m = new ObjectMap(htmlLinks), m2 = new ObjectMap();
+							for (Map.Entry<String,Object> e : m.entrySet())
+								m2.put(req.resolveVars(e.getKey()), req.resolveVars(StringUtils.toString(e.getValue())));
+							return m2;
+						} catch (ParseException e) {
+							throw new RuntimeException(e);
+						}
+					}
 					if (k.equals(HTMLDOC_nav))
 						return htmlNav == null ? null : req.resolveVars(htmlNav);
 					if (k.equals(HTMLDOC_aside))

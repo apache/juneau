@@ -104,7 +104,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param name The header name.
 	 * @return The header value, or <jk>null</jk> if it doesn't exist.
 	 */
-	public String getFirst(String name) {
+	public String getString(String name) {
 		String[] v = null;
 		if (queryParams != null)
 			v = queryParams.get(name);
@@ -124,9 +124,53 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param def The default value to return if the header value isn't found.
 	 * @return The header value, or the default value if the header isn't present.
 	 */
-	public String getFirst(String name, String def) {
-		String s = getFirst(name);
+	public String getString(String name, String def) {
+		String s = getString(name);
 		return StringUtils.isEmpty(s) ? def : s;
+	}
+
+	/**
+	 * Same as {@link #getString(String)} but converts the value to an integer.
+	 *
+	 * @param name The HTTP header name.
+	 * @return The header value, or the default value if the header isn't present.
+	 */
+	public int getInt(String name) {
+		return getInt(name, 0);
+	}
+
+	/**
+	 * Same as {@link #getString(String,String)} but converts the value to an integer.
+	 *
+	 * @param name The HTTP header name.
+	 * @param def The default value to return if the header value isn't found.
+	 * @return The header value, or the default value if the header isn't present.
+	 */
+	public int getInt(String name, int def) {
+		String s = getString(name);
+		return StringUtils.isEmpty(s) ? def : Integer.parseInt(s);
+	}
+
+	/**
+	 * Same as {@link #getString(String)} but converts the value to a boolean.
+	 *
+	 * @param name The HTTP header name.
+	 * @return The header value, or the default value if the header isn't present.
+	 */
+	public boolean getBoolean(String name) {
+		return getBoolean(name, false);
+	}
+
+	/**
+	 * Same as {@link #getString(String,String)} but converts the value to a boolean.
+	 *
+	 * @param name The HTTP header name.
+	 * @param def The default value to return if the header value isn't found.
+	 * @return The header value, or the default value if the header isn't present.
+	 */
+	public boolean getBoolean(String name, boolean def) {
+		String s = getString(name);
+		return StringUtils.isEmpty(s) ? def : Boolean.parseBoolean(s);
 	}
 
 	/**
@@ -160,7 +204,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 */
 	public <T> T get(String name, Class<T> type) {
-		String h = getFirst(name);
+		String h = getString(name);
 		return beanSession.convertToType(h, type);
 	}
 
@@ -174,7 +218,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 */
 	public <T> T get(String name, T def, Class<T> type) {
-		String h = getFirst(name);
+		String h = getString(name);
 		if (h == null)
 			return def;
 		return beanSession.convertToType(h, type);
@@ -204,7 +248,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
-		String h = getFirst(name);
+		String h = getString(name);
 		return (T)parser.parse(PartType.HEADER, h, beanSession.getClassMeta(type, args));
 	}
 
@@ -244,7 +288,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 *
 	 */
 	public Accept getAccept() {
-		return Accept.forString(getFirst("Accept"));
+		return Accept.forString(getString("Accept"));
 	}
 
 	/**
@@ -260,7 +304,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Accept-Charset</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public AcceptCharset getAcceptCharset() {
-		return AcceptCharset.forString(getFirst("Accept-Charset"));
+		return AcceptCharset.forString(getString("Accept-Charset"));
 	}
 
 	/**
@@ -276,7 +320,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Accept-Encoding</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public AcceptEncoding getAcceptEncoding() {
-		return AcceptEncoding.forString(getFirst("Accept-Encoding"));
+		return AcceptEncoding.forString(getString("Accept-Encoding"));
 	}
 
 	/**
@@ -292,7 +336,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Accept-Language</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public AcceptLanguage getAcceptLanguage() {
-		return AcceptLanguage.forString(getFirst("Accept-Language"));
+		return AcceptLanguage.forString(getString("Accept-Language"));
 	}
 
 	/**
@@ -308,7 +352,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Authorization</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Authorization getAuthorization() {
-		return Authorization.forString(getFirst("Authorization"));
+		return Authorization.forString(getString("Authorization"));
 	}
 
 	/**
@@ -324,7 +368,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Cache-Control</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public CacheControl getCacheControl() {
-		return CacheControl.forString(getFirst("Cache-Control"));
+		return CacheControl.forString(getString("Cache-Control"));
 	}
 
 	/**
@@ -341,7 +385,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code></code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Connection getConnection() {
-		return Connection.forString(getFirst("Connection"));
+		return Connection.forString(getString("Connection"));
 	}
 
 	/**
@@ -357,7 +401,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Content-Length</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public ContentLength getContentLength() {
-		return ContentLength.forString(getFirst("Content-Length"));
+		return ContentLength.forString(getString("Content-Length"));
 	}
 
 	/**
@@ -373,7 +417,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Content-Type</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public ContentType getContentType() {
-		return ContentType.forString(getFirst("Content-Type"));
+		return ContentType.forString(getString("Content-Type"));
 	}
 
 	/**
@@ -389,7 +433,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Date</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Date getDate() {
-		return Date.forString(getFirst("Date"));
+		return Date.forString(getString("Date"));
 	}
 
 	/**
@@ -405,7 +449,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Expect</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Expect getExpect() {
-		return Expect.forString(getFirst("Expect"));
+		return Expect.forString(getString("Expect"));
 	}
 
 	/**
@@ -421,7 +465,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>From</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public From getFrom() {
-		return From.forString(getFirst("From"));
+		return From.forString(getString("From"));
 	}
 
 	/**
@@ -439,7 +483,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Host</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Host getHost() {
-		return Host.forString(getFirst("Host"));
+		return Host.forString(getString("Host"));
 	}
 
 	/**
@@ -456,7 +500,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>If-Match</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfMatch getIfMatch() {
-		return IfMatch.forString(getFirst("If-Match"));
+		return IfMatch.forString(getString("If-Match"));
 	}
 
 	/**
@@ -472,7 +516,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>If-Modified-Since</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfModifiedSince getIfModifiedSince() {
-		return IfModifiedSince.forString(getFirst("If-Modified-Since"));
+		return IfModifiedSince.forString(getString("If-Modified-Since"));
 	}
 
 	/**
@@ -488,7 +532,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>If-None-Match</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfNoneMatch getIfNoneMatch() {
-		return IfNoneMatch.forString(getFirst("If-None-Match"));
+		return IfNoneMatch.forString(getString("If-None-Match"));
 	}
 
 	/**
@@ -504,7 +548,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>If-Range</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfRange getIfRange() {
-		return IfRange.forString(getFirst("If-Range"));
+		return IfRange.forString(getString("If-Range"));
 	}
 
 	/**
@@ -520,7 +564,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>If-Unmodified-Since</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfUnmodifiedSince getIfUnmodifiedSince() {
-		return IfUnmodifiedSince.forString(getFirst("If-Unmodified-Since"));
+		return IfUnmodifiedSince.forString(getString("If-Unmodified-Since"));
 	}
 
 	/**
@@ -536,7 +580,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Max-Forwards</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public MaxForwards getMaxForwards() {
-		return MaxForwards.forString(getFirst("Max-Forwards"));
+		return MaxForwards.forString(getString("Max-Forwards"));
 	}
 
 	/**
@@ -552,7 +596,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Pragma</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Pragma getPragma() {
-		return Pragma.forString(getFirst("Pragma"));
+		return Pragma.forString(getString("Pragma"));
 	}
 
 	/**
@@ -568,7 +612,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Proxy-Authorization</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public ProxyAuthorization getProxyAuthorization() {
-		return ProxyAuthorization.forString(getFirst("Proxy-Authorization"));
+		return ProxyAuthorization.forString(getString("Proxy-Authorization"));
 	}
 
 	/**
@@ -584,7 +628,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Range</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Range getRange() {
-		return Range.forString(getFirst("Range"));
+		return Range.forString(getString("Range"));
 	}
 
 	/**
@@ -600,7 +644,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Referer</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Referer getReferer() {
-		return Referer.forString(getFirst("Referer"));
+		return Referer.forString(getString("Referer"));
 	}
 
 	/**
@@ -618,7 +662,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>TE</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public TE getTE() {
-		return TE.forString(getFirst("TE"));
+		return TE.forString(getString("TE"));
 	}
 
 	/**
@@ -629,7 +673,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The <code>Time-Zone</code> header value on the request, or <jk>null</jk> if not present.
 	 */
 	public TimeZone getTimeZone() {
-		String tz = getFirst("Time-Zone");
+		String tz = getString("Time-Zone");
 		if (tz != null)
 			return TimeZone.getTimeZone(tz);
 		return null;
@@ -648,7 +692,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>User-Agent</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public UserAgent getUserAgent() {
-		return UserAgent.forString(getFirst("User-Agent"));
+		return UserAgent.forString(getString("User-Agent"));
 	}
 
 	/**
@@ -664,7 +708,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Upgrade</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Upgrade getUpgrade() {
-		return Upgrade.forString(getFirst("Upgrade"));
+		return Upgrade.forString(getString("Upgrade"));
 	}
 
 	/**
@@ -680,7 +724,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Via</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Via getVia() {
-		return Via.forString(getFirst("Via"));
+		return Via.forString(getString("Via"));
 	}
 
 	/**
@@ -696,7 +740,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parsed <code>Warning</code> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Warning getWarning() {
-		return Warning.forString(getFirst("Warning"));
+		return Warning.forString(getString("Warning"));
 	}
 
 	/**

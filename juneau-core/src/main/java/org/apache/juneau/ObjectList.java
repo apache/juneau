@@ -139,8 +139,12 @@ public class ObjectList extends LinkedList<Object> {
 		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		if (s != null)
-			p.parseIntoCollection(s, this, session.object());
+		try {
+			if (s != null)
+				p.parseIntoCollection(s, this, session.object());
+		} catch (ParseException e) {
+			throw new ParseException("Invalid input for {0} parser.\n---start---\n{1}\n---end---", p.getClass().getSimpleName(), s).initCause(e);
+		}
 	}
 
 	/**

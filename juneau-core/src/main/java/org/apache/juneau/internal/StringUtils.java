@@ -742,6 +742,26 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Same as {@link #endsWith(String, char)} except check for multiple characters.
+	 *
+	 * @param s The string to check.  Can be <jk>null</jk>.
+	 * @param c The characters to check for.
+	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
+	 */
+	public static boolean endsWith(String s, char...c) {
+		if (s != null) {
+			int i = s.length();
+			if (i > 0) {
+				char c2 = s.charAt(i-1);
+				for (char cc : c)
+					if (c2 == cc)
+						return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Converts the specified number into a 4 hexadecimal characters.
 	 *
 	 * @param num The number to convert to hex.
@@ -1521,5 +1541,24 @@ public final class StringUtils {
 			if (! isEmpty(ss))
 				return ss;
 		return null;
+	}
+
+	/**
+	 * Same as {@link String#indexOf(int)} except allows you to check for mulitiple characters.
+	 *
+	 * @param s The string to check.
+	 * @param c The characters to check for.
+	 * @return The index into the string that is one of the specified characters.
+	 */
+	public static int indexOf(String s, char...c) {
+		if (s == null)
+			return -1;
+		for (int i = 0; i < s.length(); i++) {
+			char c2 = s.charAt(i);
+			for (char cc : c)
+				if (c2 == cc)
+					return i;
+		}
+		return -1;
 	}
 }

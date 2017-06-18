@@ -35,7 +35,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	private final String title, description, branding, header, nav, aside, footer, cssUrl, noResultsMessage;
 	private final String[] css;
-	private final Map<String,String> links;
+	private final Map<String,Object> links;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
 
@@ -158,7 +158,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
 	 * 	<jk>null</jk> if not specified.  Never an empty map.
 	 */
-	public final Map<String,String> getLinks() {
+	public final Map<String,Object> getLinks() {
 		return links;
 	}
 

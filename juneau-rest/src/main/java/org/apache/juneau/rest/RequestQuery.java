@@ -24,6 +24,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents the query parameters in an HTTP request.
@@ -81,11 +82,13 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * Same as {@link HttpServletRequest#getParameter(String)} except only looks in the URL string, not parameters from URL-Encoded FORM posts.
 	 * <p>
 	 * This method can be used to retrieve a parameter without triggering the underlying servlet API to load and parse the request body.
+	 * <p>
+	 * If multiple query parameters have the same name, this returns only the first instance.
 	 *
 	 * @param name The URL parameter name.
 	 * @return The parameter value, or <jk>null</jk> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
 	 */
-	public String getFirst(String name) {
+	public String getString(String name) {
 		String[] v = get(name);
 		if (v == null || v.length == 0)
 			return null;
@@ -100,15 +103,59 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getFirst(String)} but returns the specified default value if the query parameter was not specified.
+	 * Same as {@link #getString(String)} but returns the specified default value if the query parameter was not specified.
 	 *
 	 * @param name The URL parameter name.
 	 * @param def The default value.
 	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
 	 */
-	public String getFirst(String name, String def) {
-		String s = getFirst(name);
+	public String getString(String name, String def) {
+		String s = getString(name);
 		return StringUtils.isEmpty(s) ? def : s;
+	}
+
+	/**
+	 * Same as {@link #getString(String)} but converts the value to an integer.
+	 *
+	 * @param name The URL parameter name.
+	 * @return The parameter value, or <code>0</code> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 */
+	public int getInt(String name) {
+		return getInt(name, 0);
+	}
+
+	/**
+	 * Same as {@link #getString(String,String)} but converts the value to an integer.
+	 *
+	 * @param name The URL parameter name.
+	 * @param def The default value.
+	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 */
+	public int getInt(String name, int def) {
+		String s = getString(name);
+		return StringUtils.isEmpty(s) ? def : Integer.parseInt(s);
+	}
+
+	/**
+	 * Same as {@link #getString(String)} but converts the value to a boolean.
+	 *
+	 * @param name The URL parameter name.
+	 * @return The parameter value, or <jk>false</jk> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 */
+	public boolean getBoolean(String name) {
+		return getBoolean(name, false);
+	}
+
+	/**
+	 * Same as {@link #getString(String,String)} but converts the value to a boolean.
+	 *
+	 * @param name The URL parameter name.
+	 * @param def The default value.
+	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 */
+	public boolean getBoolean(String name, boolean def) {
+		String s = getString(name);
+		return StringUtils.isEmpty(s) ? def : Boolean.parseBoolean(s);
 	}
 
 	/**
@@ -261,9 +308,62 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		return false;
 	}
 
+	/**
+	 * Locates the special search query arguments in the query and returns them as a {@link SearchArgs} object.
+	 * <p>
+	 * The query arguments are as follows:
+	 * <ul>
+	 * 	<li><js>"&s="</js> - A comma-delimited list of column-name/search-token pairs.
+	 * 		<br>Example: <js>"&s=column1=foo*,column2=*bar"</js>
+	 * 	<li><js>"&v="</js> - A comma-delimited list column names to view.
+	 * 		<br>Example: <js>"&v=column1,column2"</js>
+	 * 	<li><js>"&o="</js> - A comma-delimited list column names to sort by.
+	 * 		<br>Column names can be suffixed with <js>'-'</js> to indicate descending order.
+	 * 		<br>Example: <js>"&o=column1,column2-"</js>
+	 * 	<li><js>"&p="</js> - The zero-index row number of the first row to display.
+	 * 		<br>Example: <js>"&p=100"</js>
+	 * 	<li><js>"&l="</js> - The number of rows to return.
+	 * 		<br><code>0</code> implies return all rows.
+	 * 		<br>Example: <js>"&l=100"</js>
+	 * 	<li><js>"&i="</js> - The case-insensitive search flag.
+	 * 		<br>Example: <js>"&i=true"</js>
+	 * </ul>
+	 * <p>
+	 * Whitespace is trimmed in the parameters.
+	 *
+	 * @return A new {@link SearchArgs} object initialized with the special search query arguments.
+	 * 	<jk>null</jk> if no search arguments were found.
+	 */
+	public SearchArgs getSearchArgs() {
+		if (hasAny("s","v","o","p","l","i")) {
+			return new SearchArgs.Builder()
+				.search(getString("s"))
+				.view(getString("v"))
+				.sort(getString("o"))
+				.position(getInt("p"))
+				.limit(getInt("l"))
+				.ignoreCase(getBoolean("i"))
+				.build();
+		}
+		return null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the query parameters contains any of the specified names.
+	 *
+	 * @param paramNames The parameter names to check for.
+	 * @return <jk>true</jk> if the query parameters contains any of the specified names.
+	 */
+	public boolean hasAny(String...paramNames) {
+		for (String p : paramNames)
+			if (containsKey(p))
+				return true;
+		return false;
+	}
+
 	/* Workhorse method */
 	private <T> T parse(String name, T def, ClassMeta<T> cm) throws ParseException {
-		String val = getFirst(name);
+		String val = getString(name);
 		if (val == null)
 			return def;
 		return parseValue(val, cm);
@@ -271,7 +371,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 
 	/* Workhorse method */
 	private <T> T parse(String name, ClassMeta<T> cm) throws ParseException {
-		String val = getFirst(name);
+		String val = getString(name);
 		if (cm.isPrimitive() && (val == null || val.isEmpty()))
 			return cm.getPrimitiveDefault();
 		return parseValue(val, cm);

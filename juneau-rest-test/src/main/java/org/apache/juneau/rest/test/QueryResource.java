@@ -32,9 +32,9 @@ public class QueryResource extends RestServletDefault {
 	@RestMethod(name="GET", path="/defaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 	public ObjectMap defaultQuery(RequestQuery query) {
 		return new ObjectMap()
-			.append("f1", query.getFirst("f1"))
-			.append("f2", query.getFirst("f2"))
-			.append("f3", query.getFirst("f3"));
+			.append("f1", query.getString("f1"))
+			.append("f2", query.getString("f2"))
+			.append("f3", query.getString("f3"));
 	}
 
 	@RestMethod(name="GET", path="/annotatedQuery")
