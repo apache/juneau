@@ -15,6 +15,7 @@ package org.apache.juneau.utils;
 import static java.util.Calendar.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
@@ -300,7 +301,7 @@ public final class PojoQuery {
 			Comparator comp = new Comparator<Map>() {
 				@Override /* Comparator */
 				public int compare(Map m1, Map m2) {
-					Comparable v1 = (Comparable)m1.get(c), v2 = (Comparable)m2.get(c);
+					Comparable v1 = toComparable(m1.get(c)), v2 = toComparable(m2.get(c));
 					if (v1 == null && v2 == null)
 						return 0;
 					if (v1 == null)
@@ -312,6 +313,18 @@ public final class PojoQuery {
 			};
 			Collections.sort(list, comp);
 		}
+	}
+
+	private static Comparable toComparable(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Comparable)
+			return (Comparable)o;
+		if (o instanceof Map)
+			return ((Map)o).size();
+		if (o.getClass().isArray())
+			return Array.getLength(o);
+		return o.toString();
 	}
 
 	/*
@@ -423,6 +436,24 @@ public final class PojoQuery {
 
 		@Override /* IMatcher */
 		public boolean matches(Object o) {
+			if (o instanceof Collection) {
+				for (Object o2 : (Collection)o)
+					if (matches(o2))
+						return true;
+				return false;
+			}
+			if (o != null && o.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					if (matches(Array.get(o, i)))
+						return true;
+				return false;
+			}
+			if (o instanceof Map) {
+				for (Object o2 : ((Map)o).values())
+					if (matches(o2))
+						return true;
+				return false;
+			}
 			if (o instanceof Number)
 				return getNumberMatcher().matches(o);
 			if (o instanceof Date || o instanceof Calendar)

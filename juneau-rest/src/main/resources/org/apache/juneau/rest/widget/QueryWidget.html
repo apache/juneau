@@ -26,7 +26,7 @@
     	color: #26343F;
     	white-space: nowrap;
     	text-align: left;
-    	margin:20px;
+    	margin:70px 50px;
 	}
 
 	.hidden {
@@ -64,8 +64,6 @@
 		white-space: nowrap;
 		float: left;
 	}
-}
-
 </style>
 <form id='queryForm' style='display:inline'>
 	<table id='query' class='queryInput hidden'>
@@ -83,7 +81,7 @@
 				</div>
 			</th>
 			<td>
-				<input name="s" size="50">
+				<input name="s" size="50" value='$R{query.s}'>
 			</td>
 		</tr>
 		<tr>
@@ -97,7 +95,7 @@
 				</div>
 			</th>
 			<td>
-				<input name="v" size="50">
+				<input name="v" size="50" value='$R{query.v}'>
 			</td>
 		</tr>
 		<tr>
@@ -112,7 +110,7 @@
 				</div>
 			</th>
 			<td>
-				<input name="o" size="50">
+				<input name="o" size="50" value='$R{query.o}'>
 			</td>
 		</tr>
 		<tr>
@@ -120,8 +118,8 @@
 				Page:
 			</th>
 			<td>
-				Position: <input name='p' type='number' style='width:50px' step=20 min=0 value='0'>
-				Limit: <input name='l' type='number' style='width:50px' step=20 min=0 value='0'>
+				Position: <input name='p' type='number' style='width:50px' step=20 min=0 value='$R{query.p}'>
+				Limit: <input name='l' type='number' style='width:50px' step=20 min=0 value='$R{query.l}'>
 				Ignore-case: <input name='i' type='checkbox' value='true'>
 			</td>
 		</tr>
@@ -130,6 +128,7 @@
 				&nbsp;
 			</th>
 			<td style='float:right'>
+				<input type='reset' value='Reset'>
 				<input type='button' value='Cancel' onclick='getElementById("query").classList.add("hidden")'>
 				<input type="submit" value='Submit'>
 			</td>
