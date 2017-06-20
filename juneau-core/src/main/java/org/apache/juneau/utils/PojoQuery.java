@@ -238,6 +238,7 @@ public final class PojoQuery {
 		int limit = args.getLimit();
 		if (pos != 0 || limit != 0) {
 			int end = (limit == 0 || limit+pos >= l.size()) ? l.size() : limit + pos;
+			pos = Math.min(pos, l.size());
 			ObjectList l2 = new DelegateList(((DelegateList)l).getClassMeta());
 			l2.addAll(l.subList(pos, end));
 			l = l2;

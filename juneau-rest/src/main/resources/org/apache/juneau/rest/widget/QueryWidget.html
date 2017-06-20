@@ -63,71 +63,109 @@
 	.tooltiptext {
 		white-space: nowrap;
 		float: left;
+		border: 1px solid black;
 	}
 </style>
 <form id='queryForm' style='display:inline'>
 	<table id='query' class='queryInput hidden'>
 		<tr>
-			<th>
-				<div class="tooltip">
-					Search <small>(?)</small>:
-					<span class="tooltiptext">
-						Comma-delimited list of key/value pair search terms.
-						<br>Keys are column names.
-						<br>Values are search terms.
-						<br>Refer to the <code>Queryable</code> javadocs for a full explanation of possible search terms.
-						<br>Example: <code>column1=foo*, column2&lt;100, column3=2013-2016.06.30</code>
-					</span>
-				</div>
-			</th>
+			<th>Search:</th>
 			<td>
 				<input name="s" size="50" value='$R{query.s}'>
 			</td>
-		</tr>
-		<tr>
-			<th>
+			<td>
 				<div class="tooltip">
-					View <small>(?)</small>:
+					<small>(?)</small>
 					<span class="tooltiptext">
-						Comma-delimited list of columns to display.
-						<br>Example: <code>column1, column2</code>
+						Comma-delimited list of key/value pair search terms.
+						<br>
+						<br>Keys are column names.  Values are search terms.
+						<br>
+						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1=foo*, column2&lt;100, column3=2013-2016.06.30]</code>
+						<br>
+						<br><b>String fields:</b>
+						<br> - <code>'*'</code> represents any character
+						<br> - <code>'?'</code> represents one character
+						<br> - Use single or double quotes for phrases
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column='foo bar']</code> - The term 'foo bar'
+						<br> - Multiple search terms are ORed 
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=foo bar]</code> - 'foo' OR 'bar'
+						<br> - Prepend <code>'+'</code> on tokens that must match
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=+foo* +*bar]</code> - Start with 'foo' AND end with 'bar'.
+						<br> - Prepend <code>'-'</code> on tokens that must not match 
+						<br>&nbsp;&nbsp;&nbsp;e.g. <code>[column=+foo* -*bar]</code> - Start with 'foo' AND does not end with 'bar'.
+						<br>
+						<br><b>Numeric fields:</b>
+						<br><code>[column=123]</code> - A single number
+						<br><code>[column=1 2 3]</code>	- Multiple numbers
+						<br><code>[column=1-100]</code> - Between two numbers
+						<br><code>[column=1-100 200-300]</code> - Two ranges of numbers
+						<br><code>[column&gt;100]</code> - Greater than a number
+						<br><code>[column&gt;=100]</code> - Greater than or equal to a number
+						<br><code>[column=!123]</code> - Not a specific number
+						<br>
+						<br><b>Date/Calendar fields:</b>
+						<br><code>[column=2001]</code> - A specific year
+						<br><code>[column=2001.01.01.10.50]</code> - A specific time
+						<br><code>[column=&gt;2001]</code> - After a specific year
+						<br><code>[column=&gt;=2001]</code> - During or after a specific year
+						<br><code>[column=2001-2003.06.30]</code> - A date range
+						<br><code>[column=2001 2003 2005]</code> - Multiple ORed dates
 					</span>
 				</div>
-			</th>
+			</td>
+		</tr>
+		<tr>
+			<th>View:</th>
 			<td>
 				<input name="v" size="50" value='$R{query.v}'>
 			</td>
-		</tr>
-		<tr>
-			<th>
+			<td>
 				<div class="tooltip">
-					Sort <small>(?)</small>:
+					<small>(?)</small>
 					<span class="tooltiptext">
-						Comma-delimited list of columns to sort by.
-						<br>Columns can be suffixed with '-' to indicate descending order.
-						<br>Example: <code>column1, column2-</code>
+						Comma-delimited list of columns to display.
+						<br>
+						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1, column2]</code>
 					</span>
 				</div>
-			</th>
+			</td>
+		</tr>
+		<tr>
+			<th>Sort:</th>
 			<td>
 				<input name="o" size="50" value='$R{query.o}'>
 			</td>
+			<td>
+				<div class="tooltip">
+					<small>(?)</small>
+					<span class="tooltiptext">
+						Comma-delimited list of columns to sort by.
+						<br>Columns can be suffixed with '-' to indicate descending order.
+						<br>
+						<br><b>Example:</b>&nbsp;&nbsp;<code>[column1, column2-]</code>
+						<br>
+						<br><b>Notes:</b>
+						<br> - Columns containing collections/arrays/lists are sorted by size.
+					</span>
+				</div>
+			</td>
 		</tr>
 		<tr>
-			<th>
-				Page:
-			</th>
+			<th>Page:</th>
 			<td>
 				Position: <input name='p' type='number' style='width:50px' step=20 min=0 value='$R{query.p}'>
 				Limit: <input name='l' type='number' style='width:50px' step=20 min=0 value='$R{query.l}'>
-				Ignore-case: <input name='i' type='checkbox' value='true'>
+				<span style='float:right'>Ignore-case: <input name='i' type='checkbox' value='true'></span>
 			</td>
-		</tr>
+			<td>
+			</td>
+		</tr> 
 		<tr>
 			<th>
 				&nbsp;
 			</th>
-			<td style='float:right'>
+			<td colspan='2' style='text-align:right'>
 				<input type='reset' value='Reset'>
 				<input type='button' value='Cancel' onclick='getElementById("query").classList.add("hidden")'>
 				<input type="submit" value='Submit'>

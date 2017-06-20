@@ -55,7 +55,7 @@ public @interface RemoteMethod {
 	String path() default "";
 
 	/**
-	 * Defines whether to use <code>GET</code> or <code>POST</code> for REST calls.
+	 * Defines the HTTP method to use for REST calls.
 	 * <p>
 	 * Possible values:
 	 * <ul>
@@ -66,4 +66,31 @@ public @interface RemoteMethod {
 	 * The default value is <js>"POST"</js>.
 	 */
 	String httpMethod() default "POST";
+
+	/**
+	 * The value the remoteable method returns.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li>{@link ReturnValue#BODY} (default) - The body of the HTTP response converted to a POJO.
+	 * 		<br>The return type on the Java method can be any of the following:
+	 * 		<ul>
+	 * 			<li><jk>void</jk> - Don't parse any response.  Note that the method will still throw an exception if an
+	 * 					error HTTP status is returned.
+	 * 			<li>Any parsable POJO - The body of the response will be converted to the POJO using the parser defined
+	 * 					on the <code>RestClient</code>.
+	 * 			<li><code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner
+	 * 					<code>HttpClient</code>.
+	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
+	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
+	 * 		</ul>
+	 * 	<li>{@link ReturnValue#HTTP_STATUS} - The HTTP status code on the response.
+	 * 		<br>The return type on the Java method can be any of the following:
+	 * 		<ul>
+	 * 			<li><jk>int</jk>/<code>Integer</code> - The HTTP response code.
+	 * 			<li><jk>boolean</jk>/<code>Boolean</code> - <jk>true</jk> if the response code is <code>&lt;400</code>
+	 * 		</ul>
+	 * </ul>
+	 */
+	ReturnValue returns() default ReturnValue.BODY;
 }

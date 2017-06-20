@@ -2147,6 +2147,55 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		assertEquals("OK", r);
 	}
 
+	//--------------------------------------------------------------------------------
+	// @RemoteableMethod(returns=HTTP_STATUS)
+	//--------------------------------------------------------------------------------
+	@Test
+	public void i01a() throws Exception {
+		int r = proxy.httpStatusReturnInt200();
+		assertEquals(200, r);
+	}
+
+	@Test
+	public void i01b() throws Exception {
+		Integer r = proxy.httpStatusReturnInteger200();
+		assertEquals(200, r.intValue());
+	}
+
+	@Test
+	public void i01c() throws Exception {
+		int r = proxy.httpStatusReturnInt404();
+		assertEquals(404, r);
+	}
+
+	@Test
+	public void i01d() throws Exception {
+		Integer r = proxy.httpStatusReturnInteger404();
+		assertEquals(404, r.intValue());
+	}
+
+	@Test
+	public void i02a() throws Exception {
+		boolean r = proxy.httpStatusReturnBool200();
+		assertEquals(true, r);
+	}
+
+	@Test
+	public void i02b() throws Exception {
+		Boolean r = proxy.httpStatusReturnBoolean200();
+		assertEquals(true, r);
+	}
+
+	@Test
+	public void i02c() throws Exception {
+		boolean r = proxy.httpStatusReturnBool404();
+		assertEquals(false, r);
+	}
+
+	public void i02d() throws Exception {
+		Boolean r = proxy.httpStatusReturnBoolean404();
+		assertEquals(false, r);
+	}
 
 	//--------------------------------------------------------------------------------
 	// Proxy class
@@ -3716,6 +3765,32 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/setEnum1d3dListMap")
 		void setEnum1d3dListMap(@Body Map<TestEnum,List<TestEnum[][][]>> x);
+
+		// Method returns status code
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		int httpStatusReturnInt200();
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		Integer httpStatusReturnInteger200();
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		int httpStatusReturnInt404();
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		Integer httpStatusReturnInteger404();
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		boolean httpStatusReturnBool200();
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		Boolean httpStatusReturnBoolean200();
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		boolean httpStatusReturnBool404();
+
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		Boolean httpStatusReturnBoolean404();
 	}
 
 	// Bean for testing NE annotations.

@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.test.pojos.*;
 import org.apache.juneau.utils.*;
@@ -1720,4 +1721,17 @@ public class ThirdPartyProxyResource extends ResourceJena {
 		return "OK";
 	}
 
+	//--------------------------------------------------------------------------------
+	// @RemoteableMethod(returns=HTTP_STATUS)
+	//--------------------------------------------------------------------------------
+
+	@RestMethod(name="GET", path="/httpStatusReturn200")
+	public void httpStatusReturn200(RestResponse res) {
+		res.setStatus(200);
+	}
+
+	@RestMethod(name="GET", path="/httpStatusReturn404")
+	public void httpStatusReturn404(RestResponse res) {
+		res.setStatus(404);
+	}
 }

@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Class-related utility methods.
@@ -923,4 +924,34 @@ public final class ClassUtils {
 		}
 		return l;
 	}
+
+	/**
+	 * Returns the default value for the specified primitive class.
+	 *
+	 * @param primitiveClass The primitive class to get the default value for.
+	 * @return The default value, or <jk>null</jk> if the specified class is not a primitive class.
+	 */
+	public static Object getPrimitiveDefault(Class<?> primitiveClass) {
+		return primitiveDefaultMap.get(primitiveClass);
+	}
+
+	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
+		new AMap<Class<?>,Object>()
+			.append(Boolean.TYPE, false)
+			.append(Character.TYPE, (char)0)
+			.append(Short.TYPE, (short)0)
+			.append(Integer.TYPE, 0)
+			.append(Long.TYPE, 0l)
+			.append(Float.TYPE, 0f)
+			.append(Double.TYPE, 0d)
+			.append(Byte.TYPE, (byte)0)
+			.append(Boolean.class, false)
+			.append(Character.class, (char)0)
+			.append(Short.class, (short)0)
+			.append(Integer.class, 0)
+			.append(Long.class, 0l)
+			.append(Float.class, 0f)
+			.append(Double.class, 0d)
+			.append(Byte.class, (byte)0)
+	);
 }

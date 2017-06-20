@@ -30,6 +30,7 @@ import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
@@ -642,7 +643,21 @@ public class RestClient extends CoreObject {
 								rc.input(otherArgs);
 							}
 
-							return rc.getResponse(method.getGenericReturnType());
+							if (rmm.getReturns() == ReturnValue.HTTP_STATUS) {
+								rc.ignoreErrors();
+								int returnCode = rc.run();
+								Class<?> rt = method.getReturnType();
+								if (rt == Integer.class || rt == int.class)
+									return returnCode;
+								if (rt == Boolean.class || rt == boolean.class)
+									return returnCode < 400;
+								throw new RestCallException("Invalid return type on method annotated with @RemoteableMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
+							}
+
+							Object v = rc.getResponse(method.getGenericReturnType());
+							if (v == null && method.getReturnType().isPrimitive())
+								v = ClassUtils.getPrimitiveDefault(method.getReturnType());
+							return v;
 
 						} catch (RestCallException e) {
 							// Try to throw original exception if possible.

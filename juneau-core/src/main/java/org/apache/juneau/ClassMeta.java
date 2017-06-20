@@ -111,15 +111,6 @@ public final class ClassMeta<T> implements Type {
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
 
-	private static final Boolean BOOLEAN_DEFAULT = false;
-	private static final Character CHARACTER_DEFAULT = (char)0;
-	private static final Short SHORT_DEFAULT = (short)0;
-	private static final Integer INTEGER_DEFAULT = 0;
-	private static final Long LONG_DEFAULT = 0l;
-	private static final Float FLOAT_DEFAULT = 0f;
-	private static final Double DOUBLE_DEFAULT = 0d;
-	private static final Byte BYTE_DEFAULT = (byte)0;
-
 	private ReadWriteLock lock = new ReentrantReadWriteLock(false);
 	private Lock rLock = lock.readLock(), wLock = lock.writeLock();
 
@@ -521,41 +512,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			if (c.isPrimitive()) {
-				if (c == Boolean.TYPE)
-					primitiveDefault = BOOLEAN_DEFAULT;
-				else if (c == Character.TYPE)
-					primitiveDefault = CHARACTER_DEFAULT;
-				else if (c == Short.TYPE)
-					primitiveDefault = SHORT_DEFAULT;
-				else if (c == Integer.TYPE)
-					primitiveDefault = INTEGER_DEFAULT;
-				else if (c == Long.TYPE)
-					primitiveDefault = LONG_DEFAULT;
-				else if (c == Float.TYPE)
-					primitiveDefault = FLOAT_DEFAULT;
-				else if (c == Double.TYPE)
-					primitiveDefault = DOUBLE_DEFAULT;
-				else if (c == Byte.TYPE)
-					primitiveDefault = BYTE_DEFAULT;
-			} else {
-				if (c == Boolean.class)
-					primitiveDefault = BOOLEAN_DEFAULT;
-				else if (c == Character.class)
-					primitiveDefault = CHARACTER_DEFAULT;
-				else if (c == Short.class)
-					primitiveDefault = SHORT_DEFAULT;
-				else if (c == Integer.class)
-					primitiveDefault = INTEGER_DEFAULT;
-				else if (c == Long.class)
-					primitiveDefault = LONG_DEFAULT;
-				else if (c == Float.class)
-					primitiveDefault = FLOAT_DEFAULT;
-				else if (c == Double.class)
-					primitiveDefault = DOUBLE_DEFAULT;
-				else if (c == Byte.class)
-					primitiveDefault = BYTE_DEFAULT;
-			}
+			primitiveDefault = ClassUtils.getPrimitiveDefault(c);
 
 			for (Method m : c.getMethods())
 				if (isPublic(m) && isNotDeprecated(m))

@@ -37,6 +37,7 @@ public class RemoteableMethodMeta {
 	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, requestBeanArgs;
 	private final Integer[] otherArgs;
 	private final Integer bodyArg;
+	private final ReturnValue returnValue;
 
 	/**
 	 * Constructor.
@@ -55,6 +56,7 @@ public class RemoteableMethodMeta {
 		this.requestBeanArgs = b.requestBeanArgs.toArray(new RemoteMethodArg[b.requestBeanArgs.size()]);
 		this.otherArgs = b.otherArgs.toArray(new Integer[b.otherArgs.size()]);
 		this.bodyArg = b.bodyArg;
+		this.returnValue = b.returnValue;
 	}
 
 	private static class Builder {
@@ -68,6 +70,7 @@ public class RemoteableMethodMeta {
 		private List<Integer>
 			otherArgs = new LinkedList<Integer>();
 		private Integer bodyArg;
+		private ReturnValue returnValue;
 
 		private Builder(String restUrl, Method m) {
 			Remoteable r = m.getDeclaringClass().getAnnotation(Remoteable.class);
@@ -82,6 +85,8 @@ public class RemoteableMethodMeta {
 
 			if (! isOneOf(methodPaths, "NAME", "SIGNATURE"))
 				throw new RemoteableMetadataException(m, "Invalid value specified for @Remoteable.methodPaths() annotation.  Valid values are [NAME,SIGNATURE].");
+
+			returnValue = rm == null ? ReturnValue.BODY : rm.returns();
 
 			url =
 				trimSlashes(restUrl)
@@ -205,5 +210,13 @@ public class RemoteableMethodMeta {
 	 */
 	public Integer getBodyArg() {
 		return bodyArg;
+	}
+
+	/**
+	 * Returns whether the method returns the HTTP response body or status code.
+	 * @return Whether the method returns the HTTP response body or status code.
+	 */
+	public ReturnValue getReturns() {
+		return returnValue;
 	}
 }

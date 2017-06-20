@@ -811,7 +811,7 @@ class CallMethod implements Comparable<CallMethod>  {
 			throw new RestException(SC_BAD_REQUEST,
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
 				method.toString(), getReadableClassNames(args)
-			);
+			).initCause(e);
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
 			if (e2 instanceof RestException)
