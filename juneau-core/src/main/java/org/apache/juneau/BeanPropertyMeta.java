@@ -129,7 +129,7 @@ public class BeanPropertyMeta {
 				if (p != null) {
 					swap = getPropertyPojoSwap(p);
 					if (! p.properties().isEmpty())
-						properties = split(p.properties(), ',');
+						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 				}
 			}
@@ -143,7 +143,7 @@ public class BeanPropertyMeta {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
-						properties = split(p.properties(), ',');
+						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 				}
 			}
@@ -157,7 +157,7 @@ public class BeanPropertyMeta {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
-						properties = split(p.properties(), ',');
+						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 				}
 			}

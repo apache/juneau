@@ -77,7 +77,7 @@ public class SearchArgs {
 		 */
 		public Builder search(String searchTerms) {
 			if (searchTerms != null) {
-				for (String s : StringUtils.split(searchTerms, ',')) {
+				for (String s : StringUtils.split(searchTerms)) {
 					int i = StringUtils.indexOf(s, '=', '>', '<');
 					if (i == -1)
 						throw new RuntimeException("Invalid search terms: '"+searchTerms+"'");
@@ -122,7 +122,7 @@ public class SearchArgs {
 		 */
 		public Builder view(String columns) {
 			if (columns != null)
-				return view(Arrays.asList(StringUtils.split(columns, ',')));
+				return view(Arrays.asList(StringUtils.split(columns)));
 			return this;
 		}
 
@@ -162,7 +162,7 @@ public class SearchArgs {
 		 */
 		public Builder sort(String sortArgs) {
 			if (sortArgs != null)
-				sort(Arrays.asList(StringUtils.split(sortArgs, ',')));
+				sort(Arrays.asList(StringUtils.split(sortArgs)));
 			return this;
 		}
 

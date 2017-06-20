@@ -13,12 +13,14 @@
 package org.apache.juneau.rest.test;
 
 import java.text.*;
+import java.util.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
 import org.junit.Assert;
+import org.junit.ComparisonFailure;
 
 import junit.framework.*;
 
@@ -75,5 +77,19 @@ public class TestUtils {
 		System.err.println("*** Response-Start *********************************************************************************"); // NOT DEBUG
 		System.err.println(r); // NOT DEBUG
 		System.err.println("*** Response-End ***********************************************************************************"); // NOT DEBUG
+	}
+
+	public static void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
+		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
+
+		if (e.length != a.length)
+			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
+
+		Arrays.sort(e);
+		Arrays.sort(a);
+
+		for (int i = 0; i < e.length; i++)
+			if (! e[i].equals(a[i]))
+				throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
 	}
 }

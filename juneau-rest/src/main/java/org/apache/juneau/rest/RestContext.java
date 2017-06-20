@@ -631,7 +631,7 @@ public final class RestContext extends Context {
 			defaultCharset = ps.getProperty(REST_defaultCharset, String.class, "utf-8");
 			paramFormat = ps.getProperty(REST_paramFormat, String.class, "");
 
-			for (String m : split(ps.getProperty(REST_allowMethodParam, String.class, ""), ','))
+			for (String m : split(ps.getProperty(REST_allowMethodParam, String.class, "")))
 				if (m.equals("true"))  // For backwards compatibility when this was a boolean field.
 					allowMethodParams.add("*");
 				else
@@ -701,7 +701,7 @@ public final class RestContext extends Context {
 				for (Object o : sc.styleSheets) {
 					if (o instanceof Pair) {
 						Pair<Class<?>,String> p = (Pair<Class<?>,String>)o;
-						for (String path : split(vr.resolve(StringUtils.toString(p.second())), ','))
+						for (String path : split(vr.resolve(StringUtils.toString(p.second()))))
 							if (path.startsWith("file://"))
 								contents.add(new FileInputStream(path));
 							else

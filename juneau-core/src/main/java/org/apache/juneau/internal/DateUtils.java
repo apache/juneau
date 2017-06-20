@@ -107,6 +107,18 @@ public final class DateUtils {
 	}
 
 	/**
+	 * Parses an ISO8601 string and converts it to a {@link Calendar}.
+	 * 
+	 * @param s The string to parse.
+	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
+	 */
+	public static Calendar parseISO8601Calendar(String s) {
+		if (StringUtils.isEmpty(s))
+			return null;
+		return DatatypeConverter.parseDateTime(toValidISO8601DT(s));
+	}
+
+	/**
 	 * Formats the given date according to the RFC 1123 pattern.
 	 *
 	 * @param date The date to format.
@@ -138,10 +150,6 @@ public final class DateUtils {
 	 */
 	public static void clearThreadLocal() {
 		DateFormatHolder.clearThreadLocal();
-	}
-
-	/** This class should not be instantiated. */
-	private DateUtils() {
 	}
 
 	/**

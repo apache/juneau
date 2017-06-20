@@ -69,7 +69,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 		Set<MediaTypeRange> ranges = new TreeSet<MediaTypeRange>();
 
-		for (String r : StringUtils.split(value, ',')) {
+		for (String r : StringUtils.split(value)) {
 			r = r.trim();
 
 			if (r.isEmpty())

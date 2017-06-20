@@ -577,7 +577,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 		String s = getString(key);
 		if (s == null)
 			return def;
-		String[] r = StringUtils.isEmpty(s) ? new String[0] : split(s, ',');
+		String[] r = StringUtils.isEmpty(s) ? new String[0] : split(s);
 		return r.length == 0 ? def : r;
 	}
 

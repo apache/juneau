@@ -219,7 +219,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 				default: throw new RuntimeException("Programmer error");
 			}
 
-			for (String p : split(sslOpts.getProtocols(), ',')) {
+			for (String p : split(sslOpts.getProtocols())) {
 				try {
 					TrustManager tm = new SimpleX509TrustManager(sslOpts.getCertValidate() == SSLOpts.CertValidate.LAX);
 

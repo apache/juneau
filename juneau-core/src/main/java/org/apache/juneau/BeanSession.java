@@ -488,7 +488,7 @@ public class BeanSession extends Session {
 				else if (startsWith(value.toString(), '['))
 					return (T)toArray(type, new ObjectList(value.toString()).setBeanSession(this));
 				else
-					return (T)toArray(type, new ObjectList((Object[])StringUtils.split(value.toString(), ',')).setBeanSession(this));
+					return (T)toArray(type, new ObjectList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
 			}
 
 			// Target type is some sort of Map that needs to be converted.

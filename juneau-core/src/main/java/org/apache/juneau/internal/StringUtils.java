@@ -454,6 +454,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] split(String s) {
+		return split(s, ',');
+	}
+
+	/**
 	 * Splits a character-delimited string into a string array.
 	 * Does not split on escaped-delimiters (e.g. "\,");
 	 * Resulting tokens are trimmed of whitespace.
@@ -470,7 +480,7 @@ public final class StringUtils {
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
-	 * @return The tokens.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
 	public static String[] split(String s, char c) {
 

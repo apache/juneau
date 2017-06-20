@@ -483,30 +483,30 @@ public class StringUtilsTest {
 	public void testSplit() throws Exception {
 		String[] r;
 
-		assertNull(split((String)null, ','));
-		assertObjectEquals("[]", split("", ','));
-		assertObjectEquals("['1']", split("1", ','));
-		assertObjectEquals("['1','2']", split("1,2", ','));
-		assertObjectEquals("['1,2']", split("1\\,2", ','));
+		assertNull(split((String)null));
+		assertObjectEquals("[]", split(""));
+		assertObjectEquals("['1']", split("1"));
+		assertObjectEquals("['1','2']", split("1,2"));
+		assertObjectEquals("['1,2']", split("1\\,2"));
 
-		r = split("1\\\\,2", ',');
+		r = split("1\\\\,2");
 		assertEquals("1\\", r[0]);
 		assertEquals("2", r[1]);
 
-		r = split("1\\\\\\,2", ',');
+		r = split("1\\\\\\,2");
 		assertEquals(1, r.length);
 		assertEquals("1\\,2", r[0]);
 
-		r = split("1,2\\", ',');
+		r = split("1,2\\");
 		assertEquals("2\\", r[1]);
 
-		r = split("1,2\\\\", ',');
+		r = split("1,2\\\\");
 		assertEquals("2\\", r[1]);
 
-		r = split("1,2\\,", ',');
+		r = split("1,2\\,");
 		assertEquals("2,", r[1]);
 
-		r = split("1,2\\\\,", ',');
+		r = split("1,2\\\\,");
 		assertEquals("2\\", r[1]);
 		assertEquals("", r[2]);
 	}

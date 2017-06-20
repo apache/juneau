@@ -213,6 +213,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return (o == null ? def : o);
 	}
 
+	/**
+	 * Shorthand method for calling {@link #setAttribute(String, Object)} fluently.
+	 *
+	 * @param name The request attribute name.
+	 * @param value The request attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest attr(String name, Object value) {
+		setAttribute(name, value);
+		return this;
+	}
+
 
 	//--------------------------------------------------------------------------------
 	// Properties
@@ -235,6 +247,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public ObjectMap getProperties() {
 		return this.properties;
+	}
+	
+	/**
+	 * Shortcut for calling <code>getProperties().append(name, value);</code> fluently.
+	 * 
+	 * @param name The property name.
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest prop(String name, Object value) {
+		this.properties.append(name, value);
+		return this;
 	}
 
 

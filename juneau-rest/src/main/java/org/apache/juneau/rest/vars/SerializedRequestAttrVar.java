@@ -51,7 +51,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 			int i = key.indexOf(',');
 			if (i == -1)
 				throw new RuntimeException("Invalid format for $SA var.  Must be of the format $SA{contentType,key[,defaultValue]}");
-			String[] s2 = split(key, ',');
+			String[] s2 = split(key);
 			RestRequest req = session.getSessionObject(RestRequest.class, RequestVar.SESSION_req);
 			if (req != null) {
 				Object o = req.getAttribute(key);

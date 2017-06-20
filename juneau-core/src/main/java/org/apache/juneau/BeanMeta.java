@@ -211,7 +211,7 @@ public class BeanMeta<T> {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
 						constructor = (Constructor<T>)x;
-						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties(), ',');
+						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties());
 						if (constructorArgs.length != x.getParameterTypes().length)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
 						if (! setAccessible(constructor))
@@ -441,7 +441,7 @@ public class BeanMeta<T> {
 			if (! name.isEmpty()) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
-				throw new BeanRuntimeException(classMeta.getInnerClass(), "Method property ''{0}'' identified in @BeanProperty, but missing from @Bean", name);
+				return null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties.
 			}
 			name = propertyNamer.getPropertyName(f.getName());
 			if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
@@ -604,9 +604,10 @@ public class BeanMeta<T> {
 						n = bpName;
 						if (! fixedBeanProps.isEmpty())
 							if (! fixedBeanProps.contains(n))
-								throw new BeanRuntimeException(c, "Method property ''{0}'' identified in @BeanProperty, but missing from @Bean", n);
+								n = null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties
 					}
-					l.add(new BeanMethod(n, isSetter, m));
+					if (n != null)
+						l.add(new BeanMethod(n, isSetter, m));
 				}
 			}
 		}

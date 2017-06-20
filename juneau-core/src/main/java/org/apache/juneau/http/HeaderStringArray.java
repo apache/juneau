@@ -37,7 +37,7 @@ public class HeaderStringArray {
 	 * @param value The raw header value.
 	 */
 	protected HeaderStringArray(String value) {
-		this.value = StringUtils.split(value, ',');
+		this.value = StringUtils.split(value);
 	}
 
 	/**

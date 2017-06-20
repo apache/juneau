@@ -240,6 +240,12 @@ public abstract class RestServlet extends HttpServlet {
 	protected void log(Level level, Throwable cause, String msg, Object...args) {
 		if (context != null)
 			context.getLogger().log(level, cause, msg, args);
+		else {
+			// If context failed to initialize, log to the console.
+			System.err.println(MessageFormat.format(msg, args));
+			if (cause != null)
+				cause.printStackTrace();
+		}
 	}
 
 	@Override /* GenericServlet */

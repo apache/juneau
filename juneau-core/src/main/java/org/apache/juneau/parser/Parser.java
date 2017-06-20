@@ -146,7 +146,7 @@ public abstract class Parser extends CoreObject {
 		if (c == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Consumes annotation", getClass().getName()));
 
-		String[] mt = split(c.value(), ',');
+		String[] mt = split(c.value());
 		this.mediaTypes = new MediaType[mt.length];
 		for (int i = 0; i < mt.length; i++) {
 			mediaTypes[i] = MediaType.forString(mt[i]);

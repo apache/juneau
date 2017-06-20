@@ -75,7 +75,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 		Set<StringRange> ranges = new TreeSet<StringRange>();
 
-		for (String r : StringUtils.split(value, ',')) {
+		for (String r : StringUtils.split(value)) {
 			r = r.trim();
 
 			if (r.isEmpty())

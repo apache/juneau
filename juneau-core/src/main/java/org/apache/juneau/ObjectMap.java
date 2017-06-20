@@ -602,7 +602,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public String[] getStringArray(String key) {
 		String s = get(String.class, key);
-		return (s == null ? new String[0] : split(s, ','));
+		return (s == null ? new String[0] : split(s));
 	}
 
 	/**
@@ -614,7 +614,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public String[] getStringArray(String key, String[] def) {
 		String s = get(String.class, key);
-		String[] r = (s == null ? new String[0] : split(s, ','));
+		String[] r = (s == null ? new String[0] : split(s));
 		return (r.length == 0 ? def : r);
 	}
 

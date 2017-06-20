@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
@@ -156,6 +157,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				for (Map.Entry<String,Object> e : propertyCache.entrySet())
 					put(e.getKey(), e.getValue());
 				propertyCache = null;
+			} catch (IllegalArgumentException e) {
+				throw new BeanRuntimeException("IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getName(), JsonSerializer.DEFAULT_LAX.toString(ClassUtils.getClasses(args)));
 			} catch (Exception e) {
 				throw new BeanRuntimeException(e);
 			}

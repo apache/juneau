@@ -84,7 +84,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			Map m = op.getMap(HTMLDOC_links, ctx.links);
 			links = ObjectUtils.isEmpty(m) ? null : new LinkedHashMap(m);
 			cssUrl = op.getString(HTMLDOC_cssUrl, ctx.cssUrl);
-			css = split(op.getString(HTMLDOC_css, null), ',');
+			css = split(op.getString(HTMLDOC_css, null));
 			nowrap = op.getBoolean(HTMLDOC_cssUrl, ctx.nowrap);
 			noResultsMessage = op.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, op.get(HTMLDOC_template, ctx.template));

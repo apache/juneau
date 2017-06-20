@@ -6184,12 +6184,18 @@
 				<br>Search columns containing lists and maps.
 				<br>Sort columns containing lists and maps.
 			<li>New {@link org.apache.juneau.remoteable.RemoteMethod#returns()} annotation.
+			<li>Fixed bugs with {@link org.apache.juneau.BeanContext#BEAN_includeProperties} and {@link org.apache.juneau.BeanContext#BEAN_excludeProperties} settings.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.rest.widgets.QueryWidget} improvements.
+			<li>{@link org.apache.juneau.rest.widget.QueryWidget} improvements.
 				<br>Fields are prefilled with current search arguments.
+			<li>Two convenience methods added to {@link org.apache.juneau.rest.RestRequest}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestRequest#attr(String,Object) attr(String,Object)}
+					<li>{@link org.apache.juneau.rest.RestRequest#prop(String,Object) prop(String,Object)}
+				</ul>
 		</ul>
 	</div>
 	

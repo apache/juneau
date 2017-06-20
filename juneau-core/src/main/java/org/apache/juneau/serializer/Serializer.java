@@ -56,7 +56,7 @@ public abstract class Serializer extends CoreObject {
 		if (p == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Produces annotation", getClass().getName()));
 
-		String[] mt = split(p.value(), ',');
+		String[] mt = split(p.value());
 		this.mediaTypes = new MediaType[mt.length];
 		for (int i = 0; i < mt.length; i++) {
 			mediaTypes[i] = MediaType.forString(mt[i]);

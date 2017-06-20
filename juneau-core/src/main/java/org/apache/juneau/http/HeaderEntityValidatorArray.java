@@ -39,7 +39,7 @@ public class HeaderEntityValidatorArray {
 	 * @param value The raw header value.
 	 */
 	protected HeaderEntityValidatorArray(String value) {
-		String[] s = StringUtils.split(value, ',');
+		String[] s = StringUtils.split(value);
 		this.value = new EntityValidator[s.length];
 		for (int i = 0; i < s.length; i++) {
 			this.value[i] = new EntityValidator(s[i]);

@@ -41,7 +41,7 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 			Bean b = li.previous();
 
 			if (! b.properties().isEmpty())
-				properties(split(b.properties(), ','));
+				properties(split(b.properties()));
 
 			if (! b.typeName().isEmpty())
 				typeName(b.typeName());
@@ -50,7 +50,7 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 				sortProperties(true);
 
 			if (! b.excludeProperties().isEmpty())
-				excludeProperties(split(b.excludeProperties(), ','));
+				excludeProperties(split(b.excludeProperties()));
 
 			if (b.propertyNamer() != PropertyNamerDefault.class)
 				propertyNamer(b.propertyNamer());

@@ -40,7 +40,7 @@ public abstract class DefaultingVar extends SimpleVar {
 		int i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());
-		String[] s2 = split(s, ',');
+		String[] s2 = split(s);
 		String v = resolve(session, s2[0]);
 		if (v == null)
 			v = s2[1];

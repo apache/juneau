@@ -271,7 +271,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return A new headers object.
 	 */
 	public RequestHeaders subset(String headers) {
-		return subset(split(headers, ','));
+		return subset(split(headers));
 	}
 
 	/**

@@ -146,11 +146,13 @@ class CallMethod implements Comparable<CallMethod>  {
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
+			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
+
 			try {
 
 				RestMethod m = method.getAnnotation(RestMethod.class);
 				if (m == null)
-					throw new RestServletException("@RestMethod annotation not found on method ''{0}.{1}''", method.getDeclaringClass().getName(), method.getName());
+					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
 				if (! m.description().isEmpty())
 					description = m.description();
@@ -260,9 +262,17 @@ class CallMethod implements Comparable<CallMethod>  {
 					for (Property p1 : m.properties())
 						sgb.property(p1.name(), p1.value());
 					if (! m.bpIncludes().isEmpty())
-						sgb.includeProperties((Map)JsonParser.DEFAULT.parse(m.bpIncludes(), Map.class, String.class, String.class));
+						try {
+							sgb.includeProperties((Map)JsonParser.DEFAULT.parse(m.bpIncludes(), Map.class, String.class, String.class));
+						} catch (ParseException e) {
+							throw new RestServletException("Invalid format for @RestMethod.bpIncludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpIncludes());
+						}
 					if (! m.bpExcludes().isEmpty())
-						sgb.excludeProperties((Map)JsonParser.DEFAULT.parse(m.bpExcludes(), Map.class, String.class, String.class));
+						try {
+							sgb.excludeProperties((Map)JsonParser.DEFAULT.parse(m.bpExcludes(), Map.class, String.class, String.class));
+						} catch (ParseException e) {
+							throw new RestServletException("Invalid format for @RestMethod.bpExcludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpExcludes());
+						}
 					sgb.beanFilters(m.beanFilters());
 					sgb.pojoSwaps(m.pojoSwaps());
 				}
@@ -304,7 +314,7 @@ class CallMethod implements Comparable<CallMethod>  {
 						try {
 							g.append(c);
 						} catch (Exception e) {
-							throw new RestServletException("Exception occurred while trying to instantiate Encoder ''{0}''", c.getSimpleName()).initCause(e);
+							throw new RestServletException("Exception occurred while trying to instantiate Encoder on method ''{0}'': ''{1}''", sig, c.getSimpleName()).initCause(e);
 						}
 					}
 					encoders = g.build();
@@ -314,7 +324,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				for (String s : m.defaultRequestHeaders()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
-						throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''name[:=]value''", s);
+						throw new RestServletException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 					defaultRequestHeaders.put(h[0], h[1]);
 				}
 
@@ -322,7 +332,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				for (String s : m.defaultQuery()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
-						throw new RestServletException("Invalid default query parameter specified: ''{0}''.  Must be in the format: ''name[:=]value''", s);
+						throw new RestServletException("Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 					defaultQuery.put(h[0], h[1]);
 				}
 
@@ -330,7 +340,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				for (String s : m.defaultFormData()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
-						throw new RestServletException("Invalid default form data parameter specified: ''{0}''.  Must be in the format: ''name[:=]value''", s);
+						throw new RestServletException("Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 					defaultFormData.put(h[0], h[1]);
 				}
 
@@ -376,7 +386,7 @@ class CallMethod implements Comparable<CallMethod>  {
 			} catch (RestServletException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new RestServletException("Exception occurred while initializing method ''{0}''", method.getName()).initCause(e);
+				throw new RestServletException("Exception occurred while initializing method ''{0}''", sig).initCause(e);
 			}
 		}
 	}

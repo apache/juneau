@@ -534,8 +534,6 @@ public class RestClient extends CoreObject {
 
 			String path = r == null ? "" : trimSlashes(r.path());
 			if (path.indexOf("://") == -1) {
-				if (path.isEmpty())
-					path = interfaceClass.getName();
 				if (rootUrl == null)
 					throw new RemoteableMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remoteable proxy.");
 				path = trimSlashes(rootUrl) + '/' + path;

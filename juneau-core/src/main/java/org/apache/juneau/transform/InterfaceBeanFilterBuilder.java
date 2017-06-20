@@ -44,7 +44,7 @@ public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
 			Bean b = li.previous();
 
 			if (! b.properties().isEmpty())
-				properties(split(b.properties(), ','));
+				properties(split(b.properties()));
 
 			if (! b.typeName().isEmpty())
 				typeName(b.typeName());
@@ -53,7 +53,7 @@ public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
 				sortProperties(true);
 
 			if (! b.excludeProperties().isEmpty())
-				excludeProperties(split(b.excludeProperties(), ','));
+				excludeProperties(split(b.excludeProperties()));
 
 			try {
 				if (b.propertyNamer() != PropertyNamerDefault.class)
