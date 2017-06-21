@@ -140,6 +140,7 @@
 				-->
 				<configuration>
 					<excludes>
+						<exclude>**/DEPENDENCIES</exclude>
 						<exclude>**/target/**</exclude>
 						<exclude>**/.settings/**</exclude>
 						<exclude>**/.project</exclude>

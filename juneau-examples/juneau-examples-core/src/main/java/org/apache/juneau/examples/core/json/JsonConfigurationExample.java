@@ -20,8 +20,7 @@
 package org.apache.juneau.examples.core.json;
 
 import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.json.JsonSerializerContext;
+import org.apache.juneau.json.JsonSerializerBuilder;
 
 public class JsonConfigurationExample {
 	public static void main(String[] args) throws Exception {
