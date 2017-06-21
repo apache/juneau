@@ -260,6 +260,13 @@ public @interface RestMethod {
 	Property[] properties() default {};
 
 	/**
+	 * Shortcut for setting {@link #properties()} of simple boolean types.
+	 * <p>
+	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
+	 */
+	String[] flags() default {};
+
+	/**
 	 * Appends the specified bean filters to all serializers and parsers used by this method.
 	 */
 	Class<?>[] beanFilters() default {};
@@ -280,7 +287,7 @@ public @interface RestMethod {
 	 * <p class='bcode'>
 	 *	<jc>// Our bean</jc>
 	 * 	<jk>public class</jk> MyBean {
-	 * 
+	 *
 	 * 		<jc>// Summary properties</jc>
 	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
 	 * 		<jk>public</jk> String <jf>id</jf>;

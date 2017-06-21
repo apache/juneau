@@ -179,6 +179,8 @@ public class RestConfig implements ServletConfig {
 				RestResource r = e.getValue();
 				for (Property p : r.properties())
 					properties.append(vr.resolve(p.name()), vr.resolve(p.value()));
+				for (String p : r.flags())
+					properties.append(p, true);
 				addSerializers(r.serializers());
 				addParsers(r.parsers());
 				addEncoders(r.encoders());

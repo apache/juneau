@@ -201,7 +201,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				ParserGroupBuilder pgb = null;
 				UrlEncodingParserBuilder uepb = null;
 
-				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpIncludes().length() > 0 || m.bpExcludes().length() > 0) {
+				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0 || m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpIncludes().length() > 0 || m.bpExcludes().length() > 0) {
 					sgb = new SerializerGroupBuilder();
 					pgb = new ParserGroupBuilder();
 					uepb = new UrlEncodingParserBuilder(urlEncodingParser.createPropertyStore());
@@ -261,6 +261,8 @@ class CallMethod implements Comparable<CallMethod>  {
 						sgb.properties(properties);
 					for (Property p1 : m.properties())
 						sgb.property(p1.name(), p1.value());
+					for (String p1 : m.flags())
+						sgb.property(p1, true);
 					if (! m.bpIncludes().isEmpty())
 						try {
 							sgb.includeProperties((Map)JsonParser.DEFAULT.parse(m.bpIncludes(), Map.class, String.class, String.class));
@@ -285,6 +287,8 @@ class CallMethod implements Comparable<CallMethod>  {
 						pgb.properties(properties);
 					for (Property p1 : m.properties())
 						pgb.property(p1.name(), p1.value());
+					for (String p1 : m.flags())
+						pgb.property(p1, true);
 					pgb.beanFilters(m.beanFilters());
 					pgb.pojoSwaps(m.pojoSwaps());
 				}
@@ -292,15 +296,18 @@ class CallMethod implements Comparable<CallMethod>  {
 				if (uepb != null) {
 					for (Property p1 : m.properties())
 						uepb.property(p1.name(), p1.value());
+					for (String p1 : m.flags())
+						uepb.property(p1, true);
 					uepb.beanFilters(m.beanFilters());
 					uepb.pojoSwaps(m.pojoSwaps());
 				}
 
-				if (m.properties().length > 0) {
+				if (m.properties().length > 0 || m.flags().length > 0) {
 					properties = new ObjectMap().setInner(properties);
-					for (Property p1 : m.properties()) {
+					for (Property p1 : m.properties())
 						properties.put(p1.name(), p1.value());
-					}
+					for (String p1 : m.flags())
+						properties.put(p1, true);
 				}
 
 				if (m.encoders().length > 0 || ! m.inheritEncoders()) {

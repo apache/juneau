@@ -193,6 +193,13 @@ public @interface RestResource {
 	Property[] properties() default {};
 
 	/**
+	 * Shortcut for setting {@link #properties()} of simple boolean types.
+	 * <p>
+	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
+	 */
+	String[] flags() default {};
+
+	/**
 	 * Specifies a list of {@link Serializer} classes to add to the list of serializers available for this servlet.
 	 * <p>
 	 * This annotation can only be used on {@link Serializer} classes that have no-arg constructors.

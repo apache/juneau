@@ -50,6 +50,8 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			
 			for (Property p : jp.properties())
 				properties.put(p.name(), p.value());
+			for (String p : jp.flags())
+				properties.put(p, true);
 
 			serializers = new SerializerGroupBuilder()
 				.append(jp.serializers())
@@ -84,6 +86,8 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (aa instanceof RestMethod) {
 				for (Property p : ((RestMethod)aa).properties())
 					m.put(p.name(), p.value());
+				for (String p : ((RestMethod)aa).flags())
+					m.put(p, true);
 			}
 		}
 		return m;

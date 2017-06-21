@@ -43,8 +43,8 @@ import org.apache.juneau.utils.*;
 	description="Log files from this service",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
-		@Property(name=REST_allowMethodParam, value="true")
 	},
+	flags={REST_allowMethodParam},
 	pojoSwaps={
 		IteratorSwap.class,       // Allows Iterators and Iterables to be serialized.
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
