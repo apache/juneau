@@ -273,10 +273,15 @@ public class HtmlSerializer extends XmlSerializer {
 			}
 
 			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
-			HtmlRender render = html.getRender();
+			HtmlRender render = (pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getRender());
+			if (render == null)
+				render = html.getRender();
 
-			if (o != null && render != null)
-				return serializeAnything(session, out, render.getContent(session, o), null, typeName, 2, pMeta, false);
+			if (render != null) {
+				Object o2 = render.getContent(session, o);
+				if (o2 != o)
+					return serializeAnything(session, out, o2, null, typeName, 2, null, false);
+			}
 
 			if (html.isAsXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsXml())) {
 				super.serializeAnything(session, out, o, null, null, null, false, XmlFormat.MIXED, false, false, null);
