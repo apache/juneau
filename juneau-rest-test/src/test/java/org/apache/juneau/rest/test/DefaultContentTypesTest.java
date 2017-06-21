@@ -62,7 +62,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s3'",
-				"Supported media-types: [text/s1, text/s2]"
+				"Supported media-types: ['text/s1','text/s2']"
 			);
 		}
 
@@ -72,7 +72,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p3'",
-				"Supported media-types: [text/p1, text/p2]"
+				"Supported media-types: ['text/p1','text/p2']"
 			);
 		}
 
@@ -82,7 +82,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p3'",
-				"Supported media-types: [text/p1, text/p2]"
+				"Supported media-types: ['text/p1','text/p2']"
 			);
 		}
 	}
@@ -104,7 +104,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -114,7 +114,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -124,7 +124,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -134,7 +134,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -144,7 +144,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -154,7 +154,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -164,7 +164,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -174,7 +174,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -184,7 +184,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s2'",
-				"Supported media-types: [text/s3]"
+				"Supported media-types: ['text/s3']"
 			);
 		}
 
@@ -240,7 +240,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 			// Note that parsers defined on method are listed before parsers defined on class.
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p4'",
-				"Supported media-types: [text/p3, text/p1, text/p2]"
+				"Supported media-types: ['text/p3','text/p1','text/p2']"
 			);
 		}
 
@@ -251,7 +251,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 			// Note that serializers defined on method are listed before serializers defined on class.
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
-				"Supported media-types: [text/s3, text/s1, text/s2]"
+				"Supported media-types: ['text/s3','text/s1','text/s2']"
 			);
 		}
 	}
@@ -280,7 +280,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'bad/*'",
-				"Supported media-types: [text/s1, text/s2]"
+				"Supported media-types: ['text/s1','text/s2']"
 			);
 		}
 
@@ -319,7 +319,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s1'",
-				"Supported media-types: [text/s3]"
+				"Supported media-types: ['text/s3']"
 			);
 		}
 
@@ -329,7 +329,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -339,7 +339,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -349,7 +349,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s2'",
-				"Supported media-types: [text/s3]"
+				"Supported media-types: ['text/s3']"
 			);
 		}
 
@@ -359,7 +359,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 
@@ -369,7 +369,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
-				"Supported media-types: [text/p3]"
+				"Supported media-types: ['text/p3']"
 			);
 		}
 

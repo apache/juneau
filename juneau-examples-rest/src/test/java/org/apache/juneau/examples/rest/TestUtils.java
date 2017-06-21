@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -28,6 +27,7 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
@@ -193,7 +193,7 @@ public class TestUtils {
 
 						String schema = schemas.get(namespaceURI);
 						if (schema == null)
-							throw new RuntimeException(MessageFormat.format("No schema found for namespaceURI ''{0}''", namespaceURI));
+							throw new FormattedRuntimeException("No schema found for namespaceURI ''{0}''", namespaceURI);
 
 						try {
 							DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();

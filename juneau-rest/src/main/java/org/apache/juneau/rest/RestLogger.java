@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 import java.util.logging.*;
@@ -235,8 +236,7 @@ public abstract class RestLogger {
 
 		@Override /* RestLogger */
 		protected void log(Level level, Throwable cause, String msg, Object...args) {
-			if (args.length > 0)
-				msg = MessageFormat.format(msg, args);
+			msg = format(msg, args);
 			getLogger().log(level, msg, cause);
 		}
 	}

@@ -42,7 +42,7 @@ public class SerializersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/b'",
-				"Supported media-types: [text/a, ");
+				"Supported media-types: ['text/a',");
 		}
 
 		r = client.doGet(url).accept("text/json").getResponseAsString();
@@ -62,7 +62,7 @@ public class SerializersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/a'",
-				"Supported media-types: [text/b]"
+				"Supported media-types: ['text/b']"
 			);
 		}
 
@@ -72,7 +72,7 @@ public class SerializersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/json'",
-				"Supported media-types: [text/b]"
+				"Supported media-types: ['text/b']"
 			);
 		}
 	}
@@ -124,7 +124,7 @@ public class SerializersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/bad'",
-				"Supported media-types: [text/a");
+				"Supported media-types: ['text/a");
 		}
 	}
 }

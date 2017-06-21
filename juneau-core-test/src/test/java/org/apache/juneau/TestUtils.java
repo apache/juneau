@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -196,7 +195,7 @@ public class TestUtils {
 
 						String schema = schemas.get(namespaceURI);
 						if (schema == null)
-							throw new RuntimeException(MessageFormat.format("No schema found for namespaceURI ''{0}''", namespaceURI));
+							throw new FormattedRuntimeException("No schema found for namespaceURI ''{0}''", namespaceURI);
 
 						try {
 							DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
@@ -485,14 +484,14 @@ public class TestUtils {
 		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
 		
 		if (e.length != a.length)
-			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
+			throw new ComparisonFailure(format(msg, args), expected, actual);
 		
 		Arrays.sort(e);
 		Arrays.sort(a);
 		
 		for (int i = 0; i < e.length; i++)
 			if (! e[i].equals(a[i]))
-				throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
+				throw new ComparisonFailure(format(msg, args), expected, actual);
 	}
 
 	/**
@@ -502,7 +501,7 @@ public class TestUtils {
 		if ("xxx".equals(expected))
 			System.err.println("actual=["+actual+"]");
 		if (! isEquals(expected, actual))
-			throw new ComparisonFailure(MessageFormat.format(msg, args), toString(expected), toString(actual));			
+			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));			
 	}
 	
 	/**

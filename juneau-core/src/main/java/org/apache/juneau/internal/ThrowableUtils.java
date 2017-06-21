@@ -14,6 +14,8 @@ package org.apache.juneau.internal;
 
 import java.text.*;
 
+import org.apache.juneau.*;
+
 /**
  * Various utility methods for creating and working with throwables.
  */
@@ -29,7 +31,7 @@ public class ThrowableUtils {
 	 */
 	public static void assertNotNull(Object o, String msg, Object...args) throws IllegalArgumentException {
 		if (o == null)
-			throw new IllegalArgumentException(MessageFormat.format(msg, args));
+			throw new FormattedIllegalArgumentException(msg, args);
 	}
 
 	/**
@@ -41,7 +43,7 @@ public class ThrowableUtils {
 	 */
 	public static void assertFieldNotNull(Object fieldValue, String fieldName) throws IllegalArgumentException {
 		if (fieldValue == null)
-			throw new IllegalArgumentException("Field '" + fieldName + "' cannot be null.");
+			throw new FormattedIllegalArgumentException("Field ''{0}'' cannot be null.", fieldName);
 	}
 
 	/**
@@ -53,7 +55,7 @@ public class ThrowableUtils {
 	 */
 	public static void assertFieldPositive(int fieldValue, String fieldName) throws IllegalArgumentException {
 		if (fieldValue <= 0)
-			throw new IllegalArgumentException("Field '" + fieldName + "' must be a positive integer.");
+			throw new FormattedIllegalArgumentException("Field ''{0}'' must be a positive integer.", fieldName);
 	}
 
 	/**
@@ -64,7 +66,7 @@ public class ThrowableUtils {
 	 * @throws IllegalArgumentException
 	 */
 	public static void illegalArg(String msg, Object...args) throws IllegalArgumentException {
-		throw new IllegalArgumentException(MessageFormat.format(msg, args));
+		throw new FormattedIllegalArgumentException(msg, args);
 	}
 
 	/**
@@ -77,6 +79,6 @@ public class ThrowableUtils {
 	 */
 	public static void assertSameThread(long threadId, String msg, Object...args) throws IllegalStateException {
 		if (Thread.currentThread().getId() != threadId)
-			throw new IllegalArgumentException(MessageFormat.format(msg, args));
+			throw new FormattedIllegalArgumentException(msg, args);
 	}
 }

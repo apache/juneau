@@ -14,11 +14,11 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.beans.*;
 import java.io.*;
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -1074,7 +1074,7 @@ public class BeanContext extends Context {
 			int ctCount = 0;
 			for (Map<Class,ClassMeta> cm : cmCacheCache.values())
 				ctCount += cm.size();
-			System.out.println(MessageFormat.format("ClassMeta cache: {0} instances in {1} caches", ctCount, cmCacheCache.size())); // NOT DEBUG
+			System.out.println(format("ClassMeta cache: {0} instances in {1} caches", ctCount, cmCacheCache.size())); // NOT DEBUG
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

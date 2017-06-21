@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.net.*;
 import java.text.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -120,10 +121,7 @@ public final class Redirect {
 		this.httpResponseCode = httpResponseCode;
 		if (url == null)
 			url = "";
-		if (args != null && args.length > 0)
-			this.uri = StringUtils.toURI(MessageFormat.format(url.toString(), args));
-		else
-			this.uri = StringUtils.toURI(url);
+		this.uri = toURI(format(url.toString(), args));
 	}
 
 	/**

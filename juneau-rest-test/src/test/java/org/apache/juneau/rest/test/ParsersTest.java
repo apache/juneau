@@ -41,7 +41,7 @@ public class ParsersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/b'",
-				"Supported media-types: [text/a"
+				"Supported media-types: ['text/a"
 			);
 		}
 
@@ -66,7 +66,7 @@ public class ParsersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/a'",
-				"Supported media-types: [text/b]"
+				"Supported media-types: ['text/b']"
 			);
 		}
 
@@ -76,7 +76,7 @@ public class ParsersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/json'",
-				"Supported media-types: [text/b]"
+				"Supported media-types: ['text/b']"
 			);
 		}
 	}
@@ -131,7 +131,7 @@ public class ParsersTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/bad'",
-				"Supported media-types: [text/a"
+				"Supported media-types: ['text/a"
 			);
 		}
 	}

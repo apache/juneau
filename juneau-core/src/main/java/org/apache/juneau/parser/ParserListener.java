@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import java.text.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
 
@@ -38,7 +38,7 @@ public class ParserListener {
 	 * @param col The column number where the unknown property was found (-1 if parser doesn't support line/column indicators).
 	 */
 	public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
-		onError(session, null, MessageFormat.format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at line {2} column {3}", propertyName, beanClass, line, col));
+		onError(session, null, format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at line {2} column {3}", propertyName, beanClass, line, col));
 	}
 
 	/**

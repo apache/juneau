@@ -57,7 +57,7 @@ public final class ClassMeta<T> implements Type {
 
 	/** Class categories. */
 	enum ClassCategory {
-		MAP, COLLECTION, CLASS, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM, VOID, ARGS
+		MAP, COLLECTION, CLASS, METHOD, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM, VOID, ARGS
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
@@ -367,6 +367,8 @@ public final class ClassMeta<T> implements Type {
 					cc = ENUM;
 				else if (c.equals(Class.class))
 					cc = CLASS;
+				else if (isParentClass(Method.class, c))
+					cc = METHOD;
 				else if (isParentClass(CharSequence.class, c)) {
 					if (c.equals(String.class))
 						cc = STR;
@@ -942,6 +944,15 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isClass() {
 		return cc == CLASS;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is {@link Method}.
+	 *
+	 * @return <jk>true</jk> if this class is {@link Method}.
+	 */
+	public boolean isMethod() {
+		return cc == METHOD;
 	}
 
 	/**

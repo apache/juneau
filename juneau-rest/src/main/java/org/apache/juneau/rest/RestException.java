@@ -12,8 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.reflect.*;
 import java.text.*;
+
+import org.apache.juneau.*;
 
 /**
  * Exception thrown to trigger an error HTTP status.
@@ -22,7 +26,7 @@ import java.text.*;
  * 	this exception to trigger an HTTP status other than the automatically-generated
  * 	<code>404</code>, <code>405</code>, and <code>500</code> statuses.
  */
-public class RestException extends RuntimeException {
+public class RestException extends FormattedRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,7 +41,7 @@ public class RestException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestException(int status, String msg, Object...args) {
-		super(args.length == 0 ? msg : MessageFormat.format(msg, args));
+		super(msg, args);
 		this.status = status;
 	}
 
@@ -108,9 +112,9 @@ public class RestException extends RuntimeException {
 				msg = msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 			String cls = e.getClass().getSimpleName();
 			if (msg == null)
-				sb.append(MessageFormat.format("\nCaused by ({0})", cls));
+				sb.append(format("\nCaused by ({0})", cls));
 			else
-				sb.append(MessageFormat.format("\nCaused by ({0}): {1}", cls, msg));
+				sb.append(format("\nCaused by ({0}): {1}", cls, msg));
 			e = e.getCause();
 		}
 		return sb.toString();

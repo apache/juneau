@@ -42,7 +42,7 @@ public class GroupsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'application/json'",
-				"Supported media-types: [text/s1, text/s2]"
+				"Supported media-types: ['text/s1','text/s2']"
 			);
 		}
 
@@ -58,7 +58,7 @@ public class GroupsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s3'",
-				"Supported media-types: [text/s1, text/s2]"
+				"Supported media-types: ['text/s1','text/s2']"
 			);
 		}
 
@@ -68,7 +68,7 @@ public class GroupsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/json'",
-				"Supported media-types: [text/s1, text/s2]"
+				"Supported media-types: ['text/s1','text/s2']"
 			);
 		}
 
@@ -78,7 +78,7 @@ public class GroupsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/json'",
-				"Supported media-types: [text/p1, text/p2]"
+				"Supported media-types: ['text/p1','text/p2']"
 			);
 		}
 
@@ -93,7 +93,7 @@ public class GroupsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s3'",
-				"Supported media-types: [text/s1, text/s2]"
+				"Supported media-types: ['text/s1','text/s2']"
 			);
 		}
 
@@ -102,7 +102,7 @@ public class GroupsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p3'",
-				"Supported media-types: [text/p1, text/p2]"
+				"Supported media-types: ['text/p1','text/p2']"
 			);
 		}
 	}

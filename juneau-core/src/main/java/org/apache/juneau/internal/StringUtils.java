@@ -15,17 +15,22 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.math.*;
 import java.net.*;
 import java.nio.*;
 import java.nio.charset.*;
+import java.text.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.regex.*;
 
 import javax.xml.bind.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 
 /**
  * Reusable string utility methods.
@@ -1570,5 +1575,35 @@ public final class StringUtils {
 					return i;
 		}
 		return -1;
+	}
+
+	/**
+	 * Similar to {@link MessageFormat#format(String, Object...)} except allows you to specify POJO arguments.
+	 *
+	 * @param pattern The string pattern.
+	 * @param args The arguments.
+	 * @return The formatted string.
+	 */
+	public static String format(String pattern, Object...args) {
+		if (args.length == 0)
+			return pattern;
+		for (int i = 0; i < args.length; i++)
+			args[i] = convertToReadable(args[i]);
+		return MessageFormat.format(pattern, args);
+	}
+
+	private static Object convertToReadable(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof ClassMeta)
+			return ((ClassMeta<?>)o).getReadableName();
+		ClassMeta<?> cm = BeanContext.DEFAULT.getClassMetaForObject(o);
+		if (cm.isMapOrBean() || cm.isCollectionOrArray())
+			return JsonSerializer.DEFAULT_LAX.toString(o);
+		if (cm.isClass())
+			return ((Class<?>)o).getName();
+		if (cm.isMethod())
+			return ((Method)o).toGenericString();
+		return o.toString();
 	}
 }

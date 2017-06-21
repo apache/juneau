@@ -490,7 +490,7 @@ public class SerializerSession extends BeanSession {
 	 */
 	public final void onError(Throwable t, String msg, Object... args) {
 		if (listener != null)
-			listener.onError(this, t, MessageFormat.format(msg, args));
+			listener.onError(this, t, format(msg, args));
 		super.addWarning(msg, args);
 	}
 

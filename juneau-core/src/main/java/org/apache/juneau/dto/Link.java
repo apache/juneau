@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 
 import org.apache.juneau.*;
@@ -106,7 +108,7 @@ public class Link implements Comparable<Link> {
 	public Link setHref(String href, Object...args) {
 		for (int i = 0; i < args.length; i++)
 			args[i] = UrlEncodingSerializer.DEFAULT.serialize(PartType.PATH, args[i]);
-		this.href = (args.length > 0 ? MessageFormat.format(href, args) : href);
+		this.href = format(href, args);
 		return this;
 	}
 

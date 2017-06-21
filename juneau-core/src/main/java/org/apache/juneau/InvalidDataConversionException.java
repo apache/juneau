@@ -14,8 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 
-import java.text.*;
-
 import org.apache.juneau.json.*;
 
 /**
@@ -23,7 +21,7 @@ import org.apache.juneau.json.*;
  * <p>
  * Exception that gets thrown if you try to perform an invalid conversion, such as when calling {@code ObjectMap.getInt(...)} on a non-numeric <code>String</code>.
  */
-public final class InvalidDataConversionException extends RuntimeException {
+public final class InvalidDataConversionException extends FormattedRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,7 +31,7 @@ public final class InvalidDataConversionException extends RuntimeException {
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, Class<?> toType, Exception cause) {
-		super(MessageFormat.format("Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", getReadableClassNameForObject(value), getReadableClassName(toType), getValue(value)), cause);
+		super(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", getReadableClassNameForObject(value), getReadableClassName(toType), getValue(value));
 	}
 
 	/**
@@ -42,7 +40,7 @@ public final class InvalidDataConversionException extends RuntimeException {
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, ClassMeta<?> toType, Exception cause) {
-		super(MessageFormat.format("Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", getReadableClassNameForObject(value), toType.toString(), getValue(value)), cause);
+		super(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", getReadableClassNameForObject(value), toType.toString(), getValue(value));
 	}
 
 	private static String getValue(Object o) {

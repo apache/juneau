@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -144,7 +143,7 @@ public abstract class Parser extends CoreObject {
 
 		Consumes c = getAnnotation(Consumes.class, getClass());
 		if (c == null)
-			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Consumes annotation", getClass().getName()));
+			throw new FormattedRuntimeException("Class ''{0}'' is missing the @Consumes annotation", c);
 
 		String[] mt = split(c.value());
 		this.mediaTypes = new MediaType[mt.length];

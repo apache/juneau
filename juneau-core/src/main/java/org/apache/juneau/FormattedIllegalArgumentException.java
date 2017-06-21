@@ -17,9 +17,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.text.*;
 
 /**
- * Subclass of non-runtime exceptions that take in a message and zero or more arguments.
+ * Subclass of illegal-argument exceptions that take in a message and zero or more arguments.
  */
-public class FormattedException extends Exception {
+public class FormattedIllegalArgumentException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class FormattedException extends Exception {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public FormattedException(String message, Object...args) {
+	public FormattedIllegalArgumentException(String message, Object...args) {
 		super(format(message, args));
 	}
 
@@ -40,17 +40,8 @@ public class FormattedException extends Exception {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public FormattedException(Throwable causedBy, String message, Object...args) {
+	public FormattedIllegalArgumentException(Throwable causedBy, String message, Object...args) {
 		this(message, args);
 		initCause(causedBy);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param causedBy The cause of this exception.
-	 */
-	public FormattedException(Throwable causedBy) {
-		this(causedBy, causedBy.getLocalizedMessage());
 	}
 }

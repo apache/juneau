@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import java.text.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
 
@@ -30,7 +30,7 @@ public class SerializerListener {
 	 * @param p The bean property we had an issue on.
 	 */
 	public void onBeanGetterException(SerializerSession session, Throwable t, BeanPropertyMeta p) {
-		onError(session, t, MessageFormat.format("Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()));
+		onError(session, t, format("Could not call getValue() on property ''{0}'' of class ''{1}'', exception = {2}", p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()));
 	}
 
 	/**

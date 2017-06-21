@@ -464,7 +464,7 @@ public class JsonParserEdgeCasesTest {
 				String errorText = errors.get(n);
 				if (errorText != null)
 					errorText = '"' + errorText + '"';
-				sb.append(java.text.MessageFormat.format(pattern, i++, fc.getName().replace(".json", ""), contents, errorText));
+				sb.append(format(pattern, i++, fc.getName().replace(".json", ""), contents, errorText));
 			}
 		}
 		System.err.println(sb); // NOT DEBUG

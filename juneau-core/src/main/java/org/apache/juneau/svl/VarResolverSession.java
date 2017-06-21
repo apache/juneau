@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static java.text.MessageFormat.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
+
+import org.apache.juneau.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
@@ -275,10 +276,10 @@ public class VarResolverSession {
 				t = (T)sessionObjects.get(name);
 			}
 		} catch (Exception e) {
-			throw new RuntimeException(format("Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c.getName()), e);
+			throw new FormattedRuntimeException(e, "Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c);
 		}
 		if (t == null)
-			throw new RuntimeException(format("Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name));
+			throw new FormattedRuntimeException("Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name);
 		return t;
 	}
 

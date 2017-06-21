@@ -278,7 +278,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
 	 * <p>
-	 * Values that start with <js>'&lt;'</js> are assumed to be HTML and rendered as-is. 
+	 * Values that start with <js>'&lt;'</js> are assumed to be HTML and rendered as-is.
 	 */
 	public static final String HTMLDOC_links = "HtmlDocSerializer.links.map";
 
@@ -391,7 +391,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+	 * 			noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
 	 * 		)
 	 * 	)
 	 * </p>

@@ -15,8 +15,9 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
-import java.text.*;
 import java.util.*;
+
+import org.apache.juneau.*;
 
 /**
  * An instance of a <code>Map</code> where the keys and values
@@ -83,7 +84,7 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 				return v;
 			}
 		}
-		throw new IllegalArgumentException(MessageFormat.format("No key ''{0}'' defined in map", key));
+		throw new FormattedIllegalArgumentException("No key ''{0}'' defined in map", key);
 	}
 
 	private class SimpleMapEntry implements Map.Entry<String,Object> {

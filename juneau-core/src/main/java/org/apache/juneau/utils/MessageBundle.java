@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -162,9 +163,7 @@ public class MessageBundle extends ResourceBundle {
 		String s = getString(key);
 		if (s.length() > 0 && s.charAt(0) == '{')
 			return s;
-		if (args.length > 0)
-			return MessageFormat.format(s, args);
-		return s;
+		return format(s, args);
 	}
 
 	/**

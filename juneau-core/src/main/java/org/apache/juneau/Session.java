@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 import java.util.*;
 
@@ -159,8 +161,7 @@ public abstract class Session {
 		if (warnings == null)
 			warnings = new LinkedList<String>();
 		getLogger().warning(msg, args);
-		msg = args.length == 0 ? msg : MessageFormat.format(msg, args);
-		warnings.add((warnings.size() + 1) + ": " + msg);
+		warnings.add((warnings.size() + 1) + ": " + format(msg, args));
 	}
 
 	/**

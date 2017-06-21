@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import java.text.*;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
  */
@@ -28,7 +30,7 @@ public class FormattedRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public FormattedRuntimeException(String message, Object...args) {
-		super(args.length == 0 ? message : MessageFormat.format(message, args));
+		super(format(message, args));
 	}
 
 	/**

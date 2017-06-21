@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -54,7 +53,7 @@ public abstract class Serializer extends CoreObject {
 
 		Produces p = getAnnotation(Produces.class, getClass());
 		if (p == null)
-			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Produces annotation", getClass().getName()));
+			throw new FormattedRuntimeException("Class ''{0}'' is missing the @Produces annotation", getClass());
 
 		String[] mt = split(p.value());
 		this.mediaTypes = new MediaType[mt.length];

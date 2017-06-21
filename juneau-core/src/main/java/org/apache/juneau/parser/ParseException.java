@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 import java.util.*;
 
@@ -67,7 +69,7 @@ public final class ParseException extends FormattedException {
 
 	private static String getMessage(ParserSession session, String msg, Object... args) {
 		if (args.length != 0)
-			msg = MessageFormat.format(msg, args);
+			msg = format(msg, args);
 		if (session != null) {
 			Map<String,Object> m = session.getLastLocation();
 			if (m != null && ! m.isEmpty())

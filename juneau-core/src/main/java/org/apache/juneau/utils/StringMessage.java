@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.text.*;
 
@@ -71,7 +73,7 @@ public class StringMessage implements CharSequence, Writable {
 	@Override /* Object */
 	public String toString() {
 		if (results == null)
-			results = (args.length == 0 ? pattern : MessageFormat.format(pattern, args));
+			results = format(pattern, args);
 		return results;
 	}
 }

@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -130,7 +129,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 						String schema = schemas.get(namespaceURI);
 						if (schema == null)
-							throw new RuntimeException(MessageFormat.format("No schema found for namespaceURI ''{0}''", namespaceURI));
+							throw new FormattedRuntimeException("No schema found for namespaceURI ''{0}''", namespaceURI);
 
 						try {
 							DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();

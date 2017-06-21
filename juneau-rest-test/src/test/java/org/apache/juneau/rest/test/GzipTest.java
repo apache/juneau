@@ -85,7 +85,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,identity;q=0'",
-				"Supported codings: [identity]"
+				"Supported codings: ['identity']"
 			);
 		}
 
@@ -96,7 +96,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,*;q=0'",
-				"Supported codings: [identity]"
+				"Supported codings: ['identity']"
 			);
 		}
 
@@ -123,7 +123,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
-				"Supported codings: [identity]"
+				"Supported codings: ['identity']"
 			);
 		}
 
@@ -134,7 +134,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
-				"Supported codings: [identity]"
+				"Supported codings: ['identity']"
 			);
 		}
 
@@ -145,7 +145,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
-				"Supported codings: [identity]"
+				"Supported codings: ['identity']"
 			);
 		}
 
@@ -156,7 +156,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
-				"Supported codings: [identity]"
+				"Supported codings: ['identity']"
 			);
 		}
 
@@ -178,7 +178,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
-				"Supported codings: [identity]"
+				"Supported codings: ['identity']"
 			);
 		}
 
@@ -241,7 +241,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
-				"Supported codings: [mycoding, identity]"
+				"Supported codings: ['mycoding','identity']"
 			);
 		}
 
@@ -252,7 +252,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
-				"Supported codings: [mycoding, identity]"
+				"Supported codings: ['mycoding','identity']"
 			);
 		}
 
@@ -263,7 +263,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
-				"Supported codings: [mycoding, identity]"
+				"Supported codings: ['mycoding','identity']"
 			);
 		}
 
@@ -274,7 +274,7 @@ public class GzipTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
-				"Supported codings: [mycoding, identity]"
+				"Supported codings: ['mycoding','identity']"
 			);
 		}
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 import java.util.*;
 
@@ -66,8 +68,7 @@ public final class SerializeException extends FormattedException {
 	}
 
 	private static String getMessage(SerializerSession session, String msg, Object... args) {
-		if (args.length != 0)
-			msg = MessageFormat.format(msg, args);
+		msg = format(msg, args);
 		if (session != null) {
 			Map<String,Object> m = session.getLastLocation();
 			if (m != null && ! m.isEmpty())

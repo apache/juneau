@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.text.*;
@@ -242,7 +243,7 @@ public abstract class RestServlet extends HttpServlet {
 			context.getLogger().log(level, cause, msg, args);
 		else {
 			// If context failed to initialize, log to the console.
-			System.err.println(MessageFormat.format(msg, args));
+			System.err.println(format(msg, args));
 			if (cause != null)
 				cause.printStackTrace();
 		}

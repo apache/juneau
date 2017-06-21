@@ -13,8 +13,8 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.html.*;
@@ -150,17 +150,17 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 
 		// Initialization run.
 		r = s.serialize(a);
-		System.err.println(MessageFormat.format("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
+		System.err.println(format("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
 		p.parse(r, A.class);
 
 		startTime = System.currentTimeMillis();
 		for (int i = 0; i < numRuns; i++)
 			r = s.serialize(a);
-		System.err.println(MessageFormat.format("Average serialize time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
+		System.err.println(format("Average serialize time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 		startTime = System.currentTimeMillis();
 		for (int i = 0; i < numRuns; i++)
 			a = p.parse(r, A.class);
-		System.err.println(MessageFormat.format("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
+		System.err.println(format("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 	}
 
 	public static class A {

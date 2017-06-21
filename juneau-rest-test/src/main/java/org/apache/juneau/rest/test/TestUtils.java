@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import java.text.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.json.*;
@@ -60,20 +61,20 @@ public class TestUtils {
 		}
 		if (status != e.getResponseCode()) {
 			dumpResponse(r, "Response status code was not correct.  Expected: ''{0}''.  Actual: ''{1}''", status, e.getResponseCode());
-			throw new AssertionFailedError(MessageFormat.format("Response status code was not correct.  Expected: ''{0}''.  Actual: ''{1}''", status, e.getResponseCode()));
+			throw new AssertionFailedError(format("Response status code was not correct.  Expected: ''{0}''.  Actual: ''{1}''", status, e.getResponseCode()));
 		}
 		for (String s : contains) {
 			if (r == null || ! r.contains(s)) {
 				if (! debug)
 					dumpResponse(r, "Response did not have the following expected text: ''{0}''", s);
-				throw new AssertionFailedError(MessageFormat.format("Response did not have the following expected text: ''{0}''", s));
+				throw new AssertionFailedError(format("Response did not have the following expected text: ''{0}''", s));
 			}
 		}
 	}
 
 	private static void dumpResponse(String r, String msg, Object...args) {
 		System.err.println("*** Failure ****************************************************************************************"); // NOT DEBUG
-		System.err.println(MessageFormat.format(msg, args));
+		System.err.println(format(msg, args));
 		System.err.println("*** Response-Start *********************************************************************************"); // NOT DEBUG
 		System.err.println(r); // NOT DEBUG
 		System.err.println("*** Response-End ***********************************************************************************"); // NOT DEBUG
@@ -83,13 +84,13 @@ public class TestUtils {
 		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
 
 		if (e.length != a.length)
-			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
+			throw new ComparisonFailure(format(msg, args), expected, actual);
 
 		Arrays.sort(e);
 		Arrays.sort(a);
 
 		for (int i = 0; i < e.length; i++)
 			if (! e[i].equals(a[i]))
-				throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
+				throw new ComparisonFailure(format(msg, args), expected, actual);
 	}
 }

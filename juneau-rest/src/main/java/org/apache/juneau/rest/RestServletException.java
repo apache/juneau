@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 
 import javax.servlet.*;
@@ -30,7 +32,7 @@ public class RestServletException extends ServletException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestServletException(String message, Object...args) {
-		super(args.length == 0 ? message : MessageFormat.format(message, args));
+		super(format(message, args));
 	}
 
 	/**

@@ -15,6 +15,8 @@ package org.apache.juneau.utils;
 import java.net.*;
 import java.text.*;
 
+import org.apache.juneau.*;
+
 /**
  * Generic exception thrown from the {@link PojoRest} class.
  * <p>
@@ -27,7 +29,7 @@ import java.text.*;
  * 	<li>{@link HttpURLConnection#HTTP_FORBIDDEN HTTP_FORBIDDEN} - Attempting to overwrite the root object.
  * </ul>
  */
-public final class PojoRestException extends RuntimeException {
+public final class PojoRestException extends FormattedRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,7 +43,7 @@ public final class PojoRestException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public PojoRestException(int status, String message, Object...args) {
-		super(args.length == 0 ? message : MessageFormat.format(message, args));
+		super(message, args);
 		this.status = status;
 	}
 

@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static java.util.logging.Level.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -263,7 +264,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 			return msg;
 		if (rb != null && rb.containsKey(msg))
 			msg = rb.getString(msg);
-		return MessageFormat.format(msg, args);
+		return format(msg, args);
 	}
 
 	private static String resolveResourceBundleName(Class<?> forClass, String path) {

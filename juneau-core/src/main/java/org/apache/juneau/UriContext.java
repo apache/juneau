@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
  * <p class='bcode'>
  * 	http://host:port/context-root/servlet-path/path-info
  * 	|   authority   |  context   |  resource  |  path  |
- *  +--------------------------------------------------+
+ * 	+--------------------------------------------------+
  * </p>
  * <p>
  * This class allows you to convert URL strings to absolute (e.g. <js>"http://host:port/foo/bar"</js>) or root-relative
@@ -71,7 +71,7 @@ public class UriContext {
 	public UriContext() {
 		this(null, null, null, null);
 	}
-	
+
 	/**
 	 * Returns the absolute URI of just the authority portion of this URI context.
 	 * <p>
