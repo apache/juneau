@@ -49,12 +49,12 @@ public class UonParserTest {
 
 		// 2nd level
 		t = "(a=a)";
-		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
-		assertEquals("a", ((Map)pe.parse(t, Map.class)).get("a"));
+		assertEquals("a", p.parse(t, Map.class).get("a"));
+		assertEquals("a", pe.parse(t, Map.class).get("a"));
 
 		t = "('a'='a')";
-		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
-		assertEquals("a", ((Map)pe.parse(t, Map.class)).get("a"));
+		assertEquals("a", p.parse(t, Map.class).get("a"));
+		assertEquals("a", pe.parse(t, Map.class).get("a"));
 
 		// Simple map
 		// Top level

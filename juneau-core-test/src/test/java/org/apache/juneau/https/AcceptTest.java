@@ -29,20 +29,20 @@ public class AcceptTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
-			
+
 			// label, accept-header, media-types, expected-index
-			
+
 			// Simple matches
 			{ "SimpleMatch-1", "text/json", "['text/json']", 0 },
 			{ "SimpleMatch-2", "text/json", "['text/json','text/foo']", 0 },
 			{ "SimpleMatch-3", "text/json", "['text/foo','text/json']", 1 },
-			
+
 			// Simple no-matches
 			{ "SimpleNoMatch-1", "text/jsonx", "['text/json']", -1 },
 			{ "SimpleNoMatch-2", "text/jso", "['text/json']", -1 },
 			{ "SimpleNoMatch-3", "text/json", "['application/json']", -1 },
 			{ "SimpleNoMatch-4", "text/json", "[]", -1 },
-			
+
 			// Meta-character matches
 			{ "MetaMatch-1", "text/*", "['text/a','text/b+c','text/b+d+e']", 2 },
 			{ "MetaMatch-2", "text/b+*", "['text/a','text/b+c','text/b+d+e']", 2 },
@@ -59,7 +59,7 @@ public class AcceptTest {
 			{ "RevMetaMatch-1", "text/a", "['text/*']", 0 },
 			{ "RevMetaMatch-3", "text/a", "['*/a']", 0 },
 			{ "RevMetaMatch-3", "text/a", "['*/*']", 0 },
-			
+
 			// Meta-character mixture matches
 			{ "MixedMetaMatch-1", "text/*", "['text/*','text/a','text/a+b','text/b+c','text/d+*']", 0 },
 			{ "MixedMetaMatch-2", "*/a", "['text/*','text/a','text/a+b','text/b+c','text/d+*']", 1 },
@@ -89,7 +89,7 @@ public class AcceptTest {
 			{ "Fuzzy-10", "text/1+2+3+4", "['text/1+2+3','text/1+2']", 0 },
 			{ "Fuzzy-11", "text/4+2+3+1", "['text/1+2+3','text/1+2']", 0 },
 			{ "Fuzzy-12", "text/4+2+3+1", "['text/1+2','text/1+2+3']", 1 },
-			
+
 			// Q metrics
 			{ "Q-1", "text/A;q=0.9,text/B;q=0.1", "['text/A','text/B']", 0 },
 			{ "Q-2", "text/A;q=0.9,text/B;q=0.1", "['text/B','text/A']", 1 },
@@ -100,23 +100,23 @@ public class AcceptTest {
 			// Test q=0
 			{ "Q0-1", "text/A;q=0,text/B;q=0.1", "['text/A','text/B']", 1 },
 			{ "Q0-2", "text/A;q=0,text/B;q=0.1", "['text/A','text/A+1']", -1 },
-			
+
 			// Test media types with parameters
 			{ "Parms-1", "text/A", "['text/A;foo=bar','text/B']", 0 },
 			{ "Parms-2", "text/A;foo=bar", "['text/A','text/B']", 0 },
 		});
 	}
-	
+
 	private String label, accept, mediaTypes;
 	private int expected;
-	
+
 	public AcceptTest(String label, String accept, String mediaTypes, int expected) {
 		this.label = label;
 		this.accept = accept;
 		this.mediaTypes = mediaTypes;
 		this.expected = expected;
 	}
-	
+
 	@Test
 	public void test() throws Exception {
 		Accept accept = Accept.forString(this.accept);

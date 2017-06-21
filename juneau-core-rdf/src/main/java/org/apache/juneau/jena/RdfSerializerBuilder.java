@@ -94,7 +94,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	public RdfSerializerBuilder language(String value) {
 		return property(RDF_language, value);
 	}
-	
+
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
 	 * @return This object (for method chaining).
@@ -463,7 +463,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 		super.sq();
 		return this;
 	}
-	
+
 	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
@@ -523,7 +523,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 		super.abridged(value);
 		return this;
 	}
-	
+
 	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder listener(Class<? extends SerializerListener> value) {
 		super.listener(value);

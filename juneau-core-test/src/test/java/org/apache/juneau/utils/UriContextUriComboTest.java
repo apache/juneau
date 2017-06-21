@@ -183,30 +183,30 @@ public class UriContextUriComboTest {
 					"/"
 				)
 			},
-		});		
+		});
 	}
-	
+
 	public static Input input(String authority, String context, String resource, String path) {
 		return new Input(authority, context, resource, path);
 	}
-	
-	public static Results results(String eAbsoluteAuthority, String eAbsoluteContext, String eAbsoluteResource, String eAbsolutePath, 
+
+	public static Results results(String eAbsoluteAuthority, String eAbsoluteContext, String eAbsoluteResource, String eAbsolutePath,
 			String eRootRelativeContext, String eRootRelativeResource, String eRootRelativePath) {
 		return new Results(eAbsoluteAuthority, eAbsoluteContext, eAbsoluteResource, eAbsolutePath, eRootRelativeContext, eRootRelativeResource, eRootRelativePath);
 	}
 
 	public static class Input {
 		private final UriContext uriContext;
-		
+
 		public Input(String authority, String context, String resource, String path) {
 			this.uriContext = new UriContext(authority, context, resource, path);
 		}
 	}
-	
+
 	public static class Results {
 		private final String eAbsoluteAuthority, eAbsoluteContext, eAbsoluteResource, eAbsolutePath, eRootRelativeContext, eRootRelativeResource, eRootRelativePath;
-		
-		public Results(String eAbsoluteAuthority, String eAbsoluteContext, String eAbsoluteResource, String eAbsolutePath, 
+
+		public Results(String eAbsoluteAuthority, String eAbsoluteContext, String eAbsoluteResource, String eAbsolutePath,
 					String eRootRelativeContext, String eRootRelativeResource, String eRootRelativePath) {
 			this.eAbsoluteAuthority = eAbsoluteAuthority;
 			this.eAbsoluteContext = eAbsoluteContext;
@@ -221,13 +221,13 @@ public class UriContextUriComboTest {
 	private String label;
 	private Input in;
 	private Results r;
-	
+
 	public UriContextUriComboTest(String label, Input in, Results r) throws Exception {
 		this.label = label;
 		this.in = in;
 		this.r = r;
 	}
-	
+
 	@Test
 	public void a1_testAbsoluteAuthority() {
 		assertEquals(r.eAbsoluteAuthority, in.uriContext.getAbsoluteAuthority(), "{0}: testAbsoluteAuthority() failed", label);
@@ -237,27 +237,27 @@ public class UriContextUriComboTest {
 	public void a2_testAbsoluteContext() {
 		assertEquals(r.eAbsoluteContext, in.uriContext.getAbsoluteContextRoot(), "{0}: testAbsoluteContext() failed", label);
 	}
-	
+
 	@Test
 	public void a3_testAbsoluteResource() {
 		assertEquals(r.eAbsoluteResource, in.uriContext.getAbsoluteServletPath(), "{0}: testAbsoluteResource() failed", label);
 	}
-	
+
 	@Test
 	public void a4_testAbsolutePath() {
 		assertEquals(r.eAbsolutePath, in.uriContext.getAbsolutePathInfo(), "{0}: testAbsolutePath() failed", label);
 	}
-	
+
 	@Test
 	public void a5_testRootRelativeContext() {
 		assertEquals(r.eRootRelativeContext, in.uriContext.getRootRelativeContextRoot(), "{0}: testRootRelativeContext() failed", label);
 	}
-	
+
 	@Test
 	public void a6_testRootRelativeResource() {
 		assertEquals(r.eRootRelativeResource, in.uriContext.getRootRelativeServletPath(), "{0}: testRootRelativeResource() failed", label);
 	}
-	
+
 	@Test
 	public void a7_testRootRelativePath() {
 		assertEquals(r.eRootRelativePath, in.uriContext.getRootRelativePathInfo(), "{0}: testRootRelativePath() failed", label);

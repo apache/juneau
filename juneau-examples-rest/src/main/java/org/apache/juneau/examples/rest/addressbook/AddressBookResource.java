@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	path="/addressBook",
 	messages="nls/AddressBookResource",
-	
+
 	// Links on the HTML rendition page.
 	// "request:/..." URIs are relative to the request URI.
 	// "servlet:/..." URIs are relative to the servlet URI.
@@ -63,41 +63,41 @@ import org.apache.juneau.utils.*;
 				+ "</div>",
 		footer="$W{poweredByJuneau}"
 	),
-	
+
 	// Widgets for $W variables above.
 	widgets={
 		PoweredByJuneauWidget.class,
 		ContentTypeLinksColumnWidget.class
 	},
-	
+
 	// Properties that get applied to all serializers and parsers.
 	properties={
-		
+
 		// Allow INIT as a method parameter.
 		@Property(name=REST_allowMethodParam, value="*"),
 
 		// Use single quotes.
 		@Property(name=SERIALIZER_quoteChar, value="'"),
-		
+
 		// Make RDF/XML readable.
 		@Property(name=RDF_rdfxml_tab, value="5"),
-		
+
 		// Make RDF parsable by adding a root node.
 		@Property(name=RDF_addRootProperty, value="true"),
-		
+
 		// Make URIs absolute so that we can easily reference them on the client side.
 		@Property(name=SERIALIZER_uriResolution, value="ABSOLUTE"),
-		
+
 		// Make the anchor text on URLs be just the path relative to the servlet.
 		@Property(name=HTML_uriAnchorText, value="SERVLET_RELATIVE")
 	},
-	
+
 	// Our stylesheet for the HTML rendition.
 	stylesheet="styles/devops.css",
-	
+
 	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,
-	
+
 	// Swagger info.
 	swagger=@ResourceSwagger(
 		contact="{name:'John Smith',email:'john@smith.com'}",

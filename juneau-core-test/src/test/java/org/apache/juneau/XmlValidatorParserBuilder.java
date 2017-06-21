@@ -15,11 +15,12 @@ package org.apache.juneau;
 import org.apache.juneau.xml.*;
 
 public class XmlValidatorParserBuilder extends XmlParserBuilder {
-	
+
 	public XmlValidatorParserBuilder() {
 		super(PropertyStore.create());
 	}
 
+	@Override
 	public XmlValidatorParser build() {
 		return new XmlValidatorParser();
 	}

@@ -14,18 +14,18 @@ package org.apache.juneau;
 
 import java.lang.reflect.*;
 
-/** 
+/**
  * Represents the input to a ComboTest.
  * @param <T>
  */
 public class ComboInput<T> {
-	
+
 	final String label;
 	final Object in;
 	final Type type;
 	final String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
-	
+
 	public ComboInput(
 			String label,
 			Type type,
@@ -77,12 +77,12 @@ public class ComboInput<T> {
 		this.rdfXmlT = rdfXmlT;
 		this.rdfXmlR = rdfXmlR;
 	}
-	
-	/** 
+
+	/**
 	 * Override this method if you want to do a post-parse verification on the object.
 	 * <p>
 	 * Note that a Function would be preferred here, but it's not available in Java 6.
-	 * 
+	 *
 	 * @param o The object returned by the parser.
 	 */
 	public void verify(T o) {}

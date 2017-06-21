@@ -130,7 +130,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		ti = roundTrip(t, IA.class);
 		assertEquals("foo", ti.getF1());
 
-		t = (A)roundTrip(t, Object.class);
+		t = roundTrip(t, Object.class);
 		assertEquals("foo", t.getF1());
 	}
 
@@ -192,7 +192,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", t.f2c.getF1());
 		assertEquals("foo", ((A)t.f2d).getF1());
 
-		t = (B)roundTrip(t, Object.class);
+		t = roundTrip(t, Object.class);
 		assertEquals("foo", t.f2a.getF1());
 		assertEquals("foo", t.f2b.getF1());
 		assertEquals("foo", t.f2c.getF1());
@@ -223,7 +223,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", t.f3c.get("foo").getF1());
 		assertEquals("foo", t.f3d.get("foo").getF1());
 
-		t = (C)roundTrip(t, Object.class);
+		t = roundTrip(t, Object.class);
 		assertEquals("foo", t.f3a.get("foo").getF1());
 		assertEquals("foo", t.f3b.get("foo").getF1());
 		assertEquals("foo", t.f3c.get("foo").getF1());
@@ -259,7 +259,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", t.f4c[0].getF1());
 		assertEquals("foo", ((A)t.f4d[0]).getF1());
 
-		t = (D)roundTrip(t, Object.class);
+		t = roundTrip(t, Object.class);
 		assertEquals("foo", t.f4a[0].getF1());
 		assertEquals("foo", t.f4b[0].getF1());
 		assertEquals("foo", t.f4c[0].getF1());
@@ -295,7 +295,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", t.f5c.get(0).getF1());
 		assertEquals("foo", ((A)t.f5d.get(0)).getF1());
 
-		t = (E)roundTrip(t, Object.class);
+		t = roundTrip(t, Object.class);
 		assertEquals("foo", t.f5a.get(0).getF1());
 		assertEquals("foo", t.f5b.get(0).getF1());
 		assertEquals("foo", t.f5c.get(0).getF1());
@@ -331,7 +331,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", t.f6c.get(0)[0].getF1());
 		assertEquals("foo", ((A)t.f6d.get(0)[0]).getF1());
 
-		t = (F)roundTrip(t, Object.class);
+		t = roundTrip(t, Object.class);
 		assertEquals("foo", t.f6a.get(0)[0].getF1());
 		assertEquals("foo", t.f6b.get(0)[0].getF1());
 		assertEquals("foo", t.f6c.get(0)[0].getF1());

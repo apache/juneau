@@ -35,7 +35,7 @@ public class AddressBook extends LinkedList<Person> implements IAddressBook {
 	public AddressBook(URI uri) throws Exception {
 		this.uri = uri;
 	}
-	
+
 	@Override /* IAddressBook */
 	public void init() throws Exception {
 		clear();

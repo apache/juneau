@@ -34,7 +34,7 @@ import org.junit.*;
 public class ConfigFileTest {
 
 	private ConfigFileBuilder configFileBuilder = new ConfigFileBuilder();
-	
+
 	private File getFreshFile() {
 		String tempDir = System.getProperty("java.io.tmpdir");
 		File f = new File(tempDir, "Test.cfg");

@@ -47,7 +47,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 		try {
 			properties = new ObjectMap();
 			JuneauProvider jp = getClass().getAnnotation(JuneauProvider.class);
-			
+
 			for (Property p : jp.properties())
 				properties.put(p.name(), p.value());
 			for (String p : jp.flags())
@@ -66,7 +66,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 				.pojoSwaps(jp.pojoSwaps())
 				.properties(properties)
 				.build();
-					
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

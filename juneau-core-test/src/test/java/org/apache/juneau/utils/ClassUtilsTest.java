@@ -120,13 +120,13 @@ public class ClassUtilsTest {
 	public void getClassFromReadableName() throws Exception {
 		fail("Not implemented");
 	}
-	
+
 	//====================================================================================================
 	// findPublicMethod
 	//====================================================================================================
 	@Test
 	public void testFindPublicMethod() {
-		
+
 		assertNotNull(findPublicMethod(B.class, "m1", void.class));
 		assertNull(findPublicMethod(B.class, "m1", int.class));
 
@@ -134,21 +134,21 @@ public class ClassUtilsTest {
 
 		assertNull(findPublicMethod(B.class, "m3", void.class));
 		assertNotNull(findPublicMethod(B.class, "m3", int.class));
-		
+
 		assertNotNull(findPublicMethod(B.class, "m4", CharSequence.class));
 		assertNotNull(findPublicMethod(B.class, "m4", Object.class));
 		assertNull(findPublicMethod(B.class, "m4", String.class));
-		
+
 		assertNotNull(findPublicMethod(B.class, "m5", void.class, int.class, CharSequence.class));
 		assertNotNull(findPublicMethod(B.class, "m5", void.class, int.class, String.class));
 		assertNull(findPublicMethod(B.class, "m5", void.class, int.class, Object.class));
-		
+
 		assertNull(findPublicMethod(B.class, "m5", void.class, int.class));
 		assertNull(findPublicMethod(B.class, "m5", void.class, int.class, CharSequence.class, CharSequence.class));
 	}
-	
+
 	public static class B {
-		
+
 		public void m1() {};
 		protected void m2() {};
 		public int m3() { return 0; }
@@ -156,8 +156,8 @@ public class ClassUtilsTest {
 
 		public void m5(int f1, CharSequence f2) {}
 	}
-	
-	
+
+
 	//====================================================================================================
 	// getMethodAnnotation
 	//====================================================================================================
@@ -168,7 +168,7 @@ public class ClassUtilsTest {
 		assertEquals("a3", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a3", CharSequence.class)).value());
 		assertEquals("a4", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a4")).value());
 	}
-	
+
 	public static interface CI1 {
 		@TestAnnotation("a1")
 		void a1();
@@ -176,15 +176,19 @@ public class ClassUtilsTest {
 		void a2();
 		@TestAnnotation("a3")
 		void a3(CharSequence foo);
-		
+
 		void a4();
 	}
-	
+
 	public static class CI2 implements CI1 {
+		@Override
 		public void a1() {}
+		@Override
 		@TestAnnotation("a2b")
 		public void a2() {}
+		@Override
 		public void a3(CharSequence s) {}
+		@Override
 		public void a4() {}
 	}
 
@@ -192,10 +196,11 @@ public class ClassUtilsTest {
 		@Override
 		public void a1() {}
 		@Override public void a2() {}
+		@Override
 		@TestAnnotation("a4")
 		public void a4() {}
 	}
-	
+
 	@Target(METHOD)
 	@Retention(RUNTIME)
 	public @interface TestAnnotation {
@@ -213,7 +218,7 @@ public class ClassUtilsTest {
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
-		
+
 		s = new TreeSet<String>();
 		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, true, false); i.hasNext();) {
 			Class<?> c = i.next();
@@ -227,7 +232,7 @@ public class ClassUtilsTest {
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
-		
+
 		s = new TreeSet<String>();
 		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, false, false); i.hasNext();) {
 			Class<?> c = i.next();
@@ -235,7 +240,7 @@ public class ClassUtilsTest {
 		}
 		assertObjectEquals("['CB','CC','CD']", s);
 	}
-	
+
 	static interface CA1 {}
 	static interface CA2 extends CA1 {}
 	static interface CA3 {}
@@ -250,18 +255,18 @@ public class ClassUtilsTest {
 	@Test
 	public void getParentMethodsParentFirst() throws Exception {
 		Set<String> s = new TreeSet<String>();
-		for (Method m : ClassUtils.getAllMethods(DD.class, true)) 
+		for (Method m : ClassUtils.getAllMethods(DD.class, true))
 			if (! m.getName().startsWith("$"))
 				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
 		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
 
 		s = new TreeSet<String>();
-		for (Method m : ClassUtils.getAllMethods(DD.class, false)) 
+		for (Method m : ClassUtils.getAllMethods(DD.class, false))
 			if (! m.getName().startsWith("$"))
 				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
 		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
 	}
-	
+
 	static interface DA1 {
 		void da1();
 	}
@@ -271,14 +276,17 @@ public class ClassUtilsTest {
 	static interface DA3 {}
 	static interface DA4 {}
 	static abstract class DB implements DA1, DA2 {
+		@Override
 		public void da1() {}
 		public void db() {}
 	}
 	static class DC extends DB implements DA3 {
+		@Override
 		public void da2() {}
 		public void dc() {}
 	}
 	static class DD extends DC {
+		@Override
 		public void da2() {}
 		public void dd() {}
 	}
@@ -302,7 +310,7 @@ public class ClassUtilsTest {
 		}
 		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
 	}
-	
+
 	static class EA {
 		int a1;
 	}

@@ -26,32 +26,32 @@ public class ConfigFileInterfaceTest {
 
 	ConfigFile cf;
 	ConfigInterface proxy;
-	
+
 	public ConfigFileInterfaceTest() throws Exception {
 		ConfigFileBuilder configFileBuilder = new ConfigFileBuilder();
 		cf = configFileBuilder.build();
 		proxy = cf.getSectionAsInterface("A", ConfigInterface.class);
 	}
-	
-	
+
+
 	//====================================================================================================
 	// getSectionAsInterface(String,Class)
 	//====================================================================================================
-	
+
 	@Test
 	public void testString() throws Exception {
 		proxy.setString("foo");
 		assertEquals("foo", proxy.getString());
 		assertEquals("foo", cf.get("A", "string"));
 	}
-	
+
 	@Test
 	public void testInt() throws Exception {
 		proxy.setInt(1);
 		assertEquals(1, proxy.getInt());
 		assertEquals("1", cf.get("A", "int"));
 	}
-	
+
 	@Test
 	public void testInteger() throws Exception {
 		proxy.setInteger(2);
@@ -66,7 +66,7 @@ public class ConfigFileInterfaceTest {
 		assertEquals(true, proxy.isBoolean());
 		assertEquals("true", cf.get("A", "boolean"));
 	}
-	
+
 	@Test
 	public void testBooleanObject() throws Exception {
 		proxy.setBooleanObject(true);
@@ -81,7 +81,7 @@ public class ConfigFileInterfaceTest {
 		assertTrue(1f == proxy.getFloat());
 		assertEquals("1.0", cf.get("A", "float"));
 	}
-	
+
 	@Test
 	public void testFloatObject() throws Exception {
 		proxy.setFloatObject(1f);
@@ -120,7 +120,7 @@ public class ConfigFileInterfaceTest {
 		assertEquals("[1,null]", cf.get("A", "integerList"));
 		assertType(Integer.class, proxy.getIntegerList().get(0));
 	}
-	
+
 	@Test
 	public void testInteger3dList() throws Exception {
 		proxy.setInteger3dList(
@@ -144,7 +144,7 @@ public class ConfigFileInterfaceTest {
 		assertEquals("[[[[1,null],null],null],null]", cf.get("A", "integer1d3dList"));
 		assertType(Integer.class, proxy.getInteger1d3dList().get(0)[0][0][0]);
 	}
-	
+
 	@Test
 	public void testInt1d3dList() throws Exception {
 		proxy.setInt1d3dList(new AList<int[][][]>().append(new int[][][]{{{1,2},null},null}).append(null));
@@ -152,7 +152,7 @@ public class ConfigFileInterfaceTest {
 		assertEquals("[[[[1,2],null],null],null]", cf.get("A", "int1d3dList"));
 		assertType(int[][][].class, proxy.getInt1d3dList().get(0));
 	}
-	
+
 	@Test
 	public void testStringList() throws Exception {
 		proxy.setStringList(Arrays.asList("foo","bar",null));
@@ -161,7 +161,7 @@ public class ConfigFileInterfaceTest {
 	}
 
 	// Beans
-	
+
 	@Test
 	public void testBean() throws Exception {
 		proxy.setBean(new ABean().init());
@@ -227,7 +227,7 @@ public class ConfigFileInterfaceTest {
 	}
 
 	// Typed beans
-	
+
 	@Test
 	public void testTypedBean() throws Exception {
 		proxy.setTypedBean(new TypedBeanImpl().init());
@@ -293,7 +293,7 @@ public class ConfigFileInterfaceTest {
 	}
 
 	// Swapped POJOs
-	
+
 	@Test
 	public void testSwappedPojo() throws Exception {
 		proxy.setSwappedPojo(new SwappedPojo());
@@ -329,7 +329,7 @@ public class ConfigFileInterfaceTest {
 	}
 
 	// Implicit swapped POJOs
-	
+
 	@Test
 	public void testImplicitSwappedPojo() throws Exception {
 		proxy.setImplicitSwappedPojo(new ImplicitSwappedPojo());
@@ -365,7 +365,7 @@ public class ConfigFileInterfaceTest {
 	}
 
 	// Enums
-	
+
 	@Test
 	public void testEnum() throws Exception {
 		proxy.setEnum(TestEnum.TWO);
@@ -449,22 +449,22 @@ public class ConfigFileInterfaceTest {
 
 		public String getString();
 		public void setString(String x);
-		
+
 		public int getInt();
 		public void setInt(int x);
-		
+
 		public Integer getInteger();
 		public void setInteger(Integer x);
 
 		public boolean isBoolean();
 		public void setBoolean(boolean x);
-		
+
 		public Boolean getBooleanObject();
 		public void setBooleanObject(Boolean x);
 
 		public float getFloat();
 		public void setFloat(float x);
-		
+
 		public Float getFloatObject();
 		public void setFloatObject(Float x);
 
@@ -479,121 +479,121 @@ public class ConfigFileInterfaceTest {
 
 		public List<Integer> getIntegerList();
 		public void setIntegerList(List<Integer> x);
-		
+
 		public List<List<List<Integer>>> getInteger3dList();
 		public void setInteger3dList(List<List<List<Integer>>> x);
 
 		public List<Integer[][][]> getInteger1d3dList();
 		public void setInteger1d3dList(List<Integer[][][]> x);
-		
+
 		public List<int[][][]> getInt1d3dList();
 		public void setInt1d3dList(List<int[][][]> x);
-		
+
 		public List<String> getStringList();
-		public void setStringList(List<String> x);		
+		public void setStringList(List<String> x);
 
 		// Beans
-		
+
 		public ABean getBean();
-		public void setBean(ABean x);		
+		public void setBean(ABean x);
 
 		public ABean[][][] getBean3dArray();
-		public void setBean3dArray(ABean[][][] x);		
+		public void setBean3dArray(ABean[][][] x);
 
 		public List<ABean> getBeanList();
-		public void setBeanList(List<ABean> x);		
+		public void setBeanList(List<ABean> x);
 
 		public List<ABean[][][]> getBean1d3dList();
-		public void setBean1d3dList(List<ABean[][][]> x);		
+		public void setBean1d3dList(List<ABean[][][]> x);
 
 		public Map<String,ABean> getBeanMap();
-		public void setBeanMap(Map<String,ABean> x);		
+		public void setBeanMap(Map<String,ABean> x);
 
 		public Map<String,List<ABean>> getBeanListMap();
-		public void setBeanListMap(Map<String,List<ABean>> x);		
+		public void setBeanListMap(Map<String,List<ABean>> x);
 
 		public Map<String,List<ABean[][][]>> getBean1d3dListMap();
-		public void setBean1d3dListMap(Map<String,List<ABean[][][]>> x);		
+		public void setBean1d3dListMap(Map<String,List<ABean[][][]>> x);
 
 		public Map<Integer,List<ABean>> getBeanListMapIntegerKeys();
-		public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x);		
+		public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x);
 
 		// Typed beans
-		
+
 		public TypedBean getTypedBean();
-		public void setTypedBean(TypedBean x);		
+		public void setTypedBean(TypedBean x);
 
 		public TypedBean[][][] getTypedBean3dArray();
-		public void setTypedBean3dArray(TypedBean[][][] x);		
+		public void setTypedBean3dArray(TypedBean[][][] x);
 
 		public List<TypedBean> getTypedBeanList();
-		public void setTypedBeanList(List<TypedBean> x);		
+		public void setTypedBeanList(List<TypedBean> x);
 
 		public List<TypedBean[][][]> getTypedBean1d3dList();
-		public void setTypedBean1d3dList(List<TypedBean[][][]> x);		
+		public void setTypedBean1d3dList(List<TypedBean[][][]> x);
 
 		public Map<String,TypedBean> getTypedBeanMap();
-		public void setTypedBeanMap(Map<String,TypedBean> x);		
+		public void setTypedBeanMap(Map<String,TypedBean> x);
 
 		public Map<String,List<TypedBean>> getTypedBeanListMap();
-		public void setTypedBeanListMap(Map<String,List<TypedBean>> x);		
+		public void setTypedBeanListMap(Map<String,List<TypedBean>> x);
 
 		public Map<String,List<TypedBean[][][]>> getTypedBean1d3dListMap();
-		public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x);		
+		public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x);
 
 		public Map<Integer,List<TypedBean>> getTypedBeanListMapIntegerKeys();
-		public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x);		
+		public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x);
 
 		// Swapped POJOs
-		
+
 		public SwappedPojo getSwappedPojo();
-		public void setSwappedPojo(SwappedPojo x);		
+		public void setSwappedPojo(SwappedPojo x);
 
 		public SwappedPojo[][][] getSwappedPojo3dArray();
-		public void setSwappedPojo3dArray(SwappedPojo[][][] x);		
+		public void setSwappedPojo3dArray(SwappedPojo[][][] x);
 
 		public Map<SwappedPojo,SwappedPojo> getSwappedPojoMap();
-		public void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x);		
+		public void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x);
 
 		public Map<SwappedPojo,SwappedPojo[][][]> getSwappedPojo3dMap();
-		public void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x);		
+		public void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x);
 
 		// Implicit swapped POJOs
-		
+
 		public ImplicitSwappedPojo getImplicitSwappedPojo();
-		public void setImplicitSwappedPojo(ImplicitSwappedPojo x);		
+		public void setImplicitSwappedPojo(ImplicitSwappedPojo x);
 
 		public ImplicitSwappedPojo[][][] getImplicitSwappedPojo3dArray();
-		public void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x);		
+		public void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x);
 
 		public Map<ImplicitSwappedPojo,ImplicitSwappedPojo> getImplicitSwappedPojoMap();
-		public void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x);		
+		public void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x);
 
 		public Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> getImplicitSwappedPojo3dMap();
-		public void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x);		
+		public void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x);
 
 		// Enums
-		
+
 		public TestEnum getEnum();
-		public void setEnum(TestEnum x);		
+		public void setEnum(TestEnum x);
 
 		public TestEnum[][][] getEnum3d();
-		public void setEnum3d(TestEnum[][][] x);		
+		public void setEnum3d(TestEnum[][][] x);
 
 		public List<TestEnum> getEnumList();
-		public void setEnumList(List<TestEnum> x);		
+		public void setEnumList(List<TestEnum> x);
 
 		public List<List<List<TestEnum>>> getEnum3dList();
-		public void setEnum3dList(List<List<List<TestEnum>>> x);		
+		public void setEnum3dList(List<List<List<TestEnum>>> x);
 
 		public List<TestEnum[][][]> getEnum1d3dList();
-		public void setEnum1d3dList(List<TestEnum[][][]> x);		
+		public void setEnum1d3dList(List<TestEnum[][][]> x);
 
 		public Map<TestEnum,TestEnum> getEnumMap();
-		public void setEnumMap(Map<TestEnum,TestEnum> x);		
+		public void setEnumMap(Map<TestEnum,TestEnum> x);
 
 		public Map<TestEnum,TestEnum[][][]> getEnum3dArrayMap();
-		public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x);		
+		public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x);
 
 		public Map<TestEnum,List<TestEnum[][][]>> getEnum1d3dListMap();
 		public void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x);

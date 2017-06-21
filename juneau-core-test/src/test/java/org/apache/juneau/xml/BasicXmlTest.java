@@ -1659,21 +1659,21 @@ public class BasicXmlTest {
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithWhitespaceTextFields {
 		@Xml(format=XmlFormat.TEXT)
 		public String a;
-	
+
 		public BeanWithWhitespaceTextFields init(String s) {
 			a = s;
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithWhitespaceTextPwsFields {
 		@Xml(format=XmlFormat.TEXT_PWS)
 		public String a;
-	
+
 		public BeanWithWhitespaceTextPwsFields init(String s) {
 			a = s;
 			return this;
@@ -1683,7 +1683,7 @@ public class BasicXmlTest {
 	public static class BeanWithWhitespaceMixedFields {
 		@Xml(format=XmlFormat.MIXED)
 		public String[] a;
-	
+
 		public BeanWithWhitespaceMixedFields init(String[] s) {
 			a = s;
 			return this;
@@ -1693,7 +1693,7 @@ public class BasicXmlTest {
 	public static class BeanWithWhitespaceMixedPwsFields {
 		@Xml(format=XmlFormat.MIXED_PWS)
 		public String[] a;
-	
+
 		public BeanWithWhitespaceMixedPwsFields init(String[] s) {
 			a = s;
 			return this;

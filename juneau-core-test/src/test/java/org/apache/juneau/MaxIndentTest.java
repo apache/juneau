@@ -206,19 +206,19 @@ public class MaxIndentTest {
 			},
 		});
 	}
-	
+
 	Input input;
-	
+
 	public MaxIndentTest(Input input) {
 		this.input = input;
 	}
-	
+
 	static class Input {
 		String label;
 		Object in;
 		int maxDepth;
 		String json, xml, html, uon, urlEnc;
-		
+
 		Input(String label, Object in, int maxDepth, String json, String xml, String html, String uon, String urlEnc) {
 			this.label = label;
 			this.in = in;
@@ -230,14 +230,14 @@ public class MaxIndentTest {
 			this.urlEnc = urlEnc;
 		}
 	}
-	
+
 	public static class List1dOfBeans extends LinkedList<ABean> {
 		public List1dOfBeans init1() {
 			add(new ABean().init());
 			return this;
 		}
 	}
-	
+
 	public static class List2dOfBeans extends LinkedList<List1dOfBeans> {
 		public List2dOfBeans init2() {
 			add(new List1dOfBeans().init1());
@@ -251,7 +251,7 @@ public class MaxIndentTest {
 			return this;
 		}
 	}
-	
+
 	public static class Map2dOfBeans extends LinkedHashMap<String,Map1dOfBeans> {
 		public Map2dOfBeans init2() {
 			put("b", new Map1dOfBeans().init1());
@@ -264,44 +264,44 @@ public class MaxIndentTest {
 		WriterSerializer s = JsonSerializer.DEFAULT_LAX_READABLE.builder().maxIndent(input.maxDepth).build();
 		testSerialize("json", s, input.json);
 	}
-	
+
 	@Test
 	public void b11_serializeXml() throws Exception {
 		WriterSerializer s = XmlSerializer.DEFAULT_SQ_READABLE.builder().maxIndent(input.maxDepth).build();
 		testSerialize("xml", s, input.xml);
 	}
-	
+
 	@Test
 	public void c11_serializeHtml() throws Exception {
 		WriterSerializer s = HtmlSerializer.DEFAULT_SQ_READABLE.builder().maxIndent(input.maxDepth).build();
 		testSerialize("html", s, input.html);
 	}
-	
+
 	@Test
 	public void d11_serializeUon() throws Exception {
 		WriterSerializer s = UonSerializer.DEFAULT_READABLE.builder().maxIndent(input.maxDepth).build();
 		testSerialize("uon", s, input.uon);
 	}
-	
+
 	@Test
 	public void e11_serializeUrlEncoding() throws Exception {
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT_READABLE.builder().maxIndent(input.maxDepth).build();
 		testSerialize("urlEncoding", s, input.urlEnc);
 	}
-	
+
 	private void testSerialize(String testName, Serializer s, String expected) throws Exception {
 		try {
 			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(input.in) : ((OutputStreamSerializer)s).serializeToHex(input.in);
-			
+
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {
 				System.out.println(input.label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
 				System.out.println(r);
 				return;
 			}
-			
+
 			TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", input.label, testName);
-			
+
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
@@ -309,5 +309,5 @@ public class MaxIndentTest {
 			throw new AssertionError(input.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 		}
 	}
-	
+
 }

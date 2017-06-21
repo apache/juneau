@@ -27,7 +27,7 @@ import org.junit.*;
 public class SampleRemoteableServicesResourceTest extends RestTestcase {
 
 	static RestClient[] clients;
-	
+
 	private static String path = SamplesMicroservice.getURI().getPath() + "/addressBook/proxy";
 
 	@BeforeClass

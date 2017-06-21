@@ -166,7 +166,7 @@ public class CommonParserTest {
 		// XML parser may or may not support line numbers.
 		assertTrue(MyParserListener.events.get(0).startsWith("unknownProperty,"));
 	}
-	
+
 	public static class MyParserListener extends ParserListener {
 		final static List<String> events = new LinkedList<String>();
 

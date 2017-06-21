@@ -296,7 +296,7 @@ public class XmlTest {
 	public static class J1 {
 		@BeanProperty(properties="f2") public List<J2> f1 = new AList<J2>().append(new J2());
 	}
-	
+
 	@Bean(typeName="bar")
 	public static class J2 {
 		public int f2 = 2;

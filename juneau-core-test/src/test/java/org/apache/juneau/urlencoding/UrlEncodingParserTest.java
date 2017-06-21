@@ -59,7 +59,7 @@ public class UrlEncodingParserTest {
 
 		// 2nd level
 		t = "?a=a";
-		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
+		assertEquals("a", p.parse(t, Map.class).get("a"));
 
 		// Simple map
 		// Top level

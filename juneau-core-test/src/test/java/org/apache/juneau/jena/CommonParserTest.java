@@ -193,7 +193,7 @@ public class CommonParserTest {
 		assertEquals(1, MyParserListener.events.size());
 		assertEquals("unknownProperty,-1,-1", MyParserListener.events.get(0));
 	}
-	
+
 	public static class MyParserListener extends ParserListener {
 		final static List<String> events = new LinkedList<String>();
 

@@ -95,7 +95,7 @@ public abstract class Microservice {
 	private static Args args;
 	private static ConfigFile cf;
 	private static ManifestFile mf;
-	
+
 	private String cfPath;
 
 	/**
@@ -107,7 +107,7 @@ public abstract class Microservice {
 	protected Microservice(String...args) throws Exception {
 		Microservice.args = new Args(args);
 	}
-	
+
 	/**
 	 * Specifies the path of the config file for this microservice.
 	 * <p>
@@ -119,7 +119,7 @@ public abstract class Microservice {
 	 * 		(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
 	 * </ol>
 	 * If this path does not exist, a {@link FileNotFoundException} will be thrown from the {@link #start()} command.
-	 * 
+	 *
 	 * @param cfPath The absolute or relative path of the config file.
 	 * @param create Create the file if it doesn't exist.
 	 * @return This object (for method chaining).
@@ -136,7 +136,7 @@ public abstract class Microservice {
 		this.cfPath = cfPath;
 		return this;
 	}
-	
+
 	/**
 	 * Specifies the config file for this microservice.
 	 * <p>
@@ -161,7 +161,7 @@ public abstract class Microservice {
 	 * 		is located in the project root.
 	 * 	<li>Using the class loader for this class to find the file at the URL <js>"META-INF/MANIFEST.MF"</js>.
 	 * </ol>
-	 * 
+	 *
 	 * @param mf The manifest file of this microservice.
 	 * @return This object (for method chaining).
 	 */
@@ -172,7 +172,7 @@ public abstract class Microservice {
 
 	/**
 	 * Convenience method for specifying the manifest contents directly.
-	 * 
+	 *
 	 * @param contents The lines in the manifest file.
 	 * @return This object (for method chaining).
 	 * @throws IOException
@@ -185,7 +185,7 @@ public abstract class Microservice {
 
 	/**
 	 * Same as {@link #setManifest(Manifest)} except specified through a {@link File} object.
-	 * 
+	 *
 	 * @param f The manifest file of this microservice.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
@@ -197,7 +197,7 @@ public abstract class Microservice {
 
 	/**
 	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the specified class is contained within.
-	 * 
+	 *
 	 * @param c The class whose jar file contains the manifest to use for this microservice.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
@@ -223,7 +223,7 @@ public abstract class Microservice {
 	 * </ul>
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jd>/**
@@ -295,7 +295,7 @@ public abstract class Microservice {
 	 * String variables defined by {@link #createVarResolver()} are automatically resolved when using this method.
 	 * <p>
 	 * This method can be called from the class constructor.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<cc>#--------------------------</cc>
@@ -373,7 +373,7 @@ public abstract class Microservice {
 	 * 	and entries converted to simple strings.
 	 * <p>
 	 * This method can be called from the class constructor.
-	 * 
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
@@ -389,7 +389,7 @@ public abstract class Microservice {
 		return mf;
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Abstract lifecycle methods.
 	//--------------------------------------------------------------------------------
@@ -405,7 +405,7 @@ public abstract class Microservice {
 	 * @throws Exception
 	 */
 	public Microservice start() throws Exception {
-		
+
 		// --------------------------------------------------------------------------------
 		// Try to get the manifest file if it wasn't already set.
 		// --------------------------------------------------------------------------------
@@ -443,7 +443,7 @@ public abstract class Microservice {
 		ConfigFileBuilder cfb = new ConfigFileBuilder();
 		if (cfPath != null)
 			cf = cfb.build(cfPath).getResolving(createVarResolver().build());
-		
+
 		// --------------------------------------------------------------------------------
 		// Find config file.
 		// Can either be passed in as first parameter, or we discover it using
@@ -493,7 +493,7 @@ public abstract class Microservice {
 				onConfigChange(cf, changes);
 			}
 		});
-		
+
 		// --------------------------------------------------------------------------------
 		// Add exit listeners.
 		// --------------------------------------------------------------------------------
@@ -544,7 +544,7 @@ public abstract class Microservice {
 	 * Default implementation simply calls {@link #onStop()}.
 	 * <p>
 	 * Overridden methods MUST call this method LAST so that the {@link #onStop()} method is called.
-	 * 
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public Microservice stop() {
@@ -560,7 +560,7 @@ public abstract class Microservice {
 		System.exit(2);
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Lifecycle listener methods.
 	// Subclasses can override these methods to run code on certain events.

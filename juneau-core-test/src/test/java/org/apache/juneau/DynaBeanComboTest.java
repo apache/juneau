@@ -62,6 +62,7 @@ public class DynaBeanComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithDynaField o) {
 						assertType(BeanWithDynaField.class, o);
 					}
@@ -95,6 +96,7 @@ public class DynaBeanComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithDynaMethods o) {
 						assertType(BeanWithDynaMethods.class, o);
 						Assert.assertTrue(o.setterCalled);
@@ -129,6 +131,7 @@ public class DynaBeanComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithDynaGetterOnly o) {
 						assertType(BeanWithDynaGetterOnly.class, o);
 					}
@@ -162,6 +165,7 @@ public class DynaBeanComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f1a>1901-03-03T18:11:12Z</jp:f1a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithDynaFieldSwapped o) {
 						assertType(BeanWithDynaFieldSwapped.class, o);
 						assertType(Calendar.class, o.f1.get("f1a"));
@@ -196,6 +200,7 @@ public class DynaBeanComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f1a>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:f1a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithDynaFieldStringList o) {
 						assertType(BeanWithDynaFieldStringList.class, o);
 					}
@@ -203,28 +208,28 @@ public class DynaBeanComboTest extends ComboTest {
 			},
 		});
 	}
-	
+
 	public DynaBeanComboTest(ComboInput<?> comboInput) {
 		super(comboInput);
 	}
-	
+
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
 		return s.builder().trimNullProperties(false).build();
 	}
-	
+
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
 		return p.builder().build();
 	}
-	
+
 	@Bean(sort=true)
 	public static class BeanWithDynaField {
 		public int f1;
 		@BeanProperty(name="*")
 		public Map<String,Object> f2 = new LinkedHashMap<String,Object>();
 		public int f3;
-	
+
 		public BeanWithDynaField init() {
 			this.f1 = 1;
 			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
@@ -239,7 +244,7 @@ public class DynaBeanComboTest extends ComboTest {
 		private int f1, f3;
 		private Map<String,Object> f2 = new LinkedHashMap<String,Object>();
 		private boolean setterCalled = false;
-	
+
 		public int getF1() {
 			return f1;
 		}
@@ -277,7 +282,7 @@ public class DynaBeanComboTest extends ComboTest {
 
 		private int f1, f3;
 		private Map<String,Object> f2 = new LinkedHashMap<String,Object>();
-	
+
 		public int getF1() {
 			return f1;
 		}
@@ -303,7 +308,7 @@ public class DynaBeanComboTest extends ComboTest {
 			return this;
 		}
 	}
-	
+
 	private static Calendar singleDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));
 	static {
 		singleDate.setTimeInMillis(0);
@@ -314,7 +319,7 @@ public class DynaBeanComboTest extends ComboTest {
 	public static class BeanWithDynaFieldSwapped {
 		@BeanProperty(name="*", swap=CalendarSwap.ISO8601DTZ.class)
 		public Map<String,Calendar> f1 = new LinkedHashMap<String,Calendar>();
-	
+
 		public BeanWithDynaFieldSwapped init() {
 			this.f1.put("f1a", singleDate);
 			return this;
@@ -325,7 +330,7 @@ public class DynaBeanComboTest extends ComboTest {
 	public static class BeanWithDynaFieldStringList {
 		@BeanProperty(name="*")
 		public Map<String,List<String>> f1 = new LinkedHashMap<String,List<String>>();
-	
+
 		public BeanWithDynaFieldStringList init() {
 			this.f1.put("f1a", Arrays.asList(new String[]{"foo","bar"}));
 			return this;

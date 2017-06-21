@@ -64,7 +64,7 @@ public class RdfParser extends ReaderParser {
 
 	/** Default N3 parser, all default settings.*/
 	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore.create());
-	
+
 
 	/** Consumes RDF/XML input */
 	@Consumes("text/xml+rdf")
@@ -77,7 +77,7 @@ public class RdfParser extends ReaderParser {
 		public Xml(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
-		
+
 		@Override
 		protected ObjectMap getOverrideProperties() {
 			return super.getOverrideProperties().append(RDF_language, LANG_RDF_XML);
@@ -87,7 +87,7 @@ public class RdfParser extends ReaderParser {
 	/** Consumes N-Triple input */
 	@Consumes(value="text/n-triple")
 	public static class NTriple extends RdfParser {
-		
+
 		/**
 		 * Constructor.
 		 * @param propertyStore The property store containing all the settings for this object.
@@ -95,7 +95,7 @@ public class RdfParser extends ReaderParser {
 		public NTriple(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
-		
+
 		@Override
 		protected ObjectMap getOverrideProperties() {
 			return super.getOverrideProperties().append(RDF_language, LANG_NTRIPLE);
@@ -113,7 +113,7 @@ public class RdfParser extends ReaderParser {
 		public Turtle(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
-		
+
 		@Override
 		protected ObjectMap getOverrideProperties() {
 			return super.getOverrideProperties().append(RDF_language, LANG_TURTLE);
@@ -131,7 +131,7 @@ public class RdfParser extends ReaderParser {
 		public N3(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
-		
+
 		@Override
 		protected ObjectMap getOverrideProperties() {
 			return super.getOverrideProperties().append(RDF_language, LANG_N3);
@@ -174,7 +174,7 @@ public class RdfParser extends ReaderParser {
 				c = new ArrayList();
 			else
 				c = (type.canCreateNewInstance(session.getOuter()) ? (Collection<?>)type.newInstance(session.getOuter()) : new ObjectList(session));
-			
+
 			int argIndex = 0;
 			for (Resource resource : roots)
 				c.add(parseAnything(s, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), resource, session.getOuter(), null));
@@ -273,7 +273,7 @@ public class RdfParser extends ReaderParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
-		
+
 		if (! sType.canCreateNewInstance(outer)) {
 			if (n.isResource()) {
 				Statement st = n.asResource().getProperty(session.getTypeProperty());
@@ -469,7 +469,7 @@ public class RdfParser extends ReaderParser {
 		return l;
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------

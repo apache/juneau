@@ -54,19 +54,19 @@ public class PetStoreResource extends Resource {
 
 	// Our database.
 	private Map<Integer,Pet> petDB;
-	
+
 	@Override /* Servlet */
 	public synchronized void init(RestConfig config) throws Exception {
 		// Load our database from a local JSON file.
 		petDB = JsonParser.DEFAULT.parse(getClass().getResourceAsStream("PetStore.json"), LinkedHashMap.class, Integer.class, Pet.class);
 		super.init(config);
 	}
-	
+
 	// Exclude the 'breed' and 'getsAlongWith' properties from the beans.
 	@RestMethod(
-		name="GET", 
-		path="/", 
-		summary="The complete list of pets in the store", 
+		name="GET",
+		path="/",
+		summary="The complete list of pets in the store",
 		bpExcludes="{Pet:'breed,getsAlongWith'}",
 		converters=Queryable.class
 	)
@@ -82,33 +82,33 @@ public class PetStoreResource extends Resource {
 
 	// Our bean class.
 	public static class Pet {
-		
+
 		@Html(link="servlet:/{id}")  // Creates a hyperlink in HTML view.
 		@NameProperty                // Links the parent key to this bean.
 		public int id;
-		
+
 		public String name;
 		public Kind kind;
 		public String breed;
 		public List<Kind> getsAlongWith;
-		
+
 		@BeanProperty(format="$%.2f")  // Renders price in dollars.
 		public float price;
-		
+
 		@BeanProperty(swap=DateSwap.RFC2822D.class)  // Renders dates in RFC2822 format.
 		public Date birthDate;
-	
+
 		public int getAge() {
 			Calendar c = new GregorianCalendar();
 			c.setTime(birthDate);
-			return new GregorianCalendar().get(Calendar.YEAR) - c.get(Calendar.YEAR); 
+			return new GregorianCalendar().get(Calendar.YEAR) - c.get(Calendar.YEAR);
 		}
 	}
-	
+
 	@Html(render=KindRender.class)  // Render as an icon in HTML.
 	public static enum Kind {
-		CAT, 
-		DOG, 
+		CAT,
+		DOG,
 		BIRD,
 		FISH,
 		MOUSE,

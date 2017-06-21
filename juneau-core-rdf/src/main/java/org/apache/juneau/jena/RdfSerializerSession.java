@@ -65,7 +65,7 @@ public final class RdfSerializerSession extends SerializerSession {
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @param uriContext The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form. 
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
 	protected RdfSerializerSession(RdfSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);

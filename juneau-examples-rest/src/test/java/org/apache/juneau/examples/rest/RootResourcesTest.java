@@ -64,7 +64,7 @@ public class RootResourcesTest extends RestTestcase {
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("Example of a router resource page"));
-		
+
 		client.closeQuietly();
 	}
 
@@ -84,7 +84,7 @@ public class RootResourcesTest extends RestTestcase {
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("Example of a router resource page"));
-		
+
 		client.closeQuietly();
 	}
 

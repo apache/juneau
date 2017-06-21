@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
 public class DirectoryResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
-	
+
 	private File rootDir;     // The root directory
 
 	// Settings enabled through servlet init parameters

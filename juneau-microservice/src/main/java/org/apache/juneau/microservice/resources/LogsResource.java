@@ -63,12 +63,12 @@ public class LogsResource extends Resource {
 			return f.isDirectory() || f.getName().endsWith(".log");
 		}
 	};
-	
+
 	@Override /* RestServlet */
 	public synchronized void init(RestConfig config) throws Exception {
 		super.init(config);
 		ConfigFile cf = config.getConfigFile();
-		
+
 		logDir = new File(cf.getString("Logging/logDir", "."));
 		leFormatter = new LogEntryFormatter(
 			cf.getString("Logging/format", "[{date} {level}] {msg}%n"),
@@ -88,12 +88,12 @@ public class LogsResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(
-		name="GET", 
-		path="/*", 
+		name="GET",
+		path="/*",
 		swagger=@MethodSwagger(
 			responses={@Response(200),@Response(404)}
 		)
-	)	
+	)
 	public Object getFileOrDirectory(RestRequest req, RestResponse res, @Properties ObjectMap properties, @PathRemainder String path) throws Exception {
 
 		File f = getFile(path);
@@ -132,7 +132,7 @@ public class LogsResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(
-		name="VIEW", 
+		name="VIEW",
 		path="/*",
 		swagger=@MethodSwagger(
 			responses={@Response(200),@Response(404)}
@@ -211,9 +211,9 @@ public class LogsResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(
-		name="PARSE", 
-		path="/*", 
-		converters=Queryable.class, 
+		name="PARSE",
+		path="/*",
+		converters=Queryable.class,
 		swagger=@MethodSwagger(
 			responses={@Response(200),@Response(404)}
 		)
@@ -238,8 +238,8 @@ public class LogsResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(
-		name="DOWNLOAD", 
-		path="/*", 
+		name="DOWNLOAD",
+		path="/*",
 		swagger=@MethodSwagger(
 			responses={@Response(200),@Response(404)}
 		)
@@ -264,7 +264,7 @@ public class LogsResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(
-		name="DELETE", 
+		name="DELETE",
 		path="/*",
 		swagger=@MethodSwagger(
 			responses={@Response(200),@Response(404)}

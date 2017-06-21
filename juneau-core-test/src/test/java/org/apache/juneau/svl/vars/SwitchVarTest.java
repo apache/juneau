@@ -26,9 +26,9 @@ public class SwitchVarTest {
 	@Test
 	public void test() throws Exception {
 		VarResolver vr = new VarResolverBuilder().vars(SwitchVar.class, SystemPropertiesVar.class).build();
-		
+
 		System.setProperty("SwitchVarTest.test", "foobar");
-		
+
 		assertEquals("YES", vr.resolve("$SWITCH{$S{SwitchVarTest.test},foobar,YES}"));
 		assertEquals("YES", vr.resolve("$SWITCH{ $S{ SwitchVarTest.test } , foobar , YES }"));
 		assertEquals("", vr.resolve("$SWITCH{$S{SwitchVarTest.test},foobar2,YES}"));

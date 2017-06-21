@@ -22,7 +22,7 @@ import org.apache.juneau.remoteable.*;
  */
 @Remoteable
 public interface IAddressBook {
-	
+
 	/** Initialize this address book with preset entries */
 	void init() throws Exception;
 

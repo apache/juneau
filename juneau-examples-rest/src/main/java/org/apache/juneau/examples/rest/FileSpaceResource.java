@@ -49,7 +49,7 @@ public class FileSpaceResource extends Resource {
 		new FileSpace("E:", 100000000, 97500000),
 		new FileSpace("F:", 100000000, 5000000)
 	};
-	
+
 	/**
 	 * Our bean class being serialized.
 	 * Properties are listed to ensure order across all JVMs.
@@ -59,7 +59,7 @@ public class FileSpaceResource extends Resource {
 
 		private final String drive;
 		private final long total, available;
-		
+
 		public FileSpace(String drive, long total, long available) {
 			this.drive = drive;
 			this.total = total;
@@ -83,7 +83,7 @@ public class FileSpaceResource extends Resource {
 		public float getPctFull() {
 			return ((100 * available) / total);
 		}
-		
+
 		@Html(render=FileSpaceStatusRender.class)
 		public FileSpaceStatus getStatus() {
 			float pf = getPctFull();
@@ -94,11 +94,11 @@ public class FileSpaceResource extends Resource {
 			return FileSpaceStatus.SEVERE;
 		}
 	}
-	
+
 	public static enum FileSpaceStatus {
 		OK, WARNING, SEVERE;
 	}
-	
+
 	public static class FileSpacePctRender extends HtmlRender<Float> {
 
 		@Override
@@ -112,15 +112,15 @@ public class FileSpaceResource extends Resource {
 
 		@Override
 		public Object getContent(SerializerSession session, Float value) {
-			if (value >= 90) 
+			if (value >= 90)
 				return div(
-					String.format("%.0f%%", value), 
+					String.format("%.0f%%", value),
 					style("@keyframes color_change { from { background-color: red; } to { background-color: yellow; }")
 				);
 			return String.format("%.0f%%", value);
 		}
 	}
-	
+
 	public static class FileSpaceStatusRender extends HtmlRender<FileSpaceStatus> {
 
 		@Override

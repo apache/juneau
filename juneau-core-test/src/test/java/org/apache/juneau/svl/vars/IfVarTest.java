@@ -26,7 +26,7 @@ public class IfVarTest {
 	@Test
 	public void test() throws Exception {
 		VarResolver vr = new VarResolverBuilder().vars(IfVar.class, SystemPropertiesVar.class).build();
-		
+
 		for (String test : new String[]{"","0","false","FALSE","f","F","foobar"}) {
 			System.setProperty("IfVarTest.test", test);
 			assertEquals("NO", vr.resolve("$IF{$S{IfVarTest.test},YES,NO}"));
@@ -34,7 +34,7 @@ public class IfVarTest {
 			assertEquals("", vr.resolve("$IF{$S{IfVarTest.test},YES}"));
 			assertEquals("x  x", vr.resolve("x $IF{ $S{ IfVarTest.test } , YES } x"));
 		}
-		
+
 		for (String test : new String[]{"1","true","TRUE","t","T"}) {
 			System.setProperty("IfVarTest.test", test);
 			assertEquals("YES", vr.resolve("$IF{$S{IfVarTest.test},YES,NO}"));

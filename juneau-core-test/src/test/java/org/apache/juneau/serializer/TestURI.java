@@ -22,7 +22,7 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings("javadoc")
 @Bean(sort=true)
 public class TestURI {
-	
+
 	// String annotated as a URI
 	@org.apache.juneau.annotation.URI
 	@Rdf(beanUri=true)
@@ -30,7 +30,7 @@ public class TestURI {
 	public String f0 = "f0/x0";
 
 	// URI properties
-	public URI 
+	public URI
 		f1a = URI.create("http://www.apache.org/f1a"),
 		f1b = URI.create("/f1b"),
 		f1c = URI.create("/f1c/x/y"),
@@ -46,7 +46,7 @@ public class TestURI {
 		f1m = URI.create("context:/"),
 		f1n = URI.create("context:/.."),
 		fio = null;
-		
+
 	// Strings annotated with @URI properties
 	@org.apache.juneau.annotation.URI
 	public String
@@ -72,10 +72,10 @@ public class TestURI {
 		f3a = "http://www.apache.org/f3a/x?label=MY_LABEL&foo=bar",
 		f3b = XmlUtils.urlEncode("<>&'\""),
 		f3c = "<>&'\"";  // Invalid URI, but should produce parsable output.
-	
+
 	// @URI on bean
 	public TestURIb f4 = new TestURIb();
-	
+
 	// @URI on bean property method.
 	@org.apache.juneau.annotation.URI
 	public String getF5() {

@@ -248,10 +248,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public ObjectMap getProperties() {
 		return this.properties;
 	}
-	
+
 	/**
 	 * Shortcut for calling <code>getProperties().append(name, value);</code> fluently.
-	 * 
+	 *
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).

@@ -99,7 +99,7 @@ public class RestMicroservice extends Microservice {
 		super(args);
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Methods implemented on Microservice API
 	//--------------------------------------------------------------------------------
@@ -147,11 +147,11 @@ public class RestMicroservice extends Microservice {
 		return this;
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// RestMicroservice API methods.
 	//--------------------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the port that this microservice started up on.
 	 * @return The port that this microservice started up on.
@@ -342,7 +342,7 @@ public class RestMicroservice extends Microservice {
 
 		ConfigFile cf = getConfig();
 		ObjectMap mf = getManifest();
-		
+
 		int[] ports = cf.getObjectWithDefault("REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}), int[].class);
 
 		port = findOpenPort(ports);
@@ -350,7 +350,7 @@ public class RestMicroservice extends Microservice {
 			System.err.println("Open port not found.  Tried " + JsonSerializer.DEFAULT_LAX.toString(ports));
 			System.exit(1);
 		}
-			
+
 		contextPath = cf.getString("REST/contextPath", mf.getString("Rest-ContextPath", "/"));
 
 		if (cf.getBoolean("REST/useSsl")) {
@@ -397,7 +397,7 @@ public class RestMicroservice extends Microservice {
 
 		return server;
 	}
-	
+
 	private static int findOpenPort(int[] ports) {
 		for (int port : ports) {
 			try {
@@ -416,7 +416,7 @@ public class RestMicroservice extends Microservice {
 	 * Method used to start the Jetty server created by {@link #createServer()}.
 	 * <p>
 	 * Subclasses can override this method to customize server startup.
-	 * 
+	 *
 	 * @return The port that this server started on.
 	 * @throws Exception
 	 */
@@ -544,7 +544,7 @@ public class RestMicroservice extends Microservice {
 		}
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Lifecycle listener methods.
 	//--------------------------------------------------------------------------------
@@ -584,17 +584,17 @@ public class RestMicroservice extends Microservice {
 	 */
 	protected void onPostStopServer() {}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods.
 	//--------------------------------------------------------------------------------
-	
+
 	@Override /* Microservice */
 	public RestMicroservice setConfig(String cfPath, boolean create) throws IOException {
 		super.setConfig(cfPath, create);
 		return this;
 	}
-	
+
 	@Override /* Microservice */
 	public RestMicroservice setConfig(ConfigFile cf) {
 		super.setConfig(cf);
@@ -624,7 +624,7 @@ public class RestMicroservice extends Microservice {
 		super.setManifest(c);
 		return this;
 	}
-	
+
 	//--------------------------------------------------------------------------------
 	// Other methods.
 	//--------------------------------------------------------------------------------

@@ -49,15 +49,15 @@ public class MediaRangeTest {
 			{ "16", "foo/bar/baz", "['foo/bar/baz']" },
 		});
 	}
-	
+
 	private String label, mediaRange, expected;
-	
+
 	public MediaRangeTest(String label, String mediaRange, String expected) {
 		this.label = label;
 		this.mediaRange = mediaRange;
 		this.expected = expected;
 	}
-	
+
 	@Test
 	public void test() {
 		MediaTypeRange[] r = MediaTypeRange.parse(mediaRange);

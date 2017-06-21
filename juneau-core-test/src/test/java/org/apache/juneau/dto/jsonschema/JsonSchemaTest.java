@@ -189,7 +189,7 @@ public class JsonSchemaTest {
 			.setNot(new SchemaRef("http://not"))
 		;
 	}
-	
+
 	/** Bean with other possible property value types not covered in test1 */
 	public static Schema getTest2() {
 		return new Schema()

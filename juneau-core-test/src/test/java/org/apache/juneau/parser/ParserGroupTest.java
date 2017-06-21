@@ -27,7 +27,7 @@ public class ParserGroupTest {
 	//====================================================================================================
 	@Test
 	public void testParserGroupMatching() throws Exception {
-		
+
 		ParserGroup g = new ParserGroupBuilder().append(Parser1.class, Parser2.class, Parser3.class).build();
 		assertType(Parser1.class, g.getParser("text/foo"));
 		assertType(Parser1.class, g.getParser("text/foo_a"));
@@ -44,15 +44,15 @@ public class ParserGroupTest {
 		assertType(Parser3.class, g.getParser("text/yyy+baz"));
 		assertType(Parser3.class, g.getParser("text/yyy+baz_a"));
 	}
-	
-	
+
+
 	@Consumes("text/foo,text/foo_a")
 	public static class Parser1 extends JsonParser {
 		public Parser1(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Consumes("text/foo+bar,text/foo+bar_a")
 	public static class Parser2 extends JsonParser {
 		public Parser2(PropertyStore propertyStore) {
@@ -66,7 +66,7 @@ public class ParserGroupTest {
 			super(propertyStore);
 		}
 	}
-	
+
 	//====================================================================================================
 	// Test inheritence
 	//====================================================================================================
@@ -74,11 +74,11 @@ public class ParserGroupTest {
 	public void testInheritence() throws Exception {
 		ParserGroupBuilder gb = null;
 		ParserGroup g = null;
-		
+
 		gb = new ParserGroupBuilder().append(P1.class, P2.class);
 		g = gb.build();
 		assertObjectEquals("['text/1','text/2','text/2a']", g.getSupportedMediaTypes());
-		
+
 		gb = new ParserGroupBuilder(g).append(P3.class, P4.class);
 		g = gb.build();
 		assertObjectEquals("['text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
@@ -87,14 +87,14 @@ public class ParserGroupTest {
 		g = gb.build();
 		assertObjectEquals("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 	}
-	
+
 	@Consumes("text/1")
 	public static class P1 extends JsonParser {
 		public P1(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Consumes("text/2,text/2a")
 	public static class P2 extends JsonParser {
 		public P2(PropertyStore propertyStore) {
@@ -108,14 +108,14 @@ public class ParserGroupTest {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Consumes("text/4,text/4a")
 	public static class P4 extends JsonParser {
 		public P4(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Consumes("text/5")
 	public static class P5 extends JsonParser {
 		public P5(PropertyStore propertyStore) {

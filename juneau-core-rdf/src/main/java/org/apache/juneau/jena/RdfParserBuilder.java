@@ -336,7 +336,7 @@ public class RdfParserBuilder extends ParserBuilder {
 		super.strict();
 		return this;
 	}
-	
+
 	@Override /* ParserBuilder */
 	public RdfParserBuilder inputStreamCharset(String value) {
 		super.inputStreamCharset(value);

@@ -27,7 +27,7 @@ import org.junit.runners.*;
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
 public class Html5ComboTest extends ComboTest {
-	
+
 	private static final B btag = b("bbb");
 
 	@Parameterized.Parameters
@@ -61,6 +61,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A o) {
 						assertType(A.class, o);
 					}
@@ -94,6 +95,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A o) {
 						assertType(A.class, o);
 					}
@@ -127,6 +129,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li></rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A o) {
 						assertType(A.class, o);
 					}
@@ -160,6 +163,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>_x0020_</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A o) {
 						assertType(A.class, o);
 					}
@@ -193,6 +197,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A o) {
 						assertType(A.class, o);
 					}
@@ -226,6 +231,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>abbr</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Abbr o) {
 						assertType(Abbr.class, o);
 					}
@@ -259,6 +265,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>abbr</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:title>foo</jp:title>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Abbr o) {
 						assertType(Abbr.class, o);
 					}
@@ -292,6 +299,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>address</jp:_type>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Address o) {
 						assertType(Address.class, o);
 					}
@@ -325,6 +333,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>address</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li></rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Address o) {
 						assertType(Address.class, o);
 					}
@@ -358,6 +367,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>address</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href>bar</jp:href>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>baz</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href>qux</jp:href>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>quux</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Address o) {
 						assertType(Address.class, o);
 						assertType(A.class, o.getChild(1));
@@ -395,6 +405,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>aside</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h1</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>header1</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Aside o) {
 						assertType(Aside.class, o);
 						assertType(H1.class, o.getChild(0));
@@ -433,6 +444,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>audio</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:controls>true</jp:controls>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>source</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.ogg</jp:src>\n            <jp:type>audio/ogg</jp:type>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>source</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.mp3</jp:src>\n            <jp:type>audio/mpeg</jp:type>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Audio o) {
 						assertType(Audio.class, o);
 						assertType(Source.class, o.getChild(0));
@@ -466,8 +478,9 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>bdi</jp:_type>\n<jp:c>إيان</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>bdi</jp:t>\n<jp:c>إيان</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>bdi</jp:_type>\n          <jp:c>إيان</jp:c>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
-				)	
+				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Bdi.class, o.getChild(1));
@@ -502,6 +515,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>bdo</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:dir>rtl</jp:dir>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>baz</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Bdo.class, o.getChild(1));
@@ -536,6 +550,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>blockquote</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Blockquote o) {
 						assertType(Blockquote.class, o);
 					}
@@ -569,6 +584,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>br</jp:_type>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Br o) {
 						assertType(Br.class, o);
 					}
@@ -602,6 +618,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>br</jp:_type>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Br.class, o.getChild(0));
@@ -636,6 +653,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>button</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:type>button</jp:type>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Button o) {
 						assertType(Button.class, o);
 					}
@@ -669,6 +687,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>canvas</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:width>100</jp:width>\n      <jp:height>200</jp:height>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Canvas o) {
 						assertType(Canvas.class, o);
 					}
@@ -702,6 +721,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>cite</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Cite.class, o.getChild(0));
@@ -736,6 +756,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>code</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo_x000A__x0009_bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Code o) {
 						assertType(Code.class, o);
 					}
@@ -772,6 +793,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>datalist</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:id>foo</jp:id>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>option</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:value>One</jp:value>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>option</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:value>Two</jp:value>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Datalist o) {
 						assertType(Datalist.class, o);
 						assertType(Option.class, o.getChild(0));
@@ -810,6 +832,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>dl</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>dt</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>dd</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Dl o) {
 						assertType(Dl.class, o);
 						assertType(Dt.class, o.getChild(0));
@@ -845,6 +868,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>del</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>ins</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>baz</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Del.class, o.getChild(0));
@@ -881,6 +905,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>dfn</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Dfn.class, o.getChild(0));
@@ -915,6 +940,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>div</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Div o) {
 						assertType(Div.class, o);
 						assertType(B.class, o.getChild(1));
@@ -949,6 +975,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>em</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Em.class, o.getChild(1));
@@ -983,6 +1010,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>embed</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:src>foo.swf</jp:src>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Embed o) {
 						assertType(Embed.class, o);
 					}
@@ -1024,6 +1052,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>form</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:action>bar</jp:action>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>fieldset</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>legend</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>foo:</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>Name:</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>input</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:type>text</jp:type>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>br</jp:_type>\n              </rdf:li>\n              <rdf:li>Email:</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>input</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:type>text</jp:type>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>br</jp:_type>\n              </rdf:li>\n              <rdf:li>X:</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>keygen</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:name>X</jp:name>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>label</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:for>Name</jp:for>\n                </jp:a>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>label</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Form o) {
 						assertType(Form.class, o);
 						assertType(Fieldset.class, o.getChild(0));
@@ -1068,6 +1097,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>figure</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>img</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.png</jp:src>\n            <jp:alt>foo</jp:alt>\n            <jp:width>100</jp:width>\n            <jp:height>200</jp:height>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>figcaption</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>The caption</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Figure o) {
 						assertType(Figure.class, o);
 						assertType(Img.class, o.getChild(0));
@@ -1105,6 +1135,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>div</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h1</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>One</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h2</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Two</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h3</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Three</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h4</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Four</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h5</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Five</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h6</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Six</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Div o) {
 						assertType(Div.class, o);
 						assertType(H1.class, o.getChild(0));
@@ -1144,6 +1175,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>hr</jp:_type>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Hr.class, o.getChild(0));
@@ -1170,7 +1202,7 @@ public class Html5ComboTest extends ComboTest {
 					/* JsonR */		"{\n\t_type: 'html',\n\tc: [\n\t\t{\n\t\t\t_type: 'head',\n\t\t\tc: [\n\t\t\t\t{\n\t\t\t\t\t_type: 'title',\n\t\t\t\t\tc: 'title'\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t_type: 'base',\n\t\t\t\t\ta: {\n\t\t\t\t\t\thref: 'foo',\n\t\t\t\t\t\ttarget: '_blank'\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t_type: 'link',\n\t\t\t\t\ta: {\n\t\t\t\t\t\trel: 'stylesheet',\n\t\t\t\t\t\ttype: 'text/css',\n\t\t\t\t\t\thref: 'theme.css'\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t_type: 'meta',\n\t\t\t\t\ta: {\n\t\t\t\t\t\tcharset: 'UTF-8'\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'body',\n\t\t\tc: [\n\t\t\t\t'bar'\n\t\t\t]\n\t\t}\n\t]\n}",
 					/* Xml */		"<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>",
 					/* XmlT */		"<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>",
-					/* XmlR */	
+					/* XmlR */
 						"<html>\n"
 						+"	<head>\n"
 						+"		<title>title</title>\n"
@@ -1183,7 +1215,7 @@ public class Html5ComboTest extends ComboTest {
 					/* XmlNs */		"<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>",
 					/* Html */		"<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>",
 					/* HtmlT */		"<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>",
-					/* HtmlR */		
+					/* HtmlR */
 						"<html>\n"
 						+"	<head>\n"
 						+"		<title>title</title>\n"
@@ -1206,6 +1238,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>html</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>head</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>title</jp:_type>\n                <jp:c>title</jp:c>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>base</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:href>foo</jp:href>\n                  <jp:target>_blank</jp:target>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>link</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:rel>stylesheet</jp:rel>\n                  <jp:type>text/css</jp:type>\n                  <jp:href>theme.css</jp:href>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>meta</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:charset>UTF-8</jp:charset>\n                </jp:a>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>body</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Html o) {
 						assertType(Html.class, o);
 						assertType(Head.class, o.getChild(0));
@@ -1245,6 +1278,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>i</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(I.class, o.getChild(0));
@@ -1279,6 +1313,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>iframe</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Iframe o) {
 						assertType(Iframe.class, o);
 					}
@@ -1312,6 +1347,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>kbd</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Kbd.class, o.getChild(0));
@@ -1352,6 +1388,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>main</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>article</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>header</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>h1</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>header1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>p</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>header2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>p</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>content</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>footer</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>h2</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>footer1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>p</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>footer2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Main o) {
 						assertType(Main.class, o);
 						assertType(Article.class, o.getChild(0));
@@ -1393,6 +1430,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>map</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:name>baz</jp:name>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>area</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:shape>rect</jp:shape>\n            <jp:coords>0,1,2,3</jp:coords>\n            <jp:href>foo</jp:href>\n            <jp:alt>bar</jp:alt>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map o) {
 						assertType(Map.class, o);
 						assertType(Area.class, o.getChild(0));
@@ -1427,6 +1465,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>mark</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Mark.class, o.getChild(0));
@@ -1461,6 +1500,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>meter</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:value>1</jp:value>\n      <jp:min>0</jp:min>\n      <jp:max>2</jp:max>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Meter o) {
 						assertType(Meter.class, o);
 					}
@@ -1494,6 +1534,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>nav</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href>foo</jp:href>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Nav o) {
 						assertType(Nav.class, o);
 						assertType(A.class, o.getChild(0));
@@ -1528,6 +1569,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>noscript</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>No script!</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Noscript o) {
 						assertType(Noscript.class, o);
 					}
@@ -1561,6 +1603,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>object</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:width>1</jp:width>\n      <jp:height>2</jp:height>\n      <jp:data>foo.swf</jp:data>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>param</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:name>autoplay</jp:name>\n            <jp:value>true</jp:value>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Object2 o) {
 						assertType(Object2.class, o);
 						assertType(Param.class, o.getChild(0));
@@ -1595,6 +1638,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>ol</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>li</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Ol o) {
 						assertType(Ol.class, o);
 						assertType(Li.class, o.getChild(0));
@@ -1633,6 +1677,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>form</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:action>testform</jp:action>\n      <jp:oninput>x.value=parseInt(a.value)+parseInt(b.value)</jp:oninput>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>0</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>range</jp:type>\n            <jp:id>a</jp:id>\n            <jp:value>50</jp:value>\n          </jp:a>\n        </rdf:li>\n        <rdf:li>+</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>number</jp:type>\n            <jp:id>b</jp:id>\n            <jp:value>50</jp:value>\n          </jp:a>\n        </rdf:li>\n        <rdf:li>=</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>output</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:name>x</jp:name>\n            <jp:for>a b</jp:for>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Form o) {
 						assertType(Form.class, o);
 						assertType(Input.class, o.getChild(1));
@@ -1669,6 +1714,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 					}
@@ -1702,6 +1748,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>pre</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo   _x000A_   bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Pre o) {
 						assertType(Pre.class, o);
 					}
@@ -1735,6 +1782,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>progress</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:value>1</jp:value>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Progress o) {
 						assertType(Progress.class, o);
 					}
@@ -1768,6 +1816,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>q</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Q.class, o.getChild(1));
@@ -1804,6 +1853,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>ruby</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>法</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>rb</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>華</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>経</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>rtc</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>き</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>rp</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>け</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>ょ</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Ruby o) {
 						assertType(Ruby.class, o);
 						assertType(Rb.class, o.getChild(1));
@@ -1840,6 +1890,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>s</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(S.class, o.getChild(1));
@@ -1874,6 +1925,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>samp</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Samp o) {
 						assertType(Samp.class, o);
 					}
@@ -1907,6 +1959,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>script</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:type>text/javascript</jp:type>\n    </jp:a>\n    <jp:c>_x000A__x0009_alert('hello world!');_x000A_</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Script o) {
 						assertType(Script.class, o);
 					}
@@ -1940,6 +1993,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>section</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h1</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Section o) {
 						assertType(Section.class, o);
 						assertType(H1.class, o.getChild(0));
@@ -1975,6 +2029,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>select</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:name>foo</jp:name>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>optgroup</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:label>bar</jp:label>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>option</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:value>o1</jp:value>\n                </jp:a>\n                <jp:c>v1</jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Select o) {
 						assertType(Select.class, o);
 						assertType(Optgroup.class, o.getChild(0));
@@ -2010,6 +2065,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>small</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Small.class, o.getChild(0));
@@ -2044,6 +2100,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>My mother has_x0020_</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>span</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:style>color:blue</jp:style>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>blue</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>_x0020_eyes.</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Span.class, o.getChild(1));
@@ -2078,6 +2135,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>strong</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Strong.class, o.getChild(0));
@@ -2112,6 +2170,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>head</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>style</jp:_type>\n          <jp:c>_x000A__x0009_h1 {color:red;}_x000A__x0009_p: {color:blue;}_x000A_</jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Head o) {
 						assertType(Head.class, o);
 						assertType(Style.class, o.getChild(0));
@@ -2146,6 +2205,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>sub</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Sub.class, o.getChild(0));
@@ -2180,6 +2240,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>sup</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Sup.class, o.getChild(0));
@@ -2398,6 +2459,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>table</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>caption</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>caption1</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>colgroup</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>col</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:class>foo</jp:class>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>col</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:class>bar</jp:class>\n                </jp:a>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>thead</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>tr</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>th</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>c1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>th</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>c2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>tbody</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>tr</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>v1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>v2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>tfoot</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>tr</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>f1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>f2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Table o) {
 						assertType(Table.class, o);
 						assertType(Caption.class, o.getChild(0));
@@ -2447,6 +2509,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>template</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:id>foo</jp:id>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>div</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Template o) {
 						assertType(Template.class, o);
 						assertType(Div.class, o.getChild(0));
@@ -2481,12 +2544,13 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>textarea</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:name>foo</jp:name>\n    </jp:a>\n    <jp:c>bar</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Textarea o) {
 						assertType(Textarea.class, o);
 					}
 				}
 			},
-			{	/* 64 */	
+			{	/* 64 */
 				new ComboInput<P>(
 					"Time",
 					P.class,
@@ -2514,6 +2578,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>I have a date on_x0020_</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>time</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:datetime>2016-02-14 18:00</jp:datetime>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Valentines day</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>.</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Time.class, o.getChild(1));
@@ -2548,6 +2613,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>u</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(U.class, o.getChild(0));
@@ -2582,6 +2648,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>ul</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>li</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Ul o) {
 						assertType(Ul.class, o);
 						assertType(Li.class, o.getChild(0));
@@ -2616,6 +2683,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>var</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Var.class, o.getChild(0));
@@ -2653,6 +2721,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>video</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:width>100</jp:width>\n      <jp:height>200</jp:height>\n      <jp:controls>true</jp:controls>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>source</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.mp4</jp:src>\n            <jp:type>video/mp4</jp:type>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>track</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>subtitles_en.vtt</jp:src>\n            <jp:kind>subtitles</jp:kind>\n            <jp:srclang>en</jp:srclang>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Video o) {
 						assertType(Video.class, o);
 						assertType(Source.class, o.getChild(0));
@@ -2688,6 +2757,7 @@ public class Html5ComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>wbr</jp:_type>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(P o) {
 						assertType(P.class, o);
 						assertType(Wbr.class, o.getChild(1));

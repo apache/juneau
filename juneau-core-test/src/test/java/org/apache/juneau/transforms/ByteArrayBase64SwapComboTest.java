@@ -61,6 +61,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>AQID</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(byte[] o) {
 						assertType(byte[].class, o);
 					}
@@ -94,6 +95,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>AQID</rdf:li>\n    <rdf:li>BAUG</rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(byte[][] o) {
 						assertType(byte[][].class, o);
 					}
@@ -131,6 +133,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>AQID</rdf:li>\n    <rdf:li>BAUG</rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(List<byte[]> o) {
 						assertType(List.class, o);
 						assertType(byte[].class, o.get(0));
@@ -170,6 +173,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>AQID</jp:foo>\n    <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n    <jp:_x0000_>BAUG</jp:_x0000_>\n    <jp:null>BwgJ</jp:null>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,byte[]> o) {
 						assertType(Map.class, o);
 						assertType(String.class, o.keySet().iterator().next());
@@ -205,6 +209,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>AQID</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithByteArrayField o) {
 						assertType(BeanWithByteArrayField.class, o);
 					}
@@ -238,6 +243,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>AQID</rdf:li>\n        <rdf:li>BAUG</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithByteArray2dField o) {
 						assertType(BeanWithByteArray2dField.class, o);
 					}
@@ -271,6 +277,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithByteArrayNullField o) {
 						assertType(BeanWithByteArrayNullField.class, o);
 					}
@@ -304,6 +311,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>AQID</rdf:li>\n        <rdf:li>BAUG</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithByteArrayListField o) {
 						assertType(BeanWithByteArrayListField.class, o);
 					}
@@ -337,6 +345,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo>AQID</jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_>BAUG</jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithByteArrayMapField o) {
 						assertType(BeanWithByteArrayMapField.class, o);
 					}
@@ -370,6 +379,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f1>AQID</jp:f1>\n          <jp:f2>\n            <rdf:Seq>\n              <rdf:li>AQID</rdf:li>\n              <rdf:li>BAUG</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f2>\n          <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:f4>\n            <rdf:Seq>\n              <rdf:li>AQID</rdf:li>\n              <rdf:li>BAUG</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f4>\n          <jp:f5 rdf:parseType='Resource'>\n            <jp:foo>AQID</jp:foo>\n            <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            <jp:_x0000_>BAUG</jp:_x0000_>\n          </jp:f5>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithByteArrayBeanListField o) {
 						assertType(BeanWithByteArrayBeanListField.class, o);
 					}
@@ -403,6 +413,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo rdf:parseType='Resource'>\n        <jp:f1>AQID</jp:f1>\n        <jp:f2>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f2>\n        <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n        <jp:f4>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f4>\n        <jp:f5 rdf:parseType='Resource'>\n          <jp:foo>AQID</jp:foo>\n          <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:_x0000_>BAUG</jp:_x0000_>\n        </jp:f5>\n      </jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_ rdf:parseType='Resource'>\n        <jp:f1>AQID</jp:f1>\n        <jp:f2>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f2>\n        <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n        <jp:f4>\n          <rdf:Seq>\n            <rdf:li>AQID</rdf:li>\n            <rdf:li>BAUG</rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </jp:f4>\n        <jp:f5 rdf:parseType='Resource'>\n          <jp:foo>AQID</jp:foo>\n          <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:_x0000_>BAUG</jp:_x0000_>\n        </jp:f5>\n      </jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(BeanWithByteArrayBeanMapField o) {
 						assertType(BeanWithByteArrayBeanMapField.class, o);
 					}
@@ -410,21 +421,21 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			},
 		});
 	}
-	
+
 	public ByteArrayBase64SwapComboTest(ComboInput<?> comboInput) {
 		super(comboInput);
 	}
-	
+
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
 		return s.builder().pojoSwaps(ByteArrayBase64Swap.class).trimNullProperties(false).build();
 	}
-	
+
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
 		return p.builder().pojoSwaps(ByteArrayBase64Swap.class).build();
 	}
-		
+
 	public static class BeanWithByteArrayField {
 		public byte[] f;
 		public BeanWithByteArrayField init() {
@@ -440,7 +451,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithByteArrayNullField {
 		public byte[] f;
 		public BeanWithByteArrayNullField init() {
@@ -448,7 +459,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithByteArrayListField {
 		public List<byte[]> f;
 		public BeanWithByteArrayListField init() {
@@ -460,7 +471,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithByteArrayMapField {
 		public Map<String,byte[]> f;
 		public BeanWithByteArrayMapField init() {
@@ -472,7 +483,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithByteArrayBeanListField {
 		public List<B> f;
 		public BeanWithByteArrayBeanListField init() {
@@ -483,7 +494,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithByteArrayBeanMapField {
 		public Map<String,B> f;
 		public BeanWithByteArrayBeanMapField init() {

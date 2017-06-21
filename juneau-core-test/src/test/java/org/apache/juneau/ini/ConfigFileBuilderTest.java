@@ -42,7 +42,7 @@ public class ConfigFileBuilderTest {
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -70,7 +70,7 @@ public class ConfigFileBuilderTest {
 		cf = b1.build("TestGet.cfg");
 		assertObjectEquals("{'default':{},Test:{A:'a'}}", cf);
 	}
-	
+
 	/**
 	 * Retrieving config file should fail if the file doesn't exist and createIfNotExist == false.
 	 */
@@ -82,9 +82,9 @@ public class ConfigFileBuilderTest {
 
 		b = new ConfigFileBuilder().paths().createIfNotExists();
 		try { b.build("TestGet.cfg"); fail(); } catch (FileNotFoundException e) {}
-	}	
+	}
 
-	
+
 	//====================================================================================================
 	// loadIfModified()
 	//====================================================================================================

@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
 )
 public class MethodExampleResource extends Resource {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final UUID SAMPLE_UUID = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
 	private static final String SAMPLE_UUID_STRING = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
 
@@ -53,7 +53,7 @@ public class MethodExampleResource extends Resource {
 		};
 	}
 
-	/** 
+	/**
 	 * Methodology #1 - GET request using annotated attributes.
 	 * This approach uses annotated parameters for retrieving input.
 	 */
@@ -87,7 +87,7 @@ public class MethodExampleResource extends Resource {
 			.append("header-doNotTrack", doNotTrack);
 	}
 
-	/** 
+	/**
 	 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
 	 * This approach uses low-level request/response objects to perform the same as above.
 	 */
@@ -96,7 +96,7 @@ public class MethodExampleResource extends Resource {
 			RestRequest req,          // A direct subclass of HttpServletRequest.
 			RestResponse res          // A direct subclass of HttpServletResponse.
 		) throws Exception {
-		
+
 		// HTTP method.
 		String method = req.getMethod();
 
@@ -136,7 +136,7 @@ public class MethodExampleResource extends Resource {
 		res.setOutput(m);
 	}
 
-	/** 
+	/**
 	 * Methodology #3 - GET request using special objects.
 	 * This approach uses intermediate-level APIs.
 	 * The framework recognizes the parameter types and knows how to resolve them.
@@ -180,5 +180,5 @@ public class MethodExampleResource extends Resource {
 			.append("header-lang", lang)
 			.append("header-accept", accept)
 			.append("header-doNotTrack", doNotTrack);
-	}	
+	}
 }

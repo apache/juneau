@@ -36,7 +36,7 @@ public class PropertyNamerTest {
 		assertEquals("a", n.getPropertyName("A"));
 		assertEquals("a", n.getPropertyName("A"));
 	}
-	
+
 	//====================================================================================================
 	// test underscore-lower-case
 	//====================================================================================================

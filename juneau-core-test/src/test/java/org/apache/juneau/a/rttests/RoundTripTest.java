@@ -222,7 +222,7 @@ public abstract class RoundTripTest {
 	public Class<?>[] getDictionary() {
 		return new Class<?>[0];
 	}
-	
+
 	public ObjectMap getProperties() {
 		return ObjectMap.EMPTY_MAP;
 	}

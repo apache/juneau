@@ -32,11 +32,11 @@ import org.junit.runners.*;
 public class DateSwapComboTest extends ComboTest {
 
 	private static Date singleDate = CalendarSwapTest.testDate.getTime();
-	
+
 	private static Date[] dateArray = new Date[]{singleDate};
-	
+
 	private static ObjectMap dateMap = new ObjectMap().append("foo", singleDate);
-	
+
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
@@ -70,6 +70,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>Sun Mar 03 10:11:12 PST 1901</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date o) {
 						assertType(Date.class, o);
 					}
@@ -104,6 +105,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Sun Mar 03 10:11:12 PST 1901</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date[] o) {
 						assertType(Date.class, o[0]);
 					}
@@ -138,6 +140,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Sun Mar 03 10:11:12 PST 1901</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(ObjectMap o) {
 						assertType(Date.class, o.get("foo"));
 					}
@@ -172,6 +175,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>1901-03-03T10:11:12-08:00</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date o) {
 						assertType(Date.class, o);
 					}
@@ -206,6 +210,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>1901-03-03T10:11:12-08:00</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date[] o) {
 						assertType(Date.class, o[0]);
 					}
@@ -240,6 +245,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>1901-03-03T10:11:12-08:00</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(ObjectMap o) {
 						assertType(Date.class, o.get("foo"));
 					}
@@ -274,6 +280,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>Sun, 03 Mar 1901 18:11:12 GMT</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date o) {
 						assertType(Date.class, o);
 					}
@@ -308,6 +315,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Sun, 03 Mar 1901 18:11:12 GMT</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date[] o) {
 						assertType(Date.class, o[0]);
 					}
@@ -342,6 +350,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Sun, 03 Mar 1901 18:11:12 GMT</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(ObjectMap o) {
 						assertType(Date.class, o.get("foo"));
 					}
@@ -376,6 +385,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>-2172116928000</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date o) {
 						assertType(Date.class, o);
 					}
@@ -410,6 +420,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>-2172116928000</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date[] o) {
 						assertType(Date.class, o[0]);
 					}
@@ -444,6 +455,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>-2172116928000</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(ObjectMap o) {
 						assertType(Date.class, o.get("foo"));
 					}
@@ -478,6 +490,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:time>-2172116928000</jp:time>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date o) {
 						assertType(Date.class, o);
 					}
@@ -512,6 +525,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:time>-2172116928000</jp:time>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date[] o) {
 						assertType(Date.class, o[0]);
 					}
@@ -546,6 +560,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo rdf:parseType='Resource'>\n      <jp:time>-2172116928000</jp:time>\n    </jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(ObjectMap o) {
 						assertType(Date.class, o.get("foo"));
 					}
@@ -580,6 +595,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>Mar 3, 1901</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date o) {
 						assertType(Date.class, o);
 					}
@@ -614,6 +630,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Mar 3, 1901</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Date[] o) {
 						assertType(Date.class, o[0]);
 					}
@@ -648,6 +665,7 @@ public class DateSwapComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Mar 3, 1901</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(ObjectMap o) {
 						assertType(Date.class, o.get("foo"));
 					}
@@ -655,17 +673,17 @@ public class DateSwapComboTest extends ComboTest {
 			},
 		});
 	}
-	
+
 	private final Class<?> swapClass;
-	
+
 	public DateSwapComboTest(ComboInput2<?> comboInput) {
 		super(comboInput);
 		this.swapClass = comboInput.swapClass;
 	}
-		
+
 	public static class ComboInput2<T> extends ComboInput<T> {
 		private final Class<?> swapClass;
-		
+
 		public ComboInput2(
 				String label,
 				Type type,
@@ -697,24 +715,24 @@ public class DateSwapComboTest extends ComboTest {
 			this.swapClass = swapClass;
 		}
 	}
-	
+
 	@BeforeClass
 	public static void beforeClass() {
 		TestUtils.setTimeZone("PST");
 		TestUtils.setLocale(Locale.US);
 	}
-	
+
 	@AfterClass
 	public static void afterClass() {
 		TestUtils.unsetTimeZone();
 		TestUtils.unsetLocale();
 	}
-	
+
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
 		return s.builder().pojoSwaps(swapClass).build();
 	}
-	
+
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
 		return p.builder().pojoSwaps(swapClass).build();

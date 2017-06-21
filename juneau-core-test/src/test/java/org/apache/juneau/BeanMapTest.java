@@ -55,7 +55,7 @@ public class BeanMapTest {
 			addCollectionClass("LinkedListOfCalendar", LinkedList.class, Calendar.class);
 		}
 	}
-	
+
 	//====================================================================================================
 	// Primitive field properties
 	//====================================================================================================
@@ -1358,7 +1358,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testToLinkedListInteger() throws Exception {
-		
+
 		// With _type
 		ObjectMap m = new ObjectMap(session);
 		m.put("_type", "LinkedListOfInts");
@@ -1563,7 +1563,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToStringArray() throws Exception {
-		
+
 		// With _type
 		ObjectMap m = new ObjectMap(session);
 		m.put("_type", "StringArray");
@@ -1603,7 +1603,7 @@ public class BeanMapTest {
 		l2 = m.cast(bc.getClassMeta(StringBuffer[].class));
 		assertEquals("1", l[0].toString());
 	}
-	
+
 	//====================================================================================================
 	// testCastToIntArray - cast() to int[]
 	//====================================================================================================

@@ -51,6 +51,7 @@ public class BasicHtmlTest {
 					"<string>foo</string>"
 				)
 				{
+					@Override
 					public void verify(String o) {
 						assertType(String.class, o);
 					}
@@ -66,6 +67,7 @@ public class BasicHtmlTest {
 					"<boolean>true</boolean>"
 				)
 				{
+					@Override
 					public void verify(Boolean o) {
 						assertType(Boolean.class, o);
 					}
@@ -81,6 +83,7 @@ public class BasicHtmlTest {
 					"<number>123</number>"
 				)
 				{
+					@Override
 					public void verify(Integer o) {
 						assertType(Integer.class, o);
 					}
@@ -96,6 +99,7 @@ public class BasicHtmlTest {
 					"<number>1.23</number>"
 				)
 				{
+					@Override
 					public void verify(Float o) {
 						assertType(Float.class, o);
 					}
@@ -121,6 +125,7 @@ public class BasicHtmlTest {
 					"<ul><li>foo</li></ul>"
 				)
 				{
+					@Override
 					public void verify(String[] o) {
 						assertType(String.class, o[0]);
 					}
@@ -146,6 +151,7 @@ public class BasicHtmlTest {
 					"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>"
 				)
 				{
+					@Override
 					public void verify(Object[] o) {
 						assertType(String.class, o[0]);
 						assertType(Integer.class, o[1]);
@@ -163,6 +169,7 @@ public class BasicHtmlTest {
 					"<ul><li>123</li></ul>"
 				)
 				{
+					@Override
 					public void verify(int[] o) {
 						assertType(int[].class, o);
 					}
@@ -178,6 +185,7 @@ public class BasicHtmlTest {
 					"<ul><li>true</li></ul>"
 				)
 				{
+					@Override
 					public void verify(boolean[] o) {
 						assertType(boolean[].class, o);
 					}
@@ -193,6 +201,7 @@ public class BasicHtmlTest {
 					"<ul><li><ul><li>foo</li></ul></li></ul>"
 				)
 				{
+					@Override
 					public void verify(String[][] o) {
 						assertType(String[][].class, o);
 					}
@@ -213,7 +222,7 @@ public class BasicHtmlTest {
 							+"<td><null/></td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>k1</td>\n"
@@ -224,7 +233,7 @@ public class BasicHtmlTest {
 							+"\t\t<td><null/></td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>k1</td>"
@@ -237,6 +246,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(Map<String,String> o) {
 						assertType(String.class, o.get("k1"));
 					}
@@ -261,7 +271,7 @@ public class BasicHtmlTest {
 							+"<td><null/></td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>k1</td>\n"
@@ -276,7 +286,7 @@ public class BasicHtmlTest {
 							+"\t\t<td><null/></td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>k1</td>"
@@ -293,6 +303,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(Map<String,Number> o) {
 						assertType(Number.class, o.get("k1"));
 					}
@@ -325,7 +336,7 @@ public class BasicHtmlTest {
 							+"<td><null/></td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>k1</td>\n"
@@ -348,7 +359,7 @@ public class BasicHtmlTest {
 							+"\t\t<td><null/></td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>k1</td>"
@@ -373,6 +384,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(Map<String,Object> o) {
 						assertType(String.class, o.get("k1"));
 						assertType(Integer.class, o.get("k2"));
@@ -391,6 +403,7 @@ public class BasicHtmlTest {
 					"<ul><li>foo</li><li><null/></li></ul>"
 				)
 				{
+					@Override
 					public void verify(List<String> o) {
 						assertType(String.class, o.get(0));
 					}
@@ -406,6 +419,7 @@ public class BasicHtmlTest {
 					"<ul><li>123</li><li>1.23</li><li><null/></li></ul>"
 				)
 				{
+					@Override
 					public void verify(List<Number> o) {
 						assertType(Integer.class, o.get(0));
 						assertType(Float.class, o.get(1));
@@ -422,6 +436,7 @@ public class BasicHtmlTest {
 					"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>"
 				)
 				{
+					@Override
 					public void verify(List<Object> o) {
 						assertType(String.class, o.get(0));
 						assertType(Integer.class, o.get(1));
@@ -480,7 +495,7 @@ public class BasicHtmlTest {
 							+"</td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>a</td>\n"
@@ -526,7 +541,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>a</td>"
@@ -574,6 +589,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithNormalProperties o) {
 						assertType(String.class, o.c);
 						assertType(Integer.class, o.d);
@@ -633,7 +649,7 @@ public class BasicHtmlTest {
 							+"</td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>a</td>\n"
@@ -681,7 +697,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>a</td>"
@@ -731,6 +747,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithMapProperties o) {
 						assertType(String.class, o.a.get("k1"));
 						assertType(Integer.class, o.b.get("k2"));
@@ -755,7 +772,7 @@ public class BasicHtmlTest {
 							+"<td>foo</td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table _type='X'>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>a</td>\n"
@@ -766,7 +783,7 @@ public class BasicHtmlTest {
 							+"\t\t<td>foo</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>a</td>"
@@ -779,6 +796,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithTypeName o) {
 						assertType(BeanWithTypeName.class, o);
 					}
@@ -813,7 +831,7 @@ public class BasicHtmlTest {
 							+"</td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>b1</td>\n"
@@ -838,7 +856,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>b1</td>"
@@ -865,6 +883,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithPropertiesWithTypeNames o) {
 						assertType(B.class, o.b2);
 					}
@@ -916,7 +935,7 @@ public class BasicHtmlTest {
 							+"</td>"
 						+"</tr>"
 					+"</table>",
-					
+
 					"<table>\n"
 						+"\t<tr>\n"
 							+"\t\t<td>b1</td>\n"
@@ -958,7 +977,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>b1</td>"
@@ -1002,6 +1021,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithPropertiesWithArrayTypeNames o) {
 						assertType(B.class, o.b2[0]);
 						assertType(B.class, o.b3[0]);
@@ -1176,6 +1196,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithPropertiesWith2dArrayTypeNames o) {
 						assertType(B.class, o.b2[0][0]);
 						assertType(B.class, o.b3[0][0]);
@@ -1264,7 +1285,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>b1</td>"
@@ -1305,6 +1326,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithPropertiesWithMapTypeNames o) {
 						assertType(B.class, o.b1.get("k1"));
 						assertType(B.class, o.b2.get("k2"));
@@ -1321,6 +1343,7 @@ public class BasicHtmlTest {
 					"<a href='http://apache.org'>foo</a>"
 				)
 				{
+					@Override
 					public void verify(LinkBean o) {
 						assertType(LinkBean.class, o);
 					}
@@ -1336,6 +1359,7 @@ public class BasicHtmlTest {
 					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
 				)
 				{
+					@Override
 					public void verify(LinkBean[] o) {
 						assertType(LinkBean.class, o[0]);
 					}
@@ -1351,6 +1375,7 @@ public class BasicHtmlTest {
 					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
 				)
 				{
+					@Override
 					public void verify(List<LinkBean> o) {
 						assertType(LinkBean.class, o.get(0));
 					}
@@ -1412,7 +1437,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-						
+
 					"<table>"
 						+"<tr>"
 							+"<td>a</td>"
@@ -1440,6 +1465,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithLinkBeanProperties o) {
 						assertType(LinkBean.class, o.a);
 						assertType(LinkBean.class, o.b.get(0));
@@ -1457,6 +1483,7 @@ public class BasicHtmlTest {
 					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithSpecialCharacters o) {
 						assertType(BeanWithSpecialCharacters.class, o);
 					}
@@ -1475,10 +1502,11 @@ public class BasicHtmlTest {
 					+"		<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n"
 					+"	</tr>\n"
 					+"</table>\n",
-				
+
 					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithSpecialCharacters o) {
 						assertType(BeanWithSpecialCharacters.class, o);
 					}
@@ -1494,6 +1522,7 @@ public class BasicHtmlTest {
 					"<table></table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithNullProperties o) {
 						assertType(BeanWithNullProperties.class, o);
 					}
@@ -1597,7 +1626,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>a</td>"
@@ -1646,6 +1675,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithAbstractFields o) {
 						assertType(A.class, o.a);
 						assertType(A.class, o.ia);
@@ -1942,6 +1972,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithAbstractArrayFields o) {
 						assertType(A.class, o.a[0]);
 						assertType(A.class, o.ia1[0]);
@@ -2071,7 +2102,7 @@ public class BasicHtmlTest {
 							+"\t\t</td>\n"
 						+"\t</tr>\n"
 					+"</table>\n",
-					
+
 					"<table>"
 						+"<tr>"
 							+"<td>a</td>"
@@ -2130,6 +2161,7 @@ public class BasicHtmlTest {
 					+"</table>"
 				)
 				{
+					@Override
 					public void verify(BeanWithAbstractMapFields o) {
 						assertType(A.class, o.a.get("k1"));
 						assertType(A.class, o.b.get("k2"));
@@ -2147,6 +2179,7 @@ public class BasicHtmlTest {
 					"<object></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
 						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
@@ -2162,6 +2195,7 @@ public class BasicHtmlTest {
 					"<object><sp/></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
 						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
@@ -2177,6 +2211,7 @@ public class BasicHtmlTest {
 					"<object><sp> </sp></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
 						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
@@ -2192,6 +2227,7 @@ public class BasicHtmlTest {
 					"<object><sp> </sp><sp> </sp></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
 						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
@@ -2207,6 +2243,7 @@ public class BasicHtmlTest {
 					"<object><sp> </sp> foobar <sp> </sp></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
 						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
@@ -2222,6 +2259,7 @@ public class BasicHtmlTest {
 					"<object></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
 						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
@@ -2237,6 +2275,7 @@ public class BasicHtmlTest {
 					"<object><sp/></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
 						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
@@ -2252,6 +2291,7 @@ public class BasicHtmlTest {
 					"<object> </object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
 						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
@@ -2267,6 +2307,7 @@ public class BasicHtmlTest {
 					"<object>  </object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
 						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
@@ -2282,6 +2323,7 @@ public class BasicHtmlTest {
 					"<object>  foobar  </object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
 						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
@@ -2297,6 +2339,7 @@ public class BasicHtmlTest {
 					"<object></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
 						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
@@ -2312,6 +2355,7 @@ public class BasicHtmlTest {
 					"<object></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
 						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
@@ -2327,6 +2371,7 @@ public class BasicHtmlTest {
 					"<object><sp/></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
 						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
@@ -2342,6 +2387,7 @@ public class BasicHtmlTest {
 					"<object><sp> </sp></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
 						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
@@ -2357,6 +2403,7 @@ public class BasicHtmlTest {
 					"<object><sp> </sp><sp> </sp></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
 						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
@@ -2372,6 +2419,7 @@ public class BasicHtmlTest {
 					"<object><sp> </sp> foobar <sp> </sp></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
 						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
@@ -2387,6 +2435,7 @@ public class BasicHtmlTest {
 					"<object></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
 						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
@@ -2402,6 +2451,7 @@ public class BasicHtmlTest {
 					"<object></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
 						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
@@ -2417,6 +2467,7 @@ public class BasicHtmlTest {
 					"<object><sp/></object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
 						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
@@ -2432,6 +2483,7 @@ public class BasicHtmlTest {
 					"<object> </object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
 						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
@@ -2447,6 +2499,7 @@ public class BasicHtmlTest {
 					"<object>  </object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
 						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
@@ -2462,6 +2515,7 @@ public class BasicHtmlTest {
 					"<object>  foobar  </object>"
 				)
 				{
+					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
 						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
@@ -2475,12 +2529,12 @@ public class BasicHtmlTest {
 	public BasicHtmlTest(Input input) throws Exception {
 		this.input = input;
 	}
-	
+
 	public static class Input<T> {
 		private final String label, e1, e2, e3;
 		private final Type type;
 		private final Object in;
-		
+
 		public Input(String label, Type type, T in, String e1, String e2, String e3) {
 			this.label = label;
 			this.type = type;
@@ -2489,7 +2543,7 @@ public class BasicHtmlTest {
 			this.e2 = e2;
 			this.e3 = e3;
 		}
-		
+
 		public void verify(T o) {}
 	}
 
@@ -2831,7 +2885,7 @@ public class BasicHtmlTest {
 			return this;
 		}
 	}
-	
+
 	public static class BeanWithNullProperties {
 		public String a;
 		public String[] b;
@@ -2915,23 +2969,23 @@ public class BasicHtmlTest {
 			return this;
 		}
 	}
-	
+
 	@Html(asXml=true)
 	public static class BeanWithWhitespaceTextFields {
 		@Xml(format=XmlFormat.TEXT)
 		public String a;
-	
+
 		public BeanWithWhitespaceTextFields init(String s) {
 			a = s;
 			return this;
 		}
 	}
-	
+
 	@Html(asXml=true)
 	public static class BeanWithWhitespaceTextPwsFields {
 		@Xml(format=XmlFormat.TEXT_PWS)
 		public String a;
-	
+
 		public BeanWithWhitespaceTextPwsFields init(String s) {
 			a = s;
 			return this;
@@ -2942,7 +2996,7 @@ public class BasicHtmlTest {
 	public static class BeanWithWhitespaceMixedFields {
 		@Xml(format=XmlFormat.MIXED)
 		public String[] a;
-	
+
 		public BeanWithWhitespaceMixedFields init(String[] s) {
 			a = s;
 			return this;
@@ -2953,7 +3007,7 @@ public class BasicHtmlTest {
 	public static class BeanWithWhitespaceMixedPwsFields {
 		@Xml(format=XmlFormat.MIXED_PWS)
 		public String[] a;
-	
+
 		public BeanWithWhitespaceMixedPwsFields init(String[] s) {
 			a = s;
 			return this;

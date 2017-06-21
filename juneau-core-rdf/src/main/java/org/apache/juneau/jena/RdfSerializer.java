@@ -163,7 +163,7 @@ public class RdfSerializer extends WriterSerializer {
 
 
 	private final RdfSerializerContext ctx;
-	
+
 	/**
 	 * Constructor.
 	 * @param propertyStore The property store containing all the settings for this object.
@@ -435,7 +435,7 @@ public class RdfSerializer extends WriterSerializer {
 
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------

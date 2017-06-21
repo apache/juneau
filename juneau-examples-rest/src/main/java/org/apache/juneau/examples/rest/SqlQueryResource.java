@@ -60,7 +60,7 @@ public class SqlQueryResource extends Resource {
 		allowUpdates = cf.getBoolean("SqlQueryResource/allowUpdates", false);
 		allowTempUpdates = cf.getBoolean("SqlQueryResource/allowTempUpdates", false);
 		includeRowNums = cf.getBoolean("SqlQueryResource/includeRowNums", false);
-		
+
 		try {
 			Class.forName(driver).newInstance();
 		} catch (Exception e) {
@@ -120,7 +120,7 @@ public class SqlQueryResource extends Resource {
 		// Don't try to submit empty input.
 		if (isEmpty(in.sql))
 			return results;
-		
+
 		if (in.pos < 1 || in.pos > 10000)
 			throw new RestException(SC_BAD_REQUEST, "Invalid value for position.  Must be between 1-10000");
 		if (in.limit < 1 || in.limit > 10000)

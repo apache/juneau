@@ -231,7 +231,7 @@ public class StringVarResolverTest {
 		}
 
 		VarResolver vr = vrb.build();
-		
+
 		// These should all be unchanged.
 		in = "$@{foobar}";
 		assertEquals(in, vr.resolve(in));
@@ -280,7 +280,7 @@ public class StringVarResolverTest {
 		vrb.vars(AlwaysNullVar.class);
 
 		vr = vrb.build();
-		
+
 		in = "$A{xxx}";
 		assertEquals("", vr.resolve(in));
 		in = "x$A{xxx}";

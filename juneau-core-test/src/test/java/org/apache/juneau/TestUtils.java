@@ -482,13 +482,13 @@ public class TestUtils {
 
 	public static void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
 		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
-		
+
 		if (e.length != a.length)
 			throw new ComparisonFailure(format(msg, args), expected, actual);
-		
+
 		Arrays.sort(e);
 		Arrays.sort(a);
-		
+
 		for (int i = 0; i < e.length; i++)
 			if (! e[i].equals(a[i]))
 				throw new ComparisonFailure(format(msg, args), expected, actual);
@@ -501,16 +501,16 @@ public class TestUtils {
 		if ("xxx".equals(expected))
 			System.err.println("actual=["+actual+"]");
 		if (! isEquals(expected, actual))
-			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));			
+			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));
 	}
-	
+
 	/**
 	 * Creates a ClassMeta for the given types.
 	 */
 	public static Type getType(Type type, Type...args) {
 		return beanSession.getClassMeta(type, args);
 	}
-	
+
 	/**
 	 * Throws an AssertionError if the object isn't of the specified type.
 	 */
@@ -519,7 +519,7 @@ public class TestUtils {
 			return;
 		throw new AssertionError(new StringMessage("Expected type {0} but was {1}", type, (o == null ? null : o.getClass())));
 	}
-	
+
 	private static boolean isEquals(Object o1, Object o2) {
 		if (o1 == null)
 			return o2 == null;

@@ -261,7 +261,7 @@ public class PojoQueryTest {
 		BeanSession session = BeanContext.DEFAULT.createSession();
 		SearchArgs sa;
 		List results;
-		
+
 		List<C> in = new AList<C>()
 			.append(new C(1))
 			.append(new C(2))

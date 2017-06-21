@@ -30,7 +30,7 @@ public class AcceptExtensionsTest {
 	public void testExtensions() throws Exception {
 		Accept accept;
 		MediaTypeRange mr;
-		
+
 		accept = Accept.forString("text/json");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json", mr);
@@ -62,7 +62,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
 		assertTextEquals("0.9", mr.getQValue());
 		assertObjectEquals("{b:['2']}", mr.getExtensions());
-		
+
 		accept = Accept.forString("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1;a=2;q=0.9;b=3;b=4", mr);
@@ -86,7 +86,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
 		assertTextEquals("1.0", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
-		
+
 		accept = Accept.forString("text/json;q=0.9");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;q=0.9", mr);
@@ -103,7 +103,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("0.9", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
 	}
-	
+
 	//--------------------------------------------------------------------------------
 	// Tests the Accept.hasSubtypePart() method.
 	//--------------------------------------------------------------------------------

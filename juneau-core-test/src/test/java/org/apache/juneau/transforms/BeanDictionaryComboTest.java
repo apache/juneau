@@ -62,6 +62,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>A</jp:_type>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A o) {
 						assertType(A.class, o);
 					}
@@ -95,6 +96,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>A</jp:_type>\n      <jp:a>1</jp:a>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A[] o) {
 						assertType(A.class, o[0]);
 					}
@@ -128,6 +130,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>A</jp:_type>\n              <jp:a>1</jp:a>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(A[][][] o) {
 						assertType(A.class, o[0][0][0]);
 					}
@@ -161,6 +164,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(List<A[][][]> o) {
 						assertType(A.class, o.get(0)[0][0][0]);
 					}
@@ -194,6 +198,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,A[][][]> o) {
 						assertType(A.class, o.get("x")[0][0][0]);
 					}
@@ -227,6 +232,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>A</jp:_type>\n                      <jp:a>1</jp:a>\n                    </rdf:li>\n                    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n                  </rdf:Seq>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,List<A[][][]>> o) {
 						assertType(A.class, o.get("x").get(0)[0][0][0]);
 					}
@@ -260,6 +266,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>A</jp:_type>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(IA o) {
 						assertType(A.class, o);
 					}
@@ -293,6 +300,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>A</jp:_type>\n      <jp:a>1</jp:a>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(IA[] o) {
 						assertType(A.class, o[0]);
 					}
@@ -326,6 +334,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>A</jp:_type>\n              <jp:a>1</jp:a>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(IA[][][] o) {
 						assertType(A.class, o[0][0][0]);
 					}
@@ -359,6 +368,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(List<IA[][][]> o) {
 						assertType(A.class, o.get(0)[0][0][0]);
 					}
@@ -392,6 +402,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,IA[][][]> o) {
 						assertType(A.class, o.get("x")[0][0][0]);
 					}
@@ -425,6 +436,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>A</jp:_type>\n                      <jp:a>1</jp:a>\n                    </rdf:li>\n                    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n                  </rdf:Seq>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,List<IA[][][]>> o) {
 						assertType(A.class, o.get("x").get(0)[0][0][0]);
 					}
@@ -458,6 +470,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:z>B</jp:z>\n    <jp:b>1</jp:b>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(B o) {
 						assertType(B.class, o);
 					}
@@ -491,6 +504,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:z>B</jp:z>\n      <jp:b>1</jp:b>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(B[] o) {
 						assertType(B.class, o[0]);
 					}
@@ -524,6 +538,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:z>B</jp:z>\n              <jp:b>1</jp:b>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(B[][][] o) {
 						assertType(B.class, o[0][0][0]);
 					}
@@ -557,6 +572,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(List<B[][][]> o) {
 						assertType(B.class, o.get(0)[0][0][0]);
 					}
@@ -590,6 +606,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,B[][][]> o) {
 						assertType(B.class, o.get("x")[0][0][0]);
 					}
@@ -623,6 +640,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:z>B</jp:z>\n                      <jp:b>1</jp:b>\n                    </rdf:li>\n                    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n                  </rdf:Seq>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,List<B[][][]>> o) {
 						assertType(B.class, o.get("x").get(0)[0][0][0]);
 					}
@@ -656,6 +674,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:z>B</jp:z>\n    <jp:b>1</jp:b>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(IB o) {
 						assertType(B.class, o);
 					}
@@ -689,6 +708,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:z>B</jp:z>\n      <jp:b>1</jp:b>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(IB[] o) {
 						assertType(B.class, o[0]);
 					}
@@ -722,6 +742,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:z>B</jp:z>\n              <jp:b>1</jp:b>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(IB[][][] o) {
 						assertType(B.class, o[0][0][0]);
 					}
@@ -755,6 +776,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(List<IB[][][]> o) {
 						assertType(B.class, o.get(0)[0][0][0]);
 					}
@@ -788,6 +810,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,IB[][][]> o) {
 						assertType(B.class, o.get("x")[0][0][0]);
 					}
@@ -821,6 +844,7 @@ public class BeanDictionaryComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:z>B</jp:z>\n                      <jp:b>1</jp:b>\n                    </rdf:li>\n                    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n                  </rdf:Seq>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(Map<String,List<IB[][][]>> o) {
 						assertType(B.class, o.get("x").get(0)[0][0][0]);
 					}
@@ -828,28 +852,28 @@ public class BeanDictionaryComboTest extends ComboTest {
 			},
 		});
 	}
-	
+
 	public BeanDictionaryComboTest(ComboInput<?> comboInput) {
 		super(comboInput);
 	}
-	
+
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
 		return s.builder().trimNullProperties(false).build();
 	}
-	
+
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
 		return p.builder().build();
 	}
-	
+
 	@Bean(beanDictionary={A.class})
 	public static interface IA {}
-	
+
 	@Bean(typeName="A")
 	public static class A implements IA {
 		public int a;
-		
+
 		public A init() {
 			a = 1;
 			return this;
@@ -858,11 +882,11 @@ public class BeanDictionaryComboTest extends ComboTest {
 
 	@Bean(beanDictionary={B.class}, typePropertyName="z")
 	public static interface IB {}
-	
+
 	@Bean(typeName="B")
 	public static class B implements IB {
 		public int b;
-		
+
 		public B init() {
 			b = 1;
 			return this;

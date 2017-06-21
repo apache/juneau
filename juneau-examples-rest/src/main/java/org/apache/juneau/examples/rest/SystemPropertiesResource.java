@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -27,12 +27,12 @@ import org.apache.juneau.rest.annotation.Body;
 
 @RestResource(
 	path="/systemProperties",
-	
+
 	// Title and description that show up on HTML rendition page.
 	// Also used in Swagger doc.
 	title="System properties resource",
 	description="REST interface for performing CRUD operations on system properties.",
-	
+
 	// Links on the HTML rendition page.
 	// "request:/..." URIs are relative to the request URI.
 	// "servlet:/..." URIs are relative to the servlet URI.
@@ -45,19 +45,19 @@ import org.apache.juneau.rest.annotation.Body;
 			+ "</div>",
 		css="aside {display:table-caption;}"
 	),
-	
+
 	// Properties that get applied to all serializers and parsers.
 	properties={
 		// Use single quotes.
 		@Property(name=SERIALIZER_quoteChar, value="'")
 	},
-	
+
 	// Our stylesheet for the HTML rendition.
 	stylesheet="styles/devops.css",
-	
+
 	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,
-	
+
 	swagger=@ResourceSwagger(
 		contact="{name:'John Smith',email:'john@smith.com'}",
 		license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
@@ -106,7 +106,7 @@ public class SystemPropertiesResource extends Resource {
 	public String getSystemProperty(@Path String propertyName) throws Throwable {
 		return System.getProperty(propertyName);
 	}
-	
+
 	@RestMethod(
 		name="PUT", path="/{propertyName}",
 		summary="Replace system property",
@@ -122,7 +122,7 @@ public class SystemPropertiesResource extends Resource {
 					headers={
 						@Parameter(name="Location", description="The root URL of this resource.")
 					}
-				),	
+				),
 				@Response(value=403, description="User is not an admin.")
 			}
 		)
@@ -147,7 +147,7 @@ public class SystemPropertiesResource extends Resource {
 					headers={
 						@Parameter(name="Location", description="The root URL of this resource.")
 					}
-				),	
+				),
 				@Response(value=403, description="Unauthorized:  User is not an admin.")
 			}
 		)
@@ -171,7 +171,7 @@ public class SystemPropertiesResource extends Resource {
 					headers={
 						@Parameter(name="Location", description="The root URL of this resource.")
 					}
-				),	
+				),
 				@Response(value=403, description="Unauthorized:  User is not an admin")
 			}
 		)

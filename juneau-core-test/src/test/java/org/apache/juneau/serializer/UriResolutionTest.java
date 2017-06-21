@@ -37,7 +37,7 @@ public class UriResolutionTest {
 	private final String label;
 	private final Input input;
 	private final Results results;
-	
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Input
 	//------------------------------------------------------------------------------------------------------------------
@@ -45,24 +45,24 @@ public class UriResolutionTest {
 		private final UriContext context;
 		private final UriResolution resolution;
 		private final UriRelativity relativity;
-		
+
 		public Input(UriResolution resolution, UriRelativity relativity, String authority, String context, String resource, String path) {
 			this.resolution = resolution;
 			this.relativity = relativity;
 			this.context = new UriContext(authority, context, resource, path);
 		}
 	}
-	
+
 	private static Input input(UriResolution uriResolution, UriRelativity uriRelativity, String authority, String context, String resource, String path) {
 		return new Input(uriResolution, uriRelativity, authority, context, resource, path);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Output
 	//------------------------------------------------------------------------------------------------------------------
 	private static class Results {
 		final String json, xml, html, uon, urlEncoding, msgPack, rdfXml;
-		
+
 		Results(String json, String xml, String html, String uon, String urlEncoding, String msgPack, String rdfXml) {
 			this.json = json;
 			this.xml = xml;
@@ -73,17 +73,17 @@ public class UriResolutionTest {
 			this.rdfXml = rdfXml;
 		}
 	}
-	
+
 	private static Results results(String json, String xml, String html, String uon, String urlEncoding, String msgPack, String rdfXml) {
 		return new Results(json, xml, html, uon, urlEncoding, msgPack, rdfXml);
 	}
-	
+
 	public UriResolutionTest(String label, Input input, Results results) {
 		this.label = label;
 		this.input = input;
 		this.results = results;
 	}
-	
+
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
@@ -541,31 +541,31 @@ public class UriResolutionTest {
 			},
 		});
 	};
-	
+
 	private void testSerialize(Serializer s, String expected) throws Exception {
 		try {
 			boolean isRdf = s instanceof RdfSerializer;
-			
+
 			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(new TestURI()) : ((OutputStreamSerializer)s).serializeToHex(new TestURI());
-			
+
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.
 			// Also because RDF sucks really bad and can't be expected to produce consistent testable results,
 			// we must also do an expensive sort-then-compare operation to verify the results.
 			if (isRdf)
 				r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
-		
+
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {
 				System.out.println(label + "/" + s.getClass().getSimpleName() + "=\n" + r.replaceAll("\t", "\\\\t").replaceAll("\\\\", "\\\\\\\\").replaceAll("\\\"", "\\\\\\\"").replaceAll("\n", "\\\\n")); // NOT DEBUG
 				System.out.println(r);
 			}
-			
+
 			if (isRdf)
 				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName());
 			else
 				TestUtils.assertEquals(expected, r, "{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName());
-			
+
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
@@ -573,16 +573,16 @@ public class UriResolutionTest {
 			throw new AssertionError(label + "/" + s.getClass().getSimpleName() + " failed.  exception=" + e.getLocalizedMessage());
 		}
 	}
-	
+
 	private void testParse(Serializer s, Parser p) throws Exception {
 		try {
 			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(new TestURI()) : ((OutputStreamSerializer)s).serializeToHex(new TestURI());
 
 			TreeMap<String,String> m = p.parse(r, TreeMap.class, String.class, String.class);
-			
+
 			String r2 = JsonSerializer.DEFAULT_LAX.toString(m);
 			TestUtils.assertEquals(results.json, r2, "{0}/{1} parse failed", label, s.getClass().getSimpleName());
-			
+
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
@@ -596,25 +596,25 @@ public class UriResolutionTest {
 		Serializer s = new JsonSerializerBuilder().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.json);
 	}
-	
+
 	@Test
 	public void a2_testJsonParse() throws Exception {
 		Serializer s = new JsonSerializerBuilder().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, JsonParser.DEFAULT);
 	}
-	
+
 	@Test
 	public void b1_testXmlSerialize() throws Exception {
 		Serializer s = new XmlSerializerBuilder().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.xml);
 	}
-	
+
 	@Test
 	public void b2_testXmlParse() throws Exception {
 		Serializer s = new XmlSerializerBuilder().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, XmlParser.DEFAULT);
 	}
-	
+
 	@Test
 	public void c1_testHtmlSerialize() throws Exception {
 		Serializer s = new HtmlSerializerBuilder().sq().lookForLabelParameters(true).uriAnchorText(HtmlSerializerContext.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
@@ -626,7 +626,7 @@ public class UriResolutionTest {
 		Serializer s = new HtmlSerializerBuilder().sq().lookForLabelParameters(true).uriAnchorText(HtmlSerializerContext.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, HtmlParser.DEFAULT);
 	}
-	
+
 	@Test
 	public void d1_testUonSerialize() throws Exception {
 		Serializer s = new UonSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
@@ -638,7 +638,7 @@ public class UriResolutionTest {
 		Serializer s = new UonSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, UonParser.DEFAULT);
 	}
-	
+
 	@Test
 	public void e1_testUrlEncodingSerialize() throws Exception {
 		Serializer s = new UrlEncodingSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();

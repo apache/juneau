@@ -107,7 +107,7 @@ public class PhotosResource extends Resource {
 		photos.put(id, new Photo(id, image));
 		return "OK";
 	}
-	
+
 	/** POST request handler */
 	@RestMethod(name="POST", path="/", parsers=ImageParser.class, summary="Add a photo")
 	public Photo setPhoto(@Body BufferedImage image) throws Exception {

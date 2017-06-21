@@ -35,7 +35,7 @@ import org.apache.juneau.rest.client.*;
 )
 public class TumblrParserResource extends Resource {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final int MAX_POSTS = 100;
 
 	@RestMethod(name="GET", path="/", summary="Get the instructions page")

@@ -27,7 +27,7 @@ public class SerializerGroupTest {
 	//====================================================================================================
 	@Test
 	public void testSerializerGroupMatching() throws Exception {
-		
+
 		SerializerGroup sg = new SerializerGroupBuilder().append(SA1.class, SA2.class, SA3.class).build();
 		assertType(SA1.class, sg.getSerializer("text/foo"));
 		assertType(SA1.class, sg.getSerializer("text/foo_a"));
@@ -45,19 +45,19 @@ public class SerializerGroupTest {
 		assertType(SA3.class, sg.getSerializer("text/baz_a+yyy"));
 		assertType(SA3.class, sg.getSerializer("text/yyy+baz"));
 		assertType(SA3.class, sg.getSerializer("text/yyy+baz_a"));
-		
+
 		assertType(SA1.class, sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8"));
 		assertType(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9"));
 	}
-	
-	
+
+
 	@Produces("text/foo,text/foo_a")
 	public static class SA1 extends JsonSerializer {
 		public SA1(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Produces("text/foo+bar,text/foo+bar_a")
 	public static class SA2 extends JsonSerializer {
 		public SA2(PropertyStore propertyStore) {
@@ -79,11 +79,11 @@ public class SerializerGroupTest {
 	public void testInheritence() throws Exception {
 		SerializerGroupBuilder gb = null;
 		SerializerGroup g = null;
-		
+
 		gb = new SerializerGroupBuilder().append(SB1.class, SB2.class);
 		g = gb.build();
 		assertObjectEquals("['text/1','text/2','text/2a']", g.getSupportedMediaTypes());
-		
+
 		gb = new SerializerGroupBuilder(g).append(SB3.class, SB4.class);
 		g = gb.build();
 		assertObjectEquals("['text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
@@ -92,14 +92,14 @@ public class SerializerGroupTest {
 		g = gb.build();
 		assertObjectEquals("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 	}
-	
+
 	@Produces("text/1")
 	public static class SB1 extends JsonSerializer {
 		public SB1(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Produces("text/2,text/2a")
 	public static class SB2 extends JsonSerializer {
 		public SB2(PropertyStore propertyStore) {
@@ -113,21 +113,21 @@ public class SerializerGroupTest {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Produces("text/4,text/4a")
 	public static class SB4 extends JsonSerializer {
 		public SB4(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Produces("text/5")
 	public static class SB5 extends JsonSerializer {
 		public SB5(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	//====================================================================================================
 	// Test media type with meta-characters
 	//====================================================================================================
@@ -135,28 +135,28 @@ public class SerializerGroupTest {
 	public void testMediaTypesWithMetaCharacters() throws Exception {
 		SerializerGroupBuilder gb = null;
 		SerializerGroup g = null;
-		
+
 		gb = new SerializerGroupBuilder().append(SC1.class, SC2.class, SC3.class);
 		g = gb.build();
 		assertType(SC1.class, g.getSerializer("text/foo"));
 		assertType(SC2.class, g.getSerializer("foo/json"));
 		assertType(SC3.class, g.getSerializer("foo/foo"));
 	}
-	
+
 	@Produces("text/*")
 	public static class SC1 extends JsonSerializer {
 		public SC1(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Produces("*/json")
 	public static class SC2 extends JsonSerializer {
 		public SC2(PropertyStore propertyStore) {
 			super(propertyStore);
 		}
 	}
-	
+
 	@Produces("*/*")
 	public static class SC3 extends JsonSerializer {
 		public SC3(PropertyStore propertyStore) {

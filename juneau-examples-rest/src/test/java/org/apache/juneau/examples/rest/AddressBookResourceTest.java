@@ -71,7 +71,7 @@ public class AddressBookResourceTest extends RestTestcase {
 		}
 	}
 
-	
+
 	//====================================================================================================
 	// Get AddressBookResource as JSON
 	//====================================================================================================
@@ -91,7 +91,7 @@ public class AddressBookResourceTest extends RestTestcase {
 			+"\n			isCurrent: false"
 			+"\n		}"
 			+"\n	]"
-			+"\n}";			
+			+"\n}";
 		JsonParser p = new JsonParserBuilder().pojoSwaps(CalendarSwap.DateMedium.class).build();
 		Person person = p.parse(in, Person.class);
 		if (debug) System.err.println(person);
@@ -270,7 +270,7 @@ public class AddressBookResourceTest extends RestTestcase {
 			List<Person> people;
 
 			IAddressBook ab = client.getRemoteableProxy(IAddressBook.class, "/addressBook/proxy");
-				
+
 			// Reinitialize the resource
 			ab.init();
 

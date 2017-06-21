@@ -61,6 +61,7 @@ public class Html5TemplateComboTest extends ComboTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:action rdf:resource='http://myaction'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>text</jp:type>\n            <jp:name>v1</jp:name>\n            <jp:value>123</jp:value>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>text</jp:type>\n            <jp:name>v2</jp:name>\n            <jp:value>true</jp:value>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				{
+					@Override
 					public void verify(FormTemplate o) {
 						assertType(FormTemplate.class, o);
 					}
@@ -69,26 +70,26 @@ public class Html5TemplateComboTest extends ComboTest {
 		});
 	}
 
-	
+
 	@Bean(beanDictionary=HtmlBeanDictionary.class)
 	public static class FormTemplate {
-		
+
 		private String action;
 		private int value1;
 		private boolean value2;
-		
+
 		public FormTemplate(Form f) {
 			this.action = f.getAttr("action");
 			this.value1 = f.getChild(Input.class, 0).getAttr(int.class, "value");
 			this.value2 = f.getChild(Input.class, 1).getAttr(boolean.class, "value");
 		}
-		
+
 		public FormTemplate(String action, int value1, boolean value2) {
 			this.action = action;
 			this.value1 = value1;
 			this.value2 = value2;
 		}
-		
+
 		public Form swap(BeanSession session) {
 			return form(action,
 				input("text").name("v1").value(value1),
@@ -96,7 +97,7 @@ public class Html5TemplateComboTest extends ComboTest {
 			);
 		}
 	}
-	
+
 	public Html5TemplateComboTest(ComboInput<?> comboInput) {
 		super(comboInput);
 	}
