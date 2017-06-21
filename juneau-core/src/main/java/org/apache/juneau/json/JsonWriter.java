@@ -236,7 +236,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Adds a space only if the current indentation level is below maxIndent.
-	 * 
+	 *
 	 * @param indent
 	 * @return This object (for method chaining).
 	 * @throws IOException

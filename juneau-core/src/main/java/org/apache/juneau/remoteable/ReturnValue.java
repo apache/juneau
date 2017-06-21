@@ -18,8 +18,8 @@ package org.apache.juneau.remoteable;
 public enum ReturnValue {
 
 	/** HTTP response body */
-	BODY, 
-	
+	BODY,
+
 	/** HTTP status code */
 	HTTP_STATUS;
 }

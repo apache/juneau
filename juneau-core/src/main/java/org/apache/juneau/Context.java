@@ -45,7 +45,7 @@ public abstract class Context {
 
 	/**
 	 * Returns the property store associated with this context.
-	 * 
+	 *
 	 * @return The property store associated with this context.
 	 */
 	protected PropertyStore getPropertyStore() {
