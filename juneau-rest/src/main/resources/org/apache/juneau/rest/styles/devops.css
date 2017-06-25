@@ -72,22 +72,26 @@ footer {
 
 /* Title */
 h3.title {
-	color: white;
 	margin: 0px;
 	padding: 10px 20px;
+	border-bottom: 2px solid #34534B;
+}
+h3.title, h3.title * {
+	color: white;
 	text-decoration: none;
 	font-weight: normal;
-	border-bottom: 2px solid #34534B;
 }
 
 /* Description */
 h5.description {
-	color: #B3B3B3;
 	margin: 0;
 	padding: 10px 20px;
+	border-bottom: 2px solid #34534B;
+}
+h5.description, h5.description * {
+	color: #B3B3B3;
 	text-decoration: none;
 	font-weight: normal;
-	border-bottom: 2px solid #34534B;
 }
 
 /************************************************************************************/
@@ -144,24 +148,6 @@ div.data th, .header {
 	font-weight: bold;
 	text-align:center;
 	background-color: #F4F6F9;
-}
-
-button {
-	border-left:1px solid #A1AFAC;
-	border-top:1px solid #A1AFAC;
-	color: white;
-	font-size: 9pt;
-	background: #00B299;
-    font-weight: bold;
-    padding: 5px 20px;	
-	border-radius: 5px;
-	text-transform: uppercase;
-	margin-left: 10px;
-}
-
-button:hover {
-	background-image: none;
-	background-color: #66D1C2;
 }
 
 div.data ul {

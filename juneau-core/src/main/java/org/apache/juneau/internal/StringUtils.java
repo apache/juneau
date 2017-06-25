@@ -1585,7 +1585,7 @@ public final class StringUtils {
 	 * @return The formatted string.
 	 */
 	public static String format(String pattern, Object...args) {
-		if (args.length == 0)
+		if (args == null || args.length == 0)
 			return pattern;
 		for (int i = 0; i < args.length; i++)
 			args[i] = convertToReadable(args[i]);

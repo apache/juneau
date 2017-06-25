@@ -42,7 +42,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 		w.append(2, "@import ").q().append(cssUrl).q().appendln(";");
 		if (session.isNoWrap())
-			w.appendln("\n* {white-space:nowrap;}");
+			w.appendln("\ndiv.data * {white-space:nowrap;}");
 		if (session.getCss() != null)
 			for (String css : session.getCss())
 				w.appendln(css);
@@ -96,9 +96,9 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 			String description = session.getDescription();
 			String branding = session.getBranding();
 			if (exists(title))
-				w.oTag(3, "h3").attr("class", "title").append('>').text(title).eTag("h3").nl(3);
+				w.oTag(3, "h3").attr("class", "title").append('>').append(title).eTag("h3").nl(3);
 			if (exists(description))
-				w.oTag(3, "h5").attr("class", "description").append('>').text(description).eTag("h5").nl(3);
+				w.oTag(3, "h5").attr("class", "description").append('>').append(description).eTag("h5").nl(3);
 			if (exists(branding))
 				w.append(3, branding).nl(3);
 		}
