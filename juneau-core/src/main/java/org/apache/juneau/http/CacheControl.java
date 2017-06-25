@@ -53,8 +53,8 @@ package org.apache.juneau.http;
  * 	     | cache-extension                     ; Section 14.9.6
  * 	cache-response-directive =
  * 	       "public"                               ; Section 14.9.1
- * 	     | "private" [ "=" <"> 1#field-name <"> ] ; Section 14.9.1
- * 	     | "no-cache" [ "=" <"> 1#field-name <"> ]; Section 14.9.1
+ * 	     | "private" [ "=" &lt;"&gt; 1#field-name &lt;"&gt; ] ; Section 14.9.1
+ * 	     | "no-cache" [ "=" &lt;"&gt; 1#field-name &lt;"&gt; ]; Section 14.9.1
  * 	     | "no-store"                             ; Section 14.9.2
  * 	     | "no-transform"                         ; Section 14.9.5
  * 	     | "must-revalidate"                      ; Section 14.9.4

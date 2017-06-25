@@ -21,11 +21,13 @@ package org.apache.juneau.html;
  * 		&lt;head&gt;
  * 			&lt;style <xa>type</xa>=<xs>'text/css'</xs>&gt;
  * 				<xv>CSS styles and links to stylesheets</xv>
- * 			&lt/style&gt;
+ * 			&lt;/style&gt;
  * 		&lt;/head&gt;
  * 		&lt;body&gt;
  * 			&lt;header&gt;
- * 				<xv>Page title and description</xv>
+ * 				&lt;h3 <xa>class</xa>=<xs>'title'</xs>&gt;<xv>Page title</xv>&lt;/h3&gt;
+ * 				&lt;h5 <xa>class</xa>=<xs>'description'</xs>&gt;<xv>Page description</xv>&lt;/h5&gt;
+ * 				<xv>Arbitrary page branding</xv>
  * 			&lt;/header&gt;
  * 			&lt;nav&gt;
  * 				<xv>Page links</xv>

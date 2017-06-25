@@ -446,7 +446,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={

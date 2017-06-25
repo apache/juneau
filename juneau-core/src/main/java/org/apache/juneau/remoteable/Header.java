@@ -161,7 +161,7 @@ public @interface Header {
 	 * 		String getFoo();
 	 * 	}
 	 * 		</p>
-	 * 	</ul>
+	 * 	</li>
 	 * </ul>
 	 */
 	String name() default "";

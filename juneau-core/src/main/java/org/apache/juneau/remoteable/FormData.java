@@ -175,7 +175,7 @@ public @interface FormData {
 	 * 		String getFoo();
 	 * 	}
 	 * 		</p>
-	 * 	</ul>
+	 * 	</li>
 	 * </ul>
 	 */
 	String name() default "";

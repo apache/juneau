@@ -55,7 +55,7 @@ public @interface RestMethod {
 	 * 		<br>Otherwise, defaults to <js>"GET"</js>.
 	 * 	<li><js>"PROXY"</js> - Remote-proxy interface.
 	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the {@link Remoteable @Remoteable} annotation)
-	 * 		to be used as a remote proxy using <code>RestClient.getRemoteableProxy(Class<T> interfaceClass, String url)</code>.
+	 * 		to be used as a remote proxy using <code>RestClient.getRemoteableProxy(Class&lt;T&gt; interfaceClass, String url)</code>.
 	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
 	 * 		<br>Conceptually, this is simply a fancy <code>POST</code> against the url <js>"/{path}/{javaMethodName}"</js> where the arguments
 	 * 		are marshalled from the client to the server as an HTTP body containing an array of objects,
@@ -486,7 +486,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for backwards compatability.
+	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for backwards compatibility.
 	 * <p class='bcode'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)

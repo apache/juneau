@@ -741,8 +741,8 @@ public class BeanMeta<T> {
 	 * <p>
 	 * TODO:  This code doesn't currently properly handle the following situation:
 	 * <p class='bcode'>
-	 * 	public static class BeanB&ltT extends Number> extends BeanA&ltT>;
-	 * 	public static class BeanC extends BeanB&ltInteger>;
+	 * 	public static class BeanB&lt;T extends Number&gt; extends BeanA&lt;T&gt;;
+	 * 	public static class BeanC extends BeanB&lt;Integer&gt;;
 	 * <p>
 	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.<br>
 	 * If anyone can figure out a better way of doing this, please do so!

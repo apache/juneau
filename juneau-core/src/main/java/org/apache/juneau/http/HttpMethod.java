@@ -15,7 +15,7 @@ package org.apache.juneau.http;
 import java.util.*;
 
 /**
- * Represents valid HTTP 1.1 method names per the <a class='doclink' href='https://www.ietf.org/rfc/rfc2616.txt'>RFC 2616</a> spec.
+ * Represents valid HTTP 1.1 method names per the RFC 2616 spec.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>

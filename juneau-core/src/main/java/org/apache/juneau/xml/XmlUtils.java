@@ -167,7 +167,7 @@ public final class XmlUtils {
 	 * <p>
 	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
 	 * 	to the specified writer.
-	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.<br>
+	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.
 	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
 	 *
 	 * @param w The writer to send the output to.
@@ -301,8 +301,8 @@ public final class XmlUtils {
 	 * <p>
 	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
 	 * 	to the specified writer.
-	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, <js>'&gt;'</js>, <js>'"'</js>, and <js>'\''</js> as XML entities.<br>
-	 * <br?Encodes invalid XML text characters to <code>_x####_</code> sequences.
+	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, <js>'&gt;'</js>, <js>'"'</js>, and <js>'\''</js> as XML entities.
+	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.

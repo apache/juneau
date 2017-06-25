@@ -42,8 +42,8 @@ import org.apache.juneau.rest.annotation.*;
  * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
  * {@link RestConfig} and {@link RestContext} objects:
  * <ul>
- * 	<li><jk>public void</jk> init(RestConfig);</code>
- * 	<li><jk>public void</jk> init(RestContext);</code>
+ * 	<li><code><jk>public void</jk> init(RestConfig);</code>
+ * 	<li><code><jk>public void</jk> init(RestContext);</code>
  * </ul>
  */
 public class RestResourceResolver {

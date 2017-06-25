@@ -174,7 +174,7 @@ public @interface Query {
 	 * 		String getFoo();
 	 * 	}
 	 * 		</p>
-	 * 	</ul>
+	 * 	</li>
 	 * </ul>
 	 */
 	String name() default "";

@@ -47,7 +47,7 @@ import org.apache.juneau.rest.*;
  * 		&lt;head&gt;
  * 			&lt;style <xa>type</xa>=<xs>'text/css'</xs>&gt;
  * 				<xv>CSS styles and links to stylesheets</xv>
- * 			&lt/style&gt;
+ * 			&lt;/style&gt;
  * 		&lt;/head&gt;
  * 		&lt;body&gt;
  * 			&lt;header&gt;
@@ -88,7 +88,7 @@ public @interface HtmlDoc {
 	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
 	 * 	<li><code>{servletClass}.title</code> resource bundle value.
 	 * 	<li><code>info/title</code> entry in swagger file.
-	 * <ol>
+	 * </ol>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>
@@ -126,7 +126,7 @@ public @interface HtmlDoc {
 	 * 	<li><code>summary</code> entry in swagger file for method.
 	 * 	<li><code>{servletClass}.description</code> resource bundle value.
 	 * 	<li><code>info/description</code> entry in swagger file.
-	 * <ol>
+	 * </ol>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>
@@ -174,7 +174,7 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			header=<js>"&lt;p&gtThis is my REST interface&lt;/p&gt;"</js>
+	 * 			header=<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
 	 * 		)
 	 * 	)
 	 * </p>

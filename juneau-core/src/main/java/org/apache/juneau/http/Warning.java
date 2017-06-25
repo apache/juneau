@@ -39,7 +39,7 @@ package org.apache.juneau.http;
  * 	                ; the name or pseudonym of the server adding
  * 	                ; the Warning header, for use in debugging
  * 	warn-text  = quoted-string
- * 	warn-date  = <"> HTTP-date <">
+ * 	warn-date  = &lt;"&gt; HTTP-date &lt;"&gt;
  * </p>
  * <p>
  * A response MAY carry more than one Warning header.

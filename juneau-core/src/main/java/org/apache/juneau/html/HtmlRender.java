@@ -62,9 +62,9 @@ import org.apache.juneau.serializer.*;
  * 		<ja>@Html</ja>(render=FileSpaceStatusRender.<jk>class</jk>)
  * 		<jk>public</jk> FileSpaceStatus getStatus() {
  * 			<jk>float</jk> pf = getPctFull();
- * 			<jk>if</jk> (pf < 80)
+ * 			<jk>if</jk> (pf &lt; 80)
  * 				<jk>return</jk> FileSpaceStatus.<jsf>OK</jsf>;
- * 			<jk>if</jk> (pf < 90)
+ * 			<jk>if</jk> (pf &lt; 90)
  * 				<jk>return</jk> FileSpaceStatus.<jsf>WARNING</jsf>;
  * 			<jk>return</jk> FileSpaceStatus.<jsf>SEVERE</jsf>;
  * 		}
@@ -80,9 +80,9 @@ import org.apache.juneau.serializer.*;
  *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String getStyle(SerializerSession session, Float value) {
- * 			<jk>if</jk> (value < 80)
+ * 			<jk>if</jk> (value &lt; 80)
  * 				<jk>return</jk> <js>"background-color:lightgreen;text-align:center"</js>;
- * 			<jk>if</jk> (value < 90)
+ * 			<jk>if</jk> (value &lt; 90)
  * 				<jk>return</jk> <js>"background-color:yellow;text-align:center"</js>;
  * 			<jk>return</jk> <js>"background-color:red;text-align:center;border:;animation:color_change 0.5s infinite alternate"</js>;
  * 		}

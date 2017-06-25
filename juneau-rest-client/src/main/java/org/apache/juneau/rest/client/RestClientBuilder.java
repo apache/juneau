@@ -251,7 +251,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
 	 *
 	 * @param rootUrl The root URL to prefix to relative URL strings.  Trailing slashes are trimmed.
-	 * Usually a <code>String<code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
+	 * Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder rootUrl(Object rootUrl) {

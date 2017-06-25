@@ -68,7 +68,7 @@ import org.apache.juneau.svl.vars.*;
  * this object instead.  Also, this method can throw any exception, not just a {@link ServletException}.
  * <p>
  * The parent <code>init(RestServletConfig)</code> method will construct a read-only {@link RestContext} object
- * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)<code> before
+ * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)</code> before
  * you modify this config object, you won't see the changes!
  */
 @SuppressWarnings({"hiding"})
@@ -1070,7 +1070,7 @@ public class RestConfig implements ServletConfig {
 	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
 	 * 	<li><code>{servletClass}.title</code> resource bundle value.
 	 * 	<li><code>info/title</code> entry in swagger file.
-	 * <ol>
+	 * </ol>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>
@@ -1111,7 +1111,7 @@ public class RestConfig implements ServletConfig {
 	 * 	<li><code>summary</code> entry in swagger file for method.
 	 * 	<li><code>{servletClass}.description</code> resource bundle value.
 	 * 	<li><code>info/description</code> entry in swagger file.
-	 * <ol>
+	 * </ol>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>

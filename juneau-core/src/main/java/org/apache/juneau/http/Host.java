@@ -39,7 +39,7 @@ package org.apache.juneau.http;
  * <p>
  * A "host" without any trailing port information implies the default port for the service requested (e.g., "80" for an
  * HTTP URL).
- * For example, a request on the origin server for <http://www.w3.org/pub/WWW/> would properly include:
+ * For example, a request on the origin server for &lt;http://www.w3.org/pub/WWW/&gt; would properly include:
  * <p class='bcode'>
  * 	GET /pub/WWW/ HTTP/1.1
  * 	Host: www.w3.org

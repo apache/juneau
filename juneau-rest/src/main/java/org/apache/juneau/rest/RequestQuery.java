@@ -215,10 +215,10 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	Listt&lt;String&gt; myparam = req.getQueryParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; myparam = req.getQueryParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	Listt&lt;List&lt;String&gt;&gt; myparam = req.getQueryParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; myparam = req.getQueryParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; myparam = req.getQueryParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
@@ -313,20 +313,20 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * <p>
 	 * The query arguments are as follows:
 	 * <ul>
-	 * 	<li><js>"&s="</js> - A comma-delimited list of column-name/search-token pairs.
-	 * 		<br>Example: <js>"&s=column1=foo*,column2=*bar"</js>
-	 * 	<li><js>"&v="</js> - A comma-delimited list column names to view.
-	 * 		<br>Example: <js>"&v=column1,column2"</js>
-	 * 	<li><js>"&o="</js> - A comma-delimited list column names to sort by.
+	 * 	<li><js>"&amp;s="</js> - A comma-delimited list of column-name/search-token pairs.
+	 * 		<br>Example: <js>"&amp;s=column1=foo*,column2=*bar"</js>
+	 * 	<li><js>"&amp;v="</js> - A comma-delimited list column names to view.
+	 * 		<br>Example: <js>"&amp;v=column1,column2"</js>
+	 * 	<li><js>"&amp;o="</js> - A comma-delimited list column names to sort by.
 	 * 		<br>Column names can be suffixed with <js>'-'</js> to indicate descending order.
-	 * 		<br>Example: <js>"&o=column1,column2-"</js>
-	 * 	<li><js>"&p="</js> - The zero-index row number of the first row to display.
-	 * 		<br>Example: <js>"&p=100"</js>
-	 * 	<li><js>"&l="</js> - The number of rows to return.
+	 * 		<br>Example: <js>"&amp;o=column1,column2-"</js>
+	 * 	<li><js>"&amp;p="</js> - The zero-index row number of the first row to display.
+	 * 		<br>Example: <js>"&amp;p=100"</js>
+	 * 	<li><js>"&amp;l="</js> - The number of rows to return.
 	 * 		<br><code>0</code> implies return all rows.
-	 * 		<br>Example: <js>"&l=100"</js>
-	 * 	<li><js>"&i="</js> - The case-insensitive search flag.
-	 * 		<br>Example: <js>"&i=true"</js>
+	 * 		<br>Example: <js>"&amp;l=100"</js>
+	 * 	<li><js>"&amp;i="</js> - The case-insensitive search flag.
+	 * 		<br>Example: <js>"&amp;i=true"</js>
 	 * </ul>
 	 * <p>
 	 * Whitespace is trimmed in the parameters.
