@@ -37,6 +37,7 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public XmlParserBuilder(PropertyStore propertyStore) {
@@ -66,7 +67,8 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * If <jk>true</jk>, XML document will be validated.
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -98,7 +100,8 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * 	<li>Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -125,7 +128,8 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -152,7 +156,8 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

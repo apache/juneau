@@ -224,23 +224,30 @@ public class ConfigFileBuilder {
 	 * <p>
 	 * Arguments can be any of the following...
 	 * <ul class='spaced-list'>
-	 * 	<li>No arguments<br>
-	 * 		Prints usage message.<br>
-	 * 	<li><code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code><br>
-	 * 		Creates a batch file that will set each config file entry as an environment variable.<br>
+	 * 	<li>No arguments
+	 * 		<br>
+	 * 		Prints usage message.
+	 * 	<li><code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code>
+	 * 		<br>
+	 * 		Creates a batch file that will set each config file entry as an environment variable.
+	 * 		<br>
 	 * 		Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
-	 * 			will be converted to underscores.<br>
+	 * 			will be converted to underscores.
 	 * 	<li><code>createShellEnvFile -configFile &lt;configFile&gt; -envFile &lt;configFile&gt; [-verbose]</code>
-	 * 		Creates a shell script that will set each config file entry as an environment variable.<br>
+	 * 		Creates a shell script that will set each config file entry as an environment variable.
+	 * 		<br>
 	 * 		Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
-	 * 			will be converted to underscores.<br>
+	 * 		will be converted to underscores.
+	 * 		<br>
 	 * 	<li><code>setVals -configFile &lt;configFile&gt; -vals [var1=val1 [var2=val2...]] [-verbose]</code>
-	 * 		Sets values in config files.<br>
+	 * 		Sets values in config files.
 	 * </ul>
 	 * <p>
-	 * For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the file <code>'MyConfig.cfg'</code>.
+	 * For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the
+	 * file <code>'MyConfig.cfg'</code>.
 	 * <p class='bcode'>
-	 * 	java org.apache.juneau.ini.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg -batchfile C:\foo\MyConfig.bat
+	 * 	java org.apache.juneau.ini.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg
+	 * 		-batchfile C:\foo\MyConfig.bat
 	 * </p>
 	 *
 	 * @param args Command-line arguments

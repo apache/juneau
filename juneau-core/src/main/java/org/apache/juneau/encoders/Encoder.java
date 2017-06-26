@@ -19,7 +19,7 @@ import java.io.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * Used to wrap input and output streams withing compression/decompression streams.
+ * Used to wrap input and output streams within compression/decompression streams.
  * <p>
  * Encoders are registered with <code>RestServlets</code> through the <ja>@RestResource.encoders()</ja> annotation.
  */

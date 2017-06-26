@@ -26,8 +26,11 @@ import org.apache.juneau.svl.*;
  * </ul>
  * <p>
  * The boolean argument is any string.
- * <br>The following values are interpreted as <jk>true</jk>:  <js>"true"</js>,<js>"TRUE"</js>,<js>"t"</js>,<js>"T"</js>,<js>"1"</js>.
- * <br>All else are interpreted as <jk>false</jk>
+ * <br>
+ * The following values are interpreted as <jk>true</jk>:  <js>"true"</js>,<js>"TRUE"</js>,<js>"t"</js>,
+ * <js>"T"</js>,<js>"1"</js>.
+ * <br>
+ * All else are interpreted as <jk>false</jk>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

@@ -19,12 +19,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-base-element">&lt;base&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/document-metadata.html#the-base-element">&lt;base&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -52,8 +54,10 @@ public class Base extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a>
+	 * attribute.
 	 * Default browsing context for hyperlink navigation and form submission.
+	 *
 	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

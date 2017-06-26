@@ -28,16 +28,18 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows
- * 	properties on the wrapped object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
+ * A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows properties on the wrapped
+ * object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
  * <p>
  * Use the {@link BeanContext} class to create instances of this class.
  *
  * <h6 class='topic'>Bean property order</h6>
  * <p>
- * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()} methods are as follows:
+ * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()}
+ * methods are as follows:
  * <ul class='spaced-list'>
- * 	<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties in the annotation.
+ * 	<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties
+ * 		in the annotation.
  * 	<li>If {@link Bean @Bean} annotation is not specified on the class, then the order is the same as that returned
  * 		by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
  * </ul>
@@ -46,9 +48,9 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h6 class='topic'>POJO swaps</h6>
  * <p>
- * If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties themselves, the
- * 	{@link #get(Object)} and {@link #put(String, Object)} methods will automatically
- * 	transform the property value to and from the serialized form.
+ * If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties
+ * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the
+ * property value to and from the serialized form.
  *
  * @param <T> Specifies the type of object that this map encapsulates.
  */
@@ -193,7 +195,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @param property The name of the property to set.
 	 * @param value The value to set the property to.
-	 * @return If the bean context setting {@code beanMapPutReturnsOldValue} is <jk>true</jk>, then the old value of the property is returned.
+	 * @return If the bean context setting {@code beanMapPutReturnsOldValue} is <jk>true</jk>, then the old value of the
+	 * property is returned.
 	 * Otherwise, this method always returns <jk>null</jk>.
 	 * @throws RuntimeException if any of the following occur.
 	 * <ul class='spaced-list'>
@@ -408,7 +411,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @return The class type of the wrapped bean.
 	 */
-	@Override /* Delagate */
+	@Override /* Delegate */
 	public ClassMeta<T> getClassMeta() {
 		return this.meta.getClassMeta();
 	}

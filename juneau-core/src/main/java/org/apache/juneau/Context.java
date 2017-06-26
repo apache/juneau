@@ -17,7 +17,8 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session} objects.
+ * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
+ * objects.
  * <p>
  * Contexts are created through the {@link PropertyStore#getContext(Class)} method.
  * <p>

@@ -15,12 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-meter-element">&lt;meter&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-meter-element">&lt;meter&gt;</a>
+ * element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -32,6 +34,7 @@ public class Meter extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.
 	 * Low limit of high range.
+	 *
 	 * @param high The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -44,6 +47,7 @@ public class Meter extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-low">low</a> attribute.
 	 * High limit of low range.
+	 *
 	 * @param low The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -56,6 +60,7 @@ public class Meter extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-max">max</a> attribute.
 	 * Upper bound of range.
+	 *
 	 * @param max The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -68,6 +73,7 @@ public class Meter extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-min">min</a> attribute.
 	 * Lower bound of range.
+	 *
 	 * @param min The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -80,6 +86,7 @@ public class Meter extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-optimum">optimum</a> attribute.
 	 * Optimum value in gauge.
+	 *
 	 * @param optimum The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -92,6 +99,7 @@ public class Meter extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-value">value</a> attribute.
 	 * Current value of the element.
+	 *
 	 * @param value The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).

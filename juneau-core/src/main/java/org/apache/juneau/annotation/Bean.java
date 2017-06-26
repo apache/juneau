@@ -47,8 +47,8 @@ public @interface Bean {
 	 * 	output so that the class can be determined during parsing.
 	 * It is also used to specify element names in XML.
 	 * <p>
-	 * The name is used in combination with the bean dictionary defined through {@link BeanProperty#beanDictionary()} or {@link BeanContext#BEAN_beanDictionary}.  Together, they make up
-	 * 	a simple name/value mapping of names to classes.
+	 * The name is used in combination with the bean dictionary defined through {@link BeanProperty#beanDictionary()} or
+	 * {@link BeanContext#BEAN_beanDictionary}.  Together, they make up a simple name/value mapping of names to classes.
 	 * Names do not need to be universally unique.  However, they must be unique within a dictionary.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -123,16 +123,19 @@ public @interface Bean {
 	 * 		common HTML attribute names.
 	 * </ul>
 	 *
-	 * The default value if not specified is <js>"_type"</js> unless overridden by the {@link BeanContext#BEAN_beanTypePropertyName} setting.
+	 * The default value if not specified is <js>"_type"</js> unless overridden by the
+	 * {@link BeanContext#BEAN_beanTypePropertyName} setting.
 	 */
 	String typePropertyName() default "";
 
 	/**
 	 * The set and order of names of properties associated with a bean class.
 	 * <p>
-	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and related methods.
+	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
+	 * related methods.
 	 * <p>
-	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getProperties()} method.
+	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
+	 * {@link BeanFilter#getProperties()} method.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -152,7 +155,7 @@ public @interface Bean {
 	 * Otherwise, the natural order of the bean properties is used which is dependent on the
 	 * 	JVM vendor.
 	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * On Oracle JVMs, the bean properties are not ordered (which follows the offical JVM specs).
+	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
 	 * <p>
 	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
@@ -166,7 +169,8 @@ public @interface Bean {
 	/**
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
 	 * <p>
-	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getExcludeProperties()} method.
+	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
+	 * {@link BeanFilter#getExcludeProperties()} method.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -183,10 +187,11 @@ public @interface Bean {
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.
 	 * <p>
 	 * Property namers are used to transform bean property names from standard form to some other form.
-	 * For example, the {@link PropertyNamerDLC} will convert property names to dashed-lowercase, and
-	 * 	these will be used as attribute names in JSON, and element names in XML.
+	 * For example, the {@link PropertyNamerDLC} will convert property names to dashed-lowercase, and these will be used
+	 * as attribute names in JSON, and element names in XML.
 	 * <p>
-	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getPropertyNamer()} method.
+	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
+	 * {@link BeanFilter#getPropertyNamer()} method.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -225,7 +230,8 @@ public @interface Bean {
 	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
 	 * 	or can be set individually on the child classes.
 	 * <p>
-	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getInterfaceClass()} method.
+	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
+	 * {@link BeanFilter#getInterfaceClass()} method.
 	 */
 	Class<?> interfaceClass() default Object.class;
 
@@ -233,10 +239,10 @@ public @interface Bean {
 	 * Identifies a stop class for the annotated class.
 	 * <p>
 	 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
-	 * Any properties in the stop class or in its baseclasses will be ignored during analysis.
+	 * Any properties in the stop class or in its base classes will be ignored during analysis.
 	 * <p>
-	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>, but
-	 * 	not <code>p1</code> or <code>p2</code>.
+	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
+	 * but not <code>p1</code> or <code>p2</code>.
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> C1 {
 	 * 		<jk>public int</jk> getP1();

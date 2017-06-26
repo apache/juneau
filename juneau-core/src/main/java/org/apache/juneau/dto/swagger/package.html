@@ -69,7 +69,9 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Overview</h2>
 <div class='topic'>
 	<p>
-		Juneau supports generation and consumption of Swagger 2.0 documents and fragments through the use of DTOs (Data Transfer Objects).<br>
+		Juneau supports generation and consumption of Swagger 2.0 documents and fragments through the use of DTOs 
+		(Data Transfer Objects).
+		<br>
 		It uses existing support for serializing and parsing POJOs to and from JSON to define these objects. 
 	</p>
 	
@@ -162,7 +164,8 @@
 					<jsm>contact</jsm>().email(<js>"apiteam@swagger.io"</js>)
 				)
 				.license(
-					<jsm>license</jsm>(<js>"Apache 2.0"</js>).url(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
+					<jsm>license</jsm>(<js>"Apache 2.0"</js>)
+						.url(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
 				)
 		)
 		.host(<js>"petstore.swagger.io"</js>)

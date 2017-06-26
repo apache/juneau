@@ -26,7 +26,8 @@ import java.util.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
+ * 		proxies against 3rd-party REST interfaces</a>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */
@@ -78,13 +79,15 @@ public class RemoteableMethodMeta {
 
 			httpMethod = rm == null ? "POST" : rm.httpMethod();
 			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT"))
-				throw new RemoteableMetadataException(m, "Invalid value specified for @RemoteMethod.httpMethod() annotation.  Valid values are [DELTE,GET,POST,PUT].");
+				throw new RemoteableMetadataException(m,
+					"Invalid value specified for @RemoteMethod.httpMethod() annotation.  Valid values are [DELTE,GET,POST,PUT].");
 
 			String path = rm == null || rm.path().isEmpty() ? null : rm.path();
 			String methodPaths = r == null ? "NAME" : r.methodPaths();
 
 			if (! isOneOf(methodPaths, "NAME", "SIGNATURE"))
-				throw new RemoteableMetadataException(m, "Invalid value specified for @Remoteable.methodPaths() annotation.  Valid values are [NAME,SIGNATURE].");
+				throw new RemoteableMetadataException(m,
+					"Invalid value specified for @Remoteable.methodPaths() annotation.  Valid values are [NAME,SIGNATURE].");
 
 			returnValue = rm == null ? ReturnValue.BODY : rm.returns();
 
@@ -127,7 +130,8 @@ public class RemoteableMethodMeta {
 						if (bodyArg == null)
 							bodyArg = index;
 						else
-							throw new RemoteableMetadataException(m, "Multiple @Body parameters found.  Only one can be specified per Java method.");
+							throw new RemoteableMetadataException(m,
+								"Multiple @Body parameters found.  Only one can be specified per Java method.");
 					}
 				}
 				if (! annotated)
@@ -136,12 +140,14 @@ public class RemoteableMethodMeta {
 			}
 
 			if (bodyArg != null && otherArgs.size() > 0)
-				throw new RemoteableMetadataException(m, "@Body and non-annotated parameters found together.  Non-annotated parameters cannot be used when @Body is used.");
+				throw new RemoteableMetadataException(m,
+					"@Body and non-annotated parameters found together.  Non-annotated parameters cannot be used when @Body is used.");
 		}
 	}
 
 	/**
 	 * Returns the value of the {@link RemoteMethod#httpMethod()} annotation on this Java method.
+	 *
 	 * @return The value of the {@link RemoteMethod#httpMethod()} annotation, never <jk>null</jk>.
 	 */
 	public String getHttpMethod() {
@@ -150,6 +156,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the absolute URL of the REST interface invoked by this Java method.
+	 *
 	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
 	 */
 	public String getUrl() {
@@ -158,6 +165,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the {@link Path @Path} annotated arguments on this Java method.
+	 *
 	 * @return A map of {@link Path#value() @Path.value()} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getPathArgs() {
@@ -166,6 +174,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the {@link Query @Query} annotated arguments on this Java method.
+	 *
 	 * @return A map of {@link Query#value() @Query.value()} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getQueryArgs() {
@@ -174,6 +183,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the {@link FormData @FormData} annotated arguments on this Java method.
+	 *
 	 * @return A map of {@link FormData#value() @FormData.value()} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getFormDataArgs() {
@@ -182,6 +192,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the {@link Header @Header} annotated arguments on this Java method.
+	 *
 	 * @return A map of {@link Header#value() @Header.value()} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getHeaderArgs() {
@@ -190,6 +201,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the {@link RequestBean @RequestBean} annotated arguments on this Java method.
+	 *
 	 * @return A list of zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getRequestBeanArgs() {
@@ -198,6 +210,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the remaining non-annotated arguments on this Java method.
+	 *
 	 * @return A list of zero-indexed argument indices.
 	 */
 	public Integer[] getOtherArgs() {
@@ -206,6 +219,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns the argument annotated with {@link Body @Body}.
+	 *
 	 * @return A index of the argument with the {@link Body @Body} annotation, or <jk>null</jk> if no argument exists.
 	 */
 	public Integer getBodyArg() {
@@ -214,6 +228,7 @@ public class RemoteableMethodMeta {
 
 	/**
 	 * Returns whether the method returns the HTTP response body or status code.
+	 *
 	 * @return Whether the method returns the HTTP response body or status code.
 	 */
 	public ReturnValue getReturns() {

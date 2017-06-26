@@ -24,8 +24,7 @@ import org.apache.juneau.serializer.*;
  * Specialized {@link PojoSwap} for surrogate classes.
  * <p>
  * Surrogate classes are used in place of other classes during serialization.
- * For example, you may want to use a surrogate class to change the names or order of bean
- * properties on a bean.
+ * For example, you may want to use a surrogate class to change the names or order of bean properties on a bean.
  * <p>
  * The following is an example of a surrogate class change changes a property name:
  * <p class='bcode'>
@@ -38,7 +37,7 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  * <p>
- * Optionally, a public static method can be used to untransform a class during parsing:
+ * Optionally, a public static method can be used to un-transform a class during parsing:
  * <p class='bcode'>
  * 	<jk>public class</jk> SurrogateClass {
  * 		...
@@ -53,13 +52,17 @@ import org.apache.juneau.serializer.*;
  * 	<li>It must have a one or more public constructors that take in a single parameter whose type is the normal types.
  * 		(It is possible to define a class as a surrogate for multiple class types by using multiple constructors with
  * 		different parameter types).
- * 	<li>It optionally can have a public static method that takes in a single parameter whose type is the transformed type
- * 		and returns an instance of the normal type.  This is called the untransform method.  The method can be called anything.
- * 	<li>If an untransform method is present, the class must also contain a no-arg constructor (so that the transformed class
- * 		can be instantiated by the parser before being converted into the normal class by the untransform method).
+ * 	<li>It optionally can have a public static method that takes in a single parameter whose type is the transformed
+ * 		type and returns an instance of the normal type.
+ * 		This is called the un-transform method.
+ * 		The method can be called anything.
+ * 	<li>If an un-transform method is present, the class must also contain a no-arg constructor (so that the
+ * 		transformed class can be instantiated by the parser before being converted into the normal class by the
+ * 		un-transform method).
  * </ul>
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
+ * Surrogate classes are associated with serializers and parsers using the {@link CoreObjectBuilder#pojoSwaps(Class...)}
+ * method.
  * <p class='bcode'>
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> test() <jk>throws</jk> Exception {
@@ -95,10 +98,10 @@ import org.apache.juneau.serializer.*;
  * 			f2 = n.f1;
  * 		}
  *
- * 		<jc>// Constructor used during parsing (only needed if untransform method specified)</jc>
+ * 		<jc>// Constructor used during parsing (only needed if un-transform method specified)</jc>
  * 		<jk>public</jk> Surrogate() {}
  *
- * 		<jc>// Untransform method (optional)</jc>
+ * 		<jc>// Un-transform method (optional)</jc>
  * 		<jk>public static</jk> Normal <jsm>toNormal</jsm>(Surrogate f) {
  * 			Normal n = <jk>new</jk> Normal();
  * 			n.f1 = f.f2;
@@ -107,7 +110,8 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  * <p>
- * It should be noted that a surrogate class is functionally equivalent to the following {@link PojoSwap} implementation:
+ * It should be noted that a surrogate class is functionally equivalent to the following {@link PojoSwap}
+ * implementation:
  * <p class='bcode'>
  * 	<jk>public static class</jk> SurrogateSwap <jk>extends</jk> PojoSwap&lt;Normal,Surrogate&gt; {
  * 		<jk>public</jk> Surrogate swap(Normal n) <jk>throws</jk> SerializeException {
@@ -195,7 +199,8 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	@SuppressWarnings("unchecked")
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (untransformMethod == null)
-			throw new ParseException("static valueOf({0}) method not implement on surrogate class ''{1}''", f.getClass().getName(), getNormalClass().getName());
+			throw new ParseException("static valueOf({0}) method not implement on surrogate class ''{1}''",
+				f.getClass().getName(), getNormalClass().getName());
 		try {
 			return (T)untransformMethod.invoke(null, f);
 		} catch (Exception e) {

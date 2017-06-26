@@ -61,6 +61,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore Initialize with the specified config property store.
 	 */
 	public XmlSchemaSerializer(PropertyStore propertyStore) {
@@ -69,6 +70,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 	/**
 	 * Constructor
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 * @param overrideProperties A set of overridden settings, typically defined by the class itself.
 	 */
@@ -95,7 +97,8 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	/**
 	 * Returns an XML-Schema validator based on the output returned by {@link #doSerialize(SerializerSession, Object)};
 	 *
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType, UriContext)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale,
+	 * TimeZone, MediaType, UriContext)}.
 	 * Can be <jk>null</jk>.
 	 * @param o The object to serialize.
 	 * @return The new validator.

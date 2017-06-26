@@ -24,7 +24,8 @@ package org.apache.juneau.http;
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
 public class EntityValidator {
@@ -49,6 +50,7 @@ public class EntityValidator {
 
 	/**
 	 * Returns the validator value stripped of quotes and weak tag.
+	 *
 	 * @return The validator value.
 	 */
 	public String asString() {
@@ -57,6 +59,7 @@ public class EntityValidator {
 
 	/**
 	 * Returns <jk>true</jk> if the weak flag is present in the value.
+	 *
 	 * @return <jk>true</jk> if the weak flag is present in the value.
 	 */
 	public boolean isWeak() {
@@ -65,6 +68,7 @@ public class EntityValidator {
 
 	/**
 	 * Returns <jk>true</jk> if the validator string value is <code>*</code>.
+	 *
 	 * @return <jk>true</jk> if the validator string value is <code>*</code>.
 	 */
 	public boolean isAny() {

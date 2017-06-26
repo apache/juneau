@@ -76,12 +76,12 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 *
 	 * @param name The name of the logger to use.
 	 * @param resourceBundleName The name of the resource bundle.
-	 * 	Can be any of the following formats:
-	 * 	<ol>
-	 * 		<li>An absolute path.  E.g. <js>"com/foo/nls/Messages"</js>.
-	 * 		<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
-	 * 	</ol>
-	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
+	 * Can be any of the following formats:
+	 * <ol>
+	 * 	<li>An absolute path.  E.g. <js>"com/foo/nls/Messages"</js>.
+	 * 	<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
+	 * </ol>
+	 * Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
 	 * @return A new <l>Logger</l>.
 	 */
 	public static synchronized JuneauLogger getLogger(String name, String resourceBundleName) {

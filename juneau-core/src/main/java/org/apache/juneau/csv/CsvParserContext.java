@@ -25,9 +25,11 @@ import org.apache.juneau.parser.*;
  *
  * <h6 class='topic'>Inherited configurable properties</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> -
+ * 		Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='jc'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> - Configurable properties common to all parsers.
+ * 		<li class='jc'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> -
+ * 			Configurable properties common to all parsers.
  * 	</ul>
  * </ul>
  */

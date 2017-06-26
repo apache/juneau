@@ -40,6 +40,7 @@ public class StringObject implements CharSequence, Writable {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param s The serializer to use to serialize the object.
 	 * @param o The object to be serialized.
 	 */
@@ -50,6 +51,7 @@ public class StringObject implements CharSequence, Writable {
 
 	/**
 	 * Constructor with default serializer {@link JsonSerializer#DEFAULT_LAX}
+	 *
 	 * @param o The object to be serialized.
 	 */
 	public StringObject(Object o) {

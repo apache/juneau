@@ -40,7 +40,7 @@ public @interface Pojo {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
-	 * In this case, a swap is being applied to a bean that will force it to be serialized as a <code>String</code>
+	 * In this case, a swap is being applied to a bean that will force it to be serialized as a <code>String</code>:
 	 * <p class='bcode'>
 	 * 	<jc>// Our bean class</jc>
 	 * 	<ja>@Pojo</ja>(swap=BSwap.<jk>class</jk>)

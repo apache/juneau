@@ -81,17 +81,16 @@ public @interface Xml {
 	 * 		to the bean property.
 	 * </ul>
 	 * <p>
-	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a {@link XmlNs} with the same name
-	 * 	through the {@link XmlSchema#xmlNs()} annotation on the package.
-	 * </p>
+	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a
+	 * {@link XmlNs} with the same name through the {@link XmlSchema#xmlNs()} annotation on the package.
 	 */
 	String prefix() default "";
 
 	/**
 	 * Sets the namespace URI of this property or class.
 	 * <p>
-	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link XmlNs} with the same name
-	 * 	through the {@link XmlSchema#xmlNs()} annotation on the package.
+	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link XmlNs} with the
+	 * same name through the {@link XmlSchema#xmlNs()} annotation on the package.
 	 */
 	String namespace() default "";
 

@@ -80,11 +80,13 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
-		<li>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with serializable POJOs during serialization 
-			(and optionally vis-versa during parsing).
+		<li>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
+			serializable POJOs during serialization (and optionally vis-versa during parsing).
 			<ol>
-				<li>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert objects to strings.
-				<li>{@link org.apache.juneau.transform.MapSwap} - Convenience subclass for swaps that convert objects to maps.
+				<li>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert 
+					objects to strings.
+				<li>{@link org.apache.juneau.transform.MapSwap} - Convenience subclass for swaps that convert 
+					objects to maps.
 			</ol>
 		</li>
 	</ul>
@@ -120,10 +122,10 @@
 			<li>Define bean interface classes.
 		</ul>
 		<p>
-			It should be noted that the {@link org.apache.juneau.annotation.Bean @Bean} annotation provides equivalent functionality
-				through annotations.  
-			However, the <code>BeanFilter</code> class allows you to provide the same features when you do
-				not have access to the source code.
+			It should be noted that the {@link org.apache.juneau.annotation.Bean @Bean} annotation provides equivalent 
+			functionality through annotations.  
+			However, the <code>BeanFilter</code> class allows you to provide the same features when you do not have 
+			access to the source code.
 		<p>
 		<h5 class='topic'>Examples</h5>
 
@@ -212,11 +214,11 @@
 		
 		<h6 class='topic'>Limiting bean properties to parent bean classes</h6>
 		<p>
-			Occassionally, you may want to limit bean properties to some parent interface.
+			Occasionally, you may want to limit bean properties to some parent interface.
 			For example, in the <code>RequestEchoResource</code> class in the sample war file, we serialize instances of
-				<code>HttpServletRequest</code> and <code>HttpServletResponse</code>.
+			<code>HttpServletRequest</code> and <code>HttpServletResponse</code>.
 			However, we really only want to serialize the properties defined on those specific APIs, not 
-				vendor-specific methods on the instances of those classes.
+			vendor-specific methods on the instances of those classes.
 			This can be done through the <code>interfaceClass</code> property of a bean filter.
 		</p>
 		<p>
@@ -234,7 +236,8 @@
 	}
 		</p>
 		<p>
-			Suppose we only want to render the properties defined on <code>MyClass</code>, not those defined on child classes.
+			Suppose we only want to render the properties defined on <code>MyClass</code>, not those defined on child 
+			classes.
 			To do so, we can define the following bean filter:
 		</p>
 		<p class='bcode'>
@@ -273,10 +276,10 @@
 	}
 		</p>
 		<p>
-			Also, the <code>*BeanFilters(...)</code> methods will automatically interpret any non-<code>BeanFilter</code> classes
-				passed in as meaning interface classes.  
+			Also, the <code>*BeanFilters(...)</code> methods will automatically interpret any 
+			non-<code>BeanFilter</code> classes passed in as meaning interface classes.  
 			So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
-				passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
+			passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
@@ -297,8 +300,8 @@
 		
 		<h6 class='topic'>Allowing non-public bean classes/methods/fields to be used by the framework</h6>
 		<p>
-			By default, only public classes are interpreted as beans.  Non-public classes are treated as 'other' POJOs that
-			are typically just serialized to strings using the <code>toString()</code> method.
+			By default, only public classes are interpreted as beans.  Non-public classes are treated as 'other' POJOs 
+			that are typically just serialized to strings using the <code>toString()</code> method.
 			Likewise, by default, only public fields/methods are interpreted as bean properties.
 		</p>
 		<p>
@@ -312,8 +315,8 @@
 			<li>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility}
 		</ul>
 		<p>
-			Also, specifying a {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation on non-public getters/setters/fields
-				will also allow them to be detected by the framework.
+			Also, specifying a {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation on non-public 
+			getters/setters/fields will also allow them to be detected by the framework.
 		</p>
 		<p class='bcode'>
 	<jk>public class</jk> MyBean {
@@ -344,15 +347,20 @@
 			They allow the Juneau serializers and parsers to be extended to handle virtually any kind of Java object. 
 		</p>
 		<p>
-			As explained in the overview, Juneau has built-in support for serializing and parsing specific kinds of objects, like primitive objects, bean, maps, collections, and arrays.  
-			Other kinds of POJOs, such as {@code Date} objects, cannot be serialized properly, since they are not true beans.  
+			As explained in the overview, Juneau has built-in support for serializing and parsing specific kinds of 
+			objects, like primitive objects, bean, maps, collections, and arrays.  
+			Other kinds of POJOs, such as {@code Date} objects, cannot be serialized properly, since they are not true 
+			beans.  
 			This is where <code>PojoSwaps</code> come into play.
 		</p>
 		<p>
-			The purpose of an <code>PojoSwap</code> is to convert a non-serializable object to a serializable surrogate form during serialization, and to optionally convert that surrogate form back into the original object during parsing.
+			The purpose of an <code>PojoSwap</code> is to convert a non-serializable object to a serializable surrogate 
+			form during serialization, and to optionally convert that surrogate form back into the original object 
+			during parsing.
 		</p>
 		<p>
-			For example, the following swap can be used to convert {@link java.util.Date} objects to ISO8601 strings during serialization, and {@link java.util.Date} objects from ISO8601 string during parsing:
+			For example, the following swap can be used to convert {@link java.util.Date} objects to ISO8601 strings 
+			during serialization, and {@link java.util.Date} objects from ISO8601 string during parsing:
 		</p>
 		<p class='bcode'>
 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
@@ -397,7 +405,9 @@
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 		</p>
 		<p>
-			In addition, the {@link org.apache.juneau.BeanMap#get(Object)} and {@link org.apache.juneau.BeanMap#put(String,Object)} methods will automatically convert to swapped values as the following example shows:
+			In addition, the {@link org.apache.juneau.BeanMap#get(Object)} and 
+			{@link org.apache.juneau.BeanMap#put(String,Object)} methods will automatically convert to swapped values 
+			as the following example shows:
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new bean context and add our swap.</jc>
@@ -471,22 +481,31 @@
 	a2 = parser.parse(s2, <jk>byte</jk>[][].<jk>class</jk>);		<jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
 		</p>
 		<p>
-			It should be noted that the sample swaps shown above have already been implemented in the <a class='doclink' href='../transforms/package-summary.html#TOC'>org.apache.juneau.transforms</a> package.
+			It should be noted that the sample swaps shown above have already been implemented in the 
+			<a class='doclink' href='../transforms/package-summary.html#TOC'>org.apache.juneau.transforms</a> package.
 			The following are a list of out-of-the-box swaps:
 		</p>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.transforms.ByteArrayBase64Swap} - Converts byte arrays to BASE64 encoded strings.
-			<li>{@link org.apache.juneau.transforms.CalendarSwap} - Swaps for converting <code>Calendar</code> objects to various date format strings.
-			<li>{@link org.apache.juneau.transforms.DateSwap} - Swaps for converting <code>Date</code> objects to various date format strings.
-			<li>{@link org.apache.juneau.transforms.EnumerationSwap} - Swaps for converting <code>Enumeration</code> objects to arrays.
-			<li>{@link org.apache.juneau.transforms.IteratorSwap} - Swaps for converting <code>Iterator</code> objects to arrays.
-			<li>{@link org.apache.juneau.transforms.ReaderSwap} - Swaps for converting <code>Readers</code> to objects before serialization.
-			<li>{@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} - Swaps for converting <code>XMLGregorianCalendar</code> objects to ISO8601 strings.
+			<li>{@link org.apache.juneau.transforms.ByteArrayBase64Swap} 
+				- Converts byte arrays to BASE64 encoded strings.
+			<li>{@link org.apache.juneau.transforms.CalendarSwap} 
+				- Swaps for converting <code>Calendar</code> objects to various date format strings.
+			<li>{@link org.apache.juneau.transforms.DateSwap} 
+				- Swaps for converting <code>Date</code> objects to various date format strings.
+			<li>{@link org.apache.juneau.transforms.EnumerationSwap} 
+				- Swaps for converting <code>Enumeration</code> objects to arrays.
+			<li>{@link org.apache.juneau.transforms.IteratorSwap} 
+				- Swaps for converting <code>Iterator</code> objects to arrays.
+			<li>{@link org.apache.juneau.transforms.ReaderSwap} 
+				- Swaps for converting <code>Readers</code> to objects before serialization.
+			<li>{@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} 
+				- Swaps for converting <code>XMLGregorianCalendar</code> objects to ISO8601 strings.
 		</ul>
 		
 		<h6 class='topic'>Valid swapped class types</h6>
 		<p>
-			The swapped class type can be any serializable class type as defined in the <a href='../../../../overview-summary.html#Core.PojoCategories'>POJO categories</a> table.
+			The swapped class type can be any serializable class type as defined in the 
+			<a href='../../../../overview-summary.html#Core.PojoCategories'>POJO categories</a> table.
 		</p>
 	</div>
 	
@@ -496,8 +515,10 @@
 	<h3 class='topic' onclick='toggle(this)'>1.3 - One-Way PojoSwaps</h3>
 	<div class='topic'>
 		<p>
-			In the previous section, we defined two-way swaps, meaning swaps where the original objects could be reconstructing during parsing.  '
-			However, there are certain kinds of POJOs that we may want to support for serializing, but that are not possible to reconstruct during parsing.  
+			In the previous section, we defined two-way swaps, meaning swaps where the original objects could be 
+			reconstructing during parsing. 
+			However, there are certain kinds of POJOs that we may want to support for serializing, but that are not 
+			possible to reconstruct during parsing.  
 			For these, we can use one-way object swaps.
 		</p>
 		<p>
@@ -506,7 +527,8 @@
 		</p>
 		<p>
 			An example of a one-way swaps would be one that allows {@code Iterators} to be serialized as JSON arrays.  
-			It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to reconstruct an {@code Iterator} during parsing. 
+			It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
+			reconstruct an {@code Iterator} during parsing. 
 		</p>
 		<p class='bcode'>
 	<jk>public class</jk> IteratorSwap <jk>extends</jk> PojoSwap&lt;Iterator,List&gt; {
@@ -522,7 +544,8 @@
 		</p>
 		<p>
 			Here is an example of our one-way swap being used.  
-			Note that trying to parse the original object will cause a {@link org.apache.juneau.parser.ParseException} to be thrown.
+			Note that trying to parse the original object will cause a {@link org.apache.juneau.parser.ParseException} 
+			to be thrown.
 		</p>
 		<p class='bcode'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
@@ -545,7 +568,7 @@
 	<h3 class='topic' onclick='toggle(this)'>1.4 - Stop Classes</h3>
 	<div class='topic'>
 		<p>
-			Occassionally, you may want to limit bean properties to only those defined on a parent class or interface.  
+			Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
 			There are a couple of ways of doing this.
 		</p>
 		<p>
@@ -563,7 +586,8 @@
 	}
 		</p>
 		<p>
-			Suppose we only want to render the properties defined on <code>MyClass</code>, not those defined on child classes. 
+			Suppose we only want to render the properties defined on <code>MyClass</code>, not those defined on 
+			child classes. 
 			To do so, we can define the following bean filter:
 		</p>
 		<p class='bcode'>
@@ -602,8 +626,10 @@
 	}
 		</p>
 		<p>
-			Also, the <code>beanFilters()</code> methods will automatically interpret any non-<code>BeanFilter</code> classes passed in as meaning interface classes. 
-			So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
+			Also, the <code>beanFilters()</code> methods will automatically interpret any non-<code>BeanFilter</code> 
+			classes passed in as meaning interface classes. 
+			So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
+			passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
@@ -616,11 +642,12 @@
 	<h3 class='topic' onclick='toggle(this)'>1.5 - Surrogate Classes</h3>
 	<div class='topic'>
 		<p>
-			Surrogate classes are very similar in concept to one-way <code>PojoSwaps</code> except they represent a simpler syntax.
+			Surrogate classes are very similar in concept to one-way <code>PojoSwaps</code> except they represent a 
+			simpler syntax.
 		</p>
 		<p>
-			For example, let's say we want to be able to serialize the following class, but it's not serializable for some reason (for example, there are no
-			properties exposed):  
+			For example, let's say we want to be able to serialize the following class, but it's not serializable for 
+			some reason (for example, there are no properties exposed):  
 		<p class='bcode'>
 	<jk>public class</jk> MyNonSerializableClass {
 		<jk>protected</jk> String <jf>foo</jf>;
@@ -645,7 +672,8 @@
 	}
 		</p>
 		<p>
-			However, the same can be accomplished by using a surrogate class that simply contains a constructor with the non-serializable class as an argument:
+			However, the same can be accomplished by using a surrogate class that simply contains a constructor with 
+			the non-serializable class as an argument:
 		</p>
 		<p class='bcode'>
 	<jk>public class</jk> MySerializableSurrogate {
@@ -664,7 +692,8 @@
 	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().pojoSwaps(MySerializableSurrogate.<jk>class</jk>).build();
 		</p>
 		<p>
-			When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate instead.
+			When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate 
+			instead.
 		</p>
 	</div>
 	

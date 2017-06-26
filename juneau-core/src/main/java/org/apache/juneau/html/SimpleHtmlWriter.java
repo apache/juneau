@@ -19,7 +19,8 @@ import java.io.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	String table = <jk>new</jk> SimpleHtmlWriter().sTag(<js>"table"</js>).sTag(<js>"tr"</js>).sTag(<js>"td"</js>).append(<js>"hello"</js>).eTag(<js>"td"</js>).eTag(<js>"tr"</js>).eTag(<js>"table"</js>).toString();
+ * 	String table = <jk>new</jk> SimpleHtmlWriter().sTag(<js>"table"</js>).sTag(<js>"tr"</js>).sTag(<js>"td"</js>)
+ * 	.append(<js>"hello"</js>).eTag(<js>"td"</js>).eTag(<js>"tr"</js>).eTag(<js>"table"</js>).toString();
  * </p>
  */
 public class SimpleHtmlWriter extends HtmlWriter {

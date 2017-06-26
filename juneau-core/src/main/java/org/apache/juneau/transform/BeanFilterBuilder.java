@@ -78,7 +78,8 @@ public abstract class BeanFilterBuilder {
 
 	/**
 	 * Specifies the set and order of names of properties associated with the bean class.
-	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and related methods.
+	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
+	 * related methods.
 	 * Entries in the list can also contain comma-delimited lists that will be split.
 	 *
 	 * @param properties The properties associated with the bean class.
@@ -130,8 +131,8 @@ public abstract class BeanFilterBuilder {
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
 	 * </p>
 	 * <p>
-	 * Note that this filter can be used on the parent class so that it filters to all child classes,
-	 * 	or can be set individually on the child classes.
+	 * Note that this filter can be used on the parent class so that it filters to all child classes, or can be set
+	 * individually on the child classes.
 	 *
 	 * @param interfaceClass The interface class to use for this bean class.
 	 * @return This object (for method chaining).
@@ -147,8 +148,8 @@ public abstract class BeanFilterBuilder {
 	 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
 	 * Any properties in the stop class or in its base classes will be ignored during analysis.
 	 * <p>
-	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>, but
-	 * 	not <code>p1</code> or <code>p2</code>.
+	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
+	 * but not <code>p1</code> or <code>p2</code>.
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> C1 {
 	 * 		<jk>public int</jk> getP1();

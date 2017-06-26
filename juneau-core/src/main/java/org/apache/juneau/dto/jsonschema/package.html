@@ -71,11 +71,15 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Overview</h2>
 <div class='topic'>
 	<p>
-		Juneau supports serializing and parsing of JSON-Schema documents through the use of beans defined in the <code>org.apache.juneau.dto.jsonschema</code> package.<br>
-		These beans are used with the existing {@link org.apache.juneau.json.JsonSerializer} and {@link org.apache.juneau.json.JsonParser} classes to produce and consume JSON-Schema documents. 
+		Juneau supports serializing and parsing of JSON-Schema documents through the use of beans defined in the 
+		<code>org.apache.juneau.dto.jsonschema</code> package.
+		<br>
+		These beans are used with the existing {@link org.apache.juneau.json.JsonSerializer} and 
+		{@link org.apache.juneau.json.JsonParser} classes to produce and consume JSON-Schema documents. 
 	</p>
 	<p>
-		<b>NOTE:</b>  JSON-Schema is currently in draft form.  This API may change as the JSON-Schema specification changes.
+		<b>NOTE:</b>  JSON-Schema is currently in draft form.  
+		This API may change as the JSON-Schema specification changes.
 	</p>
 	
 	<!-- ======================================================================================================== -->
@@ -101,10 +105,12 @@
 	            <js>"minimum"</js>: 0
 	        },
 	        <js>"positiveIntegerDefault0"</js>: {
-	            <js>"allOf"</js>: [ { <js>"$ref"</js>: <js>"#/definitions/positiveInteger"</js> }, { <js>"default"</js>: 0 } ]
+	            <js>"allOf"</js>: [ { <js>"$ref"</js>: <js>"#/definitions/positiveInteger"</js> }, 
+	            	{ <js>"default"</js>: 0 } ]
 	        },
 	        <js>"simpleTypes"</js>: {
-	            <js>"enum"</js>: [ <js>"array"</js>, <js>"boolean"</js>, <js>"integer"</js>, <js>"null"</js>, <js>"number"</js>, <js>"object"</js>, <js>"string"</js> ]
+	            <js>"enum"</js>: [ <js>"array"</js>, <js>"boolean"</js>, <js>"integer"</js>, <js>"null"</js>, 
+	            	<js>"number"</js>, <js>"object"</js>, <js>"string"</js> ]
 	        },
 	        <js>"stringArray"</js>: {
 	            <js>"type"</js>: <js>"array"</js>,
@@ -242,8 +248,10 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.dto.jsonschema.Schema} - Top level schema object.
-			<li>{@link org.apache.juneau.dto.jsonschema.SchemaProperty} - A subclass of <code>Schema</code> for representing properties.
-			<li>{@link org.apache.juneau.dto.jsonschema.SchemaPropertySimpleArray} - A convenience subclass of <code>SchemaProperty</code> for representing properties of simple array types.
+			<li>{@link org.apache.juneau.dto.jsonschema.SchemaProperty} - A subclass of <code>Schema</code> for 
+				representing properties.
+			<li>{@link org.apache.juneau.dto.jsonschema.SchemaPropertySimpleArray} - A convenience subclass of 
+				<code>SchemaProperty</code> for representing properties of simple array types.
 			<li>{@link org.apache.juneau.dto.jsonschema.SchemaRef} - Represents a URI reference to another schema.
 			<li>{@link org.apache.juneau.dto.jsonschema.SchemaArray} - An array of <code>Schema</code> objects.
 			<li>{@link org.apache.juneau.dto.jsonschema.JsonType} - An enum of possible JSON data types.
@@ -392,7 +400,8 @@
 		<h4 class='topic' onclick='toggle(this)'>1.2.1 - Serializing to other data types</h4>
 		<div class='topic'>
 			<p>
-				Since the JSON-Schema DTOs are simple beans, they can be used to serialize to a variety of other language types as well as JSON.
+				Since the JSON-Schema DTOs are simple beans, they can be used to serialize to a variety of other 
+				language types as well as JSON.
 				This also allows JSON-Schema documents to be easily served up using the Juneau REST API.
 			</p>
 			<p>
@@ -462,14 +471,15 @@
 	}
 			</p>
 			<p>
-				When you point your browser to this resource, the default content type is HTML (since that's what the browser asks for
-				by default).
+				When you point your browser to this resource, the default content type is HTML (since that's what the 
+				browser asks for by default).
 			</p>
 			<h6 class='figure'>HTML</h6>
 			<img class='bordered' src="doc-files/Example_Html.png">
 			<p>
-				The REST API allows you to specify the <code>Accept</code> header as a GET parameter, and the <code>plainText=true</code>
-					parameter forces the returned <code>Content-Type</code> to be <code>text/plain</code>.
+				The REST API allows you to specify the <code>Accept</code> header as a GET parameter, and the 
+				<code>plainText=true</code> parameter forces the returned <code>Content-Type</code> to be 
+				<code>text/plain</code>.
 				We'll use this to view the JSON-Schema document in other languages.
 			</p>			
 			
@@ -489,7 +499,8 @@
 			<img class='bordered' src="doc-files/Example_Turtle.png">
 			
 			<p>
-				The full list of options for this resource can be accessed by the <code>options</code> link on the HTML page.
+				The full list of options for this resource can be accessed by the <code>options</code> link on the HTML 
+				page.
 			</p>
 			
 			<h6 class='figure'>Resource Options</h6>

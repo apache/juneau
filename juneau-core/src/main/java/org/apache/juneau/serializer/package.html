@@ -70,9 +70,11 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Serializer API</h2>
 <div class='topic'>
 	<p>
-		The serialization API is designed to be easily extensible by developers.<br>
-		If you are writing your own serializer, you will typically subclass directly from either {@link org.apache.juneau.serializer.WriterSerializer}
-			or {@link org.apache.juneau.serializer.OutputStreamSerializer}.<br>
+		The serialization API is designed to be easily extensible by developers.
+		<br>
+		If you are writing your own serializer, you will typically subclass directly from either 
+		{@link org.apache.juneau.serializer.WriterSerializer} or 
+		{@link org.apache.juneau.serializer.OutputStreamSerializer}.
 	</p>
 
 	<!-- ======================================================================================================== -->
@@ -80,7 +82,8 @@
 	<h3 class='topic' onclick='toggle(this)'>1.1 - The SerializerGroup class</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.serializer.SerializerGroup} class represents a group of serializers registered with the media types they handle.
+			The {@link org.apache.juneau.serializer.SerializerGroup} class represents a group of serializers registered 
+			with the media types they handle.
 		</p>
 		
 		<h6 class='topic'>Features</h6>		
@@ -105,19 +108,22 @@
 <h2 class='topic' onclick='toggle(this)'>2 - Defining a new Serializer</h2>
 <div class='topic'>
 	<p>
-		Defining a new serializer is quite simple if you subclass directly from {@link org.apache.juneau.serializer.WriterSerializer} 
-			or {@link org.apache.juneau.serializer.OutputStreamSerializer}.<br>
-		In each case, you simply need to implement a single
-			method and specify a {@link org.apache.juneau.annotation.Produces} annotation.
+		Defining a new serializer is quite simple if you subclass directly from 
+		{@link org.apache.juneau.serializer.WriterSerializer}  or {@link org.apache.juneau.serializer.OutputStreamSerializer}.
+		<br>
+		In each case, you simply need to implement a single method and specify a 
+		{@link org.apache.juneau.annotation.Produces} annotation.
 	</p>
 	<p>
-		The following example shows a simple serializer that converts images to output streams using standard JRE classes.
+		The following example shows a simple serializer that converts images to output streams using standard JRE 
+		classes.
 	</p>
 	<p class='bcode'>
 	<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 	<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
 		<ja>@Override</ja>
-		<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {
+		<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) 
+				<jk>throws</jk> IOException, SerializeException {
 			RenderedImage image = (RenderedImage)o;
 			String mediaType = ctx.getMediaType();
 			ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), out);
@@ -125,9 +131,11 @@
 	}
 	</p>
 	<p>
-		Serializer that take advantage of the entire {@link org.apache.juneau.CoreObject} interface to be able to serialize arbitrary beans and POJOs is
-			considerably more complex and outside the scope of this document.<br>  
-		If developing such a serializer, the best course of action would be to replicate what occurs in the {@link org.apache.juneau.json.JsonSerializer} class.
+		Serializer that take advantage of the entire {@link org.apache.juneau.CoreObject} interface to be able to 
+		serialize arbitrary beans and POJOs is considerably more complex and outside the scope of this document.
+		<br>  
+		If developing such a serializer, the best course of action would be to replicate what occurs in the 
+		{@link org.apache.juneau.json.JsonSerializer} class.
 	</p>
 </div>
 

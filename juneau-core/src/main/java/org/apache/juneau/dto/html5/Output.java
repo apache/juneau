@@ -15,12 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-output-element">&lt;output&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/forms.html#the-output-element">&lt;output&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -32,6 +34,7 @@ public class Output extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-output-for">for</a> attribute.
 	 * Specifies controls from which the output was calculated.
+	 *
 	 * @param _for The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -43,6 +46,7 @@ public class Output extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
+	 *
 	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -54,6 +58,7 @@ public class Output extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
+	 *
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

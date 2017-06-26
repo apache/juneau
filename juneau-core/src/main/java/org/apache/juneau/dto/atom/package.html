@@ -74,11 +74,13 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Overview</h2>
 <div class='topic'>
 	<p>
-		Juneau supports generation and consumption of ATOM feeds through the use of DTOs (Data Transfer Objects).<br>
+		Juneau supports generation and consumption of ATOM feeds through the use of DTOs (Data Transfer Objects).
+		<br>
 		It uses existing support for serializing and parsing POJOs to and from XML to define these ATOM objects. 
 	</p>
 	<p>
-		The examples shown here are pulled from the <code>AtomFeedResource</code> class in the <code>org.apache.juneau.sample.war</code> project.
+		The examples shown here are pulled from the <code>AtomFeedResource</code> class in the 
+		<code>org.apache.juneau.sample.war</code> project.
 	</p>
 	
 	
@@ -87,8 +89,10 @@
 	<h3 class='topic' onclick='toggle(this)'>1.1 - Serializing ATOM feeds</h3>
 	<div class='topic'>
 		<p>
-			The Juneau ATOM feed DTOs are simply beans with fluent-style setters.<br>
-			The following code shows a feed being created programmatically using the {@link org.apache.juneau.dto.atom.AtomBuilder} class.
+			The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
+			<br>
+			The following code shows a feed being created programmatically using the 
+			{@link org.apache.juneau.dto.atom.AtomBuilder} class.
 		</p>
 		<p class='bcode'>
 		
@@ -420,7 +424,8 @@
 		<h4 class='topic' onclick='toggle(this)'>1.1.2 - ATOM/RDF/XML</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.jena.RdfSerializer} class and subclasses can also be used to produce ATOM in various RDF formats.
+				The {@link org.apache.juneau.jena.RdfSerializer} class and subclasses can also be used to produce ATOM 
+				in various RDF formats.
 			</p>
 
 			<h6 class='figure'>ATOM/RDF/XML example</h6>

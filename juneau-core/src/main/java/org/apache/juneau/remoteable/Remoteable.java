@@ -23,7 +23,8 @@ import java.lang.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
+ * 		proxies against 3rd-party REST interfaces</a>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */
@@ -39,7 +40,8 @@ public @interface Remoteable {
 	 * When a relative path is specified, it's relative to the root-url defined on the <code>RestClient</code> used
 	 * to instantiate the interface.
 	 * <p>
-	 * When no path is specified, the path is assumed to be the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
+	 * When no path is specified, the path is assumed to be the class name (e.g.
+	 * <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
 	 */
 	String path() default "";
 
@@ -48,7 +50,8 @@ public @interface Remoteable {
 	 * <p>
 	 * The options are:
 	 * <ul>
-	 * 	<li><js>"DECLARED"</js> (default) - Only methods declared on the immediate interface/class are exposed.  Methods on parent interfaces/classes are ignored.
+	 * 	<li><js>"DECLARED"</js> (default) - Only methods declared on the immediate interface/class are exposed.
+	 * 		Methods on parent interfaces/classes are ignored.
 	 * 	<li><js>"ANNOTATED"</js> - Only methods annotated with {@link RemoteMethod} are exposed.
 	 * 	<li><js>"ALL"</js> - All methods defined on the interface or class are exposed.
 	 * </ul>
@@ -56,7 +59,8 @@ public @interface Remoteable {
 	String expose() default "DECLARED";
 
 	/**
-	 * Defines the methodology to use for the path names of the methods when not explicitly defined via {@link RemoteMethod#path() @RemoteMethod.path()}.
+	 * Defines the methodology to use for the path names of the methods when not explicitly defined via
+	 * {@link RemoteMethod#path() @RemoteMethod.path()}.
 	 * <p>
 	 * The options are:
 	 * <ul>

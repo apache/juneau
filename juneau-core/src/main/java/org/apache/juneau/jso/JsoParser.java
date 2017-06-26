@@ -34,6 +34,7 @@ public final class JsoParser extends InputStreamParser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public JsoParser(PropertyStore propertyStore) {

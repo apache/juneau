@@ -49,6 +49,7 @@ public class MsgPackParser extends InputStreamParser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public MsgPackParser(PropertyStore propertyStore) {
@@ -64,7 +65,8 @@ public class MsgPackParser extends InputStreamParser {
 	/**
 	 * Workhorse method.
 	 */
-	private <T> T parseAnything(MsgPackParserSession session, ClassMeta<T> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(MsgPackParserSession session, ClassMeta<T> eType, MsgPackInputStream is, Object outer,
+			BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -154,7 +156,11 @@ public class MsgPackParser extends InputStreamParser {
 						m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
 					o = session.cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
-					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
+					Collection l = (
+						sType.canCreateNewInstance(outer)
+						? (Collection)sType.newInstance()
+						: new ObjectList(session)
+					);
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(session, sType.getElementType(), is, l, pMeta));
 					o = l;
@@ -168,7 +174,11 @@ public class MsgPackParser extends InputStreamParser {
 						m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
 					o = session.cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
-					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
+					Collection l = (
+						sType.isCollection() && sType.canCreateNewInstance(outer)
+						? (Collection)sType.newInstance()
+						: new ObjectList(session)
+					);
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(session, sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = session.toArray(sType, l);
@@ -182,7 +192,8 @@ public class MsgPackParser extends InputStreamParser {
 				if (m.containsKey(session.getBeanTypePropertyName(eType)))
 					o = session.cast(m, pMeta, eType);
 				else
-					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+						sType.getInnerClass().getName(), sType.getNotABeanReason());
 			} else {
 				throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 			}
@@ -203,7 +214,8 @@ public class MsgPackParser extends InputStreamParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public MsgPackParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public MsgPackParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer,
+			Locale locale, TimeZone timeZone, MediaType mediaType) {
 		return new MsgPackParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 

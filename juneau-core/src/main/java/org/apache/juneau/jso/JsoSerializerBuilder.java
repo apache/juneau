@@ -32,6 +32,7 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public JsoSerializerBuilder(PropertyStore propertyStore) {

@@ -26,8 +26,8 @@ import org.apache.juneau.*;
  * <p>
  * This class contains the workhorse code for var resolution.
  * <p>
- * Instances of this class are created through the {@link VarResolver#createSession()} and {@link VarResolver#createSession(Map)}
- * 	methods.
+ * Instances of this class are created through the {@link VarResolver#createSession()} and
+ * {@link VarResolver#createSession(Map)} methods.
  * <p>
  * Instances of this class are NOT guaranteed to be thread safe.
  *
@@ -41,8 +41,8 @@ public class VarResolverSession {
 	/**
 	 * Constructor.
 	 *
-	 * @param context The {@link VarResolver} context object that contains the {@link Var Vars} and
-	 * 	context objects associated with that resolver.
+	 * @param context The {@link VarResolver} context object that contains the {@link Var Vars} and context objects
+	 * associated with that resolver.
 	 * @param sessionObjects The session objects.
 	 *
 	 */
@@ -144,8 +144,8 @@ public class VarResolverSession {
 
 	/**
 	 * Resolves variables in the specified string and sends the output to the specified writer.
-	 * More efficient than first parsing to a string and then serializing to the writer since this
-	 * method doesn't need to construct a large string.
+	 * More efficient than first parsing to a string and then serializing to the writer since this method doesn't need
+	 * to construct a large string.
 	 *
 	 * @param s The string to resolve variables in.
 	 * @param out The writer to write to.
@@ -276,10 +276,12 @@ public class VarResolverSession {
 				t = (T)sessionObjects.get(name);
 			}
 		} catch (Exception e) {
-			throw new FormattedRuntimeException(e, "Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c);
+			throw new FormattedRuntimeException(e,
+				"Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c);
 		}
 		if (t == null)
-			throw new FormattedRuntimeException("Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name);
+			throw new FormattedRuntimeException(
+				"Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name);
 		return t;
 	}
 

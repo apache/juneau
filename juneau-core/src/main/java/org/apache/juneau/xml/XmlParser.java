@@ -62,6 +62,7 @@ public class XmlParser extends ReaderParser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public XmlParser(PropertyStore propertyStore) {
@@ -87,7 +88,8 @@ public class XmlParser extends ReaderParser {
 	 * @return The parsed object.
 	 * @throws Exception
 	 */
-	protected <T> T parseAnything(XmlParserSession session, ClassMeta<T> eType, String currAttr, XMLStreamReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws Exception {
+	protected <T> T parseAnything(XmlParserSession session, ClassMeta<T> eType, String currAttr, XMLStreamReader r,
+			Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -180,7 +182,9 @@ public class XmlParser extends ReaderParser {
 		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
 			o = sType.newInstanceFromNumber(session, outer, parseNumber(session.getElementText(r), sType.getNewInstanceFromNumberClass()));
 		} else {
-			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", sType.getInnerClass().getName(), sType.getNotABeanReason(), pMeta == null ? null : pMeta.getName());
+			throw new ParseException(session,
+				"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''",
+				sType.getInnerClass().getName(), sType.getNotABeanReason(), pMeta == null ? null : pMeta.getName());
 		}
 
 		if (transform != null && o != null)
@@ -192,7 +196,8 @@ public class XmlParser extends ReaderParser {
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(XmlParserSession session, XMLStreamReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(XmlParserSession session, XMLStreamReader r, Map<K,V> m, ClassMeta<K> keyType,
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 		int depth = 0;
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String a = r.getAttributeLocalName(i);
@@ -230,7 +235,8 @@ public class XmlParser extends ReaderParser {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l,
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 		int depth = 0;
 		int argIndex = 0;
 		do {
@@ -497,7 +503,8 @@ public class XmlParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public XmlParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public XmlParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale,
+			TimeZone timeZone, MediaType mediaType) {
 		return new XmlParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 

@@ -40,7 +40,8 @@ import org.apache.juneau.utils.*;
  * <p>
  * The order of the properties are as follows:
  * <ul class='spaced-list'>
- * 	<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties in the annotation.
+ * 	<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties
+ * 		in the annotation.
  * 	<li>If {@link Bean @Bean} annotation is not specified on the class, then the order is based on the following.
  * 		<ul>
  * 			<li>Public fields (same order as {@code Class.getFields()}).
@@ -88,11 +89,11 @@ public class BeanMeta<T> {
 	private final MetadataMap extMeta;  // Extended metadata
 
 	// Other fields
-	final String typePropertyName;                                      // "_type" property actual name.
-	private final BeanPropertyMeta typeProperty;                        // "_type" mock bean property.
-	final BeanPropertyMeta dynaProperty;                                // "extras" property.
-	private final String dictionaryName;                                // The @Bean.typeName() annotation defined on this bean class.
-	final String notABeanReason;                                        // Readable string explaining why this class wasn't a bean.
+	final String typePropertyName;                         // "_type" property actual name.
+	private final BeanPropertyMeta typeProperty;           // "_type" mock bean property.
+	final BeanPropertyMeta dynaProperty;                   // "extras" property.
+	private final String dictionaryName;                   // The @Bean.typeName() annotation defined on this bean class.
+	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
 	final BeanRegistry beanRegistry;
 	final boolean sortProperties;
 
@@ -725,11 +726,11 @@ public class BeanMeta<T> {
 
 	/**
 	 * Recursively determines the classes represented by parameterized types in the class hierarchy of
-	 * the specified type, and puts the results in the specified map.<br>
+	 * the specified type, and puts the results in the specified map.
 	 * <p>
 	 * For example, given the following classes...
 	 * <p class='bcode'>
-	 * 	public static class BeanA&lt;T> {
+	 * 	public static class BeanA&lt;T&gt; {
 	 * 		public T x;
 	 * 	}
 	 * 	public static class BeanB extends BeanA&lt;Integer>} {...}
@@ -744,7 +745,7 @@ public class BeanMeta<T> {
 	 * 	public static class BeanB&lt;T extends Number&gt; extends BeanA&lt;T&gt;;
 	 * 	public static class BeanC extends BeanB&lt;Integer&gt;;
 	 * <p>
-	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.<br>
+	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.
 	 * If anyone can figure out a better way of doing this, please do so!
 	 *
 	 * @param t The type we're recursing.

@@ -22,7 +22,8 @@ import org.apache.juneau.json.*;
 /**
  * Allows the definition of a security scheme that can be used by the operations.
  * <p>
- * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's common flows (implicit, password, application and access code).
+ * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's
+ * common flows (implicit, password, application and access code).
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -52,7 +53,8 @@ import org.apache.juneau.json.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -103,7 +105,9 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public SecurityScheme setType(String type) {
 		if (isStrict() && ! contains(type, VALID_TYPES))
-			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
+			throw new RuntimeException(
+				"Invalid value passed in to setType(String).  Value='"+type+"', valid values="
+				+ JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
 		return this;
 	}
@@ -123,7 +127,8 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * A short description for security scheme.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public String getDescription() {
 		return description;
@@ -262,7 +267,8 @@ public class SecurityScheme extends SwaggerElement {
 	 * The authorization URL to be used for this flow.
 	 * This SHOULD be in the form of a URL.
 	 *
-	 * @return The value of the <property>authorizationUrl</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>authorizationUrl</property> property on this bean, or <jk>null</jk> if it
+	 * is not set.
 	 */
 	public String getAuthorizationUrl() {
 		return authorizationUrl;

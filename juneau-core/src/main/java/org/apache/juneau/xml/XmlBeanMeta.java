@@ -20,7 +20,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Metadata on beans specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the class.
+ * Metadata on beans specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the
+ * class.
  */
 public class XmlBeanMeta extends BeanMetaExtended {
 
@@ -250,7 +251,8 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	/**
 	 * Returns bean property meta with the specified name.
 	 * This is identical to calling {@link BeanMeta#getPropertyMeta(String)} except it first retrieves
-	 * 	the bean property meta based on the child name (e.g. a property whose name is "people", but whose child name is "person").
+	 * the bean property meta based on the child name (e.g. a property whose name is "people", but whose child name is
+	 * "person").
 	 *
 	 * @param fieldName The bean property name.
 	 * @return The property metadata.

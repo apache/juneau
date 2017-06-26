@@ -23,7 +23,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Metadata on classes specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the class.
+ * Metadata on classes specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the
+ * class.
  */
 public class XmlClassMeta extends ClassMetaExtended {
 
@@ -55,7 +56,8 @@ public class XmlClassMeta extends ClassMetaExtended {
 	/**
 	 * Returns the {@link Xml} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Xml} annotation defined on the class, or <jk>null</jk> if annotation is not specified.
+	 * @return The value of the {@link Xml} annotation defined on the class, or <jk>null</jk> if annotation is not
+	 * specified.
 	 */
 	protected Xml getAnnotation() {
 		return xml;
@@ -92,8 +94,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 * 	<li>{@link Xml#prefix()} annotation defined on interface packages.
 	 * </ol>
 	 *
-	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is
-	 * 	associated with it.
+	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	protected Namespace getNamespace() {
 		return namespace;

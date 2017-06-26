@@ -101,10 +101,12 @@ import org.apache.juneau.xml.annotation.*;
  * 		<xt>&lt;fico_x0020_score</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
  * <p>
- * This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
+ * This serializer provides several serialization options.
+ * Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  * <p>
- * If an attribute name contains any non-valid XML element characters, they will be escaped using standard {@code _x####_} notation.
+ * If an attribute name contains any non-valid XML element characters, they will be escaped using standard
+ * {@code _x####_} notation.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
@@ -150,6 +152,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Sq(PropertyStore propertyStore) {
@@ -167,6 +170,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public SqReadable(PropertyStore propertyStore) {
@@ -185,6 +189,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Ns(PropertyStore propertyStore) {
@@ -202,6 +207,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public NsSq(PropertyStore propertyStore) {
@@ -219,6 +225,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public NsSqReadable(PropertyStore propertyStore) {
@@ -227,7 +234,8 @@ public class XmlSerializer extends WriterSerializer {
 
 		@Override /* CoreObject */
 		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(XML_enableNamespaces, true).append(SERIALIZER_quoteChar, '\'').append(SERIALIZER_useWhitespace, true);
+			return super.getOverrideProperties().append(XML_enableNamespaces, true).append(SERIALIZER_quoteChar, '\'')
+				.append(SERIALIZER_useWhitespace, true);
 		}
 	}
 
@@ -237,6 +245,7 @@ public class XmlSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public XmlSerializer(PropertyStore propertyStore) {
@@ -344,7 +353,8 @@ public class XmlSerializer extends WriterSerializer {
 	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
 	 * @param format The format to serialize the output to.
 	 * @param isMixed We're serializing mixed content, so don't use whitespace.
-	 * @param preserveWhitespace <jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
+	 * @param preserveWhitespace <jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or
+	 * {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws Exception If a problem occurred trying to convert the output.
@@ -576,7 +586,8 @@ public class XmlSerializer extends WriterSerializer {
 		return out;
 	}
 
-	private ContentResult serializeMap(XmlSerializerSession session, XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws Exception {
+	private ContentResult serializeMap(XmlSerializerSession session, XmlWriter out, Map m, ClassMeta<?> sType,
+			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws Exception {
 
 		m = session.sort(m);
 
@@ -607,7 +618,8 @@ public class XmlSerializer extends WriterSerializer {
 		return hasChildren ? CR_ELEMENTS : CR_EMPTY;
 	}
 
-	private ContentResult serializeBeanMap(XmlSerializerSession session, XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixed) throws Exception {
+	private ContentResult serializeBeanMap(XmlSerializerSession session, XmlWriter out, BeanMap<?> m,
+			Namespace elementNs, boolean isCollapsed, boolean isMixed) throws Exception {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
@@ -745,7 +757,8 @@ public class XmlSerializer extends WriterSerializer {
 		return isMixed ? CR_MIXED : CR_ELEMENTS;
 	}
 
-	private XmlWriter serializeCollection(XmlSerializerSession session, XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws Exception {
+	private XmlWriter serializeCollection(XmlSerializerSession session, XmlWriter out, Object in, ClassMeta<?> sType,
+			ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws Exception {
 
 		ClassMeta<?> seType = sType.getElementType();
 		if (seType == null)
@@ -831,7 +844,8 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

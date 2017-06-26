@@ -19,7 +19,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.annotation.*;
 
 /**
- * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on the class.
+ * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on
+ * the class.
  */
 public class JsonClassMeta extends ClassMetaExtended {
 

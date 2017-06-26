@@ -76,31 +76,32 @@ public class SerializerSession extends BeanSession {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
+	 * The context contains all the configuration settings for this object.
 	 * @param output The output object.
-	 * 	<br>Character-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link Writer}
-	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 	</ul>
-	 * 	<br>Stream-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link OutputStream}
-	 * 		<li>{@link File}
-	 * 	</ul>
+	 * <br>Character-based serializers can handle the following output class types:
+	 * <ul>
+	 * 	<li>{@link Writer}
+	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
+	 * </ul>
+	 * <br>Stream-based serializers can handle the following output class types:
+	 * <ul>
+	 * 	<li>{@link OutputStream}
+	 * 	<li>{@link File}
+	 * </ul>
 	 * @param op The override properties.
-	 * 	These override any context properties defined in the context.
+	 * These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
 	 * @param locale The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @param uriContext The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.output = output;
@@ -229,6 +230,7 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Sets the current bean property being serialized for proper error messages.
+	 *
 	 * @param currentProperty The current property being serialized.
 	 */
 	public void setCurrentProperty(BeanPropertyMeta currentProperty) {
@@ -237,6 +239,7 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Sets the current class being serialized for proper error messages.
+	 *
 	 * @param currentClass The current class being serialized.
 	 */
 	public void setCurrentClass(ClassMeta<?> currentClass) {
@@ -396,8 +399,8 @@ public class SerializerSession extends BeanSession {
 	 * @param attrName The attribute name.
 	 * @param o The current object being serialized.
 	 * @param eType The expected class type.
-	 * @return The {@link ClassMeta} of the object so that <code>instanceof</code> operations
-	 * 	only need to be performed once (since they can be expensive).<br>
+	 * @return The {@link ClassMeta} of the object so that <code>instanceof</code> operations only need to be performed
+	 * once (since they can be expensive).
 	 * @throws SerializeException If recursion occurred.
 	 */
 	public ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
@@ -425,7 +428,7 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns <jk>true</jk> if {@link SerializerContext#SERIALIZER_detectRecursions} is enabled, and the specified
-	 * 	object is already higher up in the serialization chain.
+	 * object is already higher up in the serialization chain.
 	 *
 	 * @param attrName The bean property attribute name, or some other identifier.
 	 * @param o The object to check for recursion.
@@ -454,7 +457,8 @@ public class SerializerSession extends BeanSession {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
-				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", o.getClass().getName(), stack);
+				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.",
+					o.getClass().getName(), stack);
 		}
 		isBottom = false;
 	}
@@ -478,7 +482,8 @@ public class SerializerSession extends BeanSession {
 		if (listener != null)
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
-		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
+			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
 	}
 
 	/**
@@ -599,26 +604,26 @@ public class SerializerSession extends BeanSession {
 	 * Converts a String to an absolute URI based on the {@link UriContext} on this session.
 	 *
 	 * @param uri The input URI.
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link java.net.URI}
-	 * 		<li>{@link java.net.URL}
-	 * 		<li>{@link CharSequence}
-	 * 	</ul>
-	 * 	URI can be any of the following forms:
-	 * 	<ul>
-	 * 		<li><js>"foo://foo"</js> - Absolute URI.
-	 * 		<li><js>"/foo"</js> - Root-relative URI.
-	 * 		<li><js>"/"</js> - Root URI.
-	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI.
-	 * 		<li><js>"context:/"</js> - Context-root URI.
-	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
-	 * 		<li><js>"servlet:/"</js> - Servlet-path URI.
-	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI.
-	 * 		<li><js>"request:/"</js> - Request-path URI.
-	 * 		<li><js>"foo"</js> - Path-info-relative URI.
-	 * 		<li><js>""</js> - Path-info URI.
-	 * 	</ul>
+	 * Can be any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>{@link CharSequence}
+	 * </ul>
+	 * URI can be any of the following forms:
+	 * <ul>
+	 * 	<li><js>"foo://foo"</js> - Absolute URI.
+	 * 	<li><js>"/foo"</js> - Root-relative URI.
+	 * 	<li><js>"/"</js> - Root URI.
+	 * 	<li><js>"context:/foo"</js> - Context-root-relative URI.
+	 * 	<li><js>"context:/"</js> - Context-root URI.
+	 * 	<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+	 *		<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 	<li><js>"request:/foo"</js> - Request-path-relative URI.
+	 * 	<li><js>"request:/"</js> - Request-path URI.
+	 * 	<li><js>"foo"</js> - Path-info-relative URI.
+	 * 	<li><js>""</js> - Path-info URI.
+	 * </ul>
 	 * @return The resolved URI.
 	 */
 	public String resolveUri(Object uri) {

@@ -21,7 +21,8 @@ import java.lang.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
+ * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the
+ * request.
  * <p>
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -35,7 +36,8 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The argument can be any of the following types:
  * <ul class='spaced-list'>
- * 	<li>Any serializable POJO - Converted to text using the {@link Serializer} registered with the <code>RestClient</code>.
+ * 	<li>Any serializable POJO - Converted to text using the {@link Serializer} registered with the
+ * 		<code>RestClient</code>.
  * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
  * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
  * 	<li><code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
@@ -43,7 +45,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
- *  {@link RequestBean @RequestBean}:
+ * {@link RequestBean @RequestBean}:
  * <p>
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -62,7 +64,8 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
+ * 		proxies against 3rd-party REST interfaces</a>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */

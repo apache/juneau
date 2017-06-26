@@ -116,7 +116,7 @@ public abstract class Session {
 	 * Can be used to store objects for reuse during a session.
 	 *
 	 * @param key The key.  Can be any string.
-	 * @param val The cahed object.
+	 * @param val The cached object.
 	 */
 	public void addToCache(String key, Object val) {
 		if (cache == null)

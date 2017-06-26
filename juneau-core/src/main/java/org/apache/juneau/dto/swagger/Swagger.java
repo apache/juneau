@@ -23,7 +23,8 @@ import org.apache.juneau.utils.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -129,11 +130,12 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>host</property>.
 	 * <p>
-	 * The host (name or ip) serving the API.
+	 * The host (name or IP) serving the API.
 	 * This MUST be the host only and does not include the scheme nor sub-paths.
 	 * It MAY include a port.
 	 * If the host is not included, the host serving the documentation is to be used (including the port).
-	 * The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
+	 * The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">
+	 * path templating</a>.
 	 *
 	 * @return The value of the <property>host</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -144,11 +146,12 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>host</property>.
 	 * <p>
-	 * The host (name or ip) serving the API.
+	 * The host (name or IP) serving the API.
 	 * This MUST be the host only and does not include the scheme nor sub-paths.
 	 * It MAY include a port.
 	 * If the host is not included, the host serving the documentation is to be used (including the port).
-	 * The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
+	 * The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">
+	 * path templating</a>.
 	 *
 	 * @param host The new value for the <property>host</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -174,7 +177,8 @@ public class Swagger extends SwaggerElement {
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
 	 * If it is not included, the API is served directly under the <code>host</code>.
 	 * The value MUST start with a leading slash (/).
-	 * The <code>basePath</code> does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
+	 * The <code>basePath</code> does not support <a class="doclink"
+	 * href="http://swagger.io/specification/#pathTemplating">path templating</a>.
 	 *
 	 * @return The value of the <property>basePath</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -188,7 +192,8 @@ public class Swagger extends SwaggerElement {
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
 	 * If it is not included, the API is served directly under the <code>host</code>.
 	 * The value MUST start with a leading slash (/).
-	 * The <code>basePath</code> does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
+	 * The <code>basePath</code> does not support <a class="doclink"
+	 * href="http://swagger.io/specification/#pathTemplating">path templating</a>.
 	 *
 	 * @param basePath The new value for the <property>basePath</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -213,7 +218,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * The transfer protocol of the API.
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
-	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger definition itself.
+	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
+	 * definition itself.
 	 *
 	 * @return The value of the <property>schemes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -226,7 +232,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * The transfer protocol of the API.
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
-	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger definition itself.
+	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
+	 * definition itself.
 	 *
 	 * @param schemes The new value for the <property>schemes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -241,7 +248,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * The transfer protocol of the API.
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
-	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger definition itself.
+	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
+	 * definition itself.
 	 *
 	 * @param schemes The values to add for the <property>schemes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -255,7 +263,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * The transfer protocol of the API.
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
-	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger definition itself.
+	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
+	 * definition itself.
 	 *
 	 * @param schemes The values to add for the <property>schemes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -284,7 +293,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @return The value of the <property>consumes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -297,7 +307,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @param consumes The new value for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -312,7 +323,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -326,7 +338,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -365,7 +378,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @return The value of the <property>produces</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -378,7 +392,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -393,7 +408,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @param produces The values to add for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -407,7 +423,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
+	 * Mime Types</a>.
 	 *
 	 * @param produces The values to add for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -504,7 +521,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
 	 *
-	 * @return The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Map<String,SchemaInfo> getDefinitions() {
 		return definitions;
@@ -663,7 +681,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
 	 *
-	 * @return The value of the <property>securityDefinitions</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>securityDefinitions</property> property on this bean, or <jk>null</jk> if it
+	 * is not set.
 	 */
 	public Map<String,SecurityScheme> getSecurityDefinitions() {
 		return securityDefinitions;
@@ -713,7 +732,8 @@ public class Swagger extends SwaggerElement {
 	 * Bean property getter:  <property>security</property>.
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
-	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
+	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
+	 * between the security requirements).
 	 * Individual operations can override this definition.
 	 *
 	 * @return The value of the <property>security</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -726,7 +746,8 @@ public class Swagger extends SwaggerElement {
 	 * Bean property setter:  <property>security</property>.
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
-	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
+	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
+	 * between the security requirements).
 	 * Individual operations can override this definition.
 	 *
 	 * @param security The new value for the <property>security</property> property on this bean.
@@ -741,7 +762,8 @@ public class Swagger extends SwaggerElement {
 	 * Bean property adder:  <property>security</property>.
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
-	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
+	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
+	 * between the security requirements).
 	 * Individual operations can override this definition.
 	 *
 	 * @param security The value to add for the <property>security</property> property on this bean.
@@ -758,7 +780,8 @@ public class Swagger extends SwaggerElement {
 	 * Synonym for {@link #addSecurity(Map)}.
 	 *
 	 * @param scheme The security scheme that applies to this operation
-	 * @param alternatives The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
+	 * @param alternatives The list of values describes alternative security schemes that can be used (that is, there
+	 * is a logical OR between the security requirements).
 	 * @return This object (for method chaining).
 	 */
 	public Swagger security(String scheme, String...alternatives) {
@@ -772,7 +795,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
-	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
+	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">
+	 * Operation Object</a> must be declared.
 	 * The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * Each tag name in the list MUST be unique.
 	 *
@@ -787,7 +811,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
-	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
+	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">
+	 * Operation Object</a> must be declared.
 	 * The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * Each tag name in the list MUST be unique.
 	 *
@@ -804,7 +829,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
-	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
+	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">
+	 * Operation Object</a> must be declared.
 	 * The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * Each tag name in the list MUST be unique.
 	 *
@@ -843,7 +869,8 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Additional external documentation.
 	 *
-	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
 		return externalDocs;

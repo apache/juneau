@@ -66,6 +66,7 @@ public class UonParser extends ReaderParser {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Decoding(PropertyStore propertyStore) {
@@ -83,6 +84,7 @@ public class UonParser extends ReaderParser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public UonParser(PropertyStore propertyStore) {
@@ -102,12 +104,14 @@ public class UonParser extends ReaderParser {
 	 * @param eType The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param r The reader being parsed.
 	 * @param outer The outer object (for constructing nested inner classes).
-	 * @param isUrlParamValue If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit different than the default case.
+	 * @param isUrlParamValue If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit
+	 * different than the default case.
 	 * @param pMeta The current bean property being parsed.
 	 * @return The parsed object.
 	 * @throws Exception
 	 */
-	protected <T> T parseAnything(UonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
+	protected <T> T parseAnything(UonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer,
+			boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -175,12 +179,20 @@ public class UonParser extends ReaderParser {
 					o = session.cast(m, pMeta, eType);
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
-					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
+					Collection l = (
+						sType.canCreateNewInstance(outer)
+						? (Collection)sType.newInstance(outer)
+						: new ObjectList(session)
+					);
 					l.add(m.cast(sType.getElementType()));
 					o = l;
 				}
 			} else {
-				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
+				Collection l = (
+					sType.canCreateNewInstance(outer)
+					? (Collection)sType.newInstance(outer)
+					: new ObjectList(session)
+				);
 				o = parseIntoCollection(session, r, l, sType, isUrlParamValue, pMeta);
 			}
 		} else if (sType.canCreateNewBean(outer)) {
@@ -217,12 +229,14 @@ public class UonParser extends ReaderParser {
 			if (m.containsKey(session.getBeanTypePropertyName(sType)))
 				o = session.cast(m, pMeta, eType);
 			else
-				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+					sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else if (c == 'n') {
 			r.read();
 			parseNull(session, r);
 		} else {
-			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+				sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
 		if (o == null && sType.isPrimitive())
@@ -236,7 +250,8 @@ public class UonParser extends ReaderParser {
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType,
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -322,7 +337,8 @@ public class UonParser extends ReaderParser {
 		return null; // Unreachable.
 	}
 
-	private <E> Collection<E> parseIntoCollection(UonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(UonParserSession session, ParserReader r, Collection<E> l,
+			ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
 		int c = r.readSkipWs();
 		if (c == -1 || c == AMP)
@@ -355,14 +371,16 @@ public class UonParser extends ReaderParser {
 				if (state == S1 || state == S2) {
 					if (c == ')') {
 						if (state == S2) {
-							l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
+							l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
+									r.unread(), l, false, pMeta));
 							r.read();
 						}
 						return l;
 					} else if (Character.isWhitespace(c)) {
 						skipSpace(r);
 					} else {
-						l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
+						l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
+								r.unread(), l, false, pMeta));
 						state = S3;
 					}
 				} else if (state == S3) {
@@ -389,7 +407,8 @@ public class UonParser extends ReaderParser {
 					if (Character.isWhitespace(c)) {
 						skipSpace(r);
 					} else {
-						l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
+						l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
+								r.unread(), l, false, pMeta));
 						state = S2;
 					}
 				} else if (state == S2) {
@@ -587,7 +606,8 @@ public class UonParser extends ReaderParser {
 
 
 	/**
-	 * Returns true if the next character in the stream is preceeded by an escape '~' character.
+	 * Returns true if the next character in the stream is preceded by an escape '~' character.
+	 *
 	 * @param c The current character.
 	 * @param r The reader.
 	 * @param prevIsInEscape What the flag was last time.
@@ -738,7 +758,8 @@ public class UonParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public UonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public UonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale,
+			TimeZone timeZone, MediaType mediaType) {
 		return new UonParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 

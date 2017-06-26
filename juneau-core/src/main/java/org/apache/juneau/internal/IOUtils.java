@@ -208,7 +208,8 @@ public final class IOUtils {
 	 * <p>
 	 * The {@code Reader} is automatically closed.
 	 * <p>
-	 * If the {@code Reader} is not an instance of a {@code BufferedReader}, then it gets wrapped in a {@code BufferedReader}.
+	 * If the {@code Reader} is not an instance of a {@code BufferedReader}, then it gets wrapped in a
+	 * {@code BufferedReader}.
 	 *
 	 * @param in The input reader.
 	 * @param length Specify a positive number if the length of the input is known.
@@ -250,8 +251,8 @@ public final class IOUtils {
 	 * Wraps the specified reader in a buffered reader.
 	 *
 	 * @param r The reader being wrapped.
-	 * @return The reader wrapped in a {@link BufferedReader}, or the original {@link Reader} if it's already
-	 * 	a buffered reader.
+	 * @return The reader wrapped in a {@link BufferedReader}, or the original {@link Reader} if it's already a buffered
+	 * reader.
 	 */
 	public static Reader getBufferedReader(Reader r) {
 		if (r instanceof BufferedReader || r instanceof StringReader)

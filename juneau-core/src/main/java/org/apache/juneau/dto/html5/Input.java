@@ -17,12 +17,14 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-input-element">&lt;input&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-input-element">&lt;input&gt;</a>
+ * element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -34,6 +36,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-accept">accept</a> attribute.
 	 * Hint for expected file type in file upload controls.
+	 *
 	 * @param accept The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -45,6 +48,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-alt">alt</a> attribute.
 	 * Replacement text for use when images are not available.
+	 *
 	 * @param alt The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -55,7 +59,8 @@ public class Input extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
-	 * Hint for form autofill feature.
+	 * Hint for form auto-fill feature.
+	 *
 	 * @param autocomplete The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -67,6 +72,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
+	 *
 	 * @param autofocus The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -78,6 +84,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-checked">checked</a> attribute.
 	 * Whether the command or control is checked.
+	 *
 	 * @param checked The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -90,6 +97,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 * Name of form field to use for sending the element's directionality in form submission.
+	 *
 	 * @param dirname The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -101,6 +109,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
+	 *
 	 * @param disabled The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -113,6 +122,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
+	 *
 	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -124,6 +134,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction">formaction</a> attribute.
 	 * URL to use for form submission.
+	 *
 	 * @param formaction The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -135,6 +146,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 * Form data set encoding type to use for form submission.
+	 *
 	 * @param formenctype The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -146,6 +158,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod">formmethod</a> attribute.
 	 * HTTP method to use for form submission.
+	 *
 	 * @param formmethod The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -155,8 +168,10 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate">formnovalidate</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate">formnovalidate</a>
+	 * attribute.
 	 * Bypass form control validation for form submission.
+	 *
 	 * @param formnovalidate The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -168,6 +183,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget">formtarget</a> attribute.
 	 * Browsing context for form submission.
+	 *
 	 * @param formtarget The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -177,8 +193,10 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
+	 * attribute.
 	 * Vertical dimension.
+	 *
 	 * @param height The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -189,8 +207,10 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode">inputmode</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode">inputmode</a>
+	 * attribute.
 	 * Hint for selecting an input modality.
+	 *
 	 * @param inputmode The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -201,7 +221,8 @@ public class Input extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-list">list</a> attribute.
-	 * List of autocomplete options.
+	 * List of auto-complete options.
+	 *
 	 * @param list The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -213,6 +234,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-max">max</a> attribute.
 	 * Maximum value.
+	 *
 	 * @param max The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -225,6 +247,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
+	 *
 	 * @param maxlength The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -237,6 +260,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-min">min</a> attribute.
 	 * Minimum value.
+	 *
 	 * @param min The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -249,6 +273,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-minlength">minlength</a> attribute.
 	 * Minimum length of value.
+	 *
 	 * @param minlength The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -261,6 +286,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-multiple">multiple</a> attribute.
 	 * Whether to allow multiple values.
+	 *
 	 * @param multiple The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -273,6 +299,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
+	 *
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -284,6 +311,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern">pattern</a> attribute.
 	 * Pattern to be matched by the form control's value.
+	 *
 	 * @param pattern The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -295,6 +323,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder">placeholder</a> attribute.
 	 * User-visible label to be placed within the form control.
+	 *
 	 * @param placeholder The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -306,6 +335,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
+	 *
 	 * @param readonly The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -319,6 +349,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
+	 *
 	 * @param readonly If <jk>true</jk>, adds <code>readonly="readonly"</code>.
 	 * @return This object (for method chaining).
 	 */
@@ -331,6 +362,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">required</a> attribute.
 	 * Whether the control is required for form submission.
+	 *
 	 * @param required The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -343,6 +375,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-size">size</a> attribute.
 	 * Size of the control.
+	 *
 	 * @param size The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -355,6 +388,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-src">src</a> attribute.
 	 * Address of the resource.
+	 *
 	 * @param src The new value for this attribute.
 	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
@@ -367,6 +401,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-step">step</a> attribute.
 	 * Granularity to be matched by the form control's value.
+	 *
 	 * @param step The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -378,6 +413,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type">type</a> attribute.
 	 * Type of form control.
+	 *
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -389,6 +425,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-value">value</a> attribute.
 	 * Value of the form control.
+	 *
 	 * @param value The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -401,6 +438,7 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
+	 *
 	 * @param width The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).

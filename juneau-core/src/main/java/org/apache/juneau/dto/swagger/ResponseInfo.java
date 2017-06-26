@@ -34,7 +34,8 @@ import org.apache.juneau.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -54,7 +55,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * Bean property getter:  <property>description</property>.
 	 * <p>
 	 * Required. A short description of the response.
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for
+	 * rich text representation.
 	 *
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -66,7 +68,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * Bean property setter:  <property>description</property>.
 	 * <p>
 	 * Required. A short description of the response.
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
+	 * for rich text representation.
 	 *
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -92,7 +95,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * A definition of the response structure.
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
-	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>, its root type value may also be <js>"file"</js>.
+	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
+	 * its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
 	 *
 	 * @return The value of the <property>schema</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -107,7 +111,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * A definition of the response structure.
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
-	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>, its root type value may also be <js>"file"</js>.
+	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
+	 * its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
 	 *
 	 * @param schema The new value for the <property>schema</property> property on this bean.

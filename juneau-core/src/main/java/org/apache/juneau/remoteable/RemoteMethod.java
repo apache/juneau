@@ -21,20 +21,22 @@ import java.lang.annotation.*;
 /**
  * Annotation applied to Java methods on interface proxy classes.
  * <p>
- * TODO <i>(sorry)</i>
- * <p>
  * The return type on the Java method can be any of the following:
  * <ul>
- * 	<li><jk>void</jk> - Don't parse any response.  Note that the method will still throw an exception if an error HTTP status is returned.
- * 	<li>Any parsable POJO - The body of the response will be converted to the POJO using the parser defined on the <code>RestClient</code>.
- * 	<li><code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+ * 	<li><jk>void</jk> - Don't parse any response.  Note that the method will still throw an exception if an error
+ * 		HTTP status is returned.
+ * 	<li>Any parsable POJO - The body of the response will be converted to the POJO using the parser defined on the
+ * 		<code>RestClient</code>.
+ * 	<li><code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner
+ * 		<code>HttpClient</code>.
  * 	<li>{@link Reader} - Returns access to the raw reader of the response.
  * 	<li>{@link InputStream} - Returns access to the raw input stream of the response.
  * </ul>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
+ * 		proxies against 3rd-party REST interfaces</a>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */
@@ -47,10 +49,10 @@ public @interface RemoteMethod {
 	/**
 	 * The path to the REST service for this Java method relative to the parent proxy interface URL.
 	 * <p>
-	 * The default value is the Java method name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface/myMethod"</js>) if
-	 * 	{@link Remoteable#methodPaths() @Remoteable.methodPaths()} is <js>"NAME"</js>, or the Java method signature
-	 * 	(e.g. <js>"http://localhost/root-url/org.foo.MyInterface/myMethod(int,boolean,java.lang.String)"</js>) if
-	 * 	it's <js>"SIGNATURE"</js>.
+	 * The default value is the Java method name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface/myMethod"</js>)
+	 * if {@link Remoteable#methodPaths() @Remoteable.methodPaths()} is <js>"NAME"</js>, or the Java method signature
+	 * (e.g. <js>"http://localhost/root-url/org.foo.MyInterface/myMethod(int,boolean,java.lang.String)"</js>) if
+	 * it's <js>"SIGNATURE"</js>.
 	 */
 	String path() default "";
 

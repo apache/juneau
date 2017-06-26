@@ -96,7 +96,8 @@
 	
 	<p>
 		The {@link org.apache.juneau.ini.ConfigFileBuilder} class is used to instantiate instances of 
-		{@link org.apache.juneau.ini.ConfigFile} which can then be used to retrieve config file values through either <js>"key"</js> or <js>"Section/key"</js> identifiers.
+		{@link org.apache.juneau.ini.ConfigFile} which can then be used to retrieve config file values through either 
+		<js>"key"</js> or <js>"Section/key"</js> identifiers.
 	</p>
 
 	<p class='bcode'>
@@ -220,18 +221,21 @@
 <h2 class='topic' onclick='toggle(this)'>2 - Variables</h2>
 <div class='topic'>
 	<p>
-		Config files can contain variables that get resolved dynamically using the {@link org.apache.juneau.svl.VarResolver} API.<br>
+		Config files can contain variables that get resolved dynamically using the 
+		{@link org.apache.juneau.svl.VarResolver} API.
 	</p>
 	<p>
 		Resolving config files can be retrieved through the following methods:
 	</p>	
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.ini.ConfigFile#getResolving()} - Returns a config file that resolves a default set of variables.
-		<li>{@link org.apache.juneau.ini.ConfigFile#getResolving(VarResolver)} - Returns a config file that resolves a custom set of variables.
+		<li>{@link org.apache.juneau.ini.ConfigFile#getResolving()} - Returns a config file that resolves a default 
+			set of variables.
+		<li>{@link org.apache.juneau.ini.ConfigFile#getResolving(VarResolver)} - Returns a config file that resolves 
+			a custom set of variables.
 	</ul>
 	<p>
-		The default {@link org.apache.juneau.ini.ConfigFile#getResolving()} method returns a config file that resolves the following
-		variables:
+		The default {@link org.apache.juneau.ini.ConfigFile#getResolving()} method returns a config file that resolves 
+		the following variables:
 	</p>
 	<ul class='spaced-list'>
 		<li><code>$S{key}</code>, <code>$S{key,default}</code> - System properties.
@@ -251,9 +255,10 @@
 	</p>
 	<p>
 		Support for variables is extensible.  You can add support for your own variables by implementing custom 
-		{@link org.apache.juneau.svl.VarResolver VarResolvers}.<br>
+		{@link org.apache.juneau.svl.VarResolver VarResolvers}.
+		<br>
 		For example, the microservice <code>Resource</code> class provides access to config files that
-			can contain any of the following variables:
+		can contain any of the following variables:
 	</p>
 	<ul>
 		<li><code>$C</code> - Config variables.
@@ -276,7 +281,8 @@
 <div class='topic'>
 	<p>
 		If a config file contains sensitive information such as passwords, those values can be 
-		marked for encoding by appending <js>'*'</js> to the end of the key name.<br>
+		marked for encoding by appending <js>'*'</js> to the end of the key name.
+		<br>
 		If a marked and unencoded value is detected in the file during load, it will be encoded and saved immediately.
 	</p>
 	<p>
@@ -298,10 +304,11 @@
 		<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
 	</p>
 	<p>
-		The default encoder is {@link org.apache.juneau.ini.XorEncoder} which is a simple XOR+Base64 encoder.<br>
+		The default encoder is {@link org.apache.juneau.ini.XorEncoder} which is a simple XOR+Base64 encoder.
+		<br>
 		If desired, custom encoder can be used by implementing the {@link org.apache.juneau.ini.Encoder}
-		interface and creating your own <code>ConfigFileBuilder</code> using the {@link org.apache.juneau.ini.ConfigFileBuilder#encoder(Encoder)}
-		method.
+		interface and creating your own <code>ConfigFileBuilder</code> using the 
+		{@link org.apache.juneau.ini.ConfigFileBuilder#encoder(Encoder)} method.
 	</p>
 </div>
 
@@ -345,8 +352,10 @@
 <h2 class='topic' onclick='toggle(this)'>5 - Command Line API</h2>
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.ini.ConfigFileBuilder} class contains a {@link org.apache.juneau.ini.ConfigFileBuilder#main(String[])}
-			method that can be used to work with config files through a command-line prompt.<br>
+		The {@link org.apache.juneau.ini.ConfigFileBuilder} class contains a 
+		{@link org.apache.juneau.ini.ConfigFileBuilder#main(String[])} method that can be used to work with config 
+		files through a command-line prompt.
+		<br>
 		This is invoked as a normal Java command:
 	</p>
 	<p class='bcode'>
@@ -356,21 +365,26 @@
 		Arguments can be any of the following...
 	</p>
 	<ul class='spaced-list'>
-		<li>No arguments<br>
+		<li>No arguments
+			<br>
 			Prints usage message.
-		<li><code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code><br>
-			Creates a batch file that will set each config file entry as an environment variable.<br>
+		<li><code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code>
+			<br>
+			Creates a batch file that will set each config file entry as an environment variable.
+			<br>
 			Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
 			will be converted to underscores.
 		<li><code>createShellEnvFile -configFile &lt;configFile&gt; -envFile &lt;configFile&gt; [-verbose]</code>
-			Creates a shell script that will set each config file entry as an environment variable.<br>
+			Creates a shell script that will set each config file entry as an environment variable.
+			<br>
 			Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
 				will be converted to underscores.
 		<li><code>setVals -configFile &lt;configFile&gt; -vals [var1=val1 [var2=val2...]] [-verbose]</code>
 			Sets values in config files.
 	</ul>
 	<p>
-		For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the file <code>'MyConfig.cfg'</code>.
+		For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the 
+		file <code>'MyConfig.cfg'</code>.
 	</p>
 	<p class='bcode'>
 		java org.apache.juneau.ini.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg -batchfile C:\foo\MyConfig.bat
@@ -387,9 +401,11 @@
 	</p>
 	<p>
 		The <code>org.apache.juneau.microservice.resources.ConfigResource</code> is a predefined REST interface that
-			allows access to the config file used by a microservice.<br>
+		allows access to the config file used by a microservice.
+		<br>
 		The <code>juneau-examples-rest</code> project is a microservice that includes this resource
-			at <code>http://localhost:10000/sample/config</code>.<br>
+		at <code>http://localhost:10000/sample/config</code>.
+		<br>
 		The sample microservice uses the following config file <code>juneau-examples.cfg</code>:
 	</p>
 	<p class='bcode'>
@@ -550,8 +566,8 @@
 		However, it should be noticed that the config file is a VERY powerful feature with many capabilities including:
 	</p>
 	<p>
-		When you point your browser to this resource, you'll notice that the contents of the config file
-			are being serialized to HTML as a POJO: 
+		When you point your browser to this resource, you'll notice that the contents of the config file are being 
+		serialized to HTML as a POJO: 
 	</p>
 	<img class='bordered' src="doc-files/config1.png">
 	<p>
@@ -559,8 +575,8 @@
 	</p>
 	<img class='bordered' src="doc-files/config2.png">
 	<p>
-		The code for implementing this page could not be any simpler, since it simply returns the config
-			file returned by the <code>RestServlet.getConfig()</code> method.
+		The code for implementing this page could not be any simpler, since it simply returns the config file returned 
+		by the <code>RestServlet.getConfig()</code> method.
 	</p>
 	<p class='bcode'>
 		<jd>/** 
@@ -583,7 +599,8 @@
 		contents of the config file in INI format.
 	</p>
 	<p>
-		Since config files are serializable, that mean they can also be retrieved through the <code>RestClient</code> API.
+		Since config files are serializable, that mean they can also be retrieved through the <code>RestClient</code> 
+		API.
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new REST client with JSON support</jc>
@@ -600,16 +617,19 @@
 <div class='topic'>
 	<p>
 		In the previous example, an edit page was shown that allows you to edit config files through
-		a REST interface.<br>
+		a REST interface.
+		<br>
 		Note that if only a single entry is modified in the config file, we only want to trigger
-		listeners for that change, not trigger all listeners.<br>
-		This is where the {@link org.apache.juneau.ini.ConfigFile#merge(ConfigFile)} method comes into play.<br>
+		listeners for that change, not trigger all listeners.
+		<br>
+		This is where the {@link org.apache.juneau.ini.ConfigFile#merge(ConfigFile)} method comes into play.
+		<br>
 		This method will copy the contents of one config file over to another config file, but only
 		trigger listeners when the values are different.
 	</p>
 	<p>
-		The edit page is implemented with this method which is a simple PUT with the contents of
-			the new INI file as the body of the HTTP request:
+		The edit page is implemented with this method which is a simple PUT with the contents of the new INI file as 
+		the body of the HTTP request:
 	</p>
 	<p class='bcode'>
 	<jd>/** 

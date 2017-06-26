@@ -17,8 +17,7 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * Represents a wrapped {@link Map} where entries in the map can be removed without
- * 	affecting the underlying map.
+ * Represents a wrapped {@link Map} where entries in the map can be removed without affecting the underlying map.
  *
  * @param <T> The class type of the wrapped bean.
  */

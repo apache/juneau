@@ -51,7 +51,7 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
- *  {@link RequestBean @RequestBean}:
+ * {@link RequestBean @RequestBean}:
  * <p>
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -96,8 +96,10 @@ import org.apache.juneau.urlencoding.*;
  * 	}
  * </p>
  * <p>
- * The {@link #name()} and {@link #value()} elements are synonyms for specifying the path variable name.  Only one should be used.
- * <br>The following annotations are fully equivalent:
+ * The {@link #name()} and {@link #value()} elements are synonyms for specifying the path variable name.
+ * Only one should be used.
+ * <br>
+ * The following annotations are fully equivalent:
  * <p>
  * <p class='bcode'>
  * 	<ja>@Path</ja>(name=<js>"foo"</js>)
@@ -107,7 +109,8 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
+ * 		proxies against 3rd-party REST interfaces</a>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */
@@ -123,7 +126,7 @@ public @interface Path {
 	 * Note that {@link #name()} and {@link #value()} are synonyms.
 	 * <p>
 	 * The value should be either <js>"*"</js> to represent multiple name/value pairs, or a label that defines the
-	 * 	path variable name.
+	 * path variable name.
 	 * <p>
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
@@ -173,7 +176,7 @@ public @interface Path {
 	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
-	 * 	then on the client which by default is {@link UrlEncodingSerializer}.
+	 * then on the client which by default is {@link UrlEncodingSerializer}.
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */

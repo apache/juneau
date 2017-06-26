@@ -41,13 +41,16 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * The conversion is as follows...
  * 	<ul class='spaced-list'>
- * 		<li>{@link Map Maps} (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to HTML tables with 'key' and 'value' columns.
- * 		<li>{@link Collection Collections} (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays are converted to HTML ordered lists.
+ * 		<li>{@link Map Maps} (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to HTML tables with
+ * 			'key' and 'value' columns.
+ * 		<li>{@link Collection Collections} (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays are converted
+ * 			to HTML ordered lists.
  * 		<li>{@code Collections} of {@code Maps} and beans are converted to HTML tables with keys as headers.
  * 		<li>Everything else is converted to text.
  * 	</ul>
  * <p>
- * This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
+ * This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf>
+ * serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  * <p>
  * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
@@ -146,6 +149,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Sq(PropertyStore propertyStore) {
@@ -164,6 +168,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public SqReadable(PropertyStore propertyStore) {
@@ -182,6 +187,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public HtmlSerializer(PropertyStore propertyStore) {
@@ -196,10 +202,10 @@ public class HtmlSerializer extends XmlSerializer {
 
 	/**
 	 * Main serialization routine.
+	 *
 	 * @param session The serialization context object.
 	 * @param o The object being serialized.
 	 * @param w The writer to serialize to.
-	 *
 	 * @return The same writer passed in.
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
@@ -215,7 +221,8 @@ public class HtmlSerializer extends XmlSerializer {
 	 * @param out The writer.
 	 * @param o The object to serialize.
 	 * @param eType The expected type of the object if this is a bean property.
-	 * @param name The attribute name of this object if this object was a field in a JSON object (i.e. key of a {@link java.util.Map.Entry} or property name of a bean).
+	 * @param name The attribute name of this object if this object was a field in a JSON object (i.e. key of a
+	 * {@link java.util.Map.Entry} or property name of a bean).
 	 * @param indent The current indentation value.
 	 * @param pMeta The bean property being serialized, or <jk>null</jk> if we're not serializing a bean property.
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.
@@ -223,7 +230,8 @@ public class HtmlSerializer extends XmlSerializer {
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected ContentResult serializeAnything(HtmlSerializerSession session, HtmlWriter out, Object o, ClassMeta<?> eType, String name, int indent, BeanPropertyMeta pMeta, boolean isRoot) throws Exception {
+	protected ContentResult serializeAnything(HtmlSerializerSession session, HtmlWriter out, Object o,
+			ClassMeta<?> eType, String name, int indent, BeanPropertyMeta pMeta, boolean isRoot) throws Exception {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
@@ -362,7 +370,8 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> sType,
+			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws Exception {
 
 		ClassMeta<?> keyType = eKeyType == null ? session.string() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? session.object() : eValueType;
@@ -376,7 +385,8 @@ public class HtmlSerializer extends XmlSerializer {
 			out.attr(session.getBeanTypePropertyName(sType), typeName);
 
 		out.append(">").nl(i+1);
-		if (session.isAddKeyValueTableHeaders() && ! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
+		if (session.isAddKeyValueTableHeaders() && ! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders()
+				|| (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl(i+2);
 			out.sTag(i+2, "th").append("key").eTag("th").nl(i+3);
 			out.sTag(i+2, "th").append("value").eTag("th").nl(i+3);
@@ -420,7 +430,8 @@ public class HtmlSerializer extends XmlSerializer {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, ClassMeta<?> eType,
+			BeanPropertyMeta ppMeta) throws Exception {
 		int i = session.getIndent();
 
 		out.oTag(i, "table");
@@ -430,7 +441,8 @@ public class HtmlSerializer extends XmlSerializer {
 			out.attr(session.getBeanTypePropertyName(m.getClassMeta()), typeName);
 
 		out.append('>').nl(i);
-		if (session.isAddKeyValueTableHeaders() && ! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
+		if (session.isAddKeyValueTableHeaders() && ! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders()
+				|| (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl(i+1);
 			out.sTag(i+2, "th").append("key").eTag("th").nl(i+2);
 			out.sTag(i+2, "th").append("value").eTag("th").nl(i+2);
@@ -483,7 +495,8 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeCollection(HtmlSerializerSession session, HtmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeCollection(HtmlSerializerSession session, HtmlWriter out, Object in, ClassMeta<?> sType,
+			ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
 
 		ClassMeta<?> seType = sType.getElementType();
 		if (seType == null)
@@ -508,7 +521,8 @@ public class HtmlSerializer extends XmlSerializer {
 		HtmlBeanPropertyMeta hbpMeta = (ppMeta == null ? null : ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class));
 		String btpn = session.getBeanTypePropertyName(eType);
 
-		// Look at the objects to see how we're going to handle them.  Check the first object to see how we're going to handle this.
+		// Look at the objects to see how we're going to handle them.  Check the first object to see how we're going to
+		// handle this.
 		// If it's a map or bean, then we'll create a table.
 		// Otherwise, we'll create a list.
 		Object[] th = getTableHeaders(session, c, hbpMeta);
@@ -767,7 +781,8 @@ public class HtmlSerializer extends XmlSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new HtmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 

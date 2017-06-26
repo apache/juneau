@@ -15,12 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-q-element">&lt;q&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/text-level-semantics.html#the-q-element">&lt;q&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -32,6 +34,7 @@ public class Q extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-q-cite">cite</a> attribute.
 	 * Link to the source of the quotation or more information about the edit.
+	 *
 	 * @param cite The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

@@ -50,6 +50,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public MsgPackSerializer(PropertyStore propertyStore) {
@@ -63,11 +64,12 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	}
 
 	/**
-	 * Workhorse method. Determines the type of object, and then calls the
-	 * appropriate type-specific serialization method.
+	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization
+	 * method.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	MsgPackOutputStream serializeAnything(MsgPackSerializerSession session, MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
+	MsgPackOutputStream serializeAnything(MsgPackSerializerSession session, MsgPackOutputStream out, Object o,
+			ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
 
 		if (o == null)
 			return out.appendNull();
@@ -132,7 +134,8 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(MsgPackSerializerSession session, MsgPackOutputStream out, Map m, ClassMeta<?> type) throws Exception {
+	private void serializeMap(MsgPackSerializerSession session, MsgPackOutputStream out, Map m, ClassMeta<?> type)
+			throws Exception {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
@@ -155,7 +158,8 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		}
 	}
 
-	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws Exception {
+	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m,
+			String typeName) throws Exception {
 
 		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null);
 
@@ -191,7 +195,8 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void serializeCollection(MsgPackSerializerSession session, MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws Exception {
+	private void serializeCollection(MsgPackSerializerSession session, MsgPackOutputStream out, Collection c,
+			ClassMeta<?> type) throws Exception {
 
 		ClassMeta<?> elementType = type.getElementType();
 		List<Object> l = new ArrayList<Object>(c.size());
@@ -211,7 +216,8 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public MsgPackSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public MsgPackSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new MsgPackSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 

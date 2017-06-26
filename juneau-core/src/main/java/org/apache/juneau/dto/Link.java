@@ -28,7 +28,8 @@ import org.apache.juneau.utils.*;
  * <p class='bcode'>
  * 	<xt>&lt;a</xt> <xa>href</xa>=<xs>'href'</xs><xt>&gt;</xt>name<xt>&lt;/a&gt;</xt>
  * <p>
- * When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.<br>
+ * When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.
+ * <br>
  * All other serializers simply convert it to a simple bean.
  */
 @HtmlLink(nameProperty = "name", hrefProperty = "href")

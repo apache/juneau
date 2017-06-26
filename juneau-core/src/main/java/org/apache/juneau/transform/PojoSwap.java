@@ -25,18 +25,20 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	<code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle POJOs
- * 	that aren't automatically handled by the serializers or parsers.  For example, JSON does not have a standard
- * 	representation for rendering dates.  By defining a special {@code Date} swap and associating it with a serializer and
- * 	parser, you can convert a {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into
- * 	a {@code Date} object during parsing.
+ * <code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle
+ * POJOs that aren't automatically handled by the serializers or parsers.  For example, JSON does not have a standard
+ * representation for rendering dates.
+ * By defining a special {@code Date} swap and associating it with a serializer and parser, you can convert a
+ * {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into a
+ * {@code Date} object during parsing.
  * <p>
  * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
  * <p>
- * 	<code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap class to
- * 	the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.<br>
+ * <code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap
+ * class to the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
+ * <br>
  * When associated with a bean context, fields of the specified type will automatically be converted when the
- * 	{@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.<br>
+ * {@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.
  * <p>
  * <code>PojoSwaps</code> have two parameters:
  * <ol>
@@ -44,8 +46,11 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@code <S>} - The swapped representation of an object.
  * </ol>
  * <br>
- * {@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to {@link BeanMap#get(Object)}.<br>
- * {@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
+ * {@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to
+ * {@link BeanMap#get(Object)}.
+ * <br>
+ * {@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
+ * {@link BeanMap#put(String,Object)}.
  *
  * <h6 class='topic'>Subtypes</h6>
  * <p>
@@ -57,15 +62,17 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic'>Localization</h6>
  * <p>
- * Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and {@link BeanSession#getTimeZone()}
- * 	methods.  This allows you to specify localized swap values when needed.
- * If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and <code>Time-Zone</code> headers
- * 	on the request.
+ * Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and
+ * {@link BeanSession#getTimeZone()} methods.
+ * This allows you to specify localized swap values when needed.
+ * If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and
+ * <code>Time-Zone</code> headers on the request.
  *
  * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
  * <p>
- * The swapped object representation of an object must be an object type that the serializers can
- * 	natively convert to JSON (or language-specific equivalent).  The list of valid transformed types are as follows...
+ * The swapped object representation of an object must be an object type that the serializers can natively convert to
+ * JSON (or language-specific equivalent).
+ * The list of valid transformed types are as follows...
  * <ul class='spaced-list'>
  * 	<li>{@link String}
  * 	<li>{@link Number}
@@ -78,18 +85,20 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
  * <p>
- * The normal object representation of an object.<br>
+ * The normal object representation of an object.
  *
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
  * <p>
  * Note that while there is a unified interface for handling swaps during both serialization and parsing,
- * 	in many cases only one of the {@link #swap(BeanSession, Object)} or {@link #unswap(BeanSession, Object, ClassMeta)} methods will be defined
- * 	because the swap is one-way.  For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
- * 	it's not possible to unswap an {@code Iterator}.  In that case, the {@code swap(Object}} method would
- * 	be implemented, but the {@code unswap(ObjectMap)} object would not, and the swap would be associated on
- * 	the serializer, but not the parser.  Also, you may choose to serialize objects like {@code Dates} to readable {@code Strings},
- * 	in which case it's not possible to reparse it back into a {@code Date}, since there is no way for the {@code Parser} to
- * 	know it's a {@code Date} from just the JSON or XML text.
+ * in many cases only one of the {@link #swap(BeanSession, Object)} or {@link #unswap(BeanSession, Object, ClassMeta)}
+ * methods will be defined because the swap is one-way.
+ * For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
+ * it's not possible to unswap an {@code Iterator}.
+ * In that case, the {@code swap(Object}} method would be implemented, but the {@code unswap(ObjectMap)} object would
+ * not, and the swap would be associated on the serializer, but not the parser.
+ * Also, you may choose to serialize objects like {@code Dates} to readable {@code Strings}, in which case it's not
+ * possible to re-parse it back into a {@code Date}, since there is no way for the {@code Parser} to know it's a
+ * {@code Date} from just the JSON or XML text.
  *
  * <h5 class='section'>Additional information:</h5>
  * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
@@ -142,10 +151,10 @@ public abstract class PojoSwap<T,S> {
 	 * 	<li>A java bean with properties of anything on this list.
 	 * 	<li>An array of anything on this list.
 	 * </ul>
+	 *
 	 * @param session The bean session to use to get the class meta.
 	 * This is always going to be the same bean context that created this swap.
 	 * @param o The object to be transformed.
-	 *
 	 * @return The transformed object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -155,13 +164,13 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * If this transform is to be used to reconstitute POJOs that aren't true Java beans, it must implement this method.
+	 *
 	 * @param session The bean session to use to get the class meta.
 	 * This is always going to be the same bean context that created this swap.
 	 * @param f The transformed object.
 	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
-	 * 	on a serialized date, this may tell you that the object being created must be of type {@code GregorianCalendar}.<br>
-	 * This may be <jk>null</jk> if the parser cannot make this determination.
-	 *
+	 * on a serialized date, this may tell you that the object being created must be of type {@code GregorianCalendar}.
+	 * <br>This may be <jk>null</jk> if the parser cannot make this determination.
 	 * @return The narrowed object.
 	 * @throws ParseException If this method is not implemented.
 	 */
@@ -179,10 +188,10 @@ public abstract class PojoSwap<T,S> {
 	}
 
 	/**
-	 * Returns the G class, the generialized form of the class.
+	 * Returns the G class, the generalized form of the class.
 	 * <p>
-	 * Subclasses must override this method if the generialized class is {@code Object},
-	 * 	meaning it can produce multiple generialized forms.
+	 * Subclasses must override this method if the generalized class is {@code Object}, meaning it can produce multiple
+	 * generalized forms.
 	 *
 	 * @return The transformed form of this class.
 	 */
@@ -209,7 +218,7 @@ public abstract class PojoSwap<T,S> {
 	 *
 	 * @param o The object to check.
 	 * @return <jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
-	 * 	<jk>null</jk> always return <jk>false</jk>.
+	 * <jk>null</jk> always return <jk>false</jk>.
 	 */
 	public boolean isNormalObject(Object o) {
 		if (o == null)
@@ -222,7 +231,7 @@ public abstract class PojoSwap<T,S> {
 	 *
 	 * @param o The object to check.
 	 * @return <jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
-	 * 	<jk>null</jk> always return <jk>false</jk>.
+	 * <jk>null</jk> always return <jk>false</jk>.
 	 */
 	public boolean isSwappedObject(Object o) {
 		if (o == null)

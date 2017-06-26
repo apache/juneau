@@ -13,7 +13,8 @@
 package org.apache.juneau.html;
 
 /**
- * Defines the interface for rendering the contents of an HTML page produced by the {@link HtmlDocSerializer} serializer.
+ * Defines the interface for rendering the contents of an HTML page produced by the {@link HtmlDocSerializer}
+ * serializer.
  * <p>
  * The HTML doc serializer produces the following document structure with the typical contents:
  * <p class='bcode'>
@@ -51,6 +52,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -60,7 +62,9 @@ public interface HtmlDocTemplate {
 	public void head(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
 
 	/**
-	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style</xt> <xa>type</xa>=<xs>"text/css"</xs><xt>&gt;</xt></code> element.
+	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style</xt>
+	 * <xa>type</xa>=<xs>"text/css"</xs><xt>&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -71,6 +75,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -81,6 +86,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -91,6 +97,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -101,6 +108,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;article&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -111,6 +119,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -121,6 +130,7 @@ public interface HtmlDocTemplate {
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param s The serializer calling this method.
@@ -130,35 +140,45 @@ public interface HtmlDocTemplate {
 	public void footer(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
 
 	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style</xt> <xa>type</xa>=<xs>"text/css"</xs><xt>&gt;</xt></code> element.
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style</xt>
+	 * <xa>type</xa>=<xs>"text/css"</xs><xt>&gt;</xt></code> element.
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
 	public boolean hasCss(HtmlDocSerializerSession session);
 
 	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code> element.
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code>
+	 * element.
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
 	public boolean hasHeader(HtmlDocSerializerSession session);
 
 	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code> element.
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code>
+	 * element.
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
 	public boolean hasNav(HtmlDocSerializerSession session);
 
 	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code> element.
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code>
+	 * element.
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
 	public boolean hasAside(HtmlDocSerializerSession session);
 
 	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code> element.
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code>
+	 * element.
+	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */

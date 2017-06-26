@@ -25,17 +25,21 @@ import org.apache.juneau.*;
  * 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
  *
  * 	Feed feed =
- * 		<jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>, <js>"2013-05-08T12:29:29Z"</js>)
- * 		.subtitle(<jsm>text</jsm>(<js>"html"</js>).children(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
+ * 		<jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>,
+ * 			<js>"2013-05-08T12:29:29Z"</js>)
+ * 		.subtitle(<jsm>text</jsm>(<js>"html"</js>)
+ * 			.children(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
  * 		.links(
- * 			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+ * 			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>)
+ * 				.hreflang(<js>"en"</js>),
  * 			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
  * 		);
  * </p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Atom'>Atom</a>
  * 	</ul>
@@ -74,7 +78,8 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and {@link Entry#updated(Calendar)} attributes.
+	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and
+	 * {@link Entry#updated(Calendar)} attributes.
 	 *
 	 * @param id The {@link Entry#id(Id)} attribute.
 	 * @param title The {@link Entry#title(Text)} attribute.
@@ -86,7 +91,8 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and {@link Entry#updated(Calendar)} attributes.
+	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and
+	 * {@link Entry#updated(Calendar)} attributes.
 	 *
 	 * @param id The {@link Entry#id(Id)} attribute.
 	 * @param title The {@link Entry#title(Text)} attribute.
@@ -98,7 +104,8 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and {@link Feed#updated(Calendar)} attributes.
+	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and
+	 * {@link Feed#updated(Calendar)} attributes.
 	 *
 	 * @param id The {@link Feed#id(Id)} attribute.
 	 * @param title The {@link Feed#title(Text)} attribute.
@@ -110,7 +117,8 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and {@link Feed#updated(Calendar)} attributes.
+	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and
+	 * {@link Feed#updated(Calendar)} attributes.
 	 *
 	 * @param id The {@link Feed#id(Id)} attribute.
 	 * @param title The {@link Feed#title(Text)} attribute.
@@ -157,7 +165,8 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Link} element with the specified {@link Link#rel(String)}, {@link Link#type(String)}, and {@link Link#href(String)} attributes.
+	 * Creates a {@link Link} element with the specified {@link Link#rel(String)}, {@link Link#type(String)}, and
+	 * {@link Link#href(String)} attributes.
 	 *
 	 * @param rel The {@link Link#rel(String)} attribute.
 	 * @param type The {@link Link#type(String)} attribute.

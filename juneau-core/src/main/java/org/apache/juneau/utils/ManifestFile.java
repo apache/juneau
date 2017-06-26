@@ -24,8 +24,8 @@ import org.apache.juneau.*;
 /**
  * Utility class for working with Jar manifest files.
  * <p>
- * Copies the contents of a {@link Manifest} into an {@link ObjectMap} so that the various
- * 	convenience methods on that class can be used to retrieve values.
+ * Copies the contents of a {@link Manifest} into an {@link ObjectMap} so that the various convenience methods on that
+ * class can be used to retrieve values.
  */
 public class ManifestFile extends ObjectMap {
 

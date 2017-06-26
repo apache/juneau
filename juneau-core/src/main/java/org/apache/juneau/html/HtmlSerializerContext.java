@@ -26,9 +26,11 @@ import org.apache.juneau.xml.*;
  *
  * <h6 class='topic'>Inherited configurable properties</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties
+ * 		associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">
+ * 			SerializerContext</a> - Configurable properties common to all serializers.
  * 	</ul>
  * </ul>
  */
@@ -44,16 +46,18 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
-	 * 	in HTML, this setting defines what to set the inner text to.
+	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
+	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link #TO_STRING} / <js>"toString"</js> - Set to whatever is returned by {@link #toString()} on the object.
+	 * 	<li>{@link #TO_STRING} / <js>"toString"</js> - Set to whatever is returned by {@link #toString()} on the
+	 * 		object.
 	 * 	<li>{@link #URI} / <js>"uri"</js> - Set to the URI value.
 	 * 	<li>{@link #LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
 	 * 	<li>{@link #PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
-	 * 	<li>{@link #URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.  (e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
+	 * 	<li>{@link #URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
+	 * 		(e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
 	 * </ul>
 	 */
 	public static final String HTML_uriAnchorText = "HtmlSerializer.uriAnchorText";
@@ -81,7 +85,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * </ul>
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * 	and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
+	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
 	 */
 	public static final String HTML_detectLinksInStrings = "HtmlSerializer.detectLinksInStrings";
 
@@ -110,7 +114,6 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Default:</b> <js>"label"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
 	 */
 	public static final String HTML_labelParameter = "HtmlSerializer.labelParameter";
 
@@ -123,7 +126,6 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
 	 */
 	public static final String HTML_addKeyValueTableHeaders = "HtmlSerializer.addKeyValueTableHeaders";
 
@@ -137,9 +139,11 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined
+	 * from the value type.
 	 * <p>
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -169,7 +173,8 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 		detectLinksInStrings = ps.getProperty(HTML_detectLinksInStrings, Boolean.class, true);
 		labelParameter = ps.getProperty(HTML_labelParameter, String.class, "label");
 		addKeyValueTableHeaders = ps.getProperty(HTML_addKeyValueTableHeaders, Boolean.class, false);
-		addBeanTypeProperties = ps.getProperty(HTML_addBeanTypeProperties, boolean.class, ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		addBeanTypeProperties = ps.getProperty(HTML_addBeanTypeProperties, boolean.class,
+			ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */

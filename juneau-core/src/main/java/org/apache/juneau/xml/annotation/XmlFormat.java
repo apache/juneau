@@ -40,9 +40,10 @@ public enum XmlFormat {
 	 * <p>
 	 * On a bean class, implies bean properties will be serialized as attributes instead of child elements by default.
 	 * <p>
-	 * On bean properties, implies that the bean property value itself should be serialized as attributes on the bean element.
+	 * On bean properties, implies that the bean property value itself should be serialized as attributes on the bean
+	 * element.
 	 * The bean property data type must be of class type <code>Map&lt;Object,Object&gt;</code> where both
-	 * 	objects are convertible to <code>Strings</code>.
+	 * objects are convertible to <code>Strings</code>.
 	 */
 	ATTRS,
 
@@ -63,7 +64,8 @@ public enum XmlFormat {
 	 * <p>
 	 * Only applicable for objects of type array/Collection.
 	 * <p>
-	 * On a bean property, implies that the bean property value itself should be serialized as child elements of the bean element.
+	 * On a bean property, implies that the bean property value itself should be serialized as child elements of the
+	 * bean element.
 	 */
 	ELEMENTS,
 
@@ -105,7 +107,7 @@ public enum XmlFormat {
 	 * Same as {@link #TEXT} except the content is expected to be fully-formed XML that will
 	 * get serialized as-is.
 	 * <p>
-	 * During parsing, this XML text will be reserialized and set on the property.
+	 * During parsing, this XML text will be re-serialized and set on the property.
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.
 	 * <p>

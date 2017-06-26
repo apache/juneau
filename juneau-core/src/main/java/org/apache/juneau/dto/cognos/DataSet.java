@@ -26,7 +26,8 @@ import org.apache.juneau.xml.annotation.*;
  * 	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt>
  * 	<xt>&lt;c:dataset <xa>xmlns:c</xa>=<xs>'http://developer.cognos.com/schemas/xmldata/1/'</xs>&gt;</xt>
  * 		<xt>&lt;c:metadata&gt;</xt>
- * 			<xt>&lt;c:item</xt> <xa>name</xa>=<xs>'name'</xs> <xa>type</xa>=<xs>'xs:String'</xs> <xa>length</xa>=<xs>'255'</xs><xt>/&gt;</xt>
+ * 			<xt>&lt;c:item</xt> <xa>name</xa>=<xs>'name'</xs> <xa>type</xa>=<xs>'xs:String'</xs>
+ * 				<xa>length</xa>=<xs>'255'</xs><xt>/&gt;</xt>
  * 			<xt>&lt;c:item</xt> <xa>name</xa>=<xs>'age'</xs> <xa>type</xa>=<xs>'xs:int'</xs><xt>/&gt;</xt>
  * 			<xt>&lt;c:item</xt> <xa>name</xa>=<xs>'numAddresses'</xs> <xa>type</xa>=<xs>'xs:int'</xs><xt>/&gt;</xt>
  * 		<xt>&lt;/c:metadata&gt;</xt>
@@ -45,11 +46,12 @@ import org.apache.juneau.xml.annotation.*;
  * 	<xt>&lt;/c:dataset&gt;</xt>
  * </p>
  * <p>
- * Only 2-dimentional POJOs (arrays or collections of maps or beans) can be serialized to Cognos.
+ * Only 2-dimensional POJOs (arrays or collections of maps or beans) can be serialized to Cognos.
  *
  * <h5 class='section'>Example:</h5>
  * <p>
- * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of <code>LinkedList&lt;Person&gt;</code>.
+ * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of
+ * <code>LinkedList&lt;Person&gt;</code>.
  * The code for generating the XML is as follows...
  * </p>
  * <p class='bcode'>

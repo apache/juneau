@@ -35,87 +35,91 @@ import org.apache.juneau.utils.*;
  * <p>
  * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
  *
- * <a id='ValidDataConversions'></a><h6 class='topic'>Valid data conversions</h6>
- * Parsers can parse any parsable POJO types, as specified in the <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>.
+ * <h6 class='topic'>Valid data conversions</h6>
+ * Parsers can parse any parsable POJO types, as specified in the <a class="doclink"
+ * href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>.
  * <p>
  * Some examples of conversions are shown below...
  * </p>
- * 	<table class='styled'>
- * 		<tr>
- * 			<th>Data type</th>
- * 			<th>Class type</th>
- * 			<th>JSON example</th>
- * 			<th>XML example</th>
- * 			<th>Class examples</th>
- * 		</tr>
- * 		<tr>
- * 			<td>object</td>
- * 			<td>Maps, Java beans</td>
- * 			<td class='code'>{name:<js>'John Smith'</js>,age:21}</td>
- * 			<td class='code'><xt>&lt;object&gt;
+ * <table class='styled'>
+ * 	<tr>
+ * 		<th>Data type</th>
+ * 		<th>Class type</th>
+ * 		<th>JSON example</th>
+ * 		<th>XML example</th>
+ * 		<th>Class examples</th>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>object</td>
+ * 		<td>Maps, Java beans</td>
+ * 		<td class='code'>{name:<js>'John Smith'</js>,age:21}</td>
+ * 		<td class='code'><xt>&lt;object&gt;
  * 	&lt;name</xt> <xa>type</xa>=<xs>'string'</xs><xt>&gt;</xt>John Smith<xt>&lt;/name&gt;
  * 	&lt;age</xt> <xa>type</xa>=<xs>'number'</xs><xt>&gt;</xt>21<xt>&lt;/age&gt;
  * &lt;/object&gt;</xt></td>
- * 			<td class='code'>HashMap, TreeMap&lt;String,Integer&gt;</td>
- * 		</tr>
- * 		<tr>
- * 			<td>array</td>
- * 			<td>Collections, Java arrays</td>
- * 			<td class='code'>[1,2,3]</td>
- * 			<td class='code'><xt>&lt;array&gt;
+ * 		<td class='code'>HashMap, TreeMap&lt;String,Integer&gt;</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>array</td>
+ * 		<td>Collections, Java arrays</td>
+ * 		<td class='code'>[1,2,3]</td>
+ * 		<td class='code'><xt>&lt;array&gt;
  * 	&lt;number&gt;</xt>1<xt>&lt;/number&gt;
  * 	&lt;number&gt;</xt>2<xt>&lt;/number&gt;
  * 	&lt;number&gt;</xt>3<xt>&lt;/number&gt;
  * &lt;/array&gt;</xt></td>
- * 			<td class='code'>List&lt;Integer&gt;, <jk>int</jk>[], Float[], Set&lt;Person&gt;</td>
- * 		</tr>
- * 		<tr>
- * 			<td>number</td>
- * 			<td>Numbers</td>
- * 			<td class='code'>123</td>
- * 			<td class='code'><xt>&lt;number&gt;</xt>123<xt>&lt;/number&gt;</xt></td>
- * 			<td class='code'>Integer, Long, Float, <jk>int</jk></td>
- * 		</tr>
- * 		<tr>
- * 			<td>boolean</td>
- * 			<td>Booleans</td>
- * 			<td class='code'><jk>true</jk></td>
- * 			<td class='code'><xt>&lt;boolean&gt;</xt>true<xt>&lt;/boolean&gt;</xt></td>
- * 			<td class='code'>Boolean</td>
- * 		</tr>
- * 		<tr>
- * 			<td>string</td>
- * 			<td>CharSequences</td>
- * 			<td class='code'><js>'foobar'</js></td>
- * 			<td class='code'><xt>&lt;string&gt;</xt>foobar<xt>&lt;/string&gt;</xt></td>
- * 			<td class='code'>String, StringBuilder</td>
- * 		</tr>
- * 	</table>
+ *			<td class='code'>List&lt;Integer&gt;, <jk>int</jk>[], Float[], Set&lt;Person&gt;</td>
+ *		</tr>
+ * 	<tr>
+ * 		<td>number</td>
+ * 		<td>Numbers</td>
+ * 		<td class='code'>123</td>
+ * 		<td class='code'><xt>&lt;number&gt;</xt>123<xt>&lt;/number&gt;</xt></td>
+ * 		<td class='code'>Integer, Long, Float, <jk>int</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>boolean</td>
+ * 		<td>Booleans</td>
+ * 		<td class='code'><jk>true</jk></td>
+ * 		<td class='code'><xt>&lt;boolean&gt;</xt>true<xt>&lt;/boolean&gt;</xt></td>
+ * 		<td class='code'>Boolean</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>string</td>
+ * 		<td>CharSequences</td>
+ * 		<td class='code'><js>'foobar'</js></td>
+ * 		<td class='code'><xt>&lt;string&gt;</xt>foobar<xt>&lt;/string&gt;</xt></td>
+ * 		<td class='code'>String, StringBuilder</td>
+ * 	</tr>
+ * </table>
  * <p>
  * In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
  * 	{@link #getBeanContext() beanContext} can also be passed in.
  * <p>
- * For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String} objects.  When registered
- * 	with this parser, you can construct {@code Calendar} objects from {@code Strings} using the following syntax...
+ * For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String}
+ * objects.
+ * When registered with this parser, you can construct {@code Calendar} objects from {@code Strings} using the
+ * following syntax...
  * <p class='bcode'>
  * 	Calendar c = parser.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
  * <p>
- * If <code>Object.<jk>class</jk></code> is specified as the target type, then the parser
- * 	automatically determines the data types and generates the following object types...
+ * If <code>Object.<jk>class</jk></code> is specified as the target type, then the parser automatically determines the
+ * data types and generates the following object types...
  * </p>
  * <table class='styled'>
  * 	<tr><th>JSON type</th><th>Class type</th></tr>
  * 	<tr><td>object</td><td>{@link ObjectMap}</td></tr>
  * 	<tr><td>array</td><td>{@link ObjectList}</td></tr>
- * 	<tr><td>number</td><td>{@link Number} <br>(depending on length and format, could be {@link Integer}, {@link Double}, {@link Float}, etc...)</td></tr>
+ * 	<tr><td>number</td><td>{@link Number} <br>(depending on length and format, could be {@link Integer},
+ * 		{@link Double}, {@link Float}, etc...)</td></tr>
  * 	<tr><td>boolean</td><td>{@link Boolean}</td></tr>
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  *
  * <a id='SupportedTypes'></a><h6 class='topic'>Supported types</h6>
  * <p>
- * Several of the methods below take {@link Type} parameters to identify the type of
- * 	object to create.  Any of the following types can be passed in to these methods...
+ * Several of the methods below take {@link Type} parameters to identify the type of object to create.
+ * Any of the following types can be passed in to these methods...
  * </p>
  * <ul>
  * 	<li>{@link ClassMeta}
@@ -125,10 +129,10 @@ import org.apache.juneau.utils.*;
  * </ul>
  * <p>
  * However, {@code ParameterizedTypes} and {@code GenericArrayTypes} should not contain
- * 	{@link WildcardType WildcardTypes} or {@link TypeVariable TypeVariables}.
+ * {@link WildcardType WildcardTypes} or {@link TypeVariable TypeVariables}.
  * <p>
  * Passing in <jk>null</jk> or <code>Object.<jk>class</jk></code> typically signifies that it's up to the parser
- * 	to determine what object type is being parsed parsed based on the rules above.
+ * to determine what object type is being parsed parsed based on the rules above.
  */
 public abstract class Parser extends CoreObject {
 
@@ -163,11 +167,14 @@ public abstract class Parser extends CoreObject {
 
 	/**
 	 * Workhorse method.  Subclasses are expected to implement this method.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
+	 *
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object,
+	 * Locale, TimeZone, MediaType)}.
 	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param type The class type of the object to create.
 	 * If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
-	 * For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
+	 * For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>,
+	 * <code>ObjectMap</code>, etc...
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
@@ -188,12 +195,16 @@ public abstract class Parser extends CoreObject {
 	/**
 	 * Entry point for all parsing calls.
 	 * <p>
-	 * Calls the {@link #doParse(ParserSession, ClassMeta)} implementation class and catches/rewraps any exceptions thrown.
-	 * @param session The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
+	 * Calls the {@link #doParse(ParserSession, ClassMeta)} implementation class and catches/rewraps any exceptions
+	 * thrown.
+	 *
+	 * @param session The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale,
+	 * TimeZone, MediaType)}.
 	 * @param type The class type of the object to create.
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 * type.
 	 */
 	public final <T> T parseSession(ParserSession session, ClassMeta<T> type) throws ParseException {
 		try {
@@ -205,9 +216,11 @@ public abstract class Parser extends CoreObject {
 		} catch (StackOverflowError e) {
 			throw new ParseException(session, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(session, "I/O exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(session, "I/O exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} catch (Exception e) {
-			throw new ParseException(session, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+			throw new ParseException(session, "Exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} finally {
 			session.close();
 		}
@@ -250,29 +263,37 @@ public abstract class Parser extends CoreObject {
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input.
-	 * 	<br>Character-based parsers can handle the following input class types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by {@link ParserContext#PARSER_inputStreamCharset} property value).
-	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by {@link ParserContext#PARSER_inputStreamCharset} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by {@link ParserContext#PARSER_fileCharset} property value).
-	 * 	</ul>
-	 * 	<br>Stream-based parsers can handle the following input class types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link InputStream}
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link File}
-	 * 	</ul>
+	 * <br>
+	 * Character-based parsers can handle the following input class types:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>{@link Reader}
+	 * 	<li>{@link CharSequence}
+	 * 	<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 		{@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 	<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 		{@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 	<li>{@link File} containing system encoded text (or charset defined by
+	 * 		{@link ParserContext#PARSER_fileCharset} property value).
+	 * </ul>
+	 * <br>
+	 * Stream-based parsers can handle the following input class types:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>{@link InputStream}
+	 * 	<li><code><jk>byte</jk>[]</code>
+	 * 	<li>{@link File}
+	 * </ul>
 	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 * type.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings("unchecked")
@@ -310,7 +331,8 @@ public abstract class Parser extends CoreObject {
 	 * See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 * type.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
 		ParserSession session = createSession(input);
@@ -318,7 +340,8 @@ public abstract class Parser extends CoreObject {
 	}
 
 	/**
-	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta} object.
+	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
+	 * object.
 	 * <p>
 	 * This is mostly an internal method used by the framework.
 	 *
@@ -327,7 +350,8 @@ public abstract class Parser extends CoreObject {
 	 * See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 *  type.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
 		return parseSession(createSession(input), type);
@@ -336,8 +360,8 @@ public abstract class Parser extends CoreObject {
 	/**
 	 * Create the session object that will be passed in to the parse method.
 	 * <p>
-	 * It's up to implementers to decide what the session object looks like, although typically
-	 * 	it's going to be a subclass of {@link ParserSession}.
+	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
+	 * subclass of {@link ParserSession}.
 	 *
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @param op Optional additional properties.
@@ -352,7 +376,8 @@ public abstract class Parser extends CoreObject {
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @return The new session.
 	 */
-	public ParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public ParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale,
+			TimeZone timeZone, MediaType mediaType) {
 		return new ParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
@@ -380,15 +405,16 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
-	 * 	<li>The various character-based constructors in {@link ObjectMap} (e.g. {@link ObjectMap#ObjectMap(CharSequence,Parser)}).
+	 * 	<li>The various character-based constructors in {@link ObjectMap} (e.g.
+	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
 	 * </ul>
 	 *
 	 * @param <K> The key class type.
 	 * @param <V> The value class type.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @param m The map being loaded.
-	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.<br>
-	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.<br>
+	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
+	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same map that was passed in to allow this method to be chained.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @throws UnsupportedOperationException If not implemented.
@@ -409,12 +435,13 @@ public abstract class Parser extends CoreObject {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
+	 *
+	 * @param session The runtime session object returned by
+	 * {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param m The map being loaded.
-	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.<br>
-	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.<br>
-	 *
+	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
+	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same map that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
@@ -427,7 +454,8 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
-	 * 	<li>The various character-based constructors in {@link ObjectList} (e.g. {@link ObjectList#ObjectList(CharSequence,Parser)}.
+	 * 	<li>The various character-based constructors in {@link ObjectList} (e.g.
+	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
 	 * </ul>
 	 *
 	 * @param <E> The element class type.
@@ -435,10 +463,12 @@ public abstract class Parser extends CoreObject {
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same collection that was passed in to allow this method to be chained.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 * type.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
-	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
+	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType)
+			throws ParseException {
 		ParserSession session = createSession(input);
 		try {
 			return doParseIntoCollection(session, c, elementType);
@@ -454,11 +484,12 @@ public abstract class Parser extends CoreObject {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
+	 *
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object,
+	 * Locale, TimeZone, MediaType)}.
 	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
-	 *
 	 * @return The same collection that was passed in to allow this method to be chained.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
@@ -471,7 +502,7 @@ public abstract class Parser extends CoreObject {
 	 * argument.
 	 * <p>
 	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
-	 * 	to the {@code Method.invoke(target, args)} method.
+	 * to the {@code Method.invoke(target, args)} method.
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
@@ -481,7 +512,8 @@ public abstract class Parser extends CoreObject {
 	 * @param input The input.  Subclasses can support different input types.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 * @return An array of parsed objects.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 * type.
 	 */
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
@@ -507,7 +539,8 @@ public abstract class Parser extends CoreObject {
 	 * Converts the specified string to the specified type.
 	 *
 	 * @param session The session object.
-	 * @param outer The outer object if we're converting to an inner object that needs to be created within the context of an outer object.
+	 * @param outer The outer object if we're converting to an inner object that needs to be created within the context
+	 * of an outer object.
 	 * @param s The string to convert.
 	 * @param type The class type to convert the string to.
 	 * @return The string converted as an object of the specified type.
@@ -548,8 +581,8 @@ public abstract class Parser extends CoreObject {
 	}
 
 	/**
-	 * Convenience method for calling the {@link ParentProperty @ParentProperty} method on
-	 * the specified object if it exists.
+	 * Convenience method for calling the {@link ParentProperty @ParentProperty} method on the specified object if it
+	 * exists.
 	 *
 	 * @param cm The class type of the object.
 	 * @param o The object.
@@ -563,8 +596,7 @@ public abstract class Parser extends CoreObject {
 	}
 
 	/**
-	 * Convenience method for calling the {@link NameProperty @NameProperty} method on
-	 * the specified object if it exists.
+	 * Convenience method for calling the {@link NameProperty @NameProperty} method on the specified object if it exists.
 	 *
 	 * @param cm The class type of the object.
 	 * @param o The object.
@@ -582,7 +614,7 @@ public abstract class Parser extends CoreObject {
 	/**
 	 * Returns the media types handled based on the value of the {@link Consumes} annotation on the parser class.
 	 * <p>
-	 * This method can be overridden by subclasses to determine the media types programatically.
+	 * This method can be overridden by subclasses to determine the media types programmatically.
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */

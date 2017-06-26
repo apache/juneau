@@ -22,7 +22,8 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
+ * 		proxies against 3rd-party REST interfaces</a>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */
@@ -47,9 +48,9 @@ public class RemoteMethodArg {
 	 * @param name2 The argument name pulled from value().
 	 * @param index The zero-based index of the argument on the Java method.
 	 * @param skipIfNE The value is skipped if it's null/empty.
-	 * @param serializer The class to use for serializing headers, query paramters, form-data parameters, and
-	 * 	path variables.
-	 * 	If {@link UrlEncodingSerializer}, then the url-encoding serializer defined on the client will be used.
+	 * @param serializer The class to use for serializing headers, query parameters, form-data parameters, and
+	 * path variables.
+	 * If {@link UrlEncodingSerializer}, then the url-encoding serializer defined on the client will be used.
 	 */
 	protected RemoteMethodArg(String name, String name2, int index, boolean skipIfNE, Class<? extends PartSerializer> serializer) {
 		this.name = name.isEmpty() ? name2 : name;

@@ -24,9 +24,12 @@ import org.apache.juneau.*;
  * <p>
  * The status code is an HTTP-equivalent code.  It will be one of the following:
  * <ul class='spaced-list'>
- * 	<li>{@link HttpURLConnection#HTTP_BAD_REQUEST HTTP_BAD_REQUEST} - Attempting to do something impossible.
- * 	<li>{@link HttpURLConnection#HTTP_NOT_FOUND HTTP_NOT_FOUND} - Attempting to access a non-existent node in the tree.
- * 	<li>{@link HttpURLConnection#HTTP_FORBIDDEN HTTP_FORBIDDEN} - Attempting to overwrite the root object.
+ * 	<li>{@link HttpURLConnection#HTTP_BAD_REQUEST HTTP_BAD_REQUEST}
+ * 		- Attempting to do something impossible.
+ * 	<li>{@link HttpURLConnection#HTTP_NOT_FOUND HTTP_NOT_FOUND}
+ * 		- Attempting to access a non-existent node in the tree.
+ * 	<li>{@link HttpURLConnection#HTTP_FORBIDDEN HTTP_FORBIDDEN}
+ * 		- Attempting to overwrite the root object.
  * </ul>
  */
 public final class PojoRestException extends FormattedRuntimeException {

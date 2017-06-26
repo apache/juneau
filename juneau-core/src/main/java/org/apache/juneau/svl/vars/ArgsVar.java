@@ -21,7 +21,7 @@ import org.apache.juneau.utils.*;
  * The format for this var is <js>"$ARG{argNameOrNum}"</js> or <js>"$ARG{argNameOrNum,defaultValue}"</js>
  * <p>
  * This variable resolver requires that an {@link Args} object be set as a context object on the resolver or a
- * 	session object on the resolver session.
+ * session object on the resolver session.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -29,7 +29,8 @@ import org.apache.juneau.utils.*;
  * 	Args args = new Args(argv);
  *
  * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$ARG{1}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<js>class</js>).addContextObject(<jsf>SESSION_args</jsf>, args);
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<js>class</js>)
+ * 		.addContextObject(<jsf>SESSION_args</jsf>, args);
  *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $ARG{1}"</js>));

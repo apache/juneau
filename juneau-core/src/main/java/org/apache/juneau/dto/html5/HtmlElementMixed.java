@@ -26,7 +26,8 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -38,6 +39,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * The children of this element.
+	 *
 	 * @return The children of this element.
 	 */
 	@Xml(format=MIXED)
@@ -104,11 +106,16 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @throws InvalidDataConversionException If node is not the expected type.
 	 */
 	public <T> T getChild(Class<T> type, int index) {
-		return (children == null || children.size() <= index || index < 0 ? null : ObjectUtils.convertToType(children.get(index), type));
+		return (
+			children == null || children.size() <= index || index < 0
+			? null
+			: ObjectUtils.convertToType(children.get(index), type)
+		);
 	}
 
 	/**
 	 * Adds one or more child elements to this element.
+	 *
 	 * @param children The children to add as child elements.
 	 * Can be a mixture of strings and {@link HtmlElement} objects.
 	 * @return This object (for method chaining).
@@ -126,6 +133,7 @@ public class HtmlElementMixed extends HtmlElement {
 
 	/**
 	 * Adds a child element to this element.
+	 *
 	 * @param child The child to add as a child element.
 	 * Can be a string or {@link HtmlElement}.
 	 * @return This object (for method chaining).

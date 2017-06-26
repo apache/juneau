@@ -52,7 +52,8 @@ public final class JsonParserSession extends ParserSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	public JsonParserSession(JsonParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public JsonParserSession(JsonParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer,
+			Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 

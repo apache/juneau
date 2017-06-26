@@ -22,13 +22,9 @@ public class Utils {
 	 *
 	 * @param i1 Integer #1
 	 * @param i2 Integer #2
-	 * @return	the value <code>0</code> if Integer #1 is
-	 * 		equal to Integer #2; a value less than
-	 * 		<code>0</code> if Integer #1 numerically less
-	 * 		than Integer #2; and a value greater
-	 * 		than <code>0</code> if Integer #1 is numerically
-	 * 		greater than Integer #2 (signed
-	 * 		comparison).
+	 * @return The value <code>0</code> if Integer #1 is equal to Integer #2; a value less than <code>0</code> if
+	 * Integer #1 numerically less than Integer #2; and a value greater than <code>0</code> if Integer #1 is numerically
+	 * greater than Integer #2 (signed comparison).
 	 */
 	public static final int compare(int i1, int i2) {
 		return (i1<i2 ? -1 : (i1==i2 ? 0 : 1));

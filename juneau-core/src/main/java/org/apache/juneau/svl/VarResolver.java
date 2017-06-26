@@ -22,8 +22,9 @@ import org.apache.juneau.svl.vars.*;
 /**
  * Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.
  * <p>
- * Variables are of the form <code>$X{key}</code>, where <code>X</code> can consist of zero or more ASCII characters.<br>
- * 	The variable key can contain anything, even nested variables that get recursively resolved.
+ * Variables are of the form <code>$X{key}</code>, where <code>X</code> can consist of zero or more ASCII characters.
+ * <br>
+ * The variable key can contain anything, even nested variables that get recursively resolved.
  * <p>
  * Variables are defined through the {@link VarResolverBuilder#vars(Class[])} method.
  * <p>
@@ -55,26 +56,28 @@ import org.apache.juneau.svl.vars.*;
  * <p>
  * Var resolvers can have zero or more context objects associated with them.
  * <p>
- * Context objects are arbitrary objects associated with this var resolver, such as
- * 	a {@link ConfigFile} object.
+ * Context objects are arbitrary objects associated with this var resolver, such as a {@link ConfigFile} object.
  * They can be any class type.
  * <p>
- * Context objects can be retrieved by {@link Var} classes through the {@link VarResolverSession#getSessionObject(Class, String)} method.
+ * Context objects can be retrieved by {@link Var} classes through the
+ * {@link VarResolverSession#getSessionObject(Class, String)} method.
  *
  * <h6 class='topic'>Session objects</h6>
  * <p>
  * Session objects are considered more ephemeral than context objects.
- * While a context object is unlikely to ever change, a session object may change on every
- * 	use of the var resolver.
+ * While a context object is unlikely to ever change, a session object may change on every use of the var resolver.
  * For example, the server API defines various <code>Var</code> objects that use the <code>RestRequest</code>
- * 	object as a session object for the duration of a single HTTP request.
+ * object as a session object for the duration of a single HTTP request.
  * <p>
- * Session objects are used by calling the {@link #createSession()} or {@link #createSession(Map)} methods to create an instance
- * 	of a {@link VarResolverSession} object that contains {@link VarResolverSession#resolve(String)} and {@link VarResolverSession#resolveTo(String,Writer)} methods
- * 	that are identical to {@link VarResolver#resolve(String)} and {@link VarResolver#resolveTo(String, Writer)} except that the <code>Var</code> objects
- * 	have access to the session objects through the {@link VarResolverSession#getSessionObject(Class, String)} method.
+ * Session objects are used by calling the {@link #createSession()} or {@link #createSession(Map)} methods to create
+ * an instance of a {@link VarResolverSession} object that contains {@link VarResolverSession#resolve(String)}
+ * and {@link VarResolverSession#resolveTo(String,Writer)} methods that are identical to
+ * {@link VarResolver#resolve(String)} and {@link VarResolver#resolveTo(String, Writer)} except that the
+ * <code>Var</code> objects have access to the session objects through the
+ * {@link VarResolverSession#getSessionObject(Class, String)} method.
  * <p>
- * Session objects are specified through either the {@link #createSession(Map)} method or the {@link VarResolverSession#sessionObject(String, Object)} methods.
+ * Session objects are specified through either the {@link #createSession(Map)} method or the
+ * {@link VarResolverSession#sessionObject(String, Object)} methods.
  *
  * <h6 class='topic'>Cloning</h6>
  * <p>
@@ -84,7 +87,8 @@ import org.apache.juneau.svl.vars.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>
- * 	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.builder().vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>).build();
+ * 	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.builder().vars(ConfigVar.<jk>class</jk>,
+ * 		ArgsVar.<jk>class</jk>).build();
  * </p>
  *
  * @see org.apache.juneau.svl
@@ -110,6 +114,7 @@ public class VarResolver {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param vars The var classes
 	 * @param contextObjects
 	 */
@@ -130,6 +135,7 @@ public class VarResolver {
 
 	/**
 	 * Returns the read-only properties on this variable resolver.
+	 *
 	 * @return The read-only properties on this variable resolver.
 	 */
 	public VarResolverContext getContext() {
@@ -139,7 +145,8 @@ public class VarResolver {
 	/**
 	 * Creates a new resolver session with no session objects.
 	 * <p>
-	 * Session objects can be associated with the specified session using the {@link VarResolverSession#sessionObject(String, Object)} method.
+	 * Session objects can be associated with the specified session using the
+	 * {@link VarResolverSession#sessionObject(String, Object)} method.
 	 *
 	 * @return A new resolver session.
 	 */
@@ -150,7 +157,7 @@ public class VarResolver {
 	/**
 	 * Same as {@link #createSession()} except allows you to specify session objects as a map.
 	 *
-	 * @param sessionObjects The session objects to associate with the sessino.
+	 * @param sessionObjects The session objects to associate with the session.
 	 * @return A new resolver session.
 	 */
 	public VarResolverSession createSession(Map<String,Object> sessionObjects) {
@@ -161,7 +168,8 @@ public class VarResolver {
 	 * Resolve variables in the specified string.
 	 * <p>
 	 * This is a shortcut for calling <code>createSession(<jk>null</jk>).resolve(s);</code>.
-	 * This method can only be used if the string doesn't contain variables that rely on the existence of session variables.
+	 * This method can only be used if the string doesn't contain variables that rely on the existence of session
+	 * variables.
 	 *
 	 * @param s The input string.
 	 * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.
@@ -174,7 +182,8 @@ public class VarResolver {
 	 * Resolve variables in the specified string and sends the results to the specified writer.
 	 * <p>
 	 * This is a shortcut for calling <code>createSession(<jk>null</jk>).resolveTo(s, w);</code>.
-	 * This method can only be used if the string doesn't contain variables that rely on the existence of session variables.
+	 * This method can only be used if the string doesn't contain variables that rely on the existence of session
+	 * variables.
 	 *
 	 * @param s The input string.
 	 * @param w The writer to send the result to.

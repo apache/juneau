@@ -56,6 +56,7 @@ public final class MsgPackInputStream extends InputStream {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param is The input stream being wrapped.
 	 */
 	protected MsgPackInputStream(InputStream is) {
@@ -171,22 +172,22 @@ public final class MsgPackInputStream extends InputStream {
 				break;
 			}
 			case STRING:{
-				// fixstr stores a byte array whose length is upto 31 bytes:
+				// fixstr stores a byte array whose length is up to 31 bytes:
 				// +--------+========+
 				// |101XXXXX|  data  |
 				// +--------+========+
 				//
-				// str 8 stores a byte array whose length is upto (2^8)-1 bytes:
+				// str 8 stores a byte array whose length is up to (2^8)-1 bytes:
 				// +--------+--------+========+
 				// |  0xd9  |YYYYYYYY|  data  |
 				// +--------+--------+========+
 				//
-				// str 16 stores a byte array whose length is upto (2^16)-1 bytes:
+				// str 16 stores a byte array whose length is up to (2^16)-1 bytes:
 				// +--------+--------+--------+========+
 				// |  0xda  |ZZZZZZZZ|ZZZZZZZZ|  data  |
 				// +--------+--------+--------+========+
 				//
-				// str 32 stores a byte array whose length is upto (2^32)-1 bytes:
+				// str 32 stores a byte array whose length is up to (2^32)-1 bytes:
 				// +--------+--------+--------+--------+--------+========+
 				// |  0xdb  |AAAAAAAA|AAAAAAAA|AAAAAAAA|AAAAAAAA|  data  |
 				// +--------+--------+--------+--------+--------+========+
@@ -208,17 +209,17 @@ public final class MsgPackInputStream extends InputStream {
 				break;
 			}
 			case ARRAY: {
-				// fixarray stores an array whose length is upto 15 elements:
+				// fixarray stores an array whose length is up to 15 elements:
 				// +--------+~~~~~~~~~~~~~~~~~+
 				// |1001XXXX|    N objects    |
 				// +--------+~~~~~~~~~~~~~~~~~+
 				//
-				// array 16 stores an array whose length is upto (2^16)-1 elements:
+				// array 16 stores an array whose length is up to (2^16)-1 elements:
 				// +--------+--------+--------+~~~~~~~~~~~~~~~~~+
 				// |  0xdc  |YYYYYYYY|YYYYYYYY|    N objects    |
 				// +--------+--------+--------+~~~~~~~~~~~~~~~~~+
 				//
-				// array 32 stores an array whose length is upto (2^32)-1 elements:
+				// array 32 stores an array whose length is up to (2^32)-1 elements:
 				// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+
 				// |  0xdd  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|    N objects    |
 				// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+
@@ -237,17 +238,17 @@ public final class MsgPackInputStream extends InputStream {
 				break;
 			}
 			case BIN:{
-				//	bin 8 stores a byte array whose length is upto (2^8)-1 bytes:
+				//	bin 8 stores a byte array whose length is up to (2^8)-1 bytes:
 				//	+--------+--------+========+
 				//	|  0xc4  |XXXXXXXX|  data  |
 				//	+--------+--------+========+
 				//
-				//	bin 16 stores a byte array whose length is upto (2^16)-1 bytes:
+				//	bin 16 stores a byte array whose length is up to (2^16)-1 bytes:
 				//	+--------+--------+--------+========+
 				//	|  0xc5  |YYYYYYYY|YYYYYYYY|  data  |
 				//	+--------+--------+--------+========+
 				//
-				//	bin 32 stores a byte array whose length is upto (2^32)-1 bytes:
+				//	bin 32 stores a byte array whose length is up to (2^32)-1 bytes:
 				//	+--------+--------+--------+--------+--------+========+
 				//	|  0xc6  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|  data  |
 				//	+--------+--------+--------+--------+--------+========+
@@ -294,17 +295,17 @@ public final class MsgPackInputStream extends InputStream {
 				//	                              data (cont.)                              |
 				//	+--------+--------+--------+--------+--------+--------+--------+--------+
 				//
-				//	ext 8 stores an integer and a byte array whose length is upto (2^8)-1 bytes:
+				//	ext 8 stores an integer and a byte array whose length is up to (2^8)-1 bytes:
 				//	+--------+--------+--------+========+
 				//	|  0xc7  |XXXXXXXX|  type  |  data  |
 				//	+--------+--------+--------+========+
 				//
-				//	ext 16 stores an integer and a byte array whose length is upto (2^16)-1 bytes:
+				//	ext 16 stores an integer and a byte array whose length is up to (2^16)-1 bytes:
 				//	+--------+--------+--------+--------+========+
 				//	|  0xc8  |YYYYYYYY|YYYYYYYY|  type  |  data  |
 				//	+--------+--------+--------+--------+========+
 				//
-				//	ext 32 stores an integer and a byte array whose length is upto (2^32)-1 bytes:
+				//	ext 32 stores an integer and a byte array whose length is up to (2^32)-1 bytes:
 				//	+--------+--------+--------+--------+--------+--------+========+
 				//	|  0xc9  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|  type  |  data  |
 				//	+--------+--------+--------+--------+--------+--------+========+
@@ -337,17 +338,17 @@ public final class MsgPackInputStream extends InputStream {
 				break;
 			}
 			case MAP:{
-				//	fixmap stores a map whose length is upto 15 elements
+				//	fixmap stores a map whose length is up to 15 elements
 				//	+--------+~~~~~~~~~~~~~~~~~+
 				//	|1000XXXX|   N*2 objects   |
 				//	+--------+~~~~~~~~~~~~~~~~~+
 				//
-				//	map 16 stores a map whose length is upto (2^16)-1 elements
+				//	map 16 stores a map whose length is up to (2^16)-1 elements
 				//	+--------+--------+--------+~~~~~~~~~~~~~~~~~+
 				//	|  0xde  |YYYYYYYY|YYYYYYYY|   N*2 objects   |
 				//	+--------+--------+--------+~~~~~~~~~~~~~~~~~+
 				//
-				//	map 32 stores a map whose length is upto (2^32)-1 elements
+				//	map 32 stores a map whose length is up to (2^32)-1 elements
 				//	+--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+
 				//	|  0xdf  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|   N*2 objects   |
 				//	+--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+

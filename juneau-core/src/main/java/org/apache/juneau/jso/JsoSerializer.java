@@ -36,6 +36,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public JsoSerializer(PropertyStore propertyStore) {

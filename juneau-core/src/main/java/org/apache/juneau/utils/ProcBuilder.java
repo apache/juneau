@@ -72,11 +72,11 @@ public class ProcBuilder {
 
 	/**
 	 * Command arguments if the specified matcher matches.
-	 * Can be used for specifying os-specific commands.
+	 * Can be used for specifying OS-specific commands.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	ProcessBuilder pb = ProcessBuilder
+	 * 	ProcBuilder pb = ProcBuilder
 	 * 		.create()
 	 * 		.commandIf(<jsf>WINDOWS</jsf>, <js>"cmd /c dir"</js>)
 	 * 		.commandIf(<jsf>UNIX</jsf>, <js>"bash -c ls"</js>)

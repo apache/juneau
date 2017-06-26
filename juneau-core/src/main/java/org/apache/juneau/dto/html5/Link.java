@@ -19,12 +19,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-link-element">&lt;link&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/document-metadata.html#the-link-element">&lt;link&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -34,8 +36,10 @@ import org.apache.juneau.annotation.*;
 public class Link extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a> attribute.
-	 * How the element handles crossorigin requests.
+	 * <a class="doclink"
+	 * href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a> attribute.
+	 * How the element handles cross-origin requests.
+	 *
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -63,8 +67,10 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-hreflang">hreflang</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-hreflang">hreflang</a>
+	 * attribute.
 	 * Language of the linked resource.
+	 *
 	 * @param hreflang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -76,6 +82,7 @@ public class Link extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-media">media</a> attribute.
 	 * Applicable media.
+	 *
 	 * @param media The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -87,6 +94,7 @@ public class Link extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel">rel</a> attribute.
 	 * Relationship between the document containing the hyperlink and the destination resource.
+	 *
 	 * @param rel The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -98,6 +106,7 @@ public class Link extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes">sizes</a> attribute.
 	 * Sizes of the icons (for rel="icon").
+	 *
 	 * @param sizes The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -109,6 +118,7 @@ public class Link extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type">type</a> attribute.
 	 * Hint for the type of the referenced resource.
+	 *
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

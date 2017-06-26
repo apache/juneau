@@ -687,7 +687,8 @@ public final class ClassMeta<T> implements Type {
 	 * <p>
 	 * If <jk>null</jk>, <js>"_type"</js> should be assumed.
 	 *
-	 * @return The type property name associated with this bean class, or <jk>null</jk> if there is no explicit type property name defined or this isn't a bean.
+	 * @return The type property name associated with this bean class, or <jk>null</jk> if there is no explicit type
+	 * property name defined or this isn't a bean.
 	 */
 	public String getBeanTypePropertyName() {
 		return typePropertyName;
@@ -698,7 +699,8 @@ public final class ClassMeta<T> implements Type {
 	 * <p>
 	 * The lexical name is defined by {@link Bean#typeName()}.
 	 *
-	 * @return The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this isn't a bean.
+	 * @return The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this
+	 * isn't a bean.
 	 */
 	public String getDictionaryName() {
 		return dictionaryName;
@@ -760,7 +762,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the normal class of
-	 * one of the child pojo swaps associated with this class.
+	 * one of the child POJO swaps associated with this class.
 	 *
 	 * @param normalClass The normal class being resolved.
 	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
@@ -787,7 +789,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the swap class of
-	 * one of the child pojo swaps associated with this class.
+	 * one of the child POJO swaps associated with this class.
 	 *
 	 * @param swapClass The swap class being resolved.
 	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
@@ -856,7 +858,8 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * For array and {@code Collection} types, returns the class type of the components of the array or {@code Collection}.
+	 * For array and {@code Collection} types, returns the class type of the components of the array or
+	 * {@code Collection}.
 	 *
 	 * @return The element class type, or <jk>null</jk> if this class is not an array or Collection.
 	 */
@@ -1179,7 +1182,8 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * All methods on this class annotated with {@link Remoteable @Remotable}, or all public methods if class is annotated.
+	 * All methods on this class annotated with {@link Remoteable @Remotable}, or all public methods if class is
+	 * annotated.
 	 * Keys are method signatures.
 	 *
 	 * @return All remoteable methods on this class.
@@ -1268,8 +1272,10 @@ public final class ClassMeta<T> implements Type {
 	 * Returns <jk>false</jk> if this is a non-static member class and the outer object does not match
 	 * 	the class type of the defining class.
 	 *
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
-	 * @return <jk>true</jk> if a new instance of this class can be created within the context of the specified outer object.
+	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static
+	 * classes.
+	 * @return <jk>true</jk> if a new instance of this class can be created within the context of the specified outer
+	 * object.
 	 */
 	public boolean canCreateNewInstance(Object outer) {
 		if (isMemberClass)
@@ -1282,8 +1288,10 @@ public final class ClassMeta<T> implements Type {
 	 * Returns <jk>false</jk> if this is a non-static member class and the outer object does not match
 	 * 	the class type of the defining class.
 	 *
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
-	 * @return <jk>true</jk> if a new instance of this bean can be created within the context of the specified outer object.
+	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static
+	 * classes.
+	 * @return <jk>true</jk> if a new instance of this bean can be created within the context of the specified outer
+	 * object.
 	 */
 	public boolean canCreateNewBean(Object outer) {
 		if (beanMeta == null)
@@ -1298,7 +1306,8 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns <jk>true</jk> if this class can call the {@link #newInstanceFromString(Object, String)} method.
 	 *
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
+	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static
+	 * classes.
 	 * @return <jk>true</jk> if this class has a no-arg constructor or invocation handler.
 	 */
 	public boolean canCreateNewInstanceFromString(Object outer) {
@@ -1315,7 +1324,8 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns <jk>true</jk> if this class can call the {@link #newInstanceFromString(Object, String)} method.
 	 *
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
+	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static
+	 * classes.
 	 * @return <jk>true</jk> if this class has a no-arg constructor or invocation handler.
 	 */
 	public boolean canCreateNewInstanceFromNumber(Object outer) {
@@ -1340,7 +1350,8 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the method or field annotated with {@link NameProperty @NameProperty}.
 	 *
-	 * @return The method or field  annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not exist.
+	 * @return The method or field  annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does
+	 * not exist.
 	 */
 	public Setter getNameProperty() {
 		return namePropertyMethod;
@@ -1349,7 +1360,8 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the method or field  annotated with {@link ParentProperty @ParentProperty}.
 	 *
-	 * @return The method or field  annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not exist.
+	 * @return The method or field  annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method
+	 * does not exist.
 	 */
 	public Setter getParentProperty() {
 		return parentPropertyMethod;
@@ -1402,10 +1414,12 @@ public final class ClassMeta<T> implements Type {
 	 * 	<li><code><jk>public</jk> T(String in);</code>
 	 * </ul>
 	 *
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
+	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static
+	 * classes.
 	 * @param arg The input argument value.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no string constructor on the object.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
+	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and
+	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If the parameter type on the method was invalid.
 	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class, or
 	 * 	does not have one of the methods described above.
@@ -1434,13 +1448,15 @@ public final class ClassMeta<T> implements Type {
 	 * </ul>
 	 *
 	 * @param session The current bean session.
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
+	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static
+	 * classes.
 	 * @param arg The input argument value.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no numeric constructor on the object.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
+	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and
+	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If the parameter type on the method was invalid.
-	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class, or
-	 * 	does not have one of the methods described above.
+	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract
+	 * class, or does not have one of the methods described above.
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
 	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -1458,12 +1474,14 @@ public final class ClassMeta<T> implements Type {
 	 * Create a new instance of the main class of this declared type.
 	 *
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
+	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and
+	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
 	 * 	<ul class='spaced-list'>
 	 * 		<li>The number of actual and formal parameters differ.
 	 * 		<li>An unwrapping conversion for primitive arguments fails.
-	 * 		<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation conversion.
+	 * 		<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 			conversion.
 	 * 		<li>The constructor pertains to an enum type.
 	 * 	</ul>
 	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class.
@@ -1487,14 +1505,17 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Same as {@link #newInstance()} except for instantiating non-static member classes.
 	 *
-	 * @param outer The instance of the owning object of the member class instance.  Can be <jk>null</jk> if instantiating a non-member or static class.
+	 * @param outer The instance of the owning object of the member class instance.  Can be <jk>null</jk> if
+	 * instantiating a non-member or static class.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
+	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and
+	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
 	 * 	<ul class='spaced-list'>
 	 * 		<li>The number of actual and formal parameters differ.
 	 * 		<li>An unwrapping conversion for primitive arguments fails.
-	 * 		<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation conversion.
+	 * 		<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 			conversion.
 	 * 		<li>The constructor pertains to an enum type.
 	 * 	</ul>
 	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class.

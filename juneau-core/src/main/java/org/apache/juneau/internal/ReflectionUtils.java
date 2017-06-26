@@ -54,8 +54,8 @@ public final class ReflectionUtils {
 	/**
 	 * Returns the specified annotation only if it's been declared on the specified class.
 	 * <p>
-	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't
-	 * 	recursively look for the class up the parent chain.
+	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
+	 * up the parent chain.
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class.
@@ -145,7 +145,8 @@ public final class ReflectionUtils {
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified list.
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
 	 *
 	 * @param a The annotation.
 	 * @param c The class.
@@ -167,8 +168,8 @@ public final class ReflectionUtils {
 	}
 
 	/**
-	 * Similar to {@link Class#getResourceAsStream(String)} except looks up the
-	 * parent hierarchy for the existence of the specified resource.
+	 * Similar to {@link Class#getResourceAsStream(String)} except looks up the parent hierarchy for the existence of
+	 * the specified resource.
 	 *
 	 * @param c The class to return the resource on.
 	 * @param name The resource name.

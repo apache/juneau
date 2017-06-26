@@ -81,7 +81,8 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	/**
 	 * Sets the value of this property.
 	 * <p>
-	 * If the property is an array of type {@code X}, then the value can be a {@code Collection<X>} or {@code X[]} or {@code Object[]}.
+	 * If the property is an array of type {@code X}, then the value can be a {@code Collection<X>} or {@code X[]} or
+	 * {@code Object[]}.
 	 * <p>
 	 * If the property is a bean type {@code X}, then the value can either be an {@code X} or a {@code Map}.
 	 * <p>

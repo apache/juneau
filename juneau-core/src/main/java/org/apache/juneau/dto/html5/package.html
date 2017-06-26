@@ -70,7 +70,9 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Overview</h2>
 <div class='topic'>
 	<p>
-		Juneau supports generation and consumption of HTML5 documents and fragments through the use of DTOs (Data Transfer Objects).<br>
+		Juneau supports generation and consumption of HTML5 documents and fragments through the use of DTOs (Data 
+		Transfer Objects).
+		<br>
 		It uses existing support for serializing and parsing POJOs to and from HTML to define these HTML objects. 
 	</p>
 	
@@ -81,8 +83,8 @@
 	<div class='topic'>
 		<p>
 			The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
-			fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML serializers,
-			or to other languages such as JSON using the JSON serializers.
+			fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML 
+			serializers, or to other languages such as JSON using the JSON serializers.
 		</p>
 		<p>
 			The {@link org.apache.juneau.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
@@ -192,8 +194,10 @@
 	Object myform =
 		<jsm>form</jsm>().action(<js>"/submit"</js>).method(<js>"POST"</js>)
 		.children(
-			<js>"Position (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"pos"</js>).value(1), <jsm>br</jsm>(),
-			<js>"Limit (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"limit"</js>).value(100), <jsm>br</jsm>(),
+			<js>"Position (1-10000): "</js>, 
+				<jsm>input</jsm>(<js>"number"</js>).name(<js>"pos"</js>).value(1), <jsm>br</jsm>(),
+			<js>"Limit (1-10000): "</js>, 
+				<jsm>input</jsm>(<js>"number"</js>).name(<js>"limit"</js>).value(100), <jsm>br</jsm>(),
 			<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>),
 			<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>)
 		); 	
@@ -202,8 +206,10 @@
 				</td>
 				<td class='code'><xt>
 		&lt;form <xa>action</xa>=<xs>'/submit'</xs> <xa>method</xa>=<xs>'POST'</xs>&gt;
-			<xv>Position (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> <xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'1'</xs>/&gt;&lt;br/&gt;
-			<xv>Limit (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> <xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'100'</xs>/&gt;&lt;br/&gt;
+			<xv>Position (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> 
+				<xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'1'</xs>/&gt;&lt;br/&gt;
+			<xv>Limit (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> 
+				<xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'100'</xs>/&gt;&lt;br/&gt;
 			&lt;button <xa>type</xa>=<xs>'submit'</xs>&gt;<xv>Submit</xv>&lt;/button&gt;
 			&lt;button <xa>type</xa>=<xs>'reset'</xs>&gt;<xv>Reset</xv>&lt;/button&gt;			 
 		&lt;/form&gt;
@@ -240,11 +246,14 @@
 			you may want to consider using HTML5 templates.
 			Broadly speaking, a template is simply a bean that gets swapped out with another more complex bean during
 			serialization.
-			Juneau doesn't have a built-in concept of a "template", but rather has features that allow them to be defined using existing swap support.
+			Juneau doesn't have a built-in concept of a "template", but rather has features that allow them to be 
+			defined using existing swap support.
 		</p>
 		<p>
-			The following example shows how an HTML5 form template object can be created that gets serialized as a populated HTML5 {@link org.apache.juneau.dto.html5.Form} bean.
-			It takes advantage of the special <code>swap(BeanSession)</code> method that serializers will use to convert the object to a serialized form before serialization.
+			The following example shows how an HTML5 form template object can be created that gets serialized as a 
+			populated HTML5 {@link org.apache.juneau.dto.html5.Form} bean.
+			It takes advantage of the special <code>swap(BeanSession)</code> method that serializers will use to 
+			convert the object to a serialized form before serialization.
 			The return type of this method can be any serializable type.
 			In this case, we are defining a template for a reusable HTML form with two simple fields.  
 			This gets serialized as an HTML form. 
@@ -288,7 +297,8 @@
 	&lt;/form&gt;		
 		</xt></p>		
 		<p>
-			Support for parsing back into the template class can be accomplished by adding an unswap method or constructor.
+			Support for parsing back into the template class can be accomplished by adding an unswap method or 
+			constructor.
 		</p>
 		<p class='bcode'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
@@ -307,8 +317,10 @@
 		<jc>// Our 'unswap' constructor</jc>
 		<jk>public</jk> FormTemplate(Form f) {
 			<jk>this</jk>.<jf>action</jf> = f.getAttr(<js>"action"</js>);
-			<jk>this</jk>.<jf>value1</jf> = f.getChild(Input.<jk>class</jk>, 0).getAttr(<jk>int</jk>.<jk>class</jk>, <js>"value"</js>);
-			<jk>this</jk>.<jf>value2</jf> = f.getChild(Input.<jk>class</jk>, 1).getAttr(<jk>boolean</jk>.<jk>class</jk>, <js>"value"</js>);
+			<jk>this</jk>.<jf>value1</jf> = f.getChild(Input.<jk>class</jk>, 0)
+				.getAttr(<jk>int</jk>.<jk>class</jk>, <js>"value"</js>);
+			<jk>this</jk>.<jf>value2</jf> = f.getChild(Input.<jk>class</jk>, 1)
+				.getAttr(<jk>boolean</jk>.<jk>class</jk>, <js>"value"</js>);
 		}
 		
 		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
@@ -326,7 +338,8 @@
 	}
 		</p>
 		<p>
-			Refer to <a class='doclink' href='../../../../../overview-summary.html#Core.SwapMethods'>Swap methods</a> for information about defining swap methods on classes.
+			Refer to <a class='doclink' href='../../../../../overview-summary.html#Core.SwapMethods'>Swap methods</a> 
+			for information about defining swap methods on classes.
 		</p>
 	</div>
 

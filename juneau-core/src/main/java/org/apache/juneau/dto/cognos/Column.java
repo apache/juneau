@@ -136,7 +136,8 @@ public class Column {
 	/**
 	 * Bean property getter:  <property>length</property>.
 	 *
-	 * @return The value of the <property>length</property> property on this bean, or <jk>null</jk> if length is not applicable for the specified type.
+	 * @return The value of the <property>length</property> property on this bean, or <jk>null</jk> if length is not
+	 * applicable for the specified type.
 	 */
 	@Xml(format=XmlFormat.ATTR)
 	public Integer getLength() {

@@ -33,7 +33,8 @@ import org.apache.juneau.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -52,7 +53,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * <p>
 	 * A short description of the target documentation. GFM syntax can be used for rich text representation.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public String getDescription() {
 		return description;

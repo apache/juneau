@@ -27,8 +27,9 @@ import org.apache.juneau.json.*;
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
-  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
-* </ul>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 @BeanIgnore
 @SuppressWarnings("unchecked")
@@ -197,7 +198,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * <p>
 	 * <ul>
 	 * 	<li>Exact matches (e.g. <js>"text/json"<js>/</js>"text/json"</js>) should match
-	 * 		better than metacharacter matches (e.g. <js>"text/*"<js>/</js>"text/json"</js>)
+	 * 		better than meta-character matches (e.g. <js>"text/*"<js>/</js>"text/json"</js>)
 	 * 	<li>The comparison media type can have additional subtype tokens (e.g. <js>"text/json+foo"</js>)
 	 * 		that will not prevent a match.  The reverse is not true, e.g. the comparison media type
 	 * 		must contain all subtype tokens found in the comparing media type.

@@ -35,6 +35,7 @@ public class UonParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public UonParserBuilder(PropertyStore propertyStore) {
@@ -61,8 +62,8 @@ public class UonParserBuilder extends ParserBuilder {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk>
-	 * 	if they've already been decoded before being passed to this parser.
+	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
+	 * decoded before being passed to this parser.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

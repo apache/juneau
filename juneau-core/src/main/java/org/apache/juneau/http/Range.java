@@ -88,8 +88,8 @@ package org.apache.juneau.http;
  * </p>
  * <p>
  * HTTP retrieval requests using conditional or unconditional GET methods MAY request one or more sub-ranges of the
- * entity, instead of the entire entity, using the Range request header, which applies to the entity returned as the r
- * esult of the request:
+ * entity, instead of the entire entity, using the Range request header, which applies to the entity returned as the
+ * result of the request:
  * <p class='bcode'>
  * 	Range = "Range" ":" ranges-specifier
  * </p>
@@ -119,7 +119,8 @@ package org.apache.juneau.http;
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
 public final class Range extends HeaderString {

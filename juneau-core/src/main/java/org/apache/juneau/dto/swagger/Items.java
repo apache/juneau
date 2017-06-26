@@ -32,7 +32,8 @@ import org.apache.juneau.json.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -74,7 +75,8 @@ public class Items extends SwaggerElement {
 	 * Bean property getter:  <property>type</property>.
 	 * <p>
 	 * Required. The internal type of the array.
-	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
+	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or
+	 * <js>"array"</js>.
 	 *
 	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -86,14 +88,17 @@ public class Items extends SwaggerElement {
 	 * Bean property setter:  <property>type</property>.
 	 * <p>
 	 * Required. The internal type of the array.
-	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
+	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or
+	 * <js>"array"</js>.
 	 *
 	 * @param type The new value for the <property>type</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
 	public Items setType(String type) {
 		if (isStrict() && ! contains(type, VALID_TYPES))
-			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
+			throw new RuntimeException(
+				"Invalid value passed in to setType(String).  Value='"+type+"', valid values="
+				+ JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
 		return this;
 	}
@@ -111,7 +116,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink"
+	 * href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
 	 *
 	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -122,7 +128,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>format</property>.
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink"
+	 * href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
 	 *
 	 * @param format The new value for the <property>format</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -193,7 +200,8 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * Default value is <code>csv</code>.
 	 *
-	 * @return The value of the <property>collectionFormat</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>collectionFormat</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public String getCollectionFormat() {
 		return collectionFormat;
@@ -219,7 +227,9 @@ public class Items extends SwaggerElement {
 	 */
 	public Items setCollectionFormat(String collectionFormat) {
 		if (isStrict() && ! contains(collectionFormat, VALID_COLLECTION_FORMATS))
-			throw new RuntimeException("Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
+			throw new RuntimeException(
+				"Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values="
+			+ JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
 		this.collectionFormat = collectionFormat;
 		return this;
 	}
@@ -239,7 +249,8 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 * (Note: <js>"default"</js> has no meaning for required items.)
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 *
 	 * @return The value of the <property>default</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -253,7 +264,8 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 * (Note: <js>"default"</js> has no meaning for required items.)
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 *
 	 * @param _default The new value for the <property>default</property> property on this bean.
@@ -277,7 +289,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
 	 * @return The value of the <property>maximum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -288,7 +301,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maximum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
 	 * @param maximum The new value for the <property>maximum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -311,9 +325,11 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
-	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Boolean getExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -322,7 +338,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
 	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -345,7 +362,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
 	 * @return The value of the <property>minimum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -356,7 +374,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minimum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
 	 * @param minimum The new value for the <property>minimum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -379,9 +398,11 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
-	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Boolean getExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -390,7 +411,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
 	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -413,7 +435,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
 	 *
 	 * @return The value of the <property>maxLength</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -424,7 +447,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
 	 *
 	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -447,7 +471,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
 	 *
 	 * @return The value of the <property>minLength</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -458,7 +483,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minLength</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
 	 *
 	 * @param minLength The new value for the <property>minLength</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -481,7 +507,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
 	 *
 	 * @return The value of the <property>pattern</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -492,7 +519,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>pattern</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
 	 *
 	 * @param pattern The new value for the <property>pattern</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -515,7 +543,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
 	 *
 	 * @return The value of the <property>maxItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -526,7 +555,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
 	 *
 	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -549,7 +579,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
 	 *
 	 * @return The value of the <property>minItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -560,7 +591,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minItems</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
 	 *
 	 * @param minItems The new value for the <property>minItems</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -583,9 +615,11 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
 	 *
-	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Boolean getUniqueItems() {
 		return uniqueItems;
@@ -594,7 +628,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
 	 *
 	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -617,7 +652,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @return The value of the <property>enum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -628,7 +664,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new value for the <property>enum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -641,7 +678,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property adder:  <property>enum</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
 	 * These can either be individual objects or {@link Collection Collections} of objects.
@@ -676,7 +714,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
 	 *
 	 * @return The value of the <property>multipleOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -687,7 +726,8 @@ public class Items extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
 	 *
 	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
 	 * @return This object (for method chaining).

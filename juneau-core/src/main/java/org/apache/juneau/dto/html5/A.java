@@ -20,11 +20,13 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-a-element">&lt;a&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/text-level-semantics.html#the-a-element">&lt;a&gt;</a> element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -66,6 +68,7 @@ public class A extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
 	 * Language of the linked resource.
+	 *
 	 * @param hreflang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -77,6 +80,7 @@ public class A extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
 	 * Relationship between the document containing the hyperlink and the destination resource.
+	 *
 	 * @param rel The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -88,6 +92,7 @@ public class A extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
 	 * Default browsing context for hyperlink navigation and form submission.
+	 *
 	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -99,6 +104,7 @@ public class A extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
 	 * Hint for the type of the referenced resource.
+	 *
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

@@ -27,8 +27,10 @@ import org.apache.juneau.ini.*;
  * {@link ConfigFileImpl} class, so parsers will call this method with the section name
  * using the {@link Section#setName(String)} method.
  * <p>
- * A commonly-used case is when you're parsing a JSON map containing beans where one of the bean properties
- * 	is the key used in the map.  For example:
+ * A commonly-used case is when you're parsing a JSON map containing beans where one of the bean properties is the key
+ * used in the map.
+ * <br>
+ * For example:
  * <p class='bcode'>
  * 	{
  * 		id1: {name: <js>'John Smith'</js>, sex:<js>'M'</js>},

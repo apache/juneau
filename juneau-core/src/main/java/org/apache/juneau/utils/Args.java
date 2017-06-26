@@ -19,9 +19,11 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * Utility class to make it easier to work with command-line arguments pass in through a <code>main(String[] args)</code> method.
+ * Utility class to make it easier to work with command-line arguments pass in through a
+ * <code>main(String[] args)</code> method.
  * <p>
- * Used to parse command-line arguments of the form <js>"[zero or more main arguments] [zero or more optional arguments]"</js>.
+ * Used to parse command-line arguments of the form
+ * <js>"[zero or more main arguments] [zero or more optional arguments]"</js>.
  * <p>
  * The format of a main argument is a token that does not start with <js>'-'</js>.
  * <p>
@@ -135,7 +137,7 @@ public final class Args extends ObjectMap {
 	/**
 	 * Returns main argument at the specified index, or <jk>null</jk> if the index is out of range.
 	 * <p>
-	 * Can be used in conjuction with {@link #hasArg(int)} to check for existence of arg.
+	 * Can be used in conjunction with {@link #hasArg(int)} to check for existence of arg.
 	 * <p class='bcode'>
 	 * 	<jc>// Check for no arguments</jc>
 	 * 	<jk>if</jk> (! args.hasArg(0))

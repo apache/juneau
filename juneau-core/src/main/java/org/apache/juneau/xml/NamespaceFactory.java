@@ -24,7 +24,7 @@ import org.apache.juneau.parser.*;
  * <p>
  * For performance reasons, {@link Namespace} objects are stored in {@link IdentityList IdentityLists}.
  * For this to work property, namespaces with the same name and URI must only be represented by a single
- * 	{@link Namespace} instance.
+ * {@link Namespace} instance.
  * This factory class ensures this identity uniqueness.
  */
 public final class NamespaceFactory {
@@ -32,8 +32,8 @@ public final class NamespaceFactory {
 	private static ConcurrentHashMap<String,Namespace> cache = new ConcurrentHashMap<String,Namespace>();
 
 	/**
-	 * Get the {@link Namespace} with the specified name and URI, and create a new one
-	 * 	if this is the first time it's been encountered.
+	 * Get the {@link Namespace} with the specified name and URI, and create a new one if this is the first time it's
+	 * been encountered.
 	 *
 	 * @param name The namespace name.  See {@link Namespace#getName()}.
 	 * @param uri The namespace URI.  See {@link Namespace#getUri()}.

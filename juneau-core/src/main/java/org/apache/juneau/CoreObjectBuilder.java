@@ -317,7 +317,8 @@ public abstract class CoreObjectBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property value.
+	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * value.
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
@@ -326,7 +327,8 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
+	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * values.
 	 * Otherwise, it returns <jk>null</jk>.
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty.
@@ -490,8 +492,8 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an {@link InvocationHandler}
-	 * if there is no other way of instantiating them.
+	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
+	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1305,8 +1307,10 @@ public abstract class CoreObjectBuilder {
 	 * This list can consist of the following class types:
 	 * <ul>
 	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
+	 * 		annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
+	 * 		annotations.
 	 * </ul>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>

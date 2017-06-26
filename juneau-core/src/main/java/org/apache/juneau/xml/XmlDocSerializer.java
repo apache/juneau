@@ -29,8 +29,8 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * Same as {@link XmlSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response
- * 	to make it a valid XML document.
+ * Same as {@link XmlSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs>
+ * <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response to make it a valid XML document.
  *
  */
 public class XmlDocSerializer extends XmlSerializer {
@@ -41,6 +41,7 @@ public class XmlDocSerializer extends XmlSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Ns(PropertyStore propertyStore) {
@@ -55,6 +56,7 @@ public class XmlDocSerializer extends XmlSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public XmlDocSerializer(PropertyStore propertyStore) {

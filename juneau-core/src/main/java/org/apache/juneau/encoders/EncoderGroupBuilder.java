@@ -33,6 +33,7 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Clone an existing encoder group builder.
+	 *
 	 * @param copyFrom The encoder group that we're copying settings and encoders from.
 	 */
 	public EncoderGroupBuilder(EncoderGroup copyFrom) {

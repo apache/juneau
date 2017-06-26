@@ -35,6 +35,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public UonSerializerBuilder(PropertyStore propertyStore) {
@@ -64,8 +65,8 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 * <p>
 	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
-	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already
-	 * 	perform URL-encoding of non-valid URI characters.
+	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
+	 * URL-encoding of non-valid URI characters.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

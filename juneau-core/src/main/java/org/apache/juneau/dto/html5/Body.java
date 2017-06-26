@@ -15,12 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -30,8 +32,9 @@ import org.apache.juneau.annotation.*;
 public class Body extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a> attribute.
-	 * //onbeforeprint https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeprint.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a>
+	 * attribute.
+	 *
 	 * @param onafterprint The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -41,8 +44,9 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a> attribute.
-	 * //onhashchange https://www.w3.org/TR/html5/webappapis.html#handler-window-onhashchange.
+	 * <a class="doclink"
+	 * href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a> attribute.
+	 *
 	 * @param onbeforeunload The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -52,8 +56,9 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a> attribute.
-	 * //onoffline https://www.w3.org/TR/html5/webappapis.html#handler-window-onoffline.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a>
+	 * attribute.
+	 *
 	 * @param onmessage The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -63,8 +68,9 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a> attribute.
-	 * //onpagehide https://www.w3.org/TR/html5/webappapis.html#handler-window-onpagehide.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a>
+	 * attribute.
+	 *
 	 * @param ononline The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -74,8 +80,9 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a> attribute.
-	 * //onpopstate https://www.w3.org/TR/html5/webappapis.html#handler-window-onpopstate.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a>
+	 * attribute.
+	 *
 	 * @param onpageshow The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -85,8 +92,9 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a> attribute.
-	 * //onunload https://www.w3.org/TR/html5/webappapis.html#handler-window-onunload.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a>
+	 * attribute.
+	 *
 	 * @param onstorage The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

@@ -47,7 +47,8 @@ package org.apache.juneau.http;
  * at the time of the response.
  * <p>
  * A Vary field value consisting of a list of field-names signals that the representation selected for the response is
- * based on a selection algorithm which considers ONLY the listed request-header field values in selecting the most appropriate representation.
+ * based on a selection algorithm which considers ONLY the listed request-header field values in selecting the most
+ * appropriate representation.
  * A cache MAY assume that the same selection will be made for future requests with the same values for the listed
  * field names, for the duration of time for which the response is fresh.
  * <p>
@@ -61,7 +62,8 @@ package org.apache.juneau.http;
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
 public final class Vary extends HeaderString {

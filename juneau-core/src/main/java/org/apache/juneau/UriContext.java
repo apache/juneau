@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * </p>
  * <p>
  * This class allows you to convert URL strings to absolute (e.g. <js>"http://host:port/foo/bar"</js>) or root-relative
- * 	(e.g. <js>"/foo/bar"</js>) URLs.
+ * (e.g. <js>"/foo/bar"</js>) URLs.
  */
 @Bean
 public class UriContext {
@@ -51,7 +51,8 @@ public class UriContext {
 	 * Any parameter can be <jk>null</jk>.  Blanks and nulls are equivalent.
 	 *
 	 * @param authority - The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
-	 * @param contextRoot - The context root of the application (e.g. <js>"/context-root"</js>, or <js>"context-root"</js>)
+	 * @param contextRoot - The context root of the application (e.g. <js>"/context-root"</js>, or
+	 * <js>"context-root"</js>)
 	 * @param servletPath - The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
 	 * @param pathInfo - The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
 	 */
@@ -61,7 +62,8 @@ public class UriContext {
 		this.contextRoot = nullIfEmpty(trimSlashes(contextRoot));
 		this.servletPath = nullIfEmpty(trimSlashes(servletPath));
 		this.pathInfo = nullIfEmpty(trimSlashes(pathInfo));
-		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
+		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null
+			: this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 
 	/**
@@ -99,7 +101,11 @@ public class UriContext {
 			if (authority == null)
 				aContextRoot = getRootRelativeContextRoot();
 			else
-				aContextRoot = (contextRoot == null ? authority : (authority + '/' + contextRoot));
+				aContextRoot = (
+					contextRoot == null
+					? authority
+					: (authority + '/' + contextRoot)
+				);
 		}
 		return aContextRoot;
 	}
@@ -132,9 +138,17 @@ public class UriContext {
 				aServletPath = getRootRelativeServletPath();
 			else {
 				if (contextRoot == null)
-					aServletPath = (servletPath == null ? authority : authority + '/' + servletPath);
+					aServletPath = (
+						servletPath == null
+						? authority
+						: authority + '/' + servletPath
+					);
 				else
-					aServletPath = (servletPath == null ? (authority + '/' + contextRoot) : (authority + '/' + contextRoot + '/' + servletPath));
+					aServletPath = (
+						servletPath == null
+						? (authority + '/' + contextRoot)
+						: (authority + '/' + contextRoot + '/' + servletPath)
+					);
 			}
 		}
 		return aServletPath;
@@ -151,9 +165,17 @@ public class UriContext {
 	public String getRootRelativeServletPath() {
 		if (rResource == null) {
 			if (contextRoot == null)
-				rResource = (servletPath == null ? "/" : ('/' + servletPath));
+				rResource = (
+					servletPath == null
+					? "/"
+					: ('/' + servletPath)
+				);
 			else
-				rResource = (servletPath == null ? ('/' + contextRoot) : ('/' + contextRoot + '/' + servletPath));
+				rResource = (
+					servletPath == null
+					? ('/' + contextRoot)
+					: ('/' + contextRoot + '/' + servletPath)
+				);
 		}
 		return rResource;
 	}
@@ -191,14 +213,29 @@ public class UriContext {
 			else {
 				if (contextRoot == null) {
 					if (servletPath == null)
-						aPathInfo = (pathInfo == null ? authority : (authority + '/' + pathInfo));
+						aPathInfo = (
+							pathInfo == null
+							? authority : (authority + '/' + pathInfo)
+						);
 					else
-						aPathInfo = (pathInfo == null ? (authority + '/' + servletPath) : (authority + '/' + servletPath + '/' + pathInfo));
+						aPathInfo = (
+							pathInfo == null
+							? (authority + '/' + servletPath)
+							: (authority + '/' + servletPath + '/' + pathInfo)
+						);
 				} else {
 					if (servletPath == null)
-						aPathInfo = (pathInfo == null ? authority + '/' + contextRoot : (authority + '/' + contextRoot + '/' + pathInfo));
+						aPathInfo = (
+							pathInfo == null
+							? authority + '/' + contextRoot
+							: (authority + '/' + contextRoot + '/' + pathInfo)
+						);
 					else
-						aPathInfo = (pathInfo == null ? (authority + '/' + contextRoot + '/' + servletPath) : (authority + '/' + contextRoot + '/' + servletPath + '/' + pathInfo));
+						aPathInfo = (
+							pathInfo == null
+							? (authority + '/' + contextRoot + '/' + servletPath)
+							: (authority + '/' + contextRoot + '/' + servletPath + '/' + pathInfo)
+						);
 				}
 			}
 		}
@@ -217,14 +254,30 @@ public class UriContext {
 		if (rPath == null) {
 			if (contextRoot == null) {
 				if (servletPath == null)
-					rPath = (pathInfo == null ? "/" : ('/' + pathInfo));
+					rPath = (
+						pathInfo == null
+						? "/"
+						: ('/' + pathInfo)
+					);
 				else
-					rPath = (pathInfo == null ? ('/' + servletPath) : ('/' + servletPath + '/' + pathInfo));
+					rPath = (
+						pathInfo == null
+						? ('/' + servletPath)
+						: ('/' + servletPath + '/' + pathInfo)
+					);
 			} else {
 				if (servletPath == null)
-					rPath = (pathInfo == null ? ('/' + contextRoot) : ('/' + contextRoot + '/' + pathInfo));
+					rPath = (
+						pathInfo == null
+						? ('/' + contextRoot)
+						: ('/' + contextRoot + '/' + pathInfo)
+					);
 				else
-					rPath = (pathInfo == null ? ('/' + contextRoot + '/' + servletPath) : ('/' + contextRoot + '/' + servletPath + '/' + pathInfo));
+					rPath = (
+						pathInfo == null
+						? ('/' + contextRoot + '/' + servletPath)
+						: ('/' + contextRoot + '/' + servletPath + '/' + pathInfo)
+					);
 			}
 		}
 		return rPath;

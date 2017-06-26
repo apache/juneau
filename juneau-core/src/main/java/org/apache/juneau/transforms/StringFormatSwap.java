@@ -27,6 +27,7 @@ public class StringFormatSwap extends StringSwap<Object> {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param format The string format string.
 	 */
 	public StringFormatSwap(String format) {

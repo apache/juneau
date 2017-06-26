@@ -76,9 +76,8 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * @param timeStyle The {@link DateFormat} time style (e.g. {@link DateFormat#SHORT}).
 	 * Ignored if <code>pattern</code> is not <jk>null</jk>.
 	 * Ignored if <code>-1</code>.
-	 * @param timeZone The timeZone to use for dates.  If <jk>null</jk> then either the
-	 * 	timezone specified on the {@link Calendar} object or the timezone returned
-	 * 	by {@link BeanSession#getTimeZone()} is used.
+	 * @param timeZone The timeZone to use for dates.  If <jk>null</jk> then either the timezone specified on the
+	 * {@link Calendar} object or the timezone returned by {@link BeanSession#getTimeZone()} is used.
 	 */
 	protected CalendarSwap(String pattern, int dateStyle, int timeStyle, TimeZone timeZone) {
 		this.pattern = pattern;
@@ -91,7 +90,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * Transforms {@link Calendar Calendars} to {@link String Strings} using the {@code Date.toString()} method.
 	 *
 	 * <h5 class='section'>Example output:</h5>
-	 * 	<ul>
+	 * <ul>
 	 * 	<li><js>"Wed Jul 04 15:30:45 EST 2001"</js>
 	 * </ul>
 	 */
@@ -524,9 +523,10 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * Returns the {@link DateFormat} object for this session for formatting dates.
 	 *
 	 * @param session The current bean session.
-	 * @param c Optional <code>Calendar</code> object to copy <code>TimeZone</code> from if not specified in session or <code>timeZone</code> setting.
-	 * @return The {@link DateFormat} object.  Multiple calls to this method on the same
-	 * 	session will return a cached copy of date format object.
+	 * @param c Optional <code>Calendar</code> object to copy <code>TimeZone</code> from if not specified in session or
+	 * <code>timeZone</code> setting.
+	 * @return The {@link DateFormat} object.  Multiple calls to this method on the same session will return a cached
+	 * copy of date format object.
 	 */
 	protected DateFormat getDateFormat(BeanSession session, Calendar c) {
 		DateFormat df = session.getFromCache(DateFormat.class, this.getClass().getName());

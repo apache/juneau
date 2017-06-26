@@ -21,7 +21,7 @@ import org.apache.juneau.utils.*;
  * The format for this var is <js>"$MF{key}"</js> or <js>"$MF{key,defaultValue}"</js>
  * <p>
  * This variable resolver requires that a {@link ManifestFile} object be set as a context object on the resolver or a
- * 	session object on the resolver session.
+ * session object on the resolver session.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -29,7 +29,8 @@ import org.apache.juneau.utils.*;
  * 	ManifestFile mf = <jk>new</jk> ManifestFile(<jk>this</jk>.getClass());
  *
  * 	<jc>// Create a variable resolver that resolves manifest file entries (e.g. "$MF{Main-Class}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ManifestFile.<js>class</js>).addContextObject(<jsf>SESSION_manifest</jsf>, mf);
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ManifestFile.<js>class</js>)
+ * 		.addContextObject(<jsf>SESSION_manifest</jsf>, mf);
  *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"The main class is $MF{Main-Class}"</js>));

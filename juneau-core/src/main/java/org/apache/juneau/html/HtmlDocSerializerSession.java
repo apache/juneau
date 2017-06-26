@@ -57,7 +57,8 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
+			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			title = ctx.title;
@@ -93,8 +94,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_cssUrl} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_cssUrl} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getCssUrl() {
 		return cssUrl;
@@ -102,6 +104,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_css} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_css} setting value in this context.
 	 * 	<jk>null</jk> if not specified.  Never an empty array.
 	 */
@@ -111,6 +114,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_nowrap} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_nowrap} setting value in this context.
 	 */
 	public final boolean isNoWrap() {
@@ -119,8 +123,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getTitle() {
 		return title;
@@ -128,8 +133,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getDescription() {
 		return description;
@@ -137,8 +143,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_branding} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_branding} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getBranding() {
 		return branding;
@@ -146,8 +153,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_header} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_header} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getHeader() {
 		return header;
@@ -155,8 +163,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty map.
+	 * <jk>null</jk> if not specified.  Never an empty map.
 	 */
 	public final Map<String,Object> getLinks() {
 		return links;
@@ -164,8 +173,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the template to use for generating the HTML page.
+	 *
 	 * @return The HTML page generator.
-	 * 	Never <jk>null</jk>.
+	 * Never <jk>null</jk>.
 	 */
 	public final HtmlDocTemplate getTemplate() {
 		return template;
@@ -173,8 +183,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_nav} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_nav} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getNav() {
 		return nav;
@@ -182,8 +193,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_aside} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_aside} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getAside() {
 		return aside;
@@ -191,8 +203,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_footer} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_footer} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getFooter() {
 		return footer;
@@ -200,8 +213,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage} setting value in this context.
+	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 * <jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getNoResultsMessage() {
 		return noResultsMessage;

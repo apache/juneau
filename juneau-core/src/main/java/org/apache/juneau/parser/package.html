@@ -70,9 +70,10 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Parser API</h2>
 <div class='topic'>
 	<p>
-		The parser API is designed to be easily extensible by developers. <br>
-		If you are writing your own parser, you will typically subclass directly from either {@link org.apache.juneau.parser.ReaderParser}
-			or {@link org.apache.juneau.parser.InputStreamParser}.<br>
+		The parser API is designed to be easily extensible by developers. 
+		<br>
+		If you are writing your own parser, you will typically subclass directly from either 
+		{@link org.apache.juneau.parser.ReaderParser} or {@link org.apache.juneau.parser.InputStreamParser}.
 	</p>
 
 	<!-- ======================================================================================================== -->
@@ -80,7 +81,8 @@
 	<h3 class='topic' onclick='toggle(this)'>1.1 - The ParserGroup class</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.parser.ParserGroup} class represents a group of parser registered with the media types they handle.
+			The {@link org.apache.juneau.parser.ParserGroup} class represents a group of parser registered with the 
+			media types they handle.
 		</p>
 		
 		<h6 class='topic'>Features</h6>		
@@ -106,8 +108,9 @@
 <div class='topic'>
 	<p>
 		Defining a new parser is quite simple if you subclass directly from {@link org.apache.juneau.parser.ReaderParser} 
-			or {@link org.apache.juneau.parser.InputStreamParser}.  In each case, you simply need to implement a single
-			method and specify a {@link org.apache.juneau.annotation.Consumes} annotation.
+		or {@link org.apache.juneau.parser.InputStreamParser}.  
+		In each case, you simply need to implement a single method and specify a 
+		{@link org.apache.juneau.annotation.Consumes} annotation.
 	</p>
 	<p>
 		The following example shows a simple parser that converts input streams to images using standard JRE classes.
@@ -123,9 +126,10 @@
 	}
 	</p>
 	<p>
-		Parsers that take advantage of the entire {@link org.apache.juneau.CoreObject} interface to be able to parse arbitrary beans and POJOs is
-			considerably more complex and outside the scope of this document.  
-		If developing such a parser, the best course of action would be to replicate what occurs in the {@link org.apache.juneau.json.JsonParser} class.
+		Parsers that take advantage of the entire {@link org.apache.juneau.CoreObject} interface to be able to parse 
+		arbitrary beans and POJOs is considerably more complex and outside the scope of this document.  
+		If developing such a parser, the best course of action would be to replicate what occurs in the 
+		{@link org.apache.juneau.json.JsonParser} class.
 	</p>
 </div>
 

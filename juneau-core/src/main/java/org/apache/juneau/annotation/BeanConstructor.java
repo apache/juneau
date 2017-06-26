@@ -22,10 +22,11 @@ import org.apache.juneau.*;
 /**
  * Maps constructor arguments to property names on beans with read-only properties.
  * <p>
- * This annotation can be used in the case of beans with properties whose values can only be set by passing
- * them in through a constructor on the class.<br>
- * Since method parameter names are lost during compilation, this annotation essentially redefines them
- * so that they are available at runtime.
+ * This annotation can be used in the case of beans with properties whose values can only be set by passing them in
+ * through a constructor on the class.
+ * <br>
+ * Since method parameter names are lost during compilation, this annotation essentially redefines them so that they
+ * are available at runtime.
  * <p>
  * The definition of a read-only bean is a bean with properties with only getters, like shown below...
  * <p class='bcode'>

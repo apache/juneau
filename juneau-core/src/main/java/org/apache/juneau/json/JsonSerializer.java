@@ -37,7 +37,8 @@ import org.apache.juneau.transform.*;
  * The conversion is as follows...
  * <ul class='spaced-list'>
  * 	<li>Maps (e.g. {@link HashMap HashMaps}, {@link TreeMap TreeMaps}) are converted to JSON objects.
- * 	<li>Collections (e.g. {@link HashSet HashSets}, {@link LinkedList LinkedLists}) and Java arrays are converted to JSON arrays.
+ * 	<li>Collections (e.g. {@link HashSet HashSets}, {@link LinkedList LinkedLists}) and Java arrays are converted to
+ * 		JSON arrays.
  * 	<li>{@link String Strings} are converted to JSON strings.
  * 	<li>{@link Number Numbers} (e.g. {@link Integer}, {@link Long}, {@link Double}) are converted to JSON numbers.
  * 	<li>{@link Boolean Booleans} are converted to JSON booleans.
@@ -47,10 +48,12 @@ import org.apache.juneau.transform.*;
  * </ul>
  * <p>
  * The types above are considered "JSON-primitive" object types.  Any non-JSON-primitive object types are transformed
- * 	into JSON-primitive object types through {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the {@link CoreObjectBuilder#pojoSwaps(Class...)}
- * 	method.  Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
+ * into JSON-primitive object types through {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated
+ * through the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
+ * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  * <p>
- * This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
+ * This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will
+ * be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
  * <h5 class='section'>Configurable properties:</h5>
@@ -112,6 +115,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore propertyStore) {
@@ -130,6 +134,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Simple(PropertyStore propertyStore) {
@@ -147,6 +152,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public SimpleReadable(PropertyStore propertyStore) {
@@ -155,7 +161,8 @@ public class JsonSerializer extends WriterSerializer {
 
 		@Override /* CoreObject */
 		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(JSON_simpleMode, true).append(SERIALIZER_quoteChar, '\'').append(SERIALIZER_useWhitespace, true);
+			return super.getOverrideProperties().append(JSON_simpleMode, true).append(SERIALIZER_quoteChar, '\'')
+				.append(SERIALIZER_useWhitespace, true);
 		}
 	}
 
@@ -167,6 +174,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public SimpleReadableSafe(PropertyStore propertyStore) {
@@ -175,7 +183,8 @@ public class JsonSerializer extends WriterSerializer {
 
 		@Override /* CoreObject */
 		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(JSON_simpleMode, true).append(SERIALIZER_quoteChar, '\'').append(SERIALIZER_useWhitespace, true).append(SERIALIZER_detectRecursions, true);
+			return super.getOverrideProperties().append(JSON_simpleMode, true).append(SERIALIZER_quoteChar, '\'')
+				.append(SERIALIZER_useWhitespace, true).append(SERIALIZER_detectRecursions, true);
 		}
 	}
 
@@ -185,12 +194,12 @@ public class JsonSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public JsonSerializer(PropertyStore propertyStore) {
 		super(propertyStore);
 		this.ctx = createContext(JsonSerializerContext.class);
-//		this.schemaSerializer = new JsonSchemaSerializer(propertyStore, getOverrideProperties());
 	}
 
 	@Override /* CoreObject */
@@ -203,7 +212,8 @@ public class JsonSerializer extends WriterSerializer {
 	 * appropriate type-specific serialization method.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	SerializerWriter serializeAnything(JsonSerializerSession session, JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
+	SerializerWriter serializeAnything(JsonSerializerSession session, JsonWriter out, Object o, ClassMeta<?> eType,
+			String attrName, BeanPropertyMeta pMeta) throws Exception {
 
 		if (o == null) {
 			out.append("null");
@@ -280,7 +290,8 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(JsonSerializerSession session, JsonWriter out, Map m, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeMap(JsonSerializerSession session, JsonWriter out, Map m, ClassMeta<?> type)
+			throws Exception {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
@@ -310,7 +321,8 @@ public class JsonSerializer extends WriterSerializer {
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m, String typeName) throws Exception {
+	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m,
+			String typeName) throws Exception {
 		int i = session.getIndent();
 		out.append('{');
 
@@ -341,7 +353,8 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private SerializerWriter serializeCollection(JsonSerializerSession session, JsonWriter out, Collection c, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeCollection(JsonSerializerSession session, JsonWriter out, Collection c,
+			ClassMeta<?> type) throws Exception {
 
 		ClassMeta<?> elementType = type.getElementType();
 
@@ -367,6 +380,7 @@ public class JsonSerializer extends WriterSerializer {
 
 	/**
 	 * Returns the schema serializer based on the settings of this serializer.
+	 *
 	 * @return The schema serializer.
 	 */
 	public JsonSchemaSerializer getSchemaSerializer() {
@@ -381,7 +395,8 @@ public class JsonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new JsonSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 

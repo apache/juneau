@@ -44,7 +44,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param enableNs Flag to indicate if XML namespaces are enabled.
 	 * @param defaultNamespace The default namespace if XML namespaces are enabled.
 	 */
-	public XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
+	public XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar,
+			UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.enableNs = enableNs;
 		this.defaultNsPrefix = defaultNamespace == null ? null : defaultNamespace.name;
@@ -496,7 +497,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
-	 * @param value The attribute value, convertable to a URI via <code>toString()</code>
+	 * @param value The attribute value, convertible to a URI via <code>toString()</code>
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
 	 */
@@ -509,7 +510,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
-	 * @param value The attribute value, convertable to a URI via <code>toString()</code>
+	 * @param value The attribute value, convertible to a URI via <code>toString()</code>
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
 	 */
@@ -533,7 +534,8 @@ public class XmlWriter extends SerializerWriter {
 	 * Serializes and encodes the specified object as valid XML text.
 	 *
 	 * @param o The object being serialized.
-	 * @param preserveWhitespace If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
+	 * @param preserveWhitespace If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or
+	 * {@link XmlFormat#TEXT_PWS} content.
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */

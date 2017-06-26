@@ -20,8 +20,8 @@ import org.apache.juneau.*;
 /**
  * Simple wrapper around a standard {@link Writer} with additional methods.
  * <p>
- * Modeled after the Java ProcessBuilder class so that you can chain commands to reduce
- * 	the need for string concatenation for performance reasons.
+ * Modeled after the Java ProcessBuilder class so that you can chain commands to reduce the need for string
+ * concatenation for performance reasons.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -57,7 +57,8 @@ public class SerializerWriter extends Writer {
 	 * @param quoteChar The character to write when {@link #q()} is called.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public SerializerWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
+	public SerializerWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar,
+			UriResolver uriResolver) {
 		this.out = out;
 		this.useWhitespace = useWhitespace;
 		this.maxIndent = maxIndent;
@@ -97,8 +98,8 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text,
-	 * 	followed by a newline (if the {@code useWhitespace} setting is enabled).
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, followed by a newline
+	 * (if the {@code useWhitespace} setting is enabled).
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @param text The text to write.
@@ -145,8 +146,8 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text,
-	 * 	optionally followed by a newline (if the {@code useWhitespace} setting is enabled).
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, optionally followed by a
+	 * newline (if the {@code useWhitespace} setting is enabled).
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @param newline If <jk>true</jk>, then a newline is written.
@@ -165,8 +166,8 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Appends the specified object as a URI.
 	 * <p>
-	 * Object is converted to a <code>String</code> using <code>toString()</code>, so this will work on {@link URL} or {@link URI} objects,
-	 * or any other type that returns a URI via it's <code>toString()</code> method.
+	 * Object is converted to a <code>String</code> using <code>toString()</code>, so this will work on {@link URL} or
+	 * {@link URI} objects, or any other type that returns a URI via it's <code>toString()</code> method.
 	 * <p>
 	 * The URI is resolved based on the {@link SerializerContext#SERIALIZER_uriRelativity} and
 	 * {@link SerializerContext#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the

@@ -34,6 +34,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public SerializerBuilder(PropertyStore propertyStore) {
@@ -117,11 +118,12 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * <p>
 	 * Recursions can occur when serializing models that aren't true trees, but rather contain loops.
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link SerializerContext#SERIALIZER_ignoreRecursions}.
+	 * The behavior when recursions are detected depends on the value for
+	 * {@link SerializerContext#SERIALIZER_ignoreRecursions}.
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
-	 * <code>{A:{B:{C:null}}}</code><br>
+	 * the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
+	 * <code>{A:{B:{C:null}}}</code>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -237,9 +239,11 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
+	 * the value type.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

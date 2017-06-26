@@ -28,9 +28,11 @@ import org.apache.juneau.parser.*;
  *
  * <h6 class='topic'>Inherited configurable properties</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
+ * 		- Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='jc'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> - Configurable properties common to all parsers.
+ * 		<li class='jc'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a>
+ * 			- Configurable properties common to all parsers.
  * 	</ul>
  * </ul>
  */
@@ -108,9 +110,9 @@ public class XmlParserContext extends ParserContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will
-	 * 	contain a single entry whose key is the root element name.
-	 *
+	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
+	 * is the root element name.
+	 * <p>
 	 * Example:
 	 * <table class='styled'>
 	 * 	<tr>

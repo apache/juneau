@@ -15,12 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-textarea-element">&lt;textarea&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/forms.html#the-textarea-element">&lt;textarea&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -31,7 +33,8 @@ public class Textarea extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
-	 * Hint for form autofill feature.
+	 * Hint for form auto-fill feature.
+	 *
 	 * @param autocomplete The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -43,6 +46,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
+	 *
 	 * @param autofocus The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -55,6 +59,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-cols">cols</a> attribute.
 	 * Maximum number of characters per line.
+	 *
 	 * @param cols The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -67,6 +72,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 * Name of form field to use for sending the element's directionality in form submission.
+	 *
 	 * @param dirname The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -78,6 +84,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
+	 *
 	 * @param disabled The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -90,6 +97,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
+	 *
 	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -99,8 +107,9 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="-">inputmode</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#inputmode">inputmode</a> attribute.
 	 * Hint for selecting an input modality.
+	 *
 	 * @param inputmode The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -112,6 +121,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
+	 *
 	 * @param maxlength The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -124,6 +134,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-minlength">minlength</a> attribute.
 	 * Minimum length of value.
+	 *
 	 * @param minlength The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -136,6 +147,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
+	 *
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -145,8 +157,10 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-placeholder">placeholder</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-placeholder">placeholder</a>
+	 * attribute.
 	 * User-visible label to be placed within the form control.
+	 *
 	 * @param placeholder The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -158,6 +172,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-readonly">readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
+	 *
 	 * @param readonly The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -170,6 +185,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-required">required</a> attribute.
 	 * Whether the control is required for form submission.
+	 *
 	 * @param required The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -182,6 +198,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-rows">rows</a> attribute.
 	 * Number of lines to show.
+	 *
 	 * @param rows The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -194,6 +211,7 @@ public class Textarea extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-wrap">wrap</a> attribute.
 	 * How the value of the form control is to be wrapped for form submission.
+	 *
 	 * @param wrap The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

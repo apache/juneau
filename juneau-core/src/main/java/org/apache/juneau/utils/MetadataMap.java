@@ -71,7 +71,8 @@ public class MetadataMap {
 				throw new RuntimeException(e);
 			}
 			if (o == null)
-				throw new BeanRuntimeException(c, "Could not find a constructor on class with a parameter to handle type {0}", constructorArg.getClass());
+				throw new BeanRuntimeException(c,
+					"Could not find a constructor on class with a parameter to handle type {0}", constructorArg.getClass());
 			classes2[classes.length] = c;
 			metadata2[classes.length] = o;
 			classes = classes2;

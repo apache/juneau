@@ -31,8 +31,8 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</code>, <code><xt>&lt;head&gt;</code>,
- * 	and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
+ * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</code>,
+ * 	<code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
@@ -54,6 +54,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public HtmlDocSerializer(PropertyStore propertyStore) {
@@ -67,7 +68,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new HtmlDocSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
@@ -90,6 +92,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/**
 	 * Calls the parent {@link #doSerialize(SerializerSession, Object)} method which invokes just the HTML serializer.
+	 *
 	 * @param session The serializer session.
 	 * @param o The object being serialized.
 	 * @throws Exception

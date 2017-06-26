@@ -28,6 +28,7 @@ public class CsvParser extends ReaderParser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public CsvParser(PropertyStore propertyStore) {

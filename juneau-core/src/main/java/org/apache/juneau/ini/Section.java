@@ -229,6 +229,7 @@ public class Section implements Map<String,String> {
 
 	/**
 	 * Sets the specified value in this section.
+	 *
 	 * @param key The section key.
 	 * @param value The new value.
 	 * @param encoded Whether this value should be encoded during save.
@@ -329,6 +330,7 @@ public class Section implements Map<String,String> {
 
 	/**
 	 * Adds header comments to this section.
+	 *
 	 * @see ConfigFile#addHeaderComments(String, String...) for a description.
 	 * @param comments The comment lines to add to this section.
 	 * @return This object (for method chaining).
@@ -363,6 +365,7 @@ public class Section implements Map<String,String> {
 
 	/**
 	 * Serialize this section.
+	 *
 	 * @param out What to serialize to.
 	 * @param format The format (e.g. INI, BATCH, SHELL).
 	 */

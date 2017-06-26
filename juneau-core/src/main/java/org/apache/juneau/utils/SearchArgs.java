@@ -40,6 +40,7 @@ public class SearchArgs {
 
 	/**
 	 * Creates a new builder for {@link SearchArgs}
+	 *
 	 * @return A new builder for {@link SearchArgs}
 	 */
 	public static Builder builder() {
@@ -72,7 +73,7 @@ public class SearchArgs {
 		 * Whitespace is trimmed from column names and search tokens.
 		 *
 		 * @param searchTerms The search terms string.
-		 * 	Can be <jk>null</jk>.
+		 * Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder search(String searchTerms) {
@@ -117,7 +118,7 @@ public class SearchArgs {
 		 * Empty view columns imply view all columns.
 		 *
 		 * @param columns The columns being viewed.
-		 * 	Can be <jk>null</jk>.
+		 * Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder view(String columns) {
@@ -157,7 +158,7 @@ public class SearchArgs {
 		 * Whitespace is trimmed from column names.
 		 *
 		 * @param sortArgs The columns to sort by.
-		 * 	Can be <jk>null</jk>.
+		 * Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder sort(String sortArgs) {
@@ -175,7 +176,7 @@ public class SearchArgs {
 		 * Note that the order of the sort is important.
 		 *
 		 * @param sortArgs The columns to sort by.
-		 * 	Can be <jk>null</jk>.
+		 * Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder sort(Collection<String> sortArgs) {
@@ -205,7 +206,7 @@ public class SearchArgs {
 		 * Specifies the number of rows to return.
 		 *
 		 * @param limit The number of rows to return.
-		 * 	If <code>&lt;=0</code>, all rows should be returned.
+		 * If <code>&lt;=0</code>, all rows should be returned.
 		 * @return This object (for method chaining).
 		 */
 		public Builder limit(int limit) {
@@ -279,7 +280,7 @@ public class SearchArgs {
 	 * The first-row position.
 	 *
 	 * @return The zero-indexed row number of the first row to display.
-	 * 	Default is <code>0</code>
+	 * Default is <code>0</code>
 	 */
 	public int getPosition() {
 		return position;
@@ -289,7 +290,7 @@ public class SearchArgs {
 	 * The number of rows to return.
 	 *
 	 * @return The number of rows to return in the result.
-	 * 	Default is <code>0</code> which means return all rows.
+	 * Default is <code>0</code> which means return all rows.
 	 */
 	public int getLimit() {
 		return limit;
@@ -301,7 +302,7 @@ public class SearchArgs {
 	 * Used in conjunction with {@link #getSearch()} to specify whether case-insensitive searches should be performed.
 	 *
 	 * @return The number of rows to return in the result.
-	 * 	Default is <jk>false</jk>.
+	 * Default is <jk>false</jk>.
 	 */
 	public boolean isIgnoreCase() {
 		return ignoreCase;

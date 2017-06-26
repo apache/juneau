@@ -56,9 +56,12 @@ public class ParserSession extends BeanSession {
 	 * 	<li><jk>null</jk>
 	 * 	<li>{@link Reader}
 	 * 	<li>{@link CharSequence}
-	 * 	<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
-	 * 	<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
-	 * 	<li>{@link File} containing system encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_fileCharset}).
+	 * 	<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
+	 * 		{@link ParserContext#PARSER_inputStreamCharset}).
+	 * 	<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
+	 * 		{@link ParserContext#PARSER_inputStreamCharset}).
+	 * 	<li>{@link File} containing system encoded text (or whatever the encoding specified by
+	 * 		{@link ParserContext#PARSER_fileCharset}).
 	 * </ul>
 	 * <br>For byte-based parsers, this can be any of the following types:
 	 * <ul>
@@ -67,6 +70,7 @@ public class ParserSession extends BeanSession {
 	 * 	<li><code><jk>byte</jk>[]</code>
 	 * 	<li>{@link File}
 	 * </ul>
+	 *
 	 * @param op The override properties.
 	 * These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
@@ -77,7 +81,8 @@ public class ParserSession extends BeanSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale,
+			TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, locale, timeZone, mediaType);
 		Class<?> listenerClass;
 		if (op == null || op.isEmpty()) {
@@ -167,9 +172,17 @@ public class ParserSession extends BeanSession {
 			return reader;
 		}
 		if (input instanceof InputStream || input instanceof byte[]) {
-			InputStream is = (input instanceof InputStream ? (InputStream)input : new ByteArrayInputStream((byte[])input));
+			InputStream is = (
+				input instanceof InputStream
+				? (InputStream)input
+				: new ByteArrayInputStream((byte[])input)
+			);
 			if (noCloseReader == null) {
-				CharsetDecoder cd = ("default".equalsIgnoreCase(inputStreamCharset) ? Charset.defaultCharset() : Charset.forName(inputStreamCharset)).newDecoder();
+				CharsetDecoder cd = (
+					"default".equalsIgnoreCase(inputStreamCharset)
+					? Charset.defaultCharset()
+					: Charset.forName(inputStreamCharset)
+				).newDecoder();
 				if (strict) {
 					cd.onMalformedInput(CodingErrorAction.REPORT);
 					cd.onUnmappableCharacter(CodingErrorAction.REPORT);
@@ -187,7 +200,11 @@ public class ParserSession extends BeanSession {
 		}
 		if (input instanceof File) {
 			if (reader == null) {
-				CharsetDecoder cd = ("default".equalsIgnoreCase(fileCharset) ? Charset.defaultCharset() : Charset.forName(fileCharset)).newDecoder();
+				CharsetDecoder cd = (
+					"default".equalsIgnoreCase(fileCharset)
+					? Charset.defaultCharset()
+					: Charset.forName(fileCharset)
+				).newDecoder();
 				if (strict) {
 					cd.onMalformedInput(CodingErrorAction.REPORT);
 					cd.onUnmappableCharacter(CodingErrorAction.REPORT);
@@ -253,6 +270,7 @@ public class ParserSession extends BeanSession {
 
 	/**
 	 * Sets the current bean property being parsed for proper error messages.
+	 *
 	 * @param currentProperty The current property being parsed.
 	 */
 	public void setCurrentProperty(BeanPropertyMeta currentProperty) {
@@ -261,6 +279,7 @@ public class ParserSession extends BeanSession {
 
 	/**
 	 * Sets the current class being parsed for proper error messages.
+	 *
 	 * @param currentClass The current class being parsed.
 	 */
 	public void setCurrentClass(ClassMeta<?> currentClass) {
@@ -289,7 +308,7 @@ public class ParserSession extends BeanSession {
 	 * Trims the specified object if it's a <code>String</code> and {@link #isTrimStrings()} returns <jk>true</jk>.
 	 *
 	 * @param o The object to trim.
-	 * @return The trimmmed string if it's a string.
+	 * @return The trimmed string if it's a string.
 	 */
 	@SuppressWarnings("unchecked")
 	public final <K> K trim(K o) {
@@ -312,14 +331,13 @@ public class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Converts the specified <code>ObjectMap</code> into a bean identified by the <js>"_type"</js>
-	 * property in the map.
+	 * Converts the specified <code>ObjectMap</code> into a bean identified by the <js>"_type"</js> property in the map.
 	 *
 	 * @param m The map to convert to a bean.
 	 * @param pMeta The current bean property being parsed.
 	 * @param eType The current expected type being parsed.
-	 * @return The converted bean, or the same map if the <js>"_type"</js> entry wasn't found
-	 * 	or didn't resolve to a bean.
+	 * @return The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a
+	 * bean.
 	 */
 	public final Object cast(ObjectMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 
@@ -390,16 +408,19 @@ public class ParserSession extends BeanSession {
 	 * @param line The line number where the property was found.  <code>-1</code> if line numbers are not available.
 	 * @param col The column number where the property was found.  <code>-1</code> if column numbers are not available.
 	 * @throws ParseException Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting
-	 * 	on this parser is <jk>false</jk>
+	 * on this parser is <jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
 	public <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
 		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
 		if (! isIgnoreUnknownBeanProperties())
-			throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
+			throw new ParseException(this,
+				"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName,
+				beanMap.getClassMeta());
 		if (listener != null)
-			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean(), line, col);
+			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean(),
+				line, col);
 	}
 
 	/**

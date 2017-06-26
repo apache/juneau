@@ -21,7 +21,8 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the request.
+ * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
+ * request.
  * <p>
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -31,7 +32,8 @@ import org.apache.juneau.urlencoding.*;
  * 		<jc>// Explicit names specified for form data parameters.</jc>
  * 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
- * 		String myProxyMethod1(<ja>@FormData</ja>(<js>"foo"</js>)</ja> String foo, <ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
+ * 		String myProxyMethod1(<ja>@FormData</ja>(<js>"foo"</js>)</ja> String foo,
+ * 			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
  *
  * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
  * 		<jc>// Same as @FormData("*").</jc>
@@ -54,7 +56,7 @@ import org.apache.juneau.urlencoding.*;
  * 		String myProxyMethod5(<ja>@FormData</ja> String string);
  *
  * 		<jc>// An entire form-data HTTP body as a Reader.</jc>
- * 		<jc>// Sames as @FormData("*").</jc>
+ * 		<jc>// Same as @FormData("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod6"</js>)
  * 		String myProxyMethod6(<ja>@FormData</ja> Reader reader);
  *
@@ -62,7 +64,7 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
- *  {@link RequestBean @RequestBean}:
+ * {@link RequestBean @RequestBean}:
  * <p>
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -112,8 +114,10 @@ import org.apache.juneau.urlencoding.*;
  * 	}
  * </p>
  * <p>
- * The {@link #name()} and {@link #value()} elements are synonyms for specifying the parameter name.  Only one should be used.
- * <br>The following annotations are fully equivalent:
+ * The {@link #name()} and {@link #value()} elements are synonyms for specifying the parameter name.
+ * Only one should be used.
+ * <br>
+ * The following annotations are fully equivalent:
  * <p>
  * <p class='bcode'>
  * 	<ja>@FormData</ja>(name=<js>"foo"</js>)
@@ -123,7 +127,8 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
+ * 		proxies against 3rd-party REST interfaces</a>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */
@@ -139,7 +144,7 @@ public @interface FormData {
 	 * Note that {@link #name()} and {@link #value()} are synonyms.
 	 * <p>
 	 * The value should be either <js>"*"</js> to represent multiple name/value pairs, or a label that defines the
-	 * 	form data parameter name.
+	 * form data parameter name.
 	 * <p>
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
@@ -198,7 +203,7 @@ public @interface FormData {
 	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
-	 * 	then on the client which by default is {@link UrlEncodingSerializer}.
+	 * then on the client which by default is {@link UrlEncodingSerializer}.
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */

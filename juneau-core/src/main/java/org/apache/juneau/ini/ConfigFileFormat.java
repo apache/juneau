@@ -18,6 +18,7 @@ import java.io.*;
  * Valid formats that can be passed to the {@link ConfigFile#serializeTo(Writer, ConfigFileFormat)} method.
  */
 public enum ConfigFileFormat {
+
 	/** Normal INI file format*/
 	INI,
 

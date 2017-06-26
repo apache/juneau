@@ -36,38 +36,42 @@ import org.apache.juneau.transform.*;
  * <h5 class='section'>Description:</h5>
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
- * 	time that it takes the built-in Java DOM parsers to parse equivalent XML.
+ * time that it takes the built-in Java DOM parsers to parse equivalent XML.
  * <p>
  * This parser handles all valid JSON syntax.
  * In addition, when strict mode is disable, the parser also handles the following:
- * 	<ul class='spaced-list'>
- * 		<li> Javascript comments (both {@code /*} and {@code //}) are ignored.
- * 		<li> Both single and double quoted strings.
- * 		<li> Automatically joins concatenated strings (e.g. <code><js>"aaa"</js> + <js>'bbb'</js></code>).
- * 		<li> Unquoted attributes.
- * 	</ul>
+ * <ul class='spaced-list'>
+ * 	<li> Javascript comments (both {@code /*} and {@code //}) are ignored.
+ * 	<li> Both single and double quoted strings.
+ * 	<li> Automatically joins concatenated strings (e.g. <code><js>"aaa"</js> + <js>'bbb'</js></code>).
+ * 	<li> Unquoted attributes.
+ * </ul>
  * Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
  * <p>
  * This parser handles the following input, and automatically returns the corresponding Java class.
- * 	<ul class='spaced-list'>
- * 		<li> JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.  <br>
- * 				<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an attempt is made to convert the object
- * 				to an instance of the specified Java bean class.  See the <code>beanTypeName</code> setting on the {@link PropertyStore} for more information
- * 				about parsing beans from JSON.
- * 		<li> JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
- * 		<li> JSON string literals (<js>"'xyz'"</js>) are converted to {@link String Strings}.
- * 		<li> JSON numbers (<js>"123"</js>, including octal/hexadecimal/exponential notation) are converted to {@link Integer Integers},
- * 				{@link Long Longs}, {@link Float Floats}, or {@link Double Doubles} depending on whether the number is decimal, and the size of the number.
- * 		<li> JSON booleans (<js>"false"</js>) are converted to {@link Boolean Booleans}.
- * 		<li> JSON nulls (<js>"null"</js>) are converted to <jk>null</jk>.
- * 		<li> Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
- * 	</ul>
- * <p>
- * Input can be any of the following:<br>
  * <ul class='spaced-list'>
- * 	<li> <js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa> attribute is present.
+ * 	<li> JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.  <br>
+ * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
+ * 		attempt is made to convert the object to an instance of the specified Java bean class.
+ * 		See the <code>beanTypeName</code> setting on the {@link PropertyStore} for more information about parsing
+ * 		beans from JSON.
+ * 	<li> JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
+ * 	<li> JSON string literals (<js>"'xyz'"</js>) are converted to {@link String Strings}.
+ * 	<li> JSON numbers (<js>"123"</js>, including octal/hexadecimal/exponential notation) are converted to
+ * 		{@link Integer Integers}, {@link Long Longs}, {@link Float Floats}, or {@link Double Doubles} depending on
+ * 		whether the number is decimal, and the size of the number.
+ * 	<li> JSON booleans (<js>"false"</js>) are converted to {@link Boolean Booleans}.
+ * 	<li> JSON nulls (<js>"null"</js>) are converted to <jk>null</jk>.
+ * 	<li> Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
+ * </ul>
+ * <p>
+ * Input can be any of the following:
+ * <ul class='spaced-list'>
+ * 	<li> <js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa>
+ * 		attribute is present.
  * 	<li> <js>"[...]"</js> - Converted to a {@link ObjectList}.
- * 	<li> <js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float}, or {@link Double}).
+ * 	<li> <js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float},
+ * 		or {@link Double}).
  * 	<li> <js>"true"</js>/<js>"false"</js> - Converted to a {@link Boolean}.
  * 	<li> <js>"null"</js> - Returns <jk>null</jk>.
  * 	<li> <js>"'xxx'"</js> - Converted to a {@link String}.
@@ -75,8 +79,10 @@ import org.apache.juneau.transform.*;
  * 	<li> <js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
  * </ul>
  * <p>
- * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)}
- * 	or {@link ObjectList#ObjectList(CharSequence) ObjectList(CharSequence)} constructors instead of using this class.  The end result should be the same.
+ * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the
+ * {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)} or {@link ObjectList#ObjectList(CharSequence)
+ * ObjectList(CharSequence)} constructors instead of using this class.
+ * The end result should be the same.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
@@ -103,6 +109,7 @@ public class JsonParser extends ReaderParser {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Strict(PropertyStore propertyStore) {
@@ -120,6 +127,7 @@ public class JsonParser extends ReaderParser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public JsonParser(PropertyStore propertyStore) {
@@ -132,7 +140,8 @@ public class JsonParser extends ReaderParser {
 		return new JsonParserBuilder(propertyStore);
 	}
 
-	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer,
+			BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -220,11 +229,13 @@ public class JsonParser extends ReaderParser {
 			if (m.containsKey(session.getBeanTypePropertyName(eType)))
 				o = session.cast((ObjectMap)m, pMeta, eType);
 			else
-				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+						sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && ! session.isStrict()) {
 			o = sType.newInstanceFromString(outer, parseString(session, r));
 		} else {
-			throw new ParseException(session, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
+			throw new ParseException(session, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''",
+				sType, (char)c);
 		}
 
 		if (wrapperAttr != null)
@@ -299,7 +310,8 @@ public class JsonParser extends ReaderParser {
 	}
 
 
-	private <K,V> Map<K,V> parseIntoMap2(JsonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap2(JsonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType,
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -401,7 +413,8 @@ public class JsonParser extends ReaderParser {
 		throw new ParseException(session, "Could not find the end of the field name.");
 	}
 
-	private <E> Collection<E> parseIntoCollection2(JsonParserSession session, ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection2(JsonParserSession session, ParserReader r, Collection<E> l,
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 
 		int S0=0; // Looking for outermost [
 		int S1=1; // Looking for starting [ or { or " or ' or LITERAL or ]
@@ -545,7 +558,11 @@ public class JsonParser extends ReaderParser {
 		r.mark();
 		int qc = r.read();		// The quote character being used (" or ')
 		if (qc != '"' && session.isStrict()) {
-			String msg = (qc == '\'' ? "Invalid quote character \"{0}\" being used." : "Did not find quote character marking beginning of string.  Character=\"{0}\"");
+			String msg = (
+				qc == '\''
+				? "Invalid quote character \"{0}\" being used."
+				: "Did not find quote character marking beginning of string.  Character=\"{0}\""
+			);
 			throw new ParseException(session, msg, (char)qc);
 		}
 		final boolean isQuoted = (qc == '\'' || qc == '"');
@@ -679,7 +696,8 @@ public class JsonParser extends ReaderParser {
 				} else {
 					currAttr = parseFieldName(session, r.unread());
 					if (! currAttr.equals(wrapperAttr))
-						throw new ParseException(session, "Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
+						throw new ParseException(session,
+							"Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
 					state = S3;
 				}
 			} else if (state == S3) {
@@ -765,7 +783,8 @@ public class JsonParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public JsonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public JsonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale,
+			TimeZone timeZone, MediaType mediaType) {
 		return new JsonParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 

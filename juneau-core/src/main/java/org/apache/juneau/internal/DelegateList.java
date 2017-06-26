@@ -17,8 +17,8 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * Represents a wrapped {@link Collection} where entries in the list can be removed or reordered without
- * 	affecting the underlying list.
+ * Represents a wrapped {@link Collection} where entries in the list can be removed or reordered without affecting the
+ * underlying list.
  *
  * @param <T> The class type of the wrapped bean.
  */

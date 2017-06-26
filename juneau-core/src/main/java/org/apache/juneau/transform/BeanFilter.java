@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
  * Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
- * 	the ability to annotate those classes (e.g. you don't have access to the source code).
+ * the ability to annotate those classes (e.g. you don't have access to the source code).
  */
 public class BeanFilter {
 
@@ -48,11 +48,15 @@ public class BeanFilter {
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
 		this.propertyNamer = builder.propertyNamer;
-		this.beanDictionary = builder.beanDictionary == null ? null : builder.beanDictionary.toArray(new Class<?>[builder.beanDictionary.size()]);
+		this.beanDictionary =
+			builder.beanDictionary == null
+			? null
+			: builder.beanDictionary.toArray(new Class<?>[builder.beanDictionary.size()]);
 	}
 
 	/**
 	 * Returns the bean class that this filter applies to.
+	 *
 	 * @return The bean class that this filter applies to.
 	 */
 	public Class<?> getBeanClass() {
@@ -70,7 +74,9 @@ public class BeanFilter {
 
 	/**
 	 * Returns the set and order of names of properties associated with a bean class.
-	 * @return The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should be used.
+	 *
+	 * @return The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should
+	 * be used.
 	 */
 	public String[] getProperties() {
 		return properties;
@@ -134,8 +140,7 @@ public class BeanFilter {
 	}
 
 	/**
-	 * Subclasses can override this property to convert property values to some other
-	 * 	object just before serialization.
+	 * Subclasses can override this property to convert property values to some other object just before serialization.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
@@ -147,14 +152,13 @@ public class BeanFilter {
 	}
 
 	/**
-	 * Subclasses can override this property to convert property values to some other
-	 * 	object just before calling the bean setter.
+	 * Subclasses can override this property to convert property values to some other object just before calling the
+	 * bean setter.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
 	 * @param value The value just parsed.
-	 * @return <jk>true</jk> if we set the property, <jk>false</jk> if we should allow the
-	 * 	framework to call the setter.
+	 * @return <jk>true</jk> if we set the property, <jk>false</jk> if we should allow the framework to call the setter.
 	 */
 	public boolean writeProperty(Object bean, String name, Object value) {
 		return false;

@@ -32,6 +32,7 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public CsvSerializerBuilder(PropertyStore propertyStore) {

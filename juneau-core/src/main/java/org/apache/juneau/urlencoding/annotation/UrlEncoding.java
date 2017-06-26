@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Annotation that can be applied to classes, fields, and methods to tweak how
- * they are handled by {@link UrlEncodingSerializer} and {@link UrlEncodingParser}.
+ * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by
+ * {@link UrlEncodingSerializer} and {@link UrlEncodingParser}.
  */
 @Documented
 @Target({TYPE})
@@ -30,7 +30,7 @@ import org.apache.juneau.urlencoding.*;
 public @interface UrlEncoding {
 
 	/**
-	 * When true, bean properties of type array or Collection will be expanded into multiple key=value pairings.
+	 * When true, bean properties of type array or Collection will be expanded into multiple key/value pairings.
 	 * <p>
 	 * This annotation is identical in behavior to using the {@link UrlEncodingContext#URLENC_expandedParams}
 	 * property, but applies to only instances of this bean.

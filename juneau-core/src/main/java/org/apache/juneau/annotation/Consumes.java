@@ -26,10 +26,9 @@ import org.apache.juneau.parser.*;
  * <p>
  * Provides a way to define the contents of {@link Parser#getMediaTypes()} through an annotation.
  * <p>
- * The {@link Parser#getMediaTypes()} default implementation gathers the media types by looking
- * 	for this annotation.
- * It should be noted that this annotation is optional and that the {@link Parser#getMediaTypes()} method can
- * 	be overridden by subclasses to return the media types programmatically.
+ * The {@link Parser#getMediaTypes()} default implementation gathers the media types by looking for this annotation.
+ * It should be noted that this annotation is optional and that the {@link Parser#getMediaTypes()} method can be
+ * overridden by subclasses to return the media types programmatically.
  *
  * <h5 class='section'>Example:</h5>
  * <p>
@@ -61,7 +60,8 @@ public @interface Consumes {
 	 * A comma-delimited list of media types that the parser can handle.
 	 * <p>
 	 * Can contain meta-characters per the <code>media-type</code> specification of
-	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 *
 	 * @return The media types that the parser can handle.
 	 */
 	String value() default "";

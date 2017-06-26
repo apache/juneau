@@ -75,7 +75,8 @@ public final class ConfigFileImpl extends ConfigFile {
 	 * If <jk>null</jk>, defaults to {@link Charset#defaultCharset()}.
 	 * @throws IOException
 	 */
-	public ConfigFileImpl(File file, boolean readOnly, Encoder encoder, WriterSerializer serializer, ReaderParser parser, Charset charset) throws IOException {
+	public ConfigFileImpl(File file, boolean readOnly, Encoder encoder, WriterSerializer serializer, ReaderParser parser,
+			Charset charset) throws IOException {
 		this.file = file;
 		this.encoder = encoder == null ? XorEncoder.INSTANCE : encoder;
 		this.serializer = serializer == null ? JsonSerializer.DEFAULT : serializer;
@@ -93,7 +94,8 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	/**
 	 * Constructor.
-	 * Shortcut for calling <code><jk>new</jk> ConfigFileImpl(file, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>);</code>
+	 * Shortcut for calling <code><jk>new</jk> ConfigFileImpl(file, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>,
+	 * <jk>null</jk>, <jk>null</jk>);</code>
 	 *
 	 * @param file The config file.  Does not need to exist.
 	 * @throws IOException
@@ -104,7 +106,8 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	/**
 	 * Constructor.
-	 * Shortcut for calling <code><jk>new</jk> ConfigFileImpl(<jk>null</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>);</code>
+	 * Shortcut for calling <code><jk>new</jk> ConfigFileImpl(<jk>null</jk>, <jk>false</jk>, <jk>null</jk>,
+	 * <jk>null</jk>, <jk>null</jk>, <jk>null</jk>);</code>
 	 *
 	 * @throws IOException
 	 */
@@ -483,7 +486,8 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	@SuppressWarnings("hiding")
 	@Override /* ConfigFile */
-	public String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded, boolean newline) throws SerializeException {
+	public String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded,
+			boolean newline) throws SerializeException {
 		assertFieldNotNull(sectionKey, "sectionKey");
 		Section s = getSection(sectionName, true);
 		return s.put(sectionKey, serialize(value, serializer, newline), encoded);
@@ -759,7 +763,8 @@ public final class ConfigFileImpl extends ConfigFile {
 	public ConfigFile getResolving() {
 		return getResolving(
 			new VarResolverBuilder()
-				.vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class, ConfigFileVar.class,IfVar.class,SwitchVar.class)
+				.vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class, ConfigFileVar.class,
+					IfVar.class, SwitchVar.class)
 				.contextObject(ConfigFileVar.SESSION_config, this)
 				.build()
 		);

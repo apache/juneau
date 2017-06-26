@@ -32,6 +32,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public JsonSchemaSerializerBuilder(PropertyStore propertyStore) {

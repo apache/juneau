@@ -121,8 +121,8 @@ public class FileUtils {
 	/**
 	 * Create a temporary file with the specified name.
 	 * <p>
-	 * The name is broken into file name and suffix, and the parts
-	 * are passed to {@link File#createTempFile(String, String)}.
+	 * The name is broken into file name and suffix, and the parts are passed to
+	 * {@link File#createTempFile(String, String)}.
 	 * <p>
 	 * {@link File#deleteOnExit()} is called on the resulting file before being returned by this method.
 	 *
@@ -170,7 +170,8 @@ public class FileUtils {
 	/**
 	 * Returns the candidate file names for the specified file name in the specified locale.
 	 * <p>
-	 * For example, if looking for the <js>"MyResource.txt"</js> file in the Japanese locale, the iterator will return names in the following order:
+	 * For example, if looking for the <js>"MyResource.txt"</js> file in the Japanese locale, the iterator will return
+	 * names in the following order:
 	 * <ol>
 	 * 	<li><js>"MyResource_ja_JP.txt"</js>
 	 * 	<li><js>"MyResource_ja.txt"</js>

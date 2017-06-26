@@ -19,12 +19,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-area-element">&lt;area&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/embedded-content-0.html#the-area-element">&lt;area&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -36,6 +38,7 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.
 	 * Replacement text for use when images are not available.
+	 *
 	 * @param alt The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -45,8 +48,10 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-coords">coords</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-coords">coords</a>
+	 * attribute.
 	 * Coordinates for the shape to be created in an image map.
+	 *
 	 * @param coords The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -58,6 +63,7 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
+	 *
 	 * @param download The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -88,6 +94,7 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
 	 * Language of the linked resource.
+	 *
 	 * @param hreflang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -99,6 +106,7 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
 	 * Relationship between the document containing the hyperlink and the destination resource.
+	 *
 	 * @param rel The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -110,6 +118,7 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
 	 * The kind of shape to be created in an image map.
+	 *
 	 * @param shape The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -121,6 +130,7 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
 	 * Browsing context for hyperlink navigation.
+	 *
 	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -132,6 +142,7 @@ public class Area extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
 	 * Hint for the type of the referenced resource.
+	 *
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

@@ -29,33 +29,30 @@ public @interface XmlSchema {
 	/**
 	 * Sets the default XML prefix for all classes in this and child packages.
 	 * <p>
-	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #xmlNs()} mapping with the
-	 * 	same {@link XmlNs#prefix} value.
-	 * </p>
+	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #xmlNs()} mapping with the same
+	 * {@link XmlNs#prefix} value.
 	 */
 	public String prefix() default "";
 
 	/**
 	 * Sets the default XML namespace URL for all classes in this and child packages.
 	 * <p>
-	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #xmlNs()} mapping with the
-	 * 	same {@link XmlNs#namespaceURI} value.
-	 * </p>
+	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #xmlNs()} mapping with the same
+	 * {@link XmlNs#namespaceURI} value.
 	 */
 	public String namespace() default "";
 
 	/**
 	 * Lists all namespace mappings to be used on all classes within this package.
 	 * <p>
-	 * The purpose of this annotation is to allow namespace mappings to be defined in a single location
-	 * 	and referred to by name through just the {@link Xml#prefix()} annotation.
+	 * The purpose of this annotation is to allow namespace mappings to be defined in a single location and referred
+	 * to by name through just the {@link Xml#prefix()} annotation.
 	 * <p>
 	 * Inherited by child packages.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * Contents of <code>package-info.java</code>...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<jc>// XML namespaces used within this package.</jc>
 	 * 	<ja>@XmlSchema</ja>(prefix=<js>"ab"</js>,
@@ -71,7 +68,6 @@ public @interface XmlSchema {
 	 * </p>
 	 * <p>
 	 * Class in package using defined namespaces...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> corg.apache.juneau.examples.addressbook;
 	 *

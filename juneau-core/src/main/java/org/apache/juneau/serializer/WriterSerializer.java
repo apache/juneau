@@ -38,12 +38,13 @@ import org.apache.juneau.utils.*;
  * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
  * <p>
  * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
- * 	and {@link #getResponseContentType()} methods.
+ * and {@link #getResponseContentType()} methods.
  */
 public abstract class WriterSerializer extends Serializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	protected WriterSerializer(PropertyStore propertyStore) {

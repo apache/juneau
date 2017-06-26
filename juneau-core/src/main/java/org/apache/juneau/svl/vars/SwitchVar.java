@@ -30,7 +30,8 @@ import org.apache.juneau.svl.*;
  * 	<li>...
  * </ul>
  * <p>
- * The pattern can be any string optionally containing <js>'*'</js> or <js>'?'</js> representing any or one character respectively.
+ * The pattern can be any string optionally containing <js>'*'</js> or <js>'?'</js> representing any or one character
+ * respectively.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

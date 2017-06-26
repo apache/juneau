@@ -119,7 +119,7 @@ public class IOPipe {
 	}
 
 	/**
-	 * Sames as calling {@link #byLines()} with <jk>true</jk>.
+	 * Same as calling {@link #byLines()} with <jk>true</jk>.
 	 *
 	 * @return This object (for method chaining).
 	 */

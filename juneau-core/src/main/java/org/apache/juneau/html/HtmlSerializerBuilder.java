@@ -35,6 +35,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public HtmlSerializerBuilder(PropertyStore propertyStore) {
@@ -62,15 +63,17 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * </ul>
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
-	 * 	in HTML, this setting defines what to set the inner text to.
+	 * in HTML, this setting defines what to set the inner text to.
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link HtmlSerializerContext#TO_STRING} / <js>"toString"</js> - Set to whatever is returned by {@link #toString()} on the object.
+	 * 	<li>{@link HtmlSerializerContext#TO_STRING} / <js>"toString"</js> - Set to whatever is returned by
+	 * 		{@link #toString()} on the object.
 	 * 	<li>{@link HtmlSerializerContext#URI} / <js>"uri"</js> - Set to the URI value.
 	 * 	<li>{@link HtmlSerializerContext#LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
 	 * 	<li>{@link HtmlSerializerContext#PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
-	 * 	<li>{@link HtmlSerializerContext#URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.  (e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
+	 * 	<li>{@link HtmlSerializerContext#URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
+	 * 		(e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
 	 * </ul>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
@@ -143,7 +146,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  The parameter name to use when using {@link HtmlSerializerContext#HTML_lookForLabelParameters}.
+	 * <b>Configuration property:</b>  The parameter name to use when using
+	 * {@link HtmlSerializerContext#HTML_lookForLabelParameters}.
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>

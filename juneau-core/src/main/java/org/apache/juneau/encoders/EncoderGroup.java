@@ -35,8 +35,8 @@ import org.apache.juneau.http.*;
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous encoders to be overridden through subsequent calls.
  * <p>
- * For example, calling <code>groupBuilder.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,E4.<jk>class</jk>)</code>
- * 	will result in the order <code>E3, E4, E1, E2</code>.
+ * For example, calling <code>groupBuilder.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,
+ * 	E4.<jk>class</jk>)</code> will result in the order <code>E3, E4, E1, E2</code>.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

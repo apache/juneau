@@ -32,6 +32,7 @@ public class JsoParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public JsoParserBuilder(PropertyStore propertyStore) {

@@ -25,9 +25,11 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic'>Inherited configurable properties</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
+ * 		- Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
+ * 		- Configurable properties common to all serializers.
  * 	</ul>
  * </ul>
  */

@@ -19,12 +19,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a> element.
+ * DTO for an HTML <a class="doclink"
+ * href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a> element.
  * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
  * 	</ul>
@@ -36,6 +38,7 @@ public class Script extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-async">async</a> attribute.
 	 * Execute script asynchronously.
+	 *
 	 * @param async The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -48,6 +51,7 @@ public class Script extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-charset">charset</a> attribute.
 	 * Character encoding of the external script resource.
+	 *
 	 * @param charset The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -57,8 +61,10 @@ public class Script extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-crossorigin">crossorigin</a> attribute.
-	 * How the element handles crossorigin requests.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-crossorigin">crossorigin</a>
+	 * attribute.
+	 * How the element handles cross-origin requests.
+	 *
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -70,6 +76,7 @@ public class Script extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-defer">defer</a> attribute.
 	 * Defer script execution.
+	 *
 	 * @param defer The new value for this attribute.
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -100,6 +107,7 @@ public class Script extends HtmlElementRawText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-type">type</a> attribute.
 	 * Type of embedded resource.
+	 *
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */

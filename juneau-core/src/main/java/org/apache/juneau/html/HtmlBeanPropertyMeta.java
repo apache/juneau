@@ -17,7 +17,8 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the bean property.
+ * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html}
+ * annotation on the bean property.
  */
 @SuppressWarnings("rawtypes")
 public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
@@ -85,7 +86,8 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns whether this bean property should be serialized as plain text instead of HTML.
 	 *
-	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#asPlainText()} is <jk>true</jk>.
+	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#asPlainText()} is
+	 * <jk>true</jk>.
 	 */
 	protected boolean isAsPlainText() {
 		return asPlainText;
@@ -94,7 +96,8 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns whether this bean property should not be serialized as an HTML table.
 	 *
-	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTables()} is <jk>true</jk>.
+	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTables()} is
+	 * <jk>true</jk>.
 	 */
 	protected boolean isNoTables() {
 		return noTables;
@@ -103,7 +106,8 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns whether this bean property should not include table headers when serialized as an HTML table.
 	 *
-	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTableHeaders()} is <jk>true</jk>.
+	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTableHeaders()} is
+	 * <jk>true</jk>.
 	 */
 	public boolean isNoTableHeaders() {
 		return noTableHeaders;

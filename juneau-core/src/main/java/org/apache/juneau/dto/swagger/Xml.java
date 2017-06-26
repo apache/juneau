@@ -17,11 +17,13 @@ import org.apache.juneau.annotation.*;
 /**
  * A metadata object that allows for more fine-tuned XML model definitions.
  * <p>
- * When using arrays, XML element names are not inferred (for singular/plural forms) and the name property should be used to add that information.
+ * When using arrays, XML element names are not inferred (for singular/plural forms) and the name property should be
+ * used to add that information.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -42,8 +44,10 @@ public class Xml extends SwaggerElement {
 	 * Bean property getter:  <property>name</property>.
 	 * <p>
 	 * Replaces the name of the element/attribute used for the described schema property.
-	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements within the list.
-	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the wrapping element and only if wrapped is <jk>true</jk>.
+	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
+	 * within the list.
+	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
+	 * wrapping element and only if wrapped is <jk>true</jk>.
 	 * If wrapped is <jk>false</jk>, it will be ignored.
 	 *
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -56,8 +60,10 @@ public class Xml extends SwaggerElement {
 	 * Bean property setter:  <property>name</property>.
 	 * <p>
 	 * Replaces the name of the element/attribute used for the described schema property.
-	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements within the list.
-	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the wrapping element and only if wrapped is <jk>true</jk>.
+	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
+	 * within the list.
+	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
+	 * wrapping element and only if wrapped is <jk>true</jk>.
 	 * If wrapped is <jk>false</jk>, it will be ignored.
 	 *
 	 * @param name The new value for the <property>name</property> property on this bean.
@@ -149,7 +155,8 @@ public class Xml extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>attribute</property>.
 	 * <p>
-	 * Declares whether the property definition translates to an attribute instead of an element. Default value is <jk>false</jk>.
+	 * Declares whether the property definition translates to an attribute instead of an element.
+	 * Default value is <jk>false</jk>.
 	 *
 	 * @return The value of the <property>attribute</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -160,7 +167,8 @@ public class Xml extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>attribute</property>.
 	 * <p>
-	 * Declares whether the property definition translates to an attribute instead of an element. Default value is <jk>false</jk>.
+	 * Declares whether the property definition translates to an attribute instead of an element.
+	 * Default value is <jk>false</jk>.
 	 *
 	 * @param attribute The new value for the <property>attribute</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -184,9 +192,12 @@ public class Xml extends SwaggerElement {
 	 * Bean property getter:  <property>wrapped</property>.
 	 * <p>
 	 * MAY be used only for an array definition.
-	 * Signifies whether the array is wrapped (for example, <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped (<code>&lt;book/&gt;&lt;book/&gt;</code>).
+	 * Signifies whether the array is wrapped (for example,
+	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
+	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
 	 * Default value is <jk>false</jk>.
-	 * The definition takes effect only when defined alongside <code>type</code> being <code>array</code> (outside the <code>items</code>).
+	 * The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
+	 * (outside the <code>items</code>).
 	 *
 	 * @return The value of the <property>wrapped</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -198,9 +209,12 @@ public class Xml extends SwaggerElement {
 	 * Bean property setter:  <property>wrapped</property>.
 	 * <p>
 	 * MAY be used only for an array definition.
-	 * Signifies whether the array is wrapped (for example, <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped (<code>&lt;book/&gt;&lt;book/&gt;</code>).
+	 * Signifies whether the array is wrapped (for example,
+	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
+	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
 	 * Default value is <jk>false</jk>.
-	 * The definition takes effect only when defined alongside <code>type</code> being <code>array</code> (outside the <code>items</code>).
+	 * The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
+	 * (outside the <code>items</code>).
 	 *
 	 * @param wrapped The new value for the <property>wrapped</property> property on this bean.
 	 * @return This object (for method chaining).

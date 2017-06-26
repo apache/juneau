@@ -25,7 +25,8 @@ import org.apache.juneau.internal.*;
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
 public class HeaderDate {
@@ -35,6 +36,7 @@ public class HeaderDate {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param raw The raw header value.
 	 */
 	protected HeaderDate(String raw) {
@@ -44,6 +46,7 @@ public class HeaderDate {
 
 	/**
 	 * Returns this header value as a {@link java.util.Date}.
+	 *
 	 * @return This header value as a {@link java.util.Date}, or <jk>null</jk> if the header could not be parsed.
 	 */
 	public java.util.Date asDate() {

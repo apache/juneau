@@ -36,6 +36,7 @@ public abstract class InputStreamParser extends Parser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	protected InputStreamParser(PropertyStore propertyStore) {

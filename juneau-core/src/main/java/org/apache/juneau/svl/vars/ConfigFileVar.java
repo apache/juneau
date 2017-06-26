@@ -22,7 +22,7 @@ import org.apache.juneau.svl.*;
  * See {@link ConfigFile#getString(String)} for the format of the key.
  * <p>
  * This variable resolver requires that a {@link ConfigFile} object be set as a context object on the resolver or a
- * 	session object on the resolver session.
+ * session object on the resolver session.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -30,7 +30,8 @@ import org.apache.juneau.svl.*;
  * 	ConfigFile configFile = new ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
  *
  * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<js>class</js>).addContextObject(<jsf>SESSION_config</jsf>, configFile);
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<js>class</js>)
+ * 		.addContextObject(<jsf>SESSION_config</jsf>, configFile);
  *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));

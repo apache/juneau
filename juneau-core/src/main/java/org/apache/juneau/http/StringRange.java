@@ -30,7 +30,8 @@ import org.apache.juneau.internal.*;
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
 @BeanIgnore
@@ -45,7 +46,8 @@ public final class StringRange implements Comparable<StringRange>  {
 	/**
 	 * Parses a header such as an <code>Accept-Encoding</code> header value into an array of type ranges.
 	 * <p>
-	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in RFC2616, Section 14.1, as described below:
+	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
+	 * RFC2616, Section 14.1, as described below:
 	 * <p class='bcode'>
 	 * 	Accept-Encoding  = "Accept-Encoding" ":"
 	 * 	                   1#( codings [ ";" "q" "=" qvalue ] )
@@ -61,9 +63,11 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * 	Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
 	 * </p>
 	 *
-	 * @param value The value to parse.  If <jk>null</jk> or empty, returns a single <code>TypeRange</code> is returned that represents all types.
+	 * @param value The value to parse.  If <jk>null</jk> or empty, returns a single <code>TypeRange</code> is returned
+	 * that represents all types.
 	 * @return The type ranges described by the string.
-	 * <br>The ranges are sorted such that the most acceptable type is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
+	 * <br>The ranges are sorted such that the most acceptable type is available at ordinal position <js>'0'</js>, and
+	 * the least acceptable at position n-1.
 	 */
 	public static StringRange[] parse(String value) {
 
@@ -159,8 +163,8 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * <p>
 	 * The quality value is a float between <code>0.0</code> (unacceptable) and <code>1.0</code> (most acceptable).
 	 * <p>
-	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js> header, as opposed to <js>"accept-*"</js>
-	 * header, its value will always be <js>"1"</js>.
+	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
+	 * header, as opposed to <js>"accept-*"</js> header, its value will always be <js>"1"</js>.
 	 *
 	 * @return The 'q' value for this type, never <jk>null</jk>.
 	 */
@@ -212,7 +216,8 @@ public final class StringRange implements Comparable<StringRange>  {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is also a <code>MediaType</code>, and has the same qValue, type, parameters, and extensions.
+	 * Returns <jk>true</jk> if the specified object is also a <code>MediaType</code>, and has the same qValue, type,
+	 * parameters, and extensions.
 	 *
 	 * @return <jk>true</jk> if object is equivalent.
 	 */
@@ -245,9 +250,10 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * Compares two MediaRanges for equality.
 	 * <p>
 	 * The values are first compared according to <code>qValue</code> values.
-	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in ascending order,
-	 * 	with the <js>"*"</js> type demoted last in that order.
-	 * <code>TypeRanges</code> with the same types but with extensions are promoted over those same types with no extensions.
+	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in
+	 * ascending order, with the <js>"*"</js> type demoted last in that order.
+	 * <code>TypeRanges</code> with the same types but with extensions are promoted over those same types with no
+	 * extensions.
 	 *
 	 * @param o The range to compare to.  Never <jk>null</jk>.
 	 */

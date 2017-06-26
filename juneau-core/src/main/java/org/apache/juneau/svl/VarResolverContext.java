@@ -32,6 +32,7 @@ public class VarResolverContext {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param vars The Var classes used for resolving string variables.
 	 * @param contextObjects Read-only context objects.
 	 */

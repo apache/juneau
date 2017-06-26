@@ -143,7 +143,8 @@ public class ObjectList extends LinkedList<Object> {
 			if (s != null)
 				p.parseIntoCollection(s, this, session.object());
 		} catch (ParseException e) {
-			throw new ParseException("Invalid input for {0} parser.\n---start---\n{1}\n---end---", p.getClass().getSimpleName(), s).initCause(e);
+			throw new ParseException("Invalid input for {0} parser.\n---start---\n{1}\n---end---",
+				p.getClass().getSimpleName(), s).initCause(e);
 		}
 	}
 
@@ -160,7 +161,8 @@ public class ObjectList extends LinkedList<Object> {
 	/**
 	 * Construct a JSON array directly from a reader using the specified parser.
 	 *
-	 * @param r The reader to read from.  Will automatically be wrapped in a {@link BufferedReader} if it isn't already a BufferedReader.
+	 * @param r The reader to read from.  Will automatically be wrapped in a {@link BufferedReader} if it isn't already
+	 * a BufferedReader.
 	 * @param p The parser to use to parse the input.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 * @throws IOException If a problem occurred trying to read from the reader.

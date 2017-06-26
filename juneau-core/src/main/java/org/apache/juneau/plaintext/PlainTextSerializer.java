@@ -30,7 +30,8 @@ import org.apache.juneau.transform.*;
  * <p>
  * Essentially converts POJOs to plain text using the <code>toString()</code> method.
  * <p>
- * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform defined on it.
+ * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;}
+ * transform defined on it.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
@@ -49,6 +50,7 @@ public class PlainTextSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public PlainTextSerializer(PropertyStore propertyStore) {

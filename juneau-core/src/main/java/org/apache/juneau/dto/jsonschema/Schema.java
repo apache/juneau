@@ -30,9 +30,11 @@ import org.apache.juneau.transform.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
- * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.JsonSchema'>JSON-Schema</a>
+ * 		<li class='sublink'><a class='doclink'
+ * 			href='../../../../../overview-summary.html#DTOs.JsonSchema'>JSON-Schema</a>
  * 	</ul>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
  * </ul>
@@ -228,7 +230,8 @@ public class Schema {
 	 * <p>
 	 * Convenience method for returning the <property>type</property> property when it is a {@link JsonType} value.
 	 *
-	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonTypeArray}.
+	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a
+	 * {@link JsonTypeArray}.
 	 */
 	@BeanIgnore
 	public JsonType getTypeAsJsonType() {
@@ -264,7 +267,9 @@ public class Schema {
 			else if (type instanceof JsonTypeArray)
 				this.typeJsonTypeArray = (JsonTypeArray)type;
 			else
-				throw new BeanRuntimeException(SchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", type.getClass().getName());
+				throw new BeanRuntimeException(SchemaProperty.class,
+					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray",
+					type.getClass().getName());
 		}
 		return this;
 	}
@@ -299,7 +304,11 @@ public class Schema {
 
 		@Override /* PojoSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (o instanceof Collection ? session.getClassMeta(JsonTypeArray.class) : session.getClassMeta(JsonType.class));
+			ClassMeta<?> cm = (
+				o instanceof Collection
+				? session.getClassMeta(JsonTypeArray.class)
+				: session.getClassMeta(JsonType.class)
+			);
 			return session.convertToType(o, cm);
 		}
 	}
@@ -307,7 +316,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>definitions</property>.
 	 *
-	 * @return The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Map<String,Schema> getDefinitions() {
 		return definitions;
@@ -364,9 +374,10 @@ public class Schema {
 	/**
 	 * Returns the property with the specified name.
 	 * If <property>resolve</property> is <jk>true</jk>, the property object will automatically be
-	 * 	resolved by calling {@link #resolve()}.
+	 * resolved by calling {@link #resolve()}.
 	 * Therefore, <property>getProperty(name, <jk>true</jk>)</property> is equivalent to calling
-	 * 	<property>getProperty(name).resolve()</property>, except it's safe from a potential <property>NullPointerException</property>.
+	 * <property>getProperty(name).resolve()</property>, except it's safe from a potential
+	 * <property>NullPointerException</property>.
 	 *
 	 * @param name The property name.
 	 * @param resolve If <jk>true</jk>, calls {@link #resolve()} on object before returning.
@@ -414,7 +425,8 @@ public class Schema {
 			this.properties = new LinkedHashMap<String,Schema>();
 		for (Schema p : properties) {
 			if (p.getName() == null)
-				throw new BeanRuntimeException(Schema.class, "Invalid property passed to Schema.addProperties().  Property name was null.");
+				throw new BeanRuntimeException(Schema.class,
+					"Invalid property passed to Schema.addProperties().  Property name was null.");
 			setMasterOn(p);
 			this.properties.put(p.getName(), p);
 		}
@@ -424,7 +436,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>patternProperties</property>.
 	 *
-	 * @return The value of the <property>patternProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>patternProperties</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Map<String,Schema> getPatternProperties() {
 		return patternProperties;
@@ -461,7 +474,8 @@ public class Schema {
 			this.patternProperties = new LinkedHashMap<String,Schema>();
 		for (Schema p : properties) {
 			if (p.getName() == null)
-				throw new BeanRuntimeException(Schema.class, "Invalid property passed to Schema.addProperties().  Property name was null.");
+				throw new BeanRuntimeException(Schema.class,
+					"Invalid property passed to Schema.addProperties().  Property name was null.");
 			setMasterOn(p);
 			this.patternProperties.put(p.getName(), p);
 		}
@@ -471,7 +485,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>dependencies</property>.
 	 *
-	 * @return The value of the <property>dependencies</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>dependencies</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Map<String,Schema> getDependencies() {
 		return dependencies;
@@ -559,7 +574,11 @@ public class Schema {
 
 		@Override /* PojoSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (o instanceof Collection ? session.getClassMeta(SchemaArray.class) : session.getClassMeta(Schema.class));
+			ClassMeta<?> cm = (
+				o instanceof Collection
+				? session.getClassMeta(SchemaArray.class)
+				: session.getClassMeta(Schema.class)
+			);
 			return session.convertToType(o, cm);
 		}
 	}
@@ -583,7 +602,9 @@ public class Schema {
 				this.itemsSchemaArray = (SchemaArray)items;
 				setMasterOn(this.itemsSchemaArray);
 			} else
-				throw new BeanRuntimeException(SchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Schema, SchemaArray", items.getClass().getName());
+				throw new BeanRuntimeException(SchemaProperty.class,
+					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Schema, SchemaArray",
+					items.getClass().getName());
 		}
 		return this;
 	}
@@ -645,7 +666,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Boolean isExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -685,7 +707,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Boolean isExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -765,7 +788,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalItems</property>.
 	 *
-	 * @return The value of the <property>additionalItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>additionalItems</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 * Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=BooleanOrSchemaArraySwap.class)
@@ -778,7 +802,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalItems</property>.
 	 * <p>
-	 * Convenience method for returning the <property>additionalItems</property> property when it is a {@link Boolean} value.
+	 * Convenience method for returning the <property>additionalItems</property> property when it is a {@link Boolean}
+	 * value.
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link SchemaArray}.
 	 */
@@ -790,7 +815,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalItems</property>.
 	 * <p>
-	 * Convenience method for returning the <property>additionalItems</property> property when it is a {@link SchemaArray} value.
+	 * Convenience method for returning the <property>additionalItems</property> property when it is a
+	 * {@link SchemaArray} value.
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
@@ -817,7 +843,9 @@ public class Schema {
 				this.additionalItemsSchemaArray = (SchemaArray)additionalItems;
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else
-				throw new BeanRuntimeException(SchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, SchemaArray", additionalItems.getClass().getName());
+				throw new BeanRuntimeException(SchemaProperty.class,
+					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, SchemaArray",
+					additionalItems.getClass().getName());
 		}
 		return this;
 	}
@@ -825,7 +853,8 @@ public class Schema {
 	/**
 	 * Bean property appender:  <property>additionalItems</property>.
 	 *
-	 * @param additionalItems The list of items to append to the <property>additionalItems</property> property on this bean.
+	 * @param additionalItems The list of items to append to the <property>additionalItems</property> property on this
+	 * bean.
 	 * @return This object (for method chaining).
 	 */
 	public Schema addAdditionalItems(Schema...additionalItems) {
@@ -853,7 +882,11 @@ public class Schema {
 
 		@Override /* PojoSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (o instanceof Collection ? session.getClassMeta(SchemaArray.class) : session.getClassMeta(Boolean.class));
+			ClassMeta<?> cm = (
+				o instanceof Collection
+				? session.getClassMeta(SchemaArray.class)
+				: session.getClassMeta(Boolean.class)
+			);
 			return session.convertToType(o, cm);
 		}
 	}
@@ -901,7 +934,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
-	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Boolean getUniqueItems() {
 		return uniqueItems;
@@ -921,7 +955,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>maxProperties</property>.
 	 *
-	 * @return The value of the <property>maxProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>maxProperties</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Integer getMaxProperties() {
 		return maxProperties;
@@ -941,7 +976,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>minProperties</property>.
 	 *
-	 * @return The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Integer getMinProperties() {
 		return minProperties;
@@ -1023,7 +1059,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
-	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it
+	 * is not set.
 	 * Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=BooleanOrSchemaSwap.class)
@@ -1036,7 +1073,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 * <p>
-	 * Convenience method for returning the <property>additionalProperties</property> property when it is a {@link Boolean} value.
+	 * Convenience method for returning the <property>additionalProperties</property> property when it is a
+	 * {@link Boolean} value.
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Schema}.
 	 */
@@ -1048,7 +1086,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 * <p>
-	 * Convenience method for returning the <property>additionalProperties</property> property when it is a {@link Schema} value.
+	 * Convenience method for returning the <property>additionalProperties</property> property when it is a
+	 * {@link Schema} value.
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
@@ -1076,7 +1115,9 @@ public class Schema {
 				this.additionalPropertiesSchema = (Schema)additionalProperties;
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
-				throw new BeanRuntimeException(SchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, Schema", additionalProperties.getClass().getName());
+				throw new BeanRuntimeException(SchemaProperty.class,
+					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, Schema",
+					additionalProperties.getClass().getName());
 		}
 		return this;
 	}
@@ -1098,7 +1139,11 @@ public class Schema {
 
 		@Override /* PojoSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (o instanceof Boolean ? session.getClassMeta(Boolean.class) : session.getClassMeta(Schema.class));
+			ClassMeta<?> cm = (
+				o instanceof Boolean
+				? session.getClassMeta(Boolean.class)
+				: session.getClassMeta(Schema.class)
+			);
 			return session.convertToType(o, cm);
 		}
 	}
@@ -1362,9 +1407,9 @@ public class Schema {
 	}
 	/**
 	 * If this schema is a reference to another schema (i.e. has its <property>$ref</property> property set),
-	 * 	this method will retrieve the referenced schema from the schema map registered with this schema.
+	 * this method will retrieve the referenced schema from the schema map registered with this schema.
 	 * If this schema is not a reference, or no schema map is registered with this schema, this method
-	 * 	is a no-op and simply returns this object.
+	 * is a no-op and simply returns this object.
 	 *
 	 * @return The referenced schema, or <jk>null</jk>.
 	 */
@@ -1376,7 +1421,7 @@ public class Schema {
 
 	/**
 	 * Associates a schema map with this schema for resolving other schemas identified
-	 * 	through <property>$ref</property> properties.
+	 * through <property>$ref</property> properties.
 	 *
 	 * @param schemaMap The schema map to associate with this schema.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).

@@ -145,7 +145,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
-	 * 	be instantiated within another class instance.
+	 * be instantiated within another class instance.
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param outer If class is a member class, this is the instance of the containing class.
@@ -162,129 +162,136 @@ public class BeanSession extends Session {
 	/**
 	 * Casts the specified value into the specified type.
 	 * <p>
-	 * If the value isn't an instance of the specified type, then converts
-	 * 	the value if possible.<br>
+	 * If the value isn't an instance of the specified type, then converts the value if possible.
 	 * <p>
 	 * The following conversions are valid:
-	 * 	<table class='styled'>
-	 * 		<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				A class that is the normal type of a registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>
-	 * 				A value whose class matches the transformed type of that registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				A class that is the transformed type of a registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>
-	 * 				A value whose class matches the normal type of that registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code Number} (e.g. {@code Integer}, {@code Short}, {@code Float},...)<br>
-	 * 				<code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>, <code>Short.<jsf>TYPE</jsf></code>, <code>Float.<jsf>TYPE</jsf></code>,...)
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Number}, {@code String}, <jk>null</jk>
-	 * 			</td>
-	 * 			<td>
-	 * 				For primitive {@code TYPES}, <jk>null</jk> returns the JVM default value for that type.
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code ObjectMap})
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Map}
-	 * 			</td>
-	 * 			<td>
-	 * 				If {@code Map} is not constructible, a {@code ObjectMap} is created.
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 			{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code ObjectList})
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Collection<Object>}<br>
-	 * 				{@code Object[]}
-	 * 			</td>
-	 * 			<td>
-	 * 				If {@code Collection} is not constructible, a {@code ObjectList} is created.
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code X[]} (array of any type X)<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code List<X>}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code X[][]} (multi-dimensional arrays)<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code List<List<X>>}<br>
-	 * 				{@code List<X[]>}<br>
-	 * 				{@code List[]<X>}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code Enum}<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code String}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				Bean<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Map}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code String}<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				Anything<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				Arrays are converted to JSON arrays<br>
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				Anything with one of the following methods:<br>
-	 * 				<code><jk>public static</jk> T fromString(String)</code><br>
-	 * 				<code><jk>public static</jk> T valueOf(String)</code><br>
-	 * 				<code><jk>public</jk> T(String)</code><br>
-	 * 			</td>
-	 * 			<td>
-	 * 				<code>String</code><br>
-	 * 			</td>
-	 * 			<td>
-	 * 				<br>
-	 * 			</td>
-	 * 		</tr>
-	 * 	</table>
+	 * <table class='styled'>
+	 * 	<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			A class that is the normal type of a registered {@link PojoSwap}.
+	 * 		</td>
+	 * 		<td>
+	 * 			A value whose class matches the transformed type of that registered {@link PojoSwap}.
+	 * 		</td>
+	 * 		<td>&nbsp;</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			A class that is the transformed type of a registered {@link PojoSwap}.
+	 * 		</td>
+	 * 		<td>
+	 * 			A value whose class matches the normal type of that registered {@link PojoSwap}.
+	 * 		</td>
+	 * 		<td>&nbsp;</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			{@code Number} (e.g. {@code Integer}, {@code Short}, {@code Float},...)
+	 * 			<br>
+	 * 			<code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>,
+	 * 			<code>Short.<jsf>TYPE</jsf></code>, <code>Float.<jsf>TYPE</jsf></code>,...)
+	 * 		</td>
+	 * 		<td>
+	 * 			{@code Number}, {@code String}, <jk>null</jk>
+	 * 		</td>
+	 * 		<td>
+	 * 			For primitive {@code TYPES}, <jk>null</jk> returns the JVM default value for that type.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code ObjectMap})
+	 * 		</td>
+	 * 		<td>
+	 * 			{@code Map}
+	 * 		</td>
+	 * 		<td>
+	 * 			If {@code Map} is not constructible, a {@code ObjectMap} is created.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 		{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code ObjectList})
+	 * 		</td>
+	 * 		<td>
+	 * 			{@code Collection<Object>}
+	 * 			<br>
+	 * 			{@code Object[]}
+	 * 		</td>
+	 * 		<td>
+	 * 			If {@code Collection} is not constructible, a {@code ObjectList} is created.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			{@code X[]} (array of any type X)
+	 * 		</td>
+	 * 		<td>
+	 * 			{@code List<X>}
+	 * 		</td>
+	 * 		<td>&nbsp;</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			{@code X[][]} (multi-dimensional arrays)
+	 * 		</td>
+	 * 		<td>
+	 * 			{@code List<List<X>>}
+	 * 			<br>
+	 * 			{@code List<X[]>}
+	 * 			<br>
+	 * 			{@code List[]<X>}
+	 * 		</td>
+	 *			<td>&nbsp;</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			{@code Enum}
+	 * 		</td>
+	 * 		<td>
+	 * 			{@code String}
+	 * 		</td>
+	 * 		<td>&nbsp;</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			Bean
+	 * 		</td>
+	 * 		<td>
+	 * 			{@code Map}
+	 * 		</td>
+	 * 		<td>&nbsp;</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			{@code String}
+	 * 		</td>
+	 * 		<td>
+	 * 			Anything
+	 * 		</td>
+	 * 		<td>
+	 * 			Arrays are converted to JSON arrays
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			Anything with one of the following methods:
+	 * 			<br>
+	 * 			<code><jk>public static</jk> T fromString(String)</code>
+	 * 			<br>
+	 * 			<code><jk>public static</jk> T valueOf(String)</code>
+	 * 			<br>
+	 * 			<code><jk>public</jk> T(String)</code>
+	 * 		</td>
+	 * 		<td>
+	 * 			<code>String</code>
+	 * 		</td>
+	 * 		<td>
+	 * 			<br>
+	 * 		</td>
+	 * 	</tr>
+	 *	</table>
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to be converted.
@@ -663,7 +670,8 @@ public class BeanSession extends Session {
 	/**
 	 * Wraps an object inside a {@link BeanMap} object (i.e. a modifiable {@link Map}).
 	 * <p>
-	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
+	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
+	 * bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -741,9 +749,11 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Creates a new {@link BeanMap} object (i.e. a modifiable {@link Map}) of the given class with uninitialized property values.
+	 * Creates a new {@link BeanMap} object (i.e. a modifiable {@link Map}) of the given class with uninitialized
+	 * property values.
 	 * <p>
-	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
+	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
+	 * bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -855,9 +865,11 @@ public class BeanSession extends Session {
 	 * Used to resolve <code>ClassMetas</code> of type <code>Collection</code> and <code>Map</code> that have
 	 * <code>ClassMeta</code> values that themselves could be collections or maps.
 	 * <p>
-	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the element type.
+	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the
+	 * element type.
 	 * <p>
-	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value
+	 * types.
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
@@ -866,17 +878,23 @@ public class BeanSession extends Session {
 	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
 	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
 	 * 	<li><code>getClassMeta(List.<jk>class</jk>, String.<jk>class</jk>);</code> - A list containing strings.
-	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing strings.
-	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing linked-lists of strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing
+	 * 		strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> -
+	 * 		A linked-list containing linked-lists of strings.
 	 * 	<li><code>getClassMeta(Map.<jk>class</jk>);</code> - A map containing object keys/values.
-	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map containing string keys/values.
-	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> - A map containing string keys and values of lists containing beans.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map
+	 * 		containing string keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> -
+	 * 		A map containing string keys and values of lists containing beans.
 	 * </ul>
 	 *
 	 * @param type The class to resolve.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The class meta.
 	 */

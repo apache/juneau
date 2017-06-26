@@ -17,8 +17,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.util.*;
 
 /**
- * Encapsulates multiple collections so they can be iterated over as if they
- * were all part of the same collection.
+ * Encapsulates multiple collections so they can be iterated over as if they were all part of the same collection.
  *
  * @param <E> The object type of this set.
  */

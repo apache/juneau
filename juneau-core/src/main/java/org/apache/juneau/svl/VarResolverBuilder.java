@@ -73,8 +73,8 @@ public class VarResolverBuilder {
 	/**
 	 * Associates a context object with this resolver.
 	 * <p>
-	 * A context object is essentially some environmental object that doesn't change
-	 * but is used by vars to customize output.
+	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
+	 * output.
 	 *
 	 * @param name The name of the context object.
 	 * @param object The context object.
@@ -88,8 +88,8 @@ public class VarResolverBuilder {
 	/**
 	 * Associates multiple context objects with this resolver.
 	 * <p>
-	 * A context object is essentially some environmental object that doesn't change
-	 * but is used by vars to customize output.
+	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
+	 * output.
 	 *
 	 * @param map A map of context objects keyed by their name.
 	 * @return This object (for method chaining).

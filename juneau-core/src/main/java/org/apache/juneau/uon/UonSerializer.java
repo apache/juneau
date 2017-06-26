@@ -35,7 +35,8 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
+ * This serializer provides several serialization options.
+ * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
  * <h5 class='section'>Configurable properties:</h5>
@@ -122,7 +123,8 @@ import org.apache.juneau.transform.*;
  * 		<jk>public int</jk> getZip();
  * 	}
  *
- * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12345, <jk>false</jk>);
+ * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>,
+ * 		<js>"NY"</js>, 12345, <jk>false</jk>);
  *
  * 	<jc>// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
@@ -147,6 +149,7 @@ public class UonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore propertyStore) {
@@ -166,6 +169,7 @@ public class UonSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Encoding(PropertyStore propertyStore) {
@@ -183,6 +187,7 @@ public class UonSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public UonSerializer(PropertyStore propertyStore) {
@@ -196,15 +201,16 @@ public class UonSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * Workhorse method. Determines the type of object, and then calls the
-	 * appropriate type-specific serialization method.
+	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization
+	 * method.
+	 *
 	 * @param session The context that exist for the duration of a serialize.
 	 * @param out The writer to serialize to.
 	 * @param o The object being serialized.
 	 * @param eType The expected type of the object if this is a bean property.
-	 * @param attrName The bean property name if this is a bean property.  <jk>null</jk> if this isn't a bean property being serialized.
+	 * @param attrName The bean property name if this is a bean property.
+	 * <jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
-	 *
 	 * @return The same writer passed in.
 	 * @throws Exception
 	 */
@@ -383,7 +389,8 @@ public class UonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public UonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new UonSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 

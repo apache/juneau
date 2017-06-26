@@ -18,7 +18,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Metadata on bean properties specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the bean property.
+ * Metadata on bean properties specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation
+ * on the bean property.
  */
 public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
@@ -61,8 +62,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * 	<li>{@link Xml#prefix()} annotation defined on bean interface packages.
 	 * </ol>
 	 *
-	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is
-	 * 	associated with it.
+	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	public Namespace getNamespace() {
 		return namespace;
@@ -105,7 +105,8 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 		String cen = xml.childName();
 		if ((! cen.isEmpty()) && (! isCollection))
-			throw new BeanRuntimeException(cmProperty.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);
+			throw new BeanRuntimeException(cmProperty.getInnerClass(),
+				"Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);
 
 		if (xmlFormat == XmlFormat.COLLAPSED) {
 			if (isCollection) {
@@ -116,7 +117,8 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 				if (cen == null || cen.isEmpty())
 					cen = name;
 			} else {
-				throw new BeanRuntimeException(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
+				throw new BeanRuntimeException(cmBean.getInnerClass(),
+					"Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
 			if (cen.isEmpty() && isCollection)
 				cen = cmProperty.getDictionaryName();

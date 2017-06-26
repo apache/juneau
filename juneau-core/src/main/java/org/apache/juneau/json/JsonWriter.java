@@ -55,6 +55,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace If <jk>true</jk>, tabs and spaces will be used in output.
 	 * @param maxIndent The maximum indentation level.
@@ -64,7 +65,8 @@ public final class JsonWriter extends SerializerWriter {
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, UriResolver uriResolver) {
+	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar,
+			boolean laxMode, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.laxMode = laxMode;
 		this.escapeSolidus = escapeSolidus;
@@ -73,6 +75,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Serializes the specified object as a JSON string value.
+	 *
 	 * @param s The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
@@ -119,6 +122,7 @@ public final class JsonWriter extends SerializerWriter {
 
 	/**
 	 * Serializes the specified object as a JSON attribute name.
+	 *
 	 * @param s The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.

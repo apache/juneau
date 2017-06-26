@@ -28,7 +28,8 @@ import org.apache.juneau.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -72,7 +73,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
+	 * details.
 	 *
 	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -83,7 +85,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>format</property>.
 	 * <p>
-	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
+	 * details.
 	 *
 	 * @param format The new value for the <property>format</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -136,7 +139,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>description</property>.
 	 * <p>
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
+	 * for rich text representation.
 	 *
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -147,7 +151,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>description</property>.
 	 * <p>
-	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
+	 * for rich text representation.
 	 *
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -264,7 +269,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Boolean getExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -324,7 +330,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Boolean getExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -504,7 +511,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
-	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public Boolean getUniqueItems() {
 		return uniqueItems;
@@ -533,7 +541,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maxProperties</property>.
 	 *
-	 * @return The value of the <property>maxProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>maxProperties</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Integer getMaxProperties() {
 		return maxProperties;
@@ -563,7 +572,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minProperties</property>.
 	 *
-	 * @return The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public Integer getMinProperties() {
 		return minProperties;
@@ -839,7 +849,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
-	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it
+	 * is not set.
 	 */
 	public Map<String,Object> getAdditionalProperties() {
 		return additionalProperties;
@@ -874,7 +885,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>discriminator</property>.
 	 *
-	 * @return The value of the <property>discriminator</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>discriminator</property> property on this bean, or <jk>null</jk> if it is
+	 * not set.
 	 */
 	public String getDiscriminator() {
 		return discriminator;
@@ -964,7 +976,8 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
 	 *
-	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
 		return externalDocs;

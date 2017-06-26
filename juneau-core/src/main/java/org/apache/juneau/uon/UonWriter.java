@@ -38,7 +38,7 @@ public final class UonWriter extends SerializerWriter {
 	// Identical to unencodedChars, but excludes '='.
 	private static final AsciiSet unencodedCharsAttrName = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789;/?:@-_.!*'$(),~");
 
-	// Characters that need to be preceeded with an escape character.
+	// Characters that need to be preceded with an escape character.
 	private static final AsciiSet escapedChars = new AsciiSet("~'");
 
 	private static final AsciiSet noChars = new AsciiSet("");
@@ -57,7 +57,8 @@ public final class UonWriter extends SerializerWriter {
 	 * @param plainTextParams If <jk>true</jk>, don't use UON notation for values.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent, boolean encodeChars, boolean trimStrings, boolean plainTextParams, UriResolver uriResolver) {
+	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent,
+			boolean encodeChars, boolean trimStrings, boolean plainTextParams, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, '\'', uriResolver);
 		this.session = session;
 		this.encodeChars = encodeChars;

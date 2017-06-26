@@ -52,6 +52,7 @@ public class SerializerGroupBuilder {
 
 	/**
 	 * Clone an existing serializer group builder.
+	 *
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
@@ -1114,8 +1115,8 @@ public class SerializerGroupBuilder {
 	/**
 	 * Specifies the classloader to use when resolving classes from strings for all serializers in this group.
 	 * <p>
-	 * Can be used for resolving class names when the classes being created are in a different
-	 * 	classloader from the Juneau code.
+	 * Can be used for resolving class names when the classes being created are in a different classloader from the
+	 * Juneau code.
 	 * <p>
 	 * If <jk>null</jk>, the system classloader will be used to resolve classes.
 	 *

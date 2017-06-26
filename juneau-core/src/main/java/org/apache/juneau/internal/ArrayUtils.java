@@ -158,7 +158,8 @@ public final class ArrayUtils {
 
 	/**
 	 * Returns an iterator against an array.
-	 * This works with any array type (e.g. <code>String[]</code>, <code>Object[]</code>, <code><jk>int</jk>[]</code>, etc...).
+	 * This works with any array type (e.g. <code>String[]</code>, <code>Object[]</code>,
+	 * <code><jk>int</jk>[]</code>, etc...).
 	 *
 	 * @param array The array to create an iterator over.
 	 * @return An iterator over the specified array.
@@ -206,6 +207,7 @@ public final class ArrayUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is an array.
+	 *
 	 * @param array The array to test.
 	 * @return <jk>true</jk> if the specified object is an array.
 	 */
@@ -218,7 +220,7 @@ public final class ArrayUtils {
 	 *
 	 * @param array The array to convert.
 	 * @param componentType The type of objects in the array.
-	 * 	It must match the actual component type in the array.
+	 * It must match the actual component type in the array.
 	 * @return A new {@link ArrayList}
 	 */
 	@SuppressWarnings("unchecked")
@@ -265,8 +267,8 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified array contains the specified element
-	 * 	using the {@link Object#equals(Object)} method.
+	 * Returns <jk>true</jk> if the specified array contains the specified element using the
+	 * {@link Object#equals(Object)} method.
 	 *
 	 * @param element The element to check for.
 	 * @param array The array to check.
@@ -278,13 +280,12 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Returns the index position of the element in the specified array
-	 * 	using the {@link Object#equals(Object)} method.
+	 * Returns the index position of the element in the specified array using the {@link Object#equals(Object)} method.
 	 *
 	 * @param element The element to check for.
 	 * @param array The array to check.
 	 * @return The index position of the element in the specified array, or
-	 * 	<code>-1</code> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
+	 * <code>-1</code> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
 	 */
 	public static <T> int indexOf(T element, T[] array) {
 		if (element == null)
@@ -298,26 +299,25 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified array contains the specified element
-	 * 	using the {@link String#equals(Object)} method.
+	 * Returns <jk>true</jk> if the specified array contains the specified element using the
+	 * {@link String#equals(Object)} method.
 	 *
 	 * @param element The element to check for.
 	 * @param array The array to check.
 	 * @return <jk>true</jk> if the specified array contains the specified element,
-	 * 	<jk>false</jk> if the array or element is <jk>null</jk>.
+	 * <jk>false</jk> if the array or element is <jk>null</jk>.
 	 */
 	public static boolean contains(String element, String[] array) {
 		return indexOf(element, array) != -1;
 	}
 
 	/**
-	 * Returns the index position of the element in the specified array
-	 * 	using the {@link String#equals(Object)} method.
+	 * Returns the index position of the element in the specified array using the {@link String#equals(Object)} method.
 	 *
 	 * @param element The element to check for.
 	 * @param array The array to check.
 	 * @return The index position of the element in the specified array, or
-	 * 	<code>-1</code> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
+	 * <code>-1</code> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
 	 */
 	public static int indexOf(String element, String[] array) {
 		if (element == null)
@@ -331,7 +331,8 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Converts a primitive wrapper array (e.g. <code>Integer[]</code>) to a primitive array (e.g. <code><jk>int</jk>[]</code>).
+	 * Converts a primitive wrapper array (e.g. <code>Integer[]</code>) to a primitive array (e.g.
+	 * <code><jk>int</jk>[]</code>).
 	 *
 	 * @param o The array to convert.  Must be a primitive wrapper array.
 	 * @return A new array.
@@ -353,6 +354,7 @@ public final class ArrayUtils {
 
 	/**
 	 * Converts an Iterable to a list.
+	 *
 	 * @param i The iterable to convert.
 	 * @return A new list of objects copied from the iterable.
 	 */
@@ -369,7 +371,7 @@ public final class ArrayUtils {
 	 *
 	 * @param val The collection or array object.
 	 * @return The first object, or <jk>null</jk> if the collection or array is empty or <jk>null</jk> or the value
-	 * 	isn't a collection or array.
+	 * isn't a collection or array.
 	 */
 	public static Object getFirst(Object val) {
 		if (val != null) {

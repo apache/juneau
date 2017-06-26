@@ -50,13 +50,13 @@ public class XmlParserSession extends ParserSession {
 	 * @param ctx The context creating this session object.
 	 * The context contains all the configuration settings for this object.
 	 * @param input The input.  Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text.
-	 * 		<li>{@link File} containing system encoded text.
-	 * 	</ul>
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>{@link Reader}
+	 * 	<li>{@link CharSequence}
+	 * 	<li>{@link InputStream} containing UTF-8 encoded text.
+	 * 	<li>{@link File} containing system encoded text.
+	 * </ul>
 	 * @param op The override properties.
 	 * These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
@@ -67,7 +67,8 @@ public class XmlParserSession extends ParserSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	public XmlParserSession(XmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public XmlParserSession(XmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer,
+			Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			validating = ctx.validating;
@@ -257,8 +258,8 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Parses the current element as text.
-	 * Note that this is different than {@link #getText(XMLStreamReader)} since it
-	 * assumes that we're pointing to a whitespace element.
+	 * Note that this is different than {@link #getText(XMLStreamReader)} since it assumes that we're pointing to a
+	 * whitespace element.
 	 *
 	 * @param r
 	 * @return The parsed text.

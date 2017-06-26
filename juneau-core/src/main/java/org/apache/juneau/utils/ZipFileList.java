@@ -17,12 +17,11 @@ import java.util.*;
 import java.util.zip.*;
 
 /**
- * Utility class for representing the contents of a zip file as a list of entries
- * whose contents don't resolve until serialize time.
+ * Utility class for representing the contents of a zip file as a list of entries whose contents don't resolve until
+ * serialization time.
  * <p>
- * Generally associated with <code>RestServlets</code> using the <code>responseHandlers</code>
- * 	annotation so that REST methods can easily create ZIP file responses by simply returning instances
- * 	of this class.
+ * Generally associated with <code>RestServlets</code> using the <code>responseHandlers</code> annotation so that
+ * REST methods can easily create ZIP file responses by simply returning instances of this class.
  */
 @SuppressWarnings("serial")
 public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {

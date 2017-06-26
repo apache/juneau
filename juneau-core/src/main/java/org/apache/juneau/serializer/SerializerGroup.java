@@ -76,8 +76,8 @@ public final class SerializerGroup {
 	 * @param propertyStore The modifiable properties that were used to initialize the serializers.
 	 * A snapshot of these will be made so that we can clone and modify this group.
 	 * @param serializers The serializers defined in this group.
-	 * The order is important because they will be tried in reverse order (e.g.
-	 * 	newer first) in which they will be tried to match against media types.
+	 * The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
+	 * to match against media types.
 	 */
 	public SerializerGroup(PropertyStore propertyStore, Serializer[] serializers) {
 		this.propertyStore = PropertyStore.create(propertyStore);
@@ -114,8 +114,9 @@ public final class SerializerGroup {
 	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
 	 * </p>
 	 * <p>
-	 * The general idea behind having the serializer resolution be a two-step process is so that
-	 * 	the matched media type can be passed in to the {@link WriterSerializer#doSerialize(SerializerSession, Object)} method.
+	 * The general idea behind having the serializer resolution be a two-step process is so that the matched media type
+	 * can be passed in to the {@link WriterSerializer#doSerialize(SerializerSession, Object)} method.
+	 * <br>
 	 * For example...
 	 * <p class='bcode'>
 	 * 	String acceptHeaderValue = request.getHeader(<js>"Accept"</js>);

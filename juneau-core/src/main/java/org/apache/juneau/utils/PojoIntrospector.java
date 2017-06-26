@@ -25,7 +25,8 @@ import org.apache.juneau.parser.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	String s = <js>"foobar"</js>;
- * 	String s2 = (String)<jk>new</jk> PojoIntrospector(s).invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
+ * 	String s2 = (String)<jk>new</jk> PojoIntrospector(s)
+ * 		.invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
  * </p>
  */
 public final class PojoIntrospector {
@@ -37,7 +38,8 @@ public final class PojoIntrospector {
 	 * Constructor.
 	 *
 	 * @param o The object on which Java methods will be invoked.
-	 * @param p The parser to use to parse the method arguments.  If <jk>null</jk>, {@link JsonParser#DEFAULT} is used.
+	 * @param p The parser to use to parse the method arguments.
+	 * If <jk>null</jk>, {@link JsonParser#DEFAULT} is used.
 	 */
 	public PojoIntrospector(Object o, ReaderParser p) {
 		if (p == null)
@@ -59,23 +61,26 @@ public final class PojoIntrospector {
 	 * Primary method.  Invokes the specified method on this bean.
 	 *
 	 * @param method The method being invoked.
-	 * @param args The arguments to pass as parameters to the method.<br>
-	 * These will automatically be converted to the appropriate object type if possible.<br>
+	 * @param args The arguments to pass as parameters to the method.
+	 * These will automatically be converted to the appropriate object type if possible.
 	 * Can be <jk>null</jk> if method has no arguments.
 	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
+	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and
+	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>The number of actual and formal parameters differ.
-	 * 		<li>An unwrapping conversion for primitive arguments fails.
-	 * 		<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation conversion.
-	 * 		<li>The constructor pertains to an enum type.
-	 * 	</ul>
+	 * <ul class='spaced-list'>
+	 * 	<li>The number of actual and formal parameters differ.
+	 * 	<li>An unwrapping conversion for primitive arguments fails.
+	 * 	<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 		conversion.
+	 * 	<li>The constructor pertains to an enum type.
+	 * </ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 * @throws IOException
 	 */
-	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
+	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException,
+			IllegalAccessException, ParseException, IOException {
 		if (o == null)
 			return null;
 		Object[] params = args == null ? null : p.parseArgs(args, method.getGenericParameterTypes());
@@ -86,24 +91,26 @@ public final class PojoIntrospector {
 	 * Convenience method for invoking argument from method signature (@see {@link ClassUtils#getMethodSignature(Method)}.
 	 *
 	 * @param method The method being invoked.
-	 * @param args The arguments to pass as parameters to the method.<br>
-	 * These will automatically be converted to the appropriate object type if possible.<br>
+	 * @param args The arguments to pass as parameters to the method.
+	 * These will automatically be converted to the appropriate object type if possible.
 	 * Can be <jk>null</jk> if method has no arguments.
 	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
 	 * @throws NoSuchMethodException If method does not exist.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
+	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and
+	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>The number of actual and formal parameters differ.
-	 * 		<li>An unwrapping conversion for primitive arguments fails.
-	 * 		<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation conversion.
-	 * 		<li>The constructor pertains to an enum type.
-	 * 	</ul>
+	 * <ul class='spaced-list'>
+	 * 	<li>The number of actual and formal parameters differ.
+	 * 	<li>An unwrapping conversion for primitive arguments fails.
+	 * 	<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation conversion.
+	 * 	<li>The constructor pertains to an enum type.
+	 * </ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 * @throws IOException
 	 */
-	public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
+	public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException,
+			InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		if (o == null)
 			return null;
 		Method m = p.getBeanContext().createSession().getClassMeta(o.getClass()).getPublicMethods().get(method);

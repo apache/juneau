@@ -62,7 +62,8 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	public HtmlParserSession(HtmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public HtmlParserSession(HtmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer,
+			Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 

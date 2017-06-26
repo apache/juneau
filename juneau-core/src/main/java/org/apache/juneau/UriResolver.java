@@ -29,7 +29,8 @@ import org.apache.juneau.internal.*;
  * 	({@link UriRelativity}) to define simple {@link #resolve(Object)} and {@link #append(Appendable, Object)}
  * 	methods.
   * <p>
- * Three special protocols are used to represent context-root-relative, servlet-relative, and request-path-relative URIs:
+ * Three special protocols are used to represent context-root-relative, servlet-relative, and request-path-relative
+ * URIs:
  * 	<js>"context:/"</js>, <js>"servlet:/"</js>, and <js>"request:/"</js>.
  *
  * The following list shows the protocols of URLs that can be resolved with this class:

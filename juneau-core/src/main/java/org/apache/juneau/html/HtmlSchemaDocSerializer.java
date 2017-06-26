@@ -35,13 +35,12 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * Essentially the same as {@link HtmlSerializer}, except serializes the POJO metamodel
- * 	instead of the model itself.
+ * Essentially the same as {@link HtmlSerializer}, except serializes the POJO metamodel instead of the model itself.
  * <p>
  * Produces output that describes the POJO metamodel similar to an XML schema document.
  * <p>
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
- * 	which will create a schema serializer with the same settings as the originating serializer.
+ * which will create a schema serializer with the same settings as the originating serializer.
  */
 @Produces(value="text/html+schema", contentType="text/html")
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
@@ -51,6 +50,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store to use for creating the context for this serializer.
 	 */
 	public HtmlSchemaDocSerializer(PropertyStore propertyStore) {
@@ -60,6 +60,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store to use for creating the context for this serializer.
 	 * @param overrideProperties
 	 */

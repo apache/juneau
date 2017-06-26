@@ -165,16 +165,18 @@ public final class XmlUtils {
 	/**
 	 * Encodes the specified element text and sends the results to the specified writer.
 	 * <p>
-	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
-	 * 	to the specified writer.
-	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.
-	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
+	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response to the specified
+	 * writer.
+	 * <br>
+	 * Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.
+	 * <br>
+	 * Encodes invalid XML text characters to <code>_x####_</code> sequences.
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
 	 * @param trim Trim the text before serializing it.
 	 * @param preserveWhitespace Specifies whether we're in preserve-whitespace mode.
-	 * 	(e.g. {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
+	 * (e.g. {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 * @throws IOException Thrown from the writer.
@@ -299,10 +301,12 @@ public final class XmlUtils {
 	/**
 	 * Encodes the specified attribute value and sends the results to the specified writer.
 	 * <p>
-	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
-	 * 	to the specified writer.
-	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, <js>'&gt;'</js>, <js>'"'</js>, and <js>'\''</js> as XML entities.
-	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
+	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response to the specified
+	 * writer.
+	 * <br>
+	 * Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, <js>'&gt;'</js>, <js>'"'</js>, and <js>'\''</js> as XML entities.
+	 * <br>
+	 * Encodes invalid XML text characters to <code>_x####_</code> sequences.
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
@@ -475,8 +479,7 @@ public final class XmlUtils {
 
 	/**
 	 * Find the namespace given a list of <ja>@Xml</ja> and <ja>@XmlSchema</ja> annotations.
-	 * The annotations should be a child-to-parent ordering of annotations found on
-	 * 	a class or method.
+	 * The annotations should be a child-to-parent ordering of annotations found on a class or method.
 	 *
 	 * @param xmls The list of <ja>@Xml</ja> annotations.
 	 * @param schemas The list of <ja>@XmlSchema</ja> annotations.

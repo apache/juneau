@@ -87,8 +87,8 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Reads a single character.
-	 * Note that this method does NOT process extended unicode characters (i.e. characters
-	 * 	above 0x10000), but rather returns them as two <jk>char</jk>s.
+	 * Note that this method does NOT process extended unicode characters (i.e. characters above 0x10000), but rather
+	 * returns them as two <jk>char</jk>s.
 	 * Use {@link #readCodePoint()} to ensure proper handling of extended unicode.
 	 *
 	 * @return The character read, or -1 if the end of the stream has been reached.
@@ -123,8 +123,7 @@ public class ParserReader extends Reader {
 	}
 
 	/**
-	 * Same as {@link #read()} but detects and combines extended unicode characters (i.e. characters
-	 * 	above 0x10000).
+	 * Same as {@link #read()} but detects and combines extended unicode characters (i.e. characters above 0x10000).
 	 *
 	 * @return The character read, or -1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -362,9 +361,8 @@ public class ParserReader extends Reader {
 
 	/**
 	 * Replaces the last character in the marking buffer with the specified character.
-	 * <code>offset</code> must be at least <code>1</code> for normal characters, and
-	 * <code>2</code> for extended unicode characters in order for the replacement
-	 * to fit into the buffer.
+	 * <code>offset</code> must be at least <code>1</code> for normal characters, and <code>2</code> for extended
+	 * unicode characters in order for the replacement to fit into the buffer.
 	 *
 	 * @param c The new character.
 	 * @param offset The offset.

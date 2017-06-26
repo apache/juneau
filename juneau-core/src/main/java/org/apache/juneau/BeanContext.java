@@ -36,10 +36,10 @@ import org.apache.juneau.transform.*;
  * This class servers multiple purposes:
  * <ul class='spaced-list'>
  * 	<li>Provides the ability to wrap beans inside {@link Map} interfaces.
- * 	<li>Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter beanFilters}, {@link PropertyNamer property namers}, etc...
- * 		which are used to tailor how POJOs are serialized and parsed.
+ * 	<li>Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter beanFilters},
+ * 		{@link PropertyNamer property namers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * 	<li>Serves as a common utility class for all {@link Serializer Serializers} and {@link Parser Parsers}
- * 			for serializing and parsing Java beans.
+ * 		for serializing and parsing Java beans.
  * </ul>
  * <p>
  * All serializer and parser contexts extend from this context.
@@ -48,35 +48,39 @@ import org.apache.juneau.transform.*;
  * Bean contexts are created through the {@link PropertyStore#getContext(Class)} method.
  * These context objects are read-only, reusable, and thread-safe.
  * The {@link PropertyStore} class will typically cache copies of <code>Context</code> objects based on
- * 	the current settings on the factory.
+ * the current settings on the factory.
  * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
  * These <code>ClassMeta</code> objects are time-consuming to construct.
  * Therefore, instances of {@link BeanContext} that share the same <js>"BeanContext.*"</js> property values share
- * 	the same cache.  This allows for efficient reuse of <code>ClassMeta</code> objects so that the information about
- * 	classes only needs to be calculated once.
+ * the same cache.  This allows for efficient reuse of <code>ClassMeta</code> objects so that the information about
+ * classes only needs to be calculated once.
  * Because of this, many of the properties defined on the {@link BeanContext} class cannot be overridden on the session.
  *
  * <h5 class='topic'>Bean Sessions</h5>
  * <p>
  * Whereas <code>BeanContext</code> objects are permanent, unchangeable, cached, and thread-safe,
- * 	{@link BeanSession} objects are ephemeral and not thread-safe.
+ * {@link BeanSession} objects are ephemeral and not thread-safe.
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
  * {@link BeanMap} objects can only be created through the session.
  *
  * <h5 class='topic'>BeanContext configuration properties</h5>
- * <code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are handled.
- * These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
+ * <code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are
+ * handled.  These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
  * <p>
- * Some settings (e.g. {@link BeanContext#BEAN_beansRequireDefaultConstructor}) are used to differentiate between bean and non-bean classes.
+ * Some settings (e.g. {@link BeanContext#BEAN_beansRequireDefaultConstructor}) are used to differentiate between bean
+ * and non-bean classes.
  * Attempting to create a bean map around one of these objects will throw a {@link BeanRuntimeException}.
- * The purpose for this behavior is so that the serializers can identify these non-bean classes and convert them to plain strings using the {@link Object#toString()} method.
+ * The purpose for this behavior is so that the serializers can identify these non-bean classes and convert them to
+ * plain strings using the {@link Object#toString()} method.
  * <p>
- * Some settings (e.g. {@link BeanContext#BEAN_beanFieldVisibility}) are used to determine what kinds of properties are detected on beans.
+ * Some settings (e.g. {@link BeanContext#BEAN_beanFieldVisibility}) are used to determine what kinds of properties are
+ * detected on beans.
  * <p>
  * Some settings (e.g. {@link BeanContext#BEAN_beanMapPutReturnsOldValue}) change the runtime behavior of bean maps.
  * <p>
- * Settings are specified using the {@link PropertyStore#setProperty(String, Object)} method and related convenience methods.
+ * Settings are specified using the {@link PropertyStore#setProperty(String, Object)} method and related convenience
+ * methods.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -96,12 +100,14 @@ import org.apache.juneau.transform.*;
  * <h5 class='topic'>Bean Maps</h5>
  * <p>
  * {@link BeanMap BeanMaps} are wrappers around Java beans that allow properties to be retrieved and
- * 	set using the common {@link Map#put(Object,Object)} and {@link Map#get(Object)} methods.<br>
- * <br>
+ * set using the common {@link Map#put(Object,Object)} and {@link Map#get(Object)} methods.
+ * <p>
  * Bean maps are created in two ways...
  * <ol>
- * 	<li> {@link BeanSession#toBeanMap(Object) BeanSession.toBeanMap()} - Wraps an existing bean inside a {@code Map} wrapper.
- * 	<li> {@link BeanSession#newBeanMap(Class) BeanSession.newBeanMap()} - Create a new bean instance wrapped in a {@code Map} wrapper.
+ * 	<li>{@link BeanSession#toBeanMap(Object) BeanSession.toBeanMap()} - Wraps an existing bean inside a {@code Map}
+ * 		wrapper.
+ * 	<li>{@link BeanSession#newBeanMap(Class) BeanSession.newBeanMap()} - Create a new bean instance wrapped in a
+ * 		{@code Map} wrapper.
  * </ol>
  *
  * <h5 class='section'>Example:</h5>
@@ -131,8 +137,8 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Bean Annotations</h5>
  * <p>
- * This package contains annotations that can be applied to
- * 	class definitions to override what properties are detected on a bean.
+ * This package contains annotations that can be applied to class definitions to override what properties are detected
+ * on a bean.
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Bean class definition where only property 'name' is detected.</jc>
@@ -149,16 +155,17 @@ import org.apache.juneau.transform.*;
  * <h5 class='topic'>Beans with read-only properties</h5>
  * <p>
  * Bean maps can also be defined on top of beans with read-only properties by adding a
- * 	{@link BeanConstructor @BeanConstructor} annotation to one of the constructors on the
- * 	bean class.  This will allow read-only properties to be set through constructor arguments.
+ * {@link BeanConstructor @BeanConstructor} annotation to one of the constructors on the
+ * bean class.  This will allow read-only properties to be set through constructor arguments.
  * <p>
- * When the <code>@BeanConstructor</code> annotation is present, bean instantiation is delayed until the call to {@link BeanMap#getBean()}.
+ * When the <code>@BeanConstructor</code> annotation is present, bean instantiation is delayed until the call to
+ * {@link BeanMap#getBean()}.
  * Until then, bean property values are stored in a local cache until <code>getBean()</code> is called.
- * Because of this additional caching step, parsing into read-only beans tends to be slower and use
- * 	more memory than parsing into beans with writable properties.
+ * Because of this additional caching step, parsing into read-only beans tends to be slower and use more memory than
+ * parsing into beans with writable properties.
  * <p>
  * Attempting to call {@link BeanMap#put(String,Object)} on a read-only property after calling {@link BeanMap#getBean()}
- * 	will result in a {@link BeanRuntimeException} being thrown.
+ * will result in a {@link BeanRuntimeException} being thrown.
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  * <p>
  * Beans can be defined with a combination of read-only and read-write properties.
@@ -167,26 +174,28 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>BeanFilters and PojoSwaps</h5>
  * <p>
- * 	{@link BeanFilter BeanFilters} and {@link PojoSwap PojoSwaps} are used to tailor how beans and POJOs are handled.<br>
+ * 	{@link BeanFilter BeanFilters} and {@link PojoSwap PojoSwaps} are used to tailor how beans and POJOs are handled.
  * 	<ol class='spaced-list'>
  * 		<li>{@link BeanFilter} - Allows you to tailor handling of bean classes.
  * 			This class can be considered a programmatic equivalent to the {@link Bean} annotation when
  * 			annotating classes are not possible (e.g. you don't have access to the source).
- * 			This includes specifying which properties are visible and the ability to programmatically override the execution of properties.
+ * 			This includes specifying which properties are visible and the ability to programmatically override the
+ * 			execution of properties.
  * 		<li>{@link PojoSwap} - Allows you to swap out non-serializable objects with serializable replacements.
  * 	</ol>
  * <p>
- * See <a class='doclink' href='transform/package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
+ * See <a class='doclink' href='transform/package-summary.html#TOC'>org.apache.juneau.transform</a> for more
+ * information.
  *
  * <h5 class='topic'>ClassMetas</h5>
  * <p>
- * The {@link ClassMeta} class is a wrapper around {@link Class} object that provides cached information
- * 	about that class (e.g. whether it's a {@link Map} or {@link Collection} or bean).
+ * The {@link ClassMeta} class is a wrapper around {@link Class} object that provides cached information about that
+ * class (e.g. whether it's a {@link Map} or {@link Collection} or bean).
  * <p>
- * As a general rule, it's best to reuse bean contexts (and therefore serializers and parsers too)
- * 	whenever possible since it takes some time to populate the internal {@code ClassMeta} object cache.
- * By reusing bean contexts, the class type metadata only needs to be calculated once which significantly
- * 	improves performance.
+ * As a general rule, it's best to reuse bean contexts (and therefore serializers and parsers too) whenever possible
+ * since it takes some time to populate the internal {@code ClassMeta} object cache.
+ * By reusing bean contexts, the class type metadata only needs to be calculated once which significantly improves
+ * performance.
  * <p>
  * See {@link ClassMeta} for more information.
  */
@@ -257,7 +266,8 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireSomeProperties = "BeanContext.beansRequireSomeProperties";
 
 	/**
-	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property value.
+	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * value.
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
@@ -266,7 +276,8 @@ public class BeanContext extends Context {
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
+	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * values.
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty.
 	 */
@@ -360,8 +371,8 @@ public class BeanContext extends Context {
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an {@link InvocationHandler}
-	 * if there is no other way of instantiating them.
+	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
+	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 */
 	public static final String BEAN_useInterfaceProxies = "BeanContext.useInterfaceProxies";
 
@@ -454,7 +465,7 @@ public class BeanContext extends Context {
 	 * Otherwise, the natural order of the bean properties is used which is dependent on the
 	 * 	JVM vendor.
 	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * On Oracle JVMs, the bean properties are not ordered (which follows the offical JVM specs).
+	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
 	 * <p>
 	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
@@ -623,11 +634,11 @@ public class BeanContext extends Context {
 	 * Specifies to only include the specified list of properties for the specified bean classes.
 	 * <p>
 	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * 	names.
+	 *	names.
 	 * The key <js>"*"</js> means all bean classes.
 	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <code>foo</code> and <code>bar</code>
-	 * 	properties on the specified bean.
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <code>foo</code> and
+	 * <code>bar</code> properties on the specified bean.
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 */
@@ -654,8 +665,8 @@ public class BeanContext extends Context {
 	 * names.
 	 * The key <js>"*"</js> means all bean classes.
 	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <code>foo</code> and <code>bar</code>
-	 * 	properties on the specified bean.
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <code>foo</code> and
+	 * <code>bar</code> properties on the specified bean.
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 */
@@ -679,8 +690,10 @@ public class BeanContext extends Context {
 	 * This list can consist of the following class types:
 	 * <ul>
 	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
+	 * 		annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
+	 * 		annotations.
 	 * </ul>
 	 */
 	public static final String BEAN_beanDictionary = "BeanContext.beanDictionary.list";
@@ -830,7 +843,8 @@ public class BeanContext extends Context {
 	// This map ensures that if the BeanContext properties in the ConfigFactory are the same,
 	// then we reuse the same Class->ClassMeta cache map.
 	// This significantly reduces the number of times we need to construct ClassMeta objects which can be expensive.
-	private static final ConcurrentHashMap<Integer,Map<Class,ClassMeta>> cmCacheCache = new ConcurrentHashMap<Integer,Map<Class,ClassMeta>>();
+	private static final ConcurrentHashMap<Integer,Map<Class,ClassMeta>> cmCacheCache
+		= new ConcurrentHashMap<Integer,Map<Class,ClassMeta>>();
 
 	/** Default config.  All default settings. */
 	public static final BeanContext DEFAULT = PropertyStore.create().getContext(BeanContext.class);
@@ -1100,7 +1114,7 @@ public class BeanContext extends Context {
 	 * @param <T> The class type being wrapped.
 	 * @param type The class to resolve.
 	 * @return If the class is not an array, returns a cached {@link ClassMeta} object.
-	 * Otherwise, returns a new {@link ClassMeta} object every time.<br>
+	 * Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
 	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
 		return getClassMeta(type, true);
@@ -1113,7 +1127,7 @@ public class BeanContext extends Context {
 	 * @param type The class to resolve.
 	 * @param waitForInit If <jk>true</jk>, wait for the ClassMeta constructor to finish before returning.
 	 * @return If the class is not an array, returns a cached {@link ClassMeta} object.
-	 * Otherwise, returns a new {@link ClassMeta} object every time.<br>
+	 * Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
 	final <T> ClassMeta<T> getClassMeta(Class<T> type, boolean waitForInit) {
 
@@ -1157,17 +1171,23 @@ public class BeanContext extends Context {
 	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
 	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
 	 * 	<li><code>getClassMeta(List.<jk>class</jk>, String.<jk>class</jk>);</code> - A list containing strings.
-	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing strings.
-	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing linked-lists of strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing
+	 * 		strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> -
+	 * 		A linked-list containing linked-lists of strings.
 	 * 	<li><code>getClassMeta(Map.<jk>class</jk>);</code> - A map containing object keys/values.
-	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map containing string keys/values.
-	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> - A map containing string keys and values of lists containing beans.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map
+	 * 		containing string keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> -
+	 * 		A map containing string keys and values of lists containing beans.
 	 * </ul>
 	 *
 	 * @param type The class to resolve.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The resolved class meta.
 	 */
@@ -1363,14 +1383,13 @@ public class BeanContext extends Context {
 
 
 	/**
-	 * Used for determining the class type on a method or field where a {@code @BeanProperty} annotation
-	 * 	may be present.
+	 * Used for determining the class type on a method or field where a {@code @BeanProperty} annotation may be present.
 	 *
 	 * @param <T> The class type we're wrapping.
 	 * @param p The property annotation on the type if there is one.
 	 * @param t The type.
-	 * @param typeVarImpls Contains known resolved type parameters on the specified class so
-	 * 	that we can result {@code ParameterizedTypes} and {@code TypeVariables}.<br>
+	 * @param typeVarImpls Contains known resolved type parameters on the specified class so that we can result
+	 * {@code ParameterizedTypes} and {@code TypeVariables}.
 	 * Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the {@code Type} object.
 	 */
@@ -1422,7 +1441,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns the {@link PojoSwap} associated with the specified class, or <jk>null</jk> if there is no
-	 * pojo swap associated with the class.
+	 * POJO swap associated with the class.
 	 *
 	 * @param <T> The class associated with the swap.
 	 * @param c The class associated with the swap.

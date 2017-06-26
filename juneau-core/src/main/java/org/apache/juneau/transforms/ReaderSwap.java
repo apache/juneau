@@ -29,8 +29,8 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * The {@code Reader} must contain JSON, Juneau-generated XML (output from {@link XmlSerializer}),
- * 	or Juneau-generated HTML (output from {@link JsonSerializer}) in order to be parsed correctly.
+ * The {@code Reader} must contain JSON, Juneau-generated XML (output from {@link XmlSerializer}), or Juneau-generated
+ * HTML (output from {@link JsonSerializer}) in order to be parsed correctly.
  * <p>
  * Useful for serializing models that contain {@code Readers} created by {@code RestCall} instances.
  * <p>
@@ -91,8 +91,7 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 	}
 
 	/**
-	 * Converts the specified {@link Reader} to an {@link Object} whose type is determined
-	 * by the contents of the reader.
+	 * Converts the specified {@link Reader} to an {@link Object} whose type is determined by the contents of the reader.
 	 */
 	@Override /* PojoSwap */
 	public Object swap(BeanSession session, Reader o) throws SerializeException {
@@ -103,7 +102,8 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 		} catch (IOException e) {
 			return e.getLocalizedMessage();
 		} catch (Exception e) {
-			throw new SerializeException("ReaderSwap could not transform object of type ''{0}''", o == null ? null : o.getClass().getName()).initCause(e);
+			throw new SerializeException("ReaderSwap could not transform object of type ''{0}''",
+				o == null ? null : o.getClass().getName()).initCause(e);
 		}
 	}
 }

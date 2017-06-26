@@ -32,6 +32,7 @@ public final class CsvSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public CsvSerializer(PropertyStore propertyStore) {

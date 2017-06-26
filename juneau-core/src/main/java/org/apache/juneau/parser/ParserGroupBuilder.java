@@ -52,6 +52,7 @@ public class ParserGroupBuilder {
 
 	/**
 	 * Clone an existing parser group builder.
+	 *
 	 * @param copyFrom The parser group that we're copying settings and parsers from.
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {

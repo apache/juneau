@@ -69,7 +69,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
-	 * <code>{A:{B:{C:null}}}</code><br>
+	 * <code>{A:{B:{C:null}}}</code>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -139,9 +139,11 @@ public class SerializerContext extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
+	 * the value type.
 	 */
 	public static final String SERIALIZER_addBeanTypeProperties = "Serializer.addBeanTypeProperties";
 

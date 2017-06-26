@@ -34,7 +34,7 @@ public class ByteArrayCache {
 	 *
 	 * @param contents The byte array to add to this cache.
 	 * @return Either the same byte array or a previously cached byte array depending on whether the byte array
-	 * 	already exists in the cache.
+	 * already exists in the cache.
 	 */
 	public byte[] cache(byte[] contents) {
 		if (contents == null)
@@ -49,7 +49,7 @@ public class ByteArrayCache {
 	 *
 	 * @param contents The input stream whose contents are to be added to this cache.
 	 * @return Either the same byte array or a previously cached byte array depending on whether the byte array
-	 * 	already exists in the cache.
+	 * already exists in the cache.
 	 * @throws IOException
 	 */
 	public byte[] cache(InputStream contents) throws IOException {

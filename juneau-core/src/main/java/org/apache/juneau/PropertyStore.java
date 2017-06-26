@@ -30,12 +30,17 @@ import org.apache.juneau.parser.*;
  * <p>
  * The hierarchy of these objects are...
  * <ul class='spaced-list'>
- * 	<li>{@link PropertyStore} - A thread-safe, modifiable context property store.<br>
+ * 	<li>{@link PropertyStore} - A thread-safe, modifiable context property store.
+ * 		<br>
  * 		Used to create {@link Context} objects.
- * 	<li>{@link Context} - A reusable, cachable, thread-safe, read-only context with configuration properties copied from the store.<br>
+ *
+ * 	<li>{@link Context} - A reusable, cacheable, thread-safe, read-only context with configuration properties copied
+ * 		from the store.
+ * 		<br>
  * 		Often used to create {@link Session} objects.
- * 	<li>{@link Session} - A one-time-use non-thread-safe object.<br>
- * 		Used by serializers and parsers to retrieve context properties and to be used as scratchpads.
+ *
+ * 	<li>{@link Session} - A one-time-use non-thread-safe object.
+ * 		<br>Used by serializers and parsers to retrieve context properties and to be used as scratchpads.
  * </ul>
  *
  * <h6 class='topic'>PropertyStore objects</h6>
@@ -48,69 +53,96 @@ import org.apache.juneau.parser.*;
  * <p>
  * Property stores are used to create and cache {@link Context} objects using the {@link #getContext(Class)} method.
  * <p>
- * As a general rule, {@link PropertyStore} objects are 'slow'.<br>
- * Setting and retrieving properties on a store can involve relatively slow data conversion and synchronization.<br>
- * However, the {@link #getContext(Class)} method is fast, and will return cached context objects if the context properties have not changed.
+ * As a general rule, {@link PropertyStore} objects are 'slow'.
+ * <br>
+ * Setting and retrieving properties on a store can involve relatively slow data conversion and synchronization.
+ * <br>
+ * However, the {@link #getContext(Class)} method is fast, and will return cached context objects if the context
+ * properties have not changed.
  * <p>
- * Property stores can be used to store context properties for a variety of contexts.<br>
+ * Property stores can be used to store context properties for a variety of contexts.
+ * <br>
  * For example, a single store can store context properties for the JSON serializer, XML serializer, HTML serializer
- * 	etc... and can thus be used to retrieve context objects for those serializers.<br>
+ * etc... and can thus be used to retrieve context objects for those serializers.
  * <p>
  *
  * <h6 class='topic'>Context properties</h6>
  * <p>
- * Context properties are 'settings' for serializers and parsers.<br>
- * For example, the {@link BeanContext#BEAN_sortProperties} context property defines whether
- * 	bean properties should be serialized in alphabetical order.
+ * Context properties are 'settings' for serializers and parsers.
+ * <br>
+ * For example, the {@link BeanContext#BEAN_sortProperties} context property defines whether bean properties should be
+ * serialized in alphabetical order.
  * <p>
- * Each {@link Context} object should contain the context properties that apply to it as static
- * 	fields (e.g {@link BeanContext#BEAN_sortProperties}).
+ * Each {@link Context} object should contain the context properties that apply to it as static fields
+ * (e.g {@link BeanContext#BEAN_sortProperties}).
  * <p>
  * Context properties can be of the following types:
  * <ul class='spaced-list'>
- * 	<li><l>SIMPLE</l> - A simple property.<br>
- * 		Examples include:  booleans, integers, Strings, Classes, etc...<br>
+ * 	<li><l>SIMPLE</l> - A simple property.
  * 		<br>
- * 		An example of this would be the {@link BeanContext#BEAN_sortProperties} property.<br>
+ * 		Examples include:  booleans, integers, Strings, Classes, etc...
+ * 		<br><br>
+ * 		An example of this would be the {@link BeanContext#BEAN_sortProperties} property.
+ * 		<br>
  * 		It's name is simply <js>"BeanContext.sortProperties"</js>.
  *
- * 	<li><l>SET</l> - A sorted set of objects.<br>
- * 	These are denoted by appending <js>".set"</js> to the property name.<br>
- * 		Objects can be of any type, even complex types.<br>
- * 		Sorted sets use tree sets to maintain the value in alphabetical order.<br>
+ * 	<li><l>SET</l> - A sorted set of objects.
+ * 	<br>
+ * 	These are denoted by appending <js>".set"</js> to the property name.
  * 		<br>
- * 		For example, the {@link BeanContext#BEAN_notBeanClasses} property is used to store classes that should not be treated like beans.<br>
+ * 		Objects can be of any type, even complex types.
+ * 		<br>
+ * 		Sorted sets use tree sets to maintain the value in alphabetical order.
+ * 		<br>
+ * 		For example, the {@link BeanContext#BEAN_notBeanClasses} property is used to store classes that should not be
+ * 		treated like beans.
+ * 		<br>
  * 		It's name is <js>"BeanContext.notBeanClasses.set"</js>.
  *
- * 	<li><l>LIST</l> - A list of unique objects.<br>
- * 		These are denoted by appending <js>".list"</js> to the property name.<br>
- * 		Objects can be of any type, even complex types.<br>
- * 		Use lists if the ordering of the values in the set is important (similar to how the order of entries in a classpath is important).<br>
+ * 	<li><l>LIST</l> - A list of unique objects.
  * 		<br>
- * 		For example, the {@link BeanContext#BEAN_beanFilters} property is used to store bean filters.<br>
+ * 		These are denoted by appending <js>".list"</js> to the property name.
+ * 		<br>
+ * 		Objects can be of any type, even complex types.
+ * 		<br>
+ * 		Use lists if the ordering of the values in the set is important (similar to how the order of entries in a
+ * 		classpath is important).
+ * 		<br>
+ * 		<br>
+ * 		For example, the {@link BeanContext#BEAN_beanFilters} property is used to store bean filters.
+ * 		<br>
  * 		It's name is <js>"BeanContext.transforms.list"</js>.
  *
- * 	<li><l>MAP</l> - A sorted map of key-value pairs.<br>
- * 		These are denoted by appending <js>".map"</js> to the property name.<br>
- * 		Keys can be any type directly convertable to and from Strings.
- * 		Values can be of any type, even complex types.<br>
+ * 	<li><l>MAP</l> - A sorted map of key-value pairs.
  * 		<br>
- * 		For example, the {@link BeanContext#BEAN_implClasses} property is used to specify the names of implementation classes for interfaces.<br>
- * 		It's name is <js>"BeanContext.implClasses.map"</js>.<br>
+ * 		These are denoted by appending <js>".map"</js> to the property name.
+ * 		<br>
+ * 		Keys can be any type directly convertible to and from Strings.
+ * 		Values can be of any type, even complex types.
+ * 		<br>
+ * 		<br>
+ * 		For example, the {@link BeanContext#BEAN_implClasses} property is used to specify the names of implementation
+ * 		classes for interfaces.
+ * 		<br>
+ * 		It's name is <js>"BeanContext.implClasses.map"</js>.
  * </ul>
  * <p>
  * All context properties are set using the {@link #setProperty(String, Object)} method.
  * <p>
- * Default values for context properties can be specified globally as system properties.<br>
+ * Default values for context properties can be specified globally as system properties.
+ * <br>
  * Example: <code>System.<jsm>setProperty</jsm>(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>);</code>
  * <p>
- * SET and LIST properties can be added to using the {@link #addToProperty(String, Object)} method and removed from using the {@link #removeFromProperty(String, Object)} method.
+ * SET and LIST properties can be added to using the {@link #addToProperty(String, Object)} method and removed from
+ * using the {@link #removeFromProperty(String, Object)} method.
  * <p>
- * SET and LIST properties can also be added to and removed from by appending <js>".add"</js> or <js>".remove"</js> to the property name and using the {@link #setProperty(String, Object)} method.
+ * SET and LIST properties can also be added to and removed from by appending <js>".add"</js> or <js>".remove"</js> to
+ * the property name and using the {@link #setProperty(String, Object)} method.
  * <p>
  * The following shows the two different ways to append to a set or list property:
  * <p class='bcode'>
- * 	PropertyStore ps = <jk>new</jk> PropertyStore().setProperty(<js>"BeanContext.notBeanClasses.set"</js>, Collections.<jsm>emptySet</jsm>());
+ * 	PropertyStore ps = <jk>new</jk> PropertyStore().setProperty(<js>"BeanContext.notBeanClasses.set"</js>,
+ * 		Collections.<jsm>emptySet</jsm>());
  *
  * 	<jc>// Append to set property using addTo().</jc>
  * 	ps.addToProperty(<js>"BeanContext.notBeanClasses.set"</js>, MyNotBeanClass.<jk>class</jk>);
@@ -136,13 +168,19 @@ import org.apache.juneau.parser.*;
  * 	ps.removeFromProperty(<js>"BeanContext.notBeanClasses.set"</js>, <js>"['com.my.MyNotBeanClass3']"</js>);
  * </p>
  * <p>
- * MAP properties can be added to using the {@link #putToProperty(String, Object, Object)} and {@link #putToProperty(String, Object)} methods.<br>
- * MAP property entries can be removed by setting the value to <jk>null</jk> (e.g. <code>putToProperty(<js>"BEAN_implClasses"</js>, MyNotBeanClass.<jk>class</jk>, <jk>null</jk>);</code>.<br>
- * MAP properties can also be added to by appending <js>".put"</js> to the property name and using the {@link #setProperty(String, Object)} method.<br>
+ * MAP properties can be added to using the {@link #putToProperty(String, Object, Object)} and
+ * {@link #putToProperty(String, Object)} methods.
+ * <br>
+ * MAP property entries can be removed by setting the value to <jk>null</jk>
+ * (e.g. <code>putToProperty(<js>"BEAN_implClasses"</js>, MyNotBeanClass.<jk>class</jk>, <jk>null</jk>);</code>.
+ * <br>
+ * MAP properties can also be added to by appending <js>".put"</js> to the property name and using the
+ * {@link #setProperty(String, Object)} method.
  * <p>
  * The following shows the two different ways to append to a set property:
  * <p class='bcode'>
- * 	PropertyStore ps = PropertyStore.<jsm>create</jsm>().setProperty(<js>"BeanContext.implClasses.map"</js>, Collections.<jsm>emptyMap</jsm>());
+ * 	PropertyStore ps = PropertyStore.<jsm>create</jsm>().setProperty(<js>"BeanContext.implClasses.map"</js>,
+ * 		Collections.<jsm>emptyMap</jsm>());
  *
  * 	<jc>// Append to map property using putTo().</jc>
  * 	ps.putToProperty(<js>"BeanContext.implClasses.map"</js>, MyInterface.<jk>class</jk>, MyInterfaceImpl.<jk>class</jk>);
@@ -157,10 +195,12 @@ import org.apache.juneau.parser.*;
  * 	PropertyStore ps = PropertyStore.<jsm>create</jsm>();
  *
  * 	<jc>// Set MAP value using JSON object.</jc>
- * 	ps.setProperty(<js>"BeanContext.implClasses.map"</js>, <js>"{'com.my.MyInterface1':'com.my.MyInterfaceImpl1'}"</js>);
+ * 	ps.setProperty(<js>"BeanContext.implClasses.map"</js>,
+ * 		<js>"{'com.my.MyInterface1':'com.my.MyInterfaceImpl1'}"</js>);
  *
  * 	<jc>// Add to MAP using JSON object.</jc>
- * 	ps.putToProperty(<js>"BeanContext.implClasses.map"</js>, <js>"{'com.my.MyInterface2':'com.my.MyInterfaceImpl2'}"</js>);
+ * 	ps.putToProperty(<js>"BeanContext.implClasses.map"</js>,
+ * 		<js>"{'com.my.MyInterface2':'com.my.MyInterfaceImpl2'}"</js>);
  *
  * 	<jc>// Remove from MAP using JSON object.</jc>
  * 	ps.putToProperty(<js>"BeanContext.implClasses.map"</js>, <js>"{'com.my.MyInterface2':null}"</js>);
@@ -168,22 +208,27 @@ import org.apache.juneau.parser.*;
  * <p>
  * Context properties are retrieved from this store using the following 3 methods:
  * <ul class='spaced-list'>
- * 	<li>{@link #getProperty(String, Class, Object)} - Retrieve a SIMPLE or SET property converted to the specified class type.
- * 	<li>{@link #getMap(String, Class, Class, Map)} - Retrieve a MAP property with keys/values converted to the specified class types.
- * 	<li>{@link #getPropertyMap(String)} - Retrieve a map of all context properties with the specified prefix (e.g. <js>"BeanContext"</js> for {@link BeanContext} properties).
+ * 	<li>{@link #getProperty(String, Class, Object)} - Retrieve a SIMPLE or SET property converted to the specified
+ * 		class type.
+ * 	<li>{@link #getMap(String, Class, Class, Map)} - Retrieve a MAP property with keys/values converted to the
+ * 		specified class types.
+ * 	<li>{@link #getPropertyMap(String)} - Retrieve a map of all context properties with the specified prefix
+ * 		(e.g. <js>"BeanContext"</js> for {@link BeanContext} properties).
  * </ul>
  * <p>
  * As a general rule, only {@link Context} objects will use these read methods.
  *
  * <h6 class='topic'>Context objects</h6>
  * <p>
- * A Context object can be thought of as unmodifiable snapshot of a store.<br>
- * They should be 'fast' by avoiding synchronization by using final fields whenever possible.<br>
+ * A Context object can be thought of as unmodifiable snapshot of a store.
+ * <br>
+ * They should be 'fast' by avoiding synchronization by using final fields whenever possible.
+ * <br>
  * However, they MUST be thread safe.
  * <p>
- * Context objects are created using the {@link #getContext(Class)} method.<br>
- * As long as the properties on a store have not been modified, the store will return a cached copy
- * 	of a context.
+ * Context objects are created using the {@link #getContext(Class)} method.
+ * <br>
+ * As long as the properties on a store have not been modified, the store will return a cached copy of a context.
  * <p class='bcode'>
  * 	PropertyStore ps = PropertyStore.<jsm>create</jsm>();
  *
@@ -204,13 +249,16 @@ import org.apache.juneau.parser.*;
  *
  * <h6 class='topic'>Session objects</h6>
  * <p>
- * Session objects are created through {@link Context} objects, typically through a <code>createContext()</code> method.<br>
- * Unlike context objects, they are NOT reusable and NOT thread safe.<br>
- * They are meant to be used one time and then thrown away.<br>
+ * Session objects are created through {@link Context} objects, typically through a <code>createContext()</code> method.
+ * <br>
+ * Unlike context objects, they are NOT reusable and NOT thread safe.
+ * <br>
+ * They are meant to be used one time and then thrown away.
+ * <br>
  * They should NEVER need to use synchronization.
  * <p>
- * Session objects are also often used as scratchpads for information such as keeping track of call stack
- * 	information to detect recursive loops when serializing beans.
+ * Session objects are also often used as scratchpads for information such as keeping track of call stack information
+ * to detect recursive loops when serializing beans.
  */
 public final class PropertyStore {
 
@@ -226,7 +274,8 @@ public final class PropertyStore {
 	// Global Context cache.
 	// Property stores that are the 'same' will use the same maps from this cache.
 	// 'same' means the context properties are all the same when converted to strings.
-	private static final ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>> globalContextCache = new ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>>();
+	private static final ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>>
+		globalContextCache = new ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>>();
 
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private Lock rl = lock.readLock(), wl = lock.writeLock();
@@ -342,7 +391,8 @@ public final class PropertyStore {
 	 * 	<tr>
 	 * 		<td>Add/Remove <l>SET/LIST</l></td>
 	 * 		<td><js>"Foo.x.set.add"</js></td>
-	 * 		<td>If a collection, adds or removes the entries in the collection.  Otherwise, adds/removes a single entry.</td>
+	 * 		<td>If a collection, adds or removes the entries in the collection.  Otherwise, adds/removes a single
+	 * 			entry.</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>Set <l>MAP</l></td>
@@ -356,18 +406,16 @@ public final class PropertyStore {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * @param name The configuration property name.<br>
-	 * If name ends with <l>.add</l>, then the specified value is added to the
-	 * 	existing property value as an entry in a SET or LIST property.<br>
-	 * If name ends with <l>.put</l>, then the specified value is added to the
-	 * 	existing property value as a key/value pair in a MAP property.<br>
-	 * If name ends with <l>.remove</l>, then the specified value is removed from the
-	 * 	existing property property value in a SET or LIST property.<br>
-	 *
+	 * @param name The configuration property name.
+	 * <br>If name ends with <l>.add</l>, then the specified value is added to the existing property value as an entry
+	 * in a SET or LIST property.
+	 * <br>If name ends with <l>.put</l>, then the specified value is added to the existing property value as a
+	 * key/value pair in a MAP property.
+	 * <br>If name ends with <l>.remove</l>, then the specified value is removed from the existing property property
+	 * value in a SET or LIST property.
 	 * @param value The new value.
-	 * If <jk>null</jk>, the property value is deleted.<br>
-	 * In general, the value type can be anything.<br>
-	 *
+	 * If <jk>null</jk>, the property value is deleted.
+	 * In general, the value type can be anything.
 	 * @return This object (for method chaining).
 	 */
 	public PropertyStore setProperty(String name, Object value) {
@@ -532,14 +580,12 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Returns an instance of the specified context initialized with the properties
-	 * 	in this store.
+	 * Returns an instance of the specified context initialized with the properties in this store.
 	 * <p>
-	 * Multiple calls to this method for the same store class will return the same
-	 * 	cached value as long as the properties on this store are not touched.
+	 * Multiple calls to this method for the same store class will return the same cached value as long as the
+	 * properties on this store are not touched.
 	 * <p>
-	 * As soon as any properties are modified on this store, all cached entries
-	 * 	are discarded and recreated as needed.
+	 * As soon as any properties are modified on this store, all cached entries are discarded and recreated as needed.
 	 *
 	 * @param c The context class to instantiate.
 	 * @return The context instance.
@@ -574,8 +620,8 @@ public final class PropertyStore {
 	/**
 	 * Returns the configuration properties with the specified prefix.
 	 * <p>
-	 * For example, if <l>prefix</l> is <js>"BeanContext"</js>, then retrieves
-	 * 	all configuration properties that are prefixed with <js>"BeanContext."</js>.
+	 * For example, if <l>prefix</l> is <js>"BeanContext"</js>, then retrieves all configuration properties that are
+	 * prefixed with <js>"BeanContext."</js>.
 	 *
 	 * @param prefix The prefix of properties to retrieve.
 	 * @return The configuration properties with the specified prefix, never <jk>null</jk>.
@@ -593,8 +639,8 @@ public final class PropertyStore {
 	/**
 	 * Specifies the classloader to use when resolving classes from strings.
 	 * <p>
-	 * Can be used for resolving class names when the classes being created are in a different
-	 * 	classloader from the Juneau code.
+	 * Can be used for resolving class names when the classes being created are in a different classloader from the
+	 * Juneau code.
 	 * <p>
 	 * If <jk>null</jk>, the system classloader will be used to resolve classes.
 	 *
@@ -625,7 +671,6 @@ public final class PropertyStore {
 	 * @param name The full name of the property (e.g. <js>"BeanContext.sortProperties"</js>)
 	 * @param type The class type to convert the property value to.
 	 * @param def The default value if the property is not set.
-	 *
 	 * @return The property value.
 	 * @throws ConfigException If property has a value that cannot be converted to a boolean.
 	 */
@@ -654,7 +699,6 @@ public final class PropertyStore {
 	 * @param type The class type to convert the property value to.
 	 * @param def The type to instantiate if the property is not set.
 	 * @param args The arguments to pass to the default type constructor.
-	 *
 	 * @return The property either cast to the specified type, or instantiated from a <code>Class</code> object.
 	 * @throws ConfigException If property has a value that cannot be converted to a boolean.
 	 */
@@ -672,21 +716,21 @@ public final class PropertyStore {
 				return null;
 			if (ClassUtils.isParentClass(type, o.getClass()))
 				return (T)o;
-			throw new FormattedRuntimeException("Invalid object of type {0} found in call to PropertyStore.getTypeProperty({1},{2},{3},...)", o.getClass(), name, type, def);
+			throw new FormattedRuntimeException(
+				"Invalid object of type {0} found in call to PropertyStore.getTypeProperty({1},{2},{3},...)",
+				o.getClass(), name, type, def);
 		} finally {
 			rl.unlock();
 		}
 	}
 
 	/**
-	 * Returns a property value converted to a {@link LinkedHashMap} with the specified
-	 * 	key and value types.
+	 * Returns a property value converted to a {@link LinkedHashMap} with the specified key and value types.
 	 *
 	 * @param name The full name of the property (e.g. <js>"BeanContext.sortProperties"</js>)
 	 * @param keyType The class type of the keys in the map.
 	 * @param valType The class type of the values in the map.
 	 * @param def The default value if the property is not set.
-	 *
 	 * @return The property value.
 	 * @throws ConfigException If property has a value that cannot be converted to a boolean.
 	 */
@@ -870,8 +914,8 @@ public final class PropertyStore {
 	 * <p>
 	 * Instances of this map are immutable from outside this class.
 	 * <p>
-	 * The {@link PropertyMap#hashCode()} and {@link PropertyMap#equals(Object)} methods
-	 * 	can be used to compare with other property maps.
+	 * The {@link PropertyMap#hashCode()} and {@link PropertyMap#equals(Object)} methods can be used to compare with
+	 * other property maps.
 	 */
 	@SuppressWarnings("hiding")
 	public class PropertyMap {
@@ -918,7 +962,6 @@ public final class PropertyStore {
 		 * @param name The property name.
 		 * @param type The type of object to convert the value to.
 		 * @param def The default value if the specified property is not set.
-		 *
 		 * @return The property value.
 		 */
 		public <T> T get(String name, Class<T> type, T def) {
@@ -932,7 +975,8 @@ public final class PropertyStore {
 						return def;
 					return getBeanSession().convertToType(p.value, type);
 				} catch (InvalidDataConversionException e) {
-					throw new ConfigException("Could not retrieve property store property ''{0}''.  {1}", p.name, e.getMessage());
+					throw new ConfigException("Could not retrieve property store property ''{0}''.  {1}", p.name,
+						e.getMessage());
 				}
 			} finally {
 				rl.unlock();
@@ -948,7 +992,6 @@ public final class PropertyStore {
 		 * @param keyType The class type of the keys of the map.
 		 * @param valueType The class type of the values of the map.
 		 * @param def The default value if the specified property is not set.
-		 *
 		 * @return The property value.
 		 */
 		@SuppressWarnings("unchecked")
@@ -961,11 +1004,13 @@ public final class PropertyStore {
 				try {
 					if (isBeanSessionAvailable()) {
 						BeanSession session = getBeanSession();
-						return (Map<K,V>)session.convertToType(p.value, session.getClassMeta(LinkedHashMap.class, keyType, valueType));
+						return (Map<K,V>)session.convertToType(p.value,
+							session.getClassMeta(LinkedHashMap.class, keyType, valueType));
 					}
 					return def;
 				} catch (InvalidDataConversionException e) {
-					throw new ConfigException("Could not retrieve property store property ''{0}''.  {1}", p.name, e.getMessage());
+					throw new ConfigException("Could not retrieve property store property ''{0}''.  {1}", p.name,
+						e.getMessage());
 				}
 			} finally {
 				rl.unlock();
@@ -1110,19 +1155,24 @@ public final class PropertyStore {
 		}
 
 		void add(Object val) {
-			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).",
+				JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		void remove(Object val) {
-			throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}).",
+				JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		void put(Object val) {
-			throw new ConfigException("Cannot put value {0} ({1}) to property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot put value {0} ({1}) to property ''{2}'' ({3}).",
+				JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		void put(Object key, Object val) {
-			throw new ConfigException("Cannot put value {0}({1})->{2}({3}) to property ''{4}'' ({5}).", JsonSerializer.DEFAULT_LAX.toString(key), getReadableClassNameForObject(key), JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot put value {0}({1})->{2}({3}) to property ''{4}'' ({5}).",
+				JsonSerializer.DEFAULT_LAX.toString(key), getReadableClassNameForObject(key),
+				JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		protected Object value() {

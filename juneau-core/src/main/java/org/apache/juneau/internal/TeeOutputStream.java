@@ -44,8 +44,8 @@ public class TeeOutputStream extends OutputStream {
 	 * Adds an output stream to this tee output stream.
 	 *
 	 * @param os The output stream to add to this tee output stream.
-	 * @param close If <jk>false</jk>, then calling {@link #close()} on this stream
-	 * 	will not filter to the specified output stream.
+	 * @param close If <jk>false</jk>, then calling {@link #close()} on this stream will not filter to the specified
+	 * output stream.
 	 * @return This object (for method chaining).
 	 */
 	public TeeOutputStream add(OutputStream os, boolean close) {
@@ -68,8 +68,8 @@ public class TeeOutputStream extends OutputStream {
 	}
 
 	/**
-	 * Returns the output stream identified through the <code>id</code> parameter
-	 * passed in through the {@link #add(String, OutputStream, boolean)} method.
+	 * Returns the output stream identified through the <code>id</code> parameter passed in through the
+	 * {@link #add(String, OutputStream, boolean)} method.
 	 *
 	 * @param id The ID associated with the output stream.
 	 * @return The output stream, or <jk>null</jk> if no identifier was specified when the output stream was added.
@@ -81,8 +81,8 @@ public class TeeOutputStream extends OutputStream {
 	}
 
 	/**
-	 * Same as {@link #add(OutputStream, boolean)} but associates the stream with an identifier
-	 * so the stream can be retrieved through {@link #getOutputStream(String)}.
+	 * Same as {@link #add(OutputStream, boolean)} but associates the stream with an identifier so the stream can be
+	 * retrieved through {@link #getOutputStream(String)}.
 	 *
 	 * @param id The ID to associate the output stream with.
 	 * @param os The output stream to add.

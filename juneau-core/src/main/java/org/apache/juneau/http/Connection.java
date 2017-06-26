@@ -64,7 +64,8 @@ package org.apache.juneau.http;
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
  * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
 public final class Connection extends HeaderString {
@@ -88,6 +89,7 @@ public final class Connection extends HeaderString {
 
 	/**
 	 * Returns <jk>true</jk> if the header value is <code>close</code>.
+	 *
 	 * @return <jk>true</jk> if the header value is <code>close</code>.
 	 */
 	public boolean isClose() {
@@ -96,6 +98,7 @@ public final class Connection extends HeaderString {
 
 	/**
 	 * Returns <jk>true</jk> if the header value is <code>keep-alive</code>.
+	 *
 	 * @return <jk>true</jk> if the header value is <code>keep-alive</code>.
 	 */
 	public boolean isKeepAlive() {
@@ -104,6 +107,7 @@ public final class Connection extends HeaderString {
 
 	/**
 	 * Returns <jk>true</jk> if the header value is <code>upgrade</code>.
+	 *
 	 * @return <jk>true</jk> if the header value is <code>upgrade</code>.
 	 */
 	public boolean isUpgrade() {

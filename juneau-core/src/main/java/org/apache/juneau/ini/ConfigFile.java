@@ -65,11 +65,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @throws SerializeException If the object value could not be converted to a JSON string for some reason.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public abstract String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded, boolean newline) throws SerializeException;
+	public abstract String put(String sectionName, String sectionKey, Object value, Serializer serializer,
+			boolean encoded, boolean newline) throws SerializeException;
 
 	/**
-	 * Identical to {@link #put(String, String, Object, Serializer, boolean, boolean)} except used when the value is a simple string
-	 * to avoid having to catch a {@link SerializeException}.
+	 * Identical to {@link #put(String, String, Object, Serializer, boolean, boolean)} except used when the value is a
+	 * simple string to avoid having to catch a {@link SerializeException}.
 	 *
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
@@ -82,7 +83,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 
 	/**
-	 * Removes an antry from this config file.
+	 * Removes an entry from this config file.
 	 *
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
@@ -101,7 +102,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	public abstract Set<String> getSectionKeys(String sectionName);
 
 	/**
-	 * Reloads ths config file object from the persisted file contents if the modified timestamp on the file has changed.
+	 * Reloads this config file object from the persisted file contents if the modified timestamp on the file has changed.
 	 *
 	 * @return This object (for method chaining).
 	 * @throws IOException If file could not be read, or file is not associated with this object.
@@ -110,7 +111,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	public abstract ConfigFile loadIfModified() throws IOException;
 
 	/**
-	 * Loads ths config file object from the persisted file contents.
+	 * Loads this config file object from the persisted file contents.
 	 *
 	 * @return This object (for method chaining).
 	 * @throws IOException If file could not be read, or file is not associated with this object.
@@ -119,7 +120,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	public abstract ConfigFile load() throws IOException;
 
 	/**
-	 * Loads ths config file object from the specified reader.
+	 * Loads this config file object from the specified reader.
 	 *
 	 * @param r The reader to read from.
 	 * @return This object (for method chaining).
@@ -150,7 +151,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Adds header comments to the specified section.
 	 * <p>
-	 * Header comments are defined as lines that start with <jk>"#"</jk> immediately preceding a section header <jk>"[section]"</jk>.
+	 * Header comments are defined as lines that start with <jk>"#"</jk> immediately preceding a section header
+	 * <jk>"[section]"</jk>.
 	 * These are handled as part of the section itself instead of being interpreted as comments in the previous section.
 	 * <p>
 	 * Header comments can be of the following formats...
@@ -189,7 +191,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Converts the specified object to a string.
 	 * <p>
-	 * The serialized output is identical to LAX JSON (JSON with unquoted attributes) except for the following exceptions:
+	 * The serialized output is identical to LAX JSON (JSON with unquoted attributes) except for the following
+	 * exceptions:
 	 * <ul>
 	 * 	<li>Top level strings are not quoted.
 	 * </ul>
@@ -278,18 +281,22 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	List l = cf.getObject(<js>"MySection/myListOfBeans"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List l = cf.getObject(<js>"MySection/my2dListOfStrings"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List l = cf.getObject(<js>"MySection/my2dListOfStrings"</js>, LinkedList.<jk>class</jk>,
+	 * 		LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
+	 * 		String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map m = cf.getObject(<js>"MySection/myMapOfListsOfBeans"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map m = cf.getObject(<js>"MySection/myMapOfListsOfBeans"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>,
+	 * 		List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value
+	 * types.
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 * <p>
@@ -300,10 +307,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
@@ -317,12 +326,14 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
@@ -348,7 +359,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	MyBean b = cf.getObject(<js>"MySection/myBean"</js>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] ba = cf.getObject(<js>"MySection/myBeanArray"</js>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] b = cf.getObject(<js>"MySection/myBeanArray"</js>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myList"</js>, LinkedList.<jk>class</jk>);
@@ -361,7 +372,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 * type.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T getObject(String key, Class<T> type) throws ParseException {
@@ -374,10 +386,11 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param <T> The class type of the object being created.
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified
+	 * type.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException {
@@ -403,11 +416,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 	/**
-	 * Same as {@link #getObjectWithDefault(String, Object, Class)} but allows you to specify the parser to use to parse the value.
+	 * Same as {@link #getObjectWithDefault(String, Object, Class)} but allows you to specify the parser to use to parse
+	 * the value.
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param def The default value if section or key does not exist.
 	 * @param type The class to convert the value to.
 	 *
@@ -429,11 +443,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if section or key does not exist.
 	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 *
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
@@ -442,17 +457,20 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 	/**
-	 * Same as {@link #getObjectWithDefault(String, Object, Type, Type...)} but allows you to specify the parser to use to parse the value.
+	 * Same as {@link #getObjectWithDefault(String, Object, Type, Type...)} but allows you to specify the parser to use
+	 * to parse the value.
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param parser The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param def The default value if section or key does not exist.
 	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
@@ -472,7 +490,6 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param c The class to convert the value to.
-	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or the default value if the section or value doesn't exist.
 	 */
@@ -488,7 +505,6 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param parser The parser to use for parsing the object.
 	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param c The class to convert the value to.
-	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or the default value if the section or value doesn't exist.
 	 */
@@ -506,10 +522,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
@@ -519,22 +537,25 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 	/**
-	 * Same as {@link #getObject(String, String, Type, Type...)} but allows you to specify the parser to use to parse the value.
+	 * Same as {@link #getObject(String, String, Type, Type...)} but allows you to specify the parser to use to parse
+	 * the value.
 	 *
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
 	 * @param parser The parser to use for parsing the object.
-	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
+	 * If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 *
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
-	public final <T> T getObject(String sectionName, String sectionKey, Parser parser, Type type, Type...args) throws ParseException {
+	public final <T> T getObject(String sectionName, String sectionKey, Parser parser, Type type, Type...args)
+			throws ParseException {
 		assertFieldNotNull(sectionName, "sectionName");
 		assertFieldNotNull(sectionKey, "sectionKey");
 		return parse(get(sectionName, sectionKey), parser, type, args);
@@ -636,14 +657,16 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 	/**
-	 * Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered serializer.
+	 * Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered
+	 * serializer.
 	 * <p>
 	 * Equivalent to calling <code>put(key, value, isEncoded(key))</code>.
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value POJO.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
-	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with
+	 * this config file.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value) throws SerializeException {
@@ -656,9 +679,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value POJO.
 	 * @param serializer The serializer to use for serializing the object.
-	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * If <jk>null</jk>, then uses the predefined serializer on the config file.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
-	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with
+	 * this config file.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value, Serializer serializer) throws SerializeException {
@@ -674,14 +698,17 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 		are serialized as plain strings.
 	 * 	<li>Arrays and collections of simple types are serialized as comma-delimited lists of plain strings.
 	 * 	<li>Other types (e.g. beans) are serialized using the serializer registered with this config file.
-	 * 	<li>Arrays and collections of other types are serialized as comma-delimited lists of serialized strings of each entry.
+	 * 	<li>Arrays and collections of other types are serialized as comma-delimited lists of serialized strings of
+	 * 		each entry.
 	 * </ul>
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value.
-	 * @param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted to disk.
+	 * @param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted to
+	 * disk.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
-	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with
+	 * this config file.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
 	public final String put(String key, Object value, boolean encoded) throws SerializeException {
@@ -689,19 +716,23 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 	/**
-	 * Same as {@link #put(String, Object, boolean)} but allows you to specify the serializer to use to serialize the value.
+	 * Same as {@link #put(String, Object, boolean)} but allows you to specify the serializer to use to serialize the
+	 * value.
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value.
 	 * @param serializer The serializer to use for serializing the object.
-	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted to disk.
+	 * If <jk>null</jk>, then uses the predefined serializer on the config file.
+	 * @param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted
+	 * to disk.
 	 * @param newline If <jk>true</jk>, a newline is added to the beginning of the input.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
-	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
+	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered
+	 * with this config file.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public final String put(String key, Object value, Serializer serializer, boolean encoded, boolean newline) throws SerializeException {
+	public final String put(String key, Object value, Serializer serializer, boolean encoded, boolean newline)
+			throws SerializeException {
 		assertFieldNotNull(key, "key");
 		return put(getSectionName(key), getSectionKey(key), serialize(value, serializer, newline), encoded);
 	}
@@ -733,16 +764,18 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param sectionName The section name to write from.
 	 * @param bean The bean to set the properties on.
 	 * @param ignoreUnknownProperties If <jk>true</jk>, don't throw an {@link IllegalArgumentException} if this section
-	 * 	contains a key that doesn't correspond to a setter method.
+	 * contains a key that doesn't correspond to a setter method.
 	 * @param permittedPropertyTypes If specified, only look for setters whose property types
-	 * 	are those listed.  If not specified, use all setters.
+	 * are those listed.  If not specified, use all setters.
 	 * @return An object map of the changes made to the bean.
 	 * @throws ParseException If parser was not set on this config file or invalid properties were found in the section.
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public final ObjectMap writeProperties(String sectionName, Object bean, boolean ignoreUnknownProperties, Class<?>...permittedPropertyTypes) throws ParseException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	public final ObjectMap writeProperties(String sectionName, Object bean, boolean ignoreUnknownProperties,
+			Class<?>...permittedPropertyTypes) throws ParseException, IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
 		assertFieldNotNull(bean, "bean");
 		ObjectMap om = new ObjectMap();
 		readLock();
@@ -818,12 +851,13 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * @param sectionName The section name to write from.
 	 * @param c The bean class to create.
-	 * @param ignoreUnknownProperties If <jk>false</jk>, throws a {@link ParseException} if
-	 * 	the section contains an entry that isn't a bean property name.
+	 * @param ignoreUnknownProperties If <jk>false</jk>, throws a {@link ParseException} if the section contains an
+	 * entry that isn't a bean property name.
 	 * @return A new bean instance.
 	 * @throws ParseException
 	 */
-	public final <T> T getSectionAsBean(String sectionName, Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
+	public final <T> T getSectionAsBean(String sectionName, Class<T> c, boolean ignoreUnknownProperties)
+			throws ParseException {
 		assertFieldNotNull(c, "c");
 		readLock();
 		try {
@@ -949,7 +983,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param name The section name.
 	 * @param create Create the section if it's not there.
 	 * @return The section, or <jk>null</jk> if section does not exist.
-	 * @throws UnsupportedOperationException If config file is read only and section doesn't exist and <code>create</code> is <jk>true</jk>.
+	 * @throws UnsupportedOperationException If config file is read only and section doesn't exist and
+	 * <code>create</code> is <jk>true</jk>.
 	 */
 	protected abstract Section getSection(String name, boolean create);
 
@@ -1014,7 +1049,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 	/**
-	 * Same as {@link #serializeTo(Writer)}, except allows you to explicitely specify a format.
+	 * Same as {@link #serializeTo(Writer)}, except allows you to explicitly specify a format.
 	 *
 	 * @param out The writer to send the output to.
 	 * @param format The {@link ConfigFileFormat} of the output.
@@ -1035,9 +1070,9 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Merges the contents of the specified config file into this config file.
 	 * <p>
-	 * Pretty much identical to just replacing this config file, but
-	 * 	causes the {@link ConfigFileListener#onChange(ConfigFile, Set)} method to be invoked
-	 * 	on differences between the file.
+	 * Pretty much identical to just replacing this config file, but causes the
+	 * {@link ConfigFileListener#onChange(ConfigFile, Set)} method to be invoked on differences between the file.
+	 *
 	 * @param cf The config file whose values should be copied into this config file.
 	 * @return This object (for method chaining).
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -1053,8 +1088,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	public abstract String toString();
 
 	/**
-	 * Returns a wrapped instance of this config file where calls to getters
-	 * 	have their values first resolved by the specified {@link VarResolver}.
+	 * Returns a wrapped instance of this config file where calls to getters have their values first resolved by the
+	 * specified {@link VarResolver}.
 	 *
 	 * @param vr The {@link VarResolver} for resolving variables in values.
 	 * @return This config file wrapped in an instance of {@link ConfigFileWrapped}.
@@ -1062,8 +1097,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	public abstract ConfigFile getResolving(VarResolver vr);
 
 	/**
-	 * Returns a wrapped instance of this config file where calls to getters
-	 * 	have their values first resolved by the specified {@link VarResolverSession}.
+	 * Returns a wrapped instance of this config file where calls to getters have their values first resolved by the
+	 * specified {@link VarResolverSession}.
 	 *
 	 * @param vs The {@link VarResolverSession} for resolving variables in values.
 	 * @return This config file wrapped in an instance of {@link ConfigFileWrapped}.
@@ -1071,8 +1106,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 	public abstract ConfigFile getResolving(VarResolverSession vs);
 
 	/**
-	 * Returns a wrapped instance of this config file where calls to getters have their values
-	 * first resolved by a default {@link VarResolver}.
+	 * Returns a wrapped instance of this config file where calls to getters have their values first resolved by a
+	 * default {@link VarResolver}.
 	 *
 	 * The default {@link VarResolver} is registered with the following {@link Var StringVars}:
 	 * <ul class='spaced-list'>

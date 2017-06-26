@@ -175,7 +175,8 @@ public final class ClassUtils {
 	/**
 	 * Returns the signature of the specified method.
 	 * For no-arg methods, the signature will be a simple string such as <js>"toString"</js>.
-	 * For methods with one or more args, the arguments will be fully-qualified class names (e.g. <js>"append(java.util.StringBuilder,boolean)"</js>)
+	 * For methods with one or more args, the arguments will be fully-qualified class names (e.g.
+	 * <js>"append(java.util.StringBuilder,boolean)"</js>)
 	 *
 	 * @param m The methods to get the signature on.
 	 * @return The methods signature.
@@ -195,7 +196,9 @@ public final class ClassUtils {
 		return sb.toString();
 	}
 
-	private final static Map<Class<?>, Class<?>> pmap1 = new HashMap<Class<?>, Class<?>>(), pmap2 = new HashMap<Class<?>, Class<?>>();
+	private final static Map<Class<?>, Class<?>>
+		pmap1 = new HashMap<Class<?>, Class<?>>(),
+		pmap2 = new HashMap<Class<?>, Class<?>>();
 	static {
 		pmap1.put(boolean.class, Boolean.class);
 		pmap1.put(byte.class, Byte.class);
@@ -216,8 +219,8 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * If the specified class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>)
-	 * 	returns it's wrapper class (e.g. <code>Integer.<jk>class</jk></code>).
+	 * If the specified class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
+	 * (e.g. <code>Integer.<jk>class</jk></code>).
 	 *
 	 * @param c The class.
 	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
@@ -227,8 +230,8 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * If the specified class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>)
-	 * 	returns it's primitive class (e.g. <code>int.<jk>class</jk></code>).
+	 * If the specified class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>) returns it's
+	 * primitive class (e.g. <code>int.<jk>class</jk></code>).
 	 *
 	 * @param c The class.
 	 * @return The primitive class, or <jk>null</jk> if class is not a primitive wrapper.
@@ -238,8 +241,8 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * If the specified class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>)
-	 * 	returns it's wrapper class (e.g. <code>Integer.<jk>class</jk></code>).
+	 * If the specified class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
+	 * (e.g. <code>Integer.<jk>class</jk></code>).
 	 *
 	 * @param c The class.
 	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
@@ -349,7 +352,7 @@ public final class ClassUtils {
 	 * <p>
 	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child methods.
 	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method
-	 * 	(i.e. the same name and arguments).
+	 * (i.e. the same name and arguments).
 	 *
 	 * @param a The annotation to search for.
 	 * @param m The method to search.
@@ -363,16 +366,16 @@ public final class ClassUtils {
 	 * Returns the specified annotation on the specified method.
 	 * <p>
 	 * Similar to {@link Method#getAnnotation(Class)}, but searches up the parent hierarchy for the annotation defined
-	 * 	on parent classes and interfaces.
+	 * on parent classes and interfaces.
 	 * <p>
 	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child methods.
 	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method
-	 * 	(i.e. the same name and arguments).
+	 * (i.e. the same name and arguments).
 	 *
 	 * @param a The annotation to search for.
 	 * @param c The child class to start searching from.
-	 * 	Note that it can be a descendant class of the actual declaring class of the method passed in.
-	 * 	This allows you to find annotations on methods overridden by the method passed in.
+	 * Note that it can be a descendant class of the actual declaring class of the method passed in.
+	 * This allows you to find annotations on methods overridden by the method passed in.
 	 * @param method The method to search.
 	 * @return The annotation, or <jk>null</jk> if it wasn't found.
 	 */
@@ -518,10 +521,12 @@ public final class ClassUtils {
 	 * @param name The method name.
 	 * @param returnType The return type of the method.
 	 * Can be a super type of the actual return type.
-	 * For example, if the actual return type is <code>CharSequence</code>, then <code>Object</code> will match but <code>String</code> will not.
+	 * For example, if the actual return type is <code>CharSequence</code>, then <code>Object</code> will match but
+	 * <code>String</code> will not.
 	 * @param parameterTypes The parameter types of the method.
 	 * Can be subtypes of the actual parameter types.
-	 * For example, if the parameter type is <code>CharSequence</code>, then <code>String</code> will match but <code>Object</code> will not.
+	 * For example, if the parameter type is <code>CharSequence</code>, then <code>String</code> will match but
+	 * <code>Object</code> will not.
 	 * @return The matched method, or <jk>null</jk> if no match was found.
 	 */
 	public static Method findPublicMethod(Class<?> c, String name, Class<?> returnType, Class<?>...parameterTypes) {
@@ -712,6 +717,7 @@ public final class ClassUtils {
 
 	/**
 	 * Returns a {@link MethodInfo} bean that describes the specified method.
+	 *
 	 * @param m The method to describe.
 	 * @return The bean with information about the method.
 	 */
@@ -721,6 +727,7 @@ public final class ClassUtils {
 
 	/**
 	 * Returns {@link MethodInfo} beans that describe the specified methods.
+	 *
 	 * @param m The methods to describe.
 	 * @return The beans with information about the methods.
 	 */
@@ -756,7 +763,7 @@ public final class ClassUtils {
 	 *
 	 * @param c The class to cast to.
 	 * @param c2 The class to instantiate.
-	 * 	Can also be an instance of the class.
+	 * Can also be an instance of the class.
 	 * @param args The arguments to pass to the constructor.
 	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
 	 * @throws RuntimeException if constructor could not be found or called.

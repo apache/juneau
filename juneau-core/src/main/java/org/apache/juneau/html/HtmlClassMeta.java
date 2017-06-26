@@ -17,7 +17,8 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the class.
+ * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on
+ * the class.
  */
 public class HtmlClassMeta extends ClassMetaExtended {
 

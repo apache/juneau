@@ -80,8 +80,8 @@ public final class ParserGroup {
 	 * @param propertyStore The modifiable properties that were used to initialize the parsers.
 	 * A snapshot of these will be made so that we can clone and modify this group.
 	 * @param parsers The parsers defined in this group.
-	 * The order is important because they will be tried in reverse order (e.g.
-	 * 	newer first) in which they will be tried to match against media types.
+	 * The order is important because they will be tried in reverse order (e.g. newer first) in which they will be tried
+	 * to match against media types.
 	 */
 	public ParserGroup(PropertyStore propertyStore, Parser[] parsers) {
 		this.propertyStore = PropertyStore.create(propertyStore);

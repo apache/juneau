@@ -20,8 +20,8 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * An instance of a <code>Map</code> where the keys and values
- * 	are simple <code>String[]</code> and <code>Object[]</code> arrays.
+ * An instance of a <code>Map</code> where the keys and values are simple <code>String[]</code> and
+ * <code>Object[]</code> arrays.
  * <p>
  * Typically more efficient than <code>HashMaps</code> for small maps (e.g. &lt;10 entries).
  * <p>

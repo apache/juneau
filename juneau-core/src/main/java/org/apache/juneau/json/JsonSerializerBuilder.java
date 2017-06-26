@@ -34,6 +34,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public JsonSerializerBuilder(PropertyStore propertyStore) {
@@ -97,8 +98,8 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 * The JSON specification allows for either format.
-	 * However, if you're embedding JSON in an HTML script tag, this setting prevents
-	 * 	confusion when trying to serialize <xt>&lt;\/script&gt;</xt>.
+	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to
+	 * serialize <xt>&lt;\/script&gt;</xt>.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

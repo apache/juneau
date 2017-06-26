@@ -332,8 +332,9 @@ public class BeanPropertyMeta {
 	 * Returns the {@link ClassMeta} of the class of this property.
 	 * <p>
 	 * If this property or the property type class has a {@link PojoSwap} associated with it, this
-	 * 	method returns the transformed class meta.
-	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and {@link #set(BeanMap,String,Object)} methods.
+	 * method returns the transformed class meta.
+	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and
+	 * {@link #set(BeanMap,String,Object)} methods.
 	 *
 	 * @return The {@link ClassMeta} of the class of this property.
 	 */
@@ -504,7 +505,7 @@ public class BeanPropertyMeta {
 
 			BeanSession session = m.getBeanSession();
 
-			// Comvert to raw form.
+			// Convert to raw form.
 			value = unswap(session, value);
 
 			if (m.bean == null) {

@@ -44,6 +44,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore Initialize with the specified config property store.
 	 */
 	public JsonSchemaSerializer(PropertyStore propertyStore) {
@@ -52,6 +53,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore Initialize with the specified config property store.
 	 * @param overrideProperties
 	 */
@@ -62,7 +64,8 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 
 	@Override /* CoreObject */
 	protected ObjectMap getOverrideProperties() {
-		return super.getOverrideProperties().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true);
+		return super.getOverrideProperties().append(SERIALIZER_detectRecursions, true)
+			.append(SERIALIZER_ignoreRecursions, true);
 	}
 
 
@@ -71,7 +74,8 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new JsonSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
@@ -92,7 +96,8 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private ObjectMap getSchema(JsonSerializerSession session, ClassMeta<?> eType, String attrName, String[] pNames) throws Exception {
+	private ObjectMap getSchema(JsonSerializerSession session, ClassMeta<?> eType, String attrName, String[] pNames)
+			throws Exception {
 		ObjectMap out = new ObjectMap();
 
 		if (eType == null)

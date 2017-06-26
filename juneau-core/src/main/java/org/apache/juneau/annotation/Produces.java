@@ -26,10 +26,10 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Provides a way to define the contents of {@link Serializer#getMediaTypes()} through an annotation.
  * <p>
- * The {@link Serializer#getMediaTypes()} default implementation gathers the media types by looking
- * 	for this annotation.
+ * The {@link Serializer#getMediaTypes()} default implementation gathers the media types by looking for this annotation.
+ * <br>
  * It should be noted that this annotation is optional and that the {@link Serializer#getMediaTypes()} method can
- * 	be overridden by subclasses to return the media types programmatically.
+ * be overridden by subclasses to return the media types programmatically.
  *
  * <h5 class='section'>Example:</h5>
  * <p>
@@ -40,9 +40,10 @@ import org.apache.juneau.serializer.*;
  * </p>
  * <p>
  * The media types can also be <code>media-range</code> values per
- * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>.
- * When meta-characters are used, you should specify the {@link #contentType()} value to
- * 	indicate the real media type value that can be set on the <code>Content-Type</code> response header.
+ * <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>.
+ * <br>
+ * When meta-characters are used, you should specify the {@link #contentType()} value to indicate the real media type
+ * value that can be set on the <code>Content-Type</code> response header.
  *
  * <p class='bcode'>
  * 	<jc>// Produces any text</jc>
@@ -64,7 +65,8 @@ public @interface Produces {
 	 * A comma-delimited list of the media types that the serializer can handle.
 	 * <p>
 	 * Can contain meta-characters per the <code>media-type</code> specification of
-	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 *
 	 * @return The media types that the parser can handle.
 	 */
 	String value() default "";
@@ -72,9 +74,9 @@ public @interface Produces {
 	/**
 	 * The content type that this serializer produces.
 	 * <p>
-	 * Can be used to override the <code>Content-Type</code> response type if the media types
-	 * 	are <code>media-ranges</code> with meta-characters, or the <code>Content-Type</code>
-	 * 	differs from the media type for some reason.
+	 * Can be used to override the <code>Content-Type</code> response type if the media types are
+	 * <code>media-ranges</code> with meta-characters, or the <code>Content-Type</code> differs from the media type for some reason.
+	 *
 	 * @return The content type that this serializer produces, or blank if no overriding value exists.
 	 */
 	String contentType() default "";

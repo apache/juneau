@@ -626,10 +626,12 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty string.
+	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty
+	 * string.
 	 *
 	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty string.
+	 * @return <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty
+	 * string.
 	 */
 	public static boolean isEmpty(Object s) {
 		return s == null || s.toString().isEmpty();
@@ -913,14 +915,15 @@ public final class StringUtils {
 	/**
 	 * Generated a random UUID with the specified number of characters.
 	 * Characters are composed of lower-case ASCII letters and numbers only.
-	 * This method conforms to the restrictions for hostnames as specified in <a class="doclink" href="https://tools.ietf.org/html/rfc952">RFC 952</a>
-	 * Since each character has 36 possible values, the square approximation formula for
-	 * 	the number of generated IDs that would produce a 50% chance of collision is:
+	 * This method conforms to the restrictions for hostnames as specified in <a class="doclink"
+	 * href="https://tools.ietf.org/html/rfc952">RFC 952</a>
+	 * Since each character has 36 possible values, the square approximation formula for the number of generated IDs
+	 * that would produce a 50% chance of collision is:
 	 * <code>sqrt(36^N)</code>.
-	 * Dividing this number by 10 gives you an approximation of the number of generated IDs
-	 * 	needed to produce a &lt;1% chance of collision.
-	 * For example, given 5 characters, the number of generated IDs need to produce a &lt;1% chance of
-	 * 	collision would be:
+	 * Dividing this number by 10 gives you an approximation of the number of generated IDs needed to produce a
+	 * &lt;1% chance of collision.
+	 * For example, given 5 characters, the number of generated IDs need to produce a &lt;1% chance of collision would
+	 * be:
 	 * <code>sqrt(36^5)/10=777</code>
 	 *
 	 * @param numchars The number of characters in the generated UUID.
@@ -978,8 +981,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values
-	 * 	in the specified map.
+	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values in the specified map.
 	 * <p>
 	 * Nested variables are supported in both the input string and map values.
 	 * <p>
@@ -1070,7 +1072,6 @@ public final class StringUtils {
 
 	/**
 	 * Same as {@link #pathStartsWith(String, String)} but returns <jk>true</jk> if at least one prefix matches.
-	 * <p>
 	 *
 	 * @param path The path to check.
 	 * @param pathPrefixes The prefixes.
@@ -1111,6 +1112,7 @@ public final class StringUtils {
 	 * 	String in = <js>"0,1,2"</js>;
 	 * 	String[] parts = in.split(<js>","</js>);
 	 * 	String p1 = (parts.<jk>length</jk> > 1 ? parts[1] : <js>""</js>);
+	 * </p>
 	 *
 	 * @param fieldNum The field number.  Zero-indexed.
 	 * @param s The input string.
@@ -1351,7 +1353,8 @@ public final class StringUtils {
 	 * Returns the first non-whitespace character in the string.
 	 *
 	 * @param s The string to check.
-	 * @return The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed of only whitespace.
+	 * @return The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
+	 * of only whitespace.
 	 */
 	public static char firstNonWhitespaceChar(String s) {
 		if (s != null)
@@ -1559,7 +1562,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Same as {@link String#indexOf(int)} except allows you to check for mulitiple characters.
+	 * Same as {@link String#indexOf(int)} except allows you to check for multiple characters.
 	 *
 	 * @param s The string to check.
 	 * @param c The characters to check for.

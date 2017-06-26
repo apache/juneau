@@ -17,8 +17,8 @@ package org.apache.juneau.svl;
  * <p>
  * Note the difference between this class and {@link SimpleVar} that returns simple string values.
  * Unlike the {@link SimpleVar} class, the output from this class cannot contain nested variables.
- * However, this class can be more efficient for variables that produce large amounts of output
- * 	so that the creation of large in-memory strings is avoided.
+ * However, this class can be more efficient for variables that produce large amounts of output so that the creation
+ * of large in-memory strings is avoided.
  * <p>
  * Subclasses must implement the {@link #resolveTo(VarResolverSession, java.io.Writer, String)} method.
  *

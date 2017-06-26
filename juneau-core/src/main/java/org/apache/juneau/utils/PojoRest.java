@@ -23,8 +23,8 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Provides the ability to perform standard REST operations (GET, PUT, POST, DELETE) against
- * nodes in a POJO model.  Nodes in the POJO model are addressed using URLs.
+ * Provides the ability to perform standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.
+ * Nodes in the POJO model are addressed using URLs.
  * <p>
  * A POJO model is defined as a tree model where nodes consist of consisting of the following:
  * <ul class='spaced-list'>
@@ -35,12 +35,16 @@ import org.apache.juneau.parser.*;
  * <p>
  * Leaves of the tree can be any type of object.
  * <p>
- * Use {@link #get(String) get()} to retrieve an element from a JSON tree.<br>
- * Use {@link #put(String,Object) put()} to create (or overwrite) an element in a JSON tree.<br>
- * Use {@link #post(String,Object) post()} to add an element to a list in a JSON tree.<br>
- * Use {@link #delete(String) delete()} to remove an element from a JSON tree.<br>
+ * Use {@link #get(String) get()} to retrieve an element from a JSON tree.
+ * <br>
+ * Use {@link #put(String,Object) put()} to create (or overwrite) an element in a JSON tree.
+ * <br>
+ * Use {@link #post(String,Object) post()} to add an element to a list in a JSON tree.
+ * <br>
+ * Use {@link #delete(String) delete()} to remove an element from a JSON tree.
  * <p>
- * Leading slashes in URLs are ignored.  So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
+ * Leading slashes in URLs are ignored.
+ * So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -102,8 +106,9 @@ import org.apache.juneau.parser.*;
  * 	);
  * 	johnSmith.put(<js>"additionalInfo/medicalInfo"</js>, medicalInfo);
  * <p>
- * In the special case of collections/arrays of maps/beans, a special XPath-like selector notation
- * 	can be used in lieu of index numbers on GET requests to return a map/bean with a specified attribute value.<br>
+ * In the special case of collections/arrays of maps/beans, a special XPath-like selector notation can be used in lieu
+ * of index numbers on GET requests to return a map/bean with a specified attribute value.
+ * <br>
  * The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
  *
  * <h5 class='section'>Example:</h5>
@@ -155,7 +160,7 @@ public final class PojoRest {
 	}
 
 	/**
-	 * Call this method to prevent the root object from being overwritten on put("", xxx); calls.
+	 * Call this method to prevent the root object from being overwritten on <code>put("", xxx);</code> calls.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -223,7 +228,6 @@ public final class PojoRest {
 	 * If null or blank, returns the root.
 	 * @param def The default value if addressed item does not exist.
 	 * @param <T> The specified object type.
-	 *
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
 	public <T> T get(Class<T> type, String url, T def) {
@@ -461,30 +465,33 @@ public final class PojoRest {
 	 * </ul>
 	 * <p>
 	 * As a rule, use the simplest format needed to uniquely resolve a method.
-	 * @param args The arguments to pass as parameters to the method.<br>
-	 * These will automatically be converted to the appropriate object type if possible.<br>
+	 * @param args The arguments to pass as parameters to the method.
+	 * These will automatically be converted to the appropriate object type if possible.
 	 * This must be an array, like a JSON array.
 	 * @return The returned object from the method call.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
+	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and
+	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>The number of actual and formal parameters differ.
-	 * 		<li>An unwrapping conversion for primitive arguments fails.
-	 * 		<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation conversion.
-	 * 		<li>The constructor pertains to an enum type.
-	 * 	</ul>
+	 * <ul class='spaced-list'>
+	 * 	<li>The number of actual and formal parameters differ.
+	 * 	<li>An unwrapping conversion for primitive arguments fails.
+	 * 	<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 		conversion.
+	 * 	<li>The constructor pertains to an enum type.
+	 * </ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 * @throws NoSuchMethodException
 	 * @throws IOException
 	 */
-	public Object invokeMethod(String url, String method, String args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, NoSuchMethodException, IOException {
+	public Object invokeMethod(String url, String method, String args) throws InvocationTargetException,
+			IllegalArgumentException, IllegalAccessException, ParseException, NoSuchMethodException, IOException {
 		return new PojoIntrospector(get(url), parser).invokeMethod(method, args);
 	}
 
 	/**
-	 * Returns the list of available methods that can be passed to the {@link #invokeMethod(String, String, String)} for the object
-	 * 	addressed by the specified URL.
+	 * Returns the list of available methods that can be passed to the {@link #invokeMethod(String, String, String)}
+	 * for the object addressed by the specified URL.
 	 *
 	 * @param url The URL.
 	 * @return The list of methods.
@@ -543,7 +550,7 @@ public final class PojoRest {
 	 * </ul>
 	 *
 	 * @param url The URL of the element being added to.
-	 * 		<br>If <jk>null</jk> or blank, the root itself (assuming it's one of the types specified above) is added to.
+	 * If <jk>null</jk> or blank, the root itself (assuming it's one of the types specified above) is added to.
 	 * @param val The value being added.
 	 * @return The URL of the element that was added.
 	 */
@@ -554,7 +561,7 @@ public final class PojoRest {
 	/**
 	 * Remove an element from a POJO model.
 	 * <p>
-	 * qIf the element does not exist, no action is taken.
+	 * If the element does not exist, no action is taken.
 	 *
 	 * @param url The URL of the element being deleted.
 	 * If <jk>null</jk> or blank, the root itself is deleted.

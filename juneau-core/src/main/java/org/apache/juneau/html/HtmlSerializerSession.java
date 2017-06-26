@@ -64,7 +64,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param uriContext The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected HtmlSerializerSession(HtmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	protected HtmlSerializerSession(HtmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
+			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 		String labelParameter;
 		if (op == null || op.isEmpty()) {
@@ -90,14 +91,16 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Object output = getOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
-		return new HtmlWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
+		return new HtmlWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(),
+			getUriResolver());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is a URL.
 	 *
 	 * @param cm The ClassMeta of the object being serialized.
-	 * @param pMeta The property metadata of the bean property of the object.  Can be <jk>null</jk> if the object isn't from a bean property.
+	 * @param pMeta The property metadata of the bean property of the object.
+	 * Can be <jk>null</jk> if the object isn't from a bean property.
 	 * @param o The object.
 	 * @return <jk>true</jk> if the specified object is a URL.
 	 */
@@ -114,7 +117,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Returns the anchor text to use for the specified URL object.
 	 *
-	 * @param pMeta The property metadata of the bean property of the object.  Can be <jk>null</jk> if the object isn't from a bean property.
+	 * @param pMeta The property metadata of the bean property of the object.
+	 * Can be <jk>null</jk> if the object isn't from a bean property.
 	 * @param o The URL object.
 	 * @return The anchor text to use for the specified URL object.
 	 */

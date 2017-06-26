@@ -30,7 +30,8 @@ public class ParserContext extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 */
 	public static final String PARSER_trimStrings = "Parser.trimStrings";
 

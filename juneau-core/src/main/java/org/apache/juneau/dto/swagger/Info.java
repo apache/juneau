@@ -15,7 +15,8 @@ package org.apache.juneau.dto.swagger;
 import org.apache.juneau.annotation.*;
 
 /**
- * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented in the Swagger-UI for convenience.
+ * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented
+ * in the Swagger-UI for convenience.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -38,7 +39,8 @@ import org.apache.juneau.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 		(org.apache.juneau.dto)</a>
  * 	<ul>
  * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
  * 	</ul>
@@ -95,7 +97,8 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * A short description of the application. GFM syntax can be used for rich text representation.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public String getDescription() {
 		return description;
@@ -129,7 +132,8 @@ public class Info extends SwaggerElement {
 	 * <p>
 	 * The Terms of Service for the API.
 	 *
-	 * @return The value of the <property>termsOfService</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>termsOfService</property> property on this bean, or <jk>null</jk> if it is not
+	 * set.
 	 */
 	public String getTermsOfService() {
 		return termsOfService;

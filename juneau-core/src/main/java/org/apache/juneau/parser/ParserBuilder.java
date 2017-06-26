@@ -34,6 +34,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public ParserBuilder(PropertyStore propertyStore) {
@@ -60,7 +61,8 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

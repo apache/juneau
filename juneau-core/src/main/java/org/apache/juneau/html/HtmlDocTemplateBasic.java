@@ -123,7 +123,8 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 					if (v.startsWith("<"))
 						w.append(v);
 					else
-						w.oTag("a").attr("class", "link").attr("href", session.resolveUri(v), true).cTag().text(e.getKey(), true).eTag("a");
+						w.oTag("a").attr("class", "link").attr("href", session.resolveUri(v), true).cTag()
+							.text(e.getKey(), true).eTag("a");
 				}
 			}
 		}
