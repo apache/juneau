@@ -22,16 +22,18 @@ import org.apache.juneau.svl.vars.*;
  * In additional to the functionality of the {@link RestServletDefault} group,
  * augments the {@link RestContext#getVarResolver()} method with the following additional variable types:
  * <ul class='spaced-list'>
- * 	<li><code class='snippet'>$ARG{...}</code> - Command line arguments pulled from {@link Microservice#getArgs()}.<br>
+ * 	<li><code class='snippet'>$ARG{...}</code> - Command line arguments pulled from {@link Microservice#getArgs()}.
+ * 		<br>
  * 		<h6 class='figure'>Example:</h6>
  * 		<p class='bcode'>
- * 			String firstArg = request.getVarResolver().resolve(<js>"$ARG{0}"</js>);  <jc>// First argument.</jc>
- * 			String namedArg = request.getVarResolver().resolve(<js>"$ARG{myarg}"</js>);  <jc>// Named argument (e.g. "myarg=foo"). </jc>
+ * 	String firstArg = request.getVarResolver().resolve(<js>"$ARG{0}"</js>);  <jc>// First argument.</jc>
+ * 	String namedArg = request.getVarResolver().resolve(<js>"$ARG{myarg}"</js>);  <jc>// Named argument (e.g. "myarg=foo"). </jc>
  * 		</p>
- * 	<li><code class='snippet'>$MF{...}</code> - Manifest file entries pulled from {@link Microservice#getManifest()}.<br>
+ * 	<li><code class='snippet'>$MF{...}</code> - Manifest file entries pulled from {@link Microservice#getManifest()}.
+ * 		<br>
  * 		<h6 class='figure'>Example:</h6>
  * 		<p class='bcode'>
- * 			String mainClass = request.getVarResolver().resolve(<js>"$MF{Main-Class}"</js>);  <jc>// Main class. </jc>
+ * 	String mainClass = request.getVarResolver().resolve(<js>"$MF{Main-Class}"</js>);  <jc>// Main class. </jc>
  * 		</p>
  * </ul>
  */

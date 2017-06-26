@@ -29,16 +29,15 @@ import org.apache.juneau.utils.*;
 /**
  * Parent class for all microservices.
  * <p>
- * A microservice defines a simple API for starting and stopping simple Java services
- * 	contained in executable jars.
+ * A microservice defines a simple API for starting and stopping simple Java services contained in executable jars.
  * <p>
  * The general command for invoking these services is...
  * <p class='bcode'>
  * 	java -jar mymicroservice.jar [mymicroservice.cfg]
  * </p>
  * <p>
- * Your microservice class must be specified as the <jk>Main-Class</jk> entry in
- * 	the manifest file of your microservice jar file.
+ * Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice 
+ * jar file.
  *
  * <h6 class='topic'>Microservice Configuration</h6>
  *
@@ -50,7 +49,7 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link #getManifest()} - The manifest file for the main jar file.
  * </ul>
  *
- * <h6 class='topic'>Entrypoint Method</h6>
+ * <h6 class='topic'>Entry point Method</h6>
  *
  * Subclasses must implement a static void main method as the entry point for the microservice.
  * Typically, this method will simply consist of the following...
@@ -87,7 +86,8 @@ import org.apache.juneau.utils.*;
  * Subclasses can optionally override the following methods to provide customized behavior:
  * <p>
  * <ul class='spaced-list'>
- * 	<li>{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file returned by {@link #getConfig()}.
+ * 	<li>{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file 
+ * 		returned by {@link #getConfig()}.
  * </ul>
  */
 public abstract class Microservice {
@@ -196,7 +196,8 @@ public abstract class Microservice {
 	}
 
 	/**
-	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the specified class is contained within.
+	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the 
+	 * specified class is contained within.
 	 *
 	 * @param c The class whose jar file contains the manifest to use for this microservice.
 	 * @return This object (for method chaining).
@@ -219,7 +220,8 @@ public abstract class Microservice {
 	 * 	<li><code>$MF{key}</code>, <code>$MF{key,default}</code> - Manifest file entries.
 	 * 	<li><code>$ARG{key}</code>, <code>$ARG{key,default}</code> - Command-line arguments.
 	 * 	<li><code>$IF{boolArg,thenValue}</code>, <code>$IF{boolArg,thenValue,elseValue}</code> - If-block logic.
-	 * 	<li><code>$SWITCH{stringArg,pattern,thenVal...}</code>, <code>$SWITCH{stringArg,pattern,thenVal,elseVal...}</code>  - Switch-block logic.
+	 * 	<li><code>$SWITCH{stringArg,pattern,thenVal...}</code>, 
+	 * 		<code>$SWITCH{stringArg,pattern,thenVal,elseVal...}</code>  - Switch-block logic.
 	 * </ul>
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
@@ -285,7 +287,8 @@ public abstract class Microservice {
 	 * <ol class='spaced-list'>
 	 * 	<li>The first argument passed to the microservice jar.
 	 * 	<li>The <code>Main-ConfigFile</code> entry in the microservice jar manifest file.
-	 * 	<li>The name of the microservice jar with a <js>".cfg"</js> suffix (e.g. <js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
+	 * 	<li>The name of the microservice jar with a <js>".cfg"</js> suffix (e.g. 
+	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
 	 * </ol>
 	 * <p>
 	 * If all methods for locating the config file fail, then this method returns <jk>null</jk>.
