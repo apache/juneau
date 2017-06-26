@@ -16,7 +16,7 @@ import org.apache.juneau.jena.annotation.*;
 
 /**
  * Used in conjunction with the {@link Rdf#collectionFormat() @Rdf.collectionFormat()} annotation to fine-tune how
- * 	classes, beans, and bean properties are serialized, particularly collections.
+ * classes, beans, and bean properties are serialized, particularly collections.
  */
 public enum RdfCollectionFormat {
 

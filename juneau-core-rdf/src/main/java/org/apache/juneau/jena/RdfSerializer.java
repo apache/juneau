@@ -77,6 +77,7 @@ public class RdfSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Xml(PropertyStore propertyStore) {
@@ -95,6 +96,7 @@ public class RdfSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public XmlAbbrev(PropertyStore propertyStore) {
@@ -113,6 +115,7 @@ public class RdfSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public NTriple(PropertyStore propertyStore) {
@@ -131,6 +134,7 @@ public class RdfSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Turtle(PropertyStore propertyStore) {
@@ -149,6 +153,7 @@ public class RdfSerializer extends WriterSerializer {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public N3(PropertyStore propertyStore) {
@@ -166,6 +171,7 @@ public class RdfSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public RdfSerializer(PropertyStore propertyStore) {
@@ -207,7 +213,8 @@ public class RdfSerializer extends WriterSerializer {
 		s.getRdfWriter().write(model, session.getWriter(), "http://unknown/");
 	}
 
-	private RDFNode serializeAnything(RdfSerializerSession session, Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
+	private RDFNode serializeAnything(RdfSerializerSession session, Object o, boolean isURI, ClassMeta<?> eType, 
+			String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
 		Model m = session.getModel();
 
 		ClassMeta<?> aType = null;       // The actual type
@@ -415,7 +422,8 @@ public class RdfSerializer extends WriterSerializer {
 		return session.getModel().createList(l.iterator());
 	}
 
-	private void serializeToMultiProperties(RdfSerializerSession session, Collection c, ClassMeta<?> sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
+	private void serializeToMultiProperties(RdfSerializerSession session, Collection c, ClassMeta<?> sType, 
+			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
 		ClassMeta<?> elementType = sType.getElementType();
 		for (Object e : c) {
 			Namespace ns = null;
@@ -441,7 +449,8 @@ public class RdfSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public RdfSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public RdfSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, 
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new RdfSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

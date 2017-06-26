@@ -38,6 +38,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public RdfSerializerBuilder(PropertyStore propertyStore) {
@@ -69,10 +70,13 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li><js>"RDF/XML-ABBREV"</js>
 	 * 	<li><js>"N-TRIPLE"</js>
 	 * 	<li><js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when created.
-	 * 		Default is the pretty writer but can be overridden with system property	<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
+	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when 
+	 * 		created.
+	 * 		Default is the pretty writer but can be overridden with system property	
+	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
 	 * 	<li><js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding one-referenced bNodes.
+	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding 
+	 * 		one-referenced bNodes.
 	 * 	<li><js>"N3-PLAIN"</js> - Name of the N3 plain writer.
 	 * 		The plain writer writes records by subject.
 	 * 	<li><js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
@@ -97,6 +101,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder xml() {
@@ -105,6 +110,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder xmlabbrev() {
@@ -113,6 +119,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder ntriple() {
@@ -121,6 +128,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder n3() {
@@ -129,6 +137,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder turtle() {
@@ -241,13 +250,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
-	 * 	to identify the root node in the graph.
+	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of 
+	 * <js>"true"</js> to identify the root node in the graph.
 	 * This helps locate the root node during parsing.
 	 * <p>
-	 * If disabled, the parser has to search through the model to find any resources without
-	 * 	incoming predicates to identify root notes, which can introduce a considerable performance
-	 * 	degradation.
+	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
+	 * identify root notes, which can introduce a considerable performance degradation.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -275,9 +283,8 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Detect namespace usage before serialization.
 	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for
-	 * namespaces that will be encountered before the root element is
-	 * serialized.
+	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
+	 * the root element is serialized.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -339,7 +346,8 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get lost.
+	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
+	 * 		lost.
 	 * </ul>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>

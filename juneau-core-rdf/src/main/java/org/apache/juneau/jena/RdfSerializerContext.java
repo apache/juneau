@@ -28,11 +28,14 @@ import org.apache.juneau.xml.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF serializers</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> 
+ * 		- Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> 
+ * 			- Configurable properties common to all serializers.
  * 		<ul>
- * 			<li class='jc'><a class="doclink" href="RdfCommonContext.html#ConfigProperties">RdfCommonContext</a> - Configurable properties common to the RDF serializers and parsers.
+ * 			<li class='jc'><a class="doclink" href="RdfCommonContext.html#ConfigProperties">RdfCommonContext</a> 
+ * 				- Configurable properties common to the RDF serializers and parsers.
  * 		</ul>
  * 	</ul>
  * </ul>
@@ -62,12 +65,11 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * </ul>
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
-	 * 	to identify the root node in the graph.
+	 * to identify the root node in the graph.
 	 * This helps locate the root node during parsing.
 	 * <p>
-	 * If disabled, the parser has to search through the model to find any resources without
-	 * 	incoming predicates to identify root notes, which can introduce a considerable performance
-	 * 	degradation.
+	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
+	 * identify root notes, which can introduce a considerable performance degradation.
 	 */
 	public static final String RDF_addRootProperty = "RdfSerializer.addRootProperty";
 
@@ -113,9 +115,11 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred 
+	 * through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined 
+	 * from the value type.
 	 * <p>
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.

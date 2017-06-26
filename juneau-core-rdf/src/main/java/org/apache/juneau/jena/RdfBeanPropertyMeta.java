@@ -21,7 +21,8 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the bean property.
+ * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation 
+ * on the bean property.
  */
 public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
@@ -51,7 +52,8 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the RDF collection format of this property from the {@link Rdf#collectionFormat} annotation on this bean property.
+	 * Returns the RDF collection format of this property from the {@link Rdf#collectionFormat} annotation on this bean 
+	 * property.
 	 *
 	 * @return The RDF collection format, or {@link RdfCollectionFormat#DEFAULT} if annotation not specified.
 	 */
@@ -75,8 +77,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * 	<li>{@link Rdf#prefix()} annotation defined on bean interface packages.
 	 * </ol>
 	 *
-	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is
-	 * 	associated with it.
+	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is associated with it.
 	 */
 	public Namespace getNamespace() {
 		return namespace;

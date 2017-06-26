@@ -34,7 +34,7 @@ import com.hp.hpl.jena.util.iterator.*;
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * Refer to <a class="doclink" href="package-summary.html#ParserConfigurableProperties">Configurable Properties</a>
- * 	for the entire list of configurable properties.
+ * for the entire list of configurable properties.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
@@ -72,6 +72,7 @@ public class RdfParser extends ReaderParser {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Xml(PropertyStore propertyStore) {
@@ -90,6 +91,7 @@ public class RdfParser extends ReaderParser {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public NTriple(PropertyStore propertyStore) {
@@ -108,6 +110,7 @@ public class RdfParser extends ReaderParser {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Turtle(PropertyStore propertyStore) {
@@ -126,6 +129,7 @@ public class RdfParser extends ReaderParser {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public N3(PropertyStore propertyStore) {
@@ -143,6 +147,7 @@ public class RdfParser extends ReaderParser {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public RdfParser(PropertyStore propertyStore) {
@@ -173,11 +178,16 @@ public class RdfParser extends ReaderParser {
 			if (type.isArray() || type.isArgs())
 				c = new ArrayList();
 			else
-				c = (type.canCreateNewInstance(session.getOuter()) ? (Collection<?>)type.newInstance(session.getOuter()) : new ObjectList(session));
+				c = (
+					type.canCreateNewInstance(session.getOuter()) 
+					? (Collection<?>)type.newInstance(session.getOuter()) 
+					: new ObjectList(session)
+				);
 
 			int argIndex = 0;
 			for (Resource resource : roots)
-				c.add(parseAnything(s, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), resource, session.getOuter(), null));
+				c.add(parseAnything(s, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), resource, 
+					session.getOuter(), null));
 
 			if (type.isArray() || type.isArgs())
 				return (T)session.toArray(type, c);
@@ -266,7 +276,8 @@ public class RdfParser extends ReaderParser {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private <T> T parseAnything(RdfParserSession session, ClassMeta<T> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(RdfParserSession session, ClassMeta<T> eType, RDFNode n, Object outer, 
+			BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -425,7 +436,8 @@ public class RdfParser extends ReaderParser {
 		throw new ParseException(session, "Unknown value type for node ''{0}''", n);
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(RdfParserSession session, Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(RdfParserSession session, Resource r, Map<K,V> m, ClassMeta<K> keyType, 
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 		// Add URI as "uri" to generic maps.
 		if (r.getURI() != null) {
 			K uri = convertAttrToType(session, m, "uri", keyType);
@@ -450,7 +462,8 @@ public class RdfParser extends ReaderParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <E> Collection<E> parseIntoCollection(RdfParserSession session, Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(RdfParserSession session, Container c, Collection<E> l, 
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
 			E e = (E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
@@ -460,7 +473,8 @@ public class RdfParser extends ReaderParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <E> Collection<E> parseIntoCollection(RdfParserSession session, RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(RdfParserSession session, RDFList list, Collection<E> l, 
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
 			E e = (E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
@@ -475,7 +489,8 @@ public class RdfParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, 
+			TimeZone timeZone, MediaType mediaType) {
 		return new RdfParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 }

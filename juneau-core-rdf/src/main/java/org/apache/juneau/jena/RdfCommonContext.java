@@ -52,10 +52,13 @@ public interface RdfCommonContext {
 	 * 	<li><js>"RDF/XML-ABBREV"</js>
 	 * 	<li><js>"N-TRIPLE"</js>
 	 * 	<li><js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when created.
-	 * 		Default is the pretty writer but can be overridden with system property	<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
+	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when 
+	 * 		created.
+	 * 		Default is the pretty writer but can be overridden with system property	
+	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
 	 * 	<li><js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding one-referenced bNodes.
+	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding 
+	 * 		one-referenced bNodes.
 	 * 	<li><js>"N3-PLAIN"</js> - Name of the N3 plain writer.
 	 * 		The plain writer writes records by subject.
 	 * 	<li><js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
@@ -115,9 +118,13 @@ public interface RdfCommonContext {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces is not good practice.
-	 * 	<li><js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces in IRIs.
-	 * 	<li><js>"iri"</js> - Sets the IRI engine to IRI (<a class="doclink" href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>, <a class="doclink" href="http://www.ietf.org/rfc/rfc3987.txt">RFC 3987</a>).
+	 * 	<li><js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces 
+	 * 		is not good practice.
+	 * 	<li><js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces 
+	 * 		in IRIs.
+	 * 	<li><js>"iri"</js> - Sets the IRI engine to IRI 
+	 * 		(<a class="doclink" href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>, 
+	 * 		<a class="doclink" href="http://www.ietf.org/rfc/rfc3987.txt">RFC 3987</a>).
 	 * </ul>
 	 */
 	public static final String RDF_arp_iriRules = "Rdf.jena.rdfXml.iri-rules";
@@ -278,9 +285,9 @@ public interface RdfCommonContext {
 	 * 	<li><js>"same-document"</js> - Same-document references (e.g. <js>""</js> or <js>"#foo"</js>)
 	 * 	<li><js>"network"</js>  - Network paths (e.g. <js>"//example.org/foo"</js> omitting the URI scheme)
 	 * 	<li><js>"absolute"</js> - Absolute paths (e.g. <js>"/foo"</js> omitting the scheme and authority)
-	 * 	<li><js>"relative"</js> - Relative path not begining in <js>"../"</js>
-	 * 	<li><js>"parent"</js> - Relative path begining in <js>"../"</js>
-	 * 	<li><js>"grandparent"</js> - Relative path begining in <js>"../../"</js>
+	 * 	<li><js>"relative"</js> - Relative path not beginning in <js>"../"</js>
+	 * 	<li><js>"parent"</js> - Relative path beginning in <js>"../"</js>
+	 * 	<li><js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
 	 * </ul>
 	 * <p>
 	 * The default value is <js>"same-document, absolute, relative, parent"</js>.
@@ -302,7 +309,8 @@ public interface RdfCommonContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"true"</js> - Add XML Declaration to the output.
 	 * 	<li><js>"false"</js> - Don't add XML Declaration to the output.
-	 * 	<li><js>"default"</js> - Only add an XML Declaration when asked to write to an <code>OutputStreamWriter</code> that uses some encoding other than <code>UTF-8</code> or <code>UTF-16</code>.
+	 * 	<li><js>"default"</js> - Only add an XML Declaration when asked to write to an <code>OutputStreamWriter</code> 
+	 * 		that uses some encoding other than <code>UTF-8</code> or <code>UTF-16</code>.
 	 * 		In this case the encoding is shown in the XML declaration.
 	 * </ul>
 	 */
@@ -317,8 +325,10 @@ public interface RdfCommonContext {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If true, an XML Doctype declaration is included in the output.
-	 * This declaration includes a <code>!ENTITY</code> declaration for each prefix mapping in the model, and any attribute value that starts with the URI of that mapping is written as starting with the corresponding entity invocation.
+	 * If true, an XML doctype declaration is included in the output.
+	 * This declaration includes a <code>!ENTITY</code> declaration for each prefix mapping in the model, and any 
+	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity 
+	 * invocation.
 	 */
 	public static final String RDF_rdfxml_showDoctypeDeclaration = "Rdf.jena.rdfXml.showDoctypeDeclaration";
 
@@ -357,7 +367,9 @@ public interface RdfCommonContext {
 	 * 	<li><b>Default:</b> <js>""</js>
 	 * </ul>
 	 * <p>
-	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from <a class="doclink" href="http://www.w3.org/TR/rdf-syntax-grammar">RDF Syntax Grammar</a> indicating grammar rules that will not be used.
+	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from 
+	 * <a class="doclink" href="http://www.w3.org/TR/rdf-syntax-grammar">RDF Syntax Grammar</a> indicating grammar 
+	 * rules that will not be used.
 	 */
 	public static final String RDF_rdfxml_blockRules = "Rdf.jena.rdfXml.blockRules";
 
@@ -512,7 +524,8 @@ public interface RdfCommonContext {
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get lost.
+	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
+	 * 		lost.
 	 * </ul>
 	 */
 	public static final String RDF_collectionFormat = "Rdf.collectionFormat";

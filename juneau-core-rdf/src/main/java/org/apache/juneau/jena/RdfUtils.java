@@ -25,8 +25,7 @@ public class RdfUtils {
 
 	/**
 	 * Find the namespace given a list of <ja>@Rdf</ja> and <ja>@RdfSchema</ja> annotations.
-	 * The annotations should be a child-to-parent ordering of annotations found on
-	 * 	a class or method.
+	 * The annotations should be a child-to-parent ordering of annotations found on a class or method.
 	 *
 	 * @param rdfs The <code>@Rdf</code> annotations to search.
 	 * @param schemas The list of known RDF schemas.

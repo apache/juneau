@@ -46,8 +46,8 @@ public final class Constants {
 	/**
 	 * RDF property identifier <js>"items"</js>.
 	 * <p>
-	 * For resources that are collections, this property identifies the RDF Sequence
-	 * 	container for the items in the collection.
+	 * For resources that are collections, this property identifies the RDF Sequence container for the items in the 
+	 * collection.
 	 */
 	public static final String RDF_juneauNs_ITEMS = "items";
 

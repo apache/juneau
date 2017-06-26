@@ -38,6 +38,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public RdfParserBuilder(PropertyStore propertyStore) {
@@ -94,10 +95,13 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 	<li><js>"RDF/XML-ABBREV"</js>
 	 * 	<li><js>"N-TRIPLE"</js>
 	 * 	<li><js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when created.
-	 * 		Default is the pretty writer but can be overridden with system property	<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
+	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when 
+	 * 		created.
+	 * 		Default is the pretty writer but can be overridden with system property	
+	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
 	 * 	<li><js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding one-referenced bNodes.
+	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding 
+	 * 		one-referenced bNodes.
 	 * 	<li><js>"N3-PLAIN"</js> - Name of the N3 plain writer.
 	 * 		The plain writer writes records by subject.
 	 * 	<li><js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
@@ -121,6 +125,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder xml() {
@@ -129,6 +134,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder xmlabbrev() {
@@ -137,6 +143,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder ntriple() {
@@ -145,6 +152,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder n3() {
@@ -153,6 +161,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder turtle() {
@@ -248,7 +257,8 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get lost.
+	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
+	 * 		lost.
 	 * </ul>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>

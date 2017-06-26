@@ -16,7 +16,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.jena.annotation.*;
 
 /**
- * Metadata on beans specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the class.
+ * Metadata on beans specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the 
+ * class.
  */
 public class RdfBeanMeta extends BeanMetaExtended {
 
@@ -42,7 +43,8 @@ public class RdfBeanMeta extends BeanMetaExtended {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if one of the properties on this bean is annotated with {@link Rdf#beanUri()} as <jk>true</jk>
+	 * Returns <jk>true</jk> if one of the properties on this bean is annotated with {@link Rdf#beanUri()} as 
+	 * <jk>true</jk>
 	 *
 	 * @return <jk>true</jk> if there is a URI property associated with this bean.
 	 */
