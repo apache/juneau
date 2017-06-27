@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify the request-duration properties object for the current request.
+ * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify the
+ * request-duration properties object for the current request.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  * 	}
  * </p>
  * <p>
- * 	...or this...
+ * ...or this...
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public Person</jk> doGetPerson(RestResponse res) {
@@ -52,10 +52,10 @@ import org.apache.juneau.*;
  * </p>
  * <p>
  * The parameter type can be one of the following:
- * 	<ul>
- * 		<li>{@link ObjectMap}
- * 		<li><code>Map&lt;String,Object&gt;</code>
- * 	</ul>
+ * <ul>
+ * 	<li>{@link ObjectMap}
+ * 	<li><code>Map&lt;String,Object&gt;</code>
+ * </ul>
  */
 @Documented
 @Target(PARAMETER)

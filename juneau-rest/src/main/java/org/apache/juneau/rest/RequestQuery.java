@@ -79,9 +79,11 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	/**
 	 * Returns a query parameter value.
 	 * <p>
-	 * Same as {@link HttpServletRequest#getParameter(String)} except only looks in the URL string, not parameters from URL-Encoded FORM posts.
+	 * Same as {@link HttpServletRequest#getParameter(String)} except only looks in the URL string, not parameters from
+	 * URL-Encoded FORM posts.
 	 * <p>
-	 * This method can be used to retrieve a parameter without triggering the underlying servlet API to load and parse the request body.
+	 * This method can be used to retrieve a parameter without triggering the underlying servlet API to load and parse
+	 * the request body.
 	 * <p>
 	 * If multiple query parameters have the same name, this returns only the first instance.
 	 *
@@ -103,11 +105,13 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String)} but returns the specified default value if the query parameter was not specified.
+	 * Same as {@link #getString(String)} but returns the specified default value if the query parameter was not
+	 * specified.
 	 *
 	 * @param name The URL parameter name.
 	 * @param def The default value.
-	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 * @return The parameter value, or the default value if parameter not specified or has no value
+	 * (e.g. <js>"&amp;foo"</js>.
 	 */
 	public String getString(String name, String def) {
 		String s = getString(name);
@@ -118,7 +122,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * Same as {@link #getString(String)} but converts the value to an integer.
 	 *
 	 * @param name The URL parameter name.
-	 * @return The parameter value, or <code>0</code> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 * @return The parameter value, or <code>0</code> if parameter not specified or has no value
+	 * (e.g. <js>"&amp;foo"</js>.
 	 */
 	public int getInt(String name) {
 		return getInt(name, 0);
@@ -129,7 +134,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 *
 	 * @param name The URL parameter name.
 	 * @param def The default value.
-	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 * @return The parameter value, or the default value if parameter not specified or has no value
+	 * (e.g. <js>"&amp;foo"</js>.
 	 */
 	public int getInt(String name, int def) {
 		String s = getString(name);
@@ -140,7 +146,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * Same as {@link #getString(String)} but converts the value to a boolean.
 	 *
 	 * @param name The URL parameter name.
-	 * @return The parameter value, or <jk>false</jk> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 * @return The parameter value, or <jk>false</jk> if parameter not specified or has no value
+	 * (e.g. <js>"&amp;foo"</js>.
 	 */
 	public boolean getBoolean(String name) {
 		return getBoolean(name, false);
@@ -151,7 +158,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 *
 	 * @param name The URL parameter name.
 	 * @param def The default value.
-	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 * @return The parameter value, or the default value if parameter not specified or has no value
+	 * (e.g. <js>"&amp;foo"</js>.
 	 */
 	public boolean getBoolean(String name, boolean def) {
 		String s = getString(name);
@@ -161,8 +169,9 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	/**
 	 * Returns the specified query parameter value converted to a POJO.
 	 * <p>
-	 * This method can be used to retrieve a parameter without triggering the underlying servlet API to load and parse the request body.
-	 * <p>
+	 * This method can be used to retrieve a parameter without triggering the underlying servlet API to load and parse
+	 * the request body.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
@@ -208,10 +217,11 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	/**
 	 * Returns the specified query parameter value converted to a POJO.
 	 * <p>
-	 * This method can be used to retrieve a parameter without triggering the underlying servlet API to load and parse the request body.
+	 * This method can be used to retrieve a parameter without triggering the underlying servlet API to load and parse
+	 * the request body.
 	 * <p>
 	 * Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
-	 * <p>
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
@@ -229,10 +239,12 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 *
 	 * @param name The parameter name.
 	 * @param type The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException
@@ -246,10 +258,12 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 *
 	 * @param name The parameter name.
 	 * @param type The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
@@ -283,10 +297,12 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 *
 	 * @param name The query parameter name.
 	 * @param type The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the parameter value to.
 	 * @return The query parameter value converted to the specified class type.
 	 * @throws ParseException
@@ -313,26 +329,32 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * <p>
 	 * The query arguments are as follows:
 	 * <ul>
-	 * 	<li><js>"&amp;s="</js> - A comma-delimited list of column-name/search-token pairs.
+	 * 	<li>
+	 * 		<js>"&amp;s="</js> - A comma-delimited list of column-name/search-token pairs.
 	 * 		<br>Example: <js>"&amp;s=column1=foo*,column2=*bar"</js>
-	 * 	<li><js>"&amp;v="</js> - A comma-delimited list column names to view.
+	 * 	<li>
+	 * 		<js>"&amp;v="</js> - A comma-delimited list column names to view.
 	 * 		<br>Example: <js>"&amp;v=column1,column2"</js>
-	 * 	<li><js>"&amp;o="</js> - A comma-delimited list column names to sort by.
+	 * 	<li>
+	 * 		<js>"&amp;o="</js> - A comma-delimited list column names to sort by.
 	 * 		<br>Column names can be suffixed with <js>'-'</js> to indicate descending order.
 	 * 		<br>Example: <js>"&amp;o=column1,column2-"</js>
-	 * 	<li><js>"&amp;p="</js> - The zero-index row number of the first row to display.
+	 * 	<li>
+	 * 		<js>"&amp;p="</js> - The zero-index row number of the first row to display.
 	 * 		<br>Example: <js>"&amp;p=100"</js>
-	 * 	<li><js>"&amp;l="</js> - The number of rows to return.
+	 * 	<li>
+	 * 		<js>"&amp;l="</js> - The number of rows to return.
 	 * 		<br><code>0</code> implies return all rows.
 	 * 		<br>Example: <js>"&amp;l=100"</js>
-	 * 	<li><js>"&amp;i="</js> - The case-insensitive search flag.
+	 * 	<li>
+	 * 		<js>"&amp;i="</js> - The case-insensitive search flag.
 	 * 		<br>Example: <js>"&amp;i=true"</js>
 	 * </ul>
 	 * <p>
 	 * Whitespace is trimmed in the parameters.
 	 *
 	 * @return A new {@link SearchArgs} object initialized with the special search query arguments.
-	 * 	<jk>null</jk> if no search arguments were found.
+	 * <jk>null</jk> if no search arguments were found.
 	 */
 	public SearchArgs getSearchArgs() {
 		if (hasAny("s","v","o","p","l","i")) {

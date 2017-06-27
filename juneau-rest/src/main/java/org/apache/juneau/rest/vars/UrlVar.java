@@ -20,7 +20,8 @@ import org.apache.juneau.svl.*;
 /**
  * Resolver for resolving URL variables <js>"$U{name}"</js>.
  * <p>
- * The advantage of using this variable is that you can resolve URLs with special protocols such as <js>"servlet:/xxx"</js>.
+ * The advantage of using this variable is that you can resolve URLs with special protocols such as
+ * <js>"servlet:/xxx"</js>.
  * <p>
  * See {@link UriResolver} for the kinds of URIs that can be resolved.
  * <ul>
@@ -30,7 +31,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  * <p>
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver(UriResolution, UriRelativity)} with resolution
- * 	{@link UriResolution#ROOT_RELATIVE} and relativity {@link UriRelativity#RESOURCE}.
+ * {@link UriResolution#ROOT_RELATIVE} and relativity {@link UriRelativity#RESOURCE}.
  *
  * @see org.apache.juneau.svl
  */

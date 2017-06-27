@@ -41,42 +41,61 @@ import org.apache.juneau.transform.*;
  * This parser handles all valid JSON syntax.
  * In addition, when strict mode is disable, the parser also handles the following:
  * <ul class='spaced-list'>
- * 	<li> Javascript comments (both {@code /*} and {@code //}) are ignored.
- * 	<li> Both single and double quoted strings.
- * 	<li> Automatically joins concatenated strings (e.g. <code><js>"aaa"</js> + <js>'bbb'</js></code>).
- * 	<li> Unquoted attributes.
+ * 	<li>
+ * 		Javascript comments (both {@code /*} and {@code //}) are ignored.
+ * 	<li>
+ * 		Both single and double quoted strings.
+ * 	<li>
+ * 		Automatically joins concatenated strings (e.g. <code><js>"aaa"</js> + <js>'bbb'</js></code>).
+ * 	<li>
+ * 		Unquoted attributes.
  * </ul>
  * Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
  * <p>
  * This parser handles the following input, and automatically returns the corresponding Java class.
  * <ul class='spaced-list'>
- * 	<li> JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.  <br>
+ * 	<li>
+ * 		JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
  * 		See the <code>beanTypeName</code> setting on the {@link PropertyStore} for more information about parsing
  * 		beans from JSON.
- * 	<li> JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
- * 	<li> JSON string literals (<js>"'xyz'"</js>) are converted to {@link String Strings}.
- * 	<li> JSON numbers (<js>"123"</js>, including octal/hexadecimal/exponential notation) are converted to
+ * 	<li>
+ * 		JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
+ * 	<li>
+ * 		JSON string literals (<js>"'xyz'"</js>) are converted to {@link String Strings}.
+ * 	<li>
+ * 		JSON numbers (<js>"123"</js>, including octal/hexadecimal/exponential notation) are converted to
  * 		{@link Integer Integers}, {@link Long Longs}, {@link Float Floats}, or {@link Double Doubles} depending on
  * 		whether the number is decimal, and the size of the number.
- * 	<li> JSON booleans (<js>"false"</js>) are converted to {@link Boolean Booleans}.
- * 	<li> JSON nulls (<js>"null"</js>) are converted to <jk>null</jk>.
- * 	<li> Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
+ * 	<li>
+ * 		JSON booleans (<js>"false"</js>) are converted to {@link Boolean Booleans}.
+ * 	<li>
+ * 		JSON nulls (<js>"null"</js>) are converted to <jk>null</jk>.
+ * 	<li>
+ * 		Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
  * </ul>
  * <p>
  * Input can be any of the following:
  * <ul class='spaced-list'>
- * 	<li> <js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa>
+ * 	<li>
+ * 		<js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa>
  * 		attribute is present.
- * 	<li> <js>"[...]"</js> - Converted to a {@link ObjectList}.
- * 	<li> <js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float},
+ * 	<li>
+ * 		<js>"[...]"</js> - Converted to a {@link ObjectList}.
+ * 	<li>
+ * 		<js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float},
  * 		or {@link Double}).
- * 	<li> <js>"true"</js>/<js>"false"</js> - Converted to a {@link Boolean}.
- * 	<li> <js>"null"</js> - Returns <jk>null</jk>.
- * 	<li> <js>"'xxx'"</js> - Converted to a {@link String}.
- * 	<li> <js>"\"xxx\""</js> - Converted to a {@link String}.
- * 	<li> <js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
+ * 	<li>
+ * 		<js>"true"</js>/<js>"false"</js> - Converted to a {@link Boolean}.
+ * 	<li>
+ * 		<js>"null"</js> - Returns <jk>null</jk>.
+ * 	<li>
+ * 		<js>"'xxx'"</js> - Converted to a {@link String}.
+ * 	<li>
+ * 		<js>"\"xxx\""</js> - Converted to a {@link String}.
+ * 	<li>
+ * 		<js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
  * </ul>
  * <p>
  * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the

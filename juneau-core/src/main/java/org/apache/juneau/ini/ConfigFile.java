@@ -134,9 +134,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * The lines can be any of the following....
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"# comment"</js> - A comment line.
-	 * 	<li><js>"key=val"</js> - A key/value pair (equivalent to calling {@link #put(String,Object)}.
-	 * 	<li><js>" foobar "</js> - Anything else (interpreted as a comment).
+	 * 	<li>
+	 * 		<js>"# comment"</js> - A comment line.
+	 * 	<li>
+	 * 		<js>"key=val"</js> - A key/value pair (equivalent to calling {@link #put(String,Object)}.
+	 * 	<li>
+	 * 		<js>" foobar "</js> - Anything else (interpreted as a comment).
 	 * </ul>
 	 * <p>
 	 * If the section does not exist, it will automatically be created.
@@ -157,8 +160,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * Header comments can be of the following formats...
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"# comment"</js> - A comment line.
-	 * 	<li><js>"comment"</js> - Anything else (will automatically be prefixed with <js>"# "</js>).
+	 * 	<li>
+	 * 		<js>"# comment"</js> - A comment line.
+	 * 	<li>
+	 * 		<js>"comment"</js> - Anything else (will automatically be prefixed with <js>"# "</js>).
 	 * </ul>
 	 * <p>
 	 * If the section does not exist, it will automatically be created.
@@ -264,8 +269,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
-	 * 	<li><js>"section/key"</js> - A value from the specified section.
+	 * 	<li>
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
+	 * 	<li>
+	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
@@ -299,7 +306,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * types.
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
@@ -348,6 +355,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * Same as {@link #getObject(String, Type, Type...)} except optimized for a non-parameterized class.
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
@@ -566,8 +574,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
-	 * 	<li><js>"section/key"</js> - A value from the specified section.
+	 * 	<li>
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
+	 * 	<li>
+	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
@@ -619,8 +629,10 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><code><js>"100K"</js> => 1024000</code>
-	 * 	<li><code><js>"100M"</js> => 104857600</code>
+	 * 	<li>
+	 * 		<code><js>"100K"</js> => 1024000</code>
+	 * 	<li>
+	 * 		<code><js>"100M"</js> => 104857600</code>
 	 * </ul>
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
@@ -694,11 +706,15 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * The format of the entry depends on the data type of the value.
 	 * <ul class='spaced-list'>
-	 * 	<li>Simple types (<code>String</code>, <code>Number</code>, <code>Boolean</code>, primitives)
+	 * 	<li>
+	 * 		Simple types (<code>String</code>, <code>Number</code>, <code>Boolean</code>, primitives)
 	 * 		are serialized as plain strings.
-	 * 	<li>Arrays and collections of simple types are serialized as comma-delimited lists of plain strings.
-	 * 	<li>Other types (e.g. beans) are serialized using the serializer registered with this config file.
-	 * 	<li>Arrays and collections of other types are serialized as comma-delimited lists of serialized strings of
+	 * 	<li>
+	 * 		Arrays and collections of simple types are serialized as comma-delimited lists of plain strings.
+	 * 	<li>
+	 * 		Other types (e.g. beans) are serialized using the serializer registered with this config file.
+	 * 	<li
+	 * 		>Arrays and collections of other types are serialized as comma-delimited lists of serialized strings of
 	 * 		each entry.
 	 * </ul>
 	 *
@@ -823,7 +839,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * Converts this config file section to the specified bean instance.
 	 * <p>
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
-	 * <p>
+	 *
 	 * <h6 class='figure'>Example config file</h6>
 	 * <p class='bcode'>
 	 * 	<cs>[MyAddress]</cs>
@@ -880,7 +896,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Wraps a config file section inside a Java interface so that values in the section can be read and
 	 * write using getters and setters.
-	 * <p>
+	 *
 	 * <h6 class='figure'>Example config file</h6>
 	 * <p class='bcode'>
 	 * 	<cs>[MySection]</cs>
@@ -1111,9 +1127,12 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * The default {@link VarResolver} is registered with the following {@link Var StringVars}:
 	 * <ul class='spaced-list'>
-	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - System properties.
-	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - Environment variables.
-	 * 	<li><code>$C{key}</code>,<code>$C{key,default}</code> - Values in this configuration file.
+	 * 	<li>
+	 * 		<code>$S{key}</code>,<code>$S{key,default}</code> - System properties.
+	 * 	<li>
+	 * 		<code>$E{key}</code>,<code>$E{key,default}</code> - Environment variables.
+	 * 	<li>
+	 * 		<code>$C{key}</code>,<code>$C{key,default}</code> - Values in this configuration file.
 	 * </ul>
 	 *
 	 * @return A new config file that resolves string variables.

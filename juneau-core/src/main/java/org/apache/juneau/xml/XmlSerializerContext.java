@@ -25,13 +25,15 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic'>Inherited configurable properties</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
+ * 	<li class='jc'>
+ * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
  * 		- Properties associated with handling beans on serializers and parsers.
- * 	<ul>
- * 		<li class='jc'><a class="doclink"
- * 			href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
- * 			- Configurable properties common to all serializers.
- * 	</ul>
+ * 		<ul>
+ * 			<li class='jc'>
+ * 				<a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
+ * 				- Configurable properties common to all serializers.
+ * 		</ul>
+ * 	</li>
  * </ul>
  */
 public class XmlSerializerContext extends SerializerContext {
@@ -69,7 +71,7 @@ public class XmlSerializerContext extends SerializerContext {
 	 * the root element is serialized.
 	 * <p>
 	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Auto-detection of namespaces can be costly performance-wise.

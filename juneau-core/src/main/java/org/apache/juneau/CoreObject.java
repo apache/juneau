@@ -86,7 +86,7 @@ public abstract class CoreObject {
 
 	/**
 	 * Returns the universal <code>Object</code> metadata object.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>getBeanContext().object();</code>.
@@ -100,7 +100,7 @@ public abstract class CoreObject {
 
 	/**
 	 * Returns the universal <code>String</code> metadata object.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>getBeanContext().string();</code>.

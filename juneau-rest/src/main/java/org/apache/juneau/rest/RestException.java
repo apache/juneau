@@ -22,9 +22,8 @@ import org.apache.juneau.*;
 /**
  * Exception thrown to trigger an error HTTP status.
  * <p>
- * REST methods on subclasses of {@link RestServlet} can throw
- * 	this exception to trigger an HTTP status other than the automatically-generated
- * 	<code>404</code>, <code>405</code>, and <code>500</code> statuses.
+ * REST methods on subclasses of {@link RestServlet} can throw this exception to trigger an HTTP status other than the
+ * automatically-generated <code>404</code>, <code>405</code>, and <code>500</code> statuses.
  */
 public class RestException extends FormattedRuntimeException {
 
@@ -76,6 +75,7 @@ public class RestException extends FormattedRuntimeException {
 	 * 	<li>{@link RestException}
 	 * 	<li>{@link InvocationTargetException}
 	 * </ul>
+	 *
 	 * @return The root cause of this exception, or <jk>null</jk> if no root cause was found.
 	 */
 	public Throwable getRootCause() {

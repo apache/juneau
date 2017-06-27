@@ -69,7 +69,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	private Map<String,String> headers = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
 
-	private List<RestCallInterceptor> interceptors = new ArrayList<RestCallInterceptor>();
+	private List<RestCallInterceptor> intercepters = new ArrayList<RestCallInterceptor>();
 
 	private String rootUrl;
 	private SSLOpts sslOpts;
@@ -90,6 +90,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Constructor, default settings.
+	 *
 	 * <p>
 	 * Shortcut for calling <code><jk>new</jk> RestClientBuilder().serializer(s).parser(p);</code>
 	 *
@@ -104,6 +105,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Constructor, default settings.
+	 *
 	 * <p>
 	 * Shortcut for calling <code><jk>new</jk> RestClientBuilder().serializer(s).parser(p);</code>
 	 *
@@ -118,6 +120,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public RestClientBuilder(PropertyStore propertyStore) {
@@ -153,7 +156,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 					pf = partSerializerClass.newInstance();
 			}
 
-			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, pf, headers, interceptors, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
+			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, pf, headers, intercepters, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -161,15 +164,18 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Creates an instance of an {@link HttpClient} to be used to handle all HTTP communications with the target server.
+	 *
 	 * <p>
 	 * This HTTP client is used when the HTTP client is not specified through one of the constructors or the
-	 * 	{@link #httpClient(CloseableHttpClient, boolean)} method.
+	 * {@link #httpClient(CloseableHttpClient, boolean)} method.
+	 *
 	 * <p>
-	 * Subclasses can override this method to provide specially-configured HTTP clients to handle
-	 * 	stuff such as SSL/TLS certificate handling, authentication, etc.
+	 * Subclasses can override this method to provide specially-configured HTTP clients to handle stuff such as
+	 * SSL/TLS certificate handling, authentication, etc.
+	 *
 	 * <p>
-	 * The default implementation returns an instance of {@link HttpClient} using the client builder
-	 * 	returned by {@link #createHttpClientBuilder()}.
+	 * The default implementation returns an instance of {@link HttpClient} using the client builder returned by
+	 * {@link #createHttpClientBuilder()}.
 	 *
 	 * @return The HTTP client to use.
 	 * @throws Exception
@@ -182,10 +188,11 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * Creates an instance of an {@link HttpClientBuilder} to be used to create
-	 * 	the {@link HttpClient}.
+	 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own client builder.
+	 *
 	 * <p>
 	 * The predefined method returns an {@link HttpClientBuilder} with the following settings:
 	 * <ul>
@@ -203,8 +210,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Creates the {@link HttpClientConnectionManager} returned by {@link #createConnectionManager()}.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own connection manager.
+	 *
 	 * <p>
 	 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager}.
 	 *
@@ -245,13 +254,16 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Set a root URL for this client.
+	 *
 	 * <p>
 	 * When set, URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
-	 * 	will be prefixed with the specified root.
+	 * will be prefixed with the specified root.
 	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
 	 *
-	 * @param rootUrl The root URL to prefix to relative URL strings.  Trailing slashes are trimmed.
-	 * Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
+	 * @param rootUrl
+	 * 	The root URL to prefix to relative URL strings.
+	 * 	Trailing slashes are trimmed.
+	 * 	Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder rootUrl(Object rootUrl) {
@@ -265,8 +277,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	/**
 	 * Enable SSL support on this client.
 	 *
-	 * @param opts The SSL configuration options.  See {@link SSLOpts} for details.
-	 * This method is a no-op if <code>sslConfig</code> is <jk>null</jk>.
+	 * @param opts
+	 * 	The SSL configuration options.
+	 * 	See {@link SSLOpts} for details.
+	 * 	This method is a no-op if <code>sslConfig</code> is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
@@ -278,6 +292,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Enable LAX SSL support.
+	 *
 	 * <p>
 	 * Certificate chain validation and hostname verification is disabled.
 	 *
@@ -300,25 +315,25 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * Adds an interceptor that gets called immediately after a connection is made.
+	 * Adds an intercepter that gets called immediately after a connection is made.
 	 *
-	 * @param interceptor The interceptor.
+	 * @param intercepter The intercepter.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder interceptor(RestCallInterceptor interceptor) {
-		interceptors.add(interceptor);
+	public RestClientBuilder intercepter(RestCallInterceptor intercepter) {
+		intercepters.add(intercepter);
 		return this;
 	}
 
 	/**
-	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
+	 * Adds a {@link RestCallLogger} to the list of intercepters on this class.
 	 *
-	 * @param level The log level to log messsages at.
+	 * @param level The log level to log messages at.
 	 * @param log The logger to log messages to.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder logTo(Level level, Logger log) {
-		interceptor(new RestCallLogger(level, log));
+		intercepter(new RestCallLogger(level, log));
 		return this;
 	}
 
@@ -327,8 +342,9 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 *
 	 * @param retries The number of retries to attempt.
 	 * @param interval The time in milliseconds between attempts.
-	 * @param retryOn Optional object used for determining whether a retry should be attempted.
-	 * If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
+	 * @param retryOn
+	 * 	Optional object used for determining whether a retry should be attempted.
+	 * 	If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder retryable(int retries, long interval, RetryOn retryOn) {
@@ -340,7 +356,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * When called, the {@link #createConnectionManager()} method will return a {@link PoolingHttpClientConnectionManager}
-	 * 	instead of a {@link BasicHttpClientConnectionManager}.
+	 * instead of a {@link BasicHttpClientConnectionManager}.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -361,8 +377,8 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * Same as {@link #serializer(Serializer)}, except takes in a serializer class that
-	 * 	will be instantiated through a no-arg constructor.
+	 * Same as {@link #serializer(Serializer)}, except takes in a serializer class that will be instantiated through a
+	 * no-arg constructor.
 	 *
 	 * @param serializerClass The serializer class.
 	 * @return This object (for method chaining).
@@ -384,8 +400,8 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * Same as {@link #parser(Parser)}, except takes in a parser class that
-	 * 	will be instantiated through a no-arg constructor.
+	 * Same as {@link #parser(Parser)}, except takes in a parser class that will be instantiated through a no-arg
+	 * constructor.
 	 *
 	 * @param parserClass The parser class.
 	 * @return This object (for method chaining).
@@ -411,7 +427,8 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * Sets the part formatter to use for converting POJOs to headers, query parameters, form-data parameters, and
 	 * path variables.
 	 *
-	 * @param partSerializerClass The part serializer class.
+	 * @param partSerializerClass
+	 * 	The part serializer class.
 	 * 	The class must have a no-arg constructor.
 	 * @return This object (for method chaining).
 	 */
@@ -453,6 +470,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
+	 *
 	 * <p>
 	 * This executor service is used to create {@link Future} objects on the following methods:
 	 * <ul>
@@ -461,6 +479,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
 	 * 	<li>{@link RestCall#getResponseAsString()}
 	 * </ul>
+	 *
 	 * <p>
 	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
 	 * and a queue size of 10.
@@ -494,8 +513,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept</code> request header.
+	 *
 	 * <p>
-	 * This overrides the media type specified on the parser, but is overridden by calling <code>header(<js>"Accept"</js>, value);</code>
+	 * This overrides the media type specified on the parser, but is overridden by calling
+	 * <code>header(<js>"Accept"</js>, value);</code>
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
@@ -506,6 +527,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept-Charset</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
 	 *
@@ -518,6 +540,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept-Encoding</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
 	 *
@@ -530,6 +553,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Accept-Language</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
 	 *
@@ -542,6 +566,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Authorization</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
 	 *
@@ -554,6 +579,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Cache-Control</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
 	 *
@@ -566,6 +592,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Connection</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
 	 *
@@ -578,6 +605,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Content-Length</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
 	 *
@@ -590,8 +618,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Content-Type</code> request header.
+	 *
 	 * <p>
-	 * This overrides the media type specified on the serializer, but is overridden by calling <code>header(<js>"Content-Type"</js>, value);</code>
+	 * This overrides the media type specified on the serializer, but is overridden by calling
+	 * <code>header(<js>"Content-Type"</js>, value);</code>
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
@@ -602,6 +632,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Date</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
 	 *
@@ -614,6 +645,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Expect</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
 	 *
@@ -626,6 +658,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Forwarded</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
 	 *
@@ -638,6 +671,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>From</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
 	 *
@@ -650,6 +684,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Host</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
 	 *
@@ -662,6 +697,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Match</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
 	 *
@@ -674,6 +710,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Modified-Since</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
 	 *
@@ -686,6 +723,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>If-None-Match</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
 	 *
@@ -698,6 +736,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Range</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
 	 *
@@ -710,6 +749,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>If-Unmodified-Since</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
 	 *
@@ -722,6 +762,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Max-Forwards</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
 	 *
@@ -734,6 +775,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Origin</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
 	 *
@@ -746,6 +788,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Pragma</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
 	 *
@@ -758,6 +801,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Proxy-Authorization</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
 	 *
@@ -770,6 +814,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Range</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
 	 *
@@ -782,6 +827,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Referer</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
 	 *
@@ -794,6 +840,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>TE</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
 	 *
@@ -806,6 +853,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>User-Agent</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
 	 *
@@ -818,6 +866,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Upgrade</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
 	 *
@@ -830,6 +879,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Via</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
 	 *
@@ -842,6 +892,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the value for the <code>Warning</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
 	 *
@@ -1116,10 +1167,11 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * When called, <code>No-Trace: true</code> is added to requests.
+	 *
 	 * <p>
 	 * This gives the opportunity for the servlet to not log errors on invalid requests.
-	 * This is useful for testing purposes when you don't want your log file to show lots
-	 * of errors that are simply the results of testing.
+	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
+	 * results of testing.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -1129,10 +1181,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Sets the {@link UonSerializerContext#UON_paramFormat} property on the URL-encoding serializers in this group.
+	 *
 	 * <p>
-	 * This overrides the behavior of the URL-encoding serializer to quote and escape characters
-	 * in query names and values that may be confused for UON notation (e.g. <js>"'(foo=123)'"</js>, <js>"'@(1,2,3)'"</js>).
-	 * <p>
+	 * This overrides the behavior of the URL-encoding serializer to quote and escape characters in query names and
+	 * values that may be confused for UON notation (e.g. <js>"'(foo=123)'"</js>, <js>"'@(1,2,3)'"</js>).
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
@@ -1145,11 +1197,14 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	/**
 	 * Shortcut for calling <code>paramFormat(<js>"PLAINTEXT"</js>)</code>.
+	 *
 	 * <p>
-	 * The default behavior is to serialize part values (query parameters, form data, headers, path variables) in UON notation.
+	 * The default behavior is to serialize part values (query parameters, form data, headers, path variables) in UON
+	 * notation.
 	 * Calling this method forces plain-text to be used instead.
+	 *
 	 * <p>
-	 * Specifially, UON notation has the following effects:
+	 * Specifically, UON notation has the following effects:
 	 * <ul>
 	 * 	<li>Boolean strings (<js>"true"</js>/<js>"false"</js>) and numeric values (<js>"123"</js>) will be
 	 * 			quoted (<js>"'true'"</js>, <js>"'false'"</js>, <js>"'123'"</js>.
@@ -1158,7 +1213,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * 		<js>"'(foo=bar~'baz~')'"</js>.
 	 * </ul>
 	 * <p>
-	 * The downside to using plain text part serialization is that you cannot serialize arbitrary POJOs.
+	 * The down-side to using plain text part serialization is that you cannot serialize arbitrary POJOs.
 	 *
 	 * @return This object (for method chaining).
 	 */

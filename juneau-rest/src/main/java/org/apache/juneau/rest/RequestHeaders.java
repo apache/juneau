@@ -99,7 +99,8 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/**
 	 * Returns the specified header value, or <jk>null</jk> if the header doesn't exist.
 	 * <p>
-	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the
+	 * URL query string.
 	 * <p>
 	 * @param name The header name.
 	 * @return The header value, or <jk>null</jk> if it doesn't exist.
@@ -118,7 +119,8 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/**
 	 * Returns the specified header value, or a default value if the header doesn't exist.
 	 * <p>
-	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the
+	 * URL query string.
 	 *
 	 * @param name The HTTP header name.
 	 * @param def The default value to return if the header value isn't found.
@@ -186,9 +188,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/**
 	 * Returns the specified header value converted to a POJO.
 	 * <p>
-	 * The type can be any POJO type convertable from a <code>String</code>
-	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertable From Strings</a>).
-	 * <p>
+	 * The type can be any POJO type convertible from a <code>String</code>
+	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertible From Strings</a>).
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
@@ -227,9 +229,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/**
 	 * Returns the specified header value converted to a POJO.
 	 * <p>
-	 * The type can be any POJO type convertable from a <code>String</code>
-	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertable From Strings</a>).
-	 * <p>
+	 * The type can be any POJO type convertible from a <code>String</code>
+	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertible From Strings</a>).
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
@@ -238,10 +240,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 *
 	 * @param name The HTTP header name.
 	 * @param type The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException If the header could not be converted to the specified type.
@@ -254,6 +258,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns a copy of this object, but only with the specified header names copied.
+	 *
 	 * @param headers The headers to include in the copy.
 	 * @return A new headers object.
 	 */
@@ -267,6 +272,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Same as {@link #subset(String...)}, but allows you to specify header names as a comma-delimited list.
+	 *
 	 * @param headers The headers to include in the copy.
 	 * @return A new headers object.
 	 */
@@ -285,7 +291,6 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </p>
 	 *
 	 * @return The parsed <code>Accept</code> header on the request, or <jk>null</jk> if not found.
-	 *
 	 */
 	public Accept getAccept() {
 		return Accept.forString(getString("Accept"));
@@ -490,7 +495,8 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Returns the <code>If-Match</code> header on the request.
 	 * <p>
 	 * Only perform the action if the client supplied entity matches the same entity on the server.
-	 * This is mainly for methods like PUT to only update a resource if it has not been modified since the user last updated it.
+	 * This is mainly for methods like PUT to only update a resource if it has not been modified since the user last
+	 * updated it.
 	 *
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>

@@ -39,16 +39,21 @@ import org.apache.juneau.utils.*;
  * The root directory is specified in one of two ways:
  * </p>
  * <ul class='spaced-list'>
- * 	<li>Specifying the location via a <l>DirectoryResource.rootDir</l> property.
- * 	<li>Overriding the {@link #getRootDir()} method.
+ * 	<li>
+ * 		Specifying the location via a <l>DirectoryResource.rootDir</l> property.
+ * 	<li>
+ * 		Overriding the {@link #getRootDir()} method.
  * </ul>
  * <p>
  * Read/write access control is handled through the following properties:
  * </p>
  * <ul class='spaced-list'>
- * 	<li><l>DirectoryResource.allowViews</l> - If <jk>true</jk>, allows view and download access to files.
- * 	<li><l>DirectoryResource.allowPuts</l> - If <jk>true</jk>, allows files to be created or overwritten.
- * 	<li><l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
+ * 	<li>
+ * 		<l>DirectoryResource.allowViews</l> - If <jk>true</jk>, allows view and download access to files.
+ * 	<li>
+ * 		<l>DirectoryResource.allowPuts</l> - If <jk>true</jk>, allows files to be created or overwritten.
+ * 	<li>
+ * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
  * <p>
  * Access can also be controlled by overriding the {@link #checkAccess(RestRequest)} method.

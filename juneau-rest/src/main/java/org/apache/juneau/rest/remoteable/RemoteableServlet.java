@@ -28,8 +28,8 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Remoteable services are POJOs whose methods can be invoked remotely through proxy interfaces.
  * <p>
- * To implement a remoteable service, developers must simply subclass from this class and implement the {@link #getServiceMap()} method that
- * 	maps java interfaces to POJO instances.
+ * To implement a remoteable service, developers must simply subclass from this class and implement the
+ * {@link #getServiceMap()} method that maps java interfaces to POJO instances.
  *
  * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.rest.remoteable</a> for details.
  */
@@ -69,7 +69,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 		boolean useAll = ! useOnlyAnnotated();
 		for (Class<?> c : getServiceMap().keySet()) {
 			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())
-				l.add(new Link(c.getName(), "{0}/{1}", req.getRequestURI(), c.getName())); //$NON-NLS-1$
+				l.add(new Link(c.getName(), "{0}/{1}", req.getRequestURI(), c.getName()));
 		}
 		return l;
 	}
@@ -101,18 +101,18 @@ public abstract class RemoteableServlet extends RestServletDefault {
 		// Find the parser.
 		ReaderParser p = req.getBody().getReaderParser();
 		if (p == null)
-			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Could not find parser for media type ''{0}''", req.getHeaders().getContentType()); //$NON-NLS-1$
+			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Could not find parser for media type ''{0}''", req.getHeaders().getContentType());
 		Class<?> c = getInterfaceClass(javaInterface);
 
 		// Find the service.
 		Object service = getServiceMap().get(c);
 		if (service == null)
-			throw new RestException(SC_NOT_FOUND, "Service not found"); //$NON-NLS-1$
+			throw new RestException(SC_NOT_FOUND, "Service not found");
 
 		// Find the method.
 		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
 		if (m == null)
-			throw new RestException(SC_NOT_FOUND, "Method not found"); //$NON-NLS-1$
+			throw new RestException(SC_NOT_FOUND, "Method not found");
 
 		// Parse the args and invoke the method.
 		Object[] params = p.parseArgs(req.getReader(), m.getGenericParameterTypes());

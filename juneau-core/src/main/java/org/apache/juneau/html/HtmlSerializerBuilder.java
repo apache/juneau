@@ -67,15 +67,20 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link HtmlSerializerContext#TO_STRING} / <js>"toString"</js> - Set to whatever is returned by
+	 * 	<li>
+	 * 		{@link HtmlSerializerContext#TO_STRING} / <js>"toString"</js> - Set to whatever is returned by
 	 * 		{@link #toString()} on the object.
-	 * 	<li>{@link HtmlSerializerContext#URI} / <js>"uri"</js> - Set to the URI value.
-	 * 	<li>{@link HtmlSerializerContext#LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
-	 * 	<li>{@link HtmlSerializerContext#PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
-	 * 	<li>{@link HtmlSerializerContext#URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
+	 * 	<li>
+	 * 		{@link HtmlSerializerContext#URI} / <js>"uri"</js> - Set to the URI value.
+	 * 	<li>
+	 * 		{@link HtmlSerializerContext#LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
+	 * 	<li>
+	 * 		{@link HtmlSerializerContext#PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
+	 * 	<li>
+	 * 		{@link HtmlSerializerContext#URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
 	 * 		(e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_uriAnchorText</jsf>, value)</code>.
@@ -102,7 +107,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * 	and make it into a hyperlink based on the rules specified by {@link HtmlSerializerContext#HTML_uriAnchorText}.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_detectLinksInStrings</jsf>, value)</code>.
@@ -130,7 +135,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 * <p>
 	 * The parameter name can be changed via the {@link HtmlSerializerContext#HTML_labelParameter} property.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_lookForLabelParameters</jsf>, value)</code>.
@@ -155,7 +160,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<li><b>Default:</b> <js>"label"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_labelParameter</jsf>, value)</code>.
@@ -179,7 +184,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_addKeyValueTableHeaders</jsf>, value)</code>.

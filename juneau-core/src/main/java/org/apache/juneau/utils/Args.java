@@ -28,7 +28,7 @@ import org.apache.juneau.*;
  * The format of a main argument is a token that does not start with <js>'-'</js>.
  * <p>
  * The format of an optional argument is <js>"-argName [zero or more tokens]"</js>.
- * <p>
+ *
  * <h6 class='topic'>Command-line examples</h6>
  * <ul>
  * 	<li><code>java com.sample.MyClass mainArg1</code>

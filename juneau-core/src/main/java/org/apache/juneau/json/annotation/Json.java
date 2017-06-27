@@ -24,7 +24,8 @@ import java.lang.annotation.*;
  * <p>
  * Can be used for the following:
  * <ul class='spaced-list'>
- * 	<li>Wrap bean instances inside wrapper object (e.g. <code>{'wrapperAttr':bean}</code>).
+ * 	<li>
+ * 		Wrap bean instances inside wrapper object (e.g. <code>{'wrapperAttr':bean}</code>).
  * </ul>
  */
 @Documented

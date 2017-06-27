@@ -70,7 +70,7 @@ public class SerializerContext extends BeanContext {
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
 	 * <code>{A:{B:{C:null}}}</code>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Checking for recursion can cause a small performance penalty.
@@ -177,7 +177,8 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
-	 * 	<li>Map entries with <jk>null</jk> values will be lost.
+	 * 	<li>
+	 * 		Map entries with <jk>null</jk> values will be lost.
 	 * </ul>
 	 */
 	public static final String SERIALIZER_trimNullProperties = "Serializer.trimNullProperties";
@@ -196,8 +197,10 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
-	 * 	<li>Map entries with empty list values will be lost.
-	 * 	<li>Bean properties with empty list values will not be set.
+	 * 	<li>
+	 * 		Map entries with empty list values will be lost.
+	 * 	<li>
+	 * 		Bean properties with empty list values will not be set.
 	 * </ul>
 	 */
 	public static final String SERIALIZER_trimEmptyCollections = "Serializer.trimEmptyLists";
@@ -216,7 +219,8 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
-	 * 	<li>Bean properties with empty map values will not be set.
+	 * 	<li>
+	 * 		Bean properties with empty map values will not be set.
 	 * </ul>
 	 */
 	public static final String SERIALIZER_trimEmptyMaps = "Serializer.trimEmptyMaps";
@@ -246,7 +250,7 @@ public class SerializerContext extends BeanContext {
 	 * </ul>
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
-	 * <p>
+	 *
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>

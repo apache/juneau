@@ -44,8 +44,7 @@ import org.apache.juneau.transform.*;
  * 	<tr>
  * 		<td>
  * 			{@code Number} (e.g. {@code Integer}, {@code Short}, {@code Float},...)
- * 			<br>
- * 			<code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>,
+ * 			<br><code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>,
  * 			<code>Short.<jsf>TYPE</jsf></code>, <code>Float.<jsf>TYPE</jsf></code>,...)
  * 		</td>
  * 		<td>
@@ -68,12 +67,11 @@ import org.apache.juneau.transform.*;
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 		{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code ObjectList})
+ * 			{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code ObjectList})
  * 		</td>
  * 		<td>
  * 			{@code Collection<Object>}
- * 			<br>
- * 			{@code Object[]}
+ * 			<br>{@code Object[]}
  * 		</td>
  * 		<td>
  * 			If {@code Collection} is not constructible, a {@code ObjectList} is created.
@@ -82,7 +80,6 @@ import org.apache.juneau.transform.*;
  * 	<tr>
  * 		<td>
  * 			{@code X[]} (array of any type X)
- * 			<br>
  * 		</td>
  * 		<td>
  * 			{@code List<X>}
@@ -95,10 +92,8 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 		<td>
  * 			{@code List<List<X>>}
- * 			<br>
- * 			{@code List<X[]>}
- * 			<br>
- * 			{@code List[]<X>}
+ * 			<br>{@code List<X[]>}
+ * 			<br>{@code List[]<X>}
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
@@ -134,12 +129,9 @@ import org.apache.juneau.transform.*;
  * 	<tr>
  * 		<td>
  * 			Anything with one of the following methods:
- * 			<br>
- * 			<code><jk>public static</jk> T fromString(String)</code>
- * 			<br>
- * 			<code><jk>public static</jk> T valueOf(String)</code>
- * 			<br>
- * 			<code><jk>public</jk> T(String)</code>
+ * 			<br><code><jk>public static</jk> T fromString(String)</code>
+ * 			<br><code><jk>public static</jk> T valueOf(String)</code>
+ * 			<br><code><jk>public</jk> T(String)</code>
  * 		</td>
  * 		<td>
  * 			<code>String</code>

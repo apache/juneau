@@ -35,12 +35,14 @@ import org.apache.juneau.utils.*;
 
 /**
  * Contains metadata about a bean property.
+ *
  * <p>
- * Contains information such as type of property (e.g. field/getter/setter), class type of property value,
- * 	and whether any transforms are associated with this property.
+ * Contains information such as type of property (e.g. field/getter/setter), class type of property value, and whether
+ * any transforms are associated with this property.
+ *
  * <p>
- * Developers will typically not need access to this class.  The information provided by it is already
- * 	exposed through several methods on the {@link BeanMap} API.
+ * Developers will typically not need access to this class.  The information provided by it is already exposed through
+ * several methods on the {@link BeanMap} API.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BeanPropertyMeta {
@@ -330,9 +332,10 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns the {@link ClassMeta} of the class of this property.
+	 *
 	 * <p>
-	 * If this property or the property type class has a {@link PojoSwap} associated with it, this
-	 * method returns the transformed class meta.
+	 * If this property or the property type class has a {@link PojoSwap} associated with it, this method returns the
+	 * transformed class meta.
 	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and
 	 * {@link #set(BeanMap,String,Object)} methods.
 	 *
@@ -344,11 +347,14 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns the bean dictionary in use for this bean property.
+	 *
+	 * <p>
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
 	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary()}.
 	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_beanDictionary} context property.
 	 * </ol>
+	 *
 	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
 	 */
 	public BeanRegistry getBeanRegistry() {
@@ -357,9 +363,10 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns <jk>true</jk> if this bean property is a URI.
+	 *
 	 * <p>
 	 * A bean property can be considered a URI if any of the following are true:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li>Property class type is {@link URL} or {@link URI}.
 	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.URI}.
 	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.URI}.
@@ -373,6 +380,7 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns <jk>true</jk> if this bean property is named <js>"*"</js>.
+	 *
 	 * @return <jk>true</jk> if this bean property is named <js>"*"</js>.
 	 */
 	public boolean isDyna() {
@@ -491,8 +499,8 @@ public class BeanPropertyMeta {
 	}
 
 	/**
-	 * Equivalent to calling {@link BeanMap#put(String, Object)}, but is faster since it avoids
-	 * 	looking up the property meta.
+	 * Equivalent to calling {@link BeanMap#put(String, Object)}, but is faster since it avoids looking up the property
+	 * meta.
 	 *
 	 * @param m The bean map to set the property value on.
 	 * @param pName The property name.
@@ -712,11 +720,15 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns the {@link Map} object returned by the DynaBean getter.
+	 *
 	 * <p>
-	 * The DynaBean property is the property whose name is <js>"*"</js> and returns a map of "extra" properties on the bean.
+	 * The DynaBean property is the property whose name is <js>"*"</js> and returns a map of "extra" properties on the
+	 * bean.
 	 *
 	 * @param bean The bean.
-	 * @return The map returned by the getter, or an empty map if the getter returned <jk>null</jk> or this isn't a DynaBean property.
+	 * @return
+	 * 	The map returned by the getter, or an empty map if the getter returned <jk>null</jk> or this isn't a DynaBean
+	 * 	property.
 	 * @throws IllegalArgumentException Thrown by method invocation.
 	 * @throws IllegalAccessException Thrown by method invocation.
 	 * @throws InvocationTargetException Thrown by method invocation.
@@ -734,6 +746,8 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Sets an array field on this bean.
+	 *
+	 * <p>
 	 * Works on both <code>Object</code> and primitive arrays.
 	 *
 	 * @param bean The bean of the field.
@@ -749,8 +763,10 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Adds a value to a {@link Collection} or array property.
-	 * Note that adding values to an array property is inefficient for large
-	 * arrays since it must copy the array into a larger array on each operation.
+	 *
+	 * <p>
+	 * Note that adding values to an array property is inefficient for large arrays since it must copy the array into a
+	 * larger array on each operation.
 	 *
 	 * @param m The bean of the field being set.
 	 * @param pName The property name.
@@ -904,9 +920,10 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns all instances of the specified annotation in the hierarchy of this bean property.
+	 *
 	 * <p>
-	 * Searches through the class hierarchy (e.g. superclasses, interfaces, packages) for all
-	 * instances of the specified annotation.
+	 * Searches through the class hierarchy (e.g. superclasses, interfaces, packages) for all instances of the
+	 * specified annotation.
 	 *
 	 * @param a The class to find annotations for.
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
@@ -932,6 +949,7 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns the specified annotation on the field or methods that define this property.
+	 *
 	 * <p>
 	 * This method will search up the parent class/interface hierarchy chain to search for the annotation on
 	 * overridden getters and setters.

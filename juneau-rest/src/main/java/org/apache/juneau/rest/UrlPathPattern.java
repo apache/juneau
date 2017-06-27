@@ -77,9 +77,8 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
 	 *
 	 * @param path The path to match against.
-	 * @return An array of values matched against <js>"{var}"</js> variable in the pattern,
-	 * 	or an empty array if the pattern matched but no vars were present, or <jk>null</jk>
-	 * 	if the specified path didn't match the pattern.
+	 * @return An array of values matched against <js>"{var}"</js> variable in the pattern, or an empty array if the
+	 * pattern matched but no vars were present, or <jk>null</jk> if the specified path didn't match the pattern.
 	 */
 	protected String[] match(String path) {
 
@@ -172,6 +171,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Bean property getter:  <property>vars</property>.
+	 *
 	 * @return The value of the <property>vars</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String[] getVars() {
@@ -180,6 +180,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Bean property getter:  <property>patternString</property>.
+	 *
 	 * @return The value of the <property>patternString</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getPatternString() {

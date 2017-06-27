@@ -26,12 +26,15 @@ import org.apache.juneau.xml.*;
  *
  * <h6 class='topic'>Inherited configurable properties</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties
- * 		associated with handling beans on serializers and parsers.
- * 	<ul>
- * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">
- * 			SerializerContext</a> - Configurable properties common to all serializers.
- * 	</ul>
+ * 	<li class='jc'>
+ * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
+ * 		- Properties associated with handling beans on serializers and parsers.
+ * 		<ul>
+ * 			<li class='jc'>
+ * 				<a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
+ * 				- Configurable properties common to all serializers.
+ * 		</ul>
+ * 	</li>
  * </ul>
  */
 public class HtmlSerializerContext extends XmlSerializerContext {
@@ -51,12 +54,17 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link #TO_STRING} / <js>"toString"</js> - Set to whatever is returned by {@link #toString()} on the
+	 * 	<li>
+	 * 		{@link #TO_STRING} / <js>"toString"</js> - Set to whatever is returned by {@link #toString()} on the
 	 * 		object.
-	 * 	<li>{@link #URI} / <js>"uri"</js> - Set to the URI value.
-	 * 	<li>{@link #LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
-	 * 	<li>{@link #PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
-	 * 	<li>{@link #URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
+	 * 	<li>
+	 * 		{@link #URI} / <js>"uri"</js> - Set to the URI value.
+	 * 	<li>
+	 * 		{@link #LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
+	 * 	<li>
+	 * 		{@link #PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
+	 * 	<li>
+	 * 		{@link #URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
 	 * 		(e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
 	 * </ul>
 	 */

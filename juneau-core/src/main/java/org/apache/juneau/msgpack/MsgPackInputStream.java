@@ -19,7 +19,7 @@ import java.io.*;
 
 /**
  * Specialized input stream for parsing MessagePack streams.
- * <p>
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>This class is not intended for external use.

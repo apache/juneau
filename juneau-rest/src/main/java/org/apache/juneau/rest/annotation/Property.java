@@ -40,8 +40,8 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link XmlParserContext}
  * </ul>
  * <p>
- * Property values types that are not <code>Strings</code> will automatically be converted to the
- * 	correct type (e.g. <code>Boolean</code>, etc...).
+ * Property values types that are not <code>Strings</code> will automatically be converted to the correct type
+ * (e.g. <code>Boolean</code>, etc...).
  * <p>
  * See {@link RestResource#properties} for more information.
  */

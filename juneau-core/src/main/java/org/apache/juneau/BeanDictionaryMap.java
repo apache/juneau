@@ -19,9 +19,11 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents a map of dictionary type names to bean classes that make up a bean dictionary.
+ *
  * <p>
- * In general, this approach for defining dictionary names for classes is used when it's not possible
- * to use the {@link Bean#typeName()} annotation.
+ * In general, this approach for defining dictionary names for classes is used when it's not possible to use the
+ * {@link Bean#typeName()} annotation.
+ *
  * <p>
  * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
  */

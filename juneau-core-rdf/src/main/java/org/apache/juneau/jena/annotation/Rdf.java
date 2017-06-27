@@ -25,7 +25,7 @@ import org.apache.juneau.jena.*;
  * Can be applied to Java packages, types, fields, and methods.
  * <p>
  * Can be used for the following:
- * <ul class='spaced-list'>
+ * <ul>
  * 	<li>Override the default behavior of how collections and arrays are serialized.
  * </ul>
  */
@@ -62,7 +62,8 @@ public @interface Rdf {
 	 * <p>
 	 * Has the following effects on the following serializers:
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link RdfSerializer} - Will be rendered as the value of the <js>"rdf:about"</js> attribute
+	 * 	<li>
+	 * 		{@link RdfSerializer} - Will be rendered as the value of the <js>"rdf:about"</js> attribute
 	 * 		for the bean.
 	 * </ul>
 	 */

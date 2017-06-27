@@ -21,8 +21,8 @@ import java.util.regex.*;
  * Response patterns are applied to REST calls through the {@link RestCall#responsePattern(ResponsePattern)} method.
  *
  * <h5 class='section'>Example:</h5>
- * This example shows how to use a response pattern finder to find and capture patterns for <js>"x=number"</js> and <js>"y=string"</js>
- * 	from a response body.
+ * This example shows how to use a response pattern finder to find and capture patterns for <js>"x=number"</js> and
+ * <js>"y=string"</js> from a response body.
  * <p>
  * <p class='bcode'>
  * 	<jk>final</jk> List&lt;Number&gt; xList = <jk>new</jk> ArrayList&lt;Number&gt;();
@@ -55,26 +55,22 @@ import java.util.regex.*;
  * 		)
  * 		.run();
  * </p>
- * <p>
+ *
  * <h5 class='notes'>Important Notes:</h5>
  * <ol class='notes'>
- * 	<li><p>
+ * 	<li>
  * 		Using response patterns does not affect the functionality of any of the other methods
- * 		used to retrieve the response such as {@link RestCall#getResponseAsString()} or {@link RestCall#getResponse(Class)}.<br>
- * 		HOWEVER, if you want to retrieve the entire text of the response from inside the match methods,
- * 		use {@link RestCall#getCapturedResponse()} since this method will not absorb the response for those other methods.
- * 	</p>
- * 	<li><p>
+ * 		used to retrieve the response such as {@link RestCall#getResponseAsString()} or {@link RestCall#getResponse(Class)}.
+ * 		<br>HOWEVER, if you want to retrieve the entire text of the response from inside the match methods, use
+ * 		{@link RestCall#getCapturedResponse()} since this method will not absorb the response for those other methods.
+ * 	<li>
  * 		Response pattern methods are NOT executed if a REST exception occurs during the request.
- * 	</p>
- * 	<li><p>
- * 		The {@link RestCall#successPattern(String)} and {@link RestCall#failurePattern(String)} methods use instances of
- * 		this class to throw {@link RestCallException RestCallExceptions} when success patterns are not found or failure patterns
- * 		are found.
- * 	</p>
- * 	<li><p>
+ * 	<li>
+ * 		The {@link RestCall#successPattern(String)} and {@link RestCall#failurePattern(String)} methods use instances
+ * 		of this class to throw {@link RestCallException RestCallExceptions} when success patterns are not found or
+ * 		failure patterns are found.
+ * 	<li>
  * 		{@link ResponsePattern} objects are reusable and thread-safe.
- * 	</p>
  * </ol>
  */
 public abstract class ResponsePattern {
@@ -115,8 +111,8 @@ public abstract class ResponsePattern {
 	}
 
 	/**
-	 * Instances can override this method to handle when a regular expression pattern matches
-	 * 	on the output.
+	 * Instances can override this method to handle when a regular expression pattern matches on the output.
+	 *
 	 * <p>
 	 * This method is called once for every pattern match that occurs in the response text.
 	 *

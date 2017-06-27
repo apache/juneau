@@ -73,17 +73,19 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Remoteable Services</h2>
 <div class='topic'>
 	<p>
-		The Remoteable Service API allows for client side code to use interface proxies for 
-			calling methods on POJOs on the server side.
+		The Remoteable Service API allows for client side code to use interface proxies for calling methods on POJOs on 
+		the server side.
 	</p>
 	<p>
-		Proxy interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
-		The remoteable servlet is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a full-blown
-			REST interface for calling remoteable services (e.g. POJOs) remotely. 
+		Proxy interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} 
+		method.
+		The remoteable servlet is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a 
+		full-blown REST interface for calling remoteable services (e.g. POJOs) remotely. 
 	</p>
 	<p>
 		The following simplified example shows how a method on a POJO on a server can be called through an interface
-			on a client...
+		on a client...
+	</p>
 	<p class='bcode'>
 	<jk>public interface</jk> IAddressBook {
 		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
@@ -115,8 +117,10 @@
 		The requirements for a method to be callable through the remoteable service are:
 	</p>
 	<ul class='spaced-list'>
-		<li>The method must be public.
-		<li>The parameter and return types must be <a href='../../../../../overview-summary.html#Core.PojoCategories'>serializable and parsable</a>.
+		<li>
+			The method must be public.
+		<li>
+			The parameter and return types must be <a href='../../../../../overview-summary.html#Core.PojoCategories'>serializable and parsable</a>.
 	</ul>
 </div>
 
@@ -125,12 +129,13 @@
 <h2 class='topic' onclick='toggle(this)'>2 - Client Side</h2>
 <div class='topic'>
 	<p>
-		Remoteable interface proxies are retrieved through the existing {@link org.apache.juneau.rest.client.RestClient} class.
+		Remoteable interface proxies are retrieved through the existing {@link org.apache.juneau.rest.client.RestClient} 
+		class.
 	</p>
 	<p>
 		It may seem that the client-side code would need to be complex.
-		In reality, it builds upon existing serializing, parsing, and REST capabilities in Juneau resulting
-			in very little additional code.
+		In reality, it builds upon existing serializing, parsing, and REST capabilities in Juneau resulting in very 
+		little additional code.
 		The entire code for the <code>RestClient.getRemoteableProxy(Class)</code> method is shown below:
 	</p>
 	<p class='bcode'>
@@ -153,10 +158,9 @@
 	</p>
 	<p>
 		Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
-		For example, convenience methods for setting POJO filters and properties to customize 
-			the behavior of the serializers and parsers, and the ability to provide your own
-			customized Apache <code>HttpClient</code> for handling various scenarios involving
-			authentication and internet proxies.
+		For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
+		serializers and parsers, and the ability to provide your own customized Apache <code>HttpClient</code> for 
+		handling various scenarios involving authentication and Internet proxies.
 	</p>
 </div>
 
@@ -168,16 +172,16 @@
 		The server side is only slightly more complex, but boasts useful debugging and discovery capabilities.  
 	</p>
 	<p>
-		The {@link org.apache.juneau.rest.remoteable.RemoteableServlet} class is an implementation of {@link org.apache.juneau.rest.RestServlet} 
-			that provides a REST interface for invoking calls on POJOs.
-		The <code>RemoteableServlet</code> class is abstract and must implement a single method for providing
-			the set of POJOs to expose as remote interfaces.  
+		The {@link org.apache.juneau.rest.remoteable.RemoteableServlet} class is an implementation of 
+		{@link org.apache.juneau.rest.RestServlet} that provides a REST interface for invoking calls on POJOs.
+		The <code>RemoteableServlet</code> class is abstract and must implement a single method for providing the set 
+		of POJOs to expose as remote interfaces.  
 	</p>
 	<p>
-		The samples bundle includes a sample implementation of a remotable service that can be used to interact with the
-			address book POJO also included in the bundle.  
+		The samples bundle includes a sample implementation of a remoteable service that can be used to interact with 
+		the address book POJO also included in the bundle.  
 		The method that must be implemented is {@link org.apache.juneau.rest.remoteable.RemoteableServlet#getServiceMap()}
-			that simply returns a mapping of Java interfaces (or classes) to POJO instances.
+		that simply returns a mapping of Java interfaces (or classes) to POJO instances.
 	</p>
 	<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -213,16 +217,16 @@
 	<p>
 		Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
 		Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
-			interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
+		interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
 		Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
-			framework methods listed.
+		framework methods listed.
 	</p>
 	<img class='bordered' src="doc-files/2.png">
 	<img class='bordered' src="doc-files/3.png">
 	<p>
-		Let's see how we can interact with this interface through nothing more than REST calls
-			to get a better idea on how this works.
-			We'll use the same method call as in the introduction.
+		Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
+		how this works.
+		We'll use the same method call as in the introduction.
 		First, we need to create the serialized form of the arguments:
 	</p>
 	<p class='bcode'>
@@ -264,12 +268,13 @@
 		Methods are invoked by POSTing the serialized object array to the URI of the interface method.
 		In this case, we want to POST our JSON to <code>/juneau/sample/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)</code>.
 		Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
-		We also want the results to be returned as JSON, so we set the <code>Accept</code> header to <code>text/json</code> as well.
+		We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
+		<code>text/json</code> as well.
 	</p>
 	<img class='bordered' src="doc-files/4.png">
 	<p>
-		When we execute the POST, we should see the following successful response whose body contains the returned <code>Person</code> bean
-			serialized to JSON:
+		When we execute the POST, we should see the following successful response whose body contains the returned 
+		<code>Person</code> bean serialized to JSON:
 	</p>
 	<img class='bordered' src="doc-files/5.png">
 	<p>
@@ -280,7 +285,8 @@
 		Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(response, Person.<jk>class</jk>);
 	</p>
 	<p>
-		If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a browser...
+		If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a 
+		browser...
 	</p>
 	<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -293,15 +299,18 @@
 	<jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet {
 	</p>
 	<p>
-		For example, here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the returned POJO 
-			(in this case as HTML since that's what's in the <code>Accept</code> header when calling from a browser):
+		For example, here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the 
+		returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
+		browser):
 	</p>
 	<img class='bordered' src="doc-files/6.png">
 	<p>
-		When specifying the POST body as a <code>&amp;content</code> parameter, the method arguments should be in UON notation.
+		When specifying the POST body as a <code>&amp;content</code> parameter, the method arguments should be in UON 
+		notation.
 		See {@link org.apache.juneau.uon.UonSerializer} for more information about this encoding.
 		Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
-			but passing in unencoded JSON in a URL may not work in all browsers.  Therefore, UON is preferred.
+		but passing in unencoded JSON in a URL may not work in all browsers.  
+		Therefore, UON is preferred.
 	</p>
 </div>
 
@@ -310,7 +319,8 @@
 <h2 class='topic' onclick='toggle(this)'>4 - @Remoteable Annotation</h2>
 <div class='topic'>
 	<p>
-		What if you want fine-tuned control over which methods are exposed in an interface instead of just all public methods?
+		What if you want fine-tuned control over which methods are exposed in an interface instead of just all public 
+		methods?
 		For this, the {@link org.apache.juneau.remoteable.Remoteable @Remoteable} annotation is provided.
 		It can be applied to individual interface methods to only expose those methods through the remoteable servlet.
 	</p>
@@ -339,7 +349,8 @@
 	<jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet {
 	</p>
 	<p>
-		The <ja>@Remoteable</ja> annotation can also be applied to the interface class to expose all public methods defined on that interface.
+		The <ja>@Remoteable</ja> annotation can also be applied to the interface class to expose all public methods 
+		defined on that interface.
 	</p>
 	<p class='bcode'>
 	<ja>@Remoteable</ja>

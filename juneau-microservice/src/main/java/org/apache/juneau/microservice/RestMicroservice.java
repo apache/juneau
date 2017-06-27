@@ -46,13 +46,11 @@ import org.eclipse.jetty.util.ssl.*;
  * <p>
  * The Jetty server is created by the {@link #createServer()} method and started with the {@link #startServer()} method.
  * These methods can be overridden to provided customized behavior.
- * <p>
  *
  * <h6 class='topic'>Defining REST Resources</h6>
  * <p>
  * Top-level REST resources are defined by the {@link #getResourceMap()} method.
  * This method can be overridden to provide a customized list of REST resources.
- * <p>
  *
  * <h6 class='topic'>Logging</h6>
  * <p>
@@ -62,13 +60,20 @@ import org.eclipse.jetty.util.ssl.*;
  * <h6 class='topic'>Lifecycle Listener Methods</h6>
  * Subclasses can optionally implement the following event listener methods:
  * <ul class='spaced-list'>
- * 	<li>{@link #onStart()} - Gets executed before {@link #start()}.
- * 	<li>{@link #onStop()} - Gets executed before {@link #stop()}.
- * 	<li>{@link #onCreateServer()} - Gets executed before {@link #createServer()}.
- * 	<li>{@link #onStartServer()} - Gets executed before {@link #startServer()}.
- * 	<li>{@link #onPostStartServer()} - Gets executed after {@link #startServer()}.
- * 	<li>{@link #onStopServer()} - Gets executed before {@link #stop()}.
- * 	<li>{@link #onPostStopServer()} - Gets executed after {@link #stop()}.
+ * 	<li>
+ * 		{@link #onStart()} - Gets executed before {@link #start()}.
+ * 	<li>
+ * 		{@link #onStop()} - Gets executed before {@link #stop()}.
+ * 	<li>
+ * 		{@link #onCreateServer()} - Gets executed before {@link #createServer()}.
+ * 	<li>
+ * 		{@link #onStartServer()} - Gets executed before {@link #startServer()}.
+ * 	<li>
+ * 		{@link #onPostStartServer()} - Gets executed after {@link #startServer()}.
+ * 	<li>
+ * 		{@link #onStopServer()} - Gets executed before {@link #stop()}.
+ * 	<li>
+ * 		{@link #onPostStopServer()} - Gets executed after {@link #stop()}.
  * </ul>
  */
 public class RestMicroservice extends Microservice {

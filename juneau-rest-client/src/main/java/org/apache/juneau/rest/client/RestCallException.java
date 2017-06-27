@@ -87,7 +87,7 @@ public final class RestCallException extends IOException {
 	 * @param responseMsg The response message.
 	 * @param method The HTTP method (for message purposes).
 	 * @param url The HTTP URL (for message purposes).
-	 * @param response The reponse from the server.
+	 * @param response The response from the server.
 	 */
 	public RestCallException(int responseCode, String responseMsg, String method, URI url, String response) {
 		super(format("HTTP method '%s' call to '%s' caused response code '%s,%s'.%nResponse: %n%s%n", method, url, responseCode, responseMsg, response));
@@ -100,7 +100,8 @@ public final class RestCallException extends IOException {
 	 * Sets the server-side exception details.
 	 *
 	 * @param exceptionName The <code>Exception-Name:</code> header specifying the full name of the exception.
-	 * @param exceptionMessage The <code>Exception-Message:</code> header specifying the message returned by {@link Throwable#getMessage()}.
+	 * @param exceptionMessage
+	 * 	The <code>Exception-Message:</code> header specifying the message returned by {@link Throwable#getMessage()}.
 	 * @param exceptionTrace The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
 	 * @return This object (for method chaining).
 	 */
@@ -116,6 +117,7 @@ public final class RestCallException extends IOException {
 
 	/**
 	 * Tries to reconstruct and re-throw the server-side exception.
+	 *
 	 * <p>
 	 * The exception is based on the following HTTP response headers:
 	 * <ul>
@@ -123,8 +125,10 @@ public final class RestCallException extends IOException {
 	 * 	<li><code>Exception-Message:</code> - The message returned by {@link Throwable#getMessage()}.
 	 * 	<li><code>Exception-Trace:</code> - The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
 	 * </ul>
+	 *
 	 * <p>
 	 * Does nothing if the server-side exception could not be reconstructed.
+	 *
 	 * <p>
 	 * Currently only supports <code>Throwables</code> with either a public no-arg constructor
 	 * or a public constructor that takes in a simple string message.
@@ -154,7 +158,7 @@ public final class RestCallException extends IOException {
 	/**
 	 * Sets the HTTP response object that caused this exception.
 	 *
-	 * @param httpResponse The HTTP respose object.
+	 * @param httpResponse The HTTP response object.
 	 * @return This object (for method chaining).
 	 */
 	protected RestCallException setHttpResponse(HttpResponse httpResponse) {
@@ -165,7 +169,9 @@ public final class RestCallException extends IOException {
 	/**
 	 * Returns the HTTP response object that caused this exception.
 	 *
-	 * @return The HTTP response object that caused this exception, or <jk>null</jk> if no response was created yet when the exception was thrown.
+	 * @return
+	 * 	The HTTP response object that caused this exception, or <jk>null</jk> if no response was created yet when the
+	 * 	exception was thrown.
 	 */
 	public HttpResponse getHttpResponse() {
 		return this.httpResponse;
@@ -200,6 +206,7 @@ public final class RestCallException extends IOException {
 
 	/**
 	 * Sets the inner cause for this exception.
+	 *
 	 * @param cause The inner cause.
 	 * @return This object (for method chaining).
 	 */

@@ -42,16 +42,23 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h6 class='topic'>Features</h6>
  * <ul class='spaced-list'>
- * 	<li>Convert POJOs directly to HTTP request message bodies using {@link Serializer} class.
- * 	<li>Convert HTTP response message bodies directly to POJOs using {@link Parser} class.
- * 	<li>Fluent interface.
- * 	<li>Thread safe.
- * 	<li>API for interacting with remoteable services.
+ * 	<li>
+ * 		Convert POJOs directly to HTTP request message bodies using {@link Serializer} class.
+ * 	<li>
+ * 		Convert HTTP response message bodies directly to POJOs using {@link Parser} class.
+ * 	<li>
+ * 		Fluent interface.
+ * 	<li>
+ * 		Thread safe.
+ * 	<li>
+ * 		API for interacting with remoteable services.
  * </ul>
  *
  * <h5 class='section'>Additional information:</h5>
  * <ul>
- * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
+ * 	<li>
+ * 		<a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a>
+ * 		for more information and code examples.
  * </ul>
  */
 @SuppressWarnings("rawtypes")
@@ -76,7 +83,7 @@ public class RestClient extends CoreObject {
 	final int retries;
 	final long retryInterval;
 	final boolean debug;
-	final RestCallInterceptor[] interceptors;
+	final RestCallInterceptor[] intercepters;
 
 	// This is lazy-created.
 	private volatile ExecutorService executorService;
@@ -92,7 +99,7 @@ public class RestClient extends CoreObject {
 			UrlEncodingSerializer urlEncodingSerializer,
 			PartSerializer partSerializer,
 			Map<String,String> headers,
-			List<RestCallInterceptor> interceptors,
+			List<RestCallInterceptor> intercepters,
 			String rootUri,
 			RetryOn retryOn,
 			int retries,
@@ -117,11 +124,11 @@ public class RestClient extends CoreObject {
 		this.retryInterval = retryInterval;
 		this.debug = debug;
 
-		List<RestCallInterceptor> l = new ArrayList<RestCallInterceptor>(interceptors);
+		List<RestCallInterceptor> l = new ArrayList<RestCallInterceptor>(intercepters);
 		if (debug)
 			l.add(RestCallLogger.DEFAULT);
 
-		this.interceptors = l.toArray(new RestCallInterceptor[l.size()]);
+		this.intercepters = l.toArray(new RestCallInterceptor[l.size()]);
 
 		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
 			creationStack = Thread.currentThread().getStackTrace();
@@ -134,6 +141,8 @@ public class RestClient extends CoreObject {
 
 	/**
 	 * Calls {@link CloseableHttpClient#close()} on the underlying {@link CloseableHttpClient}.
+	 *
+	 * <p>
 	 * It's good practice to call this method after the client is no longer used.
 	 *
 	 * @throws IOException
@@ -165,6 +174,8 @@ public class RestClient extends CoreObject {
 
 	/**
 	 * Execute the specified request.
+	 *
+	 * <p>
 	 * Subclasses can override this method to provide specialized handling.
 	 *
 	 * @param req The HTTP request.
@@ -178,9 +189,12 @@ public class RestClient extends CoreObject {
 	/**
 	 * Perform a <code>GET</code> request against the specified URL.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doGet(Object url) throws RestCallException {
@@ -190,16 +204,25 @@ public class RestClient extends CoreObject {
 	/**
 	 * Perform a <code>PUT</code> request against the specified URL.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @param o The object to serialize and transmit to the URL as the body of the request.
-	 * Can be of the following types:
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * </ul>
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @param o
+	 * 	The object to serialize and transmit to the URL as the body of the request.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request
 	 * 	and getting the response as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
@@ -209,13 +232,17 @@ public class RestClient extends CoreObject {
 
 	/**
 	 * Same as {@link #doPut(Object, Object)} but don't specify the input yet.
+	 *
 	 * <p>
 	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)}
 	 * to set the contents on the result object.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException
 	 */
 	public RestCall doPut(Object url) throws RestCallException {
@@ -225,17 +252,25 @@ public class RestClient extends CoreObject {
 	/**
 	 * Perform a <code>POST</code> request against the specified URL.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @param o The object to serialize and transmit to the URL as the body of the request.
-	 * Can be of the following types:
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * </ul>
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @param o
+	 * 	The object to serialize and transmit to the URL as the body of the request.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
+	 * 		<li>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doPost(Object url, Object o) throws RestCallException {
@@ -244,13 +279,17 @@ public class RestClient extends CoreObject {
 
 	/**
 	 * Same as {@link #doPost(Object, Object)} but don't specify the input yet.
-	 * <p>
-	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)}
-	 * to set the contents on the result object.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * <p>
+	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)} to set the
+	 * contents on the result object.
+	 *
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException
 	 */
 	public RestCall doPost(Object url) throws RestCallException {
@@ -260,9 +299,12 @@ public class RestClient extends CoreObject {
 	/**
 	 * Perform a <code>DELETE</code> request against the specified URL.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doDelete(Object url) throws RestCallException {
@@ -272,9 +314,12 @@ public class RestClient extends CoreObject {
 	/**
 	 * Perform an <code>OPTIONS</code> request against the specified URL.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doOptions(Object url) throws RestCallException {
@@ -282,13 +327,18 @@ public class RestClient extends CoreObject {
 	}
 
 	/**
-	 * Perform a <code>POST</code> request with a content type of <code>application/x-www-form-urlencoded</code> against the specified URL.
+	 * Perform a <code>POST</code> request with a content type of <code>application/x-www-form-urlencoded</code>
+	 * against the specified URL.
 	 *
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @param o The object to serialize and transmit to the URL as the body of the request, serialized as a form post
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @param o
+	 * 	The object to serialize and transmit to the URL as the body of the request, serialized as a form post
 	 * 	using the {@link UrlEncodingSerializer#DEFAULT} serializer.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doFormPost(Object url, Object o) throws RestCallException {
@@ -298,22 +348,28 @@ public class RestClient extends CoreObject {
 
 	/**
 	 * Performs a REST call where the entire call is specified in a simple string.
+	 *
 	 * <p>
 	 * This method is useful for performing callbacks when the target of a callback is passed in
 	 * on an initial request, for example to signal when a long-running process has completed.
+	 *
 	 * <p>
 	 * The call string can be any of the following formats:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"[method] [url]"</js> - e.g. <js>"GET http://localhost/callback"</js>
-	 * 	<li><js>"[method] [url] [payload]"</js> - e.g. <js>"POST http://localhost/callback some text payload"</js>
-	 * 	<li><js>"[method] [headers] [url] [payload]"</js> - e.g. <js>"POST {'Content-Type':'text/json'} http://localhost/callback {'some':'json'}"</js>
+	 * 	<li>
+	 * 		<js>"[method] [url]"</js> - e.g. <js>"GET http://localhost/callback"</js>
+	 * 	<li>
+	 * 		<js>"[method] [url] [payload]"</js> - e.g. <js>"POST http://localhost/callback some text payload"</js>
+	 * 	<li>
+	 * 		<js>"[method] [headers] [url] [payload]"</js> - e.g. <js>"POST {'Content-Type':'text/json'} http://localhost/callback {'some':'json'}"</js>
 	 * </ul>
 	 * <p>
 	 * The payload will always be sent using a simple {@link StringEntity}.
 	 *
 	 * @param callString The call string.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException
 	 */
 	public RestCall doCallback(String callString) throws RestCallException {
@@ -367,19 +423,29 @@ public class RestClient extends CoreObject {
 	 * Perform a generic REST call.
 	 *
 	 * @param method The HTTP method.
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
-	 * @param content The HTTP body content.
-	 * Can be of the following types:
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 	<li>{@link NameValuePairs} - Converted to a URL-encoded FORM post.
-	 * </ul>
-	 * This parameter is IGNORED if {@link HttpMethod#hasContent()} is <jk>false</jk>.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @param content
+	 * 	The HTTP body content.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li>
+	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 	</ul>
+	 * 	This parameter is IGNORED if {@link HttpMethod#hasContent()} is <jk>false</jk>.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doCall(HttpMethod method, Object url, Object content) throws RestCallException {
@@ -393,10 +459,13 @@ public class RestClient extends CoreObject {
 	 * Perform a generic REST call.
 	 *
 	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).
-	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
 	 * @param hasContent Boolean flag indicating if the specified request has content associated with it.
-	 * @return A {@link RestCall} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doCall(String method, Object url, boolean hasContent) throws RestCallException {
@@ -445,6 +514,7 @@ public class RestClient extends CoreObject {
 
 	/**
 	 * Create a new proxy interface against a REST interface.
+	 *
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
 	 * <ul>
@@ -452,6 +522,7 @@ public class RestClient extends CoreObject {
 	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<code>root-url</code>).
 	 * 	<li>The fully-qualified class name of the interface (<code>class-name</code>).
 	 * </ul>
+	 *
 	 * <p>
 	 * The URL calculation is as follows:
 	 * <ul>
@@ -459,8 +530,10 @@ public class RestClient extends CoreObject {
 	 * 	<li><code>root-url/remoteable-path</code> - If remoteable path is relative and root-url has been specified.
 	 * 	<li><code>root-url/class-name</code> - If remoteable path is not specified.
 	 * </ul>
+	 *
 	 * <p>
 	 * If the information is not available to resolve to an absolute URL, a {@link RemoteableMetadataException} is thrown.
+	 *
 	 * <p>
 	 * Examples:
 	 * <p class='bcode'>
@@ -491,11 +564,14 @@ public class RestClient extends CoreObject {
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface3.<jk>class</jk>);
 	 * </p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
-	 * 		pooling client connection manager.  The easiest way to do this is to use the {@link RestClientBuilder#pooled()}
-	 * 		method.  If you don't do this, you may end up seeing "Connection still allocated" exceptions.
+	 * 	<li>
+	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
+	 * 		pooling client connection manager.
+	 * 		The easiest way to do this is to use the {@link RestClientBuilder#pooled()} method.
+	 * 		If you don't do this, you may end up seeing "Connection still allocated" exceptions.
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.

@@ -84,11 +84,9 @@
 	<p>
 		Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
 		and parsers.
-		<br>
-		The serializer converts POJOs directly to URL-encoded strings without the need for intermediate DOM objects 
+		<br>The serializer converts POJOs directly to URL-encoded strings without the need for intermediate DOM objects 
 		using a highly-efficient state machine.
-		<br>
-		Likewise, the parser creates POJOs directly from URL-encoded strings without the need for intermediate DOM 
+		<br>Likewise, the parser creates POJOs directly from URL-encoded strings without the need for intermediate DOM 
 		objects. 
 	</p>
 	<p>
@@ -99,21 +97,28 @@
 		Juneau can serialize and parse instances of any of the following POJO types:
 	</p>
 	<ul class='spaced-list'>
-		<li>Java primitives and primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
+		<li>
+			Java primitives and primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
 			<code>Float</code>).
-		<li>Java Collections Framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything 
+		<li>
+			Java Collections Framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything 
 			on this list.
-		<li>Multi-dimensional arrays of any type on this list.
-		<li>Java Beans with properties of any type on this list.
-		<li>Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
+		<li>
+			Multi-dimensional arrays of any type on this list.
+		<li>
+			Java Beans with properties of any type on this list.
+		<li>
+			Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
 			<code>toString()</code>, <code>fromString()</code>, <code>valueOf()</code>, <code>constructor(String)</code>).
-		<li>Non-serializable classes and properties with associated <code>PojoSwaps</code> that convert them to 
+		<li>
+			Non-serializable classes and properties with associated <code>PojoSwaps</code> that convert them to 
 			serializable forms.
 	</ul>
 	<p>
 		Refer to <a href='../../../../overview-summary.html#Core.PojoCategories' class='doclink'>POJO Categories</a> 
 		for a complete definition of supported POJOs.
 	</p>
+	
 	<h6 class='topic'>Prerequisites</h6>
 	<p>
 		The Juneau URL-encoding serialization and parsing support does not require any external prerequisites.  
@@ -127,8 +132,7 @@
 		<p>
 			The example shown here is from the Address Book resource located in the 
 			<code>org.apache.juneau.sample.war</code> application
-			<br>
-			The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
+			<br>The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
 			containing zero or more <code>Address</code> beans.
 		</p>
 		<p>
@@ -206,14 +210,17 @@
 			Juneau supports two kinds of serialization:
 		</p>
 		<ul class='spaced-list'>
-			<li>Construction of full URL query parameter strings (e.g. <code>&amp;key=value</code> pairs) from beans 
+			<li>
+				Construction of full URL query parameter strings (e.g. <code>&amp;key=value</code> pairs) from beans 
 				and maps.
-			<li>Construction of URL query parameter value strings (e.g. just the <code>value</code> portion of 
+			<li>
+				Construction of URL query parameter value strings (e.g. just the <code>value</code> portion of 
 				<code>&amp;key=value</code> pairs) from any POJO.  
 		</ul>
 		<p>
 			Top-level beans and maps can serialized as key/value pairs as shown below:
 		</p>
+		
 		<h6 class='figure'>Example:  A bean with 2 string properties, 'foo' and 'baz', serialized to a query string</h6>
 		<p class='bcode'>	
 	http://localhost/sample?<ua>foo</ua>=<us>bar</us>&amp;<ua>baz</ua>=<us>bing</us>
@@ -223,6 +230,7 @@
 			<js>"(...)"</js> construct to denote an object mapping,  and uses a comma as the parameter delimiter 
 			instead of <js>"&amp;"</js>.
 		</p>
+		
 		<h6 class='figure'>Example:  A bean serialized as a query parameter value.</h6>
 		<p class='bcode'>	
 	http://localhost/sample?<ua>a1</ua>=(<ua>foo</ua>=<us>bar</us>,<ua>baz</ua>=<us>bing</us>)
@@ -288,14 +296,14 @@
 			<code>PojoSwaps</code> can be used to convert non-serializable POJOs into serializable forms, such as 
 			converting <code>Calendar</code> object to ISO8601 strings, or <code><uk>byte</uk>[]</code> arrays to 
 			Base-64 encoded strings.
-			<br>
-			These transforms can be associated at various levels:
+			<br>These transforms can be associated at various levels:
 		</p>
-		<ul class='spaced-list'>
+		<ul>
 			<li>On serializer and parser instances to handle all objects of the class type globally.
 			<li>On classes through the <code><ja>@Bean</ja></code> annotation.
 			<li>On bean properties through the <code><ja>@BeanProperty</ja></code> annotations.
 		</ul>
+		
 		<h6 class='figure'>Example:  A serialized Calendar object using <code>CalendarSwap.RFC2822DTZ</code> transform.</h6>
 		<p class='bcode'>	
 	http://localhost/sample?<ua>a1=<us>'Sun,+03+Mar+1901+09:05:06+GMT'</us>
@@ -315,8 +323,7 @@
 	<p>
 		{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.uon.UonSerializer} 
 		classes are used to convert POJOs to URL-encoded strings.
-		<br>
-		The <code>UonSerializer</code> class converts parameter values to UON notation. 
+		<br>The <code>UonSerializer</code> class converts parameter values to UON notation. 
 		The <code>UrlEncodingSerializer</code> class converts a POJO to key/value URL-Encoded pairs using 
 		<code>UonSerializer</code> to serialize the values.
 		If you're trying to construct complete URL-Encoded entities, use <code>UrlEncodingSerializer</code>. 
@@ -324,39 +331,44 @@
 	</p>	
 	<p>
 		The serializers include several configurable settings.
-		<br>
-		Static reusable instances of serializers are provided with commonly-used settings:
+		<br>Static reusable instances of serializers are provided with commonly-used settings:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} 
+		<li>
+			{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} 
 			- All default settings, strict mode.
-		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} 
+		<li>
+			{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} 
 			- Use whitespace and indentation for readability.
-		<li>{@link org.apache.juneau.uon.UonSerializer#DEFAULT} 
+		<li>
+			{@link org.apache.juneau.uon.UonSerializer#DEFAULT} 
 			- All default settings, strict mode.
-		<li>{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE} 
+		<li>
+			{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE} 
 			- Use whitespace and indentation for readability.
-		<li>{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING} 
+		<li>
+			{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING} 
 			- Same as DEFAULT, but use URL-Encoding on special characters.
 	</ul>
 	<p>
 		The general guidelines on which serializer to use is:
 	</p>
 	<ul class='spaced-list'>
-		<li>Use encoding serializers when you're using the results to construct a URI yourself, and therefore 
+		<li>
+			Use encoding serializers when you're using the results to construct a URI yourself, and therefore 
 			need invalid URI characters to be encoded.
-		<li>Use un-encoding serializers when you're creating parameter values and passing them off to some other
+		<li>
+			Use un-encoding serializers when you're creating parameter values and passing them off to some other
 			utility class that will itself encode invalid URI characters.
-		<li>Use the readable serializer for debugging purposes.
+		<li>
+			Use the readable serializer for debugging purposes.
 	</ul>
 
 	<h6 class='topic'>Notes about examples</h6>
 	<p>
 		The examples shown in this document will use default strict settings.
-		<br>
-		For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
-		<br>
-		In the real world, you'll typically want to use standard bean getters and setters.
+		<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
+		<br>In the real world, you'll typically want to use standard bean getters and setters.
 	</p>
 	<p>
 		To start off simple, we'll begin with the following simplified bean and build upon it.
@@ -426,10 +438,9 @@
 		<p>
 			The {@link org.apache.juneau.annotation.Bean @Bean} and {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} 
 			annotations are used to customize the behavior of beans across the entire framework.
-			<br>
-			They have various uses:
+			<br>They have various uses:
 		</p>
-		<ul class='spaced-list'>
+		<ul>
 			<li>Hiding bean properties.
 			<li>Specifying the ordering of bean properties.
 			<li>Overriding the names of bean properties.
@@ -439,13 +450,10 @@
 		<p>
 			For example, we now add a <code>birthDate</code> property, and associate a transform with it to transform
 			it to an ISO8601 date-time string in GMT time.
-			<br>
-			We'll also add a couple of <code>URI</code> properties.
-			<br>
-			By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want 
+			<br>We'll also add a couple of <code>URI</code> properties.
+			<br>By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want 
 			them serialized.
-			<br>
-			Using transforms, we can convert them to standardized string forms.
+			<br>Using transforms, we can convert them to standardized string forms.
 		</p>
 		<p class='bcode'>	
 	<jk>public class</jk> Person {
@@ -499,16 +507,17 @@
 		<p>
 			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer()} annotation that 
 			allows you to plug in your own logic for determining bean property names.
-			<br>
-			The {@link org.apache.juneau.PropertyNamerDLC} is an example of an alternate property namer.
+			<br>The {@link org.apache.juneau.PropertyNamerDLC} is an example of an alternate property namer.
 			It converts bean property names to lowercase-dashed format.
 		</p>
+		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>	
 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDLC.<jk>class</jk>)
 	<jk>public class</jk> Person {
 		...
 		</p>
+		
 		<h6 class='figure'>Results</h6>
 		<p class='bcode'>
 	(<ua>id</ua>=<un>1</us>,<ua>name</ua>=<us>'John+Smith'</us>,<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,
@@ -627,17 +636,15 @@
 	<h3 class='topic' onclick='toggle(this)'>2.3 - Non-tree models and recursion detection</h3>
 	<div class='topic'>
 		<p>
-			The URL-encoding serializer is designed to be used against POJO tree structures. <br> 
-			It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
-			<br>
-			If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
+			The URL-encoding serializer is designed to be used against POJO tree structures.
+			<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
+			<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
 			be thrown (if {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_maxDepth} is not reached first).
 		</p>
 		<p>
 			If you still want to use the URL-encoding serializer on such models, Juneau provides the 
 			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_detectRecursions} setting.
-			<br>
-			It tells the serializer to look for instances of an object in the current branch of the tree and
+			<br>It tells the serializer to look for instances of an object in the current branch of the tree and
 			skip serialization when a duplicate is encountered.
 		</p>
 		<p>
@@ -688,8 +695,7 @@
 		</p>
 		<p>
 			Recursion detection introduces a performance penalty of around 20%.
-			<br>
-			For this reason the setting is disabled by default.
+			<br>For this reason the setting is disabled by default.
 		</p>
 	</div>
 
@@ -702,11 +708,14 @@
 			See the following classes for all configurable properties that can be used on this serializer:
 		</p>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.BeanContext} 
+			<li>
+				{@link org.apache.juneau.BeanContext} 
 				- Bean context properties.
-			<li>{@link org.apache.juneau.uon.UonSerializerContext} 
+			<li>
+				{@link org.apache.juneau.uon.UonSerializerContext} 
 				- UON serializer context properties.
-			<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerContext} 
+			<li>
+				{@link org.apache.juneau.urlencoding.UrlEncodingSerializerContext} 
 				- URL-Encoding serializer context properties.
 		</ul>
 	</div>		
@@ -717,10 +726,10 @@
 	<h3 class='topic' onclick='toggle(this)'>2.5 - Other notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>Like all other Juneau serializers, the URL-encoding serializers are thread safe and maintain an internal 
+			<li>
+				Like all other Juneau serializers, the URL-encoding serializers are thread safe and maintain an internal 
 				cache of bean classes encountered.
-				<br>
-				For performance reasons, it's recommended that serializers be reused whenever possible instead of 
+				<br>For performance reasons, it's recommended that serializers be reused whenever possible instead of 
 				always creating new instances.
 		</ul>
 	</div>
@@ -734,8 +743,7 @@
 	<p>
 		{@link org.apache.juneau.urlencoding.UrlEncodingParser} and {@link org.apache.juneau.uon.UonParser} classes 
 		are used to convert URL-encoded strings back into POJOs.
-		<br>
-		The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
+		<br>The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
 		The <code>UrlEncodingParser</code> class converts entire URL-Encoded strings to POJOs using 
 		<code>UonSerializer</code> to serialize individual values.
 		If you're trying to parse an entire URL-Encoded string, use <code>UrlEncodingParser</code>. 
@@ -746,26 +754,30 @@
 		The following static reusable instances of <code>UrlEncodingParser</code> are provided for convenience:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} 
+		<li>
+			{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} 
 			- Default parser for entire URL-encoded strings, decode <code>%xx</code> sequences.
-		<li>{@link org.apache.juneau.uon.UonParser#DEFAULT} 
+		<li>
+			{@link org.apache.juneau.uon.UonParser#DEFAULT} 
 			- Default parser for URL-encoded parameter values, don't decode <code>%xx</code> sequences.
-		<li>{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING} 
+		<li>
+			{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING} 
 			- Default parser for URL-encoded parameter values, decode <code>%xx</code> sequences.
 	</ul>
 	<p>
 		The general guidelines on which parser to use is:
 	</p>
 	<ul class='spaced-list'>
-		<li>Use the <code>DEFAULT</code> parser for parameter values that have already had <code>%xx</code> sequences 
+		<li>
+			Use the <code>DEFAULT</code> parser for parameter values that have already had <code>%xx</code> sequences 
 			decoded, such as when using <code>HttpServletRequest.getQueryParameter(name)</code>.
-		<li>Use the <code>DEFAULT_ENCODED</code> parser if the input has not already had <code>%xx</code> sequences 
+		<li>
+			Use the <code>DEFAULT_ENCODED</code> parser if the input has not already had <code>%xx</code> sequences 
 			decoded.
 	</ul>
 	<p>
 		Let's build upon the previous example and parse the generated URL-encoded string back into the original bean.
-		<br>
-		We start with the URL-encoded string that was generated.
+		<br>We start with the URL-encoded string that was generated.
 	</p>
 	<p class='bcode'>
 	<jc>// Use serializer with readable output.</jc>
@@ -854,16 +866,14 @@
 	<div class='topic'>
 		<p>
 			The URL-encoding parser is not limited to parsing back into the original bean classes.
-			<br>  
-			If the bean classes are not available on the parsing side, the parser can also be used to parse into a 
+			<br>If the bean classes are not available on the parsing side, the parser can also be used to parse into a 
 			generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive objects.
 		</p>
 		<p>
 			You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
 			using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
 			for converting values to various types.
-			<br> 
-			The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
+			<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
 			<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
 			<code>String[][]</code>), but using {@link org.apache.juneau.ObjectList} is recommended.
 		</p>
@@ -908,8 +918,7 @@
 		</p>
 		<p>
 			What we end up with is the exact same output.
-			<br>
-			Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
+			<br>Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
 			<code>Boolean</code> objects when parsing into generic models.
 		</p>
 		<p class='bcode'>
@@ -961,8 +970,7 @@
 
 		<p>
 			As a general rule, parsing into beans is often more efficient than parsing into generic models.
-			<br>
-			And working with beans is often less error prone than working with generic models.
+			<br>And working with beans is often less error prone than working with generic models.
 		</p>		
 	</div>
 
@@ -975,9 +983,12 @@
 			See the following classes for all configurable properties that can be used on this parser:
 		</p>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>{@link org.apache.juneau.uon.UonParserContext} - UON parser context properties.
-			<li>{@link org.apache.juneau.urlencoding.UrlEncodingParserContext} - URL-Encoding parser context properties.
+			<li>
+				{@link org.apache.juneau.BeanContext} - Bean context properties.
+			<li>
+				{@link org.apache.juneau.uon.UonParserContext} - UON parser context properties.
+			<li>
+				{@link org.apache.juneau.urlencoding.UrlEncodingParserContext} - URL-Encoding parser context properties.
 		</ul>
 	</div>		
 
@@ -987,10 +998,10 @@
 	<h3 class='topic' onclick='toggle(this)'>3.3 - Other notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>Like all other Juneau parsers, the URL-encoding parsers are thread safe and maintain an internal cache 
+			<li>
+				Like all other Juneau parsers, the URL-encoding parsers are thread safe and maintain an internal cache 
 				of bean classes encountered.
-				<br>
-				For performance reasons, it's recommended that parser be reused whenever possible instead of always 
+				<br>For performance reasons, it's recommended that parser be reused whenever possible instead of always 
 				creating new instances.
 		</ul>
 	</div>

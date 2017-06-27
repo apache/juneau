@@ -25,23 +25,27 @@ import org.apache.juneau.parser.*;
 /**
  * Provides the ability to perform standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.
  * Nodes in the POJO model are addressed using URLs.
+ *
  * <p>
  * A POJO model is defined as a tree model where nodes consist of consisting of the following:
  * <ul class='spaced-list'>
- * 	<li>{@link Map Maps} and Java beans representing JSON objects.
- * 	<li>{@link Collection Collections} and arrays representing JSON arrays.
- * 	<li>Java beans.
+ * 	<li>
+ * 		{@link Map Maps} and Java beans representing JSON objects.
+ * 	<li>
+ * 		{@link Collection Collections} and arrays representing JSON arrays.
+ * 	<li>
+ * 		Java beans.
  * </ul>
+ *
  * <p>
  * Leaves of the tree can be any type of object.
+ *
  * <p>
  * Use {@link #get(String) get()} to retrieve an element from a JSON tree.
- * <br>
- * Use {@link #put(String,Object) put()} to create (or overwrite) an element in a JSON tree.
- * <br>
- * Use {@link #post(String,Object) post()} to add an element to a list in a JSON tree.
- * <br>
- * Use {@link #delete(String) delete()} to remove an element from a JSON tree.
+ * <br>Use {@link #put(String,Object) put()} to create (or overwrite) an element in a JSON tree.
+ * <br>Use {@link #post(String,Object) post()} to add an element to a list in a JSON tree.
+ * <br>Use {@link #delete(String) delete()} to remove an element from a JSON tree.
+ *
  * <p>
  * Leading slashes in URLs are ignored.
  * So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
@@ -105,11 +109,12 @@ import org.apache.juneau.parser.*;
  * 		+ <js>"}"</js>
  * 	);
  * 	johnSmith.put(<js>"additionalInfo/medicalInfo"</js>, medicalInfo);
+ * </p>
+ *
  * <p>
  * In the special case of collections/arrays of maps/beans, a special XPath-like selector notation can be used in lieu
  * of index numbers on GET requests to return a map/bean with a specified attribute value.
- * <br>
- * The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
+ * <br>The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -459,9 +464,12 @@ public final class PojoRest {
 	 * <p>
 	 * Can be any of the following formats:
 	 * <ul class='spaced-list'>
-	 * 	<li>Method name only.  e.g. <js>"myMethod"</js>.
-	 * 	<li>Method name with class names.  e.g. <js>"myMethod(String,int)"</js>.
-	 * 	<li>Method name with fully-qualified class names.  e.g. <js>"myMethod(java.util.String,int)"</js>.
+	 * 	<li>
+	 * 		Method name only.  e.g. <js>"myMethod"</js>.
+	 * 	<li>
+	 * 		Method name with class names.  e.g. <js>"myMethod(String,int)"</js>.
+	 * 	<li>
+	 * 		Method name with fully-qualified class names.  e.g. <js>"myMethod(java.util.String,int)"</js>.
 	 * </ul>
 	 * <p>
 	 * As a rule, use the simplest format needed to uniquely resolve a method.
@@ -473,11 +481,15 @@ public final class PojoRest {
 	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
 	 * <ul class='spaced-list'>
-	 * 	<li>The number of actual and formal parameters differ.
-	 * 	<li>An unwrapping conversion for primitive arguments fails.
-	 * 	<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 	<li>
+	 * 		The number of actual and formal parameters differ.
+	 * 	<li>
+	 * 		An unwrapping conversion for primitive arguments fails.
+	 * 	<li>
+	 * 		A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
 	 * 		conversion.
-	 * 	<li>The constructor pertains to an enum type.
+	 * 	<li>
+	 * 		The constructor pertains to an enum type.
 	 * </ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
@@ -538,11 +550,11 @@ public final class PojoRest {
 	 * If the list does not already exist, it will be created.
 	 * <p>
 	 * This method expands the POJO model as necessary to create the new element.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>You can only post to three types of nodes:
-	 * 		<ul class='spaced-list'>
+	 * 		<ul>
 	 * 			<li>{@link List Lists}
 	 * 			<li>{@link Map Maps} containing integers as keys (i.e sparse arrays)
 	 * 			<li>arrays

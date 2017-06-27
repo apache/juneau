@@ -15,8 +15,9 @@ package org.apache.juneau.rest.client;
 import org.apache.http.*;
 
 /**
- * Used to intercept http connection responses to allow modification of that response before processing
- * and for listening for call lifecycle events.
+ * Used to intercept http connection responses to allow modification of that response before processing and for
+ * listening for call lifecycle events.
+ *
  * <p>
  * Useful if you want to prevent {@link RestCallException RestCallExceptions} from being thrown on error conditions.
  */

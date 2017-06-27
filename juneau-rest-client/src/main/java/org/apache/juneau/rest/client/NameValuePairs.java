@@ -22,8 +22,8 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Convenience class for constructing instances of <code>List&lt;NameValuePair&gt;</code>
- * 	for the {@link UrlEncodedFormEntity} class.
+ * Convenience class for constructing instances of <code>List&lt;NameValuePair&gt;</code> for the
+ * {@link UrlEncodedFormEntity} class.
  * <p>
  * Instances of this method can be passed directly to the {@link RestClient#doPost(Object, Object)} method or
  * {@link RestCall#input(Object)} methods to perform URL-encoded form posts.

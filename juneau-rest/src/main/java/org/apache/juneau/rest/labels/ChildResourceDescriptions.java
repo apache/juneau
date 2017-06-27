@@ -19,8 +19,7 @@ import org.apache.juneau.rest.*;
 /**
  * A POJO structure that describes the list of child resources associated with a resource.
  * <p>
- * Typically used in top-level GET methods of router resources to render a list of
- * 	available child resources.
+ * Typically used in top-level GET methods of router resources to render a list of available child resources.
  */
 public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
 

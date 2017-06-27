@@ -23,13 +23,18 @@ import org.apache.juneau.transform.*;
 
 /**
  * Used to tailor how beans get interpreted by the framework.
+ *
  * <p>
  * Can be used to do the following:
  * <ul class='spaced-list'>
- * 	<li>Explicitly specify the set and order of properties on a bean.
- * 	<li>Associate a {@link PropertyNamer} with a class.
- * 	<li>Specify subtypes of a bean differentiated by a sub type property.
+ * 	<li>
+ * 		Explicitly specify the set and order of properties on a bean.
+ * 	<li>
+ * 		Associate a {@link PropertyNamer} with a class.
+ * 	<li>
+ * 		Specify subtypes of a bean differentiated by a sub type property.
  * </ul>
+ *
  * <p>
  * This annotation can be applied to classes and interfaces.
  */

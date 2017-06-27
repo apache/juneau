@@ -18,8 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify it as the HTTP method.
+ * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as the HTTP
+ * method.
  * <p>
  * Typically used for HTTP method handlers of type <js>"*"</js> (i.e. handle all requests).
  *

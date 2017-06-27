@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomLogo</code> construct in the RFC4287 specification.
- * <p>
+ *
  * <h6 class='figure'>Schema</h6>
  * <p class='bcode'>
  * 	atomLogo = element atom:logo {
@@ -35,12 +35,17 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 	<li class='link'>
+ * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
  * 		(org.apache.juneau.dto)</a>
- * 	<ul>
- * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Atom'>Atom</a>
- * 	</ul>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.atom</a>
+ * 		<ul>
+ * 			<li class='sublink'>
+ * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Atom'>Atom</a>
+ * 		</ul>
+ * 	</li>
+ * 	<li class='jp'>
+ * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.atom</a>
+ * 	</li>
  * </ul>
  */
 @Bean(typeName="logo")
@@ -54,8 +59,7 @@ public class Logo extends Common {
 	 * Normal constructor.
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>
-	 * Strings must be valid URIs.
+	 * <br>Strings must be valid URIs.
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -87,8 +91,7 @@ public class Logo extends Common {
 	 * Sets the URI of the logo.
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>
-	 * Strings must be valid URIs.
+	 * <br>Strings must be valid URIs.
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *

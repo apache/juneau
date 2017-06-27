@@ -79,8 +79,10 @@
 		These classes are:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
-		<li>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
+		<li>
+			{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
+		<li>
+			{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
 			serializable POJOs during serialization (and optionally vis-versa during parsing).
 			<ol>
 				<li>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert 
@@ -94,14 +96,22 @@
 		Transforms are added to serializers and parsers in a variety of ways:
 	</p> 
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.serializer.SerializerBuilder#beanFilters(Class[])} / {@link org.apache.juneau.serializer.SerializerBuilder#pojoSwaps(Class[])} - On serializers.
-		<li>{@link org.apache.juneau.serializer.SerializerGroupBuilder#beanFilters(Class[])} / {@link org.apache.juneau.serializer.SerializerGroupBuilder#pojoSwaps(Class[])} - On groups of serializers.
-		<li>{@link org.apache.juneau.parser.ParserBuilder#beanFilters(Class[])} / {@link org.apache.juneau.parser.ParserBuilder#pojoSwaps(Class[])} - On parsers.
-		<li>{@link org.apache.juneau.parser.ParserGroupBuilder#beanFilters(Class[])} / {@link org.apache.juneau.parser.ParserGroupBuilder#pojoSwaps(Class[])} - On groups of parsers.
-		<li>{@link org.apache.juneau.rest.client.RestClientBuilder#beanFilters(Class[])} / {@link org.apache.juneau.rest.client.RestClientBuilder#pojoSwaps(Class[])} - On the serializer and parser registered on a REST client.
-		<li>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() @RestResource.beanFilters()} / {@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()}- On all serializers and parsers defined on a REST servlet.
-		<li>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters() @RestMethod.beanFilters()} / {@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps() @RestMethod.pojoSwaps()} - On all serializers and parsers defined on a method in a REST servlet.
-		<li>{@link org.apache.juneau.rest.jaxrs.JuneauProvider#beanFilters() @JuneauProvider.beanFilters()} / {@link org.apache.juneau.rest.jaxrs.JuneauProvider#pojoSwaps() @JuneauProvider.pojoSwaps()} - On all serializers and parsers defined on a JAX-RS provider.
+		<li>
+			{@link org.apache.juneau.serializer.SerializerBuilder#beanFilters(Class[])} / {@link org.apache.juneau.serializer.SerializerBuilder#pojoSwaps(Class[])} - On serializers.
+		<li>
+			{@link org.apache.juneau.serializer.SerializerGroupBuilder#beanFilters(Class[])} / {@link org.apache.juneau.serializer.SerializerGroupBuilder#pojoSwaps(Class[])} - On groups of serializers.
+		<li>
+			{@link org.apache.juneau.parser.ParserBuilder#beanFilters(Class[])} / {@link org.apache.juneau.parser.ParserBuilder#pojoSwaps(Class[])} - On parsers.
+		<li>
+			{@link org.apache.juneau.parser.ParserGroupBuilder#beanFilters(Class[])} / {@link org.apache.juneau.parser.ParserGroupBuilder#pojoSwaps(Class[])} - On groups of parsers.
+		<li>
+			{@link org.apache.juneau.rest.client.RestClientBuilder#beanFilters(Class[])} / {@link org.apache.juneau.rest.client.RestClientBuilder#pojoSwaps(Class[])} - On the serializer and parser registered on a REST client.
+		<li>
+			{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() @RestResource.beanFilters()} / {@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()}- On all serializers and parsers defined on a REST servlet.
+		<li>
+			{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters() @RestMethod.beanFilters()} / {@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps() @RestMethod.pojoSwaps()} - On all serializers and parsers defined on a method in a REST servlet.
+		<li>
+			{@link org.apache.juneau.rest.jaxrs.JuneauProvider#beanFilters() @JuneauProvider.beanFilters()} / {@link org.apache.juneau.rest.jaxrs.JuneauProvider#pojoSwaps() @JuneauProvider.pojoSwaps()} - On all serializers and parsers defined on a JAX-RS provider.
 	</ul>
 	<p>
 		Swaps can also be associated with classes through the {@link org.apache.juneau.annotation.Pojo#swap @Pojo.swap()} annotation. 
@@ -116,10 +126,14 @@
 			They can be used for the following purposes:
 		</p>
 		<ul class='spaced-list'>
-			<li>Include or exclude which properties are exposed in beans, or the order those properties are serialized.
-			<li>Define property-namers for customizing bean property names.
-			<li>Define bean subtypes.
-			<li>Define bean interface classes.
+			<li>
+				Include or exclude which properties are exposed in beans, or the order those properties are serialized.
+			<li>
+				Define property-namers for customizing bean property names.
+			<li>
+				Define bean subtypes.
+			<li>
+				Define bean interface classes.
 		</ul>
 		<p>
 			It should be noted that the {@link org.apache.juneau.annotation.Bean @Bean} annotation provides equivalent 
@@ -127,8 +141,7 @@
 			However, the <code>BeanFilter</code> class allows you to provide the same features when you do not have 
 			access to the source code.
 		<p>
-		<h5 class='topic'>Examples</h5>
-
+		
 		<h6 class='topic'>Explicitly specify which properties are visible on a bean class</h6>
 		<p class='bcode'>
 	<jc>// Define bean filter that orders properties by "age" then "name"</jc>

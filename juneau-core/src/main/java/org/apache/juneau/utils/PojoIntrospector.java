@@ -69,11 +69,15 @@ public final class PojoIntrospector {
 	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
 	 * <ul class='spaced-list'>
-	 * 	<li>The number of actual and formal parameters differ.
-	 * 	<li>An unwrapping conversion for primitive arguments fails.
-	 * 	<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 	<li>
+	 * 		The number of actual and formal parameters differ.
+	 * 	<li>
+	 * 		An unwrapping conversion for primitive arguments fails.
+	 * 	<li>
+	 * 		A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
 	 * 		conversion.
-	 * 	<li>The constructor pertains to an enum type.
+	 * 	<li>
+	 * 		The constructor pertains to an enum type.
 	 * </ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
@@ -100,10 +104,15 @@ public final class PojoIntrospector {
 	 * the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
 	 * <ul class='spaced-list'>
-	 * 	<li>The number of actual and formal parameters differ.
-	 * 	<li>An unwrapping conversion for primitive arguments fails.
-	 * 	<li>A parameter value cannot be converted to the corresponding formal parameter type by a method invocation conversion.
-	 * 	<li>The constructor pertains to an enum type.
+	 * 	<li>
+	 * 		The number of actual and formal parameters differ.
+	 * 	<li>
+	 * 		An unwrapping conversion for primitive arguments fails.
+	 * 	<li>
+	 * 		A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 		conversion.
+	 * 	<li>
+	 * 		The constructor pertains to an enum type.
 	 * </ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException If the input contains a syntax error or is malformed.

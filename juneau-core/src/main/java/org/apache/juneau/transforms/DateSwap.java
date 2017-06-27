@@ -30,7 +30,7 @@ import org.apache.juneau.transform.*;
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
  * The following direct subclasses are provided for convenience to the following formats:
- * <ul class='spaced-list'>
+ * <ul>
  * 	<li>{@link ToString} - To {@link String Strings} using the {@code Date.toString()} method.
  * 	<li>{@link ISO8601DT} - To ISO8601 date-time strings.
  * 	<li>{@link ISO8601DTZ} - Same as {@link ISO8601DT}, except always serializes in GMT.

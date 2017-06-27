@@ -29,8 +29,7 @@ import org.apache.juneau.ini.*;
  * <p>
  * A commonly-used case is when you're parsing a JSON map containing beans where one of the bean properties is the key
  * used in the map.
- * <br>
- * For example:
+ * <br>For example:
  * <p class='bcode'>
  * 	{
  * 		id1: {name: <js>'John Smith'</js>, sex:<js>'M'</js>},
@@ -44,7 +43,7 @@ import org.apache.juneau.ini.*;
  * 		<jk>public char</jk> <jf>sex</jf>;
  * 	}
  * </p>
- * <p>
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>The annotated field or method does not need to be public.

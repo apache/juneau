@@ -18,8 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify it as a HTTP request header converted to a POJO.
+ * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as a HTTP
+ * request header converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

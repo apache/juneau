@@ -20,9 +20,10 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Converter for enablement of {@link PojoRest} support on response objects returned by a <code>@RestMethod</code> method.
+ * Converter for enabling of {@link PojoRest} support on response objects returned by a <code>@RestMethod</code> method.
  * <p>
- * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path information.
+ * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path
+ * information.
  *
  * <p class='bcode'>
  * 	<jc>// Resource method on resource "http://localhost:8080/sample/addressBook"</jc>

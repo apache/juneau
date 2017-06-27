@@ -251,7 +251,7 @@ public class LogsResource extends Resource {
 		if (f.isDirectory())
 			throw new RestException(SC_METHOD_NOT_ALLOWED, "Download not available on directories");
 
-		res.setContentType("application/octet-stream"); //$NON-NLS-1$
+		res.setContentType("application/octet-stream");
 		res.setContentLength((int)f.length());
 		return new FileInputStream(f);
 	}
@@ -281,7 +281,7 @@ public class LogsResource extends Resource {
 			if (! f.delete())
 				throw new RestException(SC_FORBIDDEN, "Could not delete file.");
 
-		return new Redirect(path + "/.."); //$NON-NLS-1$
+		return new Redirect(path + "/..");
 	}
 
 	private static BufferedReader getReader(File f) throws IOException {

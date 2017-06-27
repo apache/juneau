@@ -19,11 +19,11 @@ import org.apache.juneau.rest.*;
 /**
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
  * <p>
- * Used with {@link RestResource#htmldoc()} and {@link RestMethod#htmldoc()} to customize the HTML view of
- * 	serialized POJOs.
+ * Used with {@link RestResource#htmldoc()} and {@link RestMethod#htmldoc()} to customize the HTML view of serialized
+ * POJOs.
  * <p>
  * All annotations specified here have no effect on any serializers other than {@link HtmlDocSerializer} and is
- * 	provided as a shorthand method of for specifying configuration properties.
+ * provided as a shorthand method of for specifying configuration properties.
  * <p>
  * For example, the following two methods for defining the HTML document title are considered equivalent:
  * <p class='bcode'>
@@ -41,7 +41,7 @@ import org.apache.juneau.rest.*;
  * </p>
  * <p>
  * The purpose of these annotation is to populate the HTML document view which by default consists of the following
- * 	structure:
+ * structure:
  * <p class='bcode'>
  * 	<xt>&lt;html&gt;
  * 		&lt;head&gt;
@@ -79,7 +79,7 @@ public @interface HtmlDoc {
 	 * The format of this value is HTML (phrasing content only).
 	 * <p>
 	 * It gets wrapped in a <code><xt>&lt;h3&gt; <xa>class</xa>=<xs>'title'</xs>&gt;</xt></code> element and then added
-	 * 	to the <code><xt>&lt;header&gt;</code> section on the page.
+	 * to the <code><xt>&lt;header&gt;</code> section on the page.
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
@@ -105,7 +105,8 @@ public @interface HtmlDoc {
 	 * 		This annotation is ignored when the {@link #header()} annotation is specified.
 	 * </ul>
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlTitle(String)}/{@link RestResponse#setHtmlTitle(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlTitle(String)}/{@link RestResponse#setHtmlTitle(Object)} methods.
 	 */
 	String title() default "";
 
@@ -115,7 +116,7 @@ public @interface HtmlDoc {
 	 * The format of this value is HTML (phrasing content only).
 	 * <p>
 	 * It gets wrapped in a <code><xt>&lt;h5&gt; <xa>class</xa>=<xs>'description'</xs>&gt;</xt></code> element and then
-	 * 	added to the <code><xt>&lt;header&gt;</code> section on the page.
+	 * added to the <code><xt>&lt;header&gt;</code> section on the page.
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
@@ -143,7 +144,8 @@ public @interface HtmlDoc {
 	 * 		This annotation is ignored when the {@link #header()} annotation is specified.
 	 * </ul>
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlDescription(String)}/{@link RestResponse#setHtmlDescription(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlDescription(String)}/{@link RestResponse#setHtmlDescription(Object)} methods.
 	 */
 	String description() default "";
 
@@ -158,7 +160,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlBranding(String)}/{@link RestResponse#setHtmlBranding(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlBranding(String)}/{@link RestResponse#setHtmlBranding(Object)} methods.
 	 */
 	String branding() default "";
 
@@ -168,8 +171,8 @@ public @interface HtmlDoc {
 	 * The format of this value is HTML.
 	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
-	 * 	to be whatever you want.
-	 * <p>
+	 * to be whatever you want.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -185,7 +188,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlHeader(String)}/{@link RestResponse#setHtmlHeader(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlHeader(String)}/{@link RestResponse#setHtmlHeader(Object)} methods.
 	 */
 	String header() default "";
 
@@ -193,10 +197,10 @@ public @interface HtmlDoc {
 	 * Sets the links in the HTML nav section.
 	 * <p>
 	 * The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
-	 * 	relative (to the servlet) or absolute URLs.
+	 * relative (to the servlet) or absolute URLs.
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
-	 * <p>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -212,7 +216,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * This field can also use URIs of any support type in {@link UriResolver}.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlLinks(String)}/{@link RestResponse#setHtmlLinks(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlLinks(String)}/{@link RestResponse#setHtmlLinks(Object)} methods.
 	 */
 	String links() default "";
 
@@ -224,7 +229,7 @@ public @interface HtmlDoc {
 	 * The nav section of the page contains the links.
 	 * <p>
 	 * The format of this value is HTML.
-	 * <p>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -240,7 +245,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlNav(String)}/{@link RestResponse#setHtmlNav(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlNav(String)}/{@link RestResponse#setHtmlNav(Object)} methods.
 	 */
 	String nav() default "";
 
@@ -250,7 +256,7 @@ public @interface HtmlDoc {
 	 * The format of this value is HTML.
 	 * <p>
 	 * The aside section typically floats on the right side of the page.
-	 * <p>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -264,7 +270,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlAside(String)}/{@link RestResponse#setHtmlAside(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlAside(String)}/{@link RestResponse#setHtmlAside(Object)} methods.
 	 */
 	String aside() default "";
 
@@ -274,7 +281,7 @@ public @interface HtmlDoc {
 	 * The format of this value is HTML.
 	 * <p>
 	 * The footer section typically floats on the bottom of the page.
-	 * <p>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -288,7 +295,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlFooter(String)}/{@link RestResponse#setHtmlFooter(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlFooter(String)}/{@link RestResponse#setHtmlFooter(Object)} methods.
 	 */
 	String footer() default "";
 
@@ -296,7 +304,7 @@ public @interface HtmlDoc {
 	 * Sets the HTML CSS style section contents.
 	 * <p>
 	 * The format of this value is CSS.
-	 * <p>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -310,7 +318,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlCss(String)}/{@link RestResponse#setHtmlCss(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlCss(String)}/{@link RestResponse#setHtmlCss(Object)} methods.
 	 */
 	String css() default "";
 
@@ -322,7 +331,7 @@ public @interface HtmlDoc {
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
 	 * <p>
 	 * The format of this value is CSS.
-	 * <p>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -333,9 +342,10 @@ public @interface HtmlDoc {
 	 * </p>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols defined
-	 * 	by {@link UriResolver}.
+	 * by {@link UriResolver}.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlCssUrl(String)}/{@link RestResponse#setHtmlCssUrl(Object)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlCssUrl(String)}/{@link RestResponse#setHtmlCssUrl(Object)} methods.
 	 */
 	String cssUrl() default "servlet:/style.css";
 
@@ -354,11 +364,11 @@ public @interface HtmlDoc {
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
 	 * <p>
-	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide
-	 * 	 your own custom renderer or subclasses from the basic class to have full control over how the page is
-	 * 	rendered.
+	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
+	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setHtmlTemplate(Class)}/{@link RestResponse#setHtmlTemplate(Class)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlTemplate(Class)}/{@link RestResponse#setHtmlTemplate(Class)} methods.
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.class;
 }

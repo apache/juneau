@@ -27,8 +27,7 @@ import org.apache.juneau.serializer.*;
  * Provides a way to define the contents of {@link Serializer#getMediaTypes()} through an annotation.
  * <p>
  * The {@link Serializer#getMediaTypes()} default implementation gathers the media types by looking for this annotation.
- * <br>
- * It should be noted that this annotation is optional and that the {@link Serializer#getMediaTypes()} method can
+ * <br>It should be noted that this annotation is optional and that the {@link Serializer#getMediaTypes()} method can
  * be overridden by subclasses to return the media types programmatically.
  *
  * <h5 class='section'>Example:</h5>
@@ -41,8 +40,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The media types can also be <code>media-range</code> values per
  * <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>.
- * <br>
- * When meta-characters are used, you should specify the {@link #contentType()} value to indicate the real media type
+ * <br>When meta-characters are used, you should specify the {@link #contentType()} value to indicate the real media type
  * value that can be set on the <code>Content-Type</code> response header.
  *
  * <p class='bcode'>

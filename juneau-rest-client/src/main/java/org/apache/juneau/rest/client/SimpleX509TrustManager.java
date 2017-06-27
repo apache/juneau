@@ -43,7 +43,7 @@ public final class SimpleX509TrustManager implements X509TrustManager {
 					return;
 				}
 			}
-			throw new IllegalStateException("Couldn't find JRE's X509TrustManager"); //$NON-NLS-1$
+			throw new IllegalStateException("Couldn't find JRE's X509TrustManager");
 		}
 	}
 

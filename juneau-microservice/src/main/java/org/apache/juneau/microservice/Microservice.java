@@ -44,9 +44,12 @@ import org.apache.juneau.utils.*;
  * This class defines the following method for accessing configuration for your microservice:
  * <p>
  * <ul class='spaced-list'>
- * 	<li>{@link #getArgs()} - The command-line arguments passed to the jar file.
- * 	<li>{@link #getConfig()} - An external INI-style configuration file.
- * 	<li>{@link #getManifest()} - The manifest file for the main jar file.
+ * 	<li>
+ * 		{@link #getArgs()} - The command-line arguments passed to the jar file.
+ * 	<li>
+ * 		{@link #getConfig()} - An external INI-style configuration file.
+ * 	<li>
+ * 		{@link #getManifest()} - The manifest file for the main jar file.
  * </ul>
  *
  * <h6 class='topic'>Entry point Method</h6>
@@ -65,9 +68,12 @@ import org.apache.juneau.utils.*;
  * Subclasses must implement the following lifecycle methods:
  * <p>
  * <ul class='spaced-list'>
- * 	<li>{@link #start()} - Gets executed during startup.
- * 	<li>{@link #stop()} - Gets executed when 'exit' is typed in the console or an external shutdown signal is received.
- * 	<li>{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
+ * 	<li>
+ * 		{@link #start()} - Gets executed during startup.
+ * 	<li>
+ * 		{@link #stop()} - Gets executed when 'exit' is typed in the console or an external shutdown signal is received.
+ * 	<li>
+ * 		{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  * </ul>
  *
  * <h6 class='topic'>Lifecycle Listener Methods</h6>
@@ -75,10 +81,14 @@ import org.apache.juneau.utils.*;
  * Subclasses can optionally implement the following event listener methods:
  * <p>
  * <ul class='spaced-list'>
- * 	<li>{@link #onStart()} - Gets executed before {@link #start()}.
- * 	<li>{@link #onStop()} - Gets executed before {@link #stop()}.
- * 	<li>{@link #onConfigSave(ConfigFile)} - Gets executed after a config file has been saved.
- * 	<li>{@link #onConfigChange(ConfigFile, Set)} - Gets executed after a config file has been modified.
+ * 	<li>
+ * 		{@link #onStart()} - Gets executed before {@link #start()}.
+ * 	<li>
+ * 		{@link #onStop()} - Gets executed before {@link #stop()}.
+ * 	<li>
+ * 		{@link #onConfigSave(ConfigFile)} - Gets executed after a config file has been saved.
+ * 	<li>
+ * 		{@link #onConfigChange(ConfigFile, Set)} - Gets executed after a config file has been modified.
  * </ul>
  *
  * <h6 class='topic'>Other Methods</h6>
@@ -86,7 +96,8 @@ import org.apache.juneau.utils.*;
  * Subclasses can optionally override the following methods to provide customized behavior:
  * <p>
  * <ul class='spaced-list'>
- * 	<li>{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file 
+ * 	<li>
+ * 		{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file 
  * 		returned by {@link #getConfig()}.
  * </ul>
  */
@@ -285,9 +296,12 @@ public abstract class Microservice {
 	 * <p>
 	 * The config file location is determined in the following order:
 	 * <ol class='spaced-list'>
-	 * 	<li>The first argument passed to the microservice jar.
-	 * 	<li>The <code>Main-ConfigFile</code> entry in the microservice jar manifest file.
-	 * 	<li>The name of the microservice jar with a <js>".cfg"</js> suffix (e.g. 
+	 * 	<li>
+	 * 		The first argument passed to the microservice jar.
+	 * 	<li>
+	 * 		The <code>Main-ConfigFile</code> entry in the microservice jar manifest file.
+	 * 	<li>
+	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g. 
 	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
 	 * </ol>
 	 * <p>

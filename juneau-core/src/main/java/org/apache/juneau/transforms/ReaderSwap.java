@@ -39,7 +39,7 @@ import org.apache.juneau.xml.*;
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
  * The following direct subclasses are provided for convenience:
- * <ul class='spaced-list'>
+ * <ul>
  * 	<li>{@link Json} - Parses JSON text.
  * 	<li>{@link Xml} - Parses XML text.
  * 	<li>{@link Html} - Parses HTML text.

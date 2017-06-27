@@ -122,7 +122,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 	public void writeTo(Writer w) throws IOException {
 		try {
 			if (! hasNext())
-				w.append("[EMPTY]"); //$NON-NLS-1$
+				w.append("[EMPTY]");
 			else for (LogParser.Entry le : this)
 				le.append(w);
 		} finally {
@@ -187,10 +187,10 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		}
 
 		public Writer appendHtml(Writer w) throws IOException {
-			w.append(toHtml(line)).append("<br>"); //$NON-NLS-1$
+			w.append(toHtml(line)).append("<br>");
 			if (additionalText != null)
 				for (String t : additionalText)
-					w.append(toHtml(t)).append("<br>"); //$NON-NLS-1$
+					w.append(toHtml(t)).append("<br>");
 			return w;
 		}
 
@@ -221,7 +221,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 
 	private static String toHtml(String s) {
 		if (s.indexOf('<') != -1)
-			return s.replaceAll("<", "&lt;");  //$NON-NLS-1$//$NON-NLS-2$
+			return s.replaceAll("<", "&lt;");//$NON-NLS-2$
 		return s;
 	}
 }

@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$L{key}"</js> or <js>"$L{key,args...}"</js>.
  * <p>
  * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * 	session object on the resolver session.
+ * session object on the resolver session.
  * <p>
  * Values are pulled from the {@link RestRequest#getMessage(String,Object[])} method.
  * These in turn are pulled from the resource bundle associated with the servlet class where the request was made.

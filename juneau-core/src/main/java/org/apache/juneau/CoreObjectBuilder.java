@@ -99,7 +99,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * Adds multiple configuration properties on this object.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling {@link PropertyStore#addProperties(Map)}.
@@ -117,7 +117,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * Sets multiple configuration properties on this object.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling {@link PropertyStore#setProperties(Map)}.
@@ -135,7 +135,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * Adds a value to a SET property.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>PropertyStore.addToProperty(name, value);</code>.
@@ -153,7 +153,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * Adds or overwrites a value to a MAP property.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>PropertyStore.putToProperty(name, key, value);</code>.
@@ -172,7 +172,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * Adds or overwrites a value to a MAP property.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>PropertyStore.putToProperty(name, value);</code>.
@@ -190,7 +190,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * Removes a value from a SET property.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>PropertyStore.removeFromProperty(name, value);</code>.
@@ -220,7 +220,7 @@ public abstract class CoreObjectBuilder {
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireDefaultConstructor</jsf>, value)</code>.
@@ -248,7 +248,7 @@ public abstract class CoreObjectBuilder {
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireSerializable</jsf>, value)</code>.
@@ -274,7 +274,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * Otherwise, they will be ignored.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireSettersForGetters</jsf>, value)</code>.
@@ -302,7 +302,7 @@ public abstract class CoreObjectBuilder {
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireSomeProperties</jsf>, value)</code>.
@@ -332,7 +332,7 @@ public abstract class CoreObjectBuilder {
 	 * Otherwise, it returns <jk>null</jk>.
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>, value)</code>.
@@ -359,7 +359,7 @@ public abstract class CoreObjectBuilder {
 	 * Constructors not meeting this minimum visibility will be ignored.
 	 * For example, if the visibility is <code>PUBLIC</code> and the constructor is <jk>protected</jk>, then
 	 * 	the constructor will be ignored.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanConstructorVisibility</jsf>, value)</code>.
@@ -386,7 +386,7 @@ public abstract class CoreObjectBuilder {
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then
 	 * 	the class will not be interpreted as a bean class.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanClassVisibility</jsf>, value)</code>.
@@ -413,7 +413,7 @@ public abstract class CoreObjectBuilder {
 	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then
 	 * 	the field will not be interpreted as a bean property.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanFieldVisibility</jsf>, value)</code>.
@@ -441,7 +441,7 @@ public abstract class CoreObjectBuilder {
 	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then
 	 * 	the method will not be interpreted as a bean getter or setter.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_methodVisibility</jsf>, value)</code>.
@@ -467,8 +467,8 @@ public abstract class CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
+	 *
+	 * <h5 class 'section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_useJavaBeanIntrospector</jsf>, value)</code>.
 	 * 	<li>Most {@link Bean @Bean} annotations will be ignored if you enable this setting.
@@ -494,7 +494,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_useInterfaceProxies</jsf>, value)</code>.
@@ -520,7 +520,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, value)</code>.
@@ -546,7 +546,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreUnknownNullBeanProperties</jsf>, value)</code>.
@@ -572,7 +572,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignorePropertiesWithoutSetters</jsf>, value)</code>.
@@ -598,7 +598,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>, value)</code>.
@@ -624,7 +624,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>, value)</code>.
@@ -653,7 +653,7 @@ public abstract class CoreObjectBuilder {
 	 * 	JVM vendor.
 	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
 	 * On Oracle JVMs, the bean properties are not ordered (which follows the offical JVM specs).
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_sortProperties</jsf>, value)</code>.
@@ -695,7 +695,7 @@ public abstract class CoreObjectBuilder {
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 * <p>
 	 * Note that you can specify prefix patterns to include all subpackages.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_notBeanPackages</jsf>, values)</code>.
@@ -724,7 +724,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to packages whose classes should not be considered beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
@@ -754,7 +754,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from packages whose classes should not be considered beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
@@ -796,7 +796,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they
 	 * appear to be bean-like.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_notBeanClasses</jsf>, values)</code>.
@@ -825,7 +825,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to classes that should not be considered beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanClasses</jsf>, values)</code>
@@ -857,7 +857,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from classes that should not be considered beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_notBeanClasses</jsf>, values)</code>
@@ -903,14 +903,16 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul class='spaced-list'>
-	 * 	<li>Subclasses of {@link BeanFilterBuilder}.
+	 * 	<li>
+	 * 		Subclasses of {@link BeanFilterBuilder}.
 	 * 		These must have a public no-arg constructor.
-	 * 	<li>Bean interface classes.
+	 * 	<li>
+	 * 		Bean interface classes.
 	 * 		A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
 	 * 		Any subclasses of an interface class will only have properties defined on the interface.
 	 * 		All other bean properties will be ignored.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanFilters</jsf>, values)</code>.
@@ -939,7 +941,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to bean filters.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_beanFilters</jsf>, values)</code>
@@ -971,7 +973,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from bean filters.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_beanFilters</jsf>, values)</code>
@@ -1016,7 +1018,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li>Subclasses of {@link PojoSwap}.
 	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_pojoSwaps</jsf>, values)</code>.
@@ -1045,7 +1047,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to POJO swaps.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_pojoSwaps</jsf>, values)</code>
@@ -1077,7 +1079,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from POJO swaps.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_pojoSwaps</jsf>, values)</code>
@@ -1120,7 +1122,7 @@ public abstract class CoreObjectBuilder {
 	 * For interfaces and abstract classes this method can be used to specify an implementation
 	 * 	class for the interface/abstract class so that instances of the implementation
 	 * 	class are used when instantiated (e.g. during a parse).
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_implClasses</jsf>, values)</code>.
@@ -1136,7 +1138,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_implClasses</jsf>, interfaceClass, implClass)</code>
@@ -1172,7 +1174,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means only serialize the <code>foo</code> and <code>bar</code>
 	 * 	properties on the specified bean.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_includeProperties</jsf>, values)</code>.
@@ -1188,7 +1190,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_includeProperties</jsf>, beanClassName, properties)</code>
@@ -1207,7 +1209,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_includeProperties</jsf>, beanClass.getName(), properties)</code>
@@ -1242,7 +1244,7 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means don't serialize the <code>foo</code> and <code>bar</code>
 	 * 	properties on the specified bean.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_excludeProperties</jsf>, values)</code>.
@@ -1258,7 +1260,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_excludeProperties</jsf>, beanClassName, properties)</code>
@@ -1277,7 +1279,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_excludeProperties</jsf>, beanClass.getName(), properties)</code>
@@ -1312,7 +1314,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
 	 * 		annotations.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanDictionary</jsf>, values)</code>.
@@ -1341,7 +1343,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to bean dictionary.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_beanDictionary</jsf>, values)</code>
@@ -1373,7 +1375,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from bean dictionary.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_beanDictionary</jsf>, values)</code>
@@ -1412,7 +1414,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <js>"_type"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanTypePropertyName</jsf>, value)</code>.
@@ -1437,7 +1439,7 @@ public abstract class CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_defaultParser</jsf>, value)</code>.
@@ -1460,7 +1462,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <code>Locale.getDefault()</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_locale</jsf>, value)</code>.
@@ -1483,7 +1485,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_timeZone</jsf>, value)</code>.
@@ -1508,7 +1510,7 @@ public abstract class CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_mediaType</jsf>, value)</code>.
@@ -1534,17 +1536,20 @@ public abstract class CoreObjectBuilder {
 	 * <p>
 	 * Enables the following additional information during serialization:
 	 * <ul class='spaced-list'>
-	 * 	<li>When bean getters throws exceptions, the exception includes the object stack information
+	 * 	<li>
+	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
-	 * 	<li>Enables {@link SerializerContext#SERIALIZER_detectRecursions}.
+	 * 	<li>
+	 * 		Enables {@link SerializerContext#SERIALIZER_detectRecursions}.
 	 * </ul>
 	 * <p>
 	 * Enables the following additional information during parsing:
 	 * <ul class='spaced-list'>
-	 * 	<li>When bean setters throws exceptions, the exception includes the object stack information
+	 * 	<li>
+	 * 		When bean setters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_debug</jsf>, value)</code>.

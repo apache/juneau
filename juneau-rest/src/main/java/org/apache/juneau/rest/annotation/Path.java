@@ -18,8 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify it as a variable in a URL path pattern converted to a POJO.
+ * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as a variable
+ * in a URL path pattern converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -30,9 +30,9 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * <p>
- * The <ja>@Path</ja> annotation is optional if the parameters are specified immediately
- * 	following the <code>RestRequest</code> and <code>RestResponse</code> parameters,
- * 	and are specified in the same order as the variables in the URL path pattern.
+ * The <ja>@Path</ja> annotation is optional if the parameters are specified immediately following the
+ * <code>RestRequest</code> and <code>RestResponse</code> parameters, and are specified in the same order as the
+ * variables in the URL path pattern.
  * The following example is equivalent to the previous example.
  * </p>
  * <p class='bcode'>
@@ -43,11 +43,10 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * <p>
- * If the order of parameters is not the default order shown above, the
- * 	attribute names must be specified (since parameter names are lost during compilation).
- * The following example is equivalent to the previous example, except
- * 	the parameter order has been switched, requiring the use of the <ja>@Path</ja>
- * 	annotations.
+ * If the order of parameters is not the default order shown above, the attribute names must be specified (since
+ * parameter names are lost during compilation).
+ * The following example is equivalent to the previous example, except the parameter order has been switched, requiring
+ * the use of the <ja>@Path</ja> annotations.
  * <p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)

@@ -31,10 +31,14 @@ import org.apache.juneau.transform.*;
  * <p>
  * Used by serializers for the following purposes:
  * <ul class='spaced-list'>
- * 	<li>Keeping track of how deep it is in a model for indentation purposes.
- * 	<li>Ensuring infinite loops don't occur by setting a limit on how deep to traverse a model.
- * 	<li>Ensuring infinite loops don't occur from loops in the model (when detectRecursions is enabled.
- * 	<li>Allowing serializer properties to be overridden on method calls.
+ * 	<li>
+ * 		Keeping track of how deep it is in a model for indentation purposes.
+ * 	<li>
+ * 		Ensuring infinite loops don't occur by setting a limit on how deep to traverse a model.
+ * 	<li>
+ * 		Ensuring infinite loops don't occur from loops in the model (when detectRecursions is enabled.
+ * 	<li>
+ * 		Allowing serializer properties to be overridden on method calls.
  * </ul>
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.

@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify whether or not the request has the specified multipart form POST parameter.
+ * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify whether or not
+ * the request has the specified multipart form POST parameter.
  * <p>
  * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
  *
@@ -75,11 +75,11 @@ import org.apache.juneau.rest.*;
  * <h6 class='topic'>Important note concerning FORM posts</h6>
  * <p>
  * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody()} method
- * 	for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet API to parse the body
- * 	content as key-value pairs, resulting in empty content.
+ * for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet API to
+ * parse the body content as key-value pairs, resulting in empty content.
  * <p>
- * The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter
- * 	in the URL string without triggering the servlet to drain the body content.
+ * The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
+ * without triggering the servlet to drain the body content.
  */
 @Documented
 @Target(PARAMETER)

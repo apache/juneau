@@ -16,10 +16,10 @@ import org.apache.http.*;
 
 /**
  * Used to determine whether a request should be retried based on the HTTP response code.
+ *
  * <p>
- * Subclasses should override either the {@link #onCode(int)} method (if you only care about
- * the HTTP status code) or {@link #onResponse(HttpResponse)} (if you want full access to
- * the HTTP response object.
+ * Subclasses should override either the {@link #onCode(int)} method (if you only care about the HTTP status code)
+ * or {@link #onResponse(HttpResponse)} (if you want full access to the HTTP response object.
  */
 public abstract class RetryOn {
 

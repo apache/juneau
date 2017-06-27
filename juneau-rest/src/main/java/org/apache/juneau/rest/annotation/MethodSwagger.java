@@ -30,8 +30,10 @@ public @interface MethodSwagger {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].externalDocs</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"MyClass.myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js> or <js>"myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js>).
+	 * The default value pulls the description from the <code>(className.?)[javaMethodName].externalDocs</code> entry in
+	 * the servlet resource bundle.
+	 * (e.g. <js>"MyClass.myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js> or
+	 * <js>"myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -56,8 +58,9 @@ public @interface MethodSwagger {
 	 * A comma-delimited list of tags for API documentation control.
 	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].tags</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"MyClass.myMethod.tags = foo,bar"</js> or <js>"myMethod.tags = foo,bar"</js>).
+	 * The default value pulls the description from the <code>(className.?)[javaMethodName].tags</code> entry in the
+	 * servlet resource bundle.
+	 * (e.g. <js>"MyClass.myMethod.tags = foo,bar"</js> or <js>"myMethod.tags = foo,bar"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -79,8 +82,9 @@ public @interface MethodSwagger {
 	 * <p>
 	 * Used to populate the Swagger deprecated field.
 	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].deprecated</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"MyClass.myMethod.deprecated = true"</js> or <js>"myMethod.deprecated = foo,bar"</js>).
+	 * The default value pulls the description from the <code>(className.?)[javaMethodName].deprecated</code> entry in
+	 * the servlet resource bundle.
+	 * (e.g. <js>"MyClass.myMethod.deprecated = true"</js> or <js>"myMethod.deprecated = foo,bar"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -100,8 +104,8 @@ public @interface MethodSwagger {
 	/**
 	 * Optional parameter descriptions.
 	 * <p>
-	 * This annotation is provided for documentation purposes and is used to populate the method <js>"parameters"</js> column
-	 * 	on the Swagger page.
+	 * This annotation is provided for documentation purposes and is used to populate the method <js>"parameters"</js>
+	 * column on the Swagger page.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -118,8 +122,8 @@ public @interface MethodSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
-	 * 	the strings are internationalized.
+	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in
+	 * this case the strings are internationalized.
 	 * <p class='bcode'>
 	 * 	<jk>MyClass.myMethod.description</jk> = <js>This is my method.</js>
 	 * 	<jk>MyClass.myMethod.req.path.a.description</jk> = <js>The 'a' attribute</js>
@@ -127,8 +131,8 @@ public @interface MethodSwagger {
 	 * 	<jk>MyClass.myMethod.req.body.description</jk> = <js>The HTTP content</js>
 	 * 	<jk>MyClass.myMethod.req.header.d.description</jk> = <js>The 'D' header</js>
 	 * <p>
-	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
-	 * 	and use resource bundles if you need to support localization.
+	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support
+	 * English), and use resource bundles if you need to support localization.
 	 * <p>
 	 * These annotations can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
@@ -139,8 +143,8 @@ public @interface MethodSwagger {
 	/**
 	 * Optional output description.
 	 * <p>
-	 * This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js> column
-	 * 	on the Swagger page.
+	 * This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js>
+	 * column on the Swagger page.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -160,18 +164,17 @@ public @interface MethodSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
-	 * 	the strings are internationalized.
+	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in
+	 * this case the strings are internationalized.
 	 * <p class='bcode'>
 	 * 	<jk>MyClass.myMethod.res.200.description</jk> = <js>OK</js>
 	 * 	<jk>MyClass.myMethod.res.302.description</jk> = <js>Thing wasn't found here</js>
 	 * 	<jk>MyClass.myMethod.res.302.header.Location.description</jk> = <js>The place to find the thing</js>
 	 * <p>
-	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
-	 * 	and use resource bundles if you need to support localization.
+	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support
+	 * English), and use resource bundles if you need to support localization.
 	 * <p>
 	 * These annotations can contain variables (e.g. "$L{my.localized.variable}").
 	 */
 	Response[] responses() default {};
-
 }

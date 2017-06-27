@@ -27,9 +27,11 @@ import org.apache.juneau.utils.ZipFileList.*;
  * <p>
  * Sets the following headers:
  * <ul class='spaced-list'>
- * 	<li><code>Content-Type</code> - <code>application/zip</code>
- * 	<li><code>Content-Disposition=attachment;filename=X</code> - Sets X to the file name passed in through
- * 		the constructor {@link ZipFileList#ZipFileList(String)}.
+ * 	<li>
+ * 		<code>Content-Type</code> - <code>application/zip</code>
+ * 	<li>
+ * 		<code>Content-Disposition=attachment;filename=X</code> - Sets X to the file name passed in through the
+ * 		constructor {@link ZipFileList#ZipFileList(String)}.
  * </ul>
  */
 public class ZipFileListResponseHandler implements ResponseHandler {
@@ -38,8 +40,8 @@ public class ZipFileListResponseHandler implements ResponseHandler {
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
 		if (output.getClass() == ZipFileList.class) {
 			ZipFileList m = (ZipFileList)output;
-			res.setContentType("application/zip"); //$NON-NLS-1$
-			res.setHeader("Content-Disposition", "attachment;filename=" + m.fileName); //$NON-NLS-1$ //$NON-NLS-2$
+			res.setContentType("application/zip");
+			res.setHeader("Content-Disposition", "attachment;filename=" + m.fileName); //$NON-NLS-2$
 			OutputStream os = res.getOutputStream();
 			try {
 				ZipOutputStream zos = new ZipOutputStream(os);

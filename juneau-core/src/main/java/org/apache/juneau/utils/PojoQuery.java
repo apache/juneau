@@ -54,24 +54,30 @@ import org.apache.juneau.internal.*;
  * <p>
  * From this table, you can perform the following functions:
  * <ul class='spaced-list'>
- * 	<li>Search - Return only rows where a search pattern matches.
- * 	<li>View - Return only the specified subset of columns in the specified order.
- * 	<li>Sort - Sort the table by one or more columns.
- * 	<li>Position/limit - Only return a subset of rows.
+ * 	<li>
+ * 		Search - Return only rows where a search pattern matches.
+ * 	<li>
+ * 		View - Return only the specified subset of columns in the specified order.
+ * 	<li>
+ * 		Sort - Sort the table by one or more columns.
+ * 	<li>
+ * 		Position/limit - Only return a subset of rows.
  * </ul>
  *
  * <h5 class='topic'>Search</h5>
  * <p>
  * The search capabilities allow you to filter based on query patterns against strings, dates, and numbers.
  * Queries take the form of a Map with column names as keys, and search patterns as values.
- * <br>
- * Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
+ * <br>Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
  *
  * <h5 class='section'>Example:</h5>
  * <ul class='spaced-list'>
- * 	<li><tt>{myInt:'123'}</tt> - Return only rows where the <tt>myInt</tt> column is 123.
- * 	<li><tt>{myString:'foobar'}</tt> - Return only rows where the <tt>myString</tt> column is 'foobar'.
- * 	<li><tt>{myDate:'2001'}</tt> - Return only rows where the <tt>myDate</tt> column have dates in the year 2001.
+ * 	<li>
+ * 		<tt>{myInt:'123'}</tt> - Return only rows where the <tt>myInt</tt> column is 123.
+ * 	<li>
+ * 		<tt>{myString:'foobar'}</tt> - Return only rows where the <tt>myString</tt> column is 'foobar'.
+ * 	<li>
+ * 		<tt>{myDate:'2001'}</tt> - Return only rows where the <tt>myDate</tt> column have dates in the year 2001.
  * </ul>
  *
  * <h5 class='topic'>String Patterns</h5>
@@ -92,9 +98,12 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
- * 	<li>Whitespace is ignored around search patterns.
- * 	<li>Prepend <tt>+</tt> to tokens that must match.  (e.g. <tt>+foo* +*bar</tt>)
- * 	<li>Prepend <tt>-</tt> to tokens that must not match.  (e.g. <tt>+foo* -*bar</tt>)
+ * 	<li>
+ * 		Whitespace is ignored around search patterns.
+ * 	<li>
+ * 		Prepend <tt>+</tt> to tokens that must match.  (e.g. <tt>+foo* +*bar</tt>)
+ * 	<li>
+ * 		Prepend <tt>-</tt> to tokens that must not match.  (e.g. <tt>+foo* -*bar</tt>)
  * </ul>
  *
  * <h5 class='topic'>Numeric Patterns</h5>
@@ -115,8 +124,10 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
- * 	<li>Whitespace is ignored in search patterns.
- * 	<li>Negative numbers are supported.
+ * 	<li>
+ * 		Whitespace is ignored in search patterns.
+ * 	<li>
+ * 		Negative numbers are supported.
  * </ul>
  *
  * <h5 class='topic'>Date Patterns</h5>
@@ -153,8 +164,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='topic'>View</h5>
  * <p>
  * The view capability allows you to return only the specified subset of columns in the specified order.
- * <br>
- * The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
+ * <br>The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
  *
  * <h6 class='topic'>Example view parameters:</h6>
  * <ul>
@@ -165,8 +175,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='topic'>Sort</h5>
  * <p>
  * The sort capability allows you to sort values by the specified rows.
- * <br>
- * The sort parameter is a list of strings with an optional <js>'+'</js> or <js>'-'</js> suffix representing
+ * <br>The sort parameter is a list of strings with an optional <js>'+'</js> or <js>'-'</js> suffix representing
  * ascending and descending order accordingly.
  *
  * <h6 class='topic'>Example sort parameters:</h6>
@@ -663,10 +672,8 @@ public final class PojoQuery {
 
 		/**
 		 * Returns <jk>true</jk> if the specified date matches the pattern passed in through the constructor.
-		 * <br>
-		 * The Object can be of type {@link Date} or {@link Calendar}.
-		 * <br>
-		 * Always returns <jk>false</jk> on <jk>null</jk> input.
+		 * <br>The Object can be of type {@link Date} or {@link Calendar}.
+		 * <br>Always returns <jk>false</jk> on <jk>null</jk> input.
 		 */
 		@Override /* IMatcher */
 		public boolean matches(Object in) {

@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * Can be applied to Java packages, types, fields, and methods.
  * <p>
  * Can be used for the following:
- * <ul class='spaced-list'>
+ * <ul>
  * 	<li>Override the child element name on the XML representation of collection or array properties.
  * 	<li>Specify the XML namespace on a package, class, or method.
  * 	<li>Override the XML format on a POJO.
@@ -75,9 +75,11 @@ public @interface Xml {
 	/**
 	 * Sets the XML prefix of this property or class.
 	 * <ul class='spaced-list'>
-	 * 	<li>When applied to a {@link ElementType#TYPE}, namespace is applied to all properties in the class, and all
+	 * 	<li>
+	 * 		When applied to a {@link ElementType#TYPE}, namespace is applied to all properties in the class, and all
 	 * 		subclasses of the class.
-	 * 	<li>When applied to bean properties on {@link ElementType#METHOD} and {@link ElementType#FIELD}, applies
+	 * 	<li>
+	 * 		When applied to bean properties on {@link ElementType#METHOD} and {@link ElementType#FIELD}, applies
 	 * 		to the bean property.
 	 * </ul>
 	 * <p>

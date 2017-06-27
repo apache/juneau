@@ -188,8 +188,7 @@ public class BeanSession extends Session {
 	 * 	<tr>
 	 * 		<td>
 	 * 			{@code Number} (e.g. {@code Integer}, {@code Short}, {@code Float},...)
-	 * 			<br>
-	 * 			<code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>,
+	 * 			<br><code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>,
 	 * 			<code>Short.<jsf>TYPE</jsf></code>, <code>Float.<jsf>TYPE</jsf></code>,...)
 	 * 		</td>
 	 * 		<td>
@@ -216,8 +215,7 @@ public class BeanSession extends Session {
 	 * 		</td>
 	 * 		<td>
 	 * 			{@code Collection<Object>}
-	 * 			<br>
-	 * 			{@code Object[]}
+	 * 			<br>{@code Object[]}
 	 * 		</td>
 	 * 		<td>
 	 * 			If {@code Collection} is not constructible, a {@code ObjectList} is created.
@@ -238,10 +236,8 @@ public class BeanSession extends Session {
 	 * 		</td>
 	 * 		<td>
 	 * 			{@code List<List<X>>}
-	 * 			<br>
-	 * 			{@code List<X[]>}
-	 * 			<br>
-	 * 			{@code List[]<X>}
+	 * 			<br>{@code List<X[]>}
+	 * 			<br>{@code List[]<X>}
 	 * 		</td>
 	 *			<td>&nbsp;</td>
 	 * 	</tr>
@@ -277,12 +273,9 @@ public class BeanSession extends Session {
 	 * 	<tr>
 	 * 		<td>
 	 * 			Anything with one of the following methods:
-	 * 			<br>
-	 * 			<code><jk>public static</jk> T fromString(String)</code>
-	 * 			<br>
-	 * 			<code><jk>public static</jk> T valueOf(String)</code>
-	 * 			<br>
-	 * 			<code><jk>public</jk> T(String)</code>
+	 * 			<br><code><jk>public static</jk> T fromString(String)</code>
+	 * 			<br><code><jk>public static</jk> T valueOf(String)</code>
+	 * 			<br><code><jk>public</jk> T(String)</code>
 	 * 		</td>
 	 * 		<td>
 	 * 			<code>String</code>
@@ -791,7 +784,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
-	 * 	be instantiated within another class instance.
+	 * be instantiated within another class instance.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -889,10 +882,12 @@ public class BeanSession extends Session {
 	 * 		A map containing string keys and values of lists containing beans.
 	 * </ul>
 	 *
-	 * @param type The class to resolve.
+	 * @param type
+	 * 	The class to resolve.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
 	 * 	{@link GenericArrayType}
-	 * @param args The type arguments of the class if it's a collection or map.
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
 	 * 	{@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.

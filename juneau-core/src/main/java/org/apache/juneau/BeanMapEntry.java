@@ -19,6 +19,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Represents a single entry in a bean map.
+ *
  * <p>
  * This class can be used to get and set property values on a bean, or to get metadata on a property.
  *
@@ -65,13 +66,14 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 
 	/**
 	 * Returns the value of this property.
+	 *
 	 * <p>
-	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
-	 * 	this method will return the transformed value.
+	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then this method
+	 * will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
-	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, this method will return a String
-	 * 	containing an ISO8601 date-time string value.
+	 * {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
+	 * {@link BeanProperty#swap() @BeanProperty.swap()} annotation, this method will return a String containing an
+	 * ISO8601 date-time string value.
 	 */
 	@Override /* Map.Entry */
 	public Object getValue() {
@@ -80,18 +82,21 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 
 	/**
 	 * Sets the value of this property.
+	 *
 	 * <p>
 	 * If the property is an array of type {@code X}, then the value can be a {@code Collection<X>} or {@code X[]} or
 	 * {@code Object[]}.
+	 *
 	 * <p>
 	 * If the property is a bean type {@code X}, then the value can either be an {@code X} or a {@code Map}.
+	 *
 	 * <p>
-	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
-	 * 	you must pass in a transformed value.
+	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then you must pass
+	 * in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
-	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, the value being passed in must be
-	 * 	a String containing an ISO8601 date-time string value.
+	 * {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
+	 * {@link BeanProperty#swap() @BeanProperty.swap()} annotation, the value being passed in must be a String
+	 * containing an ISO8601 date-time string value.
 	 *
 	 * @return  The set value after it's been converted.
 	 */

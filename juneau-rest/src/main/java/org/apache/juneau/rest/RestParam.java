@@ -35,7 +35,7 @@ public abstract class RestParam {
 	 *
 	 * @param paramType The Swagger parameter type.
 	 * @param name The parameter name.
-	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
+	 * Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
 	 */
 	protected RestParam(RestParamType paramType, String name, Type type) {
@@ -56,6 +56,7 @@ public abstract class RestParam {
 
 	/**
 	 * Returns the parameter class type that this parameter resolver is meant for.
+	 *
 	 * @return The parameter class type, or <jk>null</jk> if the type passed in isn't an instance of {@link Class}.
 	 */
 	protected Class<?> forClass() {
@@ -66,6 +67,7 @@ public abstract class RestParam {
 
 	/**
 	 * Returns the swagger parameter type for this parameter as shown in the Swagger doc.
+	 *
 	 * @return the swagger parameter type for this parameter.
 	 */
 	protected RestParamType getParamType() {
@@ -74,6 +76,7 @@ public abstract class RestParam {
 
 	/**
 	 * Returns the parameter name for this parameter as shown in the Swagger doc.
+	 *
 	 * @return the parameter name for this parameter.
 	 */
 	protected String getName() {
@@ -82,6 +85,7 @@ public abstract class RestParam {
 
 	/**
 	 * Returns the parameter class type.
+	 *
 	 * @return the parameter class type.
 	 */
 	public Type getType() {

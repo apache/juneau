@@ -21,7 +21,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$I{key}"</js> or <js>"$I{key,defaultValue}"</js>.
  * <p>
  * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * 	session object on the resolver session.
+ * session object on the resolver session.
  * <p>
  * Values are pulled from the {@link RestServlet#getInitParameter(String)} method.
  * <p>

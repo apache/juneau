@@ -25,8 +25,8 @@ import org.apache.juneau.rest.response.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Represents the contents of a text file with convenience methods for resolving
- * 	{@link Parameter} variables and adding HTTP response headers.
+ * Represents the contents of a text file with convenience methods for resolving {@link Parameter} variables and adding
+ * HTTP response headers.
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
  */
@@ -39,6 +39,7 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param mediaType The HTTP media type.
 	 * @param contents The contents of this resource.
 	 * <br>If multiple contents are specified, the results will be concatenated.
@@ -56,6 +57,7 @@ public class ReaderResource implements Writable {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param varSession Optional variable resolver for resolving variables in the string.
@@ -110,6 +112,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies the resource media type string.
+		 *
 		 * @param mediaType The resource media type string.
 		 * @return This object (for method chaining).
 		 */
@@ -120,6 +123,7 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies the resource media type string.
+		 *
 		 * @param mediaType The resource media type string.
 		 * @return This object (for method chaining).
 		 */

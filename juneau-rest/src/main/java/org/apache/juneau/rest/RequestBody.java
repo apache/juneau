@@ -134,7 +134,7 @@ public class RequestBody {
 	 * <p>
 	 * Refer to <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a> for
 	 * a complete definition of supported POJOs.
-	 * <p>
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
@@ -166,7 +166,7 @@ public class RequestBody {
 
 	/**
 	 * Reads the input from the HTTP request as JSON, XML, or HTML and converts the input to a POJO.
-	 * <p>
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
@@ -183,12 +183,12 @@ public class RequestBody {
 	 * </p>
 	 *
 	 * @param type The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * 	{@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
 	 */
@@ -230,6 +230,7 @@ public class RequestBody {
 	 * string.
 	 * <p>
 	 * Automatically handles GZipped input streams.
+	 *
 	 * @return The body contents as a reader.
 	 * @throws IOException
 	 */
@@ -260,8 +261,7 @@ public class RequestBody {
 	 * Automatically handles GZipped input streams.
 	 *
 	 * @return The negotiated input stream.
-	 * @throws IOException If any error occurred while trying to get the input stream or wrap it
-	 * 	in the GZIP wrapper.
+	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
 	public ServletInputStream getInputStream() throws IOException {
 
@@ -281,8 +281,8 @@ public class RequestBody {
 	/**
 	 * Returns the parser and media type matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk>
-	 * 	if no matching parser was found.
+	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser
+	 * was found.
 	 * Includes the matching media type.
 	 */
 	public ParserMatch getParserMatch() {
@@ -305,8 +305,8 @@ public class RequestBody {
 	/**
 	 * Returns the parser matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk>
-	 * 	if no matching parser was found.
+	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser
+	 * was found.
 	 */
 	public Parser getParser() {
 		ParserMatch pm = getParserMatch();
@@ -316,8 +316,8 @@ public class RequestBody {
 	/**
 	 * Returns the reader parser matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The reader parser matching the request <code>Content-Type</code> header, or <jk>null</jk>
-	 * 	if no matching reader parser was found, or the matching parser was an input stream parser.
+	 * @return The reader parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
+	 * reader parser was found, or the matching parser was an input stream parser.
 	 */
 	public ReaderParser getReaderParser() {
 		Parser p = getParser();
@@ -399,6 +399,7 @@ public class RequestBody {
 
 	/**
 	 * Returns the content length of the body.
+	 *
 	 * @return The content length of the body in bytes.
 	 */
 	public int getContentLength() {

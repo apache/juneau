@@ -17,9 +17,8 @@ import java.lang.reflect.*;
 /**
  * Subclass of {@link RestMatcher} that gives access to the servlet/resource and Java method it's applied to.
  * <p>
- * Essentially the same as {@link RestMatcher} except has a constructor where the
- * 	Java method is passed in so that you can access annotations defined on it to tailor
- * 	the behavior of the matcher.
+ * Essentially the same as {@link RestMatcher} except has a constructor where the Java method is passed in so that you
+ * can access annotations defined on it to tailor the behavior of the matcher.
  */
 public abstract class RestMatcherReflecting extends RestMatcher {
 

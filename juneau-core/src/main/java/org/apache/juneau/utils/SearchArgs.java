@@ -142,18 +142,22 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the sort arguments.
+		 *
 		 * <p>
 		 * The sort argument is a simple comma-delimited list of column names.
 		 * <br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
 		 * <br>No suffix implies ascending order.
+		 *
 		 * <p>
 		 * For example:
 		 * <p class='bcode'>
 		 * 	<jc>// Order by column1 ascending, then column2 descending.</jc>
 		 * 	builder.sort(<js>"column1, column2-"</js>);
 		 * </p>
+		 *
 		 * <p>
 		 * Note that the order of the order arguments is important.
+		 *
 		 * <p>
 		 * Whitespace is trimmed from column names.
 		 *
@@ -169,9 +173,11 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the sort arguments.
+		 *
 		 * <p>
-		 * <br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
+		 * Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
 		 * <br>No suffix implies ascending order.
+		 *
 		 * <p>
 		 * Note that the order of the sort is important.
 		 *

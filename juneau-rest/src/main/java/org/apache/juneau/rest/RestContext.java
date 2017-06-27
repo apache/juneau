@@ -64,7 +64,8 @@ public final class RestContext extends Context {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query parameters.
+	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
 	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
 	 * <p>
 	 * Parameter names are case-insensitive.
@@ -84,7 +85,8 @@ public final class RestContext extends Context {
 	 * 	<li><b>Default:</b> <js>""</js>
 	 * </ul>
 	 * <p>
-	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular GET request.
+	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
+	 * GET request.
 	 * For example:  <js>"?method=OPTIONS"</js>
 	 * <p>
 	 * Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
@@ -92,8 +94,9 @@ public final class RestContext extends Context {
 	 * Use "*" to represent all methods.
 	 * For backwards compatibility, "true" also means "*".
 	 * <p>
-	 * Note that per the <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
-	 * 	be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
+	 * Note that per the <a class="doclink"
+	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
+	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
 	 * <p>
 	 * Applicable to servlet class only.
 	 * <p>
@@ -110,7 +113,8 @@ public final class RestContext extends Context {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js> URL parameter.
+	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * URL parameter.
 	 * For example:  <js>"?body={name:'John%20Smith',age:45}"</js>
 	 * <p>
 	 * Parameter name is case-insensitive.
@@ -149,7 +153,7 @@ public final class RestContext extends Context {
 	 * </ul>
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
-	 * 	made available through the {@link RestException#getOccurrence()} method.
+	 * made available through the {@link RestException#getOccurrence()} method.
 	 * <p>
 	 * Applicable to servlet class only.
 	 */
@@ -181,18 +185,21 @@ public final class RestContext extends Context {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"UON"</js> - URL-Encoded Object Notation.<br>
-	 * 		This notation allows for request parameters to contain arbitrarily complex POJOs.
-	 * 	<li><js>"PLAIN"</js> - Plain text.<br>
-	 * 		This treats request parameters as plain text.<br>
-	 * 		Only POJOs directly convertable from <l>Strings</l> can be represented in parameters when using this mode.
+	 * 	<li>
+	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
+	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 	<li>
+	 * 		<js>"PLAIN"</js> - Plain text.
+	 * 		<br>This treats request parameters as plain text.
+	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
+	 * 		mode.
 	 * </ul>
 	 * <p>
 	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
-	 * 	<js>"foo"</js> when using UON mode.
+	 * <js>"foo"</js> when using UON mode.
 	 * <p>
-	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and {@link Query#format() @Query.format()}
-	 * 	annotations.
+	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and
+	 * {@link Query#format() @Query.format()} annotations.
 	 * <p>
 	 * Applicable to servlet class and methods.
 	 */
@@ -206,7 +213,8 @@ public final class RestContext extends Context {
 	/**
 	 * The request servlet path.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletPath()}
 	 */
@@ -222,7 +230,8 @@ public final class RestContext extends Context {
 	/**
 	 * The request URI path info.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getPathInfo()}
 	 */
@@ -231,7 +240,8 @@ public final class RestContext extends Context {
 	/**
 	 * The request URI.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getRequestURI()}
 	 */
@@ -240,7 +250,8 @@ public final class RestContext extends Context {
 	/**
 	 * The request method.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethod()}
 	 */
@@ -249,7 +260,8 @@ public final class RestContext extends Context {
 	/**
 	 * The localized servlet title.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletTitle()}
 	 */
@@ -258,7 +270,8 @@ public final class RestContext extends Context {
 	/**
 	 * The localized servlet description.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletDescription()}
 	 */
@@ -267,7 +280,8 @@ public final class RestContext extends Context {
 	/**
 	 * The localized method summary.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethodSummary()}
 	 */
@@ -276,7 +290,8 @@ public final class RestContext extends Context {
 	/**
 	 * The localized method description.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethodDescription()}
 	 */
@@ -766,7 +781,7 @@ public final class RestContext extends Context {
 	 * Returns the variable resolver for this servlet.
 	 * <p>
 	 * Variable resolvers are used to replace variables in property values.
-	 * </p>
+	 *
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -866,15 +881,14 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource
-	 * 	on this class, searches up the parent hierarchy chain.
+	 * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource on this class, searches
+	 * up the parent hierarchy chain.
 	 * <p>
-	 * If the resource cannot be found in the classpath, then an attempt is made to look in the
-	 * 	JVM working directory.
+	 * If the resource cannot be found in the classpath, then an attempt is made to look in the JVM working directory.
 	 * <p>
 	 * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
-	 * For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will
-	 * 	look for files in the following order:
+	 * For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
+	 * files in the following order:
 	 * <ol>
 	 * 	<li><js>"MyResource_ja_JP.txt"</js>
 	 * 	<li><js>"MyResource_ja.txt"</js>
@@ -931,8 +945,8 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * Reads the input stream from {@link #getResource(String, Locale)} and parses it into a POJO
-	 * 	using the parser matched by the specified media type.
+	 * Reads the input stream from {@link #getResource(String, Locale)} and parses it into a POJO using the parser
+	 * matched by the specified media type.
 	 * <p>
 	 * Useful if you want to load predefined POJOs from JSON files in your classpath.
 	 *
@@ -966,8 +980,8 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * Returns the path for this resource as defined by the {@link RestResource#path()} annotation or {@link RestConfig#setPath(String)} method
-	 * concatenated with those on all parent classes.
+	 * Returns the path for this resource as defined by the {@link RestResource#path()} annotation or
+	 * {@link RestConfig#setPath(String)} method concatenated with those on all parent classes.
 	 * <p>
 	 * If path is not specified, returns <js>"/"</js>.
 	 * <p>
@@ -1114,7 +1128,8 @@ public final class RestContext extends Context {
 	/**
 	 * The HTML page no-results message.
 	 * <p>
-	 * Defined by the {@link HtmlDoc#noResultsMessage()} annotation or {@link RestConfig#setHtmlNoResultsMessage(String)} method.
+	 * Defined by the {@link HtmlDoc#noResultsMessage()} annotation or {@link RestConfig#setHtmlNoResultsMessage(String)}
+	 * method.
 	 *
 	 * @return The HTML page no-results message.
 	 */
@@ -1195,7 +1210,7 @@ public final class RestContext extends Context {
 	/**
 	 * Returns a map of HTTP method names to call routers.
 	 *
-	 * @return A map with HTTP method names uppercased as the keys, and call routers as the values.
+	 * @return A map with HTTP method names upper-cased as the keys, and call routers as the values.
 	 */
 	protected Map<String,CallRouter> getCallRouters() {
 		return callRouters;
@@ -1236,7 +1251,8 @@ public final class RestContext extends Context {
 	/**
 	 * Returns the parent resource context (if this resource was initialized from a parent).
 	 * <p>
-	 * From this object, you can get access to the parent resource class itself using {@link #getResource()} or {@link #getRestServlet()}
+	 * From this object, you can get access to the parent resource class itself using {@link #getResource()} or
+	 * {@link #getRestServlet()}
 	 *
 	 * @return The parent resource context, or <jk>null</jk> if there is no parent context.
 	 */
@@ -1261,7 +1277,7 @@ public final class RestContext extends Context {
 	 * 	<li>{@link RestResource#properties() @RestResource.properties()} annotation.
 	 * 	<li>{@link RestConfig#setProperty(String, Object)}/{@link RestConfig#setProperties(Map)} methods.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>The returned {@code Map} is mutable.  Therefore, subclasses are free to override
@@ -1341,6 +1357,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the value of the {@link #REST_renderResponseStackTraces} setting.
+	 *
 	 * @return The value of the {@link #REST_renderResponseStackTraces} setting.
 	 */
 	protected boolean isRenderResponseStackTraces() {
@@ -1349,6 +1366,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the value of the {@link #REST_allowHeaderParams} setting.
+	 *
 	 * @return The value of the {@link #REST_allowHeaderParams} setting.
 	 */
 	protected boolean isAllowHeaderParams() {
@@ -1357,6 +1375,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the value of the {@link #REST_allowBodyParam} setting.
+	 *
 	 * @return The value of the {@link #REST_allowBodyParam} setting.
 	 */
 	protected boolean isAllowBodyParam() {
@@ -1365,6 +1384,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the value of the {@link #REST_defaultCharset} setting.
+	 *
 	 * @return The value of the {@link #REST_defaultCharset} setting.
 	 */
 	protected String getDefaultCharset() {
@@ -1373,6 +1393,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the value of the {@link #REST_paramFormat} setting.
+	 *
 	 * @return The value of the {@link #REST_paramFormat} setting.
 	 */
 	protected String getParamFormat() {
@@ -1399,7 +1420,7 @@ public final class RestContext extends Context {
 	 * Returns <jk>true</jk> if the specified <code>Method</code> GET parameter value can be used to override
 	 * the method name in the HTTP header.
 	 *
-	 * @param m The method name, uppercased.
+	 * @param m The method name, upper-cased.
 	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
 	 */
 	protected boolean allowMethodParam(String m) {
@@ -1519,6 +1540,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the URL-encoding parser associated with this resource.
+	 *
 	 * @return The URL-encoding parser associated with this resource.  Never <jk>null</jk>.
 	 */
 	protected UrlEncodingParser getUrlEncodingParser() {
@@ -1527,6 +1549,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the URL-encoding serializer associated with this resource.
+	 *
 	 * @return The URL-encoding serializer associated with this resource.  Never <jk>null</jk>.
 	 */
 	protected UrlEncodingSerializer getUrlEncodingSerializer() {
@@ -1541,7 +1564,8 @@ public final class RestContext extends Context {
 	 * Encoders at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#encoders() @RestResource.encoders()} annotation.
-	 * 	<li>{@link RestConfig#addEncoders(Class...)}/{@link RestConfig#addEncoders(org.apache.juneau.encoders.Encoder...)} methods.
+	 * 	<li>{@link RestConfig#addEncoders(Class...)}/{@link RestConfig#addEncoders(org.apache.juneau.encoders.Encoder...)}
+	 * 		methods.
 	 * </ul>
 	 *
 	 * @return The encoders associated with this resource.  Never <jk>null</jk>.
@@ -1554,7 +1578,8 @@ public final class RestContext extends Context {
 	 * Returns the explicit list of supported accept types for this resource.
 	 * <p>
 	 * By default, this is simply the list of accept types supported by the registered parsers, but
-	 * can be overridden via the {@link RestConfig#setSupportedAcceptTypes(MediaType...)}/{@link RestConfig#setSupportedAcceptTypes(String...)} methods.
+	 * can be overridden via the {@link RestConfig#setSupportedAcceptTypes(MediaType...)}/{@link RestConfig#setSupportedAcceptTypes(String...)}
+	 * methods.
 	 *
 	 * @return The supported <code>Accept</code> header values for this resource.  Never <jk>null</jk>.
 	 */
@@ -1565,8 +1590,9 @@ public final class RestContext extends Context {
 	/**
 	 * Returns the explicit list of supported content types for this resource.
 	 * <p>
-	 * By default, this is simply the list of content types supported by the registered serializers, but
-	 * can be overridden via the {@link RestConfig#setSupportedContentTypes(MediaType...)}/{@link RestConfig#setSupportedContentTypes(String...)} methods.
+	 * By default, this is simply the list of content types supported by the registered serializers, but can be
+	 * overridden via the {@link RestConfig#setSupportedContentTypes(MediaType...)}/{@link RestConfig#setSupportedContentTypes(String...)}
+	 * methods.
 	 *
 	 * @return The supported <code>Content-Type</code> header values for this resource.  Never <jk>null</jk>.
 	 */
@@ -1599,7 +1625,8 @@ public final class RestContext extends Context {
 	 * Default response headers are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
-	 * 	<li>{@link RestConfig#addDefaultResponseHeader(String, Object)}/{@link RestConfig#addDefaultResponseHeaders(String...)} methods.
+	 * 	<li>{@link RestConfig#addDefaultResponseHeader(String, Object)}/{@link RestConfig#addDefaultResponseHeaders(String...)}
+	 * 		methods.
 	 * </ul>
 	 *
 	 * @return The default response headers for this resource.  Never <jk>null</jk>.
@@ -1650,7 +1677,8 @@ public final class RestContext extends Context {
 	 * Response handlers are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#responseHandlers() @RestResource.responseHandlers()} annotation.
-	 * 	<li>{@link RestConfig#addResponseHandlers(Class...)}/{@link RestConfig#addResponseHandlers(ResponseHandler...)} methods.
+	 * 	<li>{@link RestConfig#addResponseHandlers(Class...)}/{@link RestConfig#addResponseHandlers(ResponseHandler...)}
+	 * 		methods.
 	 * </ul>
 	 *
 	 * @return The response handlers associated with this resource.  Never <jk>null</jk>.
@@ -1748,6 +1776,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns <jk>true</jk> if this resource has any child resources associated with it.
+	 *
 	 * @return <jk>true</jk> if this resource has any child resources associated with it.
 	 */
 	protected boolean hasChildResources() {

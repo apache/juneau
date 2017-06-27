@@ -23,21 +23,32 @@ import org.apache.juneau.transform.*;
 
 /**
  * Used tailor how bean properties get interpreted by the framework.
+ *
  * <p>
  * Can be used to do the following:
  * <ul class='spaced-list'>
- * 	<li>Override the name of a property.
- * 	<li>Identify a getter or setter with a non-standard naming convention.
- * 	<li>Identify a specific subclass for a property with a general class type.
- * 	<li>Identify class types of elements in properties of type <code>Collection</code> or <code>Map</code>.
- * 	<li>Hide properties during serialization.
- * 	<li>Associate transforms with bean property values, such as a POJO swap to convert a <code>Calendar</code> field
+ * 	<li>
+ * 		Override the name of a property.
+ * 	<li>
+ * 		Identify a getter or setter with a non-standard naming convention.
+ * 	<li>
+ * 		Identify a specific subclass for a property with a general class type.
+ * 	<li>
+ * 		Identify class types of elements in properties of type <code>Collection</code> or <code>Map</code>.
+ * 	<li>
+ * 		Hide properties during serialization.
+ * 	<li>
+ * 		Associate transforms with bean property values, such as a POJO swap to convert a <code>Calendar</code> field
  * 		to a string.
- * 	<li>Override the list of properties during serialization on child elements of a property of type
+ * 	<li>
+ * 		Override the list of properties during serialization on child elements of a property of type
  * 		<code>Collection</code> or <code>Map</code>.
- * 	<li>Identify a property as the URL for a bean.
- * 	<li>Identify a property as the ID for a bean.
+ * 	<li>
+ * 		Identify a property as the URL for a bean.
+ * 	<li>
+ * 		Identify a property as the ID for a bean.
  * </ul>
+ *
  * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
  */
@@ -57,7 +68,7 @@ public @interface BeanProperty {
 	 * If the {@link BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field (e.g. the
 	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
 	 * identified as a property.
-	 * <p>
+	 *
 	 * <h6 class='topic'>Dynamic beans</h6>
 	 * The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 	 * properties not otherwise defined.

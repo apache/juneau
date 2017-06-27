@@ -71,8 +71,7 @@
 <div class='topic'>
 	<p>
 		The parser API is designed to be easily extensible by developers. 
-		<br>
-		If you are writing your own parser, you will typically subclass directly from either 
+		<br>If you are writing your own parser, you will typically subclass directly from either 
 		{@link org.apache.juneau.parser.ReaderParser} or {@link org.apache.juneau.parser.InputStreamParser}.
 	</p>
 
@@ -89,10 +88,14 @@
 		<p>
 			The <code>ParserGroup</code> class provides the following features:
 		<ul class='spaced-list'>
-			<li>Finds parsers based on HTTP <code>Content-Type</code> header values.
-			<li>Sets common properties on all parsers in a single method call.
-			<li>Locks all parsers in a single method call.
-			<li>Clones existing groups and all parsers within the group in a single method call.
+			<li>
+				Finds parsers based on HTTP <code>Content-Type</code> header values.
+			<li>
+				Sets common properties on all parsers in a single method call.
+			<li>
+				Locks all parsers in a single method call.
+			<li>
+				Clones existing groups and all parsers within the group in a single method call.
 		</ul>
 		
 		<p>

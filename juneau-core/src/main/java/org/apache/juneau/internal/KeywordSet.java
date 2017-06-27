@@ -19,8 +19,10 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
  * <p>
  * Keywords must be:
  * <ul class='spaced-list'>
- * 	<li>2 or more characters in length.
- * 	<li>Lowercase ASCII.
+ * 	<li>
+ * 		2 or more characters in length.
+ * 	<li>
+ * 		Lowercase ASCII.
  * </ul>
  */
 public final class KeywordSet {

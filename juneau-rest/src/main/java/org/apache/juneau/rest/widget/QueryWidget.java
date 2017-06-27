@@ -20,7 +20,7 @@ import org.apache.juneau.rest.converters.*;
  * Adds a <code>QUERY</code> link to the page that allows you to perform search/view/sort/paging on the page data.
  * <p>
  * A typical usage of the query widget is to include it as a navigation link as shown in the example below
- * 	pulled from the <code>PetStoreResource</code> example:
+ * pulled from the <code>PetStoreResource</code> example:
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		widgets={
@@ -32,8 +32,8 @@ import org.apache.juneau.rest.converters.*;
  * 	)
  * </p>
  * <p>
- * In the above example, this adds a <code>QUERY</code> that displays a search popup that can be used for
- * 	filtering the page results...
+ * In the above example, this adds a <code>QUERY</code> that displays a search popup that can be used for filtering the
+ * page results...
  * <p>
  * <img class='bordered' src='doc-files/PetStore_Query.png'>
  * <p>
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.converters.*;
  * The search arguments can be retrieved programmatically using {@link RequestQuery#getSearchArgs()}.
  * <p>
  * Typically, the search functionality is implemented by applying the predefined {@link Queryable} converter on the
- * 	method that's returning a 2-dimensional table of POJOs that you wish to filter:
+ * method that's returning a 2-dimensional table of POJOs that you wish to filter:
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<js>"GET"</js>,

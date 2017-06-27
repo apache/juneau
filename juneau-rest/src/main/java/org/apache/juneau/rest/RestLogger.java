@@ -51,8 +51,8 @@ public abstract class RestLogger {
 	/**
 	 * Log a message to the logger.
 	 * <p>
-	 * Subclasses can override this method if they wish to log messages using a library other than
-	 * 	Java Logging (e.g. Apache Commons Logging).
+	 * Subclasses can override this method if they wish to log messages using a library other than Java Logging
+	 * (e.g. Apache Commons Logging).
 	 *
 	 * @param level The log level.
 	 * @param cause The cause.
@@ -75,9 +75,11 @@ public abstract class RestLogger {
 	}
 
 	/**
-	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link JsonSerializer#DEFAULT_LAX_READABLE}.
+	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through
+	 * {@link JsonSerializer#DEFAULT_LAX_READABLE}.
 	 * <p>
-	 * Serialization of arguments do not occur if message is not logged, so it's safe to use this method from within debug log statements.
+	 * Serialization of arguments do not occur if message is not logged, so it's safe to use this method from within
+	 * debug log statements.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -150,7 +152,7 @@ public abstract class RestLogger {
 	 * Subclasses can override this method to provide their own logic for determining when exceptions are logged.
 	 * <p>
 	 * The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string
-	 * 	or <code>No-Trace: true</code> is specified in the header.
+	 * or <code>No-Trace: true</code> is specified in the header.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -168,8 +170,8 @@ public abstract class RestLogger {
 	 * <p>
 	 * Subclasses can override this method to provide their own logic for determining when stack traces are logged.
 	 * <p>
-	 * The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns <code>1</code>
-	 * 	and the exception is not one of the following:
+	 * The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns
+	 * <code>1</code> and the exception is not one of the following:
 	 * </p>
 	 * <ul>
 	 * 	<li>{@link HttpServletResponse#SC_UNAUTHORIZED}

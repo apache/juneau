@@ -73,8 +73,7 @@
 	<p>
 		Juneau supports serializing and parsing of JSON-Schema documents through the use of beans defined in the 
 		<code>org.apache.juneau.dto.jsonschema</code> package.
-		<br>
-		These beans are used with the existing {@link org.apache.juneau.json.JsonSerializer} and 
+		<br>These beans are used with the existing {@link org.apache.juneau.json.JsonSerializer} and 
 		{@link org.apache.juneau.json.JsonParser} classes to produce and consume JSON-Schema documents. 
 	</p>
 	<p>
@@ -247,15 +246,22 @@
 			The bean classes that make up the model are as follows:
 		</p>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.dto.jsonschema.Schema} - Top level schema object.
-			<li>{@link org.apache.juneau.dto.jsonschema.SchemaProperty} - A subclass of <code>Schema</code> for 
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.Schema} - Top level schema object.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.SchemaProperty} - A subclass of <code>Schema</code> for 
 				representing properties.
-			<li>{@link org.apache.juneau.dto.jsonschema.SchemaPropertySimpleArray} - A convenience subclass of 
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.SchemaPropertySimpleArray} - A convenience subclass of 
 				<code>SchemaProperty</code> for representing properties of simple array types.
-			<li>{@link org.apache.juneau.dto.jsonschema.SchemaRef} - Represents a URI reference to another schema.
-			<li>{@link org.apache.juneau.dto.jsonschema.SchemaArray} - An array of <code>Schema</code> objects.
-			<li>{@link org.apache.juneau.dto.jsonschema.JsonType} - An enum of possible JSON data types.
-			<li>{@link org.apache.juneau.dto.jsonschema.JsonTypeArray} - An array of <code>JsonType</code> objects.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.SchemaRef} - Represents a URI reference to another schema.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.SchemaArray} - An array of <code>Schema</code> objects.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonType} - An enum of possible JSON data types.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonTypeArray} - An array of <code>JsonType</code> objects.
 		</ul>
 	</div>	
 
@@ -474,6 +480,7 @@
 				When you point your browser to this resource, the default content type is HTML (since that's what the 
 				browser asks for by default).
 			</p>
+			
 			<h6 class='figure'>HTML</h6>
 			<img class='bordered' src="doc-files/Example_Html.png">
 			<p>

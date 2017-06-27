@@ -47,6 +47,7 @@ public class RestCallHandler {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param context The resource context.
 	 */
 	public RestCallHandler(RestContext context) {
@@ -71,7 +72,7 @@ public class RestCallHandler {
 
 	/**
 	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
-	 * 	and the request returned by {@link #createRequest(HttpServletRequest)}.
+	 * and the request returned by {@link #createRequest(HttpServletRequest)}.
 	 * <p>
 	 * Subclasses may choose to override this method to provide a specialized response object.
 	 *
@@ -188,14 +189,15 @@ public class RestCallHandler {
 	}
 
 	/**
-	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or returned by
-	 * the Java method.
+	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or
+	 * returned by the Java method.
 	 * <p>
-	 * Subclasses may override this method if they wish to modify the way the output is rendered or support
-	 * 	other output formats.
+	 * Subclasses may override this method if they wish to modify the way the output is rendered or support other output
+	 * formats.
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
-	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse, Object)} method returns <jk>true</jk>.
+	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse, Object)} method returns
+	 * <jk>true</jk>.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -239,7 +241,8 @@ public class RestCallHandler {
 	/**
 	 * Method for handling response errors.
 	 * <p>
-	 * The default implementation logs the error and calls {@link #renderError(HttpServletRequest,HttpServletResponse,RestException)}.
+	 * The default implementation logs the error and calls
+	 * {@link #renderError(HttpServletRequest,HttpServletResponse,RestException)}.
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
@@ -257,8 +260,8 @@ public class RestCallHandler {
 	/**
 	 * Method for rendering response errors.
 	 * <p>
-	 * The default implementation renders a plain text English message, optionally with a stack trace
-	 * 	if {@link RestContext#REST_renderResponseStackTraces} is enabled.
+	 * The default implementation renders a plain text English message, optionally with a stack trace if
+	 * {@link RestContext#REST_renderResponseStackTraces} is enabled.
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
@@ -316,8 +319,8 @@ public class RestCallHandler {
 	/**
 	 * Callback method that gets invoked right before the REST Java method is invoked.
 	 * <p>
-	 * Subclasses can override this method to override request headers or set request-duration properties
-	 * 	before the Java method is invoked.
+	 * Subclasses can override this method to override request headers or set request-duration properties before the
+	 * Java method is invoked.
 	 *
 	 * @param req The HTTP servlet request object.
 	 * @throws RestException If any error occurs.
@@ -328,11 +331,11 @@ public class RestCallHandler {
 	}
 
 	/**
-	 * Callback method that gets invoked right after the REST Java method is invoked, but before
-	 * 	the serializer is invoked.
+	 * Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is
+	 * invoked.
 	 * <p>
-	 * Subclasses can override this method to override request and response headers, or
-	 * 	set/override properties used by the serializer.
+	 * Subclasses can override this method to override request and response headers, or set/override properties used by
+	 * the serializer.
 	 *
 	 * @param req The HTTP servlet request object.
 	 * @param res The HTTP servlet response object.

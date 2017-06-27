@@ -48,22 +48,30 @@ public interface RdfCommonContext {
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"RDF/XML"</js>
-	 * 	<li><js>"RDF/XML-ABBREV"</js>
-	 * 	<li><js>"N-TRIPLE"</js>
-	 * 	<li><js>"N3"</js> - General name for the N3 writer.
+	 * 	<li>
+	 * 		<js>"RDF/XML"</js>
+	 * 	<li>
+	 * 		<js>"RDF/XML-ABBREV"</js>
+	 * 	<li>
+	 * 		<js>"N-TRIPLE"</js>
+	 * 	<li>
+	 * 		<js>"N3"</js> - General name for the N3 writer.
 	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when 
 	 * 		created.
 	 * 		Default is the pretty writer but can be overridden with system property	
 	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
-	 * 	<li><js>"N3-PP"</js> - Name of the N3 pretty writer.
+	 * 	<li>
+	 * 		<js>"N3-PP"</js> - Name of the N3 pretty writer.
 	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding 
 	 * 		one-referenced bNodes.
-	 * 	<li><js>"N3-PLAIN"</js> - Name of the N3 plain writer.
+	 * 	<li>
+	 * 		<js>"N3-PLAIN"</js> - Name of the N3 plain writer.
 	 * 		The plain writer writes records by subject.
-	 * 	<li><js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
+	 * 	<li>
+	 * 		<js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
 	 * 		This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
-	 * 	<li><js>"TURTLE"</js> -  Turtle writer.
+	 * 	<li>
+	 * 		<js>"TURTLE"</js> -  Turtle writer.
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 */
@@ -118,11 +126,14 @@ public interface RdfCommonContext {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces 
+	 * 	<li>
+	 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces 
 	 * 		is not good practice.
-	 * 	<li><js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces 
+	 * 	<li>
+	 * 		<js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces 
 	 * 		in IRIs.
-	 * 	<li><js>"iri"</js> - Sets the IRI engine to IRI 
+	 * 	<li>
+	 * 		<js>"iri"</js> - Sets the IRI engine to IRI 
 	 * 		(<a class="doclink" href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>, 
 	 * 		<a class="doclink" href="http://www.ietf.org/rfc/rfc3987.txt">RFC 3987</a>).
 	 * </ul>
@@ -153,10 +164,14 @@ public interface RdfCommonContext {
 	 * <p>
 	 * See also:
 	 * <ul class='spaced-list'>
-	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setDefaultErrorMode()">ARPOptions.setDefaultErrorMode()</a>
-	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setLaxErrorMode()">ARPOptions.setLaxErrorMode()</a>
-	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode()">ARPOptions.setStrictErrorMode()</a>
-	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode(int)">ARPOptions.setStrictErrorMode(int)</a>
+	 * 	<li>
+	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setDefaultErrorMode()">ARPOptions.setDefaultErrorMode()</a>
+	 * 	<li>
+	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setLaxErrorMode()">ARPOptions.setLaxErrorMode()</a>
+	 * 	<li>
+	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode()">ARPOptions.setStrictErrorMode()</a>
+	 * 	<li>
+	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode(int)">ARPOptions.setStrictErrorMode(int)</a>
 	 * </ul>
 	 */
 	public static final String RDF_arp_errorMode = "Rdf.jena.rdfXml.error-mode";
@@ -174,7 +189,8 @@ public interface RdfCommonContext {
 	 * <p>
 	 * See also:
 	 * <ul class='spaced-list'>
-	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setEmbedding(boolean)">ARPOptions.setEmbedding(boolean)</a>
+	 * 	<li>
+	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setEmbedding(boolean)">ARPOptions.setEmbedding(boolean)</a>
 	 * </ul>
 	 */
 	public static final String RDF_arp_embedding = "Rdf.jena.rdfXml.embedding";
@@ -199,8 +215,10 @@ public interface RdfCommonContext {
 	 * <p>
 	 * See also:
 	 * <ul class='spaced-list'>
-	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPErrorNumbers.html">ARPErrorNumbers</a>
-	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setErrorMode(int,%20int)">ARPOptions.setErrorMode(int, int)</a>
+	 * 	<li>
+	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPErrorNumbers.html">ARPErrorNumbers</a>
+	 * 	<li>
+	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setErrorMode(int,%20int)">ARPOptions.setErrorMode(int, int)</a>
 	 * </ul>
 	 */
 	public static final String RDF_arp_err_ = "Rdf.jena.rdfXml.ERR_";
@@ -282,12 +300,18 @@ public interface RdfCommonContext {
 	 * <p>
 	 * A comma separate list of options:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"same-document"</js> - Same-document references (e.g. <js>""</js> or <js>"#foo"</js>)
-	 * 	<li><js>"network"</js>  - Network paths (e.g. <js>"//example.org/foo"</js> omitting the URI scheme)
-	 * 	<li><js>"absolute"</js> - Absolute paths (e.g. <js>"/foo"</js> omitting the scheme and authority)
-	 * 	<li><js>"relative"</js> - Relative path not beginning in <js>"../"</js>
-	 * 	<li><js>"parent"</js> - Relative path beginning in <js>"../"</js>
-	 * 	<li><js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
+	 * 	<li>
+	 * 		<js>"same-document"</js> - Same-document references (e.g. <js>""</js> or <js>"#foo"</js>)
+	 * 	<li>
+	 * 		<js>"network"</js>  - Network paths (e.g. <js>"//example.org/foo"</js> omitting the URI scheme)
+	 * 	<li>
+	 * 		<js>"absolute"</js> - Absolute paths (e.g. <js>"/foo"</js> omitting the scheme and authority)
+	 * 	<li>
+	 * 		<js>"relative"</js> - Relative path not beginning in <js>"../"</js>
+	 * 	<li>
+	 * 		<js>"parent"</js> - Relative path beginning in <js>"../"</js>
+	 * 	<li>
+	 * 		<js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
 	 * </ul>
 	 * <p>
 	 * The default value is <js>"same-document, absolute, relative, parent"</js>.
@@ -307,9 +331,12 @@ public interface RdfCommonContext {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"true"</js> - Add XML Declaration to the output.
-	 * 	<li><js>"false"</js> - Don't add XML Declaration to the output.
-	 * 	<li><js>"default"</js> - Only add an XML Declaration when asked to write to an <code>OutputStreamWriter</code> 
+	 * 	<li>
+	 * 		<js>"true"</js> - Add XML Declaration to the output.
+	 * 	<li>
+	 * 		<js>"false"</js> - Don't add XML Declaration to the output.
+	 * 	<li>
+	 * 		<js>"default"</js> - Only add an XML Declaration when asked to write to an <code>OutputStreamWriter</code> 
 	 * 		that uses some encoding other than <code>UTF-8</code> or <code>UTF-16</code>.
 	 * 		In this case the encoding is shown in the XML declaration.
 	 * </ul>
@@ -515,13 +542,18 @@ public interface RdfCommonContext {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li><js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li><js>"BAG"</js> - RDF Bag container.
-	 * 	<li><js>"LIST"</js> - RDF List container.
-	 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
+	 * 	<li>
+	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"SEQ"</js> - RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"BAG"</js> - RDF Bag container.
+	 * 	<li>
+	 * 		<js>"LIST"</js> - RDF List container.
+	 * 	<li>
+	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 

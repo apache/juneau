@@ -40,10 +40,14 @@ import com.hp.hpl.jena.util.iterator.*;
  * <p>
  * The following direct subclasses are provided for language-specific parsers:
  * <ul class='spaced-list'>
- * 	<li>{@link RdfParser.Xml} - RDF/XML and RDF/XML-ABBREV.
- * 	<li>{@link RdfParser.NTriple} - N-TRIPLE.
- * 	<li>{@link RdfParser.Turtle} - TURTLE.
- * 	<li>{@link RdfParser.N3} - N3.
+ * 	<li>
+ * 		{@link RdfParser.Xml} - RDF/XML and RDF/XML-ABBREV.
+ * 	<li>
+ * 		{@link RdfParser.NTriple} - N-TRIPLE.
+ * 	<li>
+ * 		{@link RdfParser.Turtle} - TURTLE.
+ * 	<li>
+ * 		{@link RdfParser.N3} - N3.
  * </ul>
  *
  * <h5 class='section'>Additional information:</h5>

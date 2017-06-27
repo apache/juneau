@@ -49,14 +49,17 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Surrogate classes must conform to the following:
  * <ul class='spaced-list'>
- * 	<li>It must have a one or more public constructors that take in a single parameter whose type is the normal types.
+ * 	<li>
+ * 		It must have a one or more public constructors that take in a single parameter whose type is the normal types.
  * 		(It is possible to define a class as a surrogate for multiple class types by using multiple constructors with
  * 		different parameter types).
- * 	<li>It optionally can have a public static method that takes in a single parameter whose type is the transformed
+ * 	<li>
+ * 		It optionally can have a public static method that takes in a single parameter whose type is the transformed
  * 		type and returns an instance of the normal type.
  * 		This is called the un-transform method.
  * 		The method can be called anything.
- * 	<li>If an un-transform method is present, the class must also contain a no-arg constructor (so that the
+ * 	<li>
+ * 		If an un-transform method is present, the class must also contain a no-arg constructor (so that the
  * 		transformed class can be instantiated by the parser before being converted into the normal class by the
  * 		un-transform method).
  * </ul>

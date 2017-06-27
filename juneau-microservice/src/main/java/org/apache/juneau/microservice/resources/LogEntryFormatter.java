@@ -27,9 +27,13 @@ import java.util.regex.*;
  * <p>
  * Uses three simple parameter for configuring log entry formats:
  * <ul class='spaced-list'>
- * 	<li><code>dateFormat</code> - A {@link SimpleDateFormat} string describing the format for dates.
- * 	<li><code>format</code> - A string with <code>{...}</code> replacement variables representing predefined fields.
- * 	<li><code>useStackTraceHashes</code> - A setting that causes duplicate stack traces to be replaced with 8-character hash strings.
+ * 	<li>
+ * 		<code>dateFormat</code> - A {@link SimpleDateFormat} string describing the format for dates.
+ * 	<li>
+ * 		<code>format</code> - A string with <code>{...}</code> replacement variables representing predefined fields.
+ * 	<li>
+ * 		<code>useStackTraceHashes</code> - A setting that causes duplicate stack traces to be replaced with 8-character
+ * 		 hash strings.
  * </ul>
  * <p>
  * This class converts the format strings into a regular expression that can be used to parse the resulting log file.

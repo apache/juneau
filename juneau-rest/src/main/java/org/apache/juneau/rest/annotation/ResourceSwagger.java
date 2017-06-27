@@ -24,13 +24,14 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger terms-of-service field.
 	 * <p>
 	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
+	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)}
+	 * method.
 	 */
 	String termsOfService() default "";
 
@@ -49,7 +50,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * <p>
 	 * The default value pulls the description from the <code>contact</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
+	 * (e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or
+	 * <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -82,7 +84,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * <p>
 	 * The default value pulls the description from the <code>license</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
+	 * (e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or
+	 * <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -107,7 +110,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger version field and to display on HTML pages.
 	 * <p>
 	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
+	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
@@ -137,7 +140,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * <p>
 	 * The default value pulls the description from the <code>tags</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
+	 * (e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or
+	 * <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -170,7 +174,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * <p>
 	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
+	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
+	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -185,9 +190,8 @@ public @interface ResourceSwagger {
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)}
+	 * method.
 	 */
 	String externalDocs() default "";
-
-
 }

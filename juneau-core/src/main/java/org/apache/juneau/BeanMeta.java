@@ -40,16 +40,19 @@ import org.apache.juneau.utils.*;
  * <p>
  * The order of the properties are as follows:
  * <ul class='spaced-list'>
- * 	<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties
+ * 	<li>
+ * 		If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties
  * 		in the annotation.
- * 	<li>If {@link Bean @Bean} annotation is not specified on the class, then the order is based on the following.
+ * 	<li>
+ * 		If {@link Bean @Bean} annotation is not specified on the class, then the order is based on the following.
  * 		<ul>
  * 			<li>Public fields (same order as {@code Class.getFields()}).
  * 			<li>Properties returned by {@code BeanInfo.getPropertyDescriptors()}.
  * 			<li>Non-standard getters/setters with {@link BeanProperty @BeanProperty} annotation defined on them.
  * 		</ul>
  * </ul>
- * <br>
+ *
+ * <p>
  * The order can also be overridden through the use of an {@link BeanFilter}.
  *
  * @param <T> The class type that this metadata applies to.
@@ -464,15 +467,15 @@ public class BeanMeta<T> {
 	/**
 	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName()} annotation.
 	 *
-	 * @return The dictioanry name for this bean, or <jk>null</jk> if it has no dictionary name defined.
+	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */
 	public String getDictionaryName() {
 		return dictionaryName;
 	}
 
 	/**
-	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves
-	 * 	to the dictionary name of the bean.
+	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
+	 * dictionary name of the bean.
 	 *
 	 * @return The type name property.
 	 */
@@ -685,8 +688,7 @@ public class BeanMeta<T> {
 	 * Returns metadata about the specified property.
 	 *
 	 * @param name The name of the property on this bean.
-	 * @return The metadata about the property, or <jk>null</jk> if no such property exists
-	 * 	on this bean.
+	 * @return The metadata about the property, or <jk>null</jk> if no such property exists on this bean.
 	 */
 	public BeanPropertyMeta getPropertyMeta(String name) {
 		BeanPropertyMeta bpm = properties.get(name);
@@ -725,8 +727,9 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Recursively determines the classes represented by parameterized types in the class hierarchy of
-	 * the specified type, and puts the results in the specified map.
+	 * Recursively determines the classes represented by parameterized types in the class hierarchy of the specified
+	 * type, and puts the results in the specified map.
+	 *
 	 * <p>
 	 * For example, given the following classes...
 	 * <p class='bcode'>
@@ -734,16 +737,21 @@ public class BeanMeta<T> {
 	 * 		public T x;
 	 * 	}
 	 * 	public static class BeanB extends BeanA&lt;Integer>} {...}
+	 * </p>
 	 * <p>
 	 * 	...calling this method on {@code BeanB.class} will load the following data into {@code m} indicating
 	 * 	that the {@code T} parameter on the BeanA class is implemented with an {@code Integer}:
 	 * <p class='bcode'>
 	 * 	{BeanA.class:[Integer.class]}
+	 * </p>
+	 *
 	 * <p>
 	 * TODO:  This code doesn't currently properly handle the following situation:
 	 * <p class='bcode'>
 	 * 	public static class BeanB&lt;T extends Number&gt; extends BeanA&lt;T&gt;;
 	 * 	public static class BeanC extends BeanB&lt;Integer&gt;;
+	 * </p>
+	 *
 	 * <p>
 	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.
 	 * If anyone can figure out a better way of doing this, please do so!

@@ -25,8 +25,8 @@ import org.apache.juneau.rest.response.*;
 /**
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.
  * <p>
- * The purpose of this class is to maintain an in-memory reusable byte array of a streamed resource for
- * the fastest possible streaming.
+ * The purpose of this class is to maintain an in-memory reusable byte array of a streamed resource for the fastest
+ * possible streaming.
  * Therefore, this object is designed to be reused and thread-safe.
  * <p>
  * This class is handled special by the {@link StreamableHandler} class.
@@ -40,6 +40,7 @@ public class StreamResource implements Streamable {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param mediaType The resource media type.
 	 * @param contents The resource contents.
 	 * <br>If multiple contents are specified, the results will be concatenated.
@@ -59,6 +60,7 @@ public class StreamResource implements Streamable {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param contents The resource contents.
@@ -113,6 +115,7 @@ public class StreamResource implements Streamable {
 
 		/**
 		 * Specifies the resource media type string.
+		 *
 		 * @param mediaType The resource media type string.
 		 * @return This object (for method chaining).
 		 */
@@ -123,6 +126,7 @@ public class StreamResource implements Streamable {
 
 		/**
 		 * Specifies the resource media type string.
+		 *
 		 * @param mediaType The resource media type string.
 		 * @return This object (for method chaining).
 		 */
@@ -190,6 +194,7 @@ public class StreamResource implements Streamable {
 
 	/**
 	 * Get the HTTP response headers.
+	 *
 	 * @return The HTTP response headers.  An unmodifiable map.  Never <jk>null</jk>.
 	 */
 	public Map<String,String> getHeaders() {

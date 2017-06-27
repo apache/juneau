@@ -79,14 +79,14 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * </p>
 	 * <p>
 	 * This option only applies to beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>URLENC_expandedParams</jsf>, value)</code>.

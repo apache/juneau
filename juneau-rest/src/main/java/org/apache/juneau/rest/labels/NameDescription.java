@@ -30,6 +30,7 @@ public class NameDescription {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param name A name.
 	 * @param description A description.
 	 */
@@ -40,6 +41,7 @@ public class NameDescription {
 
 	/**
 	 * Returns the name field on this label.
+	 *
 	 * @return The name.
 	 */
 	public Object getName() {
@@ -48,6 +50,7 @@ public class NameDescription {
 
 	/**
 	 * Sets the name field on this label to a new value.
+	 *
 	 * @param name The new name.
 	 */
 	public void setName(Object name) {
@@ -56,6 +59,7 @@ public class NameDescription {
 
 	/**
 	 * Returns the description field on this label.
+	 *
 	 * @return The description.
 	 */
 	public Object getDescription() {
@@ -64,6 +68,7 @@ public class NameDescription {
 
 	/**
 	 * Sets the description field on this label to a new value.
+	 *
 	 * @param description The new description.
 	 */
 	public void setDescription(Object description) {

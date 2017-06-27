@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.*;
 
 /**
  * Specialized output stream for serializing MessagePack streams.
- * <p>
+ *
  * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>This class is not intended for external use.

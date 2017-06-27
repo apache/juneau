@@ -48,10 +48,10 @@ public class DateSwapTest {
 
 		final DateSwap.ISO8601DT dateSwap = new DateSwap.ISO8601DT();
 		// this works
-		final String sValue = data.getString("birthday"); //$NON-NLS-1$
+		final String sValue = data.getString("birthday");
 		dateSwap.unswap(null, sValue, data.getBeanSession().getClassMeta(Date.class));
 		// this does not work
-		data.get(dateSwap, "birthday"); //$NON-NLS-1$
+		data.get(dateSwap, "birthday");
 	}
 
 	public static class A {

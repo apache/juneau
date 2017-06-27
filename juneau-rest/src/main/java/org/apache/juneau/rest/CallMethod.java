@@ -192,7 +192,10 @@ class CallMethod implements Comparable<CallMethod>  {
 				htmlCssUrl = hd.cssUrl().isEmpty() ? context.getHtmlCssUrl() : hd.cssUrl();
 				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();
 				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.header();
-				htmlTemplate = hd.template() == HtmlDocTemplate.class ? context.getHtmlTemplate() : ClassUtils.newInstance(HtmlDocTemplate.class, hd.template());
+				htmlTemplate =
+					hd.template() == HtmlDocTemplate.class
+					? context.getHtmlTemplate()
+					: ClassUtils.newInstance(HtmlDocTemplate.class, hd.template());
 
 				List<Inherit> si = Arrays.asList(m.serializersInherit());
 				List<Inherit> pi = Arrays.asList(m.parsersInherit());
@@ -201,7 +204,9 @@ class CallMethod implements Comparable<CallMethod>  {
 				ParserGroupBuilder pgb = null;
 				UrlEncodingParserBuilder uepb = null;
 
-				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0 || m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpIncludes().length() > 0 || m.bpExcludes().length() > 0) {
+				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
+						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpIncludes().length() > 0
+						|| m.bpExcludes().length() > 0) {
 					sgb = new SerializerGroupBuilder();
 					pgb = new ParserGroupBuilder();
 					uepb = new UrlEncodingParserBuilder(urlEncodingParser.createPropertyStore());
@@ -267,13 +272,15 @@ class CallMethod implements Comparable<CallMethod>  {
 						try {
 							sgb.includeProperties((Map)JsonParser.DEFAULT.parse(m.bpIncludes(), Map.class, String.class, String.class));
 						} catch (ParseException e) {
-							throw new RestServletException("Invalid format for @RestMethod.bpIncludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpIncludes());
+							throw new RestServletException(
+									"Invalid format for @RestMethod.bpIncludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpIncludes());
 						}
 					if (! m.bpExcludes().isEmpty())
 						try {
 							sgb.excludeProperties((Map)JsonParser.DEFAULT.parse(m.bpExcludes(), Map.class, String.class, String.class));
 						} catch (ParseException e) {
-							throw new RestServletException("Invalid format for @RestMethod.bpExcludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpExcludes());
+							throw new RestServletException(
+								"Invalid format for @RestMethod.bpExcludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpExcludes());
 						}
 					sgb.beanFilters(m.beanFilters());
 					sgb.pojoSwaps(m.pojoSwaps());
@@ -321,7 +328,8 @@ class CallMethod implements Comparable<CallMethod>  {
 						try {
 							g.append(c);
 						} catch (Exception e) {
-							throw new RestServletException("Exception occurred while trying to instantiate Encoder on method ''{0}'': ''{1}''", sig, c.getSimpleName()).initCause(e);
+							throw new RestServletException(
+								"Exception occurred while trying to instantiate Encoder on method ''{0}'': ''{1}''", sig, c.getSimpleName()).initCause(e);
 						}
 					}
 					encoders = g.build();
@@ -331,7 +339,8 @@ class CallMethod implements Comparable<CallMethod>  {
 				for (String s : m.defaultRequestHeaders()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
-						throw new RestServletException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+						throw new RestServletException(
+							"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 					defaultRequestHeaders.put(h[0], h[1]);
 				}
 
@@ -339,7 +348,8 @@ class CallMethod implements Comparable<CallMethod>  {
 				for (String s : m.defaultQuery()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
-						throw new RestServletException("Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+						throw new RestServletException(
+							"Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 					defaultQuery.put(h[0], h[1]);
 				}
 
@@ -347,7 +357,8 @@ class CallMethod implements Comparable<CallMethod>  {
 				for (String s : m.defaultFormData()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
-						throw new RestServletException("Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+						throw new RestServletException(
+							"Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 					defaultFormData.put(h[0], h[1]);
 				}
 

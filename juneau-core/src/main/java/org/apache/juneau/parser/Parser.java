@@ -110,13 +110,14 @@ import org.apache.juneau.utils.*;
  * 	<tr><th>JSON type</th><th>Class type</th></tr>
  * 	<tr><td>object</td><td>{@link ObjectMap}</td></tr>
  * 	<tr><td>array</td><td>{@link ObjectList}</td></tr>
- * 	<tr><td>number</td><td>{@link Number} <br>(depending on length and format, could be {@link Integer},
+ * 	<tr><td>number</td><td>{@link Number}<br>(depending on length and format, could be {@link Integer},
  * 		{@link Double}, {@link Float}, etc...)</td></tr>
  * 	<tr><td>boolean</td><td>{@link Boolean}</td></tr>
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  *
- * <a id='SupportedTypes'></a><h6 class='topic'>Supported types</h6>
+ * <a id='SupportedTypes'></a>
+ * <h6 class='topic'>Supported types</h6>
  * <p>
  * Several of the methods below take {@link Type} parameters to identify the type of object to create.
  * Any of the following types can be passed in to these methods...
@@ -255,7 +256,7 @@ public abstract class Parser extends CoreObject {
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
@@ -306,6 +307,7 @@ public abstract class Parser extends CoreObject {
 	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
@@ -405,7 +407,8 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
-	 * 	<li>The various character-based constructors in {@link ObjectMap} (e.g.
+	 * 	<li>
+	 * 		The various character-based constructors in {@link ObjectMap} (e.g.
 	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
 	 * </ul>
 	 *
@@ -454,7 +457,8 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
-	 * 	<li>The various character-based constructors in {@link ObjectList} (e.g.
+	 * 	<li>
+	 * 		The various character-based constructors in {@link ObjectList} (e.g.
 	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
 	 * </ul>
 	 *
@@ -506,7 +510,8 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
-	 * 	<li>Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
+	 * 	<li>
+	 * 		Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
 	 * </ul>
 	 *
 	 * @param input The input.  Subclasses can support different input types.

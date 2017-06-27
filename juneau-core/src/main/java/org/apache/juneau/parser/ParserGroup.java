@@ -25,10 +25,14 @@ import org.apache.juneau.http.*;
  * <p>
  * Provides the following features:
  * <ul class='spaced-list'>
- * 	<li>Finds parsers based on HTTP <code>Content-Type</code> header values.
- * 	<li>Sets common properties on all parsers in a single method call.
- * 	<li>Locks all parsers in a single method call.
- * 	<li>Clones existing groups and all parsers within the group in a single method call.
+ * 	<li>
+ * 		Finds parsers based on HTTP <code>Content-Type</code> header values.
+ * 	<li>
+ * 		Sets common properties on all parsers in a single method call.
+ * 	<li>
+ * 		Locks all parsers in a single method call.
+ * 	<li>
+ * 		Clones existing groups and all parsers within the group in a single method call.
  * </ul>
  *
  * <h6 class='topic'>Match ordering</h6>

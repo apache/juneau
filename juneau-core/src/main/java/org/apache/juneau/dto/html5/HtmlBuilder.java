@@ -17,11 +17,14 @@ package org.apache.juneau.dto.html5;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 	<li class='link'>
+ * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
  * 		(org.apache.juneau.dto)</a>
- * 	<ul>
- * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
- * 	</ul>
+ * 		<ul>
+ * 			<li class='sublink'>
+ * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
+ * 		</ul>
+ *		</li>
  * </ul>
  */
 public class HtmlBuilder {

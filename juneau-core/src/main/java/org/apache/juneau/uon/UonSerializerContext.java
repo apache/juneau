@@ -26,13 +26,15 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h6 class='topic'>Inherited configurable properties</h6>
  * <ul class='doctree'>
- * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
+ * 	<li class='jc'>
+ * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
  * 		- Properties associated with handling beans on serializers and parsers.
- * 	<ul>
- * 		<li class='jc'><a class="doclink"
- * 			href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
- * 			- Configurable properties common to all serializers.
- * 	</ul>
+ * 		<ul>
+ * 			<li class='jc'>
+ * 				<a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
+ * 				- Configurable properties common to all serializers.
+ * 		</ul>
+ * 	</li>
  * </ul>
  */
 public class UonSerializerContext extends SerializerContext {
@@ -89,21 +91,19 @@ public class UonSerializerContext extends SerializerContext {
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 * <p>
 	 * The possible values are:
-	 * <ul>
-	 * 	<li><js>"UON"</js> (default) - Use UON notation for values.
-	 * 		<br>
-	 * 		String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
-	 * 		<br>
-	 * 		Boolean strings (<js>"true"</js>/<js>"false"</js>) and numeric values (<js>"123"</js>) will also end up
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"UON"</js> (default) - Use UON notation for values.
+	 * 		<br>String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
+	 * 		<br>Boolean strings (<js>"true"</js>/<js>"false"</js>) and numeric values (<js>"123"</js>) will also end up
 	 * 		quoted (<js>"'true'"</js>, <js>"'false'"</js>, <js>"'123'"</js>.
-	 * 	<li><js>"PLAINTEXT"</js> (default) - Serialize as plain text.
-	 * 		<br>
-	 * 		Strings will never be quoted or escaped.
-	 * 		<br>
-	 * 		Note that this can cause errors during parsing if you're using the URL-encoding parser to parse
+	 * 	<li>
+	 * 		<js>"PLAINTEXT"</js> (default) - Serialize as plain text.
+	 * 		<br>Strings will never be quoted or escaped.
+	 * 		<br>Note that this can cause errors during parsing if you're using the URL-encoding parser to parse
 	 * 		the results since UON constructs won't be differentiable.
-	 * 		<br>
-	 * 		However, this is not an issue if you're simply creating queries or form posts against 3rd-party interfaces.
+	 * 		<br>However, this is not an issue if you're simply creating queries or form posts against 3rd-party
+	 * 		interfaces.
 	 * </ul>
 	 */
 	public static final String UON_paramFormat = "UonSerializer.paramFormat";

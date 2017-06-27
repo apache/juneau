@@ -35,9 +35,11 @@ import org.apache.juneau.xml.*;
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
  * <p>
- * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as a REST resource.
+ * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
+ * a REST resource.
  *
- * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on using this class.
+ * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on
+ * using this class.
  */
 @Documented
 @Target(TYPE)
@@ -54,26 +56,25 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getMessages()}
 	 * </ul>
 	 * <p>
-	 * Refer to the {@link MessageBundle} class for a description of the message key formats
-	 * 	used in the properties file.
+	 * Refer to the {@link MessageBundle} class for a description of the message key formats used in the properties file.
 	 * <p>
-	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the
-	 * 	resource bundle <js>"com.foo.sample.nls.Messages"</js> if the resource class
-	 * 	is in <js>"com.foo.sample"</js>, or it can be an absolute path, like <js>"com.foo.sample.nls.Messages"</js>
+	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
+	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
+	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
 	 */
 	String messages() default "";
 
 	/**
 	 * Class-level guards.
 	 * <p>
-	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined
-	 * 	in this class.
+	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 * These guards get called immediately before execution of any REST method in this class.
 	 * <p>
-	 * Typically, guards will be used for permissions checking on the user making the request,
-	 * 	but it can also be used for other purposes like pre-call validation of a request.
+	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
+	 * for other purposes like pre-call validation of a request.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addGuards(Class...)}/{@link RestConfig#addGuards(RestGuard...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addGuards(Class...)}/
+	 * {@link RestConfig#addGuards(RestGuard...)} methods.
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
@@ -81,14 +82,16 @@ public @interface RestResource {
 	 * Class-level converters.
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 * These converters get called immediately after execution of the REST method in the same
-	 * 	order specified in the annotation.
+	 * These converters get called immediately after execution of the REST method in the same order specified in the
+	 * annotation.
 	 * <p>
 	 * Can be used for performing post-processing on the response object before serialization.
 	 * <p>
-	 * Default converter implementations are provided in the <a class='doclink' href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
+	 * Default converter implementations are provided in the <a class='doclink'
+	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addConverters(Class...)}/{@link RestConfig#addConverters(RestConverter...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addConverters(Class...)}/
+	 * {@link RestConfig#addConverters(RestConverter...)} methods.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -103,8 +106,8 @@ public @interface RestResource {
 	 * </ul>
 	 * <p>
 	 * If the specified class is an instance of {@link BeanFilterBuilder}, then a filter built from that builder is added.
-	 * Any other classes are wrapped in a {@link InterfaceBeanFilterBuilder} to indicate that subclasses should
-	 * 	be treated as the specified class type.
+	 * Any other classes are wrapped in a {@link InterfaceBeanFilterBuilder} to indicate that subclasses should be
+	 * treated as the specified class type.
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestConfig#addBeanFilters(Class...)} method.
 	 */
@@ -185,10 +188,12 @@ public @interface RestResource {
 	 * <p>
 	 * Property values will be converted to the appropriate type.
 	 * <p>
-	 * In some cases, properties can be overridden at runtime through the {@link RestResponse#setProperty(String, Object)} method
-	 * 	or through a {@link Properties @Properties} annotated method parameter.
+	 * In some cases, properties can be overridden at runtime through the
+	 * {@link RestResponse#setProperty(String, Object)} method or through a {@link Properties @Properties} annotated
+	 * method parameter.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setProperty(String, Object)}/{@link RestConfig#setProperties(java.util.Map)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setProperty(String, Object)}/
+	 * {@link RestConfig#setProperties(java.util.Map)} methods.
 	 */
 	Property[] properties() default {};
 
@@ -204,7 +209,8 @@ public @interface RestResource {
 	 * <p>
 	 * This annotation can only be used on {@link Serializer} classes that have no-arg constructors.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addSerializers(Class...)}/{@link RestConfig#addSerializers(Serializer...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addSerializers(Class...)}/
+	 * {@link RestConfig#addSerializers(Serializer...)} methods.
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -213,18 +219,19 @@ public @interface RestResource {
 	 * <p>
 	 * This annotation can only be used on {@link Parser} classes that have no-arg constructors.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addParsers(Class...)}/{@link RestConfig#addParsers(Parser...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addParsers(Class...)}/
+	 * {@link RestConfig#addParsers(Parser...)} methods.
 	 */
 	Class<? extends Parser>[] parsers() default {};
 
 	/**
-	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned
-	 * 	by REST methods or set via {@link RestResponse#setOutput(Object)} into appropriate
-	 * 	HTTP responses.
+	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 * <p>
 	 * See {@link ResponseHandler} for details.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addResponseHandlers(Class...)}/{@link RestConfig#addResponseHandlers(ResponseHandler...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addResponseHandlers(Class...)}/
+	 * {@link RestConfig#addResponseHandlers(ResponseHandler...)} methods.
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
 
@@ -244,7 +251,8 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addEncoders(Class...)}/{@link RestConfig#addEncoders(Encoder...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addEncoders(Class...)}/
+	 * {@link RestConfig#addEncoders(Encoder...)} methods.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -255,8 +263,8 @@ public @interface RestResource {
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
 	 * <p>
-	 * The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not specified
-	 * 	so that a particular default {@link Serializer} is picked.
+	 * The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * specified so that a particular default {@link Serializer} is picked.
 	 * <p>
 	 * Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 *
@@ -269,7 +277,8 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultRequestHeader(String, Object)}/{@link RestConfig#addDefaultRequestHeaders(String...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultRequestHeader(String, Object)}/
+	 * {@link RestConfig#addDefaultRequestHeaders(String...)} methods.
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -278,7 +287,8 @@ public @interface RestResource {
 	 * <p>
 	 * Strings are of the format <js>"Header-Name: header-value"</js>.
 	 * <p>
-	 * This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of the Java methods.
+	 * This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of the Java
+	 * methods.
 	 * <p>
 	 * The header value will not be set if the header value has already been specified (hence the 'default' in the name).
 	 * <p>
@@ -293,49 +303,53 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultResponseHeader(String, Object)}/{@link RestConfig#addDefaultResponseHeaders(String...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultResponseHeader(String, Object)}/
+	 * {@link RestConfig#addDefaultResponseHeaders(String...)} methods.
 	 */
 	String[] defaultResponseHeaders() default {};
 
 	/**
 	 * Defines children of this resource.
 	 * <p>
-	 * A REST child resource is simply another servlet that is initialized as part of the parent
-	 * 	resource and has a servlet path directly under the parent servlet path.
-	 * The main advantage to defining servlets as REST children is that you do not need
-	 * 	to define them in the <code>web.xml</code> file of the web application.
-	 * This can cut down on the number of entries that show up in the <code>web.xml</code> file
-	 * 	if you are defining large numbers of servlets.
+	 * A REST child resource is simply another servlet that is initialized as part of the parent resource and has a
+	 * servlet path directly under the parent servlet path.
+	 * The main advantage to defining servlets as REST children is that you do not need to define them in the
+	 * <code>web.xml</code> file of the web application.
+	 * This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
+	 * large numbers of servlets.
 	 * <p>
-	 * Child resources must specify a value for {@link #path()} that identifies the subpath of the
-	 * 	child resource relative to the parent path.
+	 * Child resources must specify a value for {@link #path()} that identifies the subpath of the child resource
+	 * relative to the parent path.
 	 * <p>
-	 * It should be noted that servlets can be nested arbitrarily deep using this technique (i.e. children can also have children).
+	 * It should be noted that servlets can be nested arbitrarily deep using this technique (i.e. children can also have
+	 * children).
 	 *
 	 * <dl>
 	 * 	<dt>Servlet initialization:</dt>
 	 * 	<dd>
 	 * 		<p>
-	 * 			A child resource will be initialized immediately after the parent servlet is initialized.  The child resource
-	 * 			receives the same servlet config as the parent resource.  This allows configuration information such as
-	 * 			servlet initialization parameters to filter to child resources.
+	 * 			A child resource will be initialized immediately after the parent servlet is initialized.
+	 * 			The child resource receives the same servlet config as the parent resource.
+	 * 			This allows configuration information such as servlet initialization parameters to filter to child
+	 * 			resources.
 	 * 		</p>
 	 * 	</dd>
 	 * 	<dt>Runtime behavior:</dt>
 	 * 	<dd>
 	 * 		<p>
-	 * 			As a rule, methods defined on the <code>HttpServletRequest</code> object will behave as if
-	 * 			the child servlet were deployed as a top-level resource under the child's servlet path.
+	 * 			As a rule, methods defined on the <code>HttpServletRequest</code> object will behave as if the child
+	 * 			servlet were deployed as a top-level resource under the child's servlet path.
 	 * 			For example, the <code>getServletPath()</code> and <code>getPathInfo()</code> methods on the
-	 * 			<code>HttpServletRequest</code> object will behave as if the child resource were deployed
-	 * 			using the child's servlet path.
-	 * 			Therefore, the runtime behavior should be equivalent to deploying the child servlet in
-	 * 			the <code>web.xml</code> file of the web application.
+	 * 			<code>HttpServletRequest</code> object will behave as if the child resource were deployed using the
+	 * 			child's servlet path.
+	 * 			Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
+	 * 			<code>web.xml</code> file of the web application.
 	 * 		</p>
 	 * 	</dd>
 	 * </dl>
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addChildResource(String, Object)}/{@link RestConfig#addChildResources(Class...)}/{@link RestConfig#addChildResources(Object...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addChildResource(String, Object)}/
+	 * {@link RestConfig#addChildResources(Class...)}/{@link RestConfig#addChildResources(Object...)} methods.
 	 */
 	Class<?>[] children() default {};
 
@@ -343,7 +357,8 @@ public @interface RestResource {
 	 * Identifies the URL subpath relative to the parent resource.
 	 * <p>
 	 * Typically, this annotation is only applicable to resources defined as children through the {@link #children()}
-	 * 	annotation.  However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 * annotation.
+	 * However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
 	 * <p>
 	 * This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
 	 * Therefore, implementers can optionally specify a path value for documentation purposes.
@@ -359,7 +374,7 @@ public @interface RestResource {
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
 	 * <p>
 	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
+	 * (e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
@@ -372,11 +387,12 @@ public @interface RestResource {
 	/**
 	 * Optional servlet description.
 	 * <p>
-	 * It is used to populate the Swagger description field and as a default value for the {@link HtmlDoc#description()} value.
+	 * It is used to populate the Swagger description field and as a default value for the {@link HtmlDoc#description()}
+	 * value.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletDescription()} method.
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"description = foo"</js> or <js>"MyServlet.description = foo"</js>).
+	 * (e.g. <js>"description = foo"</js> or <js>"MyServlet.description = foo"</js>).
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
@@ -401,24 +417,27 @@ public @interface RestResource {
 	 * The stylesheet to use for HTML views.
 	 * <p>
 	 * The name is a path to a stylesheet located in either the classpath or working directory.
-	 * The resulting stylesheet becomes available through the servlet via the URL <js>"[servletpath]/style.css"</js>.
+	 * The resulting stylesheet becomes available through the servlet via the URL <js>"[servlet-path]/style.css"</js>.
 	 * <p>
 	 * The default set of styles located in the <code>org.apache.juneau.rest.styles</code> package are:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"styles/juneau.css"</js> - Theme based on Jazz look-and-feel.
-	 * 	<li><js>"styles/devops.css"</js> - Theme based on IBM DevOps look-and-feel.
+	 * 	<li>
+	 * 		<js>"styles/juneau.css"</js> - Theme based on Jazz look-and-feel.
+	 * 	<li>
+	 * 		<js>"styles/devops.css"</js> - Theme based on IBM DevOps look-and-feel.
 	 * </ul>
 	 * <p>
-	 * The classpath search starts with the child servlet class and proceeds up the class hierarchy
-	 * 	chain.  Since the {@link RestServlet} class is in the <code>org.apache.juneau.rest</code> package
-	 * 	and the predefined styles are in the <code>org.apache.juneau.rest.styles</code> package, the paths to
-	 * 	the predefined styles are prefixed with <js>"styles/"</js>.
+	 * The classpath search starts with the child servlet class and proceeds up the class hierarchy chain.
+	 * Since the {@link RestServlet} class is in the <code>org.apache.juneau.rest</code> package and the predefined
+	 * styles are in the <code>org.apache.juneau.rest.styles</code> package, the paths to the predefined styles are
+	 * prefixed with <js>"styles/"</js>.
 	 * <p>
-	 * If the stylesheet cannot be found on the classpath, an attempt to look in the working directory
-	 * 	for it will be made.  This allows for stylesheets to be placed on the file system in the working
-	 * 	directory.
+	 * If the stylesheet cannot be found on the classpath, an attempt to look in the working directory for it will be
+	 * made.
+	 * This allows for stylesheets to be placed on the file system in the working directory.
 	 * <p>
-	 * If the file cannot be located, the request to <js>"[servletpath]/style.css"</js> will return {@link HttpServletResponse#SC_NOT_FOUND}.
+	 * If the file cannot be located, the request to <js>"[servlet-path]/style.css"</js> will return
+	 * {@link HttpServletResponse#SC_NOT_FOUND}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -431,11 +450,13 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * In this example, the servlet will attempt to find the <code>mycss.css</code> file in the following ordered locations:
+	 * In this example, the servlet will attempt to find the <code>mycss.css</code> file in the following ordered
+	 * locations:
 	 * </p>
 	 * <ol>
 	 * 	<li><code>com.foo.mypackage.mystyles</code> package.
-	 * 	<li><code>org.apache.juneau.rest.mystyles</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.rest</code>).
+	 * 	<li><code>org.apache.juneau.rest.mystyles</code> package (since <code>RestServletDefault</code> is in
+	 * 		<code>org.apache.juneau.rest</code>).
 	 * 	<li><code>[working-dir]/mystyles</code> directory.
 	 * </ol>
 	 * <p>
@@ -443,18 +464,20 @@ public @interface RestResource {
 	 * When multiple stylesheets are specified, their contents will be concatenated and return in the order specified
 	 * in the list.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addStyleSheet(Object...)}/{@link RestConfig#addStyleSheet(Class, String)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addStyleSheet(Object...)}/
+	 * {@link RestConfig#addStyleSheet(Class, String)} methods.
 	 */
 	String stylesheet() default "";
 
 	/**
 	 * The favicon to use for HTML views.
 	 * <p>
-	 * The name is a path to an icon file located in either the classpath or working directory in a similar way
-	 * 	to how the {@link #stylesheet()} stylesheet is resolved.
-	 * The resulting favicon becomes available in the servlet via the URL <js>"[servletpath]/favicon.ico"</js>.
+	 * The name is a path to an icon file located in either the classpath or working directory in a similar way to how
+	 * the {@link #stylesheet()} stylesheet is resolved.
+	 * The resulting favicon becomes available in the servlet via the URL <js>"[servlet-path]/favicon.ico"</js>.
 	 * <p>
-	 * If the file cannot be located, the request to <js>"[servletpath]/favicon.ico"</js> will return {@link HttpServletResponse#SC_NOT_FOUND}.
+	 * If the file cannot be located, the request to <js>"[servlet-path]/favicon.ico"</js> will return
+	 * {@link HttpServletResponse#SC_NOT_FOUND}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -467,15 +490,18 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * In this example, the servlet will attempt to find the <code>myicon.ico</code> file in the following ordered locations:
+	 * In this example, the servlet will attempt to find the <code>myicon.ico</code> file in the following ordered
+	 * locations:
 	 * </p>
 	 * <ol>
 	 * 	<li><code>com.foo.mypackage.mydocs</code> package.
-	 * 	<li><code>org.apache.juneau.rest.mydocs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.rest</code>).
+	 * 	<li><code>org.apache.juneau.rest.mydocs</code> package (since <code>RestServletDefault</code> is in
+	 * 		<code>org.apache.juneau.rest</code>).
 	 * 	<li><code>[working-dir]/mydocs</code> directory.
 	 * </ol>
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setFavIcon(Object)}/{@link RestConfig#setFavIcon(Class, String)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setFavIcon(Object)}/
+	 * {@link RestConfig#setFavIcon(Class, String)} methods.
 	 */
 	String favicon() default "";
 
@@ -500,12 +526,13 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * In this example, given a GET request to <code>/myresource/htdocs/foobar.html</code>, the servlet will attempt to find the <code>foobar.html</code> file
-	 * 	in the following ordered locations:
+	 * In this example, given a GET request to <code>/myresource/htdocs/foobar.html</code>, the servlet will attempt to
+	 * find the <code>foobar.html</code> file in the following ordered locations:
 	 * </p>
 	 * <ol>
 	 * 	<li><code>com.foo.mypackage.docs</code> package.
-	 * 	<li><code>org.apache.juneau.rest.docs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.rest</code>).
+	 * 	<li><code>org.apache.juneau.rest.docs</code> package (since <code>RestServletDefault</code> is in
+	 * 		<code>org.apache.juneau.rest</code>).
 	 * 	<li><code>[working-dir]/docs</code> directory.
 	 * </ol>
 	 * <p>
@@ -516,8 +543,8 @@ public @interface RestResource {
 	/**
 	 * Specifies the HTTP header name used to identify the client version.
 	 * <p>
-	 * The client version is used to support backwards compatibility for breaking REST interface
-	 * 	changes.  Used in conjunction with {@link RestMethod#clientVersion()} annotation.
+	 * The client version is used to support backwards compatibility for breaking REST interface changes.
+	 * Used in conjunction with {@link RestMethod#clientVersion()} annotation.
 	 * <p>
 	 * If not specified, uses <js>"X-Client-Version"</js>.
 	 * <p>
@@ -533,9 +560,8 @@ public @interface RestResource {
 	 * 	<li><code><jk>public</jk> T(RestConfig)</code>
 	 * 	<li><code><jk>public</jk> T()</code>
 	 * </ul>
-	 * The former constructor can be used to get access to the {@link RestConfig} object to get access to the
-	 * config file and initialization information or make programmatic modifications to the resource before
-	 * full initialization.
+	 * The former constructor can be used to get access to the {@link RestConfig} object to get access to the config
+	 * file and initialization information or make programmatic modifications to the resource before full initialization.
 	 * <p>
 	 * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
 	 * {@link RestConfig} and {@link RestContext} objects:
@@ -546,7 +572,8 @@ public @interface RestResource {
 	 * <p>
 	 * Subclasses can be used to provide customized resolution of REST resource class instances.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/{@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/
+	 * {@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
 	 */
 	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolver.class;
 
@@ -556,7 +583,8 @@ public @interface RestResource {
 	 * The default logger performs basic error logging to the Java logger.
 	 * Subclasses can be used to customize logging behavior on the resource.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setLogger(Class)}/{@link RestConfig#setLogger(RestLogger)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setLogger(Class)}/{@link RestConfig#setLogger(RestLogger)} methods.
 	 */
 	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
 
@@ -566,7 +594,8 @@ public @interface RestResource {
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 * Subclasses can be used to customize how these HTTP calls are handled.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setCallHandler(Class)}/{@link RestConfig#setCallHandler(RestCallHandler)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setCallHandler(Class)}/{@link RestConfig#setCallHandler(RestCallHandler)} methods.
 	 */
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
 
@@ -575,7 +604,8 @@ public @interface RestResource {
 	 * <p>
 	 * Subclasses can be used to customize the documentation on a resource.
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setInfoProvider(Class)}/{@link RestConfig#setInfoProvider(RestInfoProvider)} methods.
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setInfoProvider(Class)}/{@link RestConfig#setInfoProvider(RestInfoProvider)} methods.
 	 */
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
 
@@ -591,7 +621,7 @@ public @interface RestResource {
 
 	/**
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * 	generate arbitrary replacement text.
+	 * generate arbitrary replacement text.
 	 * <p>
 	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 * <p>

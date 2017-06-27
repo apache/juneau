@@ -69,7 +69,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_validating</jsf>, value)</code>.
@@ -94,7 +94,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * </ul>
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Reporters are not copied to new parsers during a clone.
@@ -102,7 +102,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_reporter</jsf>, value)</code>.
@@ -130,7 +130,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_resolver</jsf>, value)</code>.
@@ -158,7 +158,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_eventAllocator</jsf>, value)</code>.
@@ -198,7 +198,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * 		<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
 	 * 	</tr>
 	 * </table>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_preserveRootElement</jsf>, value)</code>.

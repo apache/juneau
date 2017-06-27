@@ -119,7 +119,7 @@ import org.apache.juneau.xml.annotation.*;
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
  * The following direct subclasses are provided for convenience:
- * <ul class='spaced-list'>
+ * <ul>
  * 	<li>{@link Sq} - Default serializer, single quotes.
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>

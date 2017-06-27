@@ -38,7 +38,9 @@ public class WidgetVar extends SimpleVar {
 	 */
 	public static final String SESSION_req = "req";
 
-	/** The name of this variable. */
+	/**
+	 * The name of this variable.
+	 */
 	public static final String NAME = "W";
 
 	/**

@@ -66,9 +66,9 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	/**
 	 * Returns the specified path parameter converted to a POJO.
 	 * <p>
-	 * The type can be any POJO type convertable from a <code>String</code> (See <a class="doclink"
-	 * href="package-summary.html#PojosConvertableFromString">POJOs Convertable From Strings</a>).
-	 * <p>
+	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
+	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into an integer.</jc>
@@ -100,10 +100,11 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	/**
 	 * Returns the specified path parameter converted to a POJO.
 	 * <p>
-	 * The type can be any POJO type convertable from a <code>String</code> (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertable From Strings</a>).
+	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
+	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
 	 * <p>
 	 * Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
-	 * <p>
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
@@ -121,10 +122,12 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 *
 	 * @param name The attribute name.
 	 * @param type The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
+	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * {@link GenericArrayType}
+	 * <br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
 	 * @throws ParseException
@@ -205,7 +208,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	/**
 	 * Same as {@link #getRemainder()} but doesn't decode characters.
 	 *
-	 * @return The undecoded path remainder.
+	 * @return The un-decoded path remainder.
 	 */
 	public String getRemainderUndecoded() {
 		return remainder;

@@ -30,114 +30,99 @@ import org.apache.juneau.parser.*;
  * <p>
  * The hierarchy of these objects are...
  * <ul class='spaced-list'>
- * 	<li>{@link PropertyStore} - A thread-safe, modifiable context property store.
- * 		<br>
- * 		Used to create {@link Context} objects.
- *
- * 	<li>{@link Context} - A reusable, cacheable, thread-safe, read-only context with configuration properties copied
+ * 	<li>
+ * 		{@link PropertyStore} - A thread-safe, modifiable context property store.
+ * 		<br>Used to create {@link Context} objects.
+ * 	<li>
+ * 		{@link Context} - A reusable, cacheable, thread-safe, read-only context with configuration properties copied
  * 		from the store.
- * 		<br>
- * 		Often used to create {@link Session} objects.
- *
- * 	<li>{@link Session} - A one-time-use non-thread-safe object.
+ * 		<br>Often used to create {@link Session} objects.
+ * 	<li>
+ * 		{@link Session} - A one-time-use non-thread-safe object.
  * 		<br>Used by serializers and parsers to retrieve context properties and to be used as scratchpads.
  * </ul>
  *
  * <h6 class='topic'>PropertyStore objects</h6>
  * <p>
  * Property stores can be thought of as consisting of the following:
- * <ul class='spaced-list'>
+ * <ul>
  * 	<li>A <code>Map&lt;String,Object&gt;</code> of context properties.
  * 	<li>A <code>Map&lt;Class,Context&gt;</code> of context instances.
  * </ul>
+ *
  * <p>
  * Property stores are used to create and cache {@link Context} objects using the {@link #getContext(Class)} method.
+ *
  * <p>
  * As a general rule, {@link PropertyStore} objects are 'slow'.
- * <br>
- * Setting and retrieving properties on a store can involve relatively slow data conversion and synchronization.
- * <br>
- * However, the {@link #getContext(Class)} method is fast, and will return cached context objects if the context
+ * <br>Setting and retrieving properties on a store can involve relatively slow data conversion and synchronization.
+ * <br>However, the {@link #getContext(Class)} method is fast, and will return cached context objects if the context
  * properties have not changed.
+ *
  * <p>
  * Property stores can be used to store context properties for a variety of contexts.
- * <br>
- * For example, a single store can store context properties for the JSON serializer, XML serializer, HTML serializer
+ * <br>For example, a single store can store context properties for the JSON serializer, XML serializer, HTML serializer
  * etc... and can thus be used to retrieve context objects for those serializers.
- * <p>
  *
  * <h6 class='topic'>Context properties</h6>
  * <p>
  * Context properties are 'settings' for serializers and parsers.
- * <br>
- * For example, the {@link BeanContext#BEAN_sortProperties} context property defines whether bean properties should be
+ * <br>For example, the {@link BeanContext#BEAN_sortProperties} context property defines whether bean properties should be
  * serialized in alphabetical order.
+ *
  * <p>
  * Each {@link Context} object should contain the context properties that apply to it as static fields
  * (e.g {@link BeanContext#BEAN_sortProperties}).
+ *
  * <p>
  * Context properties can be of the following types:
  * <ul class='spaced-list'>
- * 	<li><l>SIMPLE</l> - A simple property.
- * 		<br>
- * 		Examples include:  booleans, integers, Strings, Classes, etc...
- * 		<br><br>
- * 		An example of this would be the {@link BeanContext#BEAN_sortProperties} property.
- * 		<br>
- * 		It's name is simply <js>"BeanContext.sortProperties"</js>.
- *
- * 	<li><l>SET</l> - A sorted set of objects.
- * 	<br>
- * 	These are denoted by appending <js>".set"</js> to the property name.
- * 		<br>
- * 		Objects can be of any type, even complex types.
- * 		<br>
- * 		Sorted sets use tree sets to maintain the value in alphabetical order.
- * 		<br>
- * 		For example, the {@link BeanContext#BEAN_notBeanClasses} property is used to store classes that should not be
+ * 	<li>
+ * 		<l>SIMPLE</l> - A simple property.
+ * 		<br>Examples include:  booleans, integers, Strings, Classes, etc...
+ * 		<br>An example of this would be the {@link BeanContext#BEAN_sortProperties} property.
+ * 		<br>It's name is simply <js>"BeanContext.sortProperties"</js>.
+ * 	<li>
+ * 		<l>SET</l> - A sorted set of objects.
+ * 		<br>These are denoted by appending <js>".set"</js> to the property name.
+ * 		<br>Objects can be of any type, even complex types.
+ * 		<br>Sorted sets use tree sets to maintain the value in alphabetical order.
+ * 		<br>For example, the {@link BeanContext#BEAN_notBeanClasses} property is used to store classes that should not be
  * 		treated like beans.
- * 		<br>
- * 		It's name is <js>"BeanContext.notBeanClasses.set"</js>.
- *
- * 	<li><l>LIST</l> - A list of unique objects.
- * 		<br>
- * 		These are denoted by appending <js>".list"</js> to the property name.
- * 		<br>
- * 		Objects can be of any type, even complex types.
- * 		<br>
- * 		Use lists if the ordering of the values in the set is important (similar to how the order of entries in a
+ * 		<br>It's name is <js>"BeanContext.notBeanClasses.set"</js>.
+ * 	<li>
+ * 		<l>LIST</l> - A list of unique objects.
+ * 		<br>These are denoted by appending <js>".list"</js> to the property name.
+ * 		<br>Objects can be of any type, even complex types.
+ * 		<br>Use lists if the ordering of the values in the set is important (similar to how the order of entries in a
  * 		classpath is important).
- * 		<br>
- * 		<br>
- * 		For example, the {@link BeanContext#BEAN_beanFilters} property is used to store bean filters.
- * 		<br>
- * 		It's name is <js>"BeanContext.transforms.list"</js>.
- *
- * 	<li><l>MAP</l> - A sorted map of key-value pairs.
- * 		<br>
- * 		These are denoted by appending <js>".map"</js> to the property name.
- * 		<br>
- * 		Keys can be any type directly convertible to and from Strings.
+ * 		<br>For example, the {@link BeanContext#BEAN_beanFilters} property is used to store bean filters.
+ * 		<br>It's name is <js>"BeanContext.transforms.list"</js>.
+ * 	<li>
+ * 		<l>MAP</l> - A sorted map of key-value pairs.
+ * 		<br>These are denoted by appending <js>".map"</js> to the property name.
+ * 		<br>Keys can be any type directly convertible to and from Strings.
  * 		Values can be of any type, even complex types.
- * 		<br>
- * 		<br>
- * 		For example, the {@link BeanContext#BEAN_implClasses} property is used to specify the names of implementation
+ * 		<br>For example, the {@link BeanContext#BEAN_implClasses} property is used to specify the names of implementation
  * 		classes for interfaces.
- * 		<br>
- * 		It's name is <js>"BeanContext.implClasses.map"</js>.
+ * 		<br>It's name is <js>"BeanContext.implClasses.map"</js>.
  * </ul>
+ *
  * <p>
  * All context properties are set using the {@link #setProperty(String, Object)} method.
+ *
  * <p>
  * Default values for context properties can be specified globally as system properties.
- * <br>
- * Example: <code>System.<jsm>setProperty</jsm>(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>);</code>
+ * <br>Example: <code>System.<jsm>setProperty</jsm>(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>);</code>
+ *
  * <p>
  * SET and LIST properties can be added to using the {@link #addToProperty(String, Object)} method and removed from
  * using the {@link #removeFromProperty(String, Object)} method.
+ *
  * <p>
  * SET and LIST properties can also be added to and removed from by appending <js>".add"</js> or <js>".remove"</js> to
  * the property name and using the {@link #setProperty(String, Object)} method.
+ *
  * <p>
  * The following shows the two different ways to append to a set or list property:
  * <p class='bcode'>
@@ -150,6 +135,7 @@ import org.apache.juneau.parser.*;
  * 	<jc>// Append to set property using set().</jc>
  * 	ps.setProperty(<js>"BeanContext.notBeanClasses.set.add"</js>, MyNotBeanClass.<jk>class</jk>);
  * </p>
+ *
  * <p>
  * SET and LIST properties can also be set and manipulated using JSON strings.
  * <p class='bcode'>
@@ -167,15 +153,15 @@ import org.apache.juneau.parser.*;
  * 	<jc>// Remove an array of values as a JSON array..
  * 	ps.removeFromProperty(<js>"BeanContext.notBeanClasses.set"</js>, <js>"['com.my.MyNotBeanClass3']"</js>);
  * </p>
+ *
  * <p>
  * MAP properties can be added to using the {@link #putToProperty(String, Object, Object)} and
  * {@link #putToProperty(String, Object)} methods.
- * <br>
- * MAP property entries can be removed by setting the value to <jk>null</jk>
+ * <br>MAP property entries can be removed by setting the value to <jk>null</jk>
  * (e.g. <code>putToProperty(<js>"BEAN_implClasses"</js>, MyNotBeanClass.<jk>class</jk>, <jk>null</jk>);</code>.
- * <br>
- * MAP properties can also be added to by appending <js>".put"</js> to the property name and using the
+ * <br>MAP properties can also be added to by appending <js>".put"</js> to the property name and using the
  * {@link #setProperty(String, Object)} method.
+ *
  * <p>
  * The following shows the two different ways to append to a set property:
  * <p class='bcode'>
@@ -189,6 +175,7 @@ import org.apache.juneau.parser.*;
  * 	Map m = <jk>new</jk> AMap().append(MyInterface.<jk>class</jk>,MyInterfaceImpl.<jk>class</jk>);
  * 	ps.setProperty(<js>"BeanContext.implClasses.map.put"</js>, m);
  * </p>
+ *
  * <p>
  * MAP properties can also be set and manipulated using JSON strings.
  * <p class='bcode'>
@@ -205,30 +192,33 @@ import org.apache.juneau.parser.*;
  * 	<jc>// Remove from MAP using JSON object.</jc>
  * 	ps.putToProperty(<js>"BeanContext.implClasses.map"</js>, <js>"{'com.my.MyInterface2':null}"</js>);
  * </p>
+ *
  * <p>
  * Context properties are retrieved from this store using the following 3 methods:
  * <ul class='spaced-list'>
- * 	<li>{@link #getProperty(String, Class, Object)} - Retrieve a SIMPLE or SET property converted to the specified
+ * 	<li>
+ * 		{@link #getProperty(String, Class, Object)} - Retrieve a SIMPLE or SET property converted to the specified
  * 		class type.
- * 	<li>{@link #getMap(String, Class, Class, Map)} - Retrieve a MAP property with keys/values converted to the
+ * 	<li>
+ * 		{@link #getMap(String, Class, Class, Map)} - Retrieve a MAP property with keys/values converted to the
  * 		specified class types.
- * 	<li>{@link #getPropertyMap(String)} - Retrieve a map of all context properties with the specified prefix
+ * 	<li>
+ * 		{@link #getPropertyMap(String)} - Retrieve a map of all context properties with the specified prefix
  * 		(e.g. <js>"BeanContext"</js> for {@link BeanContext} properties).
  * </ul>
+ *
  * <p>
  * As a general rule, only {@link Context} objects will use these read methods.
  *
  * <h6 class='topic'>Context objects</h6>
  * <p>
  * A Context object can be thought of as unmodifiable snapshot of a store.
- * <br>
- * They should be 'fast' by avoiding synchronization by using final fields whenever possible.
- * <br>
- * However, they MUST be thread safe.
+ * <br>They should be 'fast' by avoiding synchronization by using final fields whenever possible.
+ * <br>However, they MUST be thread safe.
+ *
  * <p>
  * Context objects are created using the {@link #getContext(Class)} method.
- * <br>
- * As long as the properties on a store have not been modified, the store will return a cached copy of a context.
+ * <br>As long as the properties on a store have not been modified, the store will return a cached copy of a context.
  * <p class='bcode'>
  * 	PropertyStore ps = PropertyStore.<jsm>create</jsm>();
  *
@@ -250,12 +240,10 @@ import org.apache.juneau.parser.*;
  * <h6 class='topic'>Session objects</h6>
  * <p>
  * Session objects are created through {@link Context} objects, typically through a <code>createContext()</code> method.
- * <br>
- * Unlike context objects, they are NOT reusable and NOT thread safe.
- * <br>
- * They are meant to be used one time and then thrown away.
- * <br>
- * They should NEVER need to use synchronization.
+ * <br>Unlike context objects, they are NOT reusable and NOT thread safe.
+ * <br>They are meant to be used one time and then thrown away.
+ * <br>They should NEVER need to use synchronization.
+ *
  * <p>
  * Session objects are also often used as scratchpads for information such as keeping track of call stack information
  * to detect recursive loops when serializing beans.
@@ -406,16 +394,18 @@ public final class PropertyStore {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * @param name The configuration property name.
-	 * <br>If name ends with <l>.add</l>, then the specified value is added to the existing property value as an entry
-	 * in a SET or LIST property.
-	 * <br>If name ends with <l>.put</l>, then the specified value is added to the existing property value as a
-	 * key/value pair in a MAP property.
-	 * <br>If name ends with <l>.remove</l>, then the specified value is removed from the existing property property
-	 * value in a SET or LIST property.
-	 * @param value The new value.
-	 * If <jk>null</jk>, the property value is deleted.
-	 * In general, the value type can be anything.
+	 * @param name
+	 * 	The configuration property name.
+	 * 	<br>If name ends with <l>.add</l>, then the specified value is added to the existing property value as an entry
+	 * 	in a SET or LIST property.
+	 * 	<br>If name ends with <l>.put</l>, then the specified value is added to the existing property value as a
+	 * 	key/value pair in a MAP property.
+	 * 	<br>If name ends with <l>.remove</l>, then the specified value is removed from the existing property property
+	 * 	value in a SET or LIST property.
+	 * @param value
+	 * 	The new value.
+	 * 	If <jk>null</jk>, the property value is deleted.
+	 * 	In general, the value type can be anything.
 	 * @return This object (for method chaining).
 	 */
 	public PropertyStore setProperty(String name, Object value) {

@@ -132,54 +132,72 @@
 		</p>
 		<p>
 			The following shows the class hierarchy of the {@link org.apache.juneau.svl.Var} class and all current
-				predefined implementations.
+			predefined implementations.
 		</p>  
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.svl.Var} - Superclass of all vars.
+			<li class='jac'>
+				{@link org.apache.juneau.svl.Var} 
+				- Superclass of all vars.
 				<ul>
-					<li class='jac'>{@link org.apache.juneau.svl.SimpleVar} - Superclass of all vars that return strings.
+					<li class='jac'>
+						{@link org.apache.juneau.svl.SimpleVar} 
+						- Superclass of all vars that return strings.
 						<ul>
-							<li class='jac'>{@link org.apache.juneau.svl.DefaultingVar} 
+							<li class='jac'>
+								{@link org.apache.juneau.svl.DefaultingVar} 
 								- Variables that define a default value if the resolve method returns null.
 								<ul>
-									<li class='jac'>{@link org.apache.juneau.svl.MapVar} 
+									<li class='jac'>
+										{@link org.apache.juneau.svl.MapVar} 
 										- Variables that pull values from maps.
 										<ul>
-											<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} 
+											<li class='jc'>
+												{@link org.apache.juneau.svl.vars.SystemPropertiesVar} 
 												- Resolves system properties.
 										</ul>
 									</li>
-									<li class='jc'>{@link org.apache.juneau.svl.vars.ArgsVar} 
+									<li class='jc'>
+										{@link org.apache.juneau.svl.vars.ArgsVar} 
 										- Resolves variables from an {@link org.apache.juneau.utils.Args} object.
-									<li class='jc'>{@link org.apache.juneau.svl.vars.ConfigFileVar} 
+									<li class='jc'>
+										{@link org.apache.juneau.svl.vars.ConfigFileVar} 
 										- Resolves variables from a {@link org.apache.juneau.ini.ConfigFile} object.
-									<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} 
+									<li class='jc'>
+										{@link org.apache.juneau.svl.vars.EnvVariablesVar} 
 										- Resolves environment variables.
-									<li class='jc'>{@link org.apache.juneau.svl.vars.ManifestFileVar} 
+									<li class='jc'>
+										{@link org.apache.juneau.svl.vars.ManifestFileVar} 
 										- Resolves variables from a {@link org.apache.juneau.utils.ManifestFile} object.
-									<li class='jc'>{@link org.apache.juneau.rest.vars.ServletInitParamVar} 
+									<li class='jc'>
+										{@link org.apache.juneau.rest.vars.ServletInitParamVar} 
 										- Resolves servlet initialization parameters.
 								</ul>
 							</li>
-							<li class='jac'>{@link org.apache.juneau.svl.MultipartVar} 
+							<li class='jac'>
+								{@link org.apache.juneau.svl.MultipartVar} 
 								- Variables that consist of 2 or more comma-delimited arguments.
 								<ul>
-									<li class='jc'>{@link org.apache.juneau.rest.vars.LocalizationVar} 
+									<li class='jc'>
+										{@link org.apache.juneau.rest.vars.LocalizationVar} 
 										- Resolves localized strings for an HTTP request.
 								</ul>
 							</li>
-							<li class='jc'>{@link org.apache.juneau.rest.vars.RequestVar} 
+							<li class='jc'>
+								{@link org.apache.juneau.rest.vars.RequestVar} 
 								- Resolves specialized HTTP request values.
-							<li class='jc'>{@link org.apache.juneau.rest.vars.UrlEncodeVar} 
+							<li class='jc'>
+								{@link org.apache.juneau.rest.vars.UrlEncodeVar} 
 								- URL-encodes the value inside the variable.
 						</ul>
 					</li>
-					<li class='jac'>{@link org.apache.juneau.svl.StreamedVar} 
+					<li class='jac'>
+						{@link org.apache.juneau.svl.StreamedVar} 
 						- Superclass of all vars that stream their value to writers.
 						<ul>
-							<li class='jc'>{@link org.apache.juneau.rest.vars.SerializedRequestAttrVar} 
-							- Resolves HTTP request attribute values passed through a 
-							{@link org.apache.juneau.serializer.Serializer}.
+							<li class='jc'>
+								{@link org.apache.juneau.rest.vars.SerializedRequestAttrVar} 
+								- Resolves HTTP request attribute values passed through a 
+								{@link org.apache.juneau.serializer.Serializer}.
 						</ul>
 					</li>
 				</ul>
@@ -196,9 +214,11 @@
 			Two methods are provided for resolving variables:
 		</p>
 		<ul class='doctree'>
-			<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolve(String)} 
+			<li class='jm'>
+				{@link org.apache.juneau.svl.VarResolver#resolve(String)} 
 				- Resolves variables and returns the results as a simple string.
-			<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolveTo(String,Writer)} 
+			<li class='jm'>
+				{@link org.apache.juneau.svl.VarResolver#resolveTo(String,Writer)} 
 				- Resolves variables and sends results to a writer.
 		</ul>
 		<p>
@@ -248,6 +268,7 @@
 			method.
 			Cloning a resolver will copy it's {@link org.apache.juneau.svl.Var} class names and context objects.
 		</p>
+		
 		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 			<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>
@@ -261,16 +282,18 @@
 	<h3 class='topic' onclick='toggle(this)'>1.3 - Other Notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>The escape character <js>'\'</js> can be used when necessary to escape the following characters: 
+			<li>
+				The escape character <js>'\'</js> can be used when necessary to escape the following characters: 
 				<code>$ , { }</code>
-			<li><b>WARNING:</b>  It is possible to cause {@link java.lang.StackOverflowError StackOverflowErrors} if 
+			<li>
+				<b>WARNING:</b>  It is possible to cause {@link java.lang.StackOverflowError StackOverflowErrors} if 
 				your nested variables result in a recursive loop (e.g. the environment variable 
 				<code>'MYPROPERTY'</code> has the value <code>'$E{MYPROPERTY}'</code>).
 				So don't do that!
-			<li>As a general rule, this class tries to be as efficient as possible by not creating new strings when not 
+			<li>
+				As a general rule, this class tries to be as efficient as possible by not creating new strings when not 
 				needed.
-				<br>
-				For example, calling the resolve method on a string that doesn't contain variables (e.g. 
+				<br>For example, calling the resolve method on a string that doesn't contain variables (e.g. 
 				<code>resolver.resolve(<js>"foobar"</js>)</code>) will simply be a no-op and return the same string.
 		</ul>
 	</div>	

@@ -95,7 +95,7 @@
 		<li><p><a class='doclink' href='#RestServlets.Headers'>Default Headers</a></p>
 		<li><p><a class='doclink' href='#RestServlets.Errors'>Handling Errors / Logging</a></p>
 		<li><p><a class='doclink' href='#RestServlets.ConfigFile'>Configuration Files</a></p>
-		<li><p><a class='doclink' href='#RestServlets.Inheritence'>Annotation Inheritence</a></p>
+		<li><p><a class='doclink' href='#RestServlets.Inheritence'>Annotation Inheritance</a></p>
 		<li><p><a class='doclink' href='#RestServlets.HttpStatusCodes'>HTTP Status Codes</a></p>
 		<li><p><a class='doclink' href='#RestServlets.OverloadedHttpMethods'>Overloaded HTTP Methods</a></p>
 		<li><p><a class='doclink' href='#RestServlets.BuildInParams'>Built-In Parameters</a></p>
@@ -104,7 +104,7 @@
 		<li><p><a class='doclink' href='#RestServlets.OtherNotes'>Other Notes</a></p>
 	</ol>
 	<li><p><a class='doclink' href='#Osgi'>Using with OSGi</a></p>
-	<li><p><a class='doclink' href='#PojosConvertableFromString'>POJOs Convertable From Strings</a></p>
+	<li><p><a class='doclink' href='#PojosConvertableFromString'>POJOs Convertible From Strings</a></p>
 	<li><p><a class='doclink' href='#AddressBookResource'>Address Book Resource</a></p>
 </ol>
 
@@ -113,79 +113,93 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Introduction</h2>
 <div class='topic'>
 	<p>
-		The <l>juneau-rest.jar</l> library allows you to quickly wrap POJOs and expose them as full-fledged REST resources served up in a servlet container using a bare-minimum amount of code.
-		The primary goal for Juneau was to make it as easy as possible to implement easy-to-read and self-documenting REST resources using very little code.
+		The <l>juneau-rest.jar</l> library allows you to quickly wrap POJOs and expose them as full-fledged REST 
+		resources served up in a servlet container using a bare-minimum amount of code.
+		The primary goal for Juneau was to make it as easy as possible to implement easy-to-read and self-documenting 
+		REST resources using very little code.
 	</p>
 	<p>
-		One of the biggest advantages of the Juneau REST framework over similar architectures is that it hides the serialization layer from the developer.  
-		The developer can work entirely with POJOs and let the Juneau framework handle all the serialization and parsing work.  
-		The developer need never know what the <l>Accept</l> or <l>Content-Type</l> or <l>Accept-Encoding</l> (etc...) header values are because those details are all handled by the framework. 
+		One of the biggest advantages of the Juneau REST framework over similar architectures is that it hides the 
+		serialization layer from the developer.  
+		The developer can work entirely with POJOs and let the Juneau framework handle all the serialization and 
+		parsing work.  
+		The developer need never know what the <l>Accept</l> or <l>Content-Type</l> or <l>Accept-Encoding</l> (etc...) 
+		header values are because those details are all handled by the framework. 
 	</p>
 	<p> 
 		The API builds upon the existing JEE Servlet API.  
-		The root class, {@link org.apache.juneau.rest.RestServlet} is nothing but a specialized {@link javax.servlet.http.HttpServlet}, and the
-			{@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} classes are nothing more than specialized {@link javax.servlet.http.HttpServletRequest} and 
-			{@link javax.servlet.http.HttpServletResponse} objects.  
-		This allows maximum flexibility for the developer since you can let Juneau handle operations such as serialization, or you can revert 
-			to the existing servlet APIs to do low-level processing of requests yourself.	
+		The root class, {@link org.apache.juneau.rest.RestServlet} is nothing but a specialized 
+		{@link javax.servlet.http.HttpServlet}, and the {@link org.apache.juneau.rest.RestRequest} and 
+		{@link org.apache.juneau.rest.RestResponse} classes are nothing more than specialized 
+		{@link javax.servlet.http.HttpServletRequest} and {@link javax.servlet.http.HttpServletResponse} objects.  
+		This allows maximum flexibility for the developer since you can let Juneau handle operations such as 
+		serialization, or you can revert to the existing servlet APIs to do low-level processing of requests yourself.	
 		It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
 	</p>
+	
 	<h6 class='topic'>Features</h6>
 	<ul class='spaced-list'>
-		<li>Serializes POJOs to JSON, XML, HTML, URL-Encoding, UON, RDF/XML, N-Triple, Turtle, N3, SOAP, or Java-serialized-object based on
-			value of <l>Accept</l> header.  <br>
-			No user code is required to handle these types.
-			<br>
+		<li>
+			Serializes POJOs to JSON, XML, HTML, URL-Encoding, UON, RDF/XML, N-Triple, Turtle, N3, SOAP, or 
+			Java-serialized-object based on value of <l>Accept</l> header.  
+			<br>No user code is required to handle these types.
 			<ul>
-				<li>Extensible design that provides ability to override existing content type handlers, or add the ability to handle other kinds of content types.
+				<li>Extensible design that provides ability to override existing content type handlers, or add the 
+					ability to handle other kinds of content types.
 			</ul>
-			<br>
-		<li>Parses content of POST/PUT request bodies to POJOs.
-			<br><br>
-		<li>Automatic built-in ability to serialize POJO metadata to JSON+SCHEMA, XML+SCHEMA, or HTML+SCHEMA based on <l>Accept</l> header.
-			<br><br>
-		<li>Automatic negotiation of output Writer based on HTTP headers.
-			<br>
+		<li>
+			Parses content of POST/PUT request bodies to POJOs.
+		<li>
+			Automatic built-in ability to serialize POJO metadata to JSON+SCHEMA, XML+SCHEMA, or HTML+SCHEMA based on 
+			<l>Accept</l> header.
+		<li>
+			Automatic negotiation of output Writer based on HTTP headers.
 			<ul>
 				<li>Automatic handling of <l>Accept-Charset</l> header for all character sets supported by the JVM.
 				<li>Automatic handling of <l>Accept-Encoding</l> header with registered encoders.
 			</ul>
-			<br>
-		<li>Automatic error handling.
-			<br>
+		<li>
+			Automatic error handling.
 			<ul>
 				<li>Automatic 401 errors (Unauthorized) on failed guards.
 				<li>Automatic 404 errors (Not Found) on unmatched path patterns.
 				<li>Automatic 405 errors (Method Not Implemented) on unimplemented methods.
-				<li>Automatic 406 errors (Not Acceptable) when no matching serializer was found to handle the <l>Accept</l> header.
+				<li>Automatic 406 errors (Not Acceptable) when no matching serializer was found to handle the 
+					<l>Accept</l> header.
 				<li>Automatic 412 errors (Precondition Failed) when all matchers failed to match.
-				<li>Automatic 415 errors (Unsupported Media Type) when no matching parser was found was found to handle the <l>Content-Type</l> header.
+				<li>Automatic 415 errors (Unsupported Media Type) when no matching parser was found was found to handle 
+					the <l>Content-Type</l> header.
 				<li>Automatic 500 errors on uncaught exceptions.
 			</ul>
-			<br>
-		<li>Self-documenting REST interfaces.
-			<br>
-		<li>Various useful debugging features that make debugging using a browser extremely simple...
-			<br>
+		<li>
+			Self-documenting REST interfaces.
+		<li>
+			Various useful debugging features that make debugging using a browser extremely simple...
 			<ul>
 				<li>Ability to pass HTTP header values as URL GET parameters (e.g. <l>&amp;Accept=text/xml</l>).
-				<li>Ability to pass HTTP content on PUT/POST requests as a URL GET parameter (e.g. <l>&amp;content={foo:"bar"}</l>).
-				<li>Ability to simulate non-GET requests using a <l>&amp;method</l> GET parameter (e.g. <l>&amp;method=POST</l>).
+				<li>Ability to pass HTTP content on PUT/POST requests as a URL GET parameter 
+					(e.g. <l>&amp;content={foo:"bar"}</l>).
+				<li>Ability to simulate non-GET requests using a <l>&amp;method</l> GET parameter 
+					(e.g. <l>&amp;method=POST</l>).
 				<li>Ability to force <js>"text/plain"</js> on response using GET parameter <l>&amp;plainText=true</l>.
 			</ul>
-			<br>
-		<li>Ability to implement overloaded HTTP methods through the use of the <l>&amp;method</l> attribute (e.g. <l>&amp;method=FOO</l>).
-			<br><br>
-		<li>Ability to match URL patterns (e.g. <l>/foo/{fooId}/bar/{barId}</l>) against URLs (e.g. <l>/foo/123/bar/456/bing</l>).
-			<br><br>
-		<li>Ability to associate guards at the resource or method levels through annotations.<br>
-			Typically useful for security, but can be used for a variety of purposes.
-			<br><br>
-		<li>Ability to associate converters at the resource or method levels through annotations.<br>
-			Typically useful for performing conversions on input and output, such as for supporting older input and output formats.
+		<li>
+			Ability to implement overloaded HTTP methods through the use of the <l>&amp;method</l> attribute 
+			(e.g. <l>&amp;method=FOO</l>).
+		<li>
+			Ability to match URL patterns (e.g. <l>/foo/{fooId}/bar/{barId}</l>) against URLs 
+			(e.g. <l>/foo/123/bar/456/bing</l>).
+		<li>
+			Ability to associate guards at the resource or method levels through annotations.
+			<br>Typically useful for security, but can be used for a variety of purposes.
+		<li>
+			Ability to associate converters at the resource or method levels through annotations.
+			<br>Typically useful for performing conversions on input and output, such as for supporting older input and 
+			output formats.
 	</ul>
 	<p>
-		Many of the examples in this document are pulled directly from the <l>microservice-samples-project.zip</l> project.
+		Many of the examples in this document are pulled directly from the <l>microservice-samples-project.zip</l> 
+		project.
 	</p>
 </div>
 	
@@ -194,7 +208,8 @@
 <h2 class='topic' onclick='toggle(this)'>2 - Hello World Example</h2>
 <div class='topic'>
 	<p>
-		A REST resource is an implementation of {@link org.apache.juneau.rest.RestServlet}, which itself is simply an extension of {@link javax.servlet.http.HttpServlet}.  
+		A REST resource is an implementation of {@link org.apache.juneau.rest.RestServlet}, which itself is simply an 
+		extension of {@link javax.servlet.http.HttpServlet}.  
 	</p>
 	<p>
 		In this example, we define a resource called <l>HelloWorldResource</l>.  
@@ -252,12 +267,15 @@
 	</p>	
 	<p>
 		It doesn't much simpler than that.  
-		In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. JSON, XML, HTML, ...).
+		In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
+		JSON, XML, HTML, ...).
 		However, we could have returned any POJO consisting of beans, maps, collections, etc...
 	</p>
 	<p>
-		The {@link org.apache.juneau.rest.RestServletDefault} class that we're using here is a subclass of {@link org.apache.juneau.rest.RestServlet} that provides default support for a variety of content types.  
-		Implementers can choose to use this class, or create their own subclass of {@link org.apache.juneau.rest.RestServlet} with their own specialized serializers and parsers.
+		The {@link org.apache.juneau.rest.RestServletDefault} class that we're using here is a subclass of 
+		{@link org.apache.juneau.rest.RestServlet} that provides default support for a variety of content types.  
+		Implementers can choose to use this class, or create their own subclass of 
+		{@link org.apache.juneau.rest.RestServlet} with their own specialized serializers and parsers.
 	</p>
 	<p>
 		If you were to start up this servlet and view it with a browser, you would see this:
@@ -268,12 +286,15 @@
 		Therefore, several built-in features are provided for making it easy to do so.  
 		Specifically, we'll be using these available URL parameters...
 	</p>
-	<ul class='normal'>
-		<li><l>&amp;plainText=true</l> - If specified, then the <l>Content-Type</l> on the response is always <l>"text/plain"</l> regardless of the data format.
-			<br><br>
-		<li><l>&amp;Accept=X</l> - Specify the content type of the response.  
-			In a browser, <l>"text/html"</l> is the default content type, but this parameter can be used to override the content type on the response.<br>
-			Note:  The behavior is identical to setting the <l>Accept</l> header on the request.  
+	<ul class='spaced-list'>
+		<li>
+			<l>&amp;plainText=true</l> - If specified, then the <l>Content-Type</l> on the response is always 
+			<l>"text/plain"</l> regardless of the data format.
+		<li>
+			<l>&amp;Accept=X</l> - Specify the content type of the response.  
+			In a browser, <l>"text/html"</l> is the default content type, but this parameter can be used to override 
+			the content type on the response.
+			<br>Note:  The behavior is identical to setting the <l>Accept</l> header on the request.  
 			In fact, Juneau allows ANY HTTP request headers to be specified as URL parameters for debugging purposes.
 	</ul>
 	<p>
@@ -285,10 +306,12 @@
 		It is possible to specify your own stylesheet, but the default styles will usually suffice for most purposes. 
 	</p>
 	<p>
-		When accessed through a browser, the content type will default to HTML (based on the value of the <l>Accept</l> HTTP header).  
+		When accessed through a browser, the content type will default to HTML (based on the value of the <l>Accept</l> 
+		HTTP header).  
 	</p>
 	<p>
-		Let's use the <l>&amp;Accept</l> URL paramter to override the <l>Accept</l> HTTP header to view this servlet in other formats...
+		Let's use the <l>&amp;Accept</l> URL parameter to override the <l>Accept</l> HTTP header to view this servlet 
+		in other formats...
 	</p>
 	<p>
 		In the case of <l>JSON</l>, we're serialize a single string, so it gets rendered as a JSON fragment....
@@ -309,7 +332,7 @@
 		The OPTIONS page is a serialized Swagger DTO bean populated by introspection of the class itself combined with
 			labels in the messages properties file and annotations.
 		It's composed of a POJO that gets serialized just like any other POJO.  
-		Therefore, the POJO can be searialized to any of the supported languages, like Swagger JSON.	  
+		Therefore, the POJO can be serialized to any of the supported languages, like Swagger JSON.	  
 	</p>
 	<img class='bordered' src="doc-files/HelloWorldResourceOptionsJson.png">
 </div>
@@ -322,81 +345,107 @@
 		The class hierarchy for the REST servlet class is shown below:
 	</p>
 	<ul class='doctree'>
-		<li class='jac'>{@link javax.servlet.http.HttpServlet javax.servlet.http.HttpServlet} 
-		<ul>
-			<li class='jac'>{@link org.apache.juneau.rest.RestServlet org.apache.juneau.rest.RestServlet}
-				<br>Contains all the main logic.
+		<li class='jac'>
+			{@link javax.servlet.http.HttpServlet javax.servlet.http.HttpServlet} 
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.rest.RestServletDefault org.apache.juneau.rest.RestServletDefault}
-				<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
-				<br><b>Developers will typically subclass this when creating REST resources in JEE environments.</b> 
-				<ul>
-					<li class='jac'>{@link org.apache.juneau.microservice.Resource org.apache.juneau.microservice.Resource}
-					<br>Subclass intented to be used in REST microservices.
-					<br><b>Developers will typically subclass this when creating microservices.</b> 
-					<li class='jac'>{@link org.apache.juneau.rest.RestServletGroupDefault org.apache.juneau.rest.RestServletGroupDefault}
-					<br>A default implementation for "router" pages.
+				<li class='jac'>
+					{@link org.apache.juneau.rest.RestServlet org.apache.juneau.rest.RestServlet}
+					<br>Contains all the main logic.
 					<ul>
-						<li class='jac'>{@link org.apache.juneau.microservice.ResourceGroup org.apache.juneau.microservice.ResourceGroup}
-						<br>Subclass intented to be used in REST microservices.
+						<li class='jac'>
+							{@link org.apache.juneau.rest.RestServletDefault org.apache.juneau.rest.RestServletDefault}
+							<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
+							<br><b>Developers will typically subclass this when creating REST resources in JEE environments.</b> 
+							<ul>
+								<li class='jac'>
+									{@link org.apache.juneau.microservice.Resource org.apache.juneau.microservice.Resource}
+									<br>Subclass intended to be used in REST microservices.
+									<br><b>Developers will typically subclass this when creating microservices.</b> 
+								<li class='jac'>
+									{@link org.apache.juneau.rest.RestServletGroupDefault org.apache.juneau.rest.RestServletGroupDefault}
+									<br>A default implementation for "router" pages.
+									<ul>
+										<li class='jac'>
+											{@link org.apache.juneau.microservice.ResourceGroup org.apache.juneau.microservice.ResourceGroup}
+											<br>Subclass intended to be used in REST microservices.
+									</ul>
+								</li>
+								<li class='jc'>
+									{@link org.apache.juneau.rest.remoteable.RemoteableServlet org.apache.juneau.rest.remoteable.RemoteableServlet}
+									<br>REST servlet for implementing remoteable proxy interfaces.
+							</ul>
+						</li>
+						<li class='jac'>
+							{@link org.apache.juneau.rest.jena.RestServletJenaDefault org.apache.juneau.rest.jena.RestServletJenaDefault}
+							<br>Same as {@link org.apache.juneau.rest.RestServletDefault}, but adds RDF support.
+							<ul>
+								<li class='jac'>
+									{@link org.apache.juneau.microservice.ResourceJena org.apache.juneau.microservice.ResourceJena}
+									<br>Subclass intended to be used in REST microservices.
+								<li class='jac'>
+									{@link org.apache.juneau.rest.jena.RestServletJenaGroupDefault org.apache.juneau.rest.jena.RestServletJenaGroupDefault}
+									<br>Same as {@link org.apache.juneau.rest.RestServletGroupDefault}, but adds RDF support.
+							</ul>
+						</li>
 					</ul>
-					<li class='jc'>{@link org.apache.juneau.rest.remoteable.RemoteableServlet org.apache.juneau.rest.remoteable.RemoteableServlet}
-					<br>REST servlet for implementing remoteable proxy interfaces.
-				</ul>
-				<li class='jac'>{@link org.apache.juneau.rest.jena.RestServletJenaDefault org.apache.juneau.rest.jena.RestServletJenaDefault}
-				<br>Same as {@link org.apache.juneau.rest.RestServletDefault}, but adds RDF support.
-				<ul>
-					<li class='jac'>{@link org.apache.juneau.microservice.ResourceJena org.apache.juneau.microservice.ResourceJena}
-					<br>Subclass intented to be used in REST microservices.
-					<li class='jac'>{@link org.apache.juneau.rest.jena.RestServletJenaGroupDefault org.apache.juneau.rest.jena.RestServletJenaGroupDefault}
-					<br>Same as {@link org.apache.juneau.rest.RestServletGroupDefault}, but adds RDF support.
-				</ul>
+				</li>
 			</ul>
-		</ul>
+		</li>
 	</ul>
 	<p>
 		The servlets with RDF support require Jena on the classpath.  
 		All other serializers and parsers do not have any external library dependencies.
-		For this reason, we have separate servlets for supporting RDF so that you don't need Jena if you don't need to support RDF. 
+		For this reason, we have separate servlets for supporting RDF so that you don't need Jena if you don't need to 
+		support RDF. 
 	</p>
 	<p>
-		The {@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} classes described later also extend from their servlet equivalents:
+		The {@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} classes 
+		described later also extend from their servlet equivalents:
 	</p> 
 	<ul class='doctree'>
-		<li class='jic'>{@link javax.servlet.http.HttpServletRequest javax.servlet.http.HttpServletRequest}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.rest.RestRequest org.apache.juneau.rest.RestRequest} - Augmented with specialized REST methods.
-		</ul> 
-		<li class='jic'>{@link javax.servlet.http.HttpServletResponse javax.servlet.http.HttpServletResponse}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.rest.RestResponse org.apache.juneau.rest.RestResponse} - Augmented with specialized REST methods.
-		</ul> 
+		<li class='jic'>
+			{@link javax.servlet.http.HttpServletRequest javax.servlet.http.HttpServletRequest}
+			<ul>
+				<li class='jc'>
+					{@link org.apache.juneau.rest.RestRequest org.apache.juneau.rest.RestRequest} 
+					- Augmented with specialized REST methods.
+			</ul>
+		</li> 
+		<li class='jic'>
+			{@link javax.servlet.http.HttpServletResponse javax.servlet.http.HttpServletResponse}
+			<ul>
+				<li class='jc'>
+					{@link org.apache.juneau.rest.RestResponse org.apache.juneau.rest.RestResponse} 
+					- Augmented with specialized REST methods.
+			</ul>
+		</li> 
 	</ul>
 </div>
 
-	<!-- ======================================================================================================== -->
+<!-- ======================================================================================================== -->
 <a id="RestResources"></a>
 <h2 class='topic' onclick='toggle(this)'>4 - REST Servlets</h2>
-	<div class='topic'>
-		<p>
-		Since REST servlets are subclasses of <l>HttpServlet</l>, they can be deployed in a J2EE
-			container like any other servlet, typically inside a <l>web.xml</l> file.
-		The REST servlet framework does not depend on any classloader scanning or external setup
-			other than registering the servlet with the J2EE container.
-		</p>
-		<p>
+<div class='topic'>
+	<p>
+		Since REST servlets are subclasses of <l>HttpServlet</l>, they can be deployed in a J2EE container like any 
+		other servlet, typically inside a <l>web.xml</l> file.
+		The REST servlet framework does not depend on any classloader scanning or external setup other than 
+		registering the servlet with the J2EE container.
+	</p>
+	<p>
 		REST servlets can also be deployed by declaring them as children of other REST servlets (described later).
-		</p>
-		<p>
- 		A REST servlet consists of an instance of {@link org.apache.juneau.rest.RestServlet} 
- 			annotated with {@link org.apache.juneau.rest.annotation.RestResource @RestResource} containing
-			public Java methods annotated with {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}.
-		</p>
-		<p>
+	</p>
+	<p>
+		A REST servlet consists of an instance of {@link org.apache.juneau.rest.RestServlet} annotated with 
+		{@link org.apache.juneau.rest.annotation.RestResource @RestResource} containing public Java methods 
+		annotated with {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}.
+	</p>
+	<p>
 		Developers will typically subclass directly from {@link org.apache.juneau.rest.RestServletDefault}
-			since it provides a default set of serializers and parsers for a variety of 
-			<l>Accept</l> and <l>Content-Type</l> types.
-		</p>
+		since it provides a default set of serializers and parsers for a variety of <l>Accept</l> and 
+		<l>Content-Type</l> types.
+	</p>
+	
 	<h6 class='figure'>Valid Accept headers for RestServletDefault</h6>
 	<table class='styled'>
 		<tr>
@@ -465,6 +514,7 @@
 			<td>{@link org.apache.juneau.jso.JsoSerializer}</td>
 		</tr>
 	</table>
+	
 	<h6 class='figure'>Valid Content-Type headers for RestServletDefault</h6>
 	<table class='styled'>
 		<tr>
@@ -498,15 +548,17 @@
 	</table>
 	<p>
  		{@link org.apache.juneau.rest.RestServletDefault} also provides a default OPTIONS page by implementing 
- 			a {@link org.apache.juneau.rest.RestServletDefault#getOptions(RestRequest)} method that returns a POJO consisting
- 			of beans describing the class.
+ 		a {@link org.apache.juneau.rest.RestServletDefault#getOptions(RestRequest)} method that returns a POJO 
+ 		consisting of beans describing the class.
  		This is what produces the output for the OPTIONS page on the Hello World sample above.
-		</p>
+	</p>
 	
 	<h6 class='topic'>Additional Information</h6>
 	<ul class='doctree'>
-		<li class='jac'>{@link org.apache.juneau.rest.RestServletDefault}
-		<li class='jac'>{@link org.apache.juneau.rest.jena.RestServletJenaDefault}	
+		<li class='jac'>
+			{@link org.apache.juneau.rest.RestServletDefault}
+		<li class='jac'>
+			{@link org.apache.juneau.rest.jena.RestServletJenaDefault}	
 	</ul>
 
 	<!-- ======================================================================================================== -->
@@ -514,7 +566,8 @@
 	<h3 class='topic' onclick='toggle(this)'>4.1 - REST Java Method Signature</h3>
 	<div class='topic'>
 		<p>
-			REST Java methods are identified on REST servlets using the {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation. 
+			REST Java methods are identified on REST servlets using the 
+			{@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation. 
 			The annotation allows the framework to identify the available REST methods through reflection.
 		</p>
 		<p class='bcode'>
@@ -524,20 +577,26 @@
 		<jk>return</jk> <js>"Hello world!"</js>;
 	}
 		</p>
+		
 		<h6 class='topic'>Method Name</h6>
 		<p>
 			There are no restrictions on the name of the Java method.  However, if you plan on making use of the 
-				{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages()} 
-				annotation (described later), the method names must be unique to make it possible to identify unique keys for labels in the resource bundle.
-			Therefore, you should not define two identically-named <l>doFoo(...)</l> methods that differ only by parameters.
+			{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages()} annotation 
+			(described later), the method names must be unique to make it possible to identify unique keys for labels 
+			in the resource bundle.
+			Therefore, you should not define two identically-named <l>doFoo(...)</l> methods that differ only by 
+			parameters.
 			If you're not using messages for NLS support, then name them whatever you want!
 		</p>
+		
 		<h6 class='topic'>Method Return Type</h6>
 		<p>
-			The return type can be any serializable POJO as defined in <a class='doclink' href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>.
-			It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or
-				is setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
-			Calling the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method is functionally equivalent to returning a value.
+			The return type can be any serializable POJO as defined in <a class='doclink' 
+			href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>.
+			It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
+			setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+			Calling the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method is functionally equivalent 
+			to returning a value.
 		</p>
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
@@ -556,30 +615,43 @@
 			The return type can also be any of the following special object types:
 		</p>
 		<ul class='doctree'>
-			<li class='jc'>{@link java.io.InputStream}
-				<br>The contents are simply piped to the output stream returned by {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
-				<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set the <l>Content-Type</l> header if you use this object type.
-			<li class='jc'>{@link java.io.Reader}
-				<br>The contents are simply piped to the output stream returned by {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
-				<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set the <l>Content-Type</l> header if you use this object type.
-			<li class='jc'>{@link org.apache.juneau.rest.Redirect}
+			<li class='jc'>
+				{@link java.io.InputStream}
+				<br>The contents are simply piped to the output stream returned by 
+				{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
+				<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+				the <l>Content-Type</l> header if you use this object type.
+			<li class='jc'>
+				{@link java.io.Reader}
+				<br>The contents are simply piped to the output stream returned by 
+				{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
+				<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+				the <l>Content-Type</l> header if you use this object type.
+			<li class='jc'>
+				{@link org.apache.juneau.rest.Redirect}
 				<br>Represents an HTTP redirect response.
-			<li class='jic'>{@link org.apache.juneau.Streamable}
+			<li class='jic'>
+				{@link org.apache.juneau.Streamable}
 				<br>Interface that identifies that an object can be serialized directly to an output stream.
-			<li class='jic'>{@link org.apache.juneau.Writable}
+			<li class='jic'>
+				{@link org.apache.juneau.Writable}
 				<br>Interface that identifies that an object can be serialized directly to a writer.
-			<li class='jc'>{@link org.apache.juneau.utils.ZipFileList}
+			<li class='jc'>
+				{@link org.apache.juneau.utils.ZipFileList}
 				<br>Special interface for sending zip files as responses.
 		</ul>
 		<p>
-			Additional "special types" can be defined through the {@link org.apache.juneau.rest.ResponseHandler} interface (described later).
+			Additional "special types" can be defined through the {@link org.apache.juneau.rest.ResponseHandler} 
+			interface (described later).
 		</p>
+		
 		<h6 class='topic'>Method Parameters</h6>
 		<p>
 			The method can contain any of the following parameters in any order:
 		</p>
 		<ul class='spaced-list'>
-			<li>Parameters of the following class types:
+			<li>
+				Parameters of the following class types:
 				<ul>
 					<li>Request/response objects:
 						<ul>
@@ -654,7 +726,8 @@
 							<li>{@link org.apache.juneau.ini.ConfigFile} - The external config file for the resource.
 						</ul>
 				</ul>
-			<li>Annotated parameters:
+			<li>
+				Annotated parameters:
 				<ul>
 					<li>{@link org.apache.juneau.rest.annotation.Path @Path} - Variables in matched URL path patterns.
 					<li>{@link org.apache.juneau.rest.annotation.FormData @FormData} - Multipart form post parameter values.
@@ -694,8 +767,9 @@
 	}
 		</p>
 		<p>
-			All the annotated parameters (with the exception of <l>@Body</l>) can be any POJO type convertable from a <l>String</l>.
-			(See <a class='doclink' href='#PojosConvertableFromString'>POJOs Convertable From String</a>)
+			All the annotated parameters (with the exception of <l>@Body</l>) can be any POJO type convertible from a 
+			<l>String</l>.
+			(See <a class='doclink' href='#PojosConvertableFromString'>POJOs Convertible From String</a>)
 		</p>
 		<p>
 			For example, headers can be accessed as Strings or UUIDs...
@@ -716,17 +790,17 @@
 		<h4 class='topic' onclick='toggle(this)'>4.1.1 - Path</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.annotation.RestMethod#path() @RestMethod.path()} annotation 
-					allows you to define URL path patterns to match against.
+				The {@link org.apache.juneau.rest.annotation.RestMethod#path() @RestMethod.path()} annotation allows 
+				you to define URL path patterns to match against.
 				These patterns can contain variables of the form <l>"{xxx}"</l> that can be passed in directly to the
-					Java methods as extra parameters.
-		</p>
-		<p>
+				Java methods as extra parameters.
+			</p>
+			<p>
 				In the following example, 3 separate GET request handlers are defined with different path patterns.
-				Note how the variables are passed in as additional arguments on the method, and how those arguments are automatically
-					converted to the specified class type...
-		</p>
-		<p class='bcode'>
+				Note how the variables are passed in as additional arguments on the method, and how those arguments are 
+				automatically converted to the specified class type...
+			</p>
+			<p class='bcode'>
 	<jc>// Default method</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
 	<jk>public void</jk> doGetDefault() {
@@ -744,12 +818,12 @@
 	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyEnum baz, <ja>@Path</ja> UUID bing) {
 		...
 	}
-		</p>
-		<p>
+			</p>
+			<p>
 				By default, path patterns are matched using a best-match heuristic. 
 				When overlaps occur, URLs are matched from most-specific to most-general order:
-		</p>
-		<p class='bcode'>
+			</p>
+			<p class='bcode'>
 	<jc>// Try first </jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/bar"</js>)
 	<jk>public void</jk> method1() {
@@ -773,19 +847,22 @@
 	<jk>public void</jk> method4(...) {
 		...
 	}
-		</p>
-		<p>
-				The match heuristic behavior can be overridden by the {@link org.apache.juneau.rest.annotation.RestMethod#priority() @RestMethod.priority()} annotation property.
+			</p>
+			<p>
+				The match heuristic behavior can be overridden by the 
+				{@link org.apache.juneau.rest.annotation.RestMethod#priority() @RestMethod.priority()} annotation 
+				property.
 				However, in practice this is almost never needed.
-		</p>
-		<p>
+			</p>
+			<p>
 				Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
-				Any remainder after the match can be accessed through {@link org.apache.juneau.rest.RequestPathMatch#getRemainder()} 
-					or parameters with the {@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder} annotation.
-				On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will require
-					an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
-		</p>
-		<p>
+				Any remainder after the match can be accessed through 
+				{@link org.apache.juneau.rest.RequestPathMatch#getRemainder()} or parameters with the 
+				{@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder} annotation.
+				On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
+				require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
+			</p>
+			<p>
 				The following example shows the distinction.
 			</p>
 			<p class='bcode'>
@@ -798,8 +875,8 @@
 	<jk>public void</jk> doPut() {
 		<jc>// URL path pattern must match exactly and will cause a 404 error if a remainder exists.</jc>
 	}
-		</p>
-		<p>
+			</p>
+			<p>
 				Annotations are provided for easy access to URL parameters with automatic conversion to any parsable object type.
 				For example, the following example can process the URL <l>"/urlWithParams?foo=foo&amp;bar=[1,2,3]&amp;baz=067e6162-3b6f-4ae2-a171-2470b63dff00"</l>...
 			</p>
@@ -809,16 +886,18 @@
 	<jk>public</jk> String doGetWithParams(<ja>@Query</ja>(<js>"foo"</js>) String foo, <ja>@Query</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Query</ja>(<js>"baz"</js>) UUID baz) <jk>throws</jk> Exception {
 		<jk>return</jk> <js>"GET /urlWithParams?foo="</js>+foo+<js>"&amp;bar="</js>+bar+<js>"&amp;baz="</js>+baz);
 	}
-		</p>
+			</p>
 		</div>
 		
 		<!-- ======================================================================================================== -->
 		<a id="RestResources.MethodSignature.Matchers"></a>
 		<h4 class='topic' onclick='toggle(this)'>4.1.2 - Matchers</h4>
 		<div class='topic'>
-		<p>
-				{@link org.apache.juneau.rest.RestMatcher RestMatchers} are used to allow multiple Java methods to be tied to the same HTTP method and path, but
-					differentiated by some request attribute such as a specific header value.
+			<p>
+				{@link org.apache.juneau.rest.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
+				tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
+				header value.
+			</p>
 			<p class='bcode'>
 	<jc>// GET method that gets invoked for administrators</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
@@ -831,8 +910,8 @@
 	<jk>public</jk> Object doGetForEveryoneElse() {
 		...
 	}
-		</p>
-		<p>
+			</p>
+			<p>
 				The interface for matchers is simple:
 			</p>
 			<p class='bcode'>
@@ -842,18 +921,25 @@
 			<jk>return</jk> req.isUserInRole(<js>"ADMINS_GROUP"</js>);
 		}
 	}
-		</p>
+			</p>
+			
 			<h6 class='topic'>Other Notes</h6>
 			<ul class='spaced-list'>
-				<li>If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
-				<li>If multiple matchers are specified on the same method, ONLY ONE matcher needs to match for the method to be invoked.
-				<li>Note that you CANNOT define identical paths on different methods UNLESS you use matchers.
-					<br>That includes paths that are only different in variable names (e.g. <l>"/foo/{bar}"</l> and <l>"/foo/{baz}"</l>).
+				<li>
+					If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
+				<li>
+					If multiple matchers are specified on the same method, ONLY ONE matcher needs to match for the 
+					method to be invoked.
+				<li>
+					Note that you CANNOT define identical paths on different methods UNLESS you use matchers.
+					<br>That includes paths that are only different in variable names (e.g. <l>"/foo/{bar}"</l> and 
+					<l>"/foo/{baz}"</l>).
 					<br>If you try to do so, a <l>ServletException</l> will be thrown on startup.
-				<li>Methods with matchers take precedence over methods without.
+				<li>
+					Methods with matchers take precedence over methods without.
 					<br>Otherwise, methods are attempted in the order they appear in the class.
 			</ul>
-	</div>
+		</div>
 	</div>
 
 	<!-- ======================================================================================================== -->
@@ -874,8 +960,8 @@
 		</p>
 		<p>
 			The HTTP body of a request can be retrieved as a parsed POJO using either the 
-				{@link org.apache.juneau.rest.RestRequest#getBody()} method, or a parameter 
-				annotated with {@link org.apache.juneau.rest.annotation.Body @Body}.
+			{@link org.apache.juneau.rest.RestRequest#getBody()} method, or a parameter annotated with 
+			{@link org.apache.juneau.rest.annotation.Body @Body}.
 		</p>
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
@@ -893,23 +979,24 @@
 		</p>
 		<p>
 			The Juneau framework will automatically determine the appropriate <l>Parser</l> to use based on the 
-			<l>Content-Type</l> HTTP header.  So the body content could be JSON or XML or any other supported parsing types.
+			<l>Content-Type</l> HTTP header.  
+			So the body content could be JSON or XML or any other supported parsing types.
 		</p>
 		
-	<!-- ======================================================================================================== -->
+		<!-- ======================================================================================================== -->
 		<a id="RestResources.RequestContent.FormPosts"></a>
 		<h4 class='topic' onclick='toggle(this)'>4.2.1 - Form Posts</h4>
-	<div class='topic'>	
-		<p>
+		<div class='topic'>	
+			<p>
 				URL-Encoded form posts require their own topic since they can be handled in multiple ways.
 			</p>
 			<p>
 				The best way to handle a form post is by using an input bean.
-				The samples include a <l>UrlEncodedFormResource</l> class that takes in URL-Encoded
-					form post of the form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
+				The samples include a <l>UrlEncodedFormResource</l> class that takes in URL-Encoded form post of the 
+				form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
 				The code is shown here:
-		</p>
-		<p class='bcode'>				
+			</p>
+			<p class='bcode'>				
 	<ja>@RestResource</ja>(
 		path=<js>"/urlEncodedForm"</js>
 	)
@@ -929,8 +1016,8 @@
 			<jk>public</jk> Calendar <jf>aDate</jf>;
 		}
 	}		
-		</p>	
-		<p>
+			</p>	
+			<p>
 				Another possibility is to access the form parameters individually:	
 			</p>	
 			<p class='bcode'>
@@ -942,14 +1029,15 @@
 			</p>
 			<p>
 				The advantage to the form input bean is that it can handle any of the parsable types (e.g. JSON, XML...) 
-					in addition to URL-Encoding.  The latter approach only supports URL-Encoding.
+				in addition to URL-Encoding.  The latter approach only supports URL-Encoding.
 			</p>
 			<ul class='doctree'>
-				<li class='severe'>If you're using form input beans, DO NOT use the <l>@FormData</l> attribute
-						or {@link org.apache.juneau.rest.RestRequest#getParameter(String)} method since this will
-						cause the underlying JEE servlet to parse the HTTP body as a form post.
-					<br>Your input bean will end up being null since there won't be any content left
-						after the servlet has parsed the body of the request.
+				<li class='severe'>
+					If you're using form input beans, DO NOT use the <l>@FormData</l> attribute or 
+					{@link org.apache.juneau.rest.RestRequest#getParameter(String)} method since this will cause the 
+					underlying JEE servlet to parse the HTTP body as a form post.
+					<br>Your input bean will end up being null since there won't be any content left after the servlet 
+					has parsed the body of the request.
 					<br>This applies to WHENEVER you use <l>@Body</l> or {@link org.apache.juneau.rest.RestRequest#getBody()}
 			</ul>
 		</div>
@@ -958,13 +1046,13 @@
 		<a id="RestResources.RequestContent"></a>
 		<h4 class='topic' onclick='toggle(this)'>4.2.2 - Multipart Form Posts</h4>
 		<div class='topic'>
-		<p>
+			<p>
 				The Juneau framework does not natively support multipart form posts.  
-				However, it can be used in conjunction wih the Apache Commons File Upload library to do so.
-		</p>	
-		<p>
-				The samples include a <l>TempDirResource</l> class that uses the File Upload library
-					to allow files to be uploaded as multipart form posts.
+				However, it can be used in conjunction with the Apache Commons File Upload library to do so.
+			</p>	
+			<p>
+				The samples include a <l>TempDirResource</l> class that uses the File Upload library to allow files to 
+				be uploaded as multipart form posts.
 			</p>
 			<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -998,7 +1086,7 @@
 				<jk>return</jk> contentType != <jk>null</jk> &amp;&amp; contentType.startsWith(<js>"multipart/form-data"</js>); 
 			}
 		}
-		</p>
+			</p>
 		</div>
 	</div>
 
@@ -1010,11 +1098,15 @@
 			REST Java methods can generate output in any of the following ways:
 		</p>
 		<ul class='spaced-list'>
-			<li>By returning a serializable POJO, or any of the following:
-				<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link org.apache.juneau.Streamable}, {@link org.apache.juneau.Writable} 
-			<li>By calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} with any of the types above.
-			<li>By accessing the {@link java.io.Writer} directly by calling {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output
-				yourself.
+			<li>
+				By returning a serializable POJO, or any of the following:
+				<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link org.apache.juneau.Streamable}, 
+				{@link org.apache.juneau.Writable} 
+			<li>
+				By calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} with any of the types above.
+			<li>
+				By accessing the {@link java.io.Writer} directly by calling 
+				{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output yourself.
 		</ul>
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
@@ -1049,21 +1141,27 @@
 	<h3 class='topic' onclick='toggle(this)'>4.4 - OPTIONS Pages</h3>
 	<div class='topic'>
 		<p>
-			One of the most useful features of Juneau is that it can produce OPTIONS pages for self-documenting designs (i.e. REST interfaces that document themselves).
+			One of the most useful features of Juneau is that it can produce OPTIONS pages for self-documenting designs 
+			(i.e. REST interfaces that document themselves).
 		</p>
+		
 		<h6 class='figure'>OPTIONS page for HelloWorld sample resource</h6>
 	 	<img class='bordered' src='doc-files/HelloWorldResourceOptions.png'>
 		<p>
-			This page is constructed through reflection on the servlet class and it's methods, combined with information provided in the following locations:
+			This page is constructed through reflection on the servlet class and it's methods, combined with 
+			information provided in the following locations:
 		</p>
 		<ul>
-			<li>Annotations (i.e. {@link org.apache.juneau.rest.annotation.RestResource @RestResource} and {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}).
+			<li>Annotations (i.e. {@link org.apache.juneau.rest.annotation.RestResource @RestResource} and 
+				{@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}).
 			<li>Resource bundle properties.
 			<li>Swagger JSON files.
 		</ul>
 		<p>
-			Swagger JSON files are specified with the same name as the servlet (e.g. <code>MyResource.java</code> -&gt; <code>MyResource.json</code>).
-			Localized versions of Swagger JSON files can be specified by appending the locale to the file name (e.g. <code>MyResource_ja_JP.json</code>).
+			Swagger JSON files are specified with the same name as the servlet 
+			(e.g. <code>MyResource.java</code> -&gt; <code>MyResource.json</code>).
+			Localized versions of Swagger JSON files can be specified by appending the locale to the file name 
+			(e.g. <code>MyResource_ja_JP.json</code>).
 			The existence of Swagger JSON files will override any auto-generation of the OPTIONS pages.
 			This allows you to fully control the contents of the OPTIONS page with your own Swagger spec.
 		</p>
@@ -1073,9 +1171,10 @@
 		</p>
 		<p>
 	 		{@link org.apache.juneau.rest.RestServletDefault} provides a default OPTIONS page by implementing 
-	 			a {@link org.apache.juneau.rest.RestServletDefault#getOptions(RestRequest)} method that returns a POJO consisting
-	 			of beans describing the class.
-	 		It uses the {@link org.apache.juneau.rest.RestRequest#getSwagger()} method that returns a localized swagger bean.
+	 		a {@link org.apache.juneau.rest.RestServletDefault#getOptions(RestRequest)} method that returns a POJO 
+	 		consisting of beans describing the class.
+	 		It uses the {@link org.apache.juneau.rest.RestRequest#getSwagger()} method that returns a localized swagger 
+	 		bean.
 	 	</p>
 	 	<p class='bcode'>
 	<jd>/**
@@ -1094,13 +1193,17 @@
 		<jk>return</jk> req.getSwagger();
 	}
 	 	</p>
+	 	
 	 	<h6 class='topic'>Title and Description</h6>
 	 	<p>
 	 		The title and description can be defined in the following ways.
 	 	</p>
 	 	<ul>
-	 		<li>Annotations:  {@link org.apache.juneau.rest.annotation.RestResource#title()}, {@link org.apache.juneau.rest.annotation.RestResource#description()}
-	 		<li>By overriding methods on the servlet class:  {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}, {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)} 
+	 		<li>Annotations:  {@link org.apache.juneau.rest.annotation.RestResource#title()}, 
+	 			{@link org.apache.juneau.rest.annotation.RestResource#description()}
+	 		<li>By overriding methods on the servlet class:  
+	 			{@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}, 
+	 			{@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)} 
 	 		<li>By defining properties in the resource bundle.
 	 		<li>By specifying them in a Swagger JSON file.
 	 	</ul>
@@ -1117,9 +1220,8 @@
 		</p>	 	
 		<p>
 			The second approach which supports internationalization is to use the 
-				{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages()}
-				annotation to point to a resource bundle, and then use predefined properties
-				that identify the label and description.
+			{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages()} annotation to 
+			point to a resource bundle, and then use predefined properties that identify the label and description.
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -1138,7 +1240,8 @@
 	<ck>description</ck> = <cv>This shows how to use labels and descriptions.</cv>
 		</p>	 	
 		<p>
-			Message keys can optionally be prefixed by the short class name if the resource bundle is shared by multiple servlets:
+			Message keys can optionally be prefixed by the short class name if the resource bundle is shared by 
+			multiple servlets:
 		</p>
 		<p class='bcode'>
 	<cc>#--------------------------------------------------------------------------------
@@ -1154,12 +1257,16 @@
 	 		The localized label and description are also available through the following methods:
 		</p>
 	 	<ul class='doctree'>
-	 		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getServletTitle()}
-	 		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getServletDescription()}
+	 		<li class='jm'>
+	 			{@link org.apache.juneau.rest.RestRequest#getServletTitle()}
+	 		<li class='jm'>
+	 			{@link org.apache.juneau.rest.RestRequest#getServletDescription()}
 	 	</ul>
 		<p>
-	 		They are also made available as the request string variables <js>"$R{servletTitle}"</js> and <js>"$R{servletDescription}"</js>.
-	 		These variable facilitate the localized label and descriptions on the HTML pages when using {@link org.apache.juneau.rest.RestServletDefault}:
+	 		They are also made available as the request string variables <js>"$R{servletTitle}"</js> and 
+	 		<js>"$R{servletDescription}"</js>.
+	 		These variable facilitate the localized label and descriptions on the HTML pages when using 
+	 		{@link org.apache.juneau.rest.RestServletDefault}:
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -1170,7 +1277,8 @@
 	 	</p>
 	 	<p>
 	 		The title and description annotations support string variables.
-	 		So in theory, you could also provide localized messages using <js>"$L"</js> variables pointing to your own resource bundle properties:
+	 		So in theory, you could also provide localized messages using <js>"$L"</js> variables pointing to your own 
+	 		resource bundle properties:
 	 	</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -1183,13 +1291,14 @@
 		</p>
 		<p>
 			Another option is to override the {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)} 
-				and {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)} methods.
-		</p>	 	
+			and {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)} methods.
+		</p>	
+		 	
 	 	<h6 class='topic'>Method Description, Input, and Responses</h6>
 	 	<p>
 	 		The <l>methods</l> field in the OPTIONS page is mostly populated through reflection.
-	 		However, the description, input, and responses field can be specified through either 
-	 			annotations or resource properties. 
+	 		However, the description, input, and responses field can be specified through either annotations or 
+	 		resource properties. 
 	 	</p>
 	 	<p>
 	 		For example, the <l>AddressBookResource</l> has a <l>getPerson()</l> method
@@ -1197,9 +1306,10 @@
 	 	</p>
 		<img class='bordered' src='doc-files/Options2.png'>
 		<p>
-			This method is described through the {@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}, 
-				{@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod.swagger()},
-				and {@link org.apache.juneau.rest.annotation.MethodSwagger @MethodSwagger} annotations.
+			This method is described through the 
+			{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}, 
+			{@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod.swagger()},
+			and {@link org.apache.juneau.rest.annotation.MethodSwagger @MethodSwagger} annotations.
 		</p>
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(
@@ -1311,11 +1421,15 @@
 				<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}</td>
 			</tr>
 		</table>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}
 		</ul>
 	</div>
 
@@ -1324,20 +1438,27 @@
 	<h3 class='topic' onclick='toggle(this)'>4.5 - Serializers</h3>
 	<div class='topic'>
 		<p>
-			REST servlets use the {@link org.apache.juneau.serializer.Serializer} API for defining serializers for serializing response POJOs.
+			REST servlets use the {@link org.apache.juneau.serializer.Serializer} API for defining serializers for 
+			serializing response POJOs.
 		</p>
 		<p>
 			The servlet will pick which serializer to use by matching the request <l>Accept</l> header with the
-				media types defined through the {@link org.apache.juneau.serializer.Serializer#getMediaTypes()} method 
-				(which itself usually comes from the {@link org.apache.juneau.annotation.Produces @Produces} annotation).
+			media types defined through the {@link org.apache.juneau.serializer.Serializer#getMediaTypes()} method 
+			(which itself usually comes from the {@link org.apache.juneau.annotation.Produces @Produces} annotation).
 		</p>
 		<p>
 			Serializers can be associated with REST servlets in the following ways:
 		</p>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#serializers() @RestResource.serializers()} - Annotation on servlet class.
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializers() @RestMethod.serializers()} - Annotation on individual servlet methods.
-			<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} - Override method to set the serializers programmatically.
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestResource#serializers() @RestResource.serializers()} 
+				- Annotation on servlet class.
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#serializers() @RestMethod.serializers()} 
+				- Annotation on individual servlet methods.
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} 
+				- Override method to set the serializers programmatically.
 		</ul>
 		<p>
 			The following are equivalent ways of defining serializers used by a servlet...
@@ -1369,13 +1490,15 @@
 		</p>
 		<ul class='doctree'>
 			<li class='info'>
-				When debugging the output from REST servlets, it's almost always easier to bypass the REST servlet and try to serialize
-					the POJOs using the serializers directly using the {@link org.apache.juneau.serializer.WriterSerializer#toString(Object)} method.
+				When debugging the output from REST servlets, it's almost always easier to bypass the REST servlet and 
+				try to serialize the POJOs using the serializers directly using the 
+				{@link org.apache.juneau.serializer.WriterSerializer#toString(Object)} method.
 		</ul>
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit() @RestMethod.serializersInherit()}
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit() @RestMethod.serializersInherit()}
 				<br>Controls how serializers are inherited from the servlet class.
 		</ul>
 	</div>
@@ -1385,20 +1508,27 @@
 	<h3 class='topic' onclick='toggle(this)'>4.6 - Parsers</h3>
 	<div class='topic'>
 		<p>
-			REST servlets use the {@link org.apache.juneau.parser.Parser} API for defining parsers for parsing request body content and converting them into POJOs.
+			REST servlets use the {@link org.apache.juneau.parser.Parser} API for defining parsers for parsing request
+			body content and converting them into POJOs.
 		</p>
 		<p>
 			The servlet will pick which parser to use by matching the request <l>Content-Type</l> header with the
-				media types defined through the {@link org.apache.juneau.parser.Parser#getMediaTypes()} method (which itself
-				usually comes from the {@link org.apache.juneau.annotation.Consumes @Consumes} annotation).
+			media types defined through the {@link org.apache.juneau.parser.Parser#getMediaTypes()} method (which itself
+			usually comes from the {@link org.apache.juneau.annotation.Consumes @Consumes} annotation).
 		</p>
 		<p>
 			Parsers can be associated with REST servlets in the following ways:
 		</p>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#parsers() @RestResource.parsers()} - Annotation on servlet class.
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsers() @RestMethod.parsers()} - Annotation on individual servlet methods.
-			<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addParsers(Class[])} - Override method to set the parsers programmatically.
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestResource#parsers() @RestResource.parsers()} 
+				- Annotation on servlet class.
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#parsers() @RestMethod.parsers()} 
+				- Annotation on individual servlet methods.
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestConfig#addParsers(Class[])} 
+				- Override method to set the parsers programmatically.
 		</ul>
 		<p>
 			The following are equivalent ways of defining parsers used by a servlet...
@@ -1428,9 +1558,11 @@
 				.append(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
 	 	}
 		</p>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit() @RestMethod.parsersInherit()} 
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit() @RestMethod.parsersInherit()} 
 				<br>Controls how parsers are inherited from the servlet class.
 		</ul>
 	</div>
@@ -1445,13 +1577,14 @@
 		</p>
 		<p>
 			There are several ways of defining properties in the REST API.
-			The most common way is going to be through the {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()}
+			The most common way is going to be through the 
+			{@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()}
 			and {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties()} annotations.
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()} annotation 
-				can be used as a convenient way to set various serializer and parser
-				properties to all serializers and parsers registered with the servlet.
+			The {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()} 
+			annotation can be used as a convenient way to set various serializer and parser properties to all 
+			serializers and parsers registered with the servlet.
 		</p>
 		<p class='bcode'>
 	<jk>import static</jk> org.apache.juneau.SerializerContext.*;
@@ -1482,7 +1615,8 @@
 		</p>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties()} annotation 
-				can be used to define method-level properties that can alter the behavior of serializers and parsers at the method level only.
+			can be used to define method-level properties that can alter the behavior of serializers and parsers at the 
+			method level only.
 		</p>
 		<p class='bcode'>
 	<jc>// GET method with method-level properties</jc>
@@ -1508,26 +1642,32 @@
 	}
 		</p>
 		<p>
-			In particular, the {@link org.apache.juneau.rest.RestContext} class has a variety of properties
-			for controlling the behavior of the {@link org.apache.juneau.rest.RestServlet} class itself.
+			In particular, the {@link org.apache.juneau.rest.RestContext} class has a variety of properties for 
+			controlling the behavior of the {@link org.apache.juneau.rest.RestServlet} class itself.
 		</p>
 		<p>
 			There are also ways to provide properties programmatically.
 		</p>
 		<ul class='spaced-list'>
-			<li>By overriding the {@link org.apache.juneau.rest.RestConfig#setProperties(Map)} method.
-			<li>By overriding the {@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} and 
+			<li>
+				By overriding the {@link org.apache.juneau.rest.RestConfig#setProperties(Map)} method.
+			<li>
+				By overriding the {@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} and 
 				{@link org.apache.juneau.rest.RestConfig#addParsers(Class[])} methods and setting properties on the 
 				serializers and parsers directly.
 			
 		</ul>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.RestContext}
+			<li class='jc'>
+				{@link org.apache.juneau.rest.RestContext}
 				<br>Properties associated with the {@link org.apache.juneau.rest.RestServlet} class.
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit @RestMethod.serializersInherit()} 
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit @RestMethod.serializersInherit()} 
 				<br>Controls how serializers inherit properties from the servlet class.
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit @RestMethod.parsersInheritInherit()} 
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit @RestMethod.parsersInheritInherit()} 
 				<br>Controls how parsers inherit properties from the servlet class.
 		</ul>
 	</div>
@@ -1568,24 +1708,30 @@
 		</p>
 		<p>
 			{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters() @RestMethod.beanFilters()} and 
-				{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps() @RestMethod.pojoSwaps()}
-				are the equivalent annotations for individual Java methods.
+			{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps() @RestMethod.pojoSwaps()}
+			are the equivalent annotations for individual Java methods.
 		</p>
 		<p>
 			Transforms can also be defined programmatically through the following:
 		</p>
 		<ul class='spaced-list'>
-			<li>By overriding the {@link org.apache.juneau.rest.RestConfig#addBeanFilters(Class[])} and {@link org.apache.juneau.rest.RestConfig#addPojoSwaps(Class[])} methods.
-			<li>By overriding the {@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} and 
+			<li>
+				By overriding the {@link org.apache.juneau.rest.RestConfig#addBeanFilters(Class[])} and 
+				{@link org.apache.juneau.rest.RestConfig#addPojoSwaps(Class[])} methods.
+			<li>
+				By overriding the {@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} and 
 				{@link org.apache.juneau.rest.RestConfig#addParsers(Class[])} methods and setting transforms on the 
 				serializers and parsers directly.
 			
 		</ul>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit @RestMethod.serializersInherit()} 
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit @RestMethod.serializersInherit()} 
 				<br>Controls how serializers inherit transforms (bean filters and POJO swaps) from the servlet class.
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit @RestMethod.parsersInherit()} 
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit @RestMethod.parsersInherit()} 
 				<br>Controls how parsers inherit transforms from the servlet class.
 		</ul>
 	</div>	
@@ -1599,7 +1745,8 @@
 		</p>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#guards @RestResource.guards()} annotation 
-				can be used to associate one or more class-level {@link org.apache.juneau.rest.RestGuard RestGuards} with a servlet.
+			can be used to associate one or more class-level {@link org.apache.juneau.rest.RestGuard RestGuards} with a 
+			servlet.
 		</p>
 		<p class='bcode'>
 	<jc>// Servlet with class-level guard applied</jc>
@@ -1638,18 +1785,23 @@
 		</p>
 		<p>
 			A guard failure results in an <l>HTTP 401 Unauthorized</l> response.
-			However, this can be configured by overriding the {@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} 
-				and processing the response yourself.
+			However, this can be configured by overriding the 
+			{@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
+			yourself.
 		</p>
 		<p>
-			When guards are associated at the class-level, it's equivalent to associating guards on all Java methods on the servlet.
+			When guards are associated at the class-level, it's equivalent to associating guards on all Java methods on 
+			the servlet.
 		</p>
 		<p>
-			Class-level guards can also be created programmatically by overriding the {@link org.apache.juneau.rest.RestConfig#addGuards(Class[])} method.
+			Class-level guards can also be created programmatically by overriding the 
+			{@link org.apache.juneau.rest.RestConfig#addGuards(Class[])} method.
 		</p>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.rest.RestGuard} 
+			<li class='jac'>
+				{@link org.apache.juneau.rest.RestGuard} 
 		</ul>
 	</div>
 	
@@ -1662,8 +1814,8 @@
 		</p>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#converters @RestResource.converters()} annotation 
-				can be used as a convenient way to add {@link org.apache.juneau.rest.RestConverter RestConverters} to
-				all Java REST methods on a servlet.
+			can be used as a convenient way to add {@link org.apache.juneau.rest.RestConverter RestConverters} to
+			all Java REST methods on a servlet.
 		</p>
 		<p class='bcode'>
 	<jc>// Associate the Traversable converter to all Java REST methods in this servlet</jc>
@@ -1674,7 +1826,7 @@
 		</p>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestMethod#converters() @RestMethod.converters()} annotation 
-				can be used to associate converters on individual methods.
+			can be used to associate converters on individual methods.
 		</p>
 		<p class='bcode'>
 	<jc>// GET person request handler.</jc>
@@ -1689,10 +1841,12 @@
 	}
 		</p>	
 		<p>
-			The following converter is used to provide support for addressing child nodes in a POJO tree with
-				URL path remainders.  
-			<br>In this code, the 3rd parameter is the object that was returned by the Java method (or set through <l>request.setObject(o);</l>).
-			<br>The converter uses the {@link org.apache.juneau.utils.PojoRest} wrapper class to address nodes in the tree.
+			The following converter is used to provide support for addressing child nodes in a POJO tree with URL path 
+			remainders.  
+			<br>In this code, the 3rd parameter is the object that was returned by the Java method (or set through 
+			<l>request.setObject(o);</l>).
+			<br>The converter uses the {@link org.apache.juneau.utils.PojoRest} wrapper class to address nodes in the 
+			tree.
 		</p>
 		<p class='bcode'>
 	<jd>/**
@@ -1725,18 +1879,26 @@
 			Juneau defines the following converters out-of-the-box:
 		</p>
 		<ul class='doctree'>
-			<li class='jic'>{@link org.apache.juneau.rest.RestConverter}
+			<li class='jic'>
+			{@link org.apache.juneau.rest.RestConverter}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.rest.converters.Queryable}
-					<br>Provides query parameters that can be used to transform the response (i.e. search/view/sort the POJO response before being serialized).
-				<li class='jc'>{@link org.apache.juneau.rest.converters.Traversable}
-					<br>Allows nodes in the POJO response tree to be individually accessed through additional path info on the request.
-				<li class='jc'>{@link org.apache.juneau.rest.converters.Introspectable}
-					<br>Allows method calls to be made on the response POJO, and for the result of that method call to be serialized as the response.
+				<li class='jc'>
+					{@link org.apache.juneau.rest.converters.Queryable}
+					<br>Provides query parameters that can be used to transform the response (i.e. search/view/sort the 
+					POJO response before being serialized).
+				<li class='jc'>
+					{@link org.apache.juneau.rest.converters.Traversable}
+					<br>Allows nodes in the POJO response tree to be individually accessed through additional path info on 
+					the request.
+				<li class='jc'>
+					{@link org.apache.juneau.rest.converters.Introspectable}
+					<br>Allows method calls to be made on the response POJO, and for the result of that method call to be 
+					serialized as the response.
 			</ul>
 		</ul>
 		<p>
-			Class-level converters can be created programmatically by overriding the {@link org.apache.juneau.rest.RestConfig#addConverters(Class[])} method.
+			Class-level converters can be created programmatically by overriding the 
+			{@link org.apache.juneau.rest.RestConfig#addConverters(Class[])} method.
 		</p>
 		<p>
 			Note that from the example above, you can specify more than one converter.
@@ -1744,9 +1906,11 @@
 			(e.g. first the results will be traversed, then the resulting node will be searched/sorted).
 			
 		</p>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='jic'>{@link org.apache.juneau.rest.RestConverter} 
+			<li class='jic'>
+				{@link org.apache.juneau.rest.RestConverter} 
 		</ul>
 	</div>
 
@@ -1756,7 +1920,7 @@
 	<div class='topic'>		
 		<p>
 			Child Resources are REST servlets that are linked to parent servlets through the 
-				{@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource.children()} annnotation.
+			{@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource.children()} annotation.
 		</p>
 		<p class='bcode'>
 	<jd>/** Parent Resource */</jd>
@@ -1776,7 +1940,8 @@
 		...
 		</p>
 		<p>
-			A HUGE advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> file.
+			A HUGE advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> 
+			file.
 			Initialization of and access to the child resources occurs through the parent resource.
 			Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 		</p>
@@ -1786,7 +1951,7 @@
 		</p>
 		<p>
 			The {@link org.apache.juneau.rest.RestServletGroupDefault} class provides a default "router" page for 
-				child resources when a parent resource is nothing more than a grouping of child resources.
+			child resources when a parent resource is nothing more than a grouping of child resources.
 		</p>		
 		<p>
 			The <l>RootResources</l> class in the Samples project is an example of a router page:
@@ -1828,10 +1993,9 @@
 		<img class='bordered' src="doc-files/Samples_RootResources.png"/>
 		<p> 
 			The <l>RestServletGroupDefault</l> class is nothing more than a subclass of 
-				{@link org.apache.juneau.rest.RestServletDefault} with a <l>getChildren()</l>
-				method mapped to the servlet root path.
-			The method returns a POJO with is just a linked-list of beans with name/description 
-				properties.
+			{@link org.apache.juneau.rest.RestServletDefault} with a <l>getChildren()</l> method mapped to the servlet 
+			root path.
+			The method returns a POJO with is just a linked-list of beans with name/description properties.
 		</p>	
 		<p class='bcode'>
 	<jk>public class</jk> RestServletGroupDefault <jk>extends</jk> RestServletDefault {
@@ -1852,11 +2016,15 @@
 			Children can also be defined programmatically by overriding any of the following methods:
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.rest.RestConfig}
+			<li class='jac'>
+			{@link org.apache.juneau.rest.RestConfig}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addChildResource(String,Object)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addChildResources(Class[])}
-				<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addChildResources(Object[])}
+				<li class='jm'>
+					{@link org.apache.juneau.rest.RestConfig#addChildResource(String,Object)}
+				<li class='jm'>
+					{@link org.apache.juneau.rest.RestConfig#addChildResources(Class[])}
+				<li class='jm'>
+					{@link org.apache.juneau.rest.RestConfig#addChildResources(Object[])}
 			</ul> 
 		</ul>
 	</div>
@@ -1866,7 +2034,8 @@
 	<h3 class='topic' onclick='toggle(this)'>4.12 - Localized Messages</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation can be used to associate a resource bundle with a servlet class.
+			The {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation can 
+			be used to associate a resource bundle with a servlet class.
 		</p>
 		<p class='bcode'>
 	<jc>// Servlet with associated resource bundle</jc>
@@ -1880,7 +2049,8 @@
 		}
 		</p>
 		<p>	
-			The resource bundle can also be passed into the method by using the {@link org.apache.juneau.rest.annotation.Messages @Messages} annotation:
+			The resource bundle can also be passed into the method by using the 
+			{@link org.apache.juneau.rest.annotation.Messages @Messages} annotation:
 		</p>
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
@@ -1889,7 +2059,8 @@
 	}
 		</p>
 		<p>
-			If a resource bundle is shared by multiple servlets, the label and description can be prefixed by the class name:
+			If a resource bundle is shared by multiple servlets, the label and description can be prefixed by the class 
+			name:
 		</p>
 		<p class='bcode'>
 	<cc>#--------------------------------------------------------------------------------
@@ -1910,10 +2081,12 @@
 	<h3 class='topic' onclick='toggle(this)'>4.13- Encoders</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.RestResource#encoders @RestResource.encoders()} annotation can be used to associate character encoders with a servlet class.
-			Encoders can be used to enable various kinds of compression (e.g. <l>"gzip"</l>) on requests and responses based on the request <l>Accept-Encoding</l>
-				and <l>Content-Encoding</l> headers.
+			The {@link org.apache.juneau.rest.annotation.RestResource#encoders @RestResource.encoders()} annotation can 
+			be used to associate character encoders with a servlet class.
+			Encoders can be used to enable various kinds of compression (e.g. <l>"gzip"</l>) on requests and responses 
+			based on the request <l>Accept-Encoding</l> and <l>Content-Encoding</l> headers.
 		</p>
+		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
 	<jc>// Servlet with automated support for GZIP compression</jc>
@@ -1926,10 +2099,13 @@
 			Juneau defines the following encoders out-of-the-box:
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.encoders.Encoder}
+			<li class='jac'>
+			{@link org.apache.juneau.encoders.Encoder}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.encoders.GzipEncoder}
-				<li class='jc'>{@link org.apache.juneau.encoders.IdentityEncoder}
+				<li class='jc'>
+					{@link org.apache.juneau.encoders.GzipEncoder}
+				<li class='jc'>
+					{@link org.apache.juneau.encoders.IdentityEncoder}
 			</ul>
 		</ul>
 	</div>
@@ -1940,7 +2116,7 @@
 	<div class='topic'>
 		<p>	
 			In the previous examples, there were several cases where embedded variables were contained within
-				annotation values:
+			annotation values:
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -1955,16 +2131,20 @@
 			Features include:
 		</p>
 		<ul class='spaced-list'>
-			<li>Variables can be nested arbitrarily deep (e.g. <l>"$X{$Y{foo}}"</l>).
-			<li>Variables can contain arguments (e.g. <l>"$L{my.label,arg1,arg2}"</l>).
-			<li>Variables are recursively resolved. 
-				<br>i.e., if a variable results to a value with another variable in it, that
-					variable will also be resolved.
+			<li>
+				Variables can be nested arbitrarily deep (e.g. <l>"$X{$Y{foo}}"</l>).
+			<li>
+				Variables can contain arguments (e.g. <l>"$L{my.label,arg1,arg2}"</l>).
+			<li>
+				Variables are recursively resolved. 
+				<br>i.e., if a variable results to a value with another variable in it, that variable will also be 
+				resolved.
 		</ul>
 		<p>	
 			String variables are implemented through the {@link org.apache.juneau.svl.VarResolver} class and one or more
-				{@link org.apache.juneau.svl.Var Vars}. 
+			{@link org.apache.juneau.svl.Var Vars}. 
 		</p>
+		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
 	<jc>// Create a variable that resolves system properties (e.g. "$S{java.home}")</jc>
@@ -1990,21 +2170,26 @@
 			The methods that define the var resolver on a servlet are:
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-					<br>Returns the <l>VarResolver</l> associated with a servlet.
-				<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addVars(Class[])}
-					<br>The method used to create the servlet <l>VarResolver</l>.
-					<br>Subclasses can override this method to provide their own resolver.
-				<li class='jm'>{@link org.apache.juneau.rest.RestCallHandler#getSessionObjects(RestRequest)}
-					<br>Defines the session objects for the var resolver.
-					<br>Subclasses can override this method to provide additional session objects.
-			</ul>
+			<li class='jac'>
+				{@link org.apache.juneau.rest.RestServlet}
+				<ul>
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+						<br>Returns the <l>VarResolver</l> associated with a servlet.
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestConfig#addVars(Class[])}
+						<br>The method used to create the servlet <l>VarResolver</l>.
+						<br>Subclasses can override this method to provide their own resolver.
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestCallHandler#getSessionObjects(RestRequest)}
+						<br>Defines the session objects for the var resolver.
+						<br>Subclasses can override this method to provide additional session objects.
+				</ul>
+			</li>
 		</ul>
 		<p>
-			The default {@link org.apache.juneau.rest.RestContext#getVarResolver()} method provides 
-				support the following string variable types:
+			The default {@link org.apache.juneau.rest.RestContext#getVarResolver()} method provides support the 
+			following string variable types:
 		</p>
 		<table class='styled'>
 			<tr>
@@ -2039,6 +2224,7 @@
 		<p>	
 			Subclasses can augment this list by adding their own variables.
 		</p>
+		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
 	<ja>@Override</ja> <jc>/* RestServlet */</jc>
@@ -2079,14 +2265,16 @@
 			</tr>
 			<tr>
 				<td><ck>$L{key}</ck><br><ck>$L{key,args...}</ck></td>
-				<td>Localized strings pulled from resource bundle.
+				<td>
+					Localized strings pulled from resource bundle.
 					<br>Resolves to the value returned by {@link org.apache.juneau.rest.RestRequest#getMessage(String, Object...)}.
 					<br>Can include message arguments (e.g. <l>"$L{my.localized.string, foo, bar}"</l>)
 				</td>
 			</tr>
 			<tr>
 				<td><ck>$R{key}</ck></td>
-				<td>Request-specific variables.
+				<td>
+					Request-specific variables.
 					<br>Possible values:
 					<ul>
 						<li><ck>$R{attribute.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
@@ -2111,24 +2299,27 @@
 			</tr>
 			<tr>
 				<td><ck>$UE{...}</ck></td>
-				<td>URL-Encode the specified value.
-					<br>Takes the contents inside the varible and replaces it with a URL-encoded string.
+				<td>
+					URL-Encode the specified value.
+					<br>Takes the contents inside the variable and replaces it with a URL-encoded string.
 				</td>
 			</tr>
 		</table>
 		<p>
-			In addition to being used in annotation values, string variables can also be embedded in resource files retrieved
-				through the {@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)} method.
+			In addition to being used in annotation values, string variables can also be embedded in resource files 
+			retrieved through the {@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)} method.
 			This can often be useful for embedding localized strings inside HTML form pages.  
 		</p>
 		<p>
 			The <l>UrlEncodedFormResource</l> class in the Samples shows an example of using an HTML form page with
-				localized variables.  When you bring it up in a browser, you see the following:
+			localized variables.  
+			When you bring it up in a browser, you see the following:
 		</p>
 		<img class='bordered' src='doc-files/UrlEncodedForm.png'>
 		<p>
 			This HTML page is a static file located in the <l>org.apache.juneau.rest.samples</l> package.
 		</p>	
+		
 		<h6 class='figure'>Contents of org/apache/juneau/server/samples/UrlEncodedForm.html</h6>
 		<p class='bcode'>
 	<xt>&lt;html&gt;</xt> 
@@ -2164,6 +2355,7 @@
 		<xt>&lt;/body&gt;</xt> 
 	<xt>&lt;/html&gt;</xt>		
 		</p>
+		
 		<h6 class='figure'>Contents of UrlEncodedFormResource.java</h6>
 		<p class='bcode'>
 	<jd>/** 
@@ -2202,6 +2394,7 @@
 		} 
 	}
 		</p>
+		
 		<h6 class='figure'>Contents of UrlEncodedFormResource.properties</h6>
 		<p class='bcode'>
 	<cc>#--------------------------------------------------------------------------------
@@ -2217,9 +2410,12 @@
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.ReaderResource}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)}
-			<li class='jp'><a class='doclink' href='../svl/package-summary.html#TOC'>org.apache.juneau.svl</a>
+			<li class='jc'>
+				{@link org.apache.juneau.rest.ReaderResource}
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)}
+			<li class='jp'>
+				<a class='doclink' href='../svl/package-summary.html#TOC'>org.apache.juneau.svl</a>
 		</ul>
 	</div>
 	
@@ -2228,12 +2424,15 @@
 	<h3 class='topic' onclick='toggle(this)'>4.15 - Static Files</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.RestResource#staticFiles @RestResource.staticFiles()} annotation
-				is used to define paths and locations of statically-served files such as images or HTML documents.
+			The {@link org.apache.juneau.rest.annotation.RestResource#staticFiles @RestResource.staticFiles()} 
+			annotation is used to define paths and locations of statically-served files such as images or HTML 
+			documents.
 		</p>
 		<p>
-			The value is a JSON map of paths to packages/directories located on either the classpath or working directory.
+			The value is a JSON map of paths to packages/directories located on either the classpath or working 
+			directory.
 		</p>
+		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
 	<jk>package</jk> com.foo.mypackage;
@@ -2250,18 +2449,24 @@
 			If not found, then an attempt is made to find the class in the Java working directory.
 		</p>
 		<p>
-			In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find the <l>foobar.html</l> file
-				in the following ordered locations:
+			In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will 
+			attempt to find the <l>foobar.html</l> file in the following ordered locations:
 		</p>
 		<ol>
 			<li><l>com.foo.mypackage.docs</l> package.
-			<li><l>org.apache.juneau.rest.docs</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.rest</l>).
+			<li><l>org.apache.juneau.rest.docs</l> package (since <l>RestServletDefault</l> is in 
+				<l>org.apache.juneau.rest</l>).
 			<li><l>[working-dir]/docs</l> directory.
 		</ol>
+		
 		<h6 class='topic'>Notes:</h6>
 		<ul class='spaced-list'>
-			<li>Mappings are cumulative from parent to child.  Child resources can override mappings made on parent resources.
-			<li>The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
+			<li>
+				Mappings are cumulative from parent to child.  Child resources can override mappings made on parent 
+				resources.
+			<li>
+				The media type on the response is determined by the 
+				{@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
 		</ul>
 	</div>
 
@@ -2270,21 +2475,27 @@
 	<h3 class='topic' onclick='toggle(this)'>4.16 - Listener Methods</h3>	
 	<div class='topic'>
 		<p>
-			Various convenience listener methods are provided on the {@link org.apache.juneau.rest.RestCallHandler} class
-				that subclasses can use to intercept requests:
+			Various convenience listener methods are provided on the {@link org.apache.juneau.rest.RestCallHandler} 
+			class that subclasses can use to intercept requests:
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.rest.RestCallHandler}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.RestCallHandler#onPreCall(RestRequest) onPreCall(RestRequest)}
-					<br>Callback method that gets invoked right before the REST Java method is invoked.
-				<li class='jm'>{@link org.apache.juneau.rest.RestCallHandler#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
-					<br>Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is invoked.
-				<li class='jm'>{@link org.apache.juneau.rest.RestCallHandler#onSuccess(RestRequest,RestResponse,long) onSuccess(RestRequest,RestResponse,long)}
-					<br>Callback method for listening for successful completion of requests.
-				<li class='jm'>{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
-					<br>Callback method for logging errors during HTTP requests.
-			</ul>
+			<li class='jac'>
+				{@link org.apache.juneau.rest.RestCallHandler}
+				<ul>
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestCallHandler#onPreCall(RestRequest) onPreCall(RestRequest)}
+						<br>Callback method that gets invoked right before the REST Java method is invoked.
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestCallHandler#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+						<br>Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is invoked.
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestCallHandler#onSuccess(RestRequest,RestResponse,long) onSuccess(RestRequest,RestResponse,long)}
+						<br>Callback method for listening for successful completion of requests.
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
+						<br>Callback method for logging errors during HTTP requests.
+				</ul>
+			</li>
 		</ul>
 	</div>
 
@@ -2294,18 +2505,21 @@
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#stylesheet @RestResource.stylesheet()} annotation
-				is used to identify the stylesheet to use when rendering POJOs as HTML.
+			is used to identify the stylesheet to use when rendering POJOs as HTML.
 		</p>
 		<p>
 			The value is a path to a stylesheet located in either the classpath or working directory.
-			The resulting stylesheet becomes available as a static file through the servlet via the URL <js>"[servletpath]/style.css"</js>.
+			The resulting stylesheet becomes available as a static file through the servlet via the URL 
+			<js>"[servletpath]/style.css"</js>.
 		</p>		
 		<p>
 			The default set of styles located in the <l>org.apache.juneau.rest.styles</l> package are:
 		</p>
 		<ul class='spaced-list'>
-			<li><l>"styles/devops.css"</l> - Theme based on IBM DevOps look-and-feel.
-			<li><l>"styles/juneau.css"</l> - Theme based on Jazz look-and-feel.
+			<li>
+				<l>"styles/devops.css"</l> - Theme based on IBM DevOps look-and-feel.
+			<li>
+				<l>"styles/juneau.css"</l> - Theme based on Jazz look-and-feel.
 		</ul>
 		<p>
 			The DevOps look-and-feel is the newer style:
@@ -2320,7 +2534,8 @@
 			If the stylesheet cannot be found on the classpath, an attempt to look in the working directory.
 		</p>	
 		<p>
-			If the file cannot be located, the request to <l>"[servletpath]/style.css"</l> will return {@link javax.servlet.http.HttpServletResponse#SC_NOT_FOUND}.
+			If the file cannot be located, the request to <l>"[servletpath]/style.css"</l> will return 
+			{@link javax.servlet.http.HttpServletResponse#SC_NOT_FOUND}.
 		</p>
 		<p>
 			Custom stylesheets can be defined by specifying your own stylesheet annotation value:
@@ -2334,11 +2549,13 @@
 	}
 		</p>
 		<p>
-			In this example, the servlet will attempt to find the <l>mycss.css</l> file in the following ordered locations:
+			In this example, the servlet will attempt to find the <l>mycss.css</l> file in the following ordered 
+			locations:
 		</p>			
 		<ol>
 			<li><l>com.foo.mypackage.mystyles</l> package.
-			<li><l>org.apache.juneau.rest.mystyles</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.rest</l>).
+			<li><l>org.apache.juneau.rest.mystyles</l> package (since <l>RestServletDefault</l> is in 
+				<l>org.apache.juneau.rest</l>).
 			<li><l>[working-dir]/mystyles</l> directory.
 		</ol>
 	</div>
@@ -2351,11 +2568,14 @@
 			The following annotations are provided for specifying default header values for requests and responses:
 		</p>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} 
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} 
 				<br>Defines default headers on request when the client doesn't specify them.
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()}
+			<li class='ja'>
+				{@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()}
 				<br>Appends the specified headers if they weren't already set programmatically.	
 		</ul>		
+		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
 	<jc>// Servlet with default headers</jc>
@@ -2375,11 +2595,15 @@
 			Default headers can also be specified programmatically by overriding the following methods:
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.rest.RestConfig}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addDefaultRequestHeaders(String[])}
-				<li class='jm'>{@link org.apache.juneau.rest.RestConfig#addDefaultResponseHeaders(String[])}
-			</ul>
+			<li class='jac'>
+				{@link org.apache.juneau.rest.RestConfig}
+				<ul>
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestConfig#addDefaultRequestHeaders(String[])}
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestConfig#addDefaultResponseHeaders(String[])}
+				</ul>
+			</li>
 		</ul>
 	</div>
 
@@ -2391,35 +2615,46 @@
 			The following overridable methods are provided for handling errors on requests:
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.rest.RestCallHandler}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.RestCallHandler#renderError(HttpServletRequest,HttpServletResponse,RestException) renderError(HttpServletRequest,HttpServletResponse,RestException)}
-					<br>Method that produces the error message on the HTTP response.
-				<li class='jm'>{@link org.apache.juneau.rest.RestCallHandler#handleNotFound(int,RestRequest,RestResponse) handleNotFound(int,RestRequest,RestResponse)}
-					<br>Method that gets called when no method/path pattern match the incoming request.
-
-			</ul>
+			<li class='jac'>
+				{@link org.apache.juneau.rest.RestCallHandler}
+				<ul>
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestCallHandler#renderError(HttpServletRequest,HttpServletResponse,RestException) renderError(HttpServletRequest,HttpServletResponse,RestException)}
+						<br>Method that produces the error message on the HTTP response.
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestCallHandler#handleNotFound(int,RestRequest,RestResponse) handleNotFound(int,RestRequest,RestResponse)}
+						<br>Method that gets called when no method/path pattern match the incoming request.
+				</ul>
+			</li>
 		</ul>
 		<p>
 			The following convenience methods are provided for logging:
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.rest.RestLogger}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.RestLogger#getLogger() getLogger()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
-					<br>Gets called when an error occurs on a request call.
-					<br>Default implementation logs the error.
-				<li class='jm'>{@link org.apache.juneau.rest.RestLogger#log(Level,String,Object[]) log(Level,String,Object[])}
-				<li class='jm'>{@link org.apache.juneau.rest.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
-				<li class='jm'>{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObject(Level,String,Object[])}
-			</ul>
+			<li class='jac'>
+				{@link org.apache.juneau.rest.RestLogger}
+				<ul>
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestLogger#getLogger() getLogger()}
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
+						<br>Gets called when an error occurs on a request call.
+						<br>Default implementation logs the error.
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestLogger#log(Level,String,Object[]) log(Level,String,Object[])}
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
+					<li class='jm'>
+						{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObject(Level,String,Object[])}
+				</ul>
+			</li>
 		</ul>
 		<p>
 			The <l>logObjects()</l> method is particularly useful because it allows you to pass in POJOs as arguments
-				that serialized using {@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE}, but only
-				if the message is actually logged.
+			that serialized using {@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE}, but only
+			if the message is actually logged.
 		</p>
+		
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
 	logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
@@ -2429,8 +2664,8 @@
 		</p>
 		<p>
 			If your application makes use of Apache Commons Logging or some other logging API, you can override the 
-				{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object[])} method to 
-				provide a bridge between the two frameworks.
+			{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object[])} method to provide a bridge between 
+			the two frameworks.
 		</p>
 		<p class='bcode'>
 	<ja>@Override</ja> <jc>/* RestServlet */</jc>
@@ -2454,12 +2689,13 @@
 	<div class='topic'>
 		<p>
 			The Juneau Configuration API is an entirely separate topic from the REST support.
-			But the Server API provides methods for associating configuration files 
-				with REST servlets so that configuration properties can be defined in external files.
+			But the Server API provides methods for associating configuration files with REST servlets so that 
+			configuration properties can be defined in external files.
 		</p>
 		<p>
 			The Configuration API provides support for INI-style configuration files with embedded string variables:
 		</p>
+		
 		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 	<cc>#--------------------------</cc>
@@ -2480,9 +2716,10 @@
 	String customMessage = cf.getString(<js>"MyProperties/customMessage"</js>);
 		</p>
 		<p>
-			Configuration files are associated with REST servlets through the {@link org.apache.juneau.rest.annotation.RestResource#config() @RestResource.config()}
-				annotation.
+			Configuration files are associated with REST servlets through the 
+			{@link org.apache.juneau.rest.annotation.RestResource#config() @RestResource.config()} annotation.
 		</p>
+		
 		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -2494,8 +2731,8 @@
 		</p>
 		<p>
 			The annotation itself can contain string variables.  
-			For example, the Microservice API {@link org.apache.juneau.microservice.Resource} class defines the location of the config file as a 
-				system property <l>"juneau.configFile"</l>:
+			For example, the Microservice API {@link org.apache.juneau.microservice.Resource} class defines the 
+			location of the config file as a system property <l>"juneau.configFile"</l>:
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -2507,12 +2744,13 @@
 		</p>
 		<p>
 			In that particular case, the system property can either be passed in, or be determined programmatically
-				based on the jar file name in the {@link org.apache.juneau.microservice.Microservice} class.
-			It should be noted that the Configuration API is used extensively in the Microservice API in order to externally configure microservices.
+			based on the jar file name in the {@link org.apache.juneau.microservice.Microservice} class.
+			It should be noted that the Configuration API is used extensively in the Microservice API in order to 
+			externally configure microservices.
 		</p>
 		<p>
-			Once a config file has been associated with a REST servlet, it can be accessed through the {@link org.apache.juneau.rest.RestContext#getConfigFile()}
-				method.
+			Once a config file has been associated with a REST servlet, it can be accessed through the 
+			{@link org.apache.juneau.rest.RestContext#getConfigFile()} method.
 		</p>
 		<p>
 			A common usage is to use this method to initialize fields in your servlet.
@@ -2539,8 +2777,8 @@
 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
 		</p>
 		<p>
-			It's even possible to reference request-level variables in your config file if you use {@link org.apache.juneau.rest.RestRequest#getConfigFile()}
-				to access the config file:
+			It's even possible to reference request-level variables in your config file if you use 
+			{@link org.apache.juneau.rest.RestRequest#getConfigFile()} to access the config file:
 		</p>
 		<p class='bcode'>
 	<cc>#-------------------------------------</cc>
@@ -2608,24 +2846,27 @@
 		}
 	}
 		</p>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='jp'><a href='../core/ini/package-summary.html#TOC'><l>org.apache.juneau.ini</l></a>
+			<li class='jp'>
+				<a href='../core/ini/package-summary.html#TOC'><l>org.apache.juneau.ini</l></a>
 				<br>Juneau Configuration API Javadocs.
-			<li class='jp'><a href='../microservice/package-summary.html#TOC'><l>org.apache.juneau.microservice</l></a>
+			<li class='jp'>
+				<a href='../microservice/package-summary.html#TOC'><l>org.apache.juneau.microservice</l></a>
 				<br>Juneau Microservice API Javadocs.
-			<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfigFile()}
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestContext#getConfigFile()}
 		</ul>
 	</div>
 
 	<!-- ======================================================================================================== -->
 	<a id="RestResources.Inheritence"></a>
-	<h3 class='topic' onclick='toggle(this)'>4.21 - Annotation Inheritence</h3>
+	<h3 class='topic' onclick='toggle(this)'>4.21 - Annotation Inheritance</h3>
 	<div class='topic'>
 		<p>
 			The <ja>@RestResource</ja> annotation can be used on parent classes and interfaces.
-			When multiple annotations are defined at different levels, the annotation values
-				are combined.
+			When multiple annotations are defined at different levels, the annotation values are combined.
 			Child annotation values always take precedence over parent annotation values.
 		</p>
 		<table class='styled'>
@@ -2768,11 +3009,12 @@
 	<h3 class='topic' onclick='toggle(this)'>4.22 - HTTP Status Codes</h3>
 	<div class='topic'>
 		<p>
-			By default, a 200 (OK) status is automatically set as the HTTP status when a Java method executes successfully.
+			By default, a 200 (OK) status is automatically set as the HTTP status when a Java method executes 
+			successfully.
 		</p>
 		<p>
-			Other status codes can be generated by throwing a {@link org.apache.juneau.rest.RestException} with a specific HTTP status code, 
-				or calling {@link javax.servlet.http.HttpServletResponse#setStatus(int)}.
+			Other status codes can be generated by throwing a {@link org.apache.juneau.rest.RestException} with a 
+			specific HTTP status code, or calling {@link javax.servlet.http.HttpServletResponse#setStatus(int)}.
 		</p>
 		<p>
 			Non-OK (200) status codes are automatically triggered by the following...
@@ -2801,17 +3043,26 @@
 			<tr>
 				<td><l>406</l></td>
 				<td>Not Acceptable</td>
-				<td>A path pattern matched, but no Java methods were found with a matching serializer for the <l>Accept</l> on the request</td>
+				<td>
+					A path pattern matched, but no Java methods were found with a matching serializer for the 
+					<l>Accept</l> on the request
+				</td>
 			</tr>
 			<tr>
 				<td><l>412</l></td>
 				<td>Precondition Failed</td>
-				<td>A path pattern matched, but no Java methods were found that were not rejected by {@link org.apache.juneau.rest.RestMatcher matchers}</td>
+				<td>
+					A path pattern matched, but no Java methods were found that were not rejected by 
+					{@link org.apache.juneau.rest.RestMatcher matchers}
+				</td>
 			</tr>
 			<tr>
 				<td><l>415</l></td>
 				<td>Unsupported Media Type</td>
-				<td>A path pattern matched, but no Java methods were found with a matching parser for the <l>Content-Type</l> on the request</td>
+				<td>
+					A path pattern matched, but no Java methods were found with a matching parser for the 
+					<l>Content-Type</l> on the request
+				</td>
 			</tr>
 			<tr>
 				<td><l>500</l></td>
@@ -2826,7 +3077,8 @@
 	<h3 class='topic' onclick='toggle(this)'>4.23 - Overloaded HTTP Methods</h3>
 	<div class='topic'>
 		<p>
-			Through the use of the built-in <l>"method"</l> GET parameter, you can implement requests beyond the basic REST http method types.
+			Through the use of the built-in <l>"method"</l> GET parameter, you can implement requests beyond the basic 
+			REST http method types.
 		</p>
 		<p>
 			For example, the URL <l>"/sample/foo?method=BAR"</l> will cause the following method to be invoked...
@@ -2839,7 +3091,7 @@
 		</p>
 		<p>
 			To support overloaded methods, the {@link org.apache.juneau.rest.RestContext#REST_allowMethodParam} property
-				must be set on your servlet.
+			must be set on your servlet.
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
@@ -2867,22 +3119,22 @@
 				<td class='code'>&amp;plainText=true</td>
 				<td>
 					Response will always be <l>Content-Type: text/plain</l> and the returned text will be human-readable
-						({@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_useWhitespace} enabled).
+					({@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_useWhitespace} enabled).
 					<br>Useful for debugging.
 				</td>
 			</tr>
 			<tr>
 				<td class='code'>&amp;debug=true</td>
 				<td>
-				Request body content will be dumped to log file.
+					Request body content will be dumped to log file.
 				</td>
 			</tr>
 			<tr>
 				<td class='code'>&amp;noTrace=true</td>
 				<td>
 					If an error occurs, don't log the stack trace to the log file.
-					<br>Useful for automated JUnit testcases testing error states to prevent the log file from filling up with
-						useless stack traces.
+					<br>Useful for automated JUnit testcases testing error states to prevent the log file from filling 
+					up with useless stack traces.
 				</td>
 			</tr>
 			<tr>
@@ -2903,7 +3155,6 @@
 				<td class='code'>&amp;content=X</td>
 				<td>
 					Pass in the HTTP body content on PUT and POST methods as a UON-encoded GET parameter.
-					<br>
 					<br>Must be enabled via {@link org.apache.juneau.rest.RestContext#REST_allowBodyParam} property.
 				</td>
 			</tr>
@@ -2915,7 +3166,8 @@
 	<h3 class='topic' onclick='toggle(this)'>4.25 - Defining your own serializers/parsers</h3>
 	<div class='topic'>
 		<p>
-			A very easy-to-use API is provided for defining your own serializers and parsers at both the servlet and method levels.
+			A very easy-to-use API is provided for defining your own serializers and parsers at both the servlet and 
+			method levels.
 		</p>
 		<p>
 			The following examples show a custom serializer and parser defined at the method level.
@@ -3036,41 +3288,56 @@
 	<h3 class='topic' onclick='toggle(this)'>4.26 - Response Handlers</h3>
 	<div class='topic'>
 		<p>
-			Juneau uses {@link org.apache.juneau.rest.ResponseHandler ResponseHandlers} to convert POJOS returned by REST 
-				methods to proper HTTP responses.
+			Juneau uses {@link org.apache.juneau.rest.ResponseHandler ResponseHandlers} to convert POJOS returned by 
+			REST methods to proper HTTP responses.
 		</p>
 		<p>
 			Juneau comes with the following response handlers out-of-the-box:
 		</p>
 		<ul class='doctree'>
-			<li class='jic'>{@link org.apache.juneau.rest.ResponseHandler}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.rest.response.DefaultHandler}
-					<br>The default handler for POJOs that convert them to output using the Juneau serializers.
-				<li class='jc'>{@link org.apache.juneau.rest.response.ReaderHandler}
-					<br>Pipes {@link java.io.Reader Readers} directly to the response stream.  
-				<li class='jc'>{@link org.apache.juneau.rest.response.InputStreamHandler}
-					<br>Pipes {@link java.io.InputStream InputStream} directly to the response stream.  
-				<li class='jc'>{@link org.apache.juneau.rest.response.RedirectHandler}
-					<br>Handles {@link org.apache.juneau.rest.Redirect} objects that perform HTTP redirection (<l>HTTP 302</l>).
-				<li class='jc'>{@link org.apache.juneau.rest.response.WritableHandler}
-					<br>Handles {@link org.apache.juneau.Writable} objects.
-				<li class='jc'>{@link org.apache.juneau.rest.response.StreamableHandler}
-					<br>Handles {@link org.apache.juneau.Streamable} objects.
-				<li class='jc'>{@link org.apache.juneau.rest.response.ZipFileListResponseHandler}
-					<br>Handles {@link org.apache.juneau.utils.ZipFileList} objects.
-			</ul>
+			<li class='jic'>
+				{@link org.apache.juneau.rest.ResponseHandler}
+				<ul>
+					<li class='jc'>
+						{@link org.apache.juneau.rest.response.DefaultHandler}
+						<br>The default handler for POJOs that convert them to output using the Juneau serializers.
+					<li class='jc'>
+						{@link org.apache.juneau.rest.response.ReaderHandler}
+						<br>Pipes {@link java.io.Reader Readers} directly to the response stream.  
+					<li class='jc'>
+						{@link org.apache.juneau.rest.response.InputStreamHandler}
+						<br>Pipes {@link java.io.InputStream InputStream} directly to the response stream.  
+					<li class='jc'>
+						{@link org.apache.juneau.rest.response.RedirectHandler}
+						<br>Handles {@link org.apache.juneau.rest.Redirect} objects that perform HTTP redirection 
+						(<l>HTTP 302</l>).
+					<li class='jc'>
+						{@link org.apache.juneau.rest.response.WritableHandler}
+						<br>Handles {@link org.apache.juneau.Writable} objects.
+					<li class='jc'>
+						{@link org.apache.juneau.rest.response.StreamableHandler}
+						<br>Handles {@link org.apache.juneau.Streamable} objects.
+					<li class='jc'>
+						{@link org.apache.juneau.rest.response.ZipFileListResponseHandler}
+						<br>Handles {@link org.apache.juneau.utils.ZipFileList} objects.
+				</ul>
+			</li>
 		</ul>
 		<p>
 			The list of response handlers can be modified or augmented in one of the following ways:
 		</p>
 		<ul class='spaced-list'>
-			<li>Specifying additional handlers through the {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} annotation.
-			<li>Overriding and extending the {@link org.apache.juneau.rest.RestConfig#addResponseHandlers(Class[])} method.
+			<li>
+				Specifying additional handlers through the 
+				{@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} 
+				annotation.
+			<li>
+				Overriding and extending the {@link org.apache.juneau.rest.RestConfig#addResponseHandlers(Class[])} 
+				method.
 		</ul>
 		<p>
-			The {@link org.apache.juneau.rest.RestCallHandler#handleResponse(RestRequest,RestResponse,Object)} method can also be 
-				overridden to bypass the response handler API and process the POJO yourself.
+			The {@link org.apache.juneau.rest.RestCallHandler#handleResponse(RestRequest,RestResponse,Object)} method 
+			can also be overridden to bypass the response handler API and process the POJO yourself.
 		</p>
 	</div>
 
@@ -3079,13 +3346,14 @@
 	<h3 class='topic' onclick='toggle(this)'>4.27 - Other Notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>Subclasses can use either {@link javax.servlet.http.HttpServlet#init(ServletConfig)} 
-					or {@link javax.servlet.http.HttpServlet#init()} for initialization
-					just like any other servlet.
-			<li>The <l>X-Response-Headers</l> header can be used to pass through header values into the response.
+			<li>
+				Subclasses can use either {@link javax.servlet.http.HttpServlet#init(ServletConfig)} 
+				or {@link javax.servlet.http.HttpServlet#init()} for initialization just like any other servlet.
+			<li>
+				The <l>X-Response-Headers</l> header can be used to pass through header values into the response.
 				The value should be a URL-encoded map of key-value pairs.
-				For example, to add a <l>"Refresh: 1"</l> header to the response to auto-refresh a page, the following parameter
-					can be specified:  <l>"/sample?X-Response-Headers={Refresh=1}"</l>
+				For example, to add a <l>"Refresh: 1"</l> header to the response to auto-refresh a page, the following 
+				parameter can be specified:  <l>"/sample?X-Response-Headers={Refresh=1}"</l>
 		</ul>
 	</div>
 </div>
@@ -3094,11 +3362,11 @@
 <a id="Osgi"></a>
 <h2 class='topic' onclick='toggle(this)'>5 - Using with OSGi</h2>
 <div class='topic'>
-		<p>
+	<p>
 		Since REST servlets are basically just <l>HttpServlets</l>, incorporating them into an OSGi environment
-			is pretty straightforward.
-		</p>
-		<p>
+		is pretty straightforward.
+	</p>
+	<p>
 		The following code shows how to register your REST servlets in an OSGi <l>Activator</l>:
 	</p>
 	<p class='bcode'>
@@ -3154,34 +3422,39 @@
 		<jk>public void</jk> removedService(ServiceReference reference, Object service) {
 		}
 	}
-		</p>
+	</p>
 </div>
 
 <!-- ======================================================================================================== -->
 <a id="PojosConvertableFromString"></a>
-<h2 class='topic' onclick='toggle(this)'>6 - POJOs Convertable From Strings</h2>
+<h2 class='topic' onclick='toggle(this)'>6 - POJOs Convertible From Strings</h2>
 <div class='topic'>
-		<p>
-		Certain methods in the REST server API allow you to specify class types that can be convertable
-			from <l>Strings</l> (e.g. {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}).
-		</p>
-		<p>
-		POJOs convertable from <l>Strings</l> have one of the following:
-		</p>
+	<p>
+		Certain methods in the REST server API allow you to specify class types that can be convertible from 
+		<l>Strings</l> (e.g. {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}).
+	</p>
+	<p>
+		POJOs convertible from <l>Strings</l> have one of the following:
+	</p>
 	<ul class='spaced-list'>
-		<li>One of the following static methods (first match wins):
-		<ul>
-			<li><code><jk>public static</jk> T fromString(String in);</code> (e.g. enums, <l>UUID</l>)
-			<li><code><jk>public static</jk> T valueOf(String in);</code> (e.g. <l>Number</l>)
-			<li><code><jk>public static</jk> T parse(String in);</code> (e.g. Java logging <l>Level</l>)
-			<li><code><jk>public static</jk> T parseString(String in);</code> (e.g. <l>DatatypeConverter</l>)
-			<li><code><jk>public static</jk> T forName(String in);</code> (e.g. <l>Class</l> and <l>Charset</l>)
-		</ul>
-		<li>A constructor that takes in a single <l>String</l>:
-		<ul>
-			<li><code><jk>public</jk> T(String in);</code>
-		</ul>
-		<li>Has a {@link org.apache.juneau.transform.PojoSwap} associated with the servlet
+		<li>
+			One of the following static methods (first match wins):
+			<ul>
+				<li><code><jk>public static</jk> T fromString(String in);</code> (e.g. enums, <l>UUID</l>)
+				<li><code><jk>public static</jk> T valueOf(String in);</code> (e.g. <l>Number</l>)
+				<li><code><jk>public static</jk> T parse(String in);</code> (e.g. Java logging <l>Level</l>)
+				<li><code><jk>public static</jk> T parseString(String in);</code> (e.g. <l>DatatypeConverter</l>)
+				<li><code><jk>public static</jk> T forName(String in);</code> (e.g. <l>Class</l> and <l>Charset</l>)
+			</ul>
+		</li>
+		<li>
+			A constructor that takes in a single <l>String</l>:
+			<ul>
+				<li><code><jk>public</jk> T(String in);</code>
+			</ul>
+		</li>
+		<li>
+			Has a {@link org.apache.juneau.transform.PojoSwap} associated with the servlet
 			with a swapped type of <l>String</l>.
 	</ul>
 </div>
@@ -3190,23 +3463,24 @@
 <a id="AddressBookResource"></a>
 <h2 class='topic' onclick='toggle(this)'>7 - Address Book Resource</h2>
 <div class='topic'>
-		<p>
+	<p>
 		The <l>AddressBookResource</l> class that's found in the <l>microservice-samples-project.zip</l> file provides
-			a good overall example of how to use the Juneau server API with beans.
-		</p>
-		<p>
+		a good overall example of how to use the Juneau server API with beans.
+	</p>
+	<p>
 		When you start the microservice and point your browser to the address book, you should see the following:
-		</p>
+	</p>
 	<img class='bordered' src='doc-files/AddressBook.png'>
 	<p>
 		Use the built-in <l>Accept</l> GET parameter to simulate different language requests, such as JSON:
-		</p>
+	</p>
 	<img class='bordered' src='doc-files/AddressBookJson.png'>
-		<p>
+	<p>
 		The source for this class is shown below:
-		</p>
+	</p>
+	
 	<h6 class='figure'>AddressBookResource.java</h6>
-		<p class='bcode'>
+	<p class='bcode'>
 	<jd>/** 
 	* Proof-of-concept resource that shows off the capabilities of working with POJO resources. 
 	* Consists of an in-memory address book repository. 
@@ -3513,16 +3787,17 @@
 			<jk>return</jk> a; 
 		} 
 	} 	
-		</p>
-		<p>
+	</p>
+	<p>
 		The generated OPTIONS page is shown below:
-		</p>
+	</p>
 	<img class='bordered' src='doc-files/AddressBookOptions.png'>
-		<p>
-		The OPTIONS page uses the servlet resource bundle to specify the labels so that they're internationalizable.
-		</p>
+	<p>
+		The OPTIONS page uses the servlet resource bundle to specify the labels so that they're globalizable.
+	</p>
+	
 	<h6 class='figure'>AddressBookResource.properties</h6>
-		<p class='bcode'>
+	<p class='bcode'>
 	<ck>label</ck> = <cv>AddressBook sample resource</cv>
 	<ck>description</ck> = <cv>Proof-of-concept resource that shows off the capabilities of working with POJO resources</cv>
 	

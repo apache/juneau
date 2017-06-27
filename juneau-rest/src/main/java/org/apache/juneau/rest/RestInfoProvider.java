@@ -55,6 +55,7 @@ public class RestInfoProvider {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param context The resource context.
 	 */
 	public RestInfoProvider(RestContext context) {
@@ -186,10 +187,10 @@ public class RestInfoProvider {
 	 * </p>
 	 * <ol>
 	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation on the method.
-	 * 	<li><ck>[ClassName].[javaMethodName].summary</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>[javaMethodName].summary</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>[ClassName].[javaMethodName].summary</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>[javaMethodName].summary</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * </ol>
 	 *
 	 * @param javaMethodName The name of the Java method whose description we're retrieving.
@@ -212,10 +213,10 @@ public class RestInfoProvider {
 	 * </p>
 	 * <ol>
 	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation on the method.
-	 * 	<li><ck>[ClassName].[javaMethodName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>[javaMethodName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>[ClassName].[javaMethodName].description</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>[javaMethodName].description</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * </ol>
 	 *
 	 * @param javaMethodName The name of the Java method whose description we're retrieving.
@@ -238,8 +239,9 @@ public class RestInfoProvider {
 	 * <p>
 	 * <ol>
 	 * 	<li>{@link RestResource#title() @RestResourcel.title()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].title</ck> property in resource bundle identified by {@link RestResource#messages() @ResourceBundle.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>[ClassName].title</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @ResourceBundle.messages()} annotation for this class, then any parent
+	 * 		classes.
 	 * 	<li><ck>title</ck> in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/title</ck> entry in swagger file.
@@ -268,11 +270,12 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any
+	 * 		parent classes.
+	 * 	<li><ck>[ClassName].description</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>description</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/description</ck> entry in swagger file.
 	 * </ol>
 	 *
@@ -299,16 +302,18 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the contact information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link ResourceSwagger#contact() @ResourceSwagger.contact()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].contact</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>contact</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li>{@link ResourceSwagger#contact() @ResourceSwagger.contact()} annotation on this class, and then any parent
+	 * 		classes.
+	 * 	<li><ck>[ClassName].contact</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>contact</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/contact</ck> entry in swagger file.
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
+	 * found.
 	 */
 	public Contact getContact(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -335,16 +340,18 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the license information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link ResourceSwagger#license() @ResourceSwagger.license()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].license</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>license</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li>{@link ResourceSwagger#license() @ResourceSwagger.license()} annotation on this class, and then any parent
+	 * 		classes.
+	 * 	<li><ck>[ClassName].license</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>license</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/license</ck> entry in swagger file.
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
+	 * found.
 	 */
 	public License getLicense(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -369,18 +376,21 @@ public class RestInfoProvider {
 	 * <p>
 	 * Subclasses can override this method to provide their own terms-of-service information.
 	 * <p>
-	 * The default implementation returns the terms-of-service information from the following locations (whichever matches first):
+	 * The default implementation returns the terms-of-service information from the following locations (whichever
+	 * matches first):
 	 * <ol>
-	 * 	<li>{@link ResourceSwagger#termsOfService() @ResourceSwagger.termsOfService()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].termsOfService</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>termsOfService</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li>{@link ResourceSwagger#termsOfService() @ResourceSwagger.termsOfService()} annotation on this class, and
+	 * 		then any parent classes.
+	 * 	<li><ck>[ClassName].termsOfService</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>termsOfService</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/termsOfService</ck> entry in swagger file.
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
+	 * found.
 	 */
 	public String getTermsOfService(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -402,16 +412,18 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent
+	 * 		classes.
+	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>version</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/version</ck> entry in swagger file.
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
+	 * found.
 	 */
 	public String getVersion(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -433,16 +445,18 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent
+	 * 		classes.
+	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>version</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/version</ck> entry in swagger file.
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
+	 * found.
 	 */
 	public List<Tag> getTags(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -469,16 +483,18 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
-	 * 		annotation for this class, then any parent classes.
+	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent
+	 * 		classes.
+	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>version</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
 	 * 	<li><ck>/info/version</ck> entry in swagger file.
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
+	 * found.
 	 */
 	public ExternalDocumentation getExternalDocs(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();

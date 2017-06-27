@@ -43,17 +43,26 @@ import org.apache.juneau.xml.*;
  * 		<th>Serializer</th>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>application/json<br>text/json</td>
+ * 		<td class='code'>
+ * 			application/json
+ * 			<br>text/json
+ * 		</td>
  * 		<td class='code'>application/json</td>
  * 		<td>{@link JsonSerializer}</td>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>application/json+simple<br>text/json+simple</td>
+ * 		<td class='code'>
+ * 			application/json+simple
+ * 			<br>text/json+simple
+ * 		</td>
  * 		<td class='code'>application/json</td>
  * 		<td>{@link org.apache.juneau.json.JsonSerializer.Simple}</td>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>application/json+schema<br>text/json+schema</td>
+ * 		<td class='code'>
+ * 			application/json+schema
+ * 			<br>text/json+schema
+ * 		</td>
  * 		<td class='code'>application/json</td>
  * 		<td>{@link JsonSchemaSerializer}</td>
  * 	</tr>
@@ -142,15 +151,24 @@ import org.apache.juneau.xml.*;
  * 		<th>Parser</th>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>application/json<br>text/json</td>
+ * 		<td class='code'>
+ * 			application/json
+ * 			<br>text/json
+ * 		</td>
  * 		<td>{@link JsonParser}</td>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>text/xml<br>application/xml</td>
+ * 		<td class='code'>
+ * 			text/xml
+ * 			<br>application/xml
+ * 		</td>
  * 		<td>{@link XmlParser}</td>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>text/html<br>text/html+stripped</td>
+ * 		<td class='code'>
+ * 			text/html
+ * 			<br>text/html+stripped
+ * 		</td>
  * 		<td>{@link HtmlParser}</td>
  * 	</tr>
  * 	<tr>
@@ -183,8 +201,9 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- * Note that the list of serializers and parsers can be appended to using the {@link RestResource#serializers() @RestResource.serializers()}
- * 	and {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
+ * Note that the list of serializers and parsers can be appended to using the
+ * {@link RestResource#serializers() @RestResource.serializers()} and
+ * {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
  */
 @RestResource(
 	serializers={

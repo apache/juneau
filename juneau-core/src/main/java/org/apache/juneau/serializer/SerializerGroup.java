@@ -25,10 +25,14 @@ import org.apache.juneau.http.*;
  * <p>
  * Provides the following features:
  * <ul class='spaced-list'>
- * 	<li>Finds serializers based on HTTP <code>Accept</code> header values.
- * 	<li>Sets common properties on all serializers in a single method call.
- * 	<li>Locks all serializers in a single method call.
- * 	<li>Clones existing groups and all serializers within the group in a single method call.
+ * 	<li>
+ * 		Finds serializers based on HTTP <code>Accept</code> header values.
+ * 	<li>
+ * 		Sets common properties on all serializers in a single method call.
+ * 	<li>
+ * 		Locks all serializers in a single method call.
+ * 	<li>
+ * 		Clones existing groups and all serializers within the group in a single method call.
  * </ul>
  *
  * <h6 class='topic'>Match ordering</h6>
@@ -116,8 +120,7 @@ public final class SerializerGroup {
 	 * <p>
 	 * The general idea behind having the serializer resolution be a two-step process is so that the matched media type
 	 * can be passed in to the {@link WriterSerializer#doSerialize(SerializerSession, Object)} method.
-	 * <br>
-	 * For example...
+	 * <br>For example...
 	 * <p class='bcode'>
 	 * 	String acceptHeaderValue = request.getHeader(<js>"Accept"</js>);
 	 * 	String matchingMediaType = group.findMatch(acceptHeaderValue);

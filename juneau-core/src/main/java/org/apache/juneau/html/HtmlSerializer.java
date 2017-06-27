@@ -41,12 +41,16 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * The conversion is as follows...
  * 	<ul class='spaced-list'>
- * 		<li>{@link Map Maps} (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to HTML tables with
+ * 		<li>
+ * 			{@link Map Maps} (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to HTML tables with
  * 			'key' and 'value' columns.
- * 		<li>{@link Collection Collections} (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays are converted
+ * 		<li>
+ * 			{@link Collection Collections} (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays are converted
  * 			to HTML ordered lists.
- * 		<li>{@code Collections} of {@code Maps} and beans are converted to HTML tables with keys as headers.
- * 		<li>Everything else is converted to text.
+ * 		<li>
+ * 			{@code Collections} of {@code Maps} and beans are converted to HTML tables with keys as headers.
+ * 		<li>
+ * 			Everything else is converted to text.
  * 	</ul>
  * <p>
  * This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf>
@@ -59,15 +63,18 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * This class has the following properties associated with it:
  * <ul class='spaced-list'>
- * 	<li>{@link HtmlSerializerContext}
+ * 	<li>
+ * 		{@link HtmlSerializerContext}
  * </ul>
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
- * 	<li>{@link Sq} - Default serializer, single quotes.
- * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
+ * 	<li>
+ * 		{@link Sq} - Default serializer, single quotes.
+ * 	<li>
+ * 		{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>

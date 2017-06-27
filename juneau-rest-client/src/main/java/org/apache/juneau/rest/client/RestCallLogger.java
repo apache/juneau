@@ -22,19 +22,21 @@ import org.apache.http.client.methods.*;
 import org.apache.http.util.*;
 
 /**
- * Specialized interceptor for logging calls to a log file.
+ * Specialized intercepter for logging calls to a log file.
+ *
  * <p>
- * Causes a log entry to be created that shows all the request and response headers and content
- * 	at the end of the request.
+ * Causes a log entry to be created that shows all the request and response headers and content at the end of the
+ * request.
+ *
  * <p>
- * Use the {@link RestClientBuilder#logTo(Level, Logger)} and {@link RestCall#logTo(Level, Logger)}
- * <p>
- * methods to create instances of this class.
+ * Use the {@link RestClientBuilder#logTo(Level, Logger)} and {@link RestCall#logTo(Level, Logger)} methods to create
+ * instances of this class.
  */
 public class RestCallLogger extends RestCallInterceptor {
 
 	/**
 	 * Default HTTP request logger.
+	 * <p>
 	 * Logs outgoing HTTP requests to the <code>org.apache.juneau.rest.client</code> logger at <jsf>WARNING</jsf> level.
 	 */
 	public static final RestCallLogger DEFAULT = new RestCallLogger(Level.WARNING, Logger.getLogger("org.apache.juneau.rest.client"));
@@ -68,9 +70,9 @@ public class RestCallLogger extends RestCallInterceptor {
 	public void onRetry(RestCall restCall, int statusCode, HttpRequest req, HttpResponse res, Exception ex) {
 		if (log.isLoggable(level)) {
 			if (ex == null)
-			log.log(level, format("Call to {0} returned {1}.  Will retry.", req.getRequestLine().getUri(), statusCode)); //$NON-NLS-1$
+			log.log(level, format("Call to {0} returned {1}.  Will retry.", req.getRequestLine().getUri(), statusCode));
 			else
-				log.log(level, format("Call to {0} caused exception {1}.  Will retry.", req.getRequestLine().getUri(), ex.getLocalizedMessage()), ex); //$NON-NLS-1$
+				log.log(level, format("Call to {0} caused exception {1}.  Will retry.", req.getRequestLine().getUri(), ex.getLocalizedMessage()), ex);
 		}
 	}
 

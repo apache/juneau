@@ -96,25 +96,27 @@
 <div class='topic'>
 	<p>
 		Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
-		<br>
-		The XML serializer converts POJOs directly to XML without the need for intermediate DOM objects.
-		<br>
-		Likewise, the XML parser uses a STaX parser and creates POJOs directly without intermediate DOM objects. 
+		<br>The XML serializer converts POJOs directly to XML without the need for intermediate DOM objects.
+		<br>Likewise, the XML parser uses a STaX parser and creates POJOs directly without intermediate DOM objects. 
 	</p>
 	<p>
 		Unlike frameworks such as JAXB, Juneau does not require POJO classes to be annotated to produce and consume 
 		XML.
-		<br>
-		For example, it can serialize and parse instances of any of the following POJO types:
+		<br>For example, it can serialize and parse instances of any of the following POJO types:
 	</p>
 	<ul class='spaced-list'>
-		<li>Java primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
+		<li>
+			Java primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
 			<code>Float</code>).
-		<li>Java collections framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything 
+		<li>
+			Java collections framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything 
 			on this list.
-		<li>Multi-dimensional arrays of any type on this list.
-		<li>Java Beans with properties of any type on this list.
-		<li>Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
+		<li>
+			Multi-dimensional arrays of any type on this list.
+		<li>
+			Java Beans with properties of any type on this list.
+		<li>
+			Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
 			<code>toString()</code>, <code>fromString()</code>, <code>valueOf()</code>, 
 			<code>constructor(String)</code>).
 	</ul>
@@ -122,8 +124,7 @@
 		In addition to the types shown above, Juneau includes the ability to define transforms to transform 
 		non-standard object and property types to serializable forms (e.g. to transform <code>Calendars</code> to and 
 		from <code>ISO8601</code> strings, or <code>byte[]</code> arrays to and from base-64 encoded strings).
-		<br>
-		These transforms can be associated with serializers/parsers, or can be associated with classes or bean 
+		<br>These transforms can be associated with serializers/parsers, or can be associated with classes or bean 
 		properties through type and method annotations.
 	</p>
 	<p>
@@ -134,6 +135,7 @@
 		While annotations are not required to produce or consume XML, several XML annotations are provided for handling 
 		namespaces and fine-tuning the format of the XML produced.
 	</p>
+	
 	<h6 class='topic'>Prerequisites</h6>
 	<p>
 		The Juneau XML serialization and parsing support does not require any external prerequisites.  
@@ -147,8 +149,7 @@
 		<p>
 			The example shown here is from the Address Book resource located in the <code>juneau-examples-rest</code> 
 			microservice project.
-			<br>
-			The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
+			<br>The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> 
 			containing zero or more <code>Address</code> beans.
 		</p>
 		<p>
@@ -183,27 +184,31 @@
 <div class='topic'>
 	<p>
 		{@link org.apache.juneau.xml.XmlSerializer} is the class used to convert POJOs to XML.
-		<br>
-		{@link org.apache.juneau.xml.XmlDocSerializer} is a subclass that adds an XML declaration element to the output 
-			before the POJO is serialized.
+		<br>{@link org.apache.juneau.xml.XmlDocSerializer} is a subclass that adds an XML declaration element to the output 
+		before the POJO is serialized.
 	</p>	
 	<p>
 		The XML serializer includes many configurable settings.
-		<br>
-		Static reusable instances of XML serializers are provided with commonly-used settings:
+		<br>Static reusable instances of XML serializers are provided with commonly-used settings:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT} 
+		<li>
+			{@link org.apache.juneau.xml.XmlSerializer#DEFAULT} 
 			- All default settings.
-		<li>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ} 
+		<li>
+			{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ} 
 			- Use single quotes on attributes.  Typically useful for testing since it makes string comparison simpler.
-		<li>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ_READABLE} 
+		<li>
+			{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_SQ_READABLE} 
 			- Use single quotes on attributes and add whitespace for readability.
-		<li>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS} 
+		<li>
+			{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS} 
 			- Same as DEFAULT but with namespaces enabled.
-		<li>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ} 
+		<li>
+			{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ} 
 			- Same as DEFAULT_SQ but with namespaces enabled.
-		<li>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ_READABLE} 
+		<li>
+			{@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS_SQ_READABLE} 
 			- Same as DEFAULT_SQ_READABLE but with namespaces enabled.
 	</ul>
 	<p>
@@ -220,13 +225,12 @@
 	<p>
 		Refer to the package-level Javadocs for more information about those formats.
 	</p>
+	
 	<h6 class='topic'>Notes about examples</h6>
 	<p>
 		The examples shown in this document will use single-quote, readable settings.
-		<br>
-		For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
-		<br>
-		In the real world, you'll typically want to use standard bean getters and setters.
+		<br>For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
+		<br>In the real world, you'll typically want to use standard bean getters and setters.
 	</p>
 	<p>
 		To start off simple, we'll begin with the following simplified bean and build upon it.
@@ -285,11 +289,9 @@
 	</xt></p>
 	<p>
 		The first thing you may notice is how the bean instance is represented by the element <xt>&lt;object&gt;</xt>.
-		<br>
-		When objects have no name associated with them, Juneau provides a default generalized name that maps to the 
+		<br>When objects have no name associated with them, Juneau provides a default generalized name that maps to the 
 		equivalent JSON data type.
-		<br>
-		Some cases when objects do not have names:
+		<br>Some cases when objects do not have names:
 	</p>
 	<ul>
 		<li>Root element
@@ -297,11 +299,9 @@
 	</ul>
 	<p>
 		The generalized name reflects the JSON-equivalent data type.
-		<br>
-		Juneau produces JSON-equivalent XML, meaning any valid JSON document can be losslessly converted into an XML 
+		<br>Juneau produces JSON-equivalent XML, meaning any valid JSON document can be losslessly converted into an XML 
 		equivalent.
-		<br>  
-		In fact, all of the Juneau serializers and parsers are built upon this JSON-equivalence.
+		<br>In fact, all of the Juneau serializers and parsers are built upon this JSON-equivalence.
 	</p>
 
 	
@@ -313,6 +313,7 @@
 			The following examples show how different data types are represented in XML.
 			They mirror how the data structures are represented in JSON.
 		</p>
+		
 		<h6 class='topic'>Simple types</h6>
 		<p>
 			The representation of loose (not a direct bean property value) simple types are shown below:
@@ -349,6 +350,7 @@
 				<td class='code'><xt>&lt;null/&gt;</xt></td>
 			</tr>
 		</table>
+		
 		<h6 class='topic'>Maps</h6>
 		<p>
 			Loose maps and beans use the element <xt>&lt;object&gt;</xt> for encapsulation.
@@ -658,6 +660,7 @@
 				</xt></td>
 			</tr>
 		</table>
+		
 		<h6 class='topic'>Beans with Map properties</h6>
 		<table class='styled' style='width:auto'>
 			<tr>
@@ -717,8 +720,7 @@
 		<p>
 			Just because Juneau allows you to serialize ordinary POJOs to XML doesn't mean you are limited to just 
 			JSON-equivalent XML.
-			<br>
-			Several annotations are provided in the <a class='doclink' href='annotation/package-summary.html#TOC'>
+			<br>Several annotations are provided in the <a class='doclink' href='annotation/package-summary.html#TOC'>
 			org.apache.juneau.xml.annotation</a> package for customizing the output.
 		</p>
 
@@ -736,6 +738,7 @@
 				<li>To serve as a class identifier so that the bean class can be inferred during parsing if it
 					cannot automatically be inferred through reflection.
 			</ol>
+			
 			<h6 class='figure'>Example</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -780,6 +783,7 @@
 				In the following example, a type attribute is used on property 'b' but not property 'a' since
 				'b' is of type <code>Object</code> and therefore the bean class cannot be inferred.
 			</p>
+			
 			<h6 class='figure'>Example</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -841,6 +845,7 @@
 			<p>
 				Pay special attention to when <xa>_type</xa> attributes are and are not used.
 			</p>
+			
 			<h6 class='figure'>Examples</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1211,6 +1216,7 @@
 				The {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml.childName()} annotation can be used to 
 				specify the name of XML child elements for bean properties of type collection or array.
 			</p>
+			
 			<h6 class='figure'>Example</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1299,17 +1305,15 @@
 			<p>
 				The {@link org.apache.juneau.xml.annotation.Xml#format() @Xml.format()} annotation can be used to tweak 
 				the XML format of a POJO.
-				<br>
-				The value is set to an enum value of type {@link org.apache.juneau.xml.annotation.XmlFormat}.
-				<br>
-				This annotation can be applied to both classes and bean properties.
+				<br>The value is set to an enum value of type {@link org.apache.juneau.xml.annotation.XmlFormat}.
+				<br>This annotation can be applied to both classes and bean properties.
 			</p>
 			<p>
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} format can be applied to bean properties to 
 				serialize them as XML attributes instead of elements.
-				<br>
-				Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
+				<br>Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
 			</p>
+			
 			<h6 class='figure'>Example</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1344,6 +1348,7 @@
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can be applied to bean classes to 
 				force all bean properties to be serialized as XML attributes instead of child elements.
 			</p>
+			
 			<h6 class='figure'>Example</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1382,6 +1387,7 @@
 				to override the {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format applied on the bean 
 				class.
 			</p>
+			
 			<h6 class='figure'>Example</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1422,10 +1428,10 @@
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can be applied to a single bean 
 				property of type <code>Map&lt;String,Object&gt;</code> to denote arbitrary XML attribute values on the 
 				element.
-				<br>
-				These can be mixed with other {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} annotated 
+				<br>These can be mixed with other {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} annotated 
 				properties, but there must not be an overlap in bean property names and map keys. 
 			</p>
+			
 			<h6 class='figure'>Example</h6>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1469,13 +1475,10 @@
 			<p>
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
 				of type array/Collection.
-				<br>
-				This causes the child objects to be serialized directly inside the bean element.
-				<br>
-				This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName()}
+				<br>This causes the child objects to be serialized directly inside the bean element.
+				<br>This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName()}
 				to differentiate which collection the values came from if you plan on parsing the output back into beans.
-				<br>
-				Note that child names must not conflict with other property names.
+				<br>Note that child names must not conflict with other property names.
 			</p>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1524,10 +1527,8 @@
 			<p>
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a single bean 
 				property of either a simple type or array/Collection.
-				<br>
-				It allows free-form child elements to be formed.
-				<br>
-				All other properties on the bean MUST be serialized as attributes.
+				<br>It allows free-form child elements to be formed.
+				<br>All other properties on the bean MUST be serialized as attributes.
 			</p>
 			<table class='styled' style='width:auto'>
 				<tr>
@@ -1593,8 +1594,7 @@
 				{@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
 				(string/number/boolean/null) are stripped from the output.
 				This format particularly useful when combined with bean dictionaries to produce mixed content.  
-				<br>
-				The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
+				<br>The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
 				types.
 			</p>
 			<p>
@@ -1940,10 +1940,8 @@
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} format is similar to 
 				{@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} except it's meant for solitary objects that 
 				get serialized as simple child text nodes.
-				<br>
-				Any object that can be serialize to a <code>String</code> can be used.
-				<br>
-				The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
+				<br>Any object that can be serialize to a <code>String</code> can be used.
+				<br>The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
 				preserved in the output.
 			</p>
 			<table class='styled' style='width:auto'>
@@ -1979,10 +1977,8 @@
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format is similar to 
 				{@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except it's meant for strings containing XML 
 				that should be serialized as-is to the document.
-				<br>
-				Any object that can be serialize to a <code>String</code> can be used.
-				<br>
-				During parsing, the element content gets parsed with the rest of the document and then re-serialized to 
+				<br>Any object that can be serialize to a <code>String</code> can be used.
+				<br>During parsing, the element content gets parsed with the rest of the document and then re-serialized to 
 				XML before being set as the property value.  
 				This process may not be perfect (e.g. double quotes may be replaced by single quotes, etc...).
 			</p>
@@ -2066,22 +2062,23 @@
 		</p>
 		<p>
 			This isn't too exciting yet since we haven't specified any namespaces yet.
-			<br>  
-			Therefore, everything is defined under the default <code>Juneau</code> namespace.
+			<br>Therefore, everything is defined under the default <code>Juneau</code> namespace.
 		</p>
 		<p>
 			Namespaces can be defined at the following levels:
 		</p>
 		<ul class='spaced-list'>
-			<li>At the package level by using the {@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema} 
+			<li>
+				At the package level by using the {@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema} 
 				annotation.
-			<li>At the class level by using the {@link org.apache.juneau.xml.annotation.Xml @Xml} annotation.
-			<li>At the bean property level by using the {@link org.apache.juneau.xml.annotation.Xml @Xml} annotation.
+			<li>
+				At the class level by using the {@link org.apache.juneau.xml.annotation.Xml @Xml} annotation.
+			<li>
+				At the bean property level by using the {@link org.apache.juneau.xml.annotation.Xml @Xml} annotation.
 		</ul>
 		<p>
 			It's typically best to specify the namespaces used at the package level.
-			<br> 
-			We'll do that here for the package containing our test code.
+			<br>We'll do that here for the package containing our test code.
 		</p>
 		<p class='bcode'>
 	<jc>// XML namespaces used in this package</jc>
@@ -2105,14 +2102,12 @@
 			Take special note that the <ja>@XmlSchema</ja> is modeled after the equivalent JAXB annotation, but is
 			defined in the <a class='doclink' 
 			href='annotation/package-summary.html#TOC'>org.apache.juneau.xml.annotation</a> package.
-			<br>
-			Other XML annotations are also modeled after JAXB. 
+			<br>Other XML annotations are also modeled after JAXB. 
 			However, since many of the features of JAXB are already implemented for all serializers and parsers
 			at a higher level through various general annotations such as {@link org.apache.juneau.annotation.Bean} 
 			and {@link org.apache.juneau.annotation.BeanProperty} it was decided to maintain separate Juneau XML 
 			annotations instead of reusing JAXB annotations.
-			<br>
-			This may change in some future implementation, but for now it was decided that having separate Juneau XML 
+			<br>This may change in some future implementation, but for now it was decided that having separate Juneau XML 
 			annotations was less confusing.
 		</p>
 		<p>
@@ -2168,11 +2163,9 @@
 			<p>
 				One important property on the XML serializer class is 
 				{@link org.apache.juneau.xml.XmlSerializerContext#XML_autoDetectNamespaces XML_autoDetectNamespaces}.
-				<br>
-				This property tells the serializer to make a first-pass over the data structure to look for namespaces 
+				<br>This property tells the serializer to make a first-pass over the data structure to look for namespaces 
 				defined on classes and bean properties.
-				<br>
-				In high-performance environments, you may want to consider disabling auto-detection and providing your 
+				<br>In high-performance environments, you may want to consider disabling auto-detection and providing your 
 				own explicit list of namespaces to the serializer to avoid this scanning step.
 			</p>
 			<p>
@@ -2199,25 +2192,26 @@
 		<p>
 			The {@link org.apache.juneau.annotation.Bean @Bean} and {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} 
 			annotations are used to customize the behavior of beans across the entire framework.
-			<br>
-			In addition to using them to identify the resource URI for the bean shown above, they have various other 
+			<br>In addition to using them to identify the resource URI for the bean shown above, they have various other 
 			uses:
 		</p>
 		<ul class='spaced-list'>
-			<li>Hiding bean properties.
-			<li>Specifying the ordering of bean properties.
-			<li>Overriding the names of bean properties.
-			<li>Associating transforms at both the class and property level (to convert non-serializable POJOs to 
+			<li>
+				Hiding bean properties.
+			<li>
+				Specifying the ordering of bean properties.
+			<li>
+				Overriding the names of bean properties.
+			<li>
+				Associating transforms at both the class and property level (to convert non-serializable POJOs to 
 				serializable forms).
 		</ul>
 		<p>
 			For example, we now add a <code>birthDate</code> property, and associate a transform with it to transform
 			it to an ISO8601 date-time string in GMT time.
-			<br>
-			By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want 
+			<br>By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want 
 			them serialized.
-			<br>
-			Using transforms, we can convert them to standardized string forms.
+			<br>Using transforms, we can convert them to standardized string forms.
 		</p>
 		<p class='bcode'>	
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
@@ -2264,10 +2258,10 @@
 		<p>
 			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer()} annotation that 
 			allows you to plug in your own logic for determining bean property names.
-			<br>
-			The {@link org.apache.juneau.PropertyNamerDLC} is an example of an alternate property namer.
+			<br>The {@link org.apache.juneau.PropertyNamerDLC} is an example of an alternate property namer.
 			It converts bean property names to lowercase-dashed format.
 		</p>
+		
 		<h6 class='figure'>Example</h6>
 		<p class='bcode'>	
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
@@ -2275,6 +2269,7 @@
 	<jk>public class</jk> Person {
 		...
 		</p>
+		
 		<h6 class='figure'>Results</h6>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
@@ -2380,30 +2375,23 @@
 		<p>
 			Juneau provides the {@link org.apache.juneau.xml.XmlSchemaSerializer} class for generating XML-Schema 
 			documents that describe the output generated by the {@link org.apache.juneau.xml.XmlSerializer} class.
-			<br>
-			This class shares the same properties as <code>XmlSerializer</code>.
-			<br>
-			Since the XML output differs based on settings on the XML serializer class, the XML-Schema serializer
+			<br>This class shares the same properties as <code>XmlSerializer</code>.
+			<br>Since the XML output differs based on settings on the XML serializer class, the XML-Schema serializer
 			class must have the same property values as the XML serializer class it's describes.
-			<br>
-			To help facilitate creating an XML Schema serializer with the same properties as the corresponding 
+			<br>To help facilitate creating an XML Schema serializer with the same properties as the corresponding 
 			XML serializer, the {@link org.apache.juneau.xml.XmlSerializer#getSchemaSerializer()} method 
 			has been added.
 		</p>
 		<p>
 			XML-Schema requires a separate file for each namespace.
-			<br>  
-			Unfortunately, does not mesh well with the Juneau serializer architecture which serializes to single writers.
-			<br>
-			To get around this limitation, the schema serializer will produce a single output, but with multiple
+			<br>Unfortunately, does not mesh well with the Juneau serializer architecture which serializes to single writers.
+			<br>To get around this limitation, the schema serializer will produce a single output, but with multiple
 			schema documents separated by the null character (<js>'\u0000'</js>) to make it simple to split apart.
 		</p>
 		<p>
 			Lets start with an example where everything is in the same namespace.
-			<br>
-			We'll use the classes from before, but remove the references to namespaces.
-			<br>
-			Since we have not defined a default namespace, everything is defined under the default Juneau namespace.
+			<br>We'll use the classes from before, but remove the references to namespaces.
+			<br>Since we have not defined a default namespace, everything is defined under the default Juneau namespace.
 		</p>
 		<p class='bcode'>
 	<ja>@Bean</ja>(typeName=<js>"person"</js>)
@@ -2477,6 +2465,7 @@
 	<jc>// Get the XML Schema corresponding to the XML generated above.</jc>
 	String xmlSchema = ss.serialize(p);
 		</p>
+		
 		<h6 class='figure'>XML results</h6>
 		<p class='bcode'>
 	<xt>&lt;person</xt> 
@@ -2499,6 +2488,7 @@
 		<xt>&lt;/addresses&gt;</xt>
 	<xt>&lt;/person&gt;</xt>				
 		</p>
+		
 		<h6 class='figure'>XML-Schema results</h6>
 		<p class='bcode'>
 	<xt>&lt;schema</xt> 
@@ -2563,6 +2553,7 @@
 		...
 	}
 		</p>
+		
 		<h6 class='figure'>XML results</h6>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
@@ -2591,6 +2582,7 @@
 		<p>
 			The schema consists of 4 documents separated by a <js>'\u0000'</js> character.
 		</p>
+		
 		<h6 class='figure'>XML-Schema results</h6>
 		<p class='bcode'>
 	<xt>&lt;schema</xt> 
@@ -2719,18 +2711,16 @@
 	<h3 class='topic' onclick='toggle(this)'>2.7 - Non-tree models and recursion detection</h3>
 	<div class='topic'>
 		<p>
-			The XML serializer is designed to be used against POJO tree structures. <br> 
-			It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
-			<br>
-			If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
+			The XML serializer is designed to be used against POJO tree structures. 
+			<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
+			<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
 			be thrown (if {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_maxDepth} is not reached 
 			first).
 		</p>
 		<p>
 			If you still want to use the XML serializer on such models, Juneau provides the 
 			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_detectRecursions} setting.
-			<br>
-			It tells the serializer to look for instances of an object in the current branch of the tree and skip 
+			<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 			serialization when a duplicate is encountered.
 		</p>
 		<p>
@@ -2786,8 +2776,7 @@
 		</p>
 		<p>
 			Recursion detection introduces a performance penalty of around 20%.
-			<br>
-			For this reason the setting is disabled by default.
+			<br>For this reason the setting is disabled by default.
 		</p>
 	</div>
 
@@ -2811,10 +2800,10 @@
 	<h3 class='topic' onclick='toggle(this)'>2.9 - Other notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>Like all other Juneau serializers, the XML serializer is thread safe and maintains an internal cache of 
+			<li>
+				Like all other Juneau serializers, the XML serializer is thread safe and maintains an internal cache of 
 				bean classes encountered.
-				<br>
-				For performance reasons, it's recommended that serializers be reused whenever possible instead of 
+				<br>For performance reasons, it's recommended that serializers be reused whenever possible instead of 
 				always creating new instances.
 		</ul>
 	</div>
@@ -2837,8 +2826,7 @@
 	</ul>
 	<p>
 		Let's build upon the previous example and parse the generated XML back into the original bean.
-		<br>
-		We start with the XML that was generated.
+		<br>We start with the XML that was generated.
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
@@ -2930,16 +2918,14 @@
 	<div class='topic'>
 		<p>
 			The XML parser is not limited to parsing back into the original bean classes.
-			<br>  
-			If the bean classes are not available on the parsing side, the parser can also be used to parse into a 
+			<br>If the bean classes are not available on the parsing side, the parser can also be used to parse into a 
 			generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive objects.
 		</p>
 		<p>
 			You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
 			using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
 			for converting values to various types.
-			<br> 
-			The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
+			<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
 			<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
 			<code>String[][]</code>), but using {@link org.apache.juneau.ObjectList} is recommended.
 		</p>
@@ -2970,10 +2956,10 @@
 	<h3 class='topic' onclick='toggle(this)'>3.3 - Other notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>Like all other Juneau parsers, the XML parser is thread safe and maintains an internal cache of bean 
+			<li>
+				Like all other Juneau parsers, the XML parser is thread safe and maintains an internal cache of bean 
 				classes encountered.
-				<br>
-				For performance reasons, it's recommended that parser be reused whenever possible instead of always 
+				<br>For performance reasons, it's recommended that parser be reused whenever possible instead of always 
 				creating new instances.
 		</ul>
 	</div>

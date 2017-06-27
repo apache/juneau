@@ -67,7 +67,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
 	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
 	 * URL-encoding of non-valid URI characters.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>UON_encodeChars</jsf>, value)</code>.

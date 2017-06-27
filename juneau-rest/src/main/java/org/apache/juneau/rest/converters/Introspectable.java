@@ -20,20 +20,25 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Converter for enablement of {@link PojoIntrospector} support on response objects returned by a <code>@RestMethod</code> method.
+ * Converter for enablement of {@link PojoIntrospector} support on response objects returned by a
+ * <code>@RestMethod</code> method.
  * <p>
- * When enabled, public methods can be called on objects returned through the {@link RestResponse#setOutput(Object)} method.
+ * When enabled, public methods can be called on objects returned through the {@link RestResponse#setOutput(Object)}
+ * method.
  * <p>
- * Note that opening up public methods for calling through a REST interface can be dangerous, and should
- * 	be done with caution.
+ * Note that opening up public methods for calling through a REST interface can be dangerous, and should be done with
+ * caution.
  * <p>
  * Java methods are invoked by passing in the following URL parameters:
  * <ul class='spaced-list'>
- * 	<li><code>&amp;invokeMethod</code> - The Java method name, optionally with arguments if necessary to differentiate between methods.
- * 	<li><code>&amp;invokeArgs</code> - The arguments as a JSON array.
+ * 	<li>
+ * 		<code>&amp;invokeMethod</code> - The Java method name, optionally with arguments if necessary to
+ * 		differentiate between methods.
+ * 	<li>
+ * 		<code>&amp;invokeArgs</code> - The arguments as a JSON array.
  * </ul>
  * <p>
- * See {@link PojoIntrospector} for additional information on introspecting POJO methods.
+ * See {@link PojoIntrospector} for additional information on introspection of POJO methods.
  */
 public final class Introspectable implements RestConverter {
 

@@ -66,25 +66,33 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"RDF/XML"</js>
-	 * 	<li><js>"RDF/XML-ABBREV"</js>
-	 * 	<li><js>"N-TRIPLE"</js>
-	 * 	<li><js>"N3"</js> - General name for the N3 writer.
+	 * 	<li>
+	 * 		<js>"RDF/XML"</js>
+	 * 	<li>
+	 * 		<js>"RDF/XML-ABBREV"</js>
+	 * 	<li>
+	 * 		<js>"N-TRIPLE"</js>
+	 * 	<li>
+	 * 		<js>"N3"</js> - General name for the N3 writer.
 	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when 
 	 * 		created.
 	 * 		Default is the pretty writer but can be overridden with system property	
 	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
-	 * 	<li><js>"N3-PP"</js> - Name of the N3 pretty writer.
+	 * 	<li>
+	 * 		<js>"N3-PP"</js> - Name of the N3 pretty writer.
 	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding 
 	 * 		one-referenced bNodes.
-	 * 	<li><js>"N3-PLAIN"</js> - Name of the N3 plain writer.
+	 * 	<li>
+	 * 		<js>"N3-PLAIN"</js> - Name of the N3 plain writer.
 	 * 		The plain writer writes records by subject.
-	 * 	<li><js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
+	 * 	<li>
+	 * 		<js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
 	 * 		This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
-	 * 	<li><js>"TURTLE"</js> -  Turtle writer.
+	 * 	<li>
+	 * 		<js>"TURTLE"</js> -  Turtle writer.
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_language</jsf>, value)</code>.
@@ -152,7 +160,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li><b>Data type:</b> {@link Namespace}
 	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
 	 * </ul>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauNs</jsf>, value)</code>.
@@ -175,7 +183,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li><b>Data type:</b> {@link Namespace}
 	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
 	 * </ul>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauBpNs</jsf>, value)</code>.
@@ -201,7 +209,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_useXmlNamespaces</jsf>, value)</code>.
@@ -225,7 +233,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_addLiteralTypes</jsf>, value)</code>.
@@ -256,7 +264,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
 	 * identify root notes, which can introduce a considerable performance degradation.
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_addRootProperty</jsf>, value)</code>.
@@ -285,7 +293,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
 	 * the root element is serialized.
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_autoDetectNamespaces</jsf>, value)</code>.
@@ -311,7 +319,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * </ul>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_namespaces</jsf>, values)</code>.
@@ -337,19 +345,24 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li><js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li><js>"BAG"</js> - RDF Bag container.
-	 * 	<li><js>"LIST"</js> - RDF List container.
-	 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
+	 * 	<li>
+	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"SEQ"</js> - RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"BAG"</js> - RDF Bag container.
+	 * 	<li>
+	 * 		<js>"LIST"</js> - RDF List container.
+	 * 	<li>
+	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
 	 * 		lost.
 	 * </ul>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_collectionFormat</jsf>, value)</code>.
@@ -404,7 +417,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<jc>// Parse back into a bean array</jc>
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
-	 * <p>
+	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_looseCollections</jsf>, value)</code>.

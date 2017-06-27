@@ -41,7 +41,7 @@ public final class UrlEncodingContext implements Cloneable {
 	 * </p>
 	 * <p>
 	 * This option only applies to beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>

@@ -100,32 +100,36 @@
 		Juneau can serialize and parse instances of any of the following POJO types:
 	</p>
 	<ul class='spaced-list'>
-		<li>Java primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
+		<li>
+			Java primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, 
 			<code>Float</code>).
-		<li>Java collections framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything on 
+		<li>
+			Java collections framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything on 
 				this list.
-		<li>Multi-dimensional arrays of any type on this list.
-		<li>Java Beans with properties of any type on this list.
-		<li>Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
+		<li>
+			Multi-dimensional arrays of any type on this list.
+		<li>
+			Java Beans with properties of any type on this list.
+		<li>
+			Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing 
 			<code>toString()</code>, <code>fromString()</code>, <code>valueOf()</code>, <code>constructor(String)</code>).
 	</ul>
 	<p>
 		In addition to the types shown above, Juneau includes the ability to define 'swaps' to transform non-standard 
 		object and property types to serializable forms (e.g. to transform <code>Calendars</code> to and from 
 		<code>ISO8601</code> strings, or <code>byte[]</code> arrays to and from base-64 encoded strings).
-		<br>
-		These  can be associated with serializers/parsers, or can be associated with classes or bean properties through 
+		<br>These  can be associated with serializers/parsers, or can be associated with classes or bean properties through 
 		type and method annotations.
 	</p>
 	<p>
 		Refer to <a href='../../../../overview-summary.html#Core.PojoCategories' class='doclink'>POJO Categories</a> 
 		for a complete definition of supported POJOs.
 	</p>
+	
 	<h6 class='topic'>Prerequisites</h6>
 	<p>
 		Juneau uses the Jena library for these formats.  
-		<br>
-		The predefined serializers and parsers convert POJOs to and from RDF models and then uses Jena to convert 
+		<br>The predefined serializers and parsers convert POJOs to and from RDF models and then uses Jena to convert 
 		them to and from the various RDF languages.	
 	</p>
 	<p>
@@ -186,8 +190,7 @@
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
-		<br>
-		Language-specific serializers are defined as inner subclasses of the <code>RdfSerializer</code> class:
+		<br>Language-specific serializers are defined as inner subclasses of the <code>RdfSerializer</code> class:
 	</p>	
 	<ul>
 		<li>{@link org.apache.juneau.jena.RdfSerializer.Xml}
@@ -212,8 +215,7 @@
 	</p>
 	<p>
 		For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.
-		<br>
-		In the real world, you'll typically want to use standard bean getters and setters.
+		<br>In the real world, you'll typically want to use standard bean getters and setters.
 	</p>
 	<p>
 		To start off simple, we'll begin with the following simplified bean and build it up.
@@ -272,10 +274,8 @@
 	</p>
 	<p>
 		Notice that we've taken an arbitrary POJO and converted it to RDF.
-		<br>
-		The Juneau serializers and parsers are designed to work with arbitrary POJOs without requiring any annotations.
-		<br>
-		That being said, several annotations are provided to customize how POJOs are handled to produce usable RDF.
+		<br>The Juneau serializers and parsers are designed to work with arbitrary POJOs without requiring any annotations.
+		<br>That being said, several annotations are provided to customize how POJOs are handled to produce usable RDF.
 	</p>
 	
 	<!-- ======================================================================================================== -->
@@ -284,8 +284,7 @@
 	<div class='topic'>
 		<p>
 			You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
-			<br>
-			These are used by default when namespaces are not explicitly specified.
+			<br>These are used by default when namespaces are not explicitly specified.
 		</p>
 		<p>
 			The <code>juneau</code> namespace is used for generic names for objects that don't have namespaces 
@@ -297,11 +296,9 @@
 		</p>
 		<p>
 			The easiest way to specify namespaces is through annotations.
-			<br>
-			In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all properties 
+			<br>In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all properties 
 			of this class.
-			<br>
-			We do this by adding the following annotation to our class:
+			<br>We do this by adding the following annotation to our class:
 		</p>
 		<p class='bcode'>
 	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
@@ -347,10 +344,8 @@
 		<p>
 			Namespace auto-detection ({@link org.apache.juneau.xml.XmlSerializerContext#XML_autoDetectNamespaces}) is 
 			enabled on serializers by default.
-			<br>
-			This causes the serializer to make a first-pass over the data structure to look for namespaces.
-			<br>
-			In high-performance environments, you may want to consider disabling auto-detection and providing an 
+			<br>This causes the serializer to make a first-pass over the data structure to look for namespaces.
+			<br>In high-performance environments, you may want to consider disabling auto-detection and providing an 
 			explicit list of namespaces to the serializer to avoid this scanning step.
 		</p>
 		<p class='bcode'>
@@ -375,16 +370,13 @@
 		<p>
 			Bean properties of type <code>java.net.URI</code> or <code>java.net.URL</code> have special meaning to the 
 			RDF serializer.
-			<br>
-			They are interpreted as resource identifiers.
+			<br>They are interpreted as resource identifiers.
 		</p>
 		<p>
 			In the following code, we're adding 2 new properties.
-			<br>
-			The first property is annotated with <ja>@BeanProperty</ja> to identify that this property is the resource 
+			<br>The first property is annotated with <ja>@BeanProperty</ja> to identify that this property is the resource 
 			identifier for this bean.
-			<br>
-			The second un-annotated property is interpreted as a reference to another resource.
+			<br>The second un-annotated property is interpreted as a reference to another resource.
 		</p>
 		<p class='bcode'>	
 	<jk>public class</jk> Person {
@@ -485,25 +477,26 @@
 		<p>
 			The {@link org.apache.juneau.annotation.Bean} and {@link org.apache.juneau.annotation.BeanProperty} 
 			annotations are used to customize the behavior of beans across the entire framework.
-			<br>
-			In addition to using them to identify the resource URI for the bean shown above, they have various other 
+			<br>In addition to using them to identify the resource URI for the bean shown above, they have various other 
 			uses:
 		</p>
 		<ul class='spaced-list'>
-			<li>Hiding bean properties.
-			<li>Specifying the ordering of bean properties.
-			<li>Overriding the names of bean properties.
-			<li>Associating transforms at both the class and property level (to convert non-serializable POJOs to 
+			<li>
+				Hiding bean properties.
+			<li>
+				Specifying the ordering of bean properties.
+			<li>
+				Overriding the names of bean properties.
+			<li>
+				Associating transforms at both the class and property level (to convert non-serializable POJOs to 
 				serializable forms).
 		</ul>
 		<p>
 			For example, we now add a <code>birthDate</code> property, and associate a swap with it to transform
 			it to an ISO8601 date-time string in GMT time.
-			<br>
-			By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want 
+			<br>By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want 
 			them serialized.
-			<br>
-			Using swaps, we can convert them to standardized string forms.
+			<br>Using swaps, we can convert them to standardized string forms.
 		</p>
 		<p class='bcode'>	
 	<jk>public class</jk> Person {
@@ -556,8 +549,7 @@
 	<div class='topic'>
 		<p>
 			Collections and arrays are converted to RDF sequences.
-			<br>
-			In our example, let's add a list-of-beans property to our sample class:
+			<br>In our example, let's add a list-of-beans property to our sample class:
 		</p>
 		<p class='bcode'>
 	<jk>public class</jk> Person {
@@ -652,27 +644,22 @@
 	<div class='topic'>
 		<p>
 			For all RDF languages, the POJO objects get broken down into simple triplets.
-			<br>
-			Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
+			<br>Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
 			to become lost.
-			<br>
-			There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
+			<br>There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
 			form, and in some cases it's impossible.
 		</p>
 		<p>
 			By default, the {@link org.apache.juneau.jena.RdfParser} class handles this by scanning all the nodes and 
 			identifying the nodes without incoming references.
-			<br>
-			However, this is inefficient, especially for large models.
-			<br>
-			And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
+			<br>However, this is inefficient, especially for large models.
+			<br>And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
 			locate the root at all.
 		</p>
 		<p>
 			To resolve this issue, the property {@link org.apache.juneau.jena.RdfSerializerContext#RDF_addRootProperty} 
 			was introduced.
-			<br>
-			When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
+			<br>When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
 			by the parser.
 		</p>
 		<p>
@@ -784,24 +771,20 @@
 	<div class='topic'>
 		<p>
 			The RDF serializer is designed to be used against tree structures.
-			<br>  
-			It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
-			<br>
-			If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
+			<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
+			<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
 			be thrown (if {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_maxDepth} is not reached 
 			first).
 		</p>
 		<p>
 			If you still want to use the XML serializer on such models, Juneau provides the 
 			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_detectRecursions} setting.
-			<br>
-			It tells the serializer to look for instances of an object in the current branch of the tree and skip 
+			<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 			serialization when a duplicate is encountered.
 		</p>
 		<p>
 			Recursion detection introduces a performance penalty of around 20%.
-			<br>
-			For this reason the setting is disabled by default.
+			<br>For this reason the setting is disabled by default.
 		</p>
 	</div>
 
@@ -814,8 +797,10 @@
 			See the following classes for all configurable properties that can be used on this serializer:
 		</p>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>{@link org.apache.juneau.jena.RdfSerializerContext} - Serializer context properties.
+			<li>
+				{@link org.apache.juneau.BeanContext} - Bean context properties.
+			<li>
+				{@link org.apache.juneau.jena.RdfSerializerContext} - Serializer context properties.
 		</ul>
 	</div>		
 
@@ -825,10 +810,11 @@
 	<h3 class='topic' onclick='toggle(this)'>2.9 - Other notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>Like all other Juneau serializers, the RDF serializer is thread safe and maintains an internal cache of 
-			bean classes encountered.
-			For performance reasons, it's recommended that serializers be reused whenever possible instead of always 
-			creating new instances.
+			<li>
+				Like all other Juneau serializers, the RDF serializer is thread safe and maintains an internal cache of 
+				bean classes encountered.
+				For performance reasons, it's recommended that serializers be reused whenever possible instead of always 
+				creating new instances.
 		</ul>
 	</div>
 </div>
@@ -840,8 +826,7 @@
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.jena.RdfParser} class is the top-level class for all Jena-based parsers.
-		<br>
-		Language-specific parsers are defined as inner subclasses of the <code>RdfParser</code> class:
+		<br>Language-specific parsers are defined as inner subclasses of the <code>RdfParser</code> class:
 	</p>	
 	<ul>
 		<li>{@link org.apache.juneau.jena.RdfParser.Xml}
@@ -929,16 +914,14 @@
 	<div class='topic'>
 		<p>
 			The RDF parser is not limited to parsing back into the original bean classes.
-			<br>  
-			If the bean classes are not available on the parsing side, the parser can also be used to parse into a 
+			<br>If the bean classes are not available on the parsing side, the parser can also be used to parse into a 
 			generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive objects.
 		</p>
 		<p>
 			You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
 			using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
 			for converting values to various types. 
-			<br> 
-			The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
+			<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
 			<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
 			<code>String[][]</code>), but using {@link org.apache.juneau.ObjectList} is recommended.
 		</p>
@@ -975,32 +958,27 @@
 		
 		<p>
 			However, there are caveats when parsing into generic models due to the nature of RDF.
-			<br>
-			Watch out for the following:
+			<br>Watch out for the following:
 		</p>
 		<ul class='spaced-list'>
-			<li>The ordering of entries are going to be inconsistent.
-				<br><br>
-			<li>Bean URIs are always going to be denoted with the key <js>"uri"</js>.
-				<br>
-				Therefore, you cannot have a bean with a URI property and a separate property named <js>"uri"</js>.
-				<br>
-				The latter will overwrite the former.
-				<br>
-				This isn't a problem when parsing into beans instead of generic POJO models.
-			<li>All values are strings.
-				<br>
-				This normally isn't a problem when using <code>ObjectMap</code> and <code>ObjectList</code> since 
+			<li>
+				The ordering of entries are going to be inconsistent.
+			<li>
+				Bean URIs are always going to be denoted with the key <js>"uri"</js>.
+				<br>Therefore, you cannot have a bean with a URI property and a separate property named <js>"uri"</js>.
+				<br>The latter will overwrite the former.
+				<br>This isn't a problem when parsing into beans instead of generic POJO models.
+			<li>
+				All values are strings.
+				<br>This normally isn't a problem when using <code>ObjectMap</code> and <code>ObjectList</code> since 
 				various methods are provided for converting to the correct type anyway.
-			<li>The results may not be what is expected if there are lots of URL reference loops in the RDF model.
-				<br>
-				As nodes are processed from the root node down through the child nodes, the parser keeps
+			<li>
+				The results may not be what is expected if there are lots of URL reference loops in the RDF model.
+				<br>As nodes are processed from the root node down through the child nodes, the parser keeps
 				track of previously processed parent URIs and handles them accordingly.
-				<br>
-				If it finds that the URI has previously been processed, it handles it as a normal URI string and doesn't 
+				<br>If it finds that the URI has previously been processed, it handles it as a normal URI string and doesn't 
 				process further.
-				<br>
-				However, depending on how complex the reference loops are, the parsed data may end up having the
+				<br>However, depending on how complex the reference loops are, the parsed data may end up having the
 				same data in it, but structured differently from the original POJO.
 		</ul>
 		<p>
@@ -1036,8 +1014,7 @@
 		</p>
 		<p>
 			As a general rule, parsing into beans is often more efficient than parsing into generic models.
-			<br>
-			And working with beans is often less error prone than working with generic models.
+			<br>And working with beans is often less error prone than working with generic models.
 		</p>
 	</div>
 
@@ -1050,8 +1027,10 @@
 			See the following classes for all configurable properties that can be used on this parser:
 		</p>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>{@link org.apache.juneau.jena.RdfParserContext} - Parser context properties.
+			<li>
+				{@link org.apache.juneau.BeanContext} - Bean context properties.
+			<li>
+				{@link org.apache.juneau.jena.RdfParserContext} - Parser context properties.
 		</ul>
 	</div>		
 
@@ -1060,7 +1039,8 @@
 	<h3 class='topic' onclick='toggle(this)'>3.3 - Other notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
-			<li>Like all other Juneau parsers, the RDF parser is thread safe and maintains an internal cache of bean 
+			<li>
+				Like all other Juneau parsers, the RDF parser is thread safe and maintains an internal cache of bean 
 				classes encountered.
 				For performance reasons, it's recommended that parser be reused whenever possible instead of always 
 				creating new instances.

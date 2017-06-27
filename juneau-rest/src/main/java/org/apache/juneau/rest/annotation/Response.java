@@ -52,7 +52,8 @@ public @interface Response {
 	 * Optional description.
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
-	 * (e.g. <js>"myMethod.res.[code].description = foo"</js> or <js>"MyServlet.myMethod.res.[code].description = foo"</js>).
+	 * (e.g. <js>"myMethod.res.[code].description = foo"</js> or
+	 * <js>"MyServlet.myMethod.res.[code].description = foo"</js>).
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
@@ -65,7 +66,8 @@ public @interface Response {
 	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
-	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>, its root type value may also be <js>"file"</js>.
+	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
+	 * its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -85,7 +87,8 @@ public @interface Response {
 	 * Optional response headers.
 	 * <p>
 	 * Response variables can also be defined in the servlet resource bundle.
-	 * 	(e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
+	 * (e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or
+	 * <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
 	 */
 	Parameter[] headers() default {};
 }

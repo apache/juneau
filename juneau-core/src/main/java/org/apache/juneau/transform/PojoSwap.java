@@ -36,8 +36,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * <code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap
  * class to the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
- * <br>
- * When associated with a bean context, fields of the specified type will automatically be converted when the
+ * <br>When associated with a bean context, fields of the specified type will automatically be converted when the
  * {@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.
  * <p>
  * <code>PojoSwaps</code> have two parameters:
@@ -45,11 +44,9 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@code <T>} - The normal representation of an object.
  * 	<li>{@code <S>} - The swapped representation of an object.
  * </ol>
- * <br>
- * {@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to
+ * <br>{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to
  * {@link BeanMap#get(Object)}.
- * <br>
- * {@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
+ * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
  * {@link BeanMap#put(String,Object)}.
  *
  * <h6 class='topic'>Subtypes</h6>
@@ -74,13 +71,20 @@ import org.apache.juneau.serializer.*;
  * JSON (or language-specific equivalent).
  * The list of valid transformed types are as follows...
  * <ul class='spaced-list'>
- * 	<li>{@link String}
- * 	<li>{@link Number}
- * 	<li>{@link Boolean}
- * 	<li>{@link Collection} containing anything on this list.
- * 	<li>{@link Map} containing anything on this list.
- * 	<li>A java bean with properties of anything on this list.
- * 	<li>An array of anything on this list.
+ * 	<li>
+ * 		{@link String}
+ * 	<li>
+ * 		{@link Number}
+ * 	<li>
+ * 		{@link Boolean}
+ * 	<li>
+ * 		{@link Collection} containing anything on this list.
+ * 	<li>
+ * 		{@link Map} containing anything on this list.
+ * 	<li>
+ * 		A java bean with properties of anything on this list.
+ * 	<li>
+ * 		An array of anything on this list.
  * </ul>
  *
  * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
@@ -143,13 +147,20 @@ public abstract class PojoSwap<T,S> {
 	 * <p>
 	 * The object must be converted into one of the following serializable types:
 	 * <ul class='spaced-list'>
-	 * 	<li>{@link String}
-	 * 	<li>{@link Number}
-	 * 	<li>{@link Boolean}
-	 * 	<li>{@link Collection} containing anything on this list.
-	 * 	<li>{@link Map} containing anything on this list.
-	 * 	<li>A java bean with properties of anything on this list.
-	 * 	<li>An array of anything on this list.
+	 * 	<li>
+	 * 		{@link String}
+	 * 	<li>
+	 * 		{@link Number}
+	 * 	<li>
+	 * 		{@link Boolean}
+	 * 	<li>
+	 * 		{@link Collection} containing anything on this list.
+	 * 	<li>
+	 * 		{@link Map} containing anything on this list.
+	 * 	<li>
+	 * 		A java bean with properties of anything on this list.
+	 * 	<li>
+	 * 		An array of anything on this list.
 	 * </ul>
 	 *
 	 * @param session The bean session to use to get the class meta.

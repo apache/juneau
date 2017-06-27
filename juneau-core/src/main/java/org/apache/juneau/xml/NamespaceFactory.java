@@ -54,7 +54,7 @@ public final class NamespaceFactory {
 	 * Converts the specified object into a {@link Namespace} object.
 	 * <p>
 	 * Can be any of following types:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li>A {@link Namespace} object
 	 * 	<li>A JSON string containing a single key/value pair indicating the name/URI mapping.
 	 * 	<li>A <code>Map</code> containing a single key/value pair indicating the name/URI mapping.
@@ -86,7 +86,7 @@ public final class NamespaceFactory {
 	 * Converts the specified object into an array of {@link Namespace} object.
 	 * <p>
 	 * Can be any of following types:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li>A {@link Namespace} array
 	 * 	<li>A JSON string with key/value pairs indicating name/URI pairs.
 	 * 	<li>A <code>Map</code> with key/value pairs indicating name/URI pairs.

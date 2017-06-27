@@ -22,6 +22,6 @@ public class MultipartFormDataMatcher extends RestMatcher {
 	@Override /* RestMatcher */
 	public boolean matches(RestRequest req) {
 		String contentType = req.getContentType();
-		return contentType != null && contentType.startsWith("multipart/form-data"); //$NON-NLS-1$
+		return contentType != null && contentType.startsWith("multipart/form-data");
 	}
 }

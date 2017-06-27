@@ -127,8 +127,10 @@ import org.apache.juneau.internal.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
+ * 	<li class='jp'>
+ * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'>
+ * 		<a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>
  * 		Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
@@ -176,12 +178,10 @@ public final class Accept {
 	 * <p>
 	 * Note that fuzzy matching is allowed on the media types where the <code>Accept</code> header may
 	 * contain additional subtype parts.
-	 * <br>
-	 * For example, given identical q-values and an <code>Accept</code> value of <js>"text/json+activity"</js>,
+	 * <br>For example, given identical q-values and an <code>Accept</code> value of <js>"text/json+activity"</js>,
 	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
 	 * isn't found.
-	 * <br>
-	 * The purpose for this is to allow serializers to match when artifacts such as <code>id</code> properties are
+	 * <br>The purpose for this is to allow serializers to match when artifacts such as <code>id</code> properties are
 	 * present in the header.
 	 * <p>
 	 * See <a class='doclink' href='https://www.w3.org/TR/activitypub/#retrieving-objects'>

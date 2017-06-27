@@ -20,10 +20,11 @@ import org.apache.juneau.serializer.*;
 /**
  * REST method response converter.
  * <p>
- * Implements a filter mechanism for REST method calls that allows response objects to be
- * 	converted to some other POJO after invocation of the REST method.
+ * Implements a filter mechanism for REST method calls that allows response objects to be converted to some other POJO
+ * after invocation of the REST method.
  * <p>
  * Converters are associated with REST methods through the {@link RestMethod#converters()} annotation.
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> RestServlet {
@@ -42,8 +43,8 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic'>How to implement</h6>
  * <p>
- * Implementers should simply implement the {@link #convert(RestRequest, Object, ClassMeta)} and
- * 		return back a 'converted' object.
+ * Implementers should simply implement the {@link #convert(RestRequest, Object, ClassMeta)} and return back a
+ * 'converted' object.
  * It's up to the implementer to decide what this means.
  * <p>
  * Converters must implement a no-args constructor.
@@ -52,9 +53,12 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The following converters are available by default.
  * <ul class='spaced-list'>
- * 	<li>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
- * 	<li>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
- * 	<li>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
+ * 	<li>
+ * 		{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
+ * 	<li>
+ * 		{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
+ * 	<li>
+ * 		{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
  * </ul>
  */
 public interface RestConverter {

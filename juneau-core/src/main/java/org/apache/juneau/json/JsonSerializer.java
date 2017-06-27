@@ -36,15 +36,23 @@ import org.apache.juneau.transform.*;
  * <p>
  * The conversion is as follows...
  * <ul class='spaced-list'>
- * 	<li>Maps (e.g. {@link HashMap HashMaps}, {@link TreeMap TreeMaps}) are converted to JSON objects.
- * 	<li>Collections (e.g. {@link HashSet HashSets}, {@link LinkedList LinkedLists}) and Java arrays are converted to
+ * 	<li>
+ * 		Maps (e.g. {@link HashMap HashMaps}, {@link TreeMap TreeMaps}) are converted to JSON objects.
+ * 	<li>
+ * 		Collections (e.g. {@link HashSet HashSets}, {@link LinkedList LinkedLists}) and Java arrays are converted to
  * 		JSON arrays.
- * 	<li>{@link String Strings} are converted to JSON strings.
- * 	<li>{@link Number Numbers} (e.g. {@link Integer}, {@link Long}, {@link Double}) are converted to JSON numbers.
- * 	<li>{@link Boolean Booleans} are converted to JSON booleans.
- * 	<li>{@code nulls} are converted to JSON nulls.
- * 	<li>{@code arrays} are converted to JSON arrays.
- * 	<li>{@code beans} are converted to JSON objects.
+ * 	<li>
+ * 		{@link String Strings} are converted to JSON strings.
+ * 	<li>
+ * 		{@link Number Numbers} (e.g. {@link Integer}, {@link Long}, {@link Double}) are converted to JSON numbers.
+ * 	<li>
+ * 		{@link Boolean Booleans} are converted to JSON booleans.
+ * 	<li>
+ * 		{@code nulls} are converted to JSON nulls.
+ * 	<li>
+ * 		{@code arrays} are converted to JSON arrays.
+ * 	<li>
+ * 		{@code beans} are converted to JSON objects.
  * </ul>
  * <p>
  * The types above are considered "JSON-primitive" object types.  Any non-JSON-primitive object types are transformed
@@ -69,8 +77,10 @@ import org.apache.juneau.transform.*;
  * <p>
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
- * 	<li>{@link Simple} - Default serializer, single quotes, simple mode.
- * 	<li>{@link SimpleReadable} - Default serializer, single quotes, simple mode, with whitespace.
+ * 	<li>
+ * 		{@link Simple} - Default serializer, single quotes, simple mode.
+ * 	<li>
+ * 		{@link SimpleReadable} - Default serializer, single quotes, simple mode, with whitespace.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>

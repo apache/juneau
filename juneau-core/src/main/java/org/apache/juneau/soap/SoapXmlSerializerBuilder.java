@@ -60,7 +60,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2003/05/soap-envelope"</js>
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SOAPXML_SOAPAction</jsf>, value)</code>.

@@ -81,26 +81,35 @@
 		What you can do with the Juneau JAX-RS provider classes:
 	</p>
 	<ul class='spaced-list'>
-		<li>Use existing Juneau serializers and parsers for converting streams to POJOs and vis-versa.
-		<li>Use annotations to specify filters and properties using the {@link org.apache.juneau.rest.annotation.RestMethod}
+		<li>
+			Use existing Juneau serializers and parsers for converting streams to POJOs and vis-versa.
+		<li>
+			Use annotations to specify filters and properties using the {@link org.apache.juneau.rest.annotation.RestMethod}
 			and {@link org.apache.juneau.rest.jaxrs.JuneauProvider} annotations.
 	</ul>
 	<p>
 		What you can't do with the Juneau JAX-RS provider classes:
 	</p>
 	<ul class='spaced-list'>
-		<li>Specify or override serializers/parsers at the Java class and method levels.
+		<li>
+			Specify or override serializers/parsers at the Java class and method levels.
 			<br>JAX-RS does not provide the capability to use different providers for the same media types
-				at the class or method levels. 
-		<li>Specify or override filters and properties at the Java class level.
-		<li>Default stylesheets for the {@link org.apache.juneau.html.HtmlDocSerializer} class.
+			at the class or method levels. 
+		<li>
+			Specify or override filters and properties at the Java class level.
+		<li>
+			Default stylesheets for the {@link org.apache.juneau.html.HtmlDocSerializer} class.
 			<br>It will produce HTML, but it won't contain any styles applied.
 			<br>However, it's possible to specify your own stylesheet using the {@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_cssUrl} property.
-		<li>The ability to specify HTTP method, headers, and content using GET parameters.
+		<li>
+			The ability to specify HTTP method, headers, and content using GET parameters.
 			<br>These make debugging REST interfaces using only a browser possible.
-		<li>Class or method level encoding.
-		<li>Class or method level guards.
-		<li>Class or method level converters.
+		<li>
+			Class or method level encoding.
+		<li>
+			Class or method level guards.
+		<li>
+			Class or method level converters.
 	</ul>
 	
 	<h6 class='topic'>Juneau JAX-RS Provider API</h6>
@@ -108,12 +117,15 @@
 		The Juneau JAX-RS provider API consists of the following classes:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.rest.jaxrs.BaseProvider} - The base provider class that implements the JAX-RS 
+		<li>
+			{@link org.apache.juneau.rest.jaxrs.BaseProvider} - The base provider class that implements the JAX-RS 
 			<code>MessageBodyReader</code> and <code>MessageBodyWriter</code> interfaces.
-		<li>{@link org.apache.juneau.rest.jaxrs.JuneauProvider} - Annotation that is applied to subclasses of <code>BaseProvider</code>
+		<li>
+			{@link org.apache.juneau.rest.jaxrs.JuneauProvider} - Annotation that is applied to subclasses of <code>BaseProvider</code>
 			to specify the serializers/parsers associated with a provider, and optionally filters and properties to 
 			apply to those serializers and parsers.
-		<li>{@link org.apache.juneau.rest.jaxrs.DefaultProvider} - A default provider that provides the same level
+		<li>
+			{@link org.apache.juneau.rest.jaxrs.DefaultProvider} - A default provider that provides the same level
 			of media type support as the {@link org.apache.juneau.rest.RestServletDefault} class.
 	</ul>
 	<p>

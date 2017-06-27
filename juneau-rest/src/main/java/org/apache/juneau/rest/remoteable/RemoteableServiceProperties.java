@@ -19,16 +19,19 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Configurable properties for the {@link RemoteableServlet} class.
  * <p>
- * Properties can be set on the {@link RestServlet} class using the {@link RestResource#properties} or {@link RestMethod#properties} annotations.
+ * Properties can be set on the {@link RestServlet} class using the {@link RestResource#properties} or
+ * {@link RestMethod#properties} annotations.
  * <p>
  * These properties can also be passed in as servlet init parameters.
  * <p>
- * These properties are only valid at the class level, not the method level.  Setting them on {@link RestMethod#properties()} has no effect.
+ * These properties are only valid at the class level, not the method level.
+ * Setting them on {@link RestMethod#properties()} has no effect.
  */
 public final class RemoteableServiceProperties {
 
 	/**
-	 * Only expose interfaces and methods annotated with {@link Remoteable @Remoteable} ({@link Boolean}, default=<jk>false</jk>).
+	 * Only expose interfaces and methods annotated with {@link Remoteable @Remoteable} ({@link Boolean},
+	 * default=<jk>false</jk>).
 	 * <p>
 	 * When enabled, the {@link RemoteableServlet} class will only work with annotated remoteable interfaces and methods.
 	 * Otherwise, all public methods can be executed through the service.

@@ -45,22 +45,28 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents a connection to a remote REST resource.
+ *
  * <p>
  * Instances of this class are created by the various {@code doX()} methods on the {@link RestClient} class.
- * <p>
- * This class uses only Java standard APIs.  Requests can be built up using a fluent interface with method chaining, like so...
  *
+ * <p>
+ * This class uses only Java standard APIs.  Requests can be built up using a fluent interface with method chaining,
+ * like so...
  * <p class='bcode'>
  * 	RestClient client = <jk>new</jk> RestClient();
  * 	RestCall c = client.doPost(<jsf>URL</jsf>).setInput(o).setHeader(x,y);
  * 	MyBean b = c.getResponse(MyBean.<jk>class</jk>);
  * </p>
+ *
  * <p>
- * The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code> methods.
+ * The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code>
+ * methods.
  *
  * <h5 class='section'>Additional information:</h5>
  * <ul>
- * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
+ * 	<li>
+ * 		<a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client
+ * 		API</a> for more information and code examples.
  * </ul>
  */
 @SuppressWarnings({ "hiding", "unchecked" })
@@ -69,7 +75,7 @@ public final class RestCall {
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
 	private HttpResponse response;                         // The response.
-	private List<RestCallInterceptor> interceptors = new ArrayList<RestCallInterceptor>();               // Used for intercepting and altering requests.
+	private List<RestCallInterceptor> intercepters = new ArrayList<RestCallInterceptor>();               // Used for intercepting and altering requests.
 
 	private boolean isConnected = false;                   // connect() has been called.
 	private boolean allowRedirectsOnPosts;
@@ -103,8 +109,8 @@ public final class RestCall {
 	protected RestCall(RestClient client, HttpRequestBase request, URI uri) throws RestCallException {
 		this.client = client;
 		this.request = request;
-		for (RestCallInterceptor i : this.client.interceptors)
-			interceptor(i);
+		for (RestCallInterceptor i : this.client.intercepters)
+			intercepter(i);
 		this.retryOn = client.retryOn;
 		this.retries = client.retries;
 		this.retryInterval = client.retryInterval;
@@ -115,6 +121,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the URI for this call.
+	 *
 	 * <p>
 	 * Can be any of the following types:
 	 *	<ul>
@@ -123,10 +130,13 @@ public final class RestCall {
 	 *		<li>{@link URIBuilder}
 	 *		<li>Anything else converted to a string using {@link Object#toString()}.
 	 *	</ul>
+	 *
+	 * <p>
 	 * Relative URL strings will be interpreted as relative to the root URL defined on the client.
 	 *
-	 * @param uri The URI to use for this call.
-	 * This overrides the URI passed in from the client.
+	 * @param uri
+	 * 	The URI to use for this call.
+	 * 	This overrides the URI passed in from the client.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
@@ -176,13 +186,16 @@ public final class RestCall {
 	/**
 	 * Adds a query parameter to the URI query.
 	 *
-	 * @param name The parameter name.
+	 * @param name
+	 * 	The parameter name.
 	 * 	Can be null/blank/* if the value is a {@link Map}, {@link String}, {@link NameValuePairs}, or bean.
-	 * @param value The parameter value converted to a string using UON notation.
+	 * @param value
+	 * 	The parameter value converted to a string using UON notation.
 	 * 	Can also be {@link Map}, {@link String}, {@link NameValuePairs}, or bean if the name is null/blank/*.
 	 * 	If a {@link String} and the name is null/blank/*, then calls {@link URIBuilder#setCustomQuery(String)}.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
-	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * @param partSerializer
+	 * 	The part serializer to use to convert the value to a string.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -242,6 +255,7 @@ public final class RestCall {
 
 	/**
 	 * Adds a query parameter to the URI query if the parameter value is not <jk>null</jk> or an empty string.
+	 *
 	 * <p>
 	 * NE = "not empty"
 	 *
@@ -256,6 +270,7 @@ public final class RestCall {
 
 	/**
 	 * Adds query parameters to the URI for any parameters that aren't null/empty.
+	 *
 	 * <p>
 	 * NE = "not empty"
 	 *
@@ -281,12 +296,15 @@ public final class RestCall {
 	/**
 	 * Adds a form data pair to this request to perform a URL-encoded form post.
 	 *
-	 * @param name The parameter name.
+	 * @param name
+	 * 	The parameter name.
 	 * 	Can be null/blank/* if the value is a {@link Map}, {@link NameValuePairs}, or bean.
-	 * @param value The parameter value converted to a string using UON notation.
+	 * @param value
+	 * 	The parameter value converted to a string using UON notation.
 	 * 	Can also be {@link Map}, {@link NameValuePairs}, or bean if the name is null/blank/*.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
-	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * @param partSerializer
+	 * 	The part serializer to use to convert the value to a string.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -325,10 +343,12 @@ public final class RestCall {
 	/**
 	 * Adds a form data pair to this request to perform a URL-encoded form post.
 	 *
-	 * @param name The parameter name.
-	 * Can be null/blank if the value is a {@link Map} or {@link NameValuePairs}.
-	 * @param value The parameter value converted to a string using UON notation.
-	 * Can also be a {@link Map} or {@link NameValuePairs}.
+	 * @param name
+	 * 	The parameter name.
+	 * 	Can be null/blank if the value is a {@link Map} or {@link NameValuePairs}.
+	 * @param value
+	 * 	The parameter value converted to a string using UON notation.
+	 * 	Can also be a {@link Map} or {@link NameValuePairs}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If name was null/blank and value wasn't a {@link Map} or {@link NameValuePairs}.
 	 */
@@ -360,6 +380,7 @@ public final class RestCall {
 
 	/**
 	 * Adds a form data pair to the request if the parameter value is not <jk>null</jk> or an empty string.
+	 *
 	 * <p>
 	 * NE = "not empty"
 	 *
@@ -374,6 +395,7 @@ public final class RestCall {
 
 	/**
 	 * Adds form data parameters to the request for any parameters that aren't null/empty.
+	 *
 	 * <p>
 	 * NE = "not empty"
 	 *
@@ -390,7 +412,8 @@ public final class RestCall {
 	 *
 	 * @param name The path variable name.
 	 * @param value The replacement value.
-	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * @param partSerializer
+	 * 	The part serializer to use to convert the value to a string.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If variable could not be found in path.
@@ -457,15 +480,22 @@ public final class RestCall {
 	/**
 	 * Sets the input for this REST call.
 	 *
-	 * @param input The input to be sent to the REST resource (only valid for PUT and POST) requests. <br>
-	 * Can be of the following types:
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 	<li>{@link NameValuePairs} - Converted to a URL-encoded FORM post.
-	 * </ul>
+	 * @param input
+	 * 	The input to be sent to the REST resource (only valid for PUT and POST) requests. <br>
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li>
+	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
@@ -478,6 +508,7 @@ public final class RestCall {
 
 	/**
 	 * Specifies the serializer to use on this call.
+	 *
 	 * <p>
 	 * Overrides the serializer specified on the {@link RestClient}.
 	 *
@@ -491,6 +522,7 @@ public final class RestCall {
 
 	/**
 	 * Specifies the parser to use on this call.
+	 *
 	 * <p>
 	 * Overrides the parser specified on the {@link RestClient}.
 	 *
@@ -510,11 +542,13 @@ public final class RestCall {
 	/**
 	 * Sets a header on the request.
 	 *
-	 * @param name The header name.
-	 * The name can be null/empty if the value is a {@link Map}.
+	 * @param name
+	 * 	The header name.
+	 * 	The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @param skipIfEmpty Don't add the header if the name is null/empty.
-	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * @param partSerializer
+	 * 	The part serializer to use to convert the value to a string.
 	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -543,8 +577,9 @@ public final class RestCall {
 	/**
 	 * Sets a header on the request.
 	 *
-	 * @param name The header name.
-	 * The name can be null/empty if the value is a {@link Map}.
+	 * @param name
+	 * 	The header name.
+	 * 	The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -566,11 +601,13 @@ public final class RestCall {
 
 	/**
 	 * Sets a header on the request if the value is not null/empty.
+	 *
 	 * <p>
 	 * NE = "not empty"
 	 *
-	 * @param name The header name.
-	 * The name can be null/empty if the value is a {@link Map}.
+	 * @param name
+	 * 	The header name.
+	 * 	The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
@@ -581,6 +618,7 @@ public final class RestCall {
 
 	/**
 	 * Sets headers on the request if the values are not null/empty.
+	 *
 	 * <p>
 	 * NE = "not empty"
 	 *
@@ -594,8 +632,10 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Accept</code> request header.
+	 *
 	 * <p>
-	 * This overrides the media type specified on the parser, but is overridden by calling <code>header(<js>"Accept"</js>, value);</code>
+	 * This overrides the media type specified on the parser, but is overridden by calling
+	 * <code>header(<js>"Accept"</js>, value);</code>
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
@@ -607,6 +647,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Accept-Charset</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
 	 *
@@ -620,6 +661,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Accept-Encoding</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
 	 *
@@ -633,6 +675,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Accept-Language</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
 	 *
@@ -646,6 +689,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Authorization</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
 	 *
@@ -659,6 +703,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Cache-Control</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
 	 *
@@ -672,6 +717,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Connection</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
 	 *
@@ -685,6 +731,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Content-Length</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
 	 *
@@ -698,8 +745,10 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Content-Type</code> request header.
+	 *
 	 * <p>
-	 * This overrides the media type specified on the serializer, but is overridden by calling <code>header(<js>"Content-Type"</js>, value);</code>
+	 * This overrides the media type specified on the serializer, but is overridden by calling
+	 * <code>header(<js>"Content-Type"</js>, value);</code>
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
@@ -711,6 +760,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Date</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
 	 *
@@ -724,6 +774,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Expect</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
 	 *
@@ -737,6 +788,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Forwarded</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
 	 *
@@ -750,6 +802,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>From</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
 	 *
@@ -763,6 +816,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Host</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
 	 *
@@ -776,6 +830,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>If-Match</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
 	 *
@@ -789,6 +844,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>If-Modified-Since</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
 	 *
@@ -802,6 +858,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>If-None-Match</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
 	 *
@@ -815,6 +872,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>If-Range</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
 	 *
@@ -828,6 +886,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>If-Unmodified-Since</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
 	 *
@@ -841,6 +900,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Max-Forwards</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
 	 *
@@ -854,6 +914,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Origin</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
 	 *
@@ -867,6 +928,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Pragma</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
 	 *
@@ -880,6 +942,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Proxy-Authorization</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
 	 *
@@ -893,6 +956,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Range</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
 	 *
@@ -906,6 +970,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Referer</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
 	 *
@@ -919,6 +984,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>TE</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
 	 *
@@ -932,6 +998,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>User-Agent</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
 	 *
@@ -945,6 +1012,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Upgrade</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
 	 *
@@ -958,6 +1026,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Via</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
 	 *
@@ -971,6 +1040,7 @@ public final class RestCall {
 
 	/**
 	 * Sets the value for the <code>Warning</code> request header.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
 	 *
@@ -998,8 +1068,9 @@ public final class RestCall {
 	 *
 	 * @param retries The number of retries to attempt.
 	 * @param interval The time in milliseconds between attempts.
-	 * @param retryOn Optional object used for determining whether a retry should be attempted.
-	 * If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
+	 * @param retryOn
+	 * 	Optional object used for determining whether a retry should be attempted.
+	 * 	If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If current entity is not repeatable.
 	 */
@@ -1019,14 +1090,13 @@ public final class RestCall {
 	}
 
 	/**
-	 * For this call, allow automatic redirects when a 302 or 307 occurs when
-	 * 	performing a POST.
+	 * For this call, allow automatic redirects when a 302 or 307 occurs when performing a POST.
+	 *
 	 * <p>
-	 * Note that this can be inefficient since the POST body needs to be serialized
-	 * 	twice.
-	 * The preferred approach if possible is to use the {@link LaxRedirectStrategy} strategy
-	 * 	on the underlying HTTP client.  However, this method is provided if you don't
-	 * 	have access to the underlying client.
+	 * Note that this can be inefficient since the POST body needs to be serialized twice.
+	 * The preferred approach if possible is to use the {@link LaxRedirectStrategy} strategy on the underlying HTTP
+	 * client.
+	 * However, this method is provided if you don't have access to the underlying client.
 	 *
 	 * @param b Redirect flag.
 	 * @return This object (for method chaining).
@@ -1048,21 +1118,23 @@ public final class RestCall {
 	}
 
 	/**
-	 * Add an interceptor for this call only.
+	 * Add an intercepter for this call only.
 	 *
-	 * @param interceptor The interceptor to add to this call.
+	 * @param intercepter The intercepter to add to this call.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall interceptor(RestCallInterceptor interceptor) {
-		interceptors.add(interceptor);
-		interceptor.onInit(this);
+	public RestCall intercepter(RestCallInterceptor intercepter) {
+		intercepters.add(intercepter);
+		intercepter.onInit(this);
 		return this;
 	}
 
 	/**
 	 * Pipes the request output to the specified writer when {@link #run()} is called.
+	 *
 	 * <p>
 	 * The writer is not closed.
+	 *
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple writers.
 	 *
@@ -1075,6 +1147,7 @@ public final class RestCall {
 
 	/**
 	 * Pipe output from response to the specified writer when {@link #run()} is called.
+	 *
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple writers.
 	 *
@@ -1087,8 +1160,9 @@ public final class RestCall {
 	}
 
 	/**
-	 * Pipe output from response to the specified writer when {@link #run()} is called and associate
-	 * that writer with an ID so it can be retrieved through {@link #getWriter(String)}.
+	 * Pipe output from response to the specified writer when {@link #run()} is called and associate that writer with an
+	 * ID so it can be retrieved through {@link #getWriter(String)}.
+	 *
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple writers.
 	 *
@@ -1124,8 +1198,10 @@ public final class RestCall {
 
 	/**
 	 * Pipes the request output to the specified output stream when {@link #run()} is called.
+	 *
 	 * <p>
 	 * The output stream is not closed.
+	 *
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple output streams.
 	 *
@@ -1138,6 +1214,7 @@ public final class RestCall {
 
 	/**
 	 * Pipe output from response to the specified output stream when {@link #run()} is called.
+	 *
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple output stream.
 	 *
@@ -1152,6 +1229,7 @@ public final class RestCall {
 	/**
 	 * Pipe output from response to the specified output stream when {@link #run()} is called and associate
 	 * that output stream with an ID so it can be retrieved through {@link #getOutputStream(String)}.
+	 *
 	 * <p>
 	 * This method can be called multiple times to pipe to multiple output stream.
 	 *
@@ -1177,6 +1255,7 @@ public final class RestCall {
 
 	/**
 	 * Prevent {@link RestCallException RestCallExceptions} from being thrown when HTTP status 400+ is encountered.
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public RestCall ignoreErrors() {
@@ -1186,6 +1265,7 @@ public final class RestCall {
 
 	/**
 	 * Stores the response text so that it can later be captured using {@link #getCapturedResponse()}.
+	 *
 	 * <p>
 	 * This method should only be called once.  Multiple calls to this method are ignored.
 	 *
@@ -1202,11 +1282,13 @@ public final class RestCall {
 
 	/**
 	 * Look for the specified regular expression pattern in the response output.
+	 *
 	 * <p>
 	 * Causes a {@link RestCallException} to be thrown if the specified pattern is found in the output.
+	 *
 	 * <p>
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
-	 * 	methods such as {@link #getResponseAsString()}.
+	 * methods such as {@link #getResponseAsString()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -1233,11 +1315,13 @@ public final class RestCall {
 
 	/**
 	 * Look for the specified regular expression pattern in the response output.
+	 *
 	 * <p>
 	 * Causes a {@link RestCallException} to be thrown if the specified pattern is not found in the output.
+	 *
 	 * <p>
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
-	 * 	methods such as {@link #getResponseAsString()}.
+	 * methods such as {@link #getResponseAsString()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -1264,18 +1348,20 @@ public final class RestCall {
 
 	/**
 	 * Adds a response pattern finder to look for regular expression matches in the response output.
+	 *
 	 * <p>
 	 * This method can be called multiple times to add multiple response pattern finders.
+	 *
 	 * <p>
-	 * {@link ResponsePattern ResponsePatterns} use the {@link #getCapturedResponse()} to read the response text and so does not affect the other output
-	 * 	methods such as {@link #getResponseAsString()}.
+	 * {@link ResponsePattern ResponsePatterns} use the {@link #getCapturedResponse()} to read the response text and so
+	 * does not affect the other output methods such as {@link #getResponseAsString()}.
 	 *
 	 * @param responsePattern The response pattern finder.
 	 * @return This object (for method chaining).
 	 */
 	public RestCall responsePattern(final ResponsePattern responsePattern) {
 		captureResponse();
-		interceptor(
+		intercepter(
 			new RestCallInterceptor() {
 				@Override
 				public void onClose(RestCall restCall) throws RestCallException {
@@ -1288,6 +1374,7 @@ public final class RestCall {
 
 	/**
 	 * Set configuration settings on this request.
+	 *
 	 * <p>
 	 * Use {@link RequestConfig#custom()} to create configuration parameters for the request.
 	 *
@@ -1311,9 +1398,10 @@ public final class RestCall {
 
 	/**
 	 * Method used to execute an HTTP response where you're only interested in the HTTP response code.
+	 *
 	 * <p>
-	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the
-	 * 	 output to an output stream or writer.
+	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the output to an
+	 * output stream or writer.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -1355,7 +1443,8 @@ public final class RestCall {
 	 *
 	 * @return The HTTP status code.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
+	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * {@link Future Futures}.
 	 */
 	public Future<Integer> runFuture() throws RestCallException {
 		return client.getExecutorService(true).submit(
@@ -1370,12 +1459,14 @@ public final class RestCall {
 
 	/**
 	 * Connects to the REST resource.
+	 *
 	 * <p>
 	 * If this is a <code>PUT</code> or <code>POST</code>, also sends the input to the remote resource.<br>
+	 *
 	 * <p>
 	 * Typically, you would only call this method if you're not interested in retrieving the body of the HTTP response.
 	 * Otherwise, you're better off just calling one of the {@link #getReader()}/{@link #getResponse(Class)}/{@link #pipeTo(Writer)}
-	 * 	methods directly which automatically call this method already.
+	 * methods directly which automatically call this method already.
 	 *
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If an exception or <code>400+</code> HTTP status code occurred during the connection attempt.
@@ -1430,7 +1521,7 @@ public final class RestCall {
 				if (! retryOn.onResponse(response))
 					retries = 0;
 				if (retries > 0) {
-					for (RestCallInterceptor rci : interceptors)
+					for (RestCallInterceptor rci : intercepters)
 						rci.onRetry(this, sc, request, response, ex);
 					request.reset();
 					long w = retryInterval;
@@ -1441,13 +1532,13 @@ public final class RestCall {
 					throw ex;
 				}
 			}
-			for (RestCallInterceptor rci : interceptors)
+			for (RestCallInterceptor rci : intercepters)
 				rci.onConnect(this, sc, request, response);
 			if (response == null)
 				throw new RestCallException("HttpClient returned a null response");
 			StatusLine sl = response.getStatusLine();
 			String method = request.getMethod();
-			sc = sl.getStatusCode(); // Read it again in case it was changed by one of the interceptors.
+			sc = sl.getStatusCode(); // Read it again in case it was changed by one of the intercepters.
 			if (sc >= 400 && ! ignoreErrors)
 				throw new RestCallException(sc, sl.getReasonPhrase(), method, request.getURI(), getResponseAsString())
 					.setServerException(response.getFirstHeader("Exception-Name"), response.getFirstHeader("Exception-Message"), response.getFirstHeader("Exception-Trace"))
@@ -1491,16 +1582,22 @@ public final class RestCall {
 	}
 
 	/**
-	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP response message body as a reader.
+	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP
+	 * response message body as a reader.
+	 *
 	 * <p>
-	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream
-	 * 	will be wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream will be
+	 * wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 *
 	 * <p>
 	 * If present, automatically handles the <code>charset</code> value in the <code>Content-Type</code> response header.
+	 *
 	 * <p>
 	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
 	 *
-	 * @return The HTTP response message body reader.  <jk>null</jk> if response was successful but didn't contain a body (e.g. HTTP 204).
+	 * @return
+	 * 	The HTTP response message body reader.
+	 * 	<jk>null</jk> if response was successful but didn't contain a body (e.g. HTTP 204).
 	 * @throws IOException If an exception occurred while streaming was already occurring.
 	 */
 	public Reader getReader() throws IOException {
@@ -1534,12 +1631,14 @@ public final class RestCall {
 
 	/**
 	 * Returns the response text as a string if {@link #captureResponse()} was called on this object.
+	 *
 	 * <p>
-	 * Note that while similar to {@link #getResponseAsString()}, this method can be called multiple times
-	 * 	to retrieve the response text multiple times.
+	 * Note that while similar to {@link #getResponseAsString()}, this method can be called multiple times to retrieve
+	 * the response text multiple times.
+	 *
 	 * <p>
-	 * Note that this method returns <jk>null</jk> if you have not called one of the methods that cause
-	 * 	the response to be processed.  (e.g. {@link #run()}, {@link #getResponse()}, {@link #getResponseAsString()}.
+	 * Note that this method returns <jk>null</jk> if you have not called one of the methods that cause the response to
+	 * be processed.  (e.g. {@link #run()}, {@link #getResponse()}, {@link #getResponseAsString()}.
 	 *
 	 * @return The captured response, or <jk>null</jk> if {@link #captureResponse()} has not been called.
 	 * @throws IllegalStateException If trying to call this method before the response is consumed.
@@ -1594,14 +1693,19 @@ public final class RestCall {
 	}
 
 	/**
-	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP response message body as an input stream.
+	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP
+	 * response message body as an input stream.
+	 *
 	 * <p>
-	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream
-	 * 	will be wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream will be
+	 * wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 *
 	 * <p>
 	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
 	 *
-	 * @return The HTTP response message body input stream. <jk>null</jk> if response was successful but didn't contain a body (e.g. HTTP 204).
+	 * @return
+	 * 	The HTTP response message body input stream. <jk>null</jk> if response was successful but didn't contain
+	 * 	a body (e.g. HTTP 204).
 	 * @throws IOException If an exception occurred while streaming was already occurring.
 	 * @throws IllegalStateException If an attempt is made to read the response more than once.
 	 */
@@ -1625,7 +1729,8 @@ public final class RestCall {
 	}
 
 	/**
-	 * Connects to the remote resource (if {@code connect()} hasn't already been called) and returns the HTTP response message body as plain text.
+	 * Connects to the remote resource (if {@code connect()} hasn't already been called) and returns the HTTP response
+	 * message body as plain text.
 	 *
 	 * @return The response as a string.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
@@ -1649,7 +1754,9 @@ public final class RestCall {
 	 *
 	 * @return The response as a string.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
+	 * @see
+	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	{@link Future Futures}.
 	 */
 	public Future<String> getResponseAsStringFuture() throws RestCallException {
 		return client.getExecutorService(true).submit(
@@ -1664,8 +1771,10 @@ public final class RestCall {
 
 	/**
 	 * Same as {@link #getResponse(Type, Type...)} except optimized for a non-parameterized class.
+	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a string.</jc>
@@ -1683,10 +1792,11 @@ public final class RestCall {
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>);
 	 * </p>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>You can also specify any of the following types:
+	 * 	<li>
+	 * 		You can also specify any of the following types:
 	 * 		<ul>
 	 * 			<li>{@link HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
@@ -1694,11 +1804,13 @@ public final class RestCall {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 * @param <T> The class type of the object being created.
-	 * See {@link #getResponse(Type, Type...)} for details.
+	 * @param <T>
+	 * 	The class type of the object being created.
+	 * 	See {@link #getResponse(Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @throws IOException If a connection error occurred.
 	 */
 	public <T> T getResponse(Class<T> type) throws IOException, ParseException {
@@ -1711,12 +1823,15 @@ public final class RestCall {
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
 	 *
-	 * @param <T> The class type of the object being created.
-	 * See {@link #getResponse(Type, Type...)} for details.
+	 * @param <T>
+	 * 	The class type of the object being created.
+	 * 	See {@link #getResponse(Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
+	 * @see
+	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> getResponseFuture(final Class<T> type) throws RestCallException {
 		return client.getExecutorService(true).submit(
@@ -1731,6 +1846,8 @@ public final class RestCall {
 
 	/**
 	 * Parses HTTP body into the specified object type.
+	 *
+	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -1750,17 +1867,22 @@ public final class RestCall {
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
+	 *
 	 * <p>
 	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 *
 	 * <p>
 	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>Use the {@link #getResponse(Class)} method instead if you don't need a parameterized map/collection.
-	 * 	<li>You can also specify any of the following types:
+	 * 	<li>
+	 * 		Use the {@link #getResponse(Class)} method instead if you don't need a parameterized map/collection.
+	 * 	<li>
+	 * 		You can also specify any of the following types:
 	 * 		<ul>
 	 * 			<li>{@link HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
@@ -1769,13 +1891,16 @@ public final class RestCall {
 	 * </ul>
 	 *
 	 * @param <T> The class type of the object to create.
-	 * @param type The object type to create.
+	 * @param type
+	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args The type arguments of the class if it's a collection or map.
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @throws IOException If a connection error occurred.
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
@@ -1789,16 +1914,23 @@ public final class RestCall {
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
 	 *
-	 * @param <T> The class type of the object being created.
-	 * See {@link #getResponse(Type, Type...)} for details.
-	 * @param type The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param <T>
+	 * 	The class type of the object being created.
+	 * 	See {@link #getResponse(Type, Type...)} for details.
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws RestCallException If the executor service was not defined.
-	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
+	 * @see
+	 * 	RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> getResponseFuture(final Type type, final Type...args) throws RestCallException {
 		return client.getExecutorService(true).submit(
@@ -1813,13 +1945,15 @@ public final class RestCall {
 
 	/**
 	 * Parses the output from the connection into the specified type and then wraps that in a {@link PojoRest}.
+	 *
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
 	 *
 	 * @param innerType The class type of the POJO being wrapped.
-	 * @return The parsed output wapped in a {@link PojoRest}.
+	 * @return The parsed output wrapped in a {@link PojoRest}.
 	 * @throws IOException If a connection error occurred.
-	 * @throws ParseException If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
 	 */
 	public PojoRest getResponsePojoRest(Class<?> innerType) throws IOException, ParseException {
 		return new PojoRest(getResponse(innerType));
@@ -1827,12 +1961,14 @@ public final class RestCall {
 
 	/**
 	 * Converts the output from the connection into an {@link ObjectMap} and then wraps that in a {@link PojoRest}.
+	 *
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
 	 *
-	 * @return The parsed output wapped in a {@link PojoRest}.
+	 * @return The parsed output wrapped in a {@link PojoRest}.
 	 * @throws IOException If a connection error occurred.
-	 * @throws ParseException If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
 	 */
 	public PojoRest getResponsePojoRest() throws IOException, ParseException {
 		return getResponsePojoRest(ObjectMap.class);
@@ -1885,6 +2021,8 @@ public final class RestCall {
 
 	/**
 	 * Returns access to the {@link HttpResponse} returned by {@link HttpClient#execute(HttpUriRequest)}.
+	 *
+	 * <p>
 	 * Returns <jk>null</jk> if {@link #connect()} has not yet been called.
 	 *
 	 * @return The HTTP response object.
@@ -1924,20 +2062,20 @@ public final class RestCall {
 			EntityUtils.consumeQuietly(response.getEntity());
 		isClosed = true;
 		if (! isFailed)
-			for (RestCallInterceptor r : interceptors)
+			for (RestCallInterceptor r : intercepters)
 				r.onClose(this);
 		return this;
 	}
 
 	/**
-	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
+	 * Adds a {@link RestCallLogger} to the list of intercepters on this class.
 	 *
 	 * @param level The log level to log events at.
 	 * @param log The logger.
 	 * @return This object (for method chaining).
 	 */
 	public RestCall logTo(Level level, Logger log) {
-		interceptor(new RestCallLogger(level, log));
+		intercepter(new RestCallLogger(level, log));
 		return this;
 	}
 

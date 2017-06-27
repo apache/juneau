@@ -35,9 +35,10 @@ import java.lang.annotation.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface
- * 		proxies against 3rd-party REST interfaces</a>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
+ * 	<li class='link'>
+ * 		<a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='jp'>
+ * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
  * </ul>
  */
 @Documented
@@ -74,7 +75,8 @@ public @interface RemoteMethod {
 	 * <p>
 	 * Possible values:
 	 * <ul>
-	 * 	<li>{@link ReturnValue#BODY} (default) - The body of the HTTP response converted to a POJO.
+	 * 	<li>
+	 * 		{@link ReturnValue#BODY} (default) - The body of the HTTP response converted to a POJO.
 	 * 		<br>The return type on the Java method can be any of the following:
 	 * 		<ul>
 	 * 			<li><jk>void</jk> - Don't parse any response.  Note that the method will still throw an exception if an
@@ -86,7 +88,8 @@ public @interface RemoteMethod {
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 		</ul>
-	 * 	<li>{@link ReturnValue#HTTP_STATUS} - The HTTP status code on the response.
+	 * 	<li>
+	 * 		{@link ReturnValue#HTTP_STATUS} - The HTTP status code on the response.
 	 * 		<br>The return type on the Java method can be any of the following:
 	 * 		<ul>
 	 * 			<li><jk>int</jk>/<code>Integer</code> - The HTTP response code.

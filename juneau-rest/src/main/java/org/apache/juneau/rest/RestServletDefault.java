@@ -92,11 +92,6 @@ import org.apache.juneau.xml.*;
  * 		<td class='code'>text/plain</td>
  * 		<td>{@link PlainTextSerializer}</td>
  * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/x-java-serialized-object</td>
- * 		<td class='code'>application/x-java-serialized-object</td>
- * 		<td>{@link JsoSerializer}</td>
- * 	</tr>
  * </table>
  * <p>
  * Supports the following request <code>Content-Type</code> header values:
@@ -132,25 +127,33 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- * It should be noted that we do NOT add {@link JsoParser} to the list of parsers since this could
- * 	cause security issues.  Use caution when using this particular parser as it could inadvertantly cause
- * 	code execution security holes.
+ * It should be noted that we do NOT add {@link JsoParser} to the list of parsers since this could cause security
+ * issues.
+ * Use caution when using this particular parser as it could inadvertently cause code execution security holes.
  * <p>
- * The list of serializers and parsers can be appended to using the {@link RestResource#serializers() @RestResource.serializers()}
- * 	and {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
+ * The list of serializers and parsers can be appended to using the
+ * 	{@link RestResource#serializers() @RestResource.serializers()} and
+ * 	{@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
  * <p>
- * This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a POJO consisting
- * 	of beans describing the class.
+ * This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a
+ * POJO consisting of beans describing the class.
  * <img class='bordered' src='doc-files/OptionsPage.png'>
  * <p>
  * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
  *
  * <h6 class='topic'>Other Notes</h6>
  * <ul class='spaced-list'>
- * 	<li>Provides a default HTML stylesheet by setting {@link RestResource#stylesheet() @RestResource.stylesheet()} to <js>"styles/juneau.css"</js>.
- * 	<li>Provides a default favicon by setting {@link RestResource#favicon() @RestResource.favicon()} to <js>"juneau.ico"</js>.
- * 	<li>Provides a default classpath entry "htdocs" by setting {@link RestResource#staticFiles() @RestResource.staticFiles()} to <js>"{htdocs:'htdocs'}"</js>.
- * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL <code>/servletPath/htdocs</code>.
+ * 	<li>
+ * 		Provides a default HTML stylesheet by setting {@link RestResource#stylesheet() @RestResource.stylesheet()}
+ * 		to <js>"styles/juneau.css"</js>.
+ * 	<li>
+ * 		Provides a default favicon by setting {@link RestResource#favicon() @RestResource.favicon()} to
+ * 		<js>"juneau.ico"</js>.
+ * 	<li>
+ * 		Provides a default classpath entry "htdocs" by setting
+ * 		{@link RestResource#staticFiles() @RestResource.staticFiles()} to <js>"{htdocs:'htdocs'}"</js>.
+ * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL
+ * 		<code>/servletPath/htdocs</code>.
  * </ul>
  */
 @RestResource(

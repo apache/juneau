@@ -278,7 +278,7 @@ public class RestConfig implements ServletConfig {
 	 * used to resolve string variables of the form <js>"$X{...}"</js>.
 	 * <p>
 	 * By default, this config includes the following variables:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li>{@link SystemPropertiesVar}
 	 * 	<li>{@link EnvVariablesVar}
 	 * 	<li>{@link ConfigFileVar}
@@ -308,11 +308,12 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Adds a var context object to this config.
 	 * <p>
-	 * Var context objects are read-only objects associated with the variable resolver for
-	 * vars that require external information.
+	 * Var context objects are read-only objects associated with the variable resolver for vars that require external
+	 * information.
 	 * <p>
-	 * For example, the {@link ConfigFileVar} needs access to this resource's {@link ConfigFile} through the {@link ConfigFileVar#SESSION_config}
-	 * object that can be specified as either a session object (temporary) or context object (permanent).
+	 * For example, the {@link ConfigFileVar} needs access to this resource's {@link ConfigFile} through the
+	 * {@link ConfigFileVar#SESSION_config} object that can be specified as either a session object (temporary) or
+	 * context object (permanent).
 	 * In this case, we call the following code to add it to the context map:
 	 * <p class='bcode'>
 	 * 	config.addVarContextObject(<jsf>SESSION_config</jsf>, configFile);
@@ -330,7 +331,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Overwrites the default config file with a custom config file.
 	 * <p>
-	 * By default, the config file is determined using the {@link RestResource#config() @RestResource.config()} annotation.
+	 * By default, the config file is determined using the {@link RestResource#config() @RestResource.config()}
+	 * annotation.
 	 * This method allows you to programmatically override it with your own custom config file.
 	 *
 	 * @param configFile The new config file.
@@ -373,9 +375,11 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Adds class-level bean filters to this resource.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#beanFilters() @RestResource.beanFilters()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#beanFilters() @RestResource.beanFilters()}
+	 * annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param beanFilters The bean filters to add to this config.
 	 * @return This object (for method chaining).
@@ -390,7 +394,8 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestResource#pojoSwaps() @RestResource.pojoSwaps()} annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param pojoSwaps The pojo swaps to add to this config.
 	 * @return This object (for method chaining).
@@ -403,7 +408,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#serializerListener() @RestResource.serializerListener()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#serializerListener() @RestResource.serializerListener()} annotation.
 	 *
 	 * @param listener The listener to add to this config.
 	 * @return This object (for method chaining).
@@ -417,7 +423,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Specifies the parser listener class to use for listening to non-fatal parse errors.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#parserListener() @RestResource.parserListener()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#parserListener() @RestResource.parserListener()} annotation.
 	 *
 	 * @param listener The listener to add to this config.
 	 * @return This object (for method chaining).
@@ -431,7 +438,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Adds class-level parameter resolvers to this resource.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#paramResolvers() @RestResource.paramResolvers()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#paramResolvers() @RestResource.paramResolvers()} annotation.
 	 *
 	 * @param paramResolvers The parameter resolvers to add to this config.
 	 * @return This object (for method chaining).
@@ -444,9 +452,11 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Adds class-level serializers to this resource.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#serializers() @RestResource.serializers()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#serializers() @RestResource.serializers()}
+	 * annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param serializers The serializer classes to add to this config.
 	 * @return This object (for method chaining).
@@ -460,12 +470,14 @@ public class RestConfig implements ServletConfig {
 	 * Adds class-level serializers to this resource.
 	 * <p>
 	 * Same as {@link #addSerializers(Class...)} except allows you to pass in serializer instances.
-	 * The actual serializer ends up being the result of this operation using the bean filters, pojo swaps, and properties on this config:
+	 * The actual serializer ends up being the result of this operation using the bean filters, pojo swaps, and
+	 * properties on this config:
 	 * <p class='bcode'>
 	 * 	serializer = serializer.builder().beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).build();
 	 * </p>
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param serializers The serializers to add to this config.
 	 * @return This object (for method chaining).
@@ -480,7 +492,8 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestResource#parsers() @RestResource.parsers()} annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param parsers The parser classes to add to this config.
 	 * @return This object (for method chaining).
@@ -494,12 +507,14 @@ public class RestConfig implements ServletConfig {
 	 * Adds class-level parsers to this resource.
 	 * <p>
 	 * Same as {@link #addParsers(Class...)} except allows you to pass in parser instances.
-	 * The actual parser ends up being the result of this operation using the bean filters, pojo swaps, and properties on this config:
+	 * The actual parser ends up being the result of this operation using the bean filters, pojo swaps, and properties
+	 * on this config:
 	 * <p class='bcode'>
 	 * 	parser = parser.builder().beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).build();
 	 * </p>
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param parsers The parsers to add to this config.
 	 * @return This object (for method chaining).
@@ -514,7 +529,8 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestResource#encoders() @RestResource.encoders()} annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 * <p>
 	 * By default, only the {@link IdentityEncoder} is included in this list.
 	 *
@@ -542,12 +558,14 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Adds class-level converters to this resource.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#converters() @RestResource.converters()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#converters() @RestResource.converters()}
+	 * annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 * <p>
 	 * By default, this config includes the following converters:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li>{@link StreamableHandler}
 	 * 	<li>{@link WritableHandler}
 	 * 	<li>{@link ReaderHandler}
@@ -582,7 +600,8 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestResource#guards() @RestResource.guards()} annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param guards The guard classes to add to this config.
 	 * @return This object (for method chaining).
@@ -617,7 +636,7 @@ public class RestConfig implements ServletConfig {
 	 * Refer to {@link MimetypesFileTypeMap#addMimeTypes(String)} for an explanation of the format.
 	 * <p>
 	 * By default, this config includes the following mime-type definitions:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li><js>"text/css css CSS"</js>
 	 * 	<li><js>"text/html html htm HTML"</js>
 	 * 	<li><js>"text/plain txt text TXT"</js>
@@ -641,9 +660,11 @@ public class RestConfig implements ServletConfig {
 	 * Adds class-level default HTTP request headers to this resource.
 	 * <p>
 	 * Default request headers are default values for when HTTP requests do not specify a header value.
-	 * For example, you can specify a default value for <code>Accept</code> if a request does not specify that header value.
+	 * For example, you can specify a default value for <code>Accept</code> if a request does not specify that header
+	 * value.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
 	 *
 	 * @param name The HTTP header name.
 	 * @param value The HTTP header value.
@@ -658,9 +679,11 @@ public class RestConfig implements ServletConfig {
 	 * Adds class-level default HTTP request headers to this resource.
 	 * <p>
 	 * Default request headers are default values for when HTTP requests do not specify a header value.
-	 * For example, you can specify a default value for <code>Accept</code> if a request does not specify that header value.
+	 * For example, you can specify a default value for <code>Accept</code> if a request does not specify that header
+	 * value.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
 	 *
 	 * @param headers HTTP headers of the form <js>"Name: Value"</js>.
 	 * @return This object (for method chaining).
@@ -680,11 +703,13 @@ public class RestConfig implements ServletConfig {
 	 * Adds class-level default HTTP response headers to this resource.
 	 * <p>
 	 * Default response headers are headers that will be appended to all responses if those headers have not already been
-	 * 	set on the response object.
+	 * set on the response object.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
 	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the annotation.
+	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * annotation.
 	 *
 	 * @param name The HTTP header name.
 	 * @param value The HTTP header value.
@@ -699,9 +724,10 @@ public class RestConfig implements ServletConfig {
 	 * Adds class-level default HTTP response headers to this resource.
 	 * <p>
 	 * Default response headers are headers that will be appended to all responses if those headers have not already been
-	 * 	set on the response object.
+	 * set on the response object.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
 	 *
 	 * @param headers HTTP headers of the form <js>"Name: Value"</js>.
 	 * @return This object (for method chaining).
@@ -723,7 +749,7 @@ public class RestConfig implements ServletConfig {
 	 * Response handlers are responsible for converting various POJOs returned by REST methods into actual HTTP responses.
 	 * <p>
 	 * By default, this config includes the following response handlers:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li>{@link StreamableHandler}
 	 * 	<li>{@link WritableHandler}
 	 * 	<li>{@link ReaderHandler}
@@ -732,7 +758,8 @@ public class RestConfig implements ServletConfig {
 	 * 	<li>{@link DefaultHandler}
 	 * </ul>
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#responseHandlers() @RestResource.responseHandlers()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#responseHandlers() @RestResource.responseHandlers()} annotation.
 	 *
 	 * @param responseHandlers The response handlers to add to this config.
 	 * @return This object (for method chaining).
@@ -880,7 +907,8 @@ public class RestConfig implements ServletConfig {
 	 * 	<li>{@link CharSequence}
 	 * 	<li><code><jk>byte</jk>[]</code>
 	 * </ul>
-	 * The contents of all these stylesheets will be aggregated into a single page in the order they are specified in this list.
+	 * The contents of all these stylesheets will be aggregated into a single page in the order they are specified in
+	 * this list.
 	 *
 	 * @param styleSheets The new list of style sheets that make up the <code>styles.css</code> page.
 	 * @return This object (for method chaining).
@@ -983,12 +1011,14 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * Use this method to specify resources located in the classpath to be served up as static files.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#staticFiles() @RestResource.staticFiles()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#staticFiles() @RestResource.staticFiles()}
+	 * annotation.
 	 *
 	 * @param resourceClass The resource class used to resolve the resource streams.
 	 * @param staticFilesString A JSON string denoting a map of child URLs to classpath subdirectories.
 	 * For example, if this string is <js>"{htdocs:'docs'}"</js> with class <code>com.foo.MyResource</code>,
-	 * then URLs of the form <js>"/resource-path/htdocs/..."</js> will resolve to files located in the <code>com.foo.docs</code> package.
+	 * then URLs of the form <js>"/resource-path/htdocs/..."</js> will resolve to files located in the
+	 * <code>com.foo.docs</code> package.
 	 * @return This object (for method chaining).
 	 */
 	public RestConfig addStaticFiles(Class<?> resourceClass, String staticFilesString) {
@@ -1001,10 +1031,12 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Overrides the default REST resource resolver.
 	 * <p>
-	 * The resource resolver is used to resolve instances from {@link Class} objects defined in the {@link RestResource#children()} annotation.
+	 * The resource resolver is used to resolve instances from {@link Class} objects defined in the
+	 * {@link RestResource#children()} annotation.
 	 * The default value is the base class {@link RestResourceResolver}.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#resourceResolver() @RestResource.resourceResolver()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#resourceResolver() @RestResource.resourceResolver()} annotation.
 	 *
 	 * @param resourceResolver The new resource resolver.
 	 * @return This object (for method chaining).
@@ -1045,7 +1077,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Sets name of the header used to denote the client version on HTTP requests.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#clientVersionHeader() @RestResource.clientVersionHeader()} annotation.
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#clientVersionHeader() @RestResource.clientVersionHeader()} annotation.
 	 *
 	 * @param clientVersionHeader The name of the HTTP header that denotes the client version.
 	 * @return This object (for method chaining).
@@ -1061,7 +1094,7 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is plain text.
 	 * <p>
 	 * It gets wrapped in a <code><xt>&lt;h3&gt; <xa>class</xa>=<xs>'title'</xs>&gt;</xt></code> element and then added
-	 * 	to the <code><xt>&lt;header&gt;</code> section on the page.
+	 * to the <code><xt>&lt;header&gt;</code> section on the page.
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
@@ -1100,7 +1133,7 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is plain text.
 	 * <p>
 	 * It gets wrapped in a <code><xt>&lt;h5&gt; <xa>class</xa>=<xs>'description'</xs>&gt;</xt></code> element and then
-	 * 	added to the <code><xt>&lt;header&gt;</code> section on the page.
+	 * added to the <code><xt>&lt;header&gt;</code> section on the page.
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
@@ -1162,9 +1195,10 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is HTML.
 	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
-	 * 	to be whatever you want.
+	 * to be whatever you want.
 	 * <p>
-	 * When a value is specified, the {@link #setHtmlTitle(String)} and {@link #setHtmlDescription(String)} values will be ignored.
+	 * When a value is specified, the {@link #setHtmlTitle(String)} and {@link #setHtmlDescription(String)} values will
+	 * be ignored.
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no header.
 	 * <p>
@@ -1184,7 +1218,7 @@ public class RestConfig implements ServletConfig {
 	 * Sets the links in the HTML nav section.
 	 * <p>
 	 * The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
-	 * 	relative (to the servlet) or absolute URLs.
+	 * relative (to the servlet) or absolute URLs.
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
 	 * <p>
@@ -1300,7 +1334,7 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is CSS.
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols defined
-	 * 	by {@link UriResolver}.
+	 * by {@link UriResolver}.
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#cssUrl() @HtmlDoc.cssUrl()} annotation.
 	 *
@@ -1328,7 +1362,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Specifies the text to display when serializing an empty array or collection.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc.noResultsMessage()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc.noResultsMessage()}
+	 * annotation.
 	 *
 	 * @param value The text to display when serializing an empty array or collection.
 	 * @return This object (for method chaining).
@@ -1358,9 +1393,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
 	 * <p>
-	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide
-	 * 	 your own custom renderer or subclasses from the basic class to have full control over how the page is
-	 * 	rendered.
+	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
+	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
 	 *
@@ -1374,7 +1408,7 @@ public class RestConfig implements ServletConfig {
 
 	/**
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * 	generate arbitrary replacement text.
+	 * generate arbitrary replacement text.
 	 * <p>
 	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 *
@@ -1419,7 +1453,8 @@ public class RestConfig implements ServletConfig {
 	 * The call handler is the object that handles execution of REST HTTP calls.
 	 * Subclasses can be created that customize the behavior of how REST calls are handled.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#callHandler() @RestResource.callHandler()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#callHandler() @RestResource.callHandler()}
+	 * annotation.
 	 *
 	 * @param restHandler The new call handler for this resource.
 	 * @return This object (for method chaining).
@@ -1435,7 +1470,8 @@ public class RestConfig implements ServletConfig {
 	 * The call handler is the object that handles execution of REST HTTP calls.
 	 * Subclasses can be created that customize the behavior of how REST calls are handled.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#callHandler() @RestResource.callHandler()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#callHandler() @RestResource.callHandler()}
+	 * annotation.
 	 *
 	 * @param restHandler The new call handler for this resource.
 	 * @return This object (for method chaining).
@@ -1451,7 +1487,8 @@ public class RestConfig implements ServletConfig {
 	 * The info provider provides all the various information about a resource such as the Swagger documentation.
 	 * Subclasses can be created that customize the information.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#infoProvider() @RestResource.infoProvider()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#infoProvider() @RestResource.infoProvider()}
+	 * annotation.
 	 *
 	 * @param infoProvider The new info provider for this resource.
 	 * @return This object (for method chaining).
@@ -1467,7 +1504,8 @@ public class RestConfig implements ServletConfig {
 	 * The info provider provides all the various information about a resource such as the Swagger documentation.
 	 * Subclasses can be created that customize the information.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#infoProvider() @RestResource.infoProvider()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#infoProvider() @RestResource.infoProvider()}
+	 * annotation.
 	 *
 	 * @param infoProvider The new info provider for this resource.
 	 * @return This object (for method chaining).
@@ -1479,6 +1517,7 @@ public class RestConfig implements ServletConfig {
 
 	/**
 	 * Creates a new {@link PropertyStore} object initialized with the properties defined in this config.
+	 *
 	 * @return A new property store.
 	 */
 	protected PropertyStore createPropertyStore() {
@@ -1493,7 +1532,8 @@ public class RestConfig implements ServletConfig {
 	/**
 	 * Returns the external configuration file for this resource.
 	 * <p>
-	 * The configuration file location is determined via the {@link RestResource#config() @RestResource.config()} annotation on the resource.
+	 * The configuration file location is determined via the {@link RestResource#config() @RestResource.config()}
+	 * annotation on the resource.
 	 * <p>
 	 * The config file can be programmatically overridden by adding the following method to your resource:
 	 * <p class='bcode'>
@@ -1539,7 +1579,8 @@ public class RestConfig implements ServletConfig {
 	 * 	<li>{@link SwitchVar}
 	 * </ul>
 	 * <p>
-	 * Note that the variables supported here are only a subset of those returned by {@link RestRequest#getVarResolverSession()}.
+	 * Note that the variables supported here are only a subset of those returned by
+	 * {@link RestRequest#getVarResolverSession()}.
 	 *
 	 * @return The variable resolver for this resource.  Never <jk>null</jk>.
 	 */

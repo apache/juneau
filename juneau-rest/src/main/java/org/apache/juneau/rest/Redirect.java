@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.*;
  * REST methods can return this object as a shortcut for performing <code>HTTP 302</code> redirects.
  * <p>
  * The following example shows the difference between handling redirects via the {@link RestRequest}/{@link RestResponse},
- * 	and the simplified approach of using this class.
+ * and the simplified approach of using this class.
  * <p class='bcode'>
  * 	<jc>// Redirect to "/contextPath/servletPath/foobar"</jc>
  *
@@ -48,8 +48,8 @@ import org.apache.juneau.urlencoding.*;
  * 	}
  * </p>
  * <p>
- * The arguments are serialized to strings using the servlet's {@link UrlEncodingSerializer},
- * 	so any filters defined on the serializer or REST method/class will be used when present.
+ * The arguments are serialized to strings using the servlet's {@link UrlEncodingSerializer}, so any filters defined on
+ * the serializer or REST method/class will be used when present.
  * The arguments will also be automatically URL-encoded.
  * <p>
  * Redirecting to the servlet root can be accomplished by simply using the no-arg constructor.
@@ -62,8 +62,8 @@ import org.apache.juneau.urlencoding.*;
  * 	}
  * </p>
  * <p>
- * This class is handled by {@link org.apache.juneau.rest.response.RedirectHandler}, a built-in default
- * 	response handler created in {@link RestConfig}.
+ * This class is handled by {@link org.apache.juneau.rest.response.RedirectHandler}, a built-in default response
+ * handler created in {@link RestConfig}.
  */
 public final class Redirect {
 

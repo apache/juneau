@@ -23,8 +23,7 @@ import org.apache.juneau.svl.vars.*;
  * Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.
  * <p>
  * Variables are of the form <code>$X{key}</code>, where <code>X</code> can consist of zero or more ASCII characters.
- * <br>
- * The variable key can contain anything, even nested variables that get recursively resolved.
+ * <br>The variable key can contain anything, even nested variables that get recursively resolved.
  * <p>
  * Variables are defined through the {@link VarResolverBuilder#vars(Class[])} method.
  * <p>
@@ -83,7 +82,7 @@ import org.apache.juneau.svl.vars.*;
  * <p>
  * Var resolvers can be cloned by using the {@link #builder()} method.
  * Cloning a resolver will copy it's {@link Var} class names and context objects.
- * <p>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>

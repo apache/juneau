@@ -228,9 +228,11 @@
 		Resolving config files can be retrieved through the following methods:
 	</p>	
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.ini.ConfigFile#getResolving()} - Returns a config file that resolves a default 
+		<li>
+			{@link org.apache.juneau.ini.ConfigFile#getResolving()} - Returns a config file that resolves a default 
 			set of variables.
-		<li>{@link org.apache.juneau.ini.ConfigFile#getResolving(VarResolver)} - Returns a config file that resolves 
+		<li>
+			{@link org.apache.juneau.ini.ConfigFile#getResolving(VarResolver)} - Returns a config file that resolves 
 			a custom set of variables.
 	</ul>
 	<p>
@@ -238,11 +240,14 @@
 		the following variables:
 	</p>
 	<ul class='spaced-list'>
-		<li><code>$S{key}</code>, <code>$S{key,default}</code> - System properties.
-		<li><code>$E{key}</code>, <code>$E{key,default}</code> - Environment variables.
-		<li><code>$C{key}</code>, <code>$C{key,default}</code> - Values in this configuration file.
+		<li>
+			<code>$S{key}</code>, <code>$S{key,default}</code> - System properties.
+		<li>
+			<code>$E{key}</code>, <code>$E{key,default}</code> - Environment variables.
+		<li>
+			<code>$C{key}</code>, <code>$C{key,default}</code> - Values in this configuration file.
 	</ul>
-	<p>
+	
 	<h6 class='topic'>Examples:</h6>
 	<p class='bcode'>
 	<cc>#--------------------------</cc>
@@ -256,8 +261,7 @@
 	<p>
 		Support for variables is extensible.  You can add support for your own variables by implementing custom 
 		{@link org.apache.juneau.svl.VarResolver VarResolvers}.
-		<br>
-		For example, the microservice <code>Resource</code> class provides access to config files that
+		<br>For example, the microservice <code>Resource</code> class provides access to config files that
 		can contain any of the following variables:
 	</p>
 	<ul>
@@ -282,8 +286,7 @@
 	<p>
 		If a config file contains sensitive information such as passwords, those values can be 
 		marked for encoding by appending <js>'*'</js> to the end of the key name.
-		<br>
-		If a marked and unencoded value is detected in the file during load, it will be encoded and saved immediately.
+		<br>If a marked and unencoded value is detected in the file during load, it will be encoded and saved immediately.
 	</p>
 	<p>
 		For example, the following password is marked for encoding....
@@ -305,8 +308,7 @@
 	</p>
 	<p>
 		The default encoder is {@link org.apache.juneau.ini.XorEncoder} which is a simple XOR+Base64 encoder.
-		<br>
-		If desired, custom encoder can be used by implementing the {@link org.apache.juneau.ini.Encoder}
+		<br>If desired, custom encoder can be used by implementing the {@link org.apache.juneau.ini.Encoder}
 		interface and creating your own <code>ConfigFileBuilder</code> using the 
 		{@link org.apache.juneau.ini.ConfigFileBuilder#encoder(Encoder)} method.
 	</p>
@@ -326,10 +328,14 @@
 		Subclasses are provided for listening for different kinds of events:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.ini.ConfigFileListener} - Config file is saved, loaded, or modified.
-		<li>{@link org.apache.juneau.ini.SectionListener} - One or more entries in a section are modified.
-		<li>{@link org.apache.juneau.ini.EntryListener} - An individual entry is modified.
+		<li>
+			{@link org.apache.juneau.ini.ConfigFileListener} - Config file is saved, loaded, or modified.
+		<li>
+			{@link org.apache.juneau.ini.SectionListener} - One or more entries in a section are modified.
+		<li>
+			{@link org.apache.juneau.ini.EntryListener} - An individual entry is modified.
 	</ul>
+	
 	<h6 class="topic">Example:</h6>
 	<p class='bcode'>
 	<jc>// Get our config file using the default config manager</jc>
@@ -355,8 +361,7 @@
 		The {@link org.apache.juneau.ini.ConfigFileBuilder} class contains a 
 		{@link org.apache.juneau.ini.ConfigFileBuilder#main(String[])} method that can be used to work with config 
 		files through a command-line prompt.
-		<br>
-		This is invoked as a normal Java command:
+		<br>This is invoked as a normal Java command:
 	</p>
 	<p class='bcode'>
 	java -jar juneau.jar org.apache.juneau.ini.ConfigFileBuilder [args]
@@ -365,21 +370,21 @@
 		Arguments can be any of the following...
 	</p>
 	<ul class='spaced-list'>
-		<li>No arguments
-			<br>
-			Prints usage message.
-		<li><code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code>
-			<br>
-			Creates a batch file that will set each config file entry as an environment variable.
-			<br>
-			Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
+		<li>
+			No arguments
+			<br>Prints usage message.
+		<li>
+			<code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code>
+			<br>Creates a batch file that will set each config file entry as an environment variable.
+			<br>Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
 			will be converted to underscores.
-		<li><code>createShellEnvFile -configFile &lt;configFile&gt; -envFile &lt;configFile&gt; [-verbose]</code>
+		<li>
+			<code>createShellEnvFile -configFile &lt;configFile&gt; -envFile &lt;configFile&gt; [-verbose]</code>
 			Creates a shell script that will set each config file entry as an environment variable.
-			<br>
-			Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
-				will be converted to underscores.
-		<li><code>setVals -configFile &lt;configFile&gt; -vals [var1=val1 [var2=val2...]] [-verbose]</code>
+			<br>Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
+			will be converted to underscores.
+		<li>
+			<code>setVals -configFile &lt;configFile&gt; -vals [var1=val1 [var2=val2...]] [-verbose]</code>
 			Sets values in config files.
 	</ul>
 	<p>
@@ -402,11 +407,9 @@
 	<p>
 		The <code>org.apache.juneau.microservice.resources.ConfigResource</code> is a predefined REST interface that
 		allows access to the config file used by a microservice.
-		<br>
-		The <code>juneau-examples-rest</code> project is a microservice that includes this resource
+		<br>The <code>juneau-examples-rest</code> project is a microservice that includes this resource
 		at <code>http://localhost:10000/sample/config</code>.
-		<br>
-		The sample microservice uses the following config file <code>juneau-examples.cfg</code>:
+		<br>The sample microservice uses the following config file <code>juneau-examples.cfg</code>:
 	</p>
 	<p class='bcode'>
 	<cc>#================================================================================
@@ -618,13 +621,10 @@
 	<p>
 		In the previous example, an edit page was shown that allows you to edit config files through
 		a REST interface.
-		<br>
-		Note that if only a single entry is modified in the config file, we only want to trigger
+		<br>Note that if only a single entry is modified in the config file, we only want to trigger
 		listeners for that change, not trigger all listeners.
-		<br>
-		This is where the {@link org.apache.juneau.ini.ConfigFile#merge(ConfigFile)} method comes into play.
-		<br>
-		This method will copy the contents of one config file over to another config file, but only
+		<br>This is where the {@link org.apache.juneau.ini.ConfigFile#merge(ConfigFile)} method comes into play.
+		<br>This method will copy the contents of one config file over to another config file, but only
 		trigger listeners when the values are different.
 	</p>
 	<p>

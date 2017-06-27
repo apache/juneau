@@ -21,12 +21,17 @@ import org.apache.juneau.*;
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 	<li class='link'>
+ * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
  * 		(org.apache.juneau.dto)</a>
- * 	<ul>
- * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
- * 	</ul>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
+ * 		<ul>
+ * 			<li class='sublink'>
+ * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.Swagger'>Swagger</a>
+ * 		</ul>
+ * 	</li>
+ * 	<li class='jp'>
+ * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a>
+ * 	</li>
  * </ul>
  */
 public class SwaggerBuilder {
@@ -55,10 +60,11 @@ public class SwaggerBuilder {
 	 * and {@link Contact#email(String)}, attributes.
 	 *
 	 * @param name The {@link Contact#name(String)} attribute.
-	 * @param url The {@link Contact#url(Object)} attribute.
-	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * 	<br>Strings must be valid URIs.
-	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * @param url
+	 * The {@link Contact#url(Object)} attribute.
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * <br>Strings must be valid URIs.
+	 * <br>URIs defined by {@link UriResolver} can be used for values.
 	 * @param email The {@link Contact#email(String)} attribute.
 	 * @return The new element.
 	 */
@@ -79,7 +85,8 @@ public class SwaggerBuilder {
 	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)}
 	 * attribute.
 	 *
-	 * @param url The {@link ExternalDocumentation#url(Object)} attribute.
+	 * @param url
+	 * The {@link ExternalDocumentation#url(Object)} attribute.
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * <br>Strings must be valid URIs.
 	 * <br>URIs defined by {@link UriResolver} can be used for values.

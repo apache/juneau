@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify it as a form post entry converted to a POJO.
+ * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as a form post
+ * entry converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -47,11 +47,11 @@ import org.apache.juneau.rest.*;
  * <h6 class='topic'>Important note concerning FORM posts</h6>
  * <p>
  * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody()} method
- * 	for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet
- * 	API to parse the body content as key-value pairs resulting in empty content.
+ * for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet
+ * API to parse the body content as key-value pairs resulting in empty content.
  * <p>
- * The {@link Query @Query} annotation can be used to retrieve a URL parameter
- * 	in the URL string without triggering the servlet to drain the body content.
+ * The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
+ * servlet to drain the body content.
  */
 @Documented
 @Target(PARAMETER)
@@ -88,12 +88,16 @@ public @interface FormData {
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"UON"</js> - URL-Encoded Object Notation.<br>
-	 * 		This notation allows for request parameters to contain arbitrarily complex POJOs.
-	 * 	<li><js>"PLAIN"</js> - Plain text.<br>
-	 * 		This treats request parameters as plain text.<br>
-	 * 		Only POJOs directly convertable from <l>Strings</l> can be represented in parameters when using this mode.
-	 * 	<li><js>"INHERIT"</js> (default) - Inherit from the {@link RestContext#REST_paramFormat} property on the servlet method or class.
+	 * 	<li>
+	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
+	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 	<li>
+	 * 		<js>"PLAIN"</js> - Plain text.
+	 * 		<br>This treats request parameters as plain text.
+	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this mode.
+	 * 	<li>
+	 * 		<js>"INHERIT"</js> (default) - Inherit from the {@link RestContext#REST_paramFormat} property on the
+	 * 		servlet method or class.
 	 * </ul>
 	 * <p>
 	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but

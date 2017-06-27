@@ -25,18 +25,24 @@ import org.apache.juneau.annotation.*;
 /**
  * Wraps a {@link ResourceBundle} to provide some useful additional functionality.
  * <ul class='spaced-list'>
- * 	<li>Instead of throwing {@link MissingResourceException}, the {@link #getString(String)} method
+ * 	<li>
+ * 		Instead of throwing {@link MissingResourceException}, the {@link #getString(String)} method
  * 		will return <js>"{!!key}"</js> if the bundle was not found, and <js>"{!key}"</js> if bundle
  * 		was found but the key is not in the bundle.
- * 	<li>A client locale can be set as a {@link ThreadLocal} object using the static {@link #setClientLocale(Locale)}
+ * 	<li>
+ * 		A client locale can be set as a {@link ThreadLocal} object using the static {@link #setClientLocale(Locale)}
  * 		so that client localized messages can be retrieved using the {@link #getClientString(String, Object...)}
  * 		method on all instances of this class.
- * 	<li>Resource bundles on parent classes can be added to the search path for this class by using the
+ * 	<li>
+ * 		Resource bundles on parent classes can be added to the search path for this class by using the
  * 		{@link #addSearchPath(Class, String)} method.
  * 		This allows messages to be retrieved from the resource bundles of parent classes.
- * 	<li>Locale-specific bundles can be retrieved by using the {@link #getBundle(Locale)} method.
- * 	<li>The {@link #getString(Locale, String, Object...)} method can be used to retrieve locale-specific messages.
- * 	<li>Messages in the resource bundle can optionally be prefixed with the simple class name.
+ * 	<li>
+ * 		Locale-specific bundles can be retrieved by using the {@link #getBundle(Locale)} method.
+ * 	<li>
+ * 		The {@link #getString(Locale, String, Object...)} method can be used to retrieve locale-specific messages.
+ * 	<li>
+ * 		Messages in the resource bundle can optionally be prefixed with the simple class name.
  * 		For example, if the class is <code>MyClass</code> and the properties file contains <js>"MyClass.myMessage"</js>,
  * 		the message can be retrieved using <code>getString(<js>"myMessage"</js>)</code>.
  * </ul>

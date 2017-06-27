@@ -26,17 +26,20 @@ import org.apache.juneau.transform.*;
 
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
- * <p>
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
+ * 	<li class='link'>
+ * 		<a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects
  * 		(org.apache.juneau.dto)</a>
- * 	<ul>
- * 		<li class='sublink'><a class='doclink'
- * 			href='../../../../../overview-summary.html#DTOs.JsonSchema'>JSON-Schema</a>
- * 	</ul>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
+ * 		<ul>
+ * 			<li class='sublink'>
+ * 				<a class='doclink' href='../../../../../overview-summary.html#DTOs.JsonSchema'>JSON-Schema</a>
+ * 		</ul>
+ * 	</li>
+ * 	<li class='jp'>
+ * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
+ * 	</li>
  * </ul>
  */
 @SuppressWarnings("hiding")
@@ -290,8 +293,10 @@ public class Schema {
 	/**
 	 * Used during parsing to convert the <property>type</property> property to the correct class type.
 	 * <ul class='spaced-list'>
-	 * 	<li>If parsing a JSON-array, converts to a {@link JsonTypeArray}.
-	 * 	<li>If parsing a JSON-object, converts to a {@link JsonType}.
+	 * 	<li>
+	 * 		If parsing a JSON-array, converts to a {@link JsonTypeArray}.
+	 * 	<li>
+	 * 		If parsing a JSON-object, converts to a {@link JsonType}.
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */
@@ -560,8 +565,10 @@ public class Schema {
 	/**
 	 * Used during parsing to convert the <property>items</property> property to the correct class type.
 	 * <ul class='spaced-list'>
-	 * 	<li>If parsing a JSON-array, converts to a {@link SchemaArray}.
-	 * 	<li>If parsing a JSON-object, converts to a {@link Schema}.
+	 * 	<li>
+	 * 		If parsing a JSON-array, converts to a {@link SchemaArray}.
+	 * 	<li>
+	 * 		If parsing a JSON-object, converts to a {@link Schema}.
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */
@@ -868,8 +875,10 @@ public class Schema {
 	/**
 	 * Used during parsing to convert the <property>additionalItems</property> property to the correct class type.
 	 * <ul class='spaced-list'>
-	 * 	<li>If parsing a JSON-array, converts to a {@link SchemaArray}.
-	 * 	<li>If parsing a JSON-boolean, converts to a {@link Boolean}.
+	 * 	<li>
+	 * 		If parsing a JSON-array, converts to a {@link SchemaArray}.
+	 * 	<li>
+	 * 		If parsing a JSON-boolean, converts to a {@link Boolean}.
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */
@@ -1125,8 +1134,10 @@ public class Schema {
 	/**
 	 * Used during parsing to convert the <property>additionalProperties</property> property to the correct class type.
 	 * <ul class='spaced-list'>
-	 * 	<li>If parsing a JSON-object, converts to a {@link Schema}.
-	 * 	<li>If parsing a JSON-boolean, converts to a {@link Boolean}.
+	 * 	<li>
+	 * 		If parsing a JSON-object, converts to a {@link Schema}.
+	 * 	<li>
+	 * 		If parsing a JSON-boolean, converts to a {@link Boolean}.
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */

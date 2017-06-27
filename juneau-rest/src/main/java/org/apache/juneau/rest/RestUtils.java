@@ -76,7 +76,7 @@ public final class RestUtils {
 	 * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.
 	 *
 	 * @param req The HTTP request
-	 * @return The undecoded path info.
+	 * @return The un-decoded path info.
 	 */
 	public static String getPathInfoUndecoded(HttpServletRequest req) {
 		String requestURI = req.getRequestURI();

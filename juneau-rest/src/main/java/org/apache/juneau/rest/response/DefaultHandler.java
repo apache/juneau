@@ -30,8 +30,8 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The {@link Serializer} used is based on the <code>Accept</code> header on the request.
  * <p>
- * The <code>Content-Type</code> header is set to the mime-type defined on the selected
- * 	serializer based on the {@link Produces#contentType() @Produces.contentType} annotation.
+ * The <code>Content-Type</code> header is set to the mime-type defined on the selected serializer based on the
+ * {@link Produces#contentType() @Produces.contentType} annotation.
  */
 public class DefaultHandler implements ResponseHandler {
 

@@ -22,7 +22,8 @@ import org.apache.juneau.rest.*;
 /**
  * Response handler for {@link Writable} and {@link ReaderResource} objects.
  * <p>
- * Uses the {@link Writable#writeTo(Writer)} method to send the contents to the {@link RestResponse#getNegotiatedWriter()} writer.
+ * Uses the {@link Writable#writeTo(Writer)} method to send the contents to the
+ * {@link RestResponse#getNegotiatedWriter()} writer.
  */
 public final class StreamableHandler implements ResponseHandler {
 

@@ -64,7 +64,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * Abort serialization if specified depth is reached in the POJO tree.
 	 * If this depth is exceeded, an exception is thrown.
 	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_maxDepth</jsf>, value)</code>.
@@ -90,7 +90,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * <p>
 	 * The initial indentation level at the root.
 	 * Useful when constructing document fragments that need to be indented at a certain level.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_initialDepth</jsf>, value)</code>.
@@ -124,7 +124,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
 	 * <code>{A:{B:{C:null}}}</code>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_detectRecursions</jsf>, value)</code>.
@@ -152,10 +152,9 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * Used in conjunction with {@link SerializerContext#SERIALIZER_detectRecursions}.
 	 * Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
 	 * <p>
-	 * If <jk>true</jk>, when we encounter the same object when serializing a tree,
-	 * 	we set the value to <jk>null</jk>.
+	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * Otherwise, an exception is thrown.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_ignoreRecursions</jsf>, value)</code>.
@@ -181,7 +180,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_useWhitespace</jsf>, value)</code>.
@@ -215,7 +214,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_maxIndent</jsf>, value)</code>.
@@ -244,7 +243,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
 	 * the value type.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_addBeanTypeProperties</jsf>, value)</code>.
@@ -270,7 +269,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * This is the character used for quoting attributes and values.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_quoteChar</jsf>, value)</code>.
@@ -304,7 +303,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimNullProperties</jsf>, value)</code>.
@@ -333,7 +332,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimEmptyCollections</jsf>, value)</code>.
@@ -363,7 +362,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimEmptyMaps</jsf>, value)</code>.
@@ -392,7 +391,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimStrings</jsf>, value)</code>.
@@ -417,12 +416,12 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
-	 * <p>
+	 *
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>
 	 * </p>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriContext</jsf>, value)</code>.
@@ -462,7 +461,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * 	<li>{@link UriResolution#NONE}
 	 * 		- Don't do any URL resolution.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriResolution</jsf>, value)</code>.
@@ -500,7 +499,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * 	<li>{@link UriRelativity#PATH_INFO}
 	 * 		- Relative URIs should be considered relative to the request URI.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriRelativity</jsf>, value)</code>.
@@ -523,7 +522,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortCollections</jsf>, value)</code>.
@@ -547,6 +546,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortMaps</jsf>, value)</code>.

@@ -63,7 +63,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_trimStrings</jsf>, value)</code>.
@@ -115,7 +115,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 * 		</td>
 	 * 	</tr>
 	 * </table>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_strict</jsf>,value)</code>.
@@ -151,7 +151,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_inputStreamCharset</jsf>, value)</code>.
@@ -180,7 +180,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
 	 * <p>
 	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_fileCharset</jsf>,value)</code>.

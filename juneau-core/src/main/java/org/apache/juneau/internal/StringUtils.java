@@ -60,7 +60,7 @@ public final class StringUtils {
 	 * Parses a number from the specified reader stream.
 	 *
 	 * @param r The reader to parse the string from.
-	 * @param type The number type to created. <br>
+	 * @param type The number type to created.
 	 * Can be any of the following:
 	 * <ul>
 	 * 	<li> Integer
@@ -107,7 +107,7 @@ public final class StringUtils {
 	 * Parses a number from the specified string.
 	 *
 	 * @param s The string to parse the number from.
-	 * @param type The number type to created. <br>
+	 * @param type The number type to created.
 	 * Can be any of the following:
 	 * <ul>
 	 * 	<li> Integer

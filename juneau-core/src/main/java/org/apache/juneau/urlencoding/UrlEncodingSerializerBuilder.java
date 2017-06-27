@@ -77,14 +77,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * </p>
 	 * <p>
 	 * This option only applies to beans.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
 	 * </ul>
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>URLENC_expandedParams</jsf>, value)</code>.
@@ -112,14 +112,16 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 * <p>
 	 * The possible values are:
-	 * <ul>
-	 * 	<li><js>"UON"</js> (default) - Use UON notation for values.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"UON"</js> (default) - Use UON notation for values.
 	 * 		<br>String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
 	 * 		<br>Similarly, boolean and numeric values will also end up quoted.
-	 * 	<li><js>"PLAINTEXT"</js> (default) - Serialize as plain text.
+	 * 	<li>
+	 * 		<js>"PLAINTEXT"</js> (default) - Serialize as plain text.
 	 * 		<br>Strings will never be quoted or escaped.
 	 * 		<br>Note that this can cause errors during parsing if you're using the URL-encoding parser to parse
-	 * 		the results since UON constructs won't be differentiatable.
+	 * 		the results since UON constructs won't be differentiable.
 	 * 		<br>However, this is not an issue if you're simply creating queries or form posts against 3rd-party interfaces.
 	 * </ul>
 	 *

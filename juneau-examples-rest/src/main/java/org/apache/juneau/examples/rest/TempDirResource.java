@@ -73,7 +73,7 @@ public class TempDirResource extends DirectoryResource {
 		FileItemIterator iter = upload.getItemIterator(req);
 		while (iter.hasNext()) {
 			FileItemStream item = iter.next();
-			if (item.getFieldName().equals("contents")) { //$NON-NLS-1$
+			if (item.getFieldName().equals("contents")) {
 				File f = new File(getRootDir(), item.getName());
 				IOPipe.create(item.openStream(), new FileOutputStream(f)).closeOut().run();
 			}
@@ -86,7 +86,7 @@ public class TempDirResource extends DirectoryResource {
 		@Override /* RestMatcher */
 		public boolean matches(RestRequest req) {
 			String contentType = req.getContentType();
-			return contentType != null && contentType.startsWith("multipart/form-data"); //$NON-NLS-1$
+			return contentType != null && contentType.startsWith("multipart/form-data");
 		}
 	}
 }
