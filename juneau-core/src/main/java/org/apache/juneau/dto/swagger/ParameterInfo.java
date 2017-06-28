@@ -21,8 +21,10 @@ import org.apache.juneau.json.*;
 
 /**
  * Describes a single operation parameter.
+ *
  * <p>
  * A unique parameter is defined by a combination of a name and location.
+ *
  * <p>
  * There are five possible parameter types.
  * <ul>
@@ -116,8 +118,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Required. The name of the parameter.
+	 *
+	 * <p>
 	 * Parameter names are case sensitive.
 	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
 	 * from the <code>path</code> field in the <a class="doclink"
@@ -134,8 +139,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Required. The name of the parameter.
+	 *
+	 * <p>
 	 * Parameter names are case sensitive.
 	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
 	 * from the <code>path</code> field in the <a class="doclink"
@@ -165,8 +173,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>in</property>.
+	 *
 	 * <p>
 	 * Required. The location of the parameter.
+	 *
+	 * <p>
 	 * Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
 	 *
 	 * @return The value of the <property>in</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -177,8 +188,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>in</property>.
+	 *
 	 * <p>
 	 * Required. The location of the parameter.
+	 *
+	 * <p>
 	 * Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
 	 *
 	 * @param in The new value for the <property>in</property> property on this bean.
@@ -207,14 +221,17 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A brief description of the parameter.
+	 *
+	 * <p>
 	 * This could contain examples of use.
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -222,8 +239,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A brief description of the parameter.
+	 *
+	 * <p>
 	 * This could contain examples of use.
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
@@ -248,8 +268,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>required</property>.
+	 *
 	 * <p>
 	 * Determines whether this parameter is mandatory.
+	 *
+	 * <p>
 	 * If the parameter is <code>in</code> <js>"path"</js>, this property is required and its value MUST be
 	 * <jk>true</jk>.
 	 * Otherwise, the property MAY be included and its default value is <jk>false</jk>.
@@ -262,8 +285,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>required</property>.
+	 *
 	 * <p>
 	 * Determines whether this parameter is mandatory.
+	 *
+	 * <p>
 	 * If the parameter is <code>in</code> <js>"path"</js>, this property is required and its value MUST be
 	 * <jk>true</jk>.
 	 * Otherwise, the property MAY be included and its default value is <jk>false</jk>.
@@ -288,6 +314,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
+	 *
 	 * <p>
 	 * Required. The schema defining the type used for the body parameter.
 	 *
@@ -299,6 +326,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schema</property>.
+	 *
 	 * <p>
 	 * Required. The schema defining the type used for the body parameter.
 	 *
@@ -322,8 +350,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Required. The type of the parameter.
+	 *
+	 * <p>
 	 * Since the parameter is not located at the request body, it is limited to simple types (that is, not an object).
 	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>,
 	 * <js>"array"</js> or <js>"file"</js>.
@@ -339,8 +370,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Required. The type of the parameter.
+	 *
+	 * <p>
 	 * Since the parameter is not located at the request body, it is limited to simple types (that is, not an object).
 	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>,
 	 * <js>"array"</js> or <js>"file"</js>.
@@ -372,8 +406,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>format</property>.
+	 *
 	 * <p>
 	 * The extending format for the previously mentioned type.
+	 *
+	 * <p>
 	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
 	 * details.
 	 *
@@ -385,8 +422,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>format</property>.
+	 *
 	 * <p>
 	 * The extending format for the previously mentioned type.
+	 *
+	 * <p>
 	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
 	 * details.
 	 *
@@ -410,8 +450,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>allowEmptyValue</property>.
+	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters.
+	 *
+	 * <p>
 	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
 	 * parameter with a name only or an empty value.
 	 * Default value is <jk>false</jk>.
@@ -425,8 +468,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>allowEmptyValue</property>.
+	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters.
+	 *
+	 * <p>
 	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
 	 * parameter with a name only or an empty value.
 	 * Default value is <jk>false</jk>.
@@ -451,8 +497,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>items</property>.
+	 *
 	 * <p>
 	 * Required if <code>type</code> is <js>"array"</js>.
+	 *
+	 * <p>
 	 * Describes the type of items in the array.
 	 *
 	 * @return The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -463,8 +512,11 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>items</property>.
+	 *
 	 * <p>
 	 * Required if <code>type</code> is <js>"array"</js>.
+	 *
+	 * <p>
 	 * Describes the type of items in the array.
 	 *
 	 * @param items The new value for the <property>items</property> property on this bean.
@@ -487,8 +539,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
+	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
@@ -500,11 +554,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		instance <code>foo=bar&amp;foo=baz</code>.
 	 * 		This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
 	 * </ul>
+	 *
 	 * <p>
 	 * Default value is <code>csv</code>.
 	 *
-	 * @return The value of the <property>collectionFormat</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>collectionFormat</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public String getCollectionFormat() {
 		return collectionFormat;
@@ -512,8 +568,10 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>collectionFormat</property>.
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
+	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
@@ -525,6 +583,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		instance <code>foo=bar&amp;foo=baz</code>.
 	 * 		This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
 	 * </ul>
+	 *
 	 * <p>
 	 * Default value is <code>csv</code>.
 	 *
@@ -550,6 +609,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>default</property>.
+	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
@@ -566,6 +626,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>default</property>.
+	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
@@ -594,6 +655,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -606,6 +668,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -630,6 +693,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -643,6 +707,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -667,6 +732,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -679,6 +745,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -703,6 +770,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -716,6 +784,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -740,6 +809,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
@@ -752,6 +822,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
@@ -776,6 +847,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
@@ -788,6 +860,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
@@ -812,6 +885,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
@@ -824,6 +898,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
@@ -848,6 +923,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
@@ -860,6 +936,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
@@ -884,6 +961,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
@@ -896,6 +974,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
@@ -920,6 +999,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
@@ -933,6 +1013,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
@@ -957,6 +1038,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
@@ -969,6 +1051,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
@@ -983,12 +1066,14 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>enum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
-	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
-	 * These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param _enum
+	 * 	The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
@@ -1010,8 +1095,9 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Synonym for {@link #addEnum(Object...)}.
 	 *
-	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
-	 * These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param _enum
+	 * 	The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo _enum(Object..._enum) {
@@ -1020,6 +1106,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
@@ -1032,6 +1119,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.

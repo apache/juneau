@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/semantics.html#the-html-element">&lt;html&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#the-html-element">&lt;html&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,6 +35,8 @@ public class Html extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#attr-html-manifest">manifest</a> attribute.
+	 *
+	 * <p>
 	 * Application cache manifest.
 	 *
 	 * @param manifest The new value for this attribute.

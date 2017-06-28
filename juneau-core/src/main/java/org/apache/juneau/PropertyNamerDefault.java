@@ -24,6 +24,7 @@ import java.beans.*;
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"fooBarURL"</js>
  * 	<li><js>"URL"</js> -&gt; <js>"URL"</js>
  * </ul>
+ *
  * <p>
  * See {@link Introspector#decapitalize(String)} for exact rules.
  */

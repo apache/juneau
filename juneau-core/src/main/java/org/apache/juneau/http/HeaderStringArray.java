@@ -16,6 +16,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.
+ *
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
@@ -46,6 +47,7 @@ public class HeaderStringArray {
 
 	/**
 	 * Returns this header as a simple string value.
+	 *
 	 * <p>
 	 * Functionally equivalent to calling {@link #toString()}.
 	 *

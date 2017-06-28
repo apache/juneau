@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Cache-Control</l> HTTP request header.
+ *
  * <p>
  * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
  *
@@ -30,9 +31,11 @@ package org.apache.juneau.http;
  * These directives typically override the default caching algorithms.
  * Cache directives are unidirectional in that the presence of a directive in a request does not imply that the same
  * directive is to be given in the response.
+ *
  * <p>
  * Note that HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache (see section
  * 14.32).
+ *
  * <p>
  * Cache directives MUST be passed through by a proxy or gateway application, regardless of their significance to that
  * application, since the directives might be applicable to all recipients along the request/response chain.
@@ -64,11 +67,13 @@ package org.apache.juneau.http;
  * 	     | cache-extension                        ; Section 14.9.6
  * 	cache-extension = token [ "=" ( token | quoted-string ) ]
  * </p>
+ *
  * <p>
  * When a directive appears without any 1#field-name parameter, the directive applies to the entire request or response.
  * When such a directive appears with a 1#field-name parameter, it applies only to the named field or fields, and not
  * to the rest of the request or response. This mechanism supports extensibility; implementations of future versions
  * of the HTTP protocol might apply these directives to header fields not defined in HTTP/1.1.
+ *
  * <p>
  * The cache-control directives can be broken down into these general categories:
  * <ul>

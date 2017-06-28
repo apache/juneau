@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/embedded-content-0.html#the-map-element">&lt;map&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-map-element">&lt;map&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,6 +35,8 @@ public class Map extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-map-name">name</a> attribute.
+	 *
+	 * <p>
 	 * Name of image map to reference from the usemap attribute.
 	 *
 	 * @param name The new value for this attribute.

@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Referer</l> HTTP request header.
+ *
  * <p>
  * This is the address of the previous web page from which a link to the currently requested page was followed.
  * (The word “referrer” has been misspelled in the RFC as well as in most implementations to the point that it has
@@ -33,14 +34,17 @@ package org.apache.juneau.http;
  * It also allows obsolete or mistyped links to be traced for maintenance.
  * The Referer field MUST NOT be sent if the Request-URI was obtained from a source that does not have its own URI,
  * such as input from the user keyboard.
+ *
  * <p class='bcode'>
  * 	Referer        = "Referer" ":" ( absoluteURI | relativeURI )
  * </p>
+ *
  * <p>
  * Example:
  * <p class='bcode'>
  * 	Referer: http://www.w3.org/hypertext/DataSources/Overview.html
  * </p>
+ *
  * <p>
  * If the field value is a relative URI, it SHOULD be interpreted relative to the Request-URI.
  * The URI MUST NOT include a fragment. See section 15.1.3 for security considerations.

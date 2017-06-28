@@ -134,9 +134,11 @@ public class Schema {
 
 	/**
 	 * Bean property setter:  <property>id</property>.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -160,9 +162,11 @@ public class Schema {
 
 	/**
 	 * Bean property setter:  <property>$schema</property>.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -218,8 +222,9 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>type</property>.
 	 *
-	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
-	 * Can be either a {@link JsonType} or {@link JsonTypeArray} depending on what value was used to set it.
+	 * @return
+	 * 	The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * 	Can be either a {@link JsonType} or {@link JsonTypeArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=JsonTypeOrJsonTypeArraySwap.class)
 	public Object getType() {
@@ -230,11 +235,12 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>type</property> property when it is a {@link JsonType} value.
 	 *
-	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a
-	 * {@link JsonTypeArray}.
+	 * @return
+	 * 	The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonTypeArray}.
 	 */
 	@BeanIgnore
 	public JsonType getTypeAsJsonType() {
@@ -243,6 +249,7 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>type</property> property when it is a {@link JsonTypeArray} value.
 	 *
@@ -256,8 +263,9 @@ public class Schema {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 *
-	 * @param type The new value for the <property>type</property> property on this bean.
-	 * This object must be of type {@link JsonType} or {@link JsonTypeArray}.
+	 * @param type
+	 * 	The new value for the <property>type</property> property on this bean.
+	 * 	This object must be of type {@link JsonType} or {@link JsonTypeArray}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -292,12 +300,15 @@ public class Schema {
 
 	/**
 	 * Used during parsing to convert the <property>type</property> property to the correct class type.
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If parsing a JSON-array, converts to a {@link JsonTypeArray}.
 	 * 	<li>
 	 * 		If parsing a JSON-object, converts to a {@link JsonType}.
 	 * </ul>
+	 *
+	 * <p>
 	 * Serialization method is a no-op.
 	 */
 	public static class JsonTypeOrJsonTypeArraySwap extends PojoSwap<Object,Object> {
@@ -321,8 +332,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>definitions</property>.
 	 *
-	 * @return The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,Schema> getDefinitions() {
 		return definitions;
@@ -367,6 +378,8 @@ public class Schema {
 
 	/**
 	 * Returns the property with the specified name.
+	 *
+	 * <p>
 	 * This is equivalent to calling <property>getProperty(name, <jk>false</jk>)</property>.
 	 *
 	 * @param name The property name.
@@ -378,8 +391,10 @@ public class Schema {
 
 	/**
 	 * Returns the property with the specified name.
-	 * If <property>resolve</property> is <jk>true</jk>, the property object will automatically be
-	 * resolved by calling {@link #resolve()}.
+	 *
+	 * <p>
+	 * If <property>resolve</property> is <jk>true</jk>, the property object will automatically be  resolved by calling
+	 * {@link #resolve()}.
 	 * Therefore, <property>getProperty(name, <jk>true</jk>)</property> is equivalent to calling
 	 * <property>getProperty(name).resolve()</property>, except it's safe from a potential
 	 * <property>NullPointerException</property>.
@@ -418,6 +433,7 @@ public class Schema {
 
 	/**
 	 * Bean property appender:  <property>properties</property>.
+	 *
 	 * <p>
 	 * Properties must have their <property>name</property> property set on them when using this method.
 	 *
@@ -441,8 +457,9 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>patternProperties</property>.
 	 *
-	 * @return The value of the <property>patternProperties</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>patternProperties</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public Map<String,Schema> getPatternProperties() {
 		return patternProperties;
@@ -467,6 +484,7 @@ public class Schema {
 
 	/**
 	 * Bean property appender:  <property>patternProperties</property>.
+	 *
 	 * <p>
 	 * Properties must have their <property>name</property> property set to the pattern string when using this method.
 	 *
@@ -490,8 +508,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>dependencies</property>.
 	 *
-	 * @return The value of the <property>dependencies</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>dependencies</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,Schema> getDependencies() {
 		return dependencies;
@@ -528,8 +546,9 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>items</property>.
 	 *
-	 * @return The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
-	 * Can be either a {@link Schema} or {@link SchemaArray} depending on what value was used to set it.
+	 * @return
+	 * 	The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * 	Can be either a {@link Schema} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=SchemaOrSchemaArraySwap.class)
 	public Object getItems() {
@@ -540,6 +559,7 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>items</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>items</property> property when it is a {@link Schema} value.
 	 *
@@ -552,6 +572,7 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>items</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>items</property> property when it is a {@link SchemaArray} value.
 	 *
@@ -564,12 +585,15 @@ public class Schema {
 
 	/**
 	 * Used during parsing to convert the <property>items</property> property to the correct class type.
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If parsing a JSON-array, converts to a {@link SchemaArray}.
 	 * 	<li>
 	 * 		If parsing a JSON-object, converts to a {@link Schema}.
 	 * </ul>
+	 *
+	 * <p>
 	 * Serialization method is a no-op.
 	 */
 	public static class SchemaOrSchemaArraySwap extends PojoSwap<Object,Object> {
@@ -593,8 +617,9 @@ public class Schema {
 	/**
 	 * Bean property setter:  <property>items</property>.
 	 *
-	 * @param items The new value for the <property>items</property> property on this bean.
-	 * This object must be of type {@link Schema} or {@link SchemaArray}.
+	 * @param
+	 * 	items The new value for the <property>items</property> property on this bean.
+	 * 	This object must be of type {@link Schema} or {@link SchemaArray}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -673,8 +698,9 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public Boolean isExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -714,8 +740,9 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public Boolean isExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -795,9 +822,10 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalItems</property>.
 	 *
-	 * @return The value of the <property>additionalItems</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
-	 * Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
+	 * @return
+	 * 	The value of the <property>additionalItems</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
+	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=BooleanOrSchemaArraySwap.class)
 	public Object getAdditionalItems() {
@@ -808,6 +836,7 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>additionalItems</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>additionalItems</property> property when it is a {@link Boolean}
 	 * value.
@@ -821,6 +850,7 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>additionalItems</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>additionalItems</property> property when it is a
 	 * {@link SchemaArray} value.
@@ -835,8 +865,9 @@ public class Schema {
 	/**
 	 * Bean property setter:  <property>additionalItems</property>.
 	 *
-	 * @param additionalItems The new value for the <property>additionalItems</property> property on this bean.
-	 * This object must be of type {@link Boolean} or {@link SchemaArray}.
+	 * @param additionalItems
+	 * 	The new value for the <property>additionalItems</property> property on this bean.
+	 * 	This object must be of type {@link Boolean} or {@link SchemaArray}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -860,8 +891,8 @@ public class Schema {
 	/**
 	 * Bean property appender:  <property>additionalItems</property>.
 	 *
-	 * @param additionalItems The list of items to append to the <property>additionalItems</property> property on this
-	 * bean.
+	 * @param additionalItems
+	 * 	The list of items to append to the <property>additionalItems</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
 	public Schema addAdditionalItems(Schema...additionalItems) {
@@ -874,12 +905,15 @@ public class Schema {
 
 	/**
 	 * Used during parsing to convert the <property>additionalItems</property> property to the correct class type.
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If parsing a JSON-array, converts to a {@link SchemaArray}.
 	 * 	<li>
 	 * 		If parsing a JSON-boolean, converts to a {@link Boolean}.
 	 * </ul>
+	 *
+	 * <p>
 	 * Serialization method is a no-op.
 	 */
 	public static class BooleanOrSchemaArraySwap extends PojoSwap<Object,Object> {
@@ -943,8 +977,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
-	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() {
 		return uniqueItems;
@@ -964,8 +998,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>maxProperties</property>.
 	 *
-	 * @return The value of the <property>maxProperties</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>maxProperties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxProperties() {
 		return maxProperties;
@@ -985,8 +1019,8 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>minProperties</property>.
 	 *
-	 * @return The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinProperties() {
 		return minProperties;
@@ -1068,9 +1102,10 @@ public class Schema {
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
-	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it
-	 * is not set.
-	 * Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
+	 * @return
+	 * 	The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it
+	 * 	is not set.
+	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=BooleanOrSchemaSwap.class)
 	public Object getAdditionalProperties() {
@@ -1081,6 +1116,7 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>additionalProperties</property> property when it is a
 	 * {@link Boolean} value.
@@ -1094,6 +1130,7 @@ public class Schema {
 
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
+	 *
 	 * <p>
 	 * Convenience method for returning the <property>additionalProperties</property> property when it is a
 	 * {@link Schema} value.
@@ -1108,8 +1145,9 @@ public class Schema {
 	/**
 	 * Bean property setter:  <property>additionalProperties</property>.
 	 *
-	 * @param additionalProperties The new value for the <property>additionalProperties</property> property on this bean.
-	 * This object must be of type {@link Boolean} or {@link Schema}.
+	 * @param additionalProperties
+	 * 	The new value for the <property>additionalProperties</property> property on this bean.
+	 * 	This object must be of type {@link Boolean} or {@link Schema}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -1133,12 +1171,15 @@ public class Schema {
 
 	/**
 	 * Used during parsing to convert the <property>additionalProperties</property> property to the correct class type.
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If parsing a JSON-object, converts to a {@link Schema}.
 	 * 	<li>
 	 * 		If parsing a JSON-boolean, converts to a {@link Boolean}.
 	 * </ul>
+	 *
+	 * <p>
 	 * Serialization method is a no-op.
 	 */
 	public static class BooleanOrSchemaSwap extends PojoSwap<Object,Object> {
@@ -1334,9 +1375,11 @@ public class Schema {
 
 	/**
 	 * Bean property setter:  <property>$ref</property>.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -1374,9 +1417,10 @@ public class Schema {
 
 	/**
 	 * Sets the master schema for this schema and all child schema objects.
+	 *
 	 * <p>
-	 * All child elements in a schema should point to a single "master" schema in order to
-	 * 	locate registered SchemaMap objects for resolving external schemas.
+	 * All child elements in a schema should point to a single "master" schema in order to locate registered SchemaMap
+	 * objects for resolving external schemas.
 	 *
 	 * @param master The master schema to associate on this and all children.  Can be <jk>null</jk>.
 	 */
@@ -1417,10 +1461,12 @@ public class Schema {
 			not.setMaster(master);
 	}
 	/**
-	 * If this schema is a reference to another schema (i.e. has its <property>$ref</property> property set),
-	 * this method will retrieve the referenced schema from the schema map registered with this schema.
-	 * If this schema is not a reference, or no schema map is registered with this schema, this method
-	 * is a no-op and simply returns this object.
+	 * If this schema is a reference to another schema (i.e. has its <property>$ref</property> property set), this
+	 * method will retrieve the referenced schema from the schema map registered with this schema.
+	 *
+	 * <p>
+	 * If this schema is not a reference, or no schema map is registered with this schema, this method is a no-op and
+	 * simply returns this object.
 	 *
 	 * @return The referenced schema, or <jk>null</jk>.
 	 */
@@ -1431,8 +1477,8 @@ public class Schema {
 	}
 
 	/**
-	 * Associates a schema map with this schema for resolving other schemas identified
-	 * through <property>$ref</property> properties.
+	 * Associates a schema map with this schema for resolving other schemas identified through <property>$ref</property>
+	 * properties.
 	 *
 	 * @param schemaMap The schema map to associate with this schema.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).

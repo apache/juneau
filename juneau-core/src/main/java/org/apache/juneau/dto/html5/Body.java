@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -46,8 +46,8 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink"
-	 * href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a>
+	 * attribute.
 	 *
 	 * @param onbeforeunload The new value for this attribute.
 	 * @return This object (for method chaining).

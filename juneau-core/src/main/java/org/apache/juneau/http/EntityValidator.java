@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a validator value.
+ *
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>

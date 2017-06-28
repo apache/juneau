@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Proxy-Authorization</l> HTTP request header.
+ *
  * <p>
  * Authorization credentials for connecting to a proxy.
  *
@@ -28,9 +29,11 @@ package org.apache.juneau.http;
  * requires authentication.
  * The Proxy-Authorization field value consists of credentials containing the authentication information of the user
  * agent for the proxy and/or realm of the resource being requested.
+ *
  * <p class='bcode'>
  * 	Proxy-Authorization     = "Proxy-Authorization" ":" credentials
  * </p>
+ *
  * <p>
  * The HTTP access authentication process is described in "HTTP Authentication: Basic and Digest Access Authentication".
  * Unlike Authorization, the Proxy-Authorization header field applies only to the next outbound proxy that demanded

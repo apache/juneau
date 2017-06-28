@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 /**
  * Defines the interface for rendering the contents of an HTML page produced by the {@link HtmlDocSerializer}
  * serializer.
+ *
  * <p>
  * The HTML doc serializer produces the following document structure with the typical contents:
  * <p class='bcode'>
@@ -45,6 +46,7 @@ package org.apache.juneau.html;
  * 		&lt;/body&gt;
  * 	&lt;/html&gt;</xt>
  * </p>
+ *
  * <p>
  * This interface allows you to control how these sections get rendered.
  */

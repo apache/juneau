@@ -27,6 +27,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link HtmlSerializer}.
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -50,18 +51,23 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param ctx The context creating this session object.
+	 * @param ctx
+	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
-	 * @param op The override properties.
+	 * @param op
+	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale The session locale.
+	 * @param locale
+	 * 	The session locale.
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone The session timezone.
+	 * @param timeZone
+	 * 	The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext The URI context.
+	 * @param uriContext
+	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
 	protected HtmlSerializerSession(HtmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
@@ -99,8 +105,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * Returns <jk>true</jk> if the specified object is a URL.
 	 *
 	 * @param cm The ClassMeta of the object being serialized.
-	 * @param pMeta The property metadata of the bean property of the object.
-	 * Can be <jk>null</jk> if the object isn't from a bean property.
+	 * @param pMeta
+	 * 	The property metadata of the bean property of the object.
+	 * 	Can be <jk>null</jk> if the object isn't from a bean property.
 	 * @param o The object.
 	 * @return <jk>true</jk> if the specified object is a URL.
 	 */
@@ -117,8 +124,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Returns the anchor text to use for the specified URL object.
 	 *
-	 * @param pMeta The property metadata of the bean property of the object.
-	 * Can be <jk>null</jk> if the object isn't from a bean property.
+	 * @param pMeta
+	 * 	The property metadata of the bean property of the object.
+	 * 	Can be <jk>null</jk> if the object isn't from a bean property.
 	 * @param o The URL object.
 	 * @return The anchor text to use for the specified URL object.
 	 */

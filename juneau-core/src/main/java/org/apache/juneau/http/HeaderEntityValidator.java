@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Category of headers that consist of a single entity validator value.
+ *
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>

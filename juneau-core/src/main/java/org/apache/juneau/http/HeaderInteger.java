@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Category of headers that consist of a single integer value.
+ *
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
@@ -53,6 +54,7 @@ public class HeaderInteger {
 
 	/**
 	 * Returns this header as a simple string value.
+	 *
 	 * <p>
 	 * Functionally equivalent to calling {@link #toString()}.
 	 *

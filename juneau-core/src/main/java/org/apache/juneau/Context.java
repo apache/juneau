@@ -19,12 +19,14 @@ import org.apache.juneau.serializer.*;
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
  * objects.
+ *
  * <p>
  * Contexts are created through the {@link PropertyStore#getContext(Class)} method.
+ *
  * <p>
  * Subclasses MUST implement a constructor method that takes in a {@link PropertyStore} parameter.
- * Besides that restriction, a context object can do anything you desire.  However, it MUST
- * 	be thread-safe and all fields should be declared final to prevent modification.
+ * Besides that restriction, a context object can do anything you desire.
+ * However, it MUST be thread-safe and all fields should be declared final to prevent modification.
  * It should NOT be used for storing temporary or state information.
  *
  * @see PropertyStore
@@ -35,6 +37,7 @@ public abstract class Context {
 
 	/**
 	 * Constructor for this class.
+	 *
 	 * <p>
 	 * Subclasses MUST implement the same constructor.
 	 *

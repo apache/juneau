@@ -27,6 +27,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * A store for instantiating {@link Context} objects.
+ *
  * <p>
  * The hierarchy of these objects are...
  * <ul class='spaced-list'>
@@ -321,9 +322,9 @@ public final class PropertyStore {
 
 	/**
 	 * Copies the properties from the specified store into this store.
+	 *
 	 * <p>
-	 * Properties of type set/list/collection will be appended to the existing
-	 * properties if they already exist.
+	 * Properties of type set/list/collection will be appended to the existing properties if they already exist.
 	 *
 	 * @param ps The store to copy from.
 	 * @return This object (for method chaining).
@@ -351,15 +352,16 @@ public final class PropertyStore {
 
 	/**
 	 * Sets a configuration property value on this object.
+	 *
 	 * <p>
 	 * A typical usage is to set or overwrite configuration values like so...
 	 * <p class='bcode'>
 	 * 	PropertyStore ps = PropertyStore.<jsm>create</jsm>();
 	 * 	ps.setProperty(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>);
 	 * </p>
+	 *
 	 * <p>
 	 * The possible class types of the value depend on the property type:
-	 * <p>
 	 * <table class='styled'>
 	 * 	<tr>
 	 * 		<th>Property type</th>
@@ -434,6 +436,7 @@ public final class PropertyStore {
 
 	/**
 	 * Convenience method for setting multiple properties in one call.
+	 *
 	 * <p>
 	 * This appends to any previous configuration properties set on this store.
 	 *
@@ -571,9 +574,11 @@ public final class PropertyStore {
 
 	/**
 	 * Returns an instance of the specified context initialized with the properties in this store.
+	 *
 	 * <p>
 	 * Multiple calls to this method for the same store class will return the same cached value as long as the
 	 * properties on this store are not touched.
+	 *
 	 * <p>
 	 * As soon as any properties are modified on this store, all cached entries are discarded and recreated as needed.
 	 *
@@ -609,6 +614,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns the configuration properties with the specified prefix.
+	 *
 	 * <p>
 	 * For example, if <l>prefix</l> is <js>"BeanContext"</js>, then retrieves all configuration properties that are
 	 * prefixed with <js>"BeanContext."</js>.
@@ -628,9 +634,11 @@ public final class PropertyStore {
 
 	/**
 	 * Specifies the classloader to use when resolving classes from strings.
+	 *
 	 * <p>
 	 * Can be used for resolving class names when the classes being created are in a different classloader from the
 	 * Juneau code.
+	 *
 	 * <p>
 	 * If <jk>null</jk>, the system classloader will be used to resolve classes.
 	 *
@@ -644,6 +652,7 @@ public final class PropertyStore {
 
 	/**
 	 * Specifies the parser to use to convert Strings to POJOs.
+	 *
 	 * <p>
 	 * If <jk>null</jk>, {@link JsonParser#DEFAULT} will be used.
 	 *
@@ -681,6 +690,7 @@ public final class PropertyStore {
 
 	/**
 	 * Returns a property value either cast to the specified type, or a new instance of the specified type.
+	 *
 	 * <p>
 	 * It's assumed that the current property value is either an instance of that type, or a <code>Class</code> that's
 	 * a subclass of the type to be instantiated.
@@ -901,8 +911,10 @@ public final class PropertyStore {
 
 	/**
 	 * Contains all the properties for a particular property prefix (e.g. <js>'BeanContext'</js>)
+	 *
 	 * <p>
 	 * Instances of this map are immutable from outside this class.
+	 *
 	 * <p>
 	 * The {@link PropertyMap#hashCode()} and {@link PropertyMap#equals(Object)} methods can be used to compare with
 	 * other property maps.
@@ -975,6 +987,7 @@ public final class PropertyStore {
 
 		/**
 		 * Returns the specified property as a map with the specified key and value types.
+		 *
 		 * <p>
 		 * The map returned is an instance of {@link LinkedHashMap}.
 		 *
@@ -1009,6 +1022,7 @@ public final class PropertyStore {
 
 		/**
 		 * Convenience method for returning all values in this property map as a simple map.
+		 *
 		 * <p>
 		 * Primarily useful for debugging.
 		 *
@@ -1379,6 +1393,8 @@ public final class PropertyStore {
 
 	/**
 	 * Returns true if a bean session is available.
+	 *
+	 * <p>
 	 * Note that a bean session will not be available when constructing the BeanContext.DEFAULT context.
 	 * (it's a chicken-and-egg thing).
 	 */

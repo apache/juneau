@@ -18,6 +18,7 @@ import org.apache.juneau.*;
 
 /**
  * Convenience class for representing a schema reference such as <js>"{'$ref':'/url/to/ref'}"</js>.
+ *
  * <p>
  * An instance of this object is equivalent to calling...
  *
@@ -44,9 +45,11 @@ public class SchemaRef extends Schema {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *

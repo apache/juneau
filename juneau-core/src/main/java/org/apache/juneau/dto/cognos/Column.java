@@ -18,6 +18,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents a meta-data column in a Cognos dataset.
+ *
  * <p>
  * When serialized to XML, creates the following construct:
  * <p class='bcode'>
@@ -60,12 +61,13 @@ public class Column {
 
 	/**
 	 * Associates a POJO swap with this column.
+	 *
 	 * <p>
 	 * Typically used to define columns that don't exist on the underlying beans being serialized.
+	 *
 	 * <p>
-	 * For example, the <code>AddressBookResource</code> sample defined the following POJO swap
-	 * 	to define an additional <js>"numAddresses"</js> column even though no such property exists
-	 * 	on the serialized beans.
+	 * For example, the <code>AddressBookResource</code> sample defined the following POJO swap to define an additional
+	 * <js>"numAddresses"</js> column even though no such property exists on the serialized beans.
 	 * <p class='bcode'>
 	 * 	Column c = <jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)
 	 * 		.addPojoSwaps(

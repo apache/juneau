@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Content-Location</l> HTTP response header.
+ *
  * <p>
  * An alternate location for the returned data.
  *
@@ -34,20 +35,25 @@ package org.apache.juneau.http;
  * 	Content-Location = "Content-Location" ":"
  * 	                   ( absoluteURI | relativeURI )
  * </p>
+ *
  * <p>
  * The value of Content-Location also defines the base URI for the entity.
+ *
  * <p>
  * The Content-Location value is not a replacement for the original requested URI; it is only a statement of the
  * location of the resource corresponding to this particular entity at the time of the request.
  * Future requests MAY specify the Content-Location URI as the request- URI if the desire is to identify the source of
  * that particular entity.
+ *
  * <p>
  * A cache cannot assume that an entity with a Content-Location different from the URI used to retrieve it can be used
  * to respond to later requests on that Content-Location URI.
  * However, the Content- Location can be used to differentiate between multiple entities retrieved from a single
  * requested resource, as described in section 13.6.
+ *
  * <p>
  * If the Content-Location is a relative URI, the relative URI is interpreted relative to the Request-URI.
+ *
  * <p>
  * The meaning of the Content-Location header in PUT or POST requests is undefined; servers are free to ignore it in
  * those cases.

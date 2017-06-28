@@ -60,8 +60,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>swagger</property>.
+	 *
 	 * <p>
 	 * Required. Specifies the Swagger Specification version being used.
+	 *
+	 * <p>
 	 * It can be used by the Swagger UI and other clients to interpret the API listing.
 	 * The value MUST be <js>"2.0"</js>.
 	 *
@@ -73,8 +76,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>swagger</property>.
+	 *
 	 * <p>
 	 * Required. Specifies the Swagger Specification version being used.
+	 *
+	 * <p>
 	 * It can be used by the Swagger UI and other clients to interpret the API listing.
 	 * The value MUST be <js>"2.0"</js>.
 	 *
@@ -98,8 +104,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>info</property>.
+	 *
 	 * <p>
 	 * Required. Provides metadata about the API.
+	 *
+	 * <p>
 	 * The metadata can be used by the clients if needed.
 	 *
 	 * @return The value of the <property>info</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -110,8 +119,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>info</property>.
+	 *
 	 * <p>
 	 * Required. Provides metadata about the API.
+	 *
+	 * <p>
 	 * The metadata can be used by the clients if needed.
 	 *
 	 * @param info The new value for the <property>info</property> property on this bean.
@@ -134,8 +146,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>host</property>.
+	 *
 	 * <p>
 	 * The host (name or IP) serving the API.
+	 *
+	 * <p>
 	 * This MUST be the host only and does not include the scheme nor sub-paths.
 	 * It MAY include a port.
 	 * If the host is not included, the host serving the documentation is to be used (including the port).
@@ -150,8 +165,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>host</property>.
+	 *
 	 * <p>
 	 * The host (name or IP) serving the API.
+	 *
+	 * <p>
 	 * This MUST be the host only and does not include the scheme nor sub-paths.
 	 * It MAY include a port.
 	 * If the host is not included, the host serving the documentation is to be used (including the port).
@@ -178,8 +196,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>basePath</property>.
+	 *
 	 * <p>
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
+	 *
+	 * <p>
 	 * If it is not included, the API is served directly under the <code>host</code>.
 	 * The value MUST start with a leading slash (/).
 	 * The <code>basePath</code> does not support <a class="doclink"
@@ -193,8 +214,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>basePath</property>.
+	 *
 	 * <p>
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
+	 *
+	 * <p>
 	 * If it is not included, the API is served directly under the <code>host</code>.
 	 * The value MUST start with a leading slash (/).
 	 * The <code>basePath</code> does not support <a class="doclink"
@@ -220,8 +244,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol of the API.
+	 *
+	 * <p>
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
 	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
@@ -234,8 +261,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol of the API.
+	 *
+	 * <p>
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
 	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
@@ -250,8 +280,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol of the API.
+	 *
+	 * <p>
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
 	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
@@ -265,8 +298,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol of the API.
+	 *
+	 * <p>
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
 	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
@@ -295,8 +331,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can consume.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -309,8 +348,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can consume.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -325,8 +367,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can consume.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -340,8 +385,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can consume.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -380,8 +428,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -394,8 +445,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -410,8 +464,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -425,8 +482,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the APIs can produce.
+	 *
+	 * <p>
 	 * This is global to all APIs but can be overridden on specific API calls.
 	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">
 	 * Mime Types</a>.
@@ -465,6 +525,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>paths</property>.
+	 *
 	 * <p>
 	 * Required. The available paths and operations for the API.
 	 *
@@ -476,6 +537,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>paths</property>.
+	 *
 	 * <p>
 	 * Required. The available paths and operations for the API.
 	 *
@@ -489,6 +551,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>paths</property>.
+	 *
 	 * <p>
 	 * Required. The available paths and operations for the API.
 	 *
@@ -523,11 +586,12 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>definitions</property>.
+	 *
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
 	 *
-	 * @return The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,SchemaInfo> getDefinitions() {
 		return definitions;
@@ -535,6 +599,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>definitions</property>.
+	 *
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
 	 *
@@ -548,6 +613,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>definitions</property>.
+	 *
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
 	 *
@@ -575,8 +641,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>parameters</property>.
+	 *
 	 * <p>
 	 * An object to hold parameters that can be used across operations.
+	 *
+	 * <p>
 	 * This property does not define global parameters for all operations.
 	 *
 	 * @return The value of the <property>parameters</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -587,8 +656,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>parameters</property>.
+	 *
 	 * <p>
 	 * An object to hold parameters that can be used across operations.
+	 *
+	 * <p>
 	 * This property does not define global parameters for all operations.
 	 *
 	 * @param parameters The new value for the <property>parameters</property> property on this bean.
@@ -601,8 +673,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>parameters</property>.
+	 *
 	 * <p>
 	 * An object to hold parameters that can be used across operations.
+	 *
+	 * <p>
 	 * This property does not define global parameters for all operations.
 	 *
 	 * @param name The parameter name.
@@ -629,8 +704,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>responses</property>.
+	 *
 	 * <p>
 	 * An object to hold responses that can be used across operations.
+	 *
+	 * <p>
 	 * This property does not define global responses for all operations.
 	 *
 	 * @return The value of the <property>responses</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -641,8 +719,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>responses</property>.
+	 *
 	 * <p>
 	 * An object to hold responses that can be used across operations.
+	 *
+	 * <p>
 	 * This property does not define global responses for all operations.
 	 *
 	 * @param responses The new value for the <property>responses</property> property on this bean.
@@ -655,8 +736,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>responses</property>.
+	 *
 	 * <p>
 	 * An object to hold responses that can be used across operations.
+	 *
+	 * <p>
 	 * This property does not define global responses for all operations.
 	 *
 	 * @param name The response name.
@@ -683,11 +767,13 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>securityDefinitions</property>.
+	 *
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
 	 *
-	 * @return The value of the <property>securityDefinitions</property> property on this bean, or <jk>null</jk> if it
-	 * is not set.
+	 * @return
+	 * 	The value of the <property>securityDefinitions</property> property on this bean, or <jk>null</jk> if it
+	 * 	is not set.
 	 */
 	public Map<String,SecurityScheme> getSecurityDefinitions() {
 		return securityDefinitions;
@@ -695,6 +781,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>securityDefinitions</property>.
+	 *
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
 	 *
@@ -708,6 +795,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>securityDefinitions</property>.
+	 *
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
 	 *
@@ -735,8 +823,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>security</property>.
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * <p>
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
 	 * Individual operations can override this definition.
@@ -749,8 +840,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>security</property>.
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * <p>
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
 	 * Individual operations can override this definition.
@@ -765,8 +859,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>security</property>.
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * <p>
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * between the security requirements).
 	 * Individual operations can override this definition.
@@ -797,8 +894,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
+	 *
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * <p>
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
 	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">
 	 * Operation Object</a> must be declared.
@@ -813,8 +913,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>tags</property>.
+	 *
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * <p>
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
 	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">
 	 * Operation Object</a> must be declared.
@@ -831,8 +934,11 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>tags</property>.
+	 *
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * <p>
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
 	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">
 	 * Operation Object</a> must be declared.
@@ -871,11 +977,13 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
+	 *
 	 * <p>
 	 * Additional external documentation.
 	 *
-	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
 		return externalDocs;
@@ -883,6 +991,7 @@ public class Swagger extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
+	 *
 	 * <p>
 	 * Additional external documentation.
 	 *

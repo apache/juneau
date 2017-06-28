@@ -72,6 +72,7 @@ public @interface Pojo {
 	 * 		<jsm>assertEquals</jsm>(<js>"bar"</js>, b.<jf>f1</jf>);
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * Note that using this annotation is functionally equivalent to adding swaps to the serializers and parsers:
 	 * <p class='bcode'>

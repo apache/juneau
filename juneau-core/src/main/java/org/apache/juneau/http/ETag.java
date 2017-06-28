@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>ETag</l> HTTP response header.
+ *
  * <p>
  * An identifier for a specific version of a resource, often a message digest.
  *
@@ -27,9 +28,11 @@ package org.apache.juneau.http;
  * The ETag response-header field provides the current value of the entity tag for the requested variant.
  * The headers used with entity tags are described in sections 14.24, 14.26 and 14.44.
  * The entity tag MAY be used for comparison with other entities from the same resource (see section 13.3.3).
+ *
  * <p class='bcode'>
  * 	ETag = "ETag" ":" entity-tag
  * </p>
+ *
  * <p>
  * Examples:
  * <p class='bcode'>

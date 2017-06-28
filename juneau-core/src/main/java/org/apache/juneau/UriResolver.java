@@ -24,15 +24,17 @@ import org.apache.juneau.internal.*;
 /**
  * Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to
  * make such resolutions.
+ *
  * <p>
  * Combines a {@link UriContext} instance with rules for resolution ({@link UriResolution} and relativity
- * 	({@link UriRelativity}) to define simple {@link #resolve(Object)} and {@link #append(Appendable, Object)}
- * 	methods.
-  * <p>
+ * ({@link UriRelativity}) to define simple {@link #resolve(Object)} and {@link #append(Appendable, Object)} methods.
+ *
+ * <p>
  * Three special protocols are used to represent context-root-relative, servlet-relative, and request-path-relative
  * URIs:
  * 	<js>"context:/"</js>, <js>"servlet:/"</js>, and <js>"request:/"</js>.
  *
+ * <p>
  * The following list shows the protocols of URLs that can be resolved with this class:
  * <ul>
  * 	<li><js>"foo://foo"</js> - Absolute URI.
@@ -74,7 +76,8 @@ public class UriResolver {
 	/**
 	 * Converts the specified URI to absolute form based on values in this context.
 	 *
-	 * @param uri The URI to convert to absolute form.
+	 * @param uri
+	 * 	The URI to convert to absolute form.
 	 * 	Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link java.net.URI}
@@ -114,9 +117,11 @@ public class UriResolver {
 
 	/**
 	 * Relativizes a URI.
+	 *
 	 * <p>
-	 * Similar to {@link URI#relativize(URI)}, except supports special protocols (e.g. <js>"servlet:/"</js>) for
-	 * both the <code>relativeTo</code> and <code>uri</code> parameters.
+	 * Similar to {@link URI#relativize(URI)}, except supports special protocols (e.g. <js>"servlet:/"</js>) for both
+	 * the <code>relativeTo</code> and <code>uri</code> parameters.
+	 *
 	 * <p>
 	 * For example, to relativize a URI to its servlet-relative form:
 	 * <p class='bcode'>

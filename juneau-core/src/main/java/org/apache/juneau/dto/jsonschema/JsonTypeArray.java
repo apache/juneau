@@ -51,8 +51,7 @@ public final class JsonTypeArray extends LinkedList<JsonType> {
 	}
 
 	/**
-	 * Convenience method for adding one or more {@link JsonType} objects to
-	 * 	this array.
+	 * Convenience method for adding one or more {@link JsonType} objects to this array.
 	 *
 	 * @param types The {@link JsonType} objects to add to this array.
 	 * @return This object (for method chaining).

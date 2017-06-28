@@ -61,10 +61,10 @@ public class SwaggerBuilder {
 	 *
 	 * @param name The {@link Contact#name(String)} attribute.
 	 * @param url
-	 * The {@link Contact#url(Object)} attribute.
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 * <br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	The {@link Contact#url(Object)} attribute.
+	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	<br>Strings must be valid URIs.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @param email The {@link Contact#email(String)} attribute.
 	 * @return The new element.
 	 */
@@ -86,10 +86,10 @@ public class SwaggerBuilder {
 	 * attribute.
 	 *
 	 * @param url
-	 * The {@link ExternalDocumentation#url(Object)} attribute.
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 * <br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	The {@link ExternalDocumentation#url(Object)} attribute.
+	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	<br>Strings must be valid URIs.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url) {
@@ -100,10 +100,11 @@ public class SwaggerBuilder {
 	 * Creates an {@link ExternalDocumentation} element with the specified {@link ExternalDocumentation#url(Object)}
 	 * and {@link ExternalDocumentation#description(String)} attributes.
 	 *
-	 * @param url The {@link ExternalDocumentation#url(Object)} attribute.
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 * <br>URIs defined by {@link UriResolver} can be used for values.
+	 * @param url
+	 * 	The {@link ExternalDocumentation#url(Object)} attribute.
+	 * 	The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * 	<br>Strings must be valid URIs.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @param description The {@link ExternalDocumentation#description(String)} attribute.
 	 * @return The new element.
 	 */
@@ -262,8 +263,8 @@ public class SwaggerBuilder {
 
 	/**
 	 * Creates an {@link ResponseInfo} element with the specified {@link ResponseInfo#description(String)} attribute.
-	 * @param description The {@link ResponseInfo#description(String)} attribute.
 	 *
+	 * @param description The {@link ResponseInfo#description(String)} attribute.
 	 * @return The new element.
 	 */
 	public static final ResponseInfo responseInfo(String description) {

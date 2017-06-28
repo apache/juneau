@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l> Proxy-Authenticate</l> HTTP response header.
+ *
  * <p>
  * Request authentication to access the proxy.
  *
@@ -28,9 +29,11 @@ package org.apache.juneau.http;
  * response.
  * The field value consists of a challenge that indicates the authentication scheme and parameters applicable to the
  * proxy for this Request-URI.
+ *
  * <p class='bcode'>
  * 	Proxy-Authenticate  = "Proxy-Authenticate" ":" 1#challenge
  * </p>
+ *
  * <p>
  * The HTTP access authentication process is described in "HTTP Authentication: Basic and Digest Access Authentication".
  * Unlike WWW-Authenticate, the Proxy-Authenticate header field applies only to the current connection and SHOULD NOT

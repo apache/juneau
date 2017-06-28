@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Accept-Range</l> HTTP response header.
+ *
  * <p>
  * What partial content range types this server supports via byte serving.
  *
@@ -30,6 +31,7 @@ package org.apache.juneau.http;
  * 	Accept-Ranges     = "Accept-Ranges" ":" acceptable-ranges
  * 	acceptable-ranges = 1#range-unit | "none"
  * </p>
+ *
  * <p>
  * Origin servers that accept byte-range requests MAY send...
  * <p class='bcode'>
@@ -37,10 +39,13 @@ package org.apache.juneau.http;
  * </p>
  * <p>
  * ...but are not required to do so.
+ *
  * <p>
  * Clients MAY generate byte-range requests without having received this header for the resource involved.
+ *
  * <p>
  * Range units are defined in section 3.12.
+ *
  * <p>
  * Servers that do not accept any kind of range request for a resource MAY send...
  * <p class='bcode'>

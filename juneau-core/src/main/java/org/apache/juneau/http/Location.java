@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Location</l> HTTP response header.
+ *
  * <p>
  * Used in redirection, or when a new resource has been created.
  *
@@ -29,14 +30,17 @@ package org.apache.juneau.http;
  * For 201 (Created) responses, the Location is that of the new resource which was created by the request.
  * For 3xx responses, the location SHOULD indicate the server's preferred URI for automatic redirection to the resource.
  * The field value consists of a single absolute URI.
+ *
  * <p class='bcode'>
  * 	Location       = "Location" ":" absoluteURI
  * </p>
+ *
  * <p>
  * An example is:
  * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
+ *
  * <p>
  * Note: The Content-Location header field (section 14.14) differs from Location in that the Content-Location identifies
  * the original location of the entity enclosed in the request.

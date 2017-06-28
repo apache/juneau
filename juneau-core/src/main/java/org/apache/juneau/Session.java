@@ -24,9 +24,10 @@ import org.apache.juneau.serializer.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
+ *
  * <p>
- * Serializers and parsers use session objects to retrieve config properties and to use it
- * 	as a scratchpad during serialize and parse actions.
+ * Serializers and parsers use session objects to retrieve config properties and to use it as a scratchpad during
+ * serialize and parse actions.
  *
  * @see PropertyStore
  */
@@ -43,8 +44,9 @@ public abstract class Session {
 	/**
 	 * Default constructor.
 	 *
-	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for the session.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for the session.
 	 * @param op Properties associated with this session.
 	 */
 	protected Session(final Context ctx, ObjectMap op) {
@@ -54,6 +56,7 @@ public abstract class Session {
 
 	/**
 	 * Returns the session property with the specified key.
+	 *
 	 * <p>
 	 * The order of lookup for the property is as follows:
 	 * <ul>
@@ -113,6 +116,8 @@ public abstract class Session {
 
 	/**
 	 * Adds an arbitrary object to this session's cache.
+	 *
+	 * <p>
 	 * Can be used to store objects for reuse during a session.
 	 *
 	 * @param key The key.  Can be any string.
@@ -126,10 +131,13 @@ public abstract class Session {
 
 	/**
 	 * Adds arbitrary objects to this session's cache.
+	 *
+	 * <p>
 	 * Can be used to store objects for reuse during a session.
 	 *
-	 * @param cacheObjects The objects to add to this session's cache.
-	 * No-op if <jk>null</jk>.
+	 * @param cacheObjects
+	 * 	The objects to add to this session's cache.
+	 * 	No-op if <jk>null</jk>.
 	 */
 	public void addToCache(Map<String,Object> cacheObjects) {
 		if (cacheObjects != null) {
@@ -184,6 +192,8 @@ public abstract class Session {
 
 	/**
 	 * Returns the logger associated with this session.
+	 *
+	 * <p>
 	 * Subclasses can override this method to provide their own logger.
 	 *
 	 * @return The logger associated with this session.

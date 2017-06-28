@@ -18,9 +18,11 @@ import org.apache.juneau.xml.*;
 
 /**
  * Configurable properties on the {@link HtmlSerializer} class.
+ *
  * <p>
  * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
  * passed into the constructor.
+ *
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  *
@@ -41,6 +43,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 
 	/**
 	 * <b>Configuration property:</b>  Anchor text source.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
@@ -48,9 +51,11 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Default:</b> <js>"toString"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -84,6 +89,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 
 	/**
 	 * <b>Configuration property:</b>  Look for URLs in {@link String Strings}.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings"</js>
@@ -91,6 +97,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
@@ -99,6 +106,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 
 	/**
 	 * <b>Configuration property:</b>  Look for link labels in the <js>"label"</js> parameter of the URL.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters"</js>
@@ -106,8 +114,10 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 *
 	 * <p>
 	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
 	 */
@@ -115,6 +125,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 
 	/**
 	 * <b>Configuration property:</b>  The parameter name to use when using {@link #HTML_lookForLabelParameters}.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>
@@ -127,6 +138,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 
 	/**
 	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders"</js>
@@ -139,6 +151,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addBeanTypeProperties"</js>
@@ -146,12 +159,14 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined
 	 * from the value type.
+	 *
 	 * <p>
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -169,6 +184,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *

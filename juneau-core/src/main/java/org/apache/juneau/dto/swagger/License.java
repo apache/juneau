@@ -55,6 +55,7 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Required. The license name used for the API.
 	 *
@@ -66,6 +67,7 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Required. The license name used for the API.
 	 *
@@ -89,11 +91,14 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>url</property>.
+	 *
 	 * <p>
 	 * A URL to the license used for the API.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -105,9 +110,11 @@ public class License extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>url</property>.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *

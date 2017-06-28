@@ -19,9 +19,10 @@ import org.apache.juneau.json.*;
 
 /**
  * Provides an {@link InvocationHandler} for creating beans from bean interfaces.
+ *
  * <p>
- * If the {@code useInterfaceProxies} setting is enabled in {@link BeanContext}, this
- * 	is the class that creates instances of beans from interfaces.
+ * If the {@code useInterfaceProxies} setting is enabled in {@link BeanContext}, this is the class that creates
+ * instances of beans from interfaces.
  *
  * @param <T> The interface class
  */

@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/tabular-data.html#the-col-element">&lt;col&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-col-element">&lt;col&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,10 +35,13 @@ public class Col extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-col-span">span</a> attribute.
+	 *
+	 * <p>
 	 * Number of columns spanned by the element.
 	 *
-	 * @param span The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param span
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Col span(Object span) {

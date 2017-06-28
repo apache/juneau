@@ -19,6 +19,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Accept-Charset</l> HTTP request header.
+ *
  * <p>
  * Character sets that are acceptable.
  *
@@ -30,6 +31,7 @@ import org.apache.juneau.internal.*;
  * <h6 class='topic'>RFC2616 Specification</h6>
  *
  * The Accept-Charset request-header field can be used to indicate what character sets are acceptable for the response.
+ *
  * <p>
  * This field allows clients capable of understanding more comprehensive or special- purpose character sets to signal
  * that capability to a server which is capable of representing documents in those character sets.
@@ -37,6 +39,7 @@ import org.apache.juneau.internal.*;
  * 	Accept-Charset = "Accept-Charset" ":"
  * 	                 1#( ( charset | "*" )[ ";" "q" "=" qvalue ] )
  * </p>
+ *
  * <p>
  * Character set values are described in section 3.4. Each charset MAY be given an associated quality value which
  * represents the user's preference for that charset.
@@ -45,14 +48,18 @@ import org.apache.juneau.internal.*;
  * <p class='bcode'>
  * 	Accept-Charset: iso-8859-5, unicode-1-1;q=0.8
  * </p>
+ *
  * <p>
  * The special value "*", if present in the Accept-Charset field, matches every character set (including ISO-8859-1)
  * which is not mentioned elsewhere in the Accept-Charset field.
+ *
  * <p>
  * If no "*" is present in an Accept-Charset field, then all character sets not explicitly mentioned get a quality
  * value of 0, except for ISO-8859-1, which gets a quality value of 1 if not explicitly mentioned.
+ *
  * <p>
  * If no Accept-Charset header is present, the default is that any character set is acceptable.
+ *
  * <p>
  * If an Accept-Charset header is present, and if the server cannot send a response which is acceptable according to
  * the Accept-Charset header, then the server SHOULD send an error response with the 406 (not acceptable) status code,

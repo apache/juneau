@@ -28,6 +28,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link HtmlParser}.
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -42,9 +43,11 @@ public final class HtmlParserSession extends XmlParserSession {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for this object.
-	 * @param input The input.  Can be any of the following types:
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
+	 * @param input
+	 * 	The input.  Can be any of the following types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
 	 * 		<li>{@link Reader}
@@ -52,14 +55,17 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text.
 	 * 		<li>{@link File} containing system encoded text.
 	 * 	</ul>
-	 * @param op The override properties.
-	 * These override any context properties defined in the context.
+	 * @param op
+	 * 	The override properties.
+	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param locale
+	 * 	The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone
+	 * 	The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
 	public HtmlParserSession(HtmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer,
@@ -69,6 +75,7 @@ public final class HtmlParserSession extends XmlParserSession {
 
 	/**
 	 * Parses CHARACTERS data.
+	 *
 	 * <p>
 	 * Precondition:  Pointing to event immediately following opening tag.
 	 * Postcondition:  Pointing to closing tag.
@@ -158,8 +165,8 @@ public final class HtmlParserSession extends XmlParserSession {
 	}
 
 	/**
-	 * Identical to {@link #parseText(XMLStreamReader)} except assumes the current event
-	 * 	is the opening tag.
+	 * Identical to {@link #parseText(XMLStreamReader)} except assumes the current event is the opening tag.
+	 *
 	 * <p>
 	 * Precondition:  Pointing to opening tag.
 	 * Postcondition:  Pointing to closing tag.

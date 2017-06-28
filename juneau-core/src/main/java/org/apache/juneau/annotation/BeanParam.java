@@ -14,7 +14,7 @@ package org.apache.juneau.annotation;
 
 
 /**
- * TODO
+ * Future support for defining bean properties on constructor args.
  */
 public @interface BeanParam {
 

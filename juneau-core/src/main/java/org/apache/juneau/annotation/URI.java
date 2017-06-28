@@ -23,20 +23,25 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used to identify a class or bean property as a URI.
+ *
  * <p>
  * By default, instances of {@link URL} and {@link URI} are considered URIs during serialization, and are handled
  * differently depending on the serializer (e.g. <code>HtmlSerializer</code> creates a hyperlink,
  * <code>RdfXmlSerializer</code> creates an <code>rdf:resource</code> object, etc...).
+ *
  * <p>
  * This annotation allows you to identify other classes that return URIs via <code>toString()</code> as URI objects.
+ *
  * <p>
  * URIs are automatically resolved to absolute or root-relative form based on the serializer
  * {@link SerializerContext#SERIALIZER_uriResolution} and {@link SerializerContext#SERIALIZER_uriRelativity}
  * configuration settings, and the URI context defined by the {@link UriContext} that's part of the serializer
  * session.
+ *
  * <p>
  * Refer to the {@link UriResolver} class for information about the types of URIs that can be resolved during
  * serialization.
+ *
  * <p>
  * This annotation can be applied to classes, interfaces, or bean property methods for fields.
  *

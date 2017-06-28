@@ -75,8 +75,10 @@ public class HtmlElementContainer extends HtmlElement {
 
 	/**
 	 * Returns the child node at the specified address.
+	 *
 	 * <p>
 	 * Indexes are zero-indexed.
+	 *
 	 * <p>
 	 * For example, calling <code>getChild(1,2,3);</code> will return the 4th child of the 3rd child of the 2nd child.
 	 *

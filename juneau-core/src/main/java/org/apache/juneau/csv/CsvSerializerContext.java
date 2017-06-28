@@ -17,9 +17,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Configurable properties on the {@link CsvSerializer} class.
+ *
  * <p>
  * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
  * passed into the constructor.
+ *
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  *
@@ -39,6 +41,7 @@ public final class CsvSerializerContext extends SerializerContext {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *

@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/forms.html#the-fieldset-element">&lt;fieldset&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-fieldset-element">&lt;fieldset&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,10 +35,13 @@ public class Fieldset extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fieldset-disabled">disabled</a> attribute.
+	 *
+	 * <p>
 	 * Whether the form control is disabled.
 	 *
-	 * @param disabled The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param disabled
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Fieldset disabled(Boolean disabled) {
@@ -48,6 +51,8 @@ public class Fieldset extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
+	 *
+	 * <p>
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.
@@ -60,6 +65,8 @@ public class Fieldset extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
+	 *
+	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
 	 * @param name The new value for this attribute.

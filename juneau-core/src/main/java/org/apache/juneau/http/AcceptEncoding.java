@@ -18,6 +18,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Accept-Encoding</l> HTTP request header.
+ *
  * <p>
  * List of acceptable encodings.
  *
@@ -36,6 +37,7 @@ import org.apache.juneau.internal.*;
  * 	                   1#( codings [ ";" "q" "=" qvalue ] )
  * 	codings          = ( content-coding | "*" )
  * </p>
+ *
  * <p>
  * Examples of its use are:
  * <p class='bcode'>
@@ -45,6 +47,7 @@ import org.apache.juneau.internal.*;
  * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * 	Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
  * </p>
+ *
  * <p>
  * A server tests whether a content-coding is acceptable, according to an Accept-Encoding field, using these rules:
  * <ol>
@@ -60,20 +63,24 @@ import org.apache.juneau.internal.*;
  * 		"identity" content-coding.
  * 		If the Accept-Encoding field-value is empty, then only the "identity" encoding is acceptable.
  * </ol>
+ *
  * <p>
  * If an Accept-Encoding field is present in a request, and if the server cannot send a response which is acceptable
  * according to the Accept-Encoding header, then the server SHOULD send an error response with the 406 (Not Acceptable)
  * status code.
+ *
  * <p>
  * If no Accept-Encoding field is present in a request, the server MAY assume that the client will accept any content
  * coding.
  * In this case, if "identity" is one of the available content-codings, then the server SHOULD use the "identity"
  * content-coding, unless it has additional information that a different content-coding is meaningful to the client.
+ *
  * <p>
  * Note: If the request does not include an Accept-Encoding field, and if the "identity" content-coding is unavailable,
  * then content-codings commonly understood by HTTP/1.0 clients (i.e.,"gzip" and "compress") are preferred; some older
  * clients improperly display messages sent with other content-codings.
  * The server might also make this decision based on information about the particular user-agent or client.
+ *
  * <p>
  * Note: Most HTTP/1.0 applications do not recognize or obey qvalues associated with content-codings.
  * This means that qvalues will not work and are not permitted with x-gzip or x-compress.

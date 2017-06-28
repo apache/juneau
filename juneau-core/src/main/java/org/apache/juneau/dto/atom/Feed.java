@@ -21,6 +21,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Top-level ATOM feed object.
+ *
  * <p>
  * Represents an <code>atomFeed</code> construct in the RFC4287 specification.
  *

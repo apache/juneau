@@ -19,8 +19,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/embedded-content-0.html#the-audio-element">&lt;audio&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-audio-element">&lt;audio&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -40,10 +40,13 @@ public class Audio extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay">autoplay</a>
 	 * attribute.
+	 *
+	 * <p>
 	 * Hint that the media resource can be started automatically when the page is loaded.
 	 *
-	 * @param autoplay The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param autoplay
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio autoplay(Object autoplay) {
@@ -54,10 +57,13 @@ public class Audio extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls">controls</a>
 	 * attribute.
+	 *
+	 * <p>
 	 * Show user agent controls.
 	 *
-	 * @param controls The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param controls
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio controls(Object controls) {
@@ -66,8 +72,10 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * <a class="doclink"
-	 * href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-crossorigin">crossorigin</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-crossorigin">crossorigin</a>
+	 * attribute.
+	 *
+	 * <p>
 	 * How the element handles cross-origin requests.
 	 *
 	 * @param crossorigin The new value for this attribute.
@@ -80,10 +88,13 @@ public class Audio extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
+	 *
+	 * <p>
 	 * Whether to loop the media resource.
 	 *
-	 * @param loop The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param loop
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio loop(Object loop) {
@@ -94,6 +105,8 @@ public class Audio extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a>
 	 * attribute.
+	 *
+	 * <p>
 	 * Groups media elements together with an implicit MediaController.
 	 *
 	 * @param mediagroup The new value for this attribute.
@@ -107,10 +120,13 @@ public class Audio extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a>
 	 * attribute.
+	 *
+	 * <p>
 	 * Whether to mute the media resource by default.
 	 *
-	 * @param muted The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param muted
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio muted(Object muted) {
@@ -121,6 +137,8 @@ public class Audio extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a>
 	 * attribute.
+	 *
+	 * <p>
 	 * Hints how much buffering the media resource will likely need.
 	 *
 	 * @param preload The new value for this attribute.
@@ -133,15 +151,20 @@ public class Audio extends HtmlElementContainer {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
+	 *
+	 * <p>
 	 * Address of the resource.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param src The new value for this attribute.
-	 * Typically a {@link URL} or {@link String}.
+	 * @param src
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio src(Object src) {

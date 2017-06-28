@@ -18,6 +18,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Content-Type</l> HTTP request/response header.
+ *
  * <p>
  * The MIME type of this content.
  *
@@ -33,6 +34,7 @@ import org.apache.juneau.internal.*;
  * <p class='bcode'>
  * 	Content-Type   = "Content-Type" ":" media-type
  * </p>
+ *
  * <p>
  * Media types are defined in section 3.7.
  * An example of the field is...
@@ -75,6 +77,7 @@ public class ContentType extends MediaType {
 
 	/**
 	 * Given a list of media types, returns the best match for this <code>Content-Type</code> header.
+	 *
 	 * <p>
 	 * Note that fuzzy matching is allowed on the media types where the <code>Content-Types</code> header may
 	 * contain additional subtype parts.

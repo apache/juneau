@@ -58,8 +58,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * Required. A short description of the response.
+	 *
+	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for
 	 * rich text representation.
 	 *
@@ -71,8 +74,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * Required. A short description of the response.
+	 *
+	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
 	 *
@@ -96,8 +102,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
+	 *
 	 * <p>
 	 * A definition of the response structure.
+	 *
+	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
 	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
@@ -112,8 +121,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schema</property>.
+	 *
 	 * <p>
 	 * A definition of the response structure.
+	 *
+	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
 	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>,
@@ -140,6 +152,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>headers</property>.
+	 *
 	 * <p>
 	 * A list of headers that are sent with the response.
 	 *
@@ -151,6 +164,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>headers</property>.
+	 *
 	 * <p>
 	 * A list of headers that are sent with the response.
 	 *
@@ -164,6 +178,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>headers</property>.
+	 *
 	 * <p>
 	 * A list of headers that are sent with the response.
 	 *
@@ -191,8 +206,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
+	 *
 	 * <p>
 	 * An example of the response message.
+	 *
+	 * <p>
 	 * Keys must be MIME-type strings.
 	 *
 	 * @return The value of the <property>examples</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -203,8 +221,11 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>examples</property>.
+	 *
 	 * <p>
 	 * An example of the response message.
+	 *
+	 * <p>
 	 * Keys must be MIME-type strings.
 	 *
 	 * @param examples The new value for the <property>examples</property> property on this bean.
@@ -217,6 +238,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>examples</property>.
+	 *
 	 * <p>
 	 * An example of the response message.
 	 *

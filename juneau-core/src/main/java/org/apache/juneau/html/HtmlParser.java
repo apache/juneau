@@ -514,7 +514,7 @@ public class HtmlParser extends XmlParser {
 			+ JsonSerializer.DEFAULT.toString(expected), r.getLocation());
 	}
 
-	/**
+	/*
 	 * Skips over the current element and advances to the next element.
 	 * <p>
 	 * Precondition:  Pointing to opening tag.

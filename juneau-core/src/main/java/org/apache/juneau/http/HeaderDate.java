@@ -16,6 +16,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a single HTTP-date.
+ *
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>

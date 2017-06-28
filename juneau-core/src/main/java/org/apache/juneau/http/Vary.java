@@ -14,10 +14,10 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Vary</l> HTTP response header.
+ *
  * <p>
  * Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather
  * than requesting a fresh one from the origin server.
-
  *
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
@@ -37,6 +37,7 @@ package org.apache.juneau.http;
  * <p class='bcode'>
  * 	Vary  = "Vary" ":" ( "*" | 1#field-name )
  * </p>
+ *
  * <p>
  * An HTTP/1.1 server SHOULD include a Vary header field with any cacheable response that is subject to server-driven
  * negotiation.
@@ -45,15 +46,18 @@ package org.apache.juneau.http;
  * A server MAY include a Vary header field with a non-cacheable response that is subject to server-driven negotiation,
  * since this might provide the user agent with useful information about the dimensions over which the response varies
  * at the time of the response.
+ *
  * <p>
  * A Vary field value consisting of a list of field-names signals that the representation selected for the response is
  * based on a selection algorithm which considers ONLY the listed request-header field values in selecting the most
  * appropriate representation.
  * A cache MAY assume that the same selection will be made for future requests with the same values for the listed
  * field names, for the duration of time for which the response is fresh.
+ *
  * <p>
  * The field-names given are not limited to the set of standard request-header fields defined by this specification.
  * Field names are case-insensitive.
+ *
  * <p>
  * A Vary field value of "*" signals that unspecified parameters not limited to the request-headers (e.g., the network
  * address of the client), play a role in the selection of the response representation.

@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Age</l> HTTP response header.
+ *
  * <p>
  * The age the object has been in a proxy cache in seconds.
  *
@@ -33,14 +34,18 @@ package org.apache.juneau.http;
  * 	Age = "Age" ":" age-value
  * 	age-value = delta-seconds
  * </p>
+ *
  * <p>
  * Age values are non-negative decimal integers, representing time in seconds.
+ *
  * <p>
  * If a cache receives a value larger than the largest positive integer it can represent, or if any of its age
  * calculations overflows, it MUST transmit an Age header with a value of 2147483648 (2^31).
+ *
  * <p>
  * An HTTP/1.1 server that includes a cache MUST include an Age header field in every response generated from its own
  * cache.
+ *
  * <p>
  * Caches SHOULD use an arithmetic type of at least 31 bits of range.
  *

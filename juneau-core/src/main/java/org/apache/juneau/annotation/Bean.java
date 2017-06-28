@@ -46,15 +46,19 @@ public @interface Bean {
 
 	/**
 	 * An identifying name for this class.
+	 *
 	 * <p>
 	 * The name is used to identify the class type during parsing when it cannot be inferred through reflection.
 	 * For example, if a bean property is of type <code>Object</code>, then the serializer will add the name to the
-	 * 	output so that the class can be determined during parsing.
+	 * output so that the class can be determined during parsing.
 	 * It is also used to specify element names in XML.
+	 *
 	 * <p>
 	 * The name is used in combination with the bean dictionary defined through {@link BeanProperty#beanDictionary()} or
-	 * {@link BeanContext#BEAN_beanDictionary}.  Together, they make up a simple name/value mapping of names to classes.
-	 * Names do not need to be universally unique.  However, they must be unique within a dictionary.
+	 * {@link BeanContext#BEAN_beanDictionary}.
+	 * Together, they make up a simple name/value mapping of names to classes.
+	 * Names do not need to be universally unique.
+	 * However, they must be unique within a dictionary.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -71,9 +75,9 @@ public @interface Bean {
 	 * 	<ja>@Bean</ja>(typeName=<js>"baz"</js>)
 	 * 	<jk>public class</jk> Baz {}
 	 * </p>
+	 *
 	 * <p>
 	 * When serialized as XML, the bean is rendered as:
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<xt>&lt;foo&gt;</xt>
 	 * 		<xt>&lt;x&gt;</xt>
@@ -82,9 +86,9 @@ public @interface Bean {
 	 * 		<xt>&lt;/x&gt;</xt>
 	 * 	<xt>&lt;/foo&gt;</xt>
 	 * </p>
+	 *
 	 * <p>
 	 * When serialized as JSON, <js>'n'</js> attributes would be added when needed to infer the type during parsing:
-	 * </p>
 	 * <p class='bcode'>
 	 * 	{
 	 * 		x: [
@@ -99,9 +103,11 @@ public @interface Bean {
 
 	/**
 	 * The property name to use for representing the type name.
+	 *
 	 * <p>
 	 * This can be used to override the name used for the <js>"_type"</js> property designated above.
 	 * Typically, you'll define this on an interface class so that it can apply to all subclasses.
+	 *
 	 * <p class='bcode'>
 	 * 	<ja>@Bean</ja>(typePropertyName=<js>"mytype"</js>, beanDictionary={MyClass1.<jk>class</jk>,MyClass2.<jk>class</jk>})
 	 * 	<jk>public interface</jk> MyInterface {...}
@@ -117,6 +123,7 @@ public @interface Bean {
 	 *	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
 	 * 	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.serialize(x);
 	 * </p>
+	 *
 	 * <p>
 	 * This is similar in concept to the {@link BeanContext#BEAN_beanTypePropertyName} setting except this annotation
 	 * applies only to the annotated class and subclasses whereas the bean context property applies globally on
@@ -135,9 +142,11 @@ public @interface Bean {
 
 	/**
 	 * The set and order of names of properties associated with a bean class.
+	 *
 	 * <p>
 	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
 	 * related methods.
+	 *
 	 * <p>
 	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
 	 * {@link BeanFilter#getProperties()} method.
@@ -155,24 +164,27 @@ public @interface Bean {
 
 	/**
 	 * Sort bean properties in alphabetical order.
+	 *
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-	 * Otherwise, the natural order of the bean properties is used which is dependent on the
-	 * 	JVM vendor.
+	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
 	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
+	 *
 	 * <p>
 	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
 	 * in the Java file.
+	 *
 	 * <p>
-	 * This annotation is equivalent to using the {@link BeanContext#BEAN_sortProperties} property, but
-	 * 	applied to individual classes instead of globally at the serializer or parser level.
+	 * This annotation is equivalent to using the {@link BeanContext#BEAN_sortProperties} property, but applied to
+	 * individual classes instead of globally at the serializer or parser level.
 	 */
 	boolean sort() default false;
 
 	/**
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
+	 *
 	 * <p>
 	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
 	 * {@link BeanFilter#getExcludeProperties()} method.
@@ -190,10 +202,12 @@ public @interface Bean {
 
 	/**
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.
+	 *
 	 * <p>
 	 * Property namers are used to transform bean property names from standard form to some other form.
 	 * For example, the {@link PropertyNamerDLC} will convert property names to dashed-lowercase, and these will be used
 	 * as attribute names in JSON, and element names in XML.
+	 *
 	 * <p>
 	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
 	 * {@link BeanFilter#getPropertyNamer()} method.
@@ -211,9 +225,11 @@ public @interface Bean {
 
 	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.
+	 *
 	 * <p>
 	 * When specified, only the list of properties defined on the interface class will be used during serialization.
 	 * Additional properties on subclasses will be ignored.
+	 *
 	 * <p class='bcode'>
 	 * 	<jc>// Parent class</jc>
 	 * 	<ja>@Bean</ja>(interfaceClass=A.<jk>class</jk>)
@@ -231,9 +247,11 @@ public @interface Bean {
 	 * 	String r = s.serialize(a1);
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  // Note f1 is not serialized.
 	 * </p>
+	 *
 	 * <p>
 	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
-	 * 	or can be set individually on the child classes.
+	 * or can be set individually on the child classes.
+	 *
 	 * <p>
 	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented
 	 * {@link BeanFilter#getInterfaceClass()} method.
@@ -242,9 +260,11 @@ public @interface Bean {
 
 	/**
 	 * Identifies a stop class for the annotated class.
+	 *
 	 * <p>
 	 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
 	 * Any properties in the stop class or in its base classes will be ignored during analysis.
+	 *
 	 * <p>
 	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
 	 * but not <code>p1</code> or <code>p2</code>.
@@ -267,10 +287,12 @@ public @interface Bean {
 
 
 	/**
-	 * The list of classes that make up the bean dictionary for all properties of this bean
-	 * or for subclasses of this bean.
+	 * The list of classes that make up the bean dictionary for all properties of this bean or for subclasses of this
+	 * bean.
+	 *
 	 * <p>
 	 * This is a shorthand for setting the {@link BeanProperty#beanDictionary()} on all properties of the bean.
+	 *
 	 * <p>
 	 * This list can consist of the following class types:
 	 * <ul>

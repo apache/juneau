@@ -60,21 +60,24 @@ public @interface BeanProperty {
 
 	/**
 	 * Identifies the name of the property.
+	 *
 	 * <p>
-	 * Normally, this is automatically inferred from the field name or getter method name
-	 * of the property.  However, this property can be used to assign a different
-	 * property name from the automatically inferred value.
+	 * Normally, this is automatically inferred from the field name or getter method name of the property.
+	 * However, this property can be used to assign a different property name from the automatically inferred value.
+	 *
 	 * <p>
 	 * If the {@link BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field (e.g. the
 	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
 	 * identified as a property.
 	 *
 	 * <h6 class='topic'>Dynamic beans</h6>
+	 * <p>
 	 * The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 	 * properties not otherwise defined.
 	 * This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> annotations.
 	 * The primary purpose is for backwards compatibility in parsing newer streams with addition information into older
 	 * beans.
+	 *
 	 * <p>
 	 *	The following examples show how to define dynamic bean properties.
 	 * <p class='bcode'>
@@ -113,9 +116,10 @@ public @interface BeanProperty {
 	 * 		}
 	 * 	}
 	 * </p>
-	 *	<p>
-	 * Similar rules apply for value types and swaps.  The property values optionally can be any serializable type or
-	 * use swaps.
+	 *
+	 *<p>
+	 * Similar rules apply for value types and swaps.
+	 * The property values optionally can be any serializable type or use swaps.
 	 * <p class='bcode'>
 	 * 	<jc>// A serializable type other than Object.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
@@ -135,7 +139,7 @@ public @interface BeanProperty {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * <p>
+	 *
 	 * <ul class='doctree'>
 	 * 	<li class='info'>
 	 * 		Note that if you're not interested in these additional properties, you can also use the
@@ -147,9 +151,10 @@ public @interface BeanProperty {
 
 	/**
 	 * A synonym for {@link #name()}.
+	 *
 	 * <p>
 	 * The following annotations are equivalent:
-	 * <p>
+	 *
 	 * <p class='bcode'>
 	 * 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
 	 *
@@ -160,11 +165,13 @@ public @interface BeanProperty {
 
 	/**
 	 * Identifies a specialized class type for the property.
+	 *
 	 * <p>
 	 * Normally this can be inferred through reflection of the field type or getter return type.
 	 * However, you'll want to specify this value if you're parsing beans where the bean property class is an interface
 	 * or abstract class to identify the bean type to instantiate.
 	 * Otherwise, you may cause an {@link InstantiationException} when trying to set these fields.
+	 *
 	 * <p>
 	 * This property must denote a concrete bean class with a no-arg constructor.
 	 *
@@ -199,8 +206,10 @@ public @interface BeanProperty {
 	/**
 	 * Associates a {@link PojoSwap} or {@link SurrogateSwap} with this bean property that will swap the value object
 	 * with another object during serialization and parsing.
+	 *
 	 * <p>
 	 * This annotation supersedes any swaps associated with the bean property type class itself.
+	 *
 	 * <p>
 	 * Typically used for rendering {@link Date Dates} and {@link Calendar Calendars} as a particular string format.
 	 *
@@ -218,6 +227,7 @@ public @interface BeanProperty {
 
 	/**
 	 * Used to limit which child properties are rendered by the serializers.
+	 *
 	 * <p>
 	 * Can be used on any of the following bean property types:
 	 * <ul class='spaced-list'>
@@ -249,10 +259,12 @@ public @interface BeanProperty {
 
 	/**
 	 * The list of classes that make up the bean dictionary for this bean property.
+	 *
 	 * <p>
 	 * The dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
 	 * The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 *
 	 * <p>
 	 * This list can consist of the following class types:
 	 * <ul>
@@ -267,8 +279,10 @@ public @interface BeanProperty {
 
 	/**
 	 * Specifies a String format for converting the bean property value to a formatted string.
+	 *
 	 * <p>
 	 * Note that this is usually a one-way conversion during serialization.
+	 *
 	 * <p>
 	 * During parsing, we will attempt to convert the value to the original form by using the
 	 * {@link BeanSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.

@@ -55,11 +55,12 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description of the target documentation. GFM syntax can be used for rich text representation.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -67,6 +68,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description of the target documentation. GFM syntax can be used for rich text representation.
 	 *
@@ -90,11 +92,14 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>url</property>.
+	 *
 	 * <p>
 	 * Required. The URL for the target documentation.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -106,9 +111,11 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>url</property>.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *

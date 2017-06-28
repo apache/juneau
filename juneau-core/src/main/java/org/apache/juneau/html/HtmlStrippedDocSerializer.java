@@ -25,6 +25,7 @@ import org.apache.juneau.serializer.*;
  * <h5 class='section'>Media types:</h5>
  * <p>
  * Handles <code>Accept</code> types: <code>text/html+stripped</code>
+ *
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/html</code>
  *
@@ -39,6 +40,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public HtmlStrippedDocSerializer(PropertyStore propertyStore) {

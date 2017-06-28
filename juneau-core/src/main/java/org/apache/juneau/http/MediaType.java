@@ -72,18 +72,22 @@ public class MediaType implements Comparable<MediaType> {
 	 * Returns the media type for the specified string.
 	 * The same media type strings always return the same objects so that these objects
 	 * can be compared for equality using '=='.
-	 * <p>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>Spaces are replaced with <js>'+'</js> characters.
+	 * 	<li>
+	 * 		Spaces are replaced with <js>'+'</js> characters.
 	 * 		This gets around the issue where passing media type strings with <js>'+'</js> as HTTP GET parameters
 	 * 		get replaced with spaces by your browser.  Since spaces aren't supported by the spec, this
 	 * 		is doesn't break anything.
-	 * 	<li>Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
+	 * 	<li>
+	 * 		Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
 	 * </ul>
 	 *
-	 * @param s The media type string.  Will be lowercased.
-	 * Returns <jk>null</jk> if input is null.
+	 * @param s
+	 * 	The media type string.
+	 * 	Will be lowercased.
+	 * 	Returns <jk>null</jk> if input is null.
 	 * @return A cached media type object.
 	 */
 	public static MediaType forString(String s) {
@@ -168,6 +172,8 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
+	 *
+	 * <P>
 	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
 	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
 	 *
@@ -179,6 +185,7 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns <jk>true</jk> if this media type is a match for the specified media type.
+	 *
 	 * <p>
 	 * Matches if any of the following is true:
 	 * <ul>
@@ -197,6 +204,7 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns a match metric against the specified media type where a larger number represents a better match.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li>Exact matches (e.g. <js>"text/json"<js>/</js>"text/json"</js>) should match
@@ -253,6 +261,7 @@ public class MediaType implements Comparable<MediaType> {
 
 	/**
 	 * Returns the additional parameters on this media type.
+	 *
 	 * <p>
 	 * For example, given the media type string <js>"text/html;level=1"</js>, will return a map
 	 * with the single entry <code>{level:[<js>'1'</js>]}</code>.

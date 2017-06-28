@@ -34,28 +34,31 @@ import org.apache.juneau.xml.annotation.*;
  * <h5 class='section'>Media types:</h5>
  * <p>
  * Handles <code>Accept</code> types: <code>text/html</code>
+ *
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/html</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
  * The conversion is as follows...
- * 	<ul class='spaced-list'>
- * 		<li>
- * 			{@link Map Maps} (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to HTML tables with
- * 			'key' and 'value' columns.
- * 		<li>
- * 			{@link Collection Collections} (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays are converted
- * 			to HTML ordered lists.
- * 		<li>
- * 			{@code Collections} of {@code Maps} and beans are converted to HTML tables with keys as headers.
- * 		<li>
- * 			Everything else is converted to text.
- * 	</ul>
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		{@link Map Maps} (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to HTML tables with
+ * 		'key' and 'value' columns.
+ * 	<li>
+ * 		{@link Collection Collections} (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays are converted
+ * 		to HTML ordered lists.
+ * 	<li>
+ * 		{@code Collections} of {@code Maps} and beans are converted to HTML tables with keys as headers.
+ * 	<li>
+ * 		Everything else is converted to text.
+ * </ul>
+ *
  * <p>
  * This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf>
  * serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
+ *
  * <p>
  * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  *
@@ -228,8 +231,9 @@ public class HtmlSerializer extends XmlSerializer {
 	 * @param out The writer.
 	 * @param o The object to serialize.
 	 * @param eType The expected type of the object if this is a bean property.
-	 * @param name The attribute name of this object if this object was a field in a JSON object (i.e. key of a
-	 * {@link java.util.Map.Entry} or property name of a bean).
+	 * @param name
+	 * 	The attribute name of this object if this object was a field in a JSON object (i.e. key of a
+	 * 	{@link java.util.Map.Entry} or property name of a bean).
 	 * @param indent The current indentation value.
 	 * @param pMeta The bean property being serialized, or <jk>null</jk> if we're not serializing a bean property.
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.
@@ -773,6 +777,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 	/**
 	 * Returns the schema serializer based on the settings of this serializer.
+	 *
 	 * @return The schema serializer.
 	 */
 	@Override /* XmlSerializer */

@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>User-Agent</l> HTTP request header.
+ *
  * <p>
  * The user agent string of the user agent.
  *
@@ -31,9 +32,11 @@ package org.apache.juneau.http;
  * The field can contain multiple product tokens (section 3.8) and comments identifying the agent and any sub-products
  * which form a significant part of the user agent.
  * By convention, the product tokens are listed in order of their significance for identifying the application.
+ *
  * <p class='bcode'>
  * 	User-Agent     = "User-Agent" ":" 1*( product | comment )
  * </p>
+ *
  * <p>
  * Example:
  * <p class='bcode'>

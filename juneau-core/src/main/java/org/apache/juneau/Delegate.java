@@ -14,8 +14,10 @@ package org.apache.juneau;
 
 /**
  * An object that represents another object, often wrapping that object.
+ *
  * <p>
  * <b>*** Internal Interface - Not intended for external use ***</b>
+ *
  * <p>
  * For example, {@link BeanMap} is a map representation of a bean.
  *

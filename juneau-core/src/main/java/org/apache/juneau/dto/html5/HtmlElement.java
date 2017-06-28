@@ -28,6 +28,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Superclass for all HTML elements.
+ *
  * <p>
  * These are beans that when serialized using {@link HtmlSerializer} generate valid HTML5 elements.
  *
@@ -94,12 +95,15 @@ public abstract class HtmlElement {
 
 	/**
 	 * Adds an arbitrary URI attribute to this element.
+	 *
 	 * <p>
-	 * Same as {@link #attr(String, Object)}, except if the value is
-	 * a string that appears to be a URI (e.g. <js>"servlet:/xxx"</js>).
+	 * Same as {@link #attr(String, Object)}, except if the value is a string that appears to be a URI
+	 * (e.g. <js>"servlet:/xxx"</js>).
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -127,8 +131,9 @@ public abstract class HtmlElement {
 	/**
 	 * Returns the attribute with the specified name converted to the specified class type.
 	 *
-	 * @param type The class type to convert this class to.
-	 * See {@link ObjectUtils} for a list of supported conversion types.
+	 * @param type
+	 * 	The class type to convert this class to.
+	 * 	See {@link ObjectUtils} for a list of supported conversion types.
 	 * @param key The attribute name.
 	 * @return The attribute value, or <jk>null</jk> if the named attribute does not exist.
 	 */
@@ -186,8 +191,9 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-hidden-attribute">hidden</a> attribute.
 	 *
-	 * @param hidden The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param hidden
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement hidden(Object hidden) {
@@ -262,8 +268,8 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class="doclink"
-	 * href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplaythrough">oncanplaythrough</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplaythrough">oncanplaythrough</a>
+	 * attribute.
 	 *
 	 * @param oncanplaythrough The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -319,8 +325,8 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class="doclink"
-	 * href="https://www.w3.org/TR/html5/webappapis.html#handler-ondurationchange">ondurationchange</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondurationchange">ondurationchange</a>
+	 * attribute.
 	 *
 	 * @param ondurationchange The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -453,8 +459,8 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class="doclink"
-	 * href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadedmetadata">onloadedmetadata</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadedmetadata">onloadedmetadata</a>
+	 * attribute.
 	 *
 	 * @param onloadedmetadata The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -490,6 +496,7 @@ public abstract class HtmlElement {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseenter">onmouseenter</a> attribute.
+	 *
 	 * @param onmouseenter The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -783,8 +790,9 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-spellcheck">spellcheck</a> attribute.
 	 *
-	 * @param spellcheck The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param spellcheck
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement spellcheck(Object spellcheck) {
@@ -806,8 +814,9 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-tabindex">tabindex</a> attribute.
 	 *
-	 * @param tabindex The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param tabindex
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement tabindex(Object tabindex) {
@@ -829,8 +838,9 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-translate">translate</a> attribute.
 	 *
-	 * @param translate The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param translate
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement translate(Object translate) {

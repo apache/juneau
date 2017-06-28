@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Pragma</l> HTTP request/response header.
+ *
  * <p>
  * Implementation-specific fields that may have various effects anywhere along the request-response chain.
  *
@@ -23,15 +24,18 @@ package org.apache.juneau.http;
  * </p>
  *
  * <h6 class='topic'>RFC2616 Specification</h6>
+ *
  * The Pragma general-header field is used to include implementation- specific directives that might apply to any
  * recipient along the request/response chain.
  * All pragma directives specify optional behavior from the viewpoint of the protocol; however, some systems MAY
  * require that behavior be consistent with the directives.
+ *
  * <p class='bcode'>
  * 	Pragma            = "Pragma" ":" 1#pragma-directive
  * 	pragma-directive  = "no-cache" | extension-pragma
  * 	extension-pragma  = token [ "=" ( token | quoted-string ) ]
  * </p>
+ *
  * <p>
  * When the no-cache directive is present in a request message, an application SHOULD forward the request toward the
  * origin server even if it has a cached copy of what is being requested.
@@ -39,14 +43,17 @@ package org.apache.juneau.http;
  * for backward compatibility with HTTP/1.0.
  * Clients SHOULD include both header fields when a no-cache request is sent to a server not known to be HTTP/1.1
  * compliant.
+ *
  * <p>
  * Pragma directives MUST be passed through by a proxy or gateway application, regardless of their significance to that
  * application, since the directives might be applicable to all recipients along the request/response chain.
  * It is not possible to specify a pragma for a specific recipient; however, any pragma directive not relevant to a
  * recipient SHOULD be ignored by that recipient.
+ *
  * <p>
  * HTTP/1.1 caches SHOULD treat "Pragma: no-cache" as if the client had sent "Cache-Control: no-cache".
  * No new Pragma directives will be defined in HTTP.
+ *
  * <p>
  * Note: because the meaning of "Pragma: no-cache as a response header field is not actually specified, it does not
  * provide a reliable replacement for "Cache-Control: no-cache" in a response.

@@ -20,8 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.html.*;
 
 /**
- * Annotation that can be applied to classes, fields, and methods to tweak how
- * they are handled by {@link HtmlSerializer}.
+ * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by {@link HtmlSerializer}.
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})
@@ -31,12 +30,16 @@ public @interface Html {
 
 	/**
 	 * Treat as XML.
+	 *
+	 * <p>
 	 * Useful when creating beans that model HTML elements.
 	 */
 	boolean asXml() default false;
 
 	/**
 	 * Treat as plain text.
+	 *
+	 * <p>
 	 * Object is serialized to a String using the <code>toString()</code> method and written directly to output.
 	 * Useful when you want to serialize custom HTML.
 	 */
@@ -44,18 +47,23 @@ public @interface Html {
 
 	/**
 	 * When <jk>true</jk>, collections of beans should be rendered as trees instead of tables.
+	 *
+	 * <p>
 	 * Default is <jk>false</jk>.
 	 */
 	boolean noTables() default false;
 
 	/**
 	 * When <jk>true</jk>, don't add headers to tables.
+	 *
+	 * <p>
 	 * Default is <jk>false</jk>.
 	 */
 	boolean noTableHeaders() default false;
 
 	/**
 	 * Associates an {@link HtmlRender} with a bean property for custom HTML rendering of the property.
+	 *
 	 * <p>
 	 * This annotation applies to bean properties and classes.
 	 */
@@ -64,8 +72,10 @@ public @interface Html {
 
 	/**
 	 * Adds a hyperlink to a bean property when rendered as HTML.
+	 *
 	 * <p>
 	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
+	 *
 	 * <p>
 	 * The URLs can be any of the following forms:
 	 * <ul>

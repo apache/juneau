@@ -20,6 +20,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents a Cognos dataset.
+ *
  * <p>
  * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
  * <p class='bcode'>
@@ -45,6 +46,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		<xt>&lt;/c:data&gt;</xt>
  * 	<xt>&lt;/c:dataset&gt;</xt>
  * </p>
+ *
  * <p>
  * Only 2-dimensional POJOs (arrays or collections of maps or beans) can be serialized to Cognos.
  *
@@ -88,8 +90,9 @@ public class DataSet {
 	 * Constructor.
 	 *
 	 * @param columns The meta-data that represents the columns in the dataset.
-	 * @param o The POJO being serialized to Cognos.
-	 * Must be an array/collection of beans/maps.
+	 * @param o
+	 * 	The POJO being serialized to Cognos.
+	 * 	Must be an array/collection of beans/maps.
 	 * @param session The bean session used to convert POJOs to strings.
 	 * @throws Exception An error occurred trying to serialize the POJO.
 	 */
@@ -124,6 +127,7 @@ public class DataSet {
 
 	/**
 	 * Represents a row of data.
+	 *
 	 * <p>
 	 * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
 	 * <p class='bcode'>

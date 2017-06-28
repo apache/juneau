@@ -79,11 +79,12 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description of the header.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -91,6 +92,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description of the header.
 	 *
@@ -114,6 +116,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Required. The type of the object.
 	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <
@@ -127,6 +130,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Required. The type of the object.
 	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or
@@ -156,9 +160,11 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>format</property>.
+	 *
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink"
-	 * href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
+	 * details.
 	 *
 	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -168,9 +174,11 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>format</property>.
+	 *
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>. See <a class="doclink"
-	 * href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
+	 * details.
 	 *
 	 * @param format The new value for the <property>format</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -192,6 +200,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>items</property>.
+	 *
 	 * <p>
 	 * Required if <code>type</code> is <js>"array"</js>.
 	 * Describes the type of items in the array.
@@ -204,6 +213,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>items</property>.
+	 *
 	 * <p>
 	 * Required if <code>type</code> is <js>"array"</js>.
 	 * Describes the type of items in the array.
@@ -228,9 +238,11 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
 	 * <p>
+	 *
 	 * Possible values are:
 	 * <ul>
 	 * 	<li><code>csv</code> - comma separated values <code>foo,bar</code>.
@@ -238,10 +250,12 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<li><code>tsv</code> - tab separated values <code>foo\tbar</code>.
 	 * 	<li><code>pipes</code> - pipe separated values <code>foo|bar</code>.
 	 * </ul>
+	 *
 	 * <p>
 	 * Default value is <code>csv</code>.
 	 *
-	 * @return The value of the <property>collectionFormat</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return
+	 * 	The value of the <property>collectionFormat</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getCollectionFormat() {
 		return collectionFormat;
@@ -249,8 +263,10 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>collectionFormat</property>.
+	 *
 	 * <p>
 	 * Determines the format of the array if type array is used.
+	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
@@ -259,6 +275,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<li><code>tsv</code> - tab separated values <code>foo\tbar</code>.
 	 * 	<li><code>pipes</code> - pipe separated values <code>foo|bar</code>.
 	 * </ul>
+	 *
 	 * <p>
 	 * Default value is <code>csv</code>.
 	 *
@@ -286,6 +303,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>default</property>.
+	 *
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
 	 * (Note: <js>"default"</js> has no meaning for required items.)
@@ -301,6 +319,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>default</property>.
+	 *
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
 	 * (Note: <js>"default"</js> has no meaning for required items.)
@@ -328,6 +347,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -340,6 +360,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -364,6 +385,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -377,6 +399,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -401,6 +424,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -413,6 +437,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -437,6 +462,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -450,6 +476,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -474,6 +501,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
@@ -486,6 +514,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
@@ -510,6 +539,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
@@ -522,6 +552,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
@@ -535,7 +566,6 @@ public class HeaderInfo extends SwaggerElement {
 	}
 
 	/**
-	 *
 	 * @param minLength The new value for the <property>minLength</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
@@ -545,6 +575,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
@@ -557,6 +588,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
@@ -581,6 +613,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
@@ -593,6 +626,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
@@ -617,6 +651,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
@@ -629,6 +664,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
@@ -653,6 +689,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
@@ -665,6 +702,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
@@ -689,6 +727,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
@@ -701,6 +740,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
@@ -715,12 +755,14 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>enum</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
-	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
-	 * These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param _enum
+	 * 	The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo addEnum(Object..._enum) {
@@ -750,6 +792,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
@@ -762,6 +805,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">
 	 * http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.

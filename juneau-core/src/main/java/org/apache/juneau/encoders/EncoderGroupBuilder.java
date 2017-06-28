@@ -88,6 +88,7 @@ public class EncoderGroupBuilder {
 
 	/**
 	 * Creates a new {@link EncoderGroup} object using a snapshot of the settings defined in this builder.
+	 *
 	 * <p>
 	 * This method can be called multiple times to produce multiple encoder groups.
 	 *

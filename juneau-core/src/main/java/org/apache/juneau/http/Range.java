@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Range</l> HTTP request header.
+ *
  * <p>
  * Request only part of an entity. Bytes are numbered from 0.
  *
@@ -27,9 +28,11 @@ package org.apache.juneau.http;
  * Since all HTTP entities are represented in HTTP messages as sequences of bytes, the concept of a byte range is
  * meaningful for any HTTP entity.
  * (However, not all clients and servers need to support byte- range operations.)
+ *
  * <p>
  * Byte range specifications in HTTP apply to the sequence of bytes in the entity-body (not necessarily the same as the
  * message-body).
+ *
  * <p>
  * A byte range operation MAY specify a single range of bytes, or a set of ranges within a single entity.
  * <p class='bcode'>
@@ -40,19 +43,23 @@ package org.apache.juneau.http;
  * 	first-byte-pos  = 1*DIGIT
  * 	last-byte-pos   = 1*DIGIT
  * </p>
+ *
  * <p>
  * The first-byte-pos value in a byte-range-spec gives the byte-offset of the first byte in a range.
  * The last-byte-pos value gives the byte-offset of the last byte in the range; that is, the byte positions specified
  * are inclusive.
  * Byte offsets start at zero.
+ *
  * <p>
  * If the last-byte-pos value is present, it MUST be greater than or equal to the first-byte-pos in that
  * byte-range-spec, or the byte- range-spec is syntactically invalid.
  * The recipient of a byte-range- set that includes one or more syntactically invalid byte-range-spec values MUST
  * ignore the header field that includes that byte-range-set.
+ *
  * <p>
  * If the last-byte-pos value is absent, or if the value is greater than or equal to the current length of the
  * entity-body, last-byte-pos is taken to be equal to one less than the current length of the entity-body in bytes.
+ *
  * <p>
  * By its choice of last-byte-pos, a client can limit the number of bytes retrieved without knowing the size of the
  * entity.
@@ -60,11 +67,13 @@ package org.apache.juneau.http;
  * 	suffix-byte-range-spec = "-" suffix-length
  * 	suffix-length = 1*DIGIT
  * </p>
+ *
  * <p>
  * A suffix-byte-range-spec is used to specify the suffix of the entity-body, of a length given by the suffix-length
  * value.
  * (That is, this form specifies the last N bytes of an entity-body.)
  * If the entity is shorter than the specified suffix-length, the entire entity-body is used.
+ *
  * <p>
  * If a syntactically valid byte-range-set includes at least one byte- range-spec whose first-byte-pos is less than the
  * current length of the entity-body, or at least one suffix-byte-range-spec with a non-zero suffix-length, then the
@@ -74,6 +83,7 @@ package org.apache.juneau.http;
  * not satisfiable).
  * Otherwise, the server SHOULD return a response with a status of 206 (Partial Content) containing the satisfiable
  * ranges of the entity-body.
+ *
  * <p>
  * Examples of byte-ranges-specifier values (assuming an entity-body of length 10000):
  * <p class='bcode'>
@@ -86,18 +96,22 @@ package org.apache.juneau.http;
  * 	   bytes=500-600,601-999
  * 	   bytes=500-700,601-999
  * </p>
+ *
  * <p>
  * HTTP retrieval requests using conditional or unconditional GET methods MAY request one or more sub-ranges of the
  * entity, instead of the entire entity, using the Range request header, which applies to the entity returned as the
  * result of the request:
+ *
  * <p class='bcode'>
  * 	Range = "Range" ":" ranges-specifier
  * </p>
+ *
  * <p>
  * A server MAY ignore the Range header.
  * However, HTTP/1.1 origin servers and intermediate caches ought to support byte ranges when possible, since Range
  * supports efficient recovery from partially failed transfers, and supports efficient partial retrieval of large
  * entities.
+ *
  * <p>
  * If the server supports the Range header and the specified range or ranges are appropriate for the entity:
  * <ul>
@@ -109,8 +123,11 @@ package org.apache.juneau.http;
  * 		otherwise successful and the condition is true. It does not affect the 304 (Not Modified) response returned if
  * 		the conditional is false.
  * </ul>
+ *
+ * <p>
  * In some cases, it might be more appropriate to use the If-Range header (see section 14.27) in addition to the Range
  * header.
+ *
  * <p>
  * If a proxy that supports ranges receives a Range request, forwards the request to an inbound server, and receives an
  * entire entity in reply, it SHOULD only return the requested range to its client.

@@ -20,16 +20,18 @@ import java.lang.annotation.*;
 import org.apache.juneau.ini.*;
 
 /**
- * Identifies a setter as a method for setting the name of a POJO as it's known by
- * its parent object.
+ * Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
+ *
  * <p>
- * For example, the {@link Section} class must know the name it's known by it's parent
- * {@link ConfigFileImpl} class, so parsers will call this method with the section name
+ * For example, the {@link Section} class must know the name it's known by it's parent {@link ConfigFileImpl} class,
+ * so parsers will call this method with the section name
  * using the {@link Section#setName(String)} method.
  * <p>
  * A commonly-used case is when you're parsing a JSON map containing beans where one of the bean properties is the key
  * used in the map.
- * <br>For example:
+ *
+ * <p>
+ * For example:
  * <p class='bcode'>
  * 	{
  * 		id1: {name: <js>'John Smith'</js>, sex:<js>'M'</js>},

@@ -18,10 +18,12 @@ import org.apache.juneau.annotation.*;
 
 /**
  * The Schema Object allows the definition of input and output data types.
+ *
  * <p>
  * These types can be objects, but also primitives and arrays.
  * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
  * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ *
  * <p>
  * Further information about the properties can be found in JSON Schema Core and JSON Schema Validation.
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
@@ -77,6 +79,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>format</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
 	 * details.
@@ -89,6 +92,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>format</property>.
+	 *
 	 * <p>
 	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
 	 * details.
@@ -143,6 +147,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
@@ -155,6 +160,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
@@ -179,6 +185,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>default</property>.
+	 *
 	 * <p>
 	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
 	 *
@@ -190,6 +197,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>default</property>.
+	 *
 	 * <p>
 	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
 	 *
@@ -274,8 +282,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public Boolean getExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -335,8 +344,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
-	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public Boolean getExclusiveMinimum() {
 		return exclusiveMinimum;
@@ -680,8 +690,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Synonym for {@link #addEnum(Object...)}.
 	 *
-	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
-	 * These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param _enum
+	 * 	The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo _enum(Object..._enum) {
@@ -771,8 +782,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property adder:  <property>enum</property>.
 	 *
-	 * @param allOf The new values to add to the <property>allOf</property> property on this bean.
-	 * These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param allOf
+	 * 	The new values to add to the <property>allOf</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addAllOf(Object...allOf) {
@@ -793,8 +805,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Synonym for {@link #addAllOf(Object...)}.
 	 *
-	 * @param allOf The new values to add to the <property>allOf</property> property on this bean.
-	 * These can either be individual objects or {@link Collection Collections} of objects.
+	 * @param allOf
+	 * 	The new values to add to the <property>allOf</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo allOf(Object...allOf) {
@@ -854,8 +867,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
-	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it
-	 * is not set.
+	 * @return
+	 * 	The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it
+	 * 	is not set.
 	 */
 	public Map<String,Object> getAdditionalProperties() {
 		return additionalProperties;
@@ -890,8 +904,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>discriminator</property>.
 	 *
-	 * @return The value of the <property>discriminator</property> property on this bean, or <jk>null</jk> if it is
-	 * not set.
+	 * @return
+	 * 	The value of the <property>discriminator</property> property on this bean, or <jk>null</jk> if it is
+	 * 	not set.
 	 */
 	public String getDiscriminator() {
 		return discriminator;
@@ -981,8 +996,9 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
 	 *
-	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not
+	 * 	set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
 		return externalDocs;

@@ -14,6 +14,7 @@ package org.apache.juneau.dto.jsonschema;
 
 /**
  * Convenience class for representing a property that's an array of simple types.
+ *
  * <p>
  * An instance of this object is equivalent to calling...
  *

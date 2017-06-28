@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/forms.html#the-progress-element">&lt;progress&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-progress-element">&lt;progress&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,10 +35,13 @@ public class Progress extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-max">max</a> attribute.
+	 *
+	 * <p>
 	 * Upper bound of range.
 	 *
-	 * @param max The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param max
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Progress max(Object max) {
@@ -48,10 +51,13 @@ public class Progress extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-value">value</a> attribute.
+	 *
+	 * <p>
 	 * Current value of the element.
 	 *
-	 * @param value The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Progress value(Object value) {

@@ -57,6 +57,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
+	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
 	 *
@@ -68,6 +69,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
+	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
 	 *
@@ -91,6 +93,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>url</property>.
+	 *
 	 * <p>
 	 * The URL pointing to the contact information. MUST be in the format of a URL.
 	 *
@@ -102,9 +105,11 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>url</property>.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -128,6 +133,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>email</property>.
+	 *
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
 	 *
@@ -139,6 +145,7 @@ public class Contact extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>email</property>.
+	 *
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
 	 *

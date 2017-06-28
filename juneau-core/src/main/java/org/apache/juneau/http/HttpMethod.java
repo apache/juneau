@@ -69,6 +69,7 @@ public enum HttpMethod {
 
 	/**
 	 * Returns the enum for the specified key.
+	 *
 	 * <p>
 	 * Case is ignored.
 	 *

@@ -15,8 +15,8 @@ package org.apache.juneau.dto.swagger;
 import org.apache.juneau.annotation.*;
 
 /**
- * Allows adding meta data to a single tag that is used by the <a class="doclink"
- * href="http://swagger.io/specification/#operationObject">Operation Object</a>.
+ * Allows adding meta data to a single tag that is used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a>.
+ *
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
  *
@@ -53,6 +53,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Required. The name of the tag.
 	 *
@@ -64,6 +65,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Required. The name of the tag.
 	 *
@@ -87,13 +89,16 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description for the tag.
+	 *
+	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -101,8 +106,11 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description for the tag.
+	 *
+	 * <p>
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
 	 *
@@ -126,11 +134,12 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
+	 *
 	 * <p>
 	 * Additional external documentation for this tag.
 	 *
-	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
 		return externalDocs;
@@ -138,6 +147,7 @@ public class Tag extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
+	 *
 	 * <p>
 	 * Additional external documentation for this tag.
 	 *

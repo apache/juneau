@@ -18,6 +18,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.
+ *
  * <p>
  * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
@@ -68,6 +69,7 @@ public class HeaderRangeArray {
 
 	/**
 	 * Returns the list of the types ranges that make up this header.
+	 *
 	 * <p>
 	 * The types ranges in the list are sorted by their q-value in descending order.
 	 *

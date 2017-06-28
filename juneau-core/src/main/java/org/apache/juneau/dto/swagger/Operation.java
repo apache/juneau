@@ -112,6 +112,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
+	 *
 	 * <p>
 	 * A list of tags for API documentation control.
 	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
@@ -124,6 +125,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>tags</property>.
+	 *
 	 * <p>
 	 * A list of tags for API documentation control.
 	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
@@ -138,6 +140,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>tags</property>.
+	 *
 	 * <p>
 	 * A list of tags for API documentation control.
 	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
@@ -151,12 +154,14 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>tags</property>.
+	 *
 	 * <p>
 	 * A list of tags for API documentation control.
 	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 *
-	 * @param tags The values to add for the <property>tags</property> property on this bean.
-	 * Ignored if <jk>null</jk>.
+	 * @param tags
+	 * 	The values to add for the <property>tags</property> property on this bean.
+	 * 	Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public Operation addTags(Collection<String> tags) {
@@ -190,6 +195,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
+	 *
 	 * <p>
 	 * A short summary of what the operation does.
 	 * For maximum readability in the swagger-ui, this field SHOULD be less than 120 characters.
@@ -202,6 +208,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>summary</property>.
+	 *
 	 * <p>
 	 * A short summary of what the operation does.
 	 * For maximum readability in the swagger-ui, this field SHOULD be less than 120 characters.
@@ -226,13 +233,14 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A verbose explanation of the operation behavior.
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
 	 * for rich text representation.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -240,6 +248,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A verbose explanation of the operation behavior.
 	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used
@@ -265,11 +274,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
+	 *
 	 * <p>
 	 * Additional external documentation for this operation.
 	 *
-	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public ExternalDocumentation getExternalDocs() {
 		return externalDocs;
@@ -277,6 +287,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>externalDocs</property>.
+	 *
 	 * <p>
 	 * Additional external documentation for this operation.
 	 *
@@ -300,13 +311,14 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>operationId</property>.
+	 *
 	 * <p>
 	 * Unique string used to identify the operation. The id MUST be unique among all operations described in the API.
 	 * Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
 	 * follow common programming naming conventions.
 	 *
-	 * @return The value of the <property>operationId</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>operationId</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getOperationId() {
 		return operationId;
@@ -314,6 +326,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>operationId</property>.
+	 *
 	 * <p>
 	 * Unique string used to identify the operation. The id MUST be unique among all operations described in the API.
 	 * Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
@@ -339,12 +352,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @return The value of the <property>consumes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -354,12 +367,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The new value for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -371,12 +384,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -387,12 +400,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>consumes</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -428,12 +441,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can produce.
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @return The value of the <property>produces</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -443,12 +456,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can produce.
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -460,12 +473,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can produce.
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -481,12 +494,12 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>produces</property>.
+	 *
 	 * <p>
 	 * A list of MIME types the operation can produces.
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink"
-	 * href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The new values to add to the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -522,6 +535,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>parameters</property>.
+	 *
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 * If a parameter is already defined at the <a class="doclink"
@@ -529,10 +543,8 @@ public class Operation extends SwaggerElement {
 	 * but can never remove it.
 	 * The list MUST NOT include duplicated parameters.
 	 * A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
-	 * The list can use the <a class="doclink"
-	 * href="http://swagger.io/specification/#referenceObject">Reference Object</a> to link to parameters that are
-	 * defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's
-	 * parameters</a>.
+	 * The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
+	 * to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
 	 * There can be one <js>"body"</js> parameter at most.
 	 *
 	 * @return The value of the <property>parameters</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -543,6 +555,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>parameters</property>.
+	 *
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 * If a parameter is already defined at the <a class="doclink"
@@ -566,6 +579,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>parameters</property>.
+	 *
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 * If a parameter is already defined at the <a class="doclink"
@@ -611,6 +625,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>responses</property>.
+	 *
 	 * <p>
 	 * Required. The list of possible responses as they are returned from executing this operation.
 	 *
@@ -622,6 +637,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>responses</property>.
+	 *
 	 * <p>
 	 * Required. The list of possible responses as they are returned from executing this operation.
 	 *
@@ -635,6 +651,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>responses</property>.
+	 *
 	 * <p>
 	 * Required. The list of possible responses as they are returned from executing this operation.
 	 *
@@ -672,6 +689,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol for the operation.
 	 * Values MUST be from the list: <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
@@ -685,6 +703,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol for the operation.
 	 * Values MUST be from the list: <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
@@ -700,6 +719,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol for the operation.
 	 * Values MUST be from the list: <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
@@ -714,6 +734,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>schemes</property>.
+	 *
 	 * <p>
 	 * The transfer protocol for the operation.
 	 * Values MUST be from the list: <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
@@ -741,6 +762,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
+	 *
 	 * <p>
 	 * Declares this operation to be deprecated.
 	 * Usage of the declared operation should be refrained.
@@ -754,6 +776,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>deprecated</property>.
+	 *
 	 * <p>
 	 * Declares this operation to be deprecated.
 	 * Usage of the declared operation should be refrained.
@@ -779,6 +802,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>security</property>.
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for this operation.
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
@@ -794,6 +818,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>security</property>.
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for this operation.
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
@@ -811,6 +836,7 @@ public class Operation extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>security</property>.
+	 *
 	 * <p>
 	 * A declaration of which security schemes are applied for this operation.
 	 * The list of values describes alternative security schemes that can be used (that is, there is a logical OR
@@ -832,8 +858,9 @@ public class Operation extends SwaggerElement {
 	 * Synonym for {@link #addSecurity(Map)}.
 	 *
 	 * @param scheme The security scheme that applies to this operation
-	 * @param alternatives The list of values describes alternative security schemes that can be used (that is, there is
-	 * a logical OR between the security requirements).
+	 * @param alternatives
+	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
+	 * 	between the security requirements).
 	 * @return This object (for method chaining).
 	 */
 	public Operation security(String scheme, String...alternatives) {

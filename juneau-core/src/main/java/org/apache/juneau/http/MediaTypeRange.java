@@ -42,9 +42,11 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Parses an <code>Accept</code> header value into an array of media ranges.
+	 *
 	 * <p>
 	 * The returned media ranges are sorted such that the most acceptable media is available at ordinal position
 	 * <js>'0'</js>, and the least acceptable at position n-1.
+	 *
 	 * <p>
 	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
@@ -60,11 +62,13 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
 	 * </p>
 	 *
-	 * @param value The value to parse.  If <jk>null</jk> or empty, returns a single <code>MediaTypeRange</code> is
-	 * returned that represents all types.
-	 * @return The media ranges described by the string.
-	 * The ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and the
-	 * least acceptable at position n-1.
+	 * @param value
+	 * 	The value to parse.
+	 * 	If <jk>null</jk> or empty, returns a single <code>MediaTypeRange</code> is returned that represents all types.
+	 * @return
+	 * 	The media ranges described by the string.
+	 * 	The ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and
+	 * 	the least acceptable at position n-1.
 	 */
 	public static MediaTypeRange[] parse(String value) {
 
@@ -157,8 +161,10 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
+	 *
 	 * <p>
 	 * The quality value is a float between <code>0.0</code> (unacceptable) and <code>1.0</code> (most acceptable).
+	 *
 	 * <p>
 	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
 	 * header, as opposed to <js>"accept-*"</js> header, its value will always be <js>"1"</js>.
@@ -171,6 +177,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Returns the optional set of custom extensions defined for this type.
+	 *
 	 * <p>
 	 * Values are lowercase and never <jk>null</jk>.
 	 *
@@ -182,6 +189,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Provides a string representation of this media range, suitable for use as an <code>Accept</code> header value.
+	 *
 	 * <p>
 	 * The literal text generated will be all lowercase.
 	 *
@@ -245,6 +253,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	/**
 	 * Compares two MediaRanges for equality.
+	 *
 	 * <p>
 	 * The values are first compared according to <code>qValue</code> values.
 	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in

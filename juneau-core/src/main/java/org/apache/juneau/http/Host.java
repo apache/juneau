@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Host</l> HTTP request header.
+ *
  * <p>
  * The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening.
  * The port number may be omitted if the port is the standard port for the service requested.
@@ -33,9 +34,11 @@ package org.apache.juneau.http;
  * The Host field value MUST represent the naming authority of the origin server or gateway given by the original URL.
  * This allows the origin server or gateway to differentiate between internally-ambiguous URLs, such as the root "/" URL
  * of a server for multiple host names on a single IP address.
+ *
  * <p class='bcode'>
  * 	Host = "Host" ":" host [ ":" port ] ; Section 3.2.2
  * </p>
+ *
  * <p>
  * A "host" without any trailing port information implies the default port for the service requested (e.g., "80" for an
  * HTTP URL).
@@ -44,6 +47,7 @@ package org.apache.juneau.http;
  * 	GET /pub/WWW/ HTTP/1.1
  * 	Host: www.w3.org
  * </p>
+ *
  * <p>
  * A client MUST include a Host header field in all HTTP/1.1 request messages.
  * If the requested URI does not include an Internet host name for the service being requested, then the Host header
@@ -52,6 +56,7 @@ package org.apache.juneau.http;
  * identifies the service being requested by the proxy.
  * All Internet-based HTTP/1.1 servers MUST respond with a 400 (Bad Request) status code to any HTTP/1.1 request
  * message which lacks a Host header field.
+ *
  * <p>
  * See sections 5.2 and 19.6.1.1 for other requirements relating to Host.
  *

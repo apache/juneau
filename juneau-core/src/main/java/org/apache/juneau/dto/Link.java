@@ -23,13 +23,16 @@ import org.apache.juneau.utils.*;
 
 /**
  * Simple bean that implements a hyperlink for the HTML serializer.
+ *
  * <p>
  * The name and url properties correspond to the following parts of a hyperlink in an HTML document...
  * <p class='bcode'>
  * 	<xt>&lt;a</xt> <xa>href</xa>=<xs>'href'</xs><xt>&gt;</xt>name<xt>&lt;/a&gt;</xt>
+ * </p>
+ *
  * <p>
  * When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.
- * <br>All other serializers simply convert it to a simple bean.
+ * All other serializers simply convert it to a simple bean.
  */
 @HtmlLink(nameProperty = "name", hrefProperty = "href")
 public class Link implements Comparable<Link> {
@@ -57,6 +60,8 @@ public class Link implements Comparable<Link> {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
 	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
 	 *
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -78,6 +83,8 @@ public class Link implements Comparable<Link> {
 
 	/**
 	 * Bean property getter:  <property>href</property>.
+	 *
+	 * <p>
 	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
 	 *
 	 * @return The value of the <property>href</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -99,6 +106,8 @@ public class Link implements Comparable<Link> {
 
 	/**
 	 * Bean property setter:  <property>href</property>.
+	 *
+	 * <p>
 	 * Same as {@link #setHref(String)} except allows for {@link MessageFormat} style arguments.
 	 *
 	 * @param href The new href.

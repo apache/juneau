@@ -21,6 +21,7 @@ import org.apache.juneau.json.*;
 
 /**
  * Allows the definition of a security scheme that can be used by the operations.
+ *
  * <p>
  * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's
  * common flows (implicit, password, application and access code).
@@ -89,8 +90,11 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Required. The type of the security scheme.
+	 *
+	 * <p>
 	 * Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
 	 *
 	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -101,8 +105,11 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
+	 *
 	 * <p>
 	 * Required. The type of the security scheme.
+	 *
+	 * <p>
 	 * Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
 	 *
 	 * @param type The new value for the <property>type</property> property on this bean.
@@ -129,11 +136,12 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description for security scheme.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -141,6 +149,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description for security scheme.
 	 *
@@ -164,6 +173,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
+	 *
 	 * <p>
 	 * The name of the header or query parameter to be used.
 	 *
@@ -175,6 +185,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
+	 *
 	 * <p>
 	 * The name of the header or query parameter to be used.
 	 *
@@ -198,6 +209,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>in</property>.
+	 *
 	 * <p>
 	 * The location of the API key. Valid values are <js>"query"</js> or <js>"header"</js>.
 	 *
@@ -209,6 +221,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>in</property>.
+	 *
 	 * <p>
 	 * The location of the API key. Valid values are <js>"query"</js> or <js>"header"</js>.
 	 *
@@ -232,8 +245,11 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>flow</property>.
+	 *
 	 * <p>
 	 * The flow used by the OAuth2 security scheme.
+	 *
+	 * <p>
 	 * Valid values are <js>"implicit"</js>, <js>"password"</js>, <js>"application"</js> or <js>"accessCode"</js>.
 	 *
 	 * @return The value of the <property>flow</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -244,8 +260,11 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>flow</property>.
+	 *
 	 * <p>
 	 * The flow used by the OAuth2 security scheme.
+	 *
+	 * <p>
 	 * Valid values are <js>"implicit"</js>, <js>"password"</js>, <js>"application"</js> or <js>"accessCode"</js>.
 	 *
 	 * @param flow The new value for the <property>flow</property> property on this bean.
@@ -268,12 +287,16 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>authorizationUrl</property>.
+	 *
 	 * <p>
 	 * The authorization URL to be used for this flow.
+	 *
+	 * <p>
 	 * This SHOULD be in the form of a URL.
 	 *
-	 * @return The value of the <property>authorizationUrl</property> property on this bean, or <jk>null</jk> if it
-	 * is not set.
+	 * @return
+	 * 	The value of the <property>authorizationUrl</property> property on this bean, or <jk>null</jk> if it
+	 * 	is not set.
 	 */
 	public String getAuthorizationUrl() {
 		return authorizationUrl;
@@ -281,8 +304,11 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>authorizationUrl</property>.
+	 *
 	 * <p>
 	 * The authorization URL to be used for this flow.
+	 *
+	 * <p>
 	 * This SHOULD be in the form of a URL.
 	 *
 	 * @param authorizationUrl The new value for the <property>authorizationUrl</property> property on this bean.
@@ -305,8 +331,11 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>tokenUrl</property>.
+	 *
 	 * <p>
 	 * The token URL to be used for this flow.
+	 *
+	 * <p>
 	 * This SHOULD be in the form of a URL.
 	 *
 	 * @return The value of the <property>tokenUrl</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -317,8 +346,11 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>tokenUrl</property>.
+	 *
 	 * <p>
 	 * The token URL to be used for this flow.
+	 *
+	 * <p>
 	 * This SHOULD be in the form of a URL.
 	 *
 	 * @param tokenUrl The new value for the <property>tokenUrl</property> property on this bean.
@@ -341,6 +373,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>scopes</property>.
+	 *
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
 	 *
@@ -352,6 +385,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>scopes</property>.
+	 *
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
 	 *
@@ -365,6 +399,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	/**
 	 * Bean property adder:  <property>scopes</property>.
+	 *
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
 	 *

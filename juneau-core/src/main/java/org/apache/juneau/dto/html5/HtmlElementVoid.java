@@ -18,6 +18,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * A subclass of HTML elements that have no content or end tags.
+ *
  * <p>
  * See <a href="https://www.w3.org/TR/html51/syntax.html#void-elements">void elements</a>
  *

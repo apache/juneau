@@ -24,6 +24,7 @@ public abstract class CoreObject {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	protected CoreObject(PropertyStore propertyStore) {
@@ -32,8 +33,8 @@ public abstract class CoreObject {
 	}
 
 	/**
-	 * Creates a new builder class for this object so that a new object can be created
-	 * that expands upon the current object's settings.
+	 * Creates a new builder class for this object so that a new object can be created that expands upon the current
+	 * object's settings.
 	 *
 	 * @return A new builder.
 	 */
@@ -42,11 +43,11 @@ public abstract class CoreObject {
 	}
 
 	/**
-	 * Method used by subclasses to override context factory properties for just this
-	 * instance without modifying the context factory itself.
+	 * Method used by subclasses to override context factory properties for just this instance without modifying the
+	 * context factory itself.
+	 *
 	 * <p>
-	 * Subclasses can call this parent method to append to override properties defined
-	 * higher in the parent chain.
+	 * Subclasses can call this parent method to append to override properties defined higher in the parent chain.
 	 *
 	 * @return The override properties.  Never <jk>null</jk>.
 	 */
@@ -55,19 +56,19 @@ public abstract class CoreObject {
 	}
 
 	/**
-	 * Returns a copy of the context factory passed in to the constructor with
-	 * any override properties applied from the {@link #getOverrideProperties()}.
+	 * Returns a copy of the context factory passed in to the constructor with any override properties applied from the
+	 * {@link #getOverrideProperties()}.
 	 *
-	 * @return The context factory on this class.
-	 * Multiple calls to this method returns the same factory.
+	 * @return
+	 * 	The context factory on this class.
+	 * 	Multiple calls to this method returns the same factory.
 	 */
 	public PropertyStore createPropertyStore() {
 		return PropertyStore.create(propertyStore);
 	}
 
 	/**
-	 * Creates a read-only context object of the specified type using the context
-	 * factory on this class.
+	 * Creates a read-only context object of the specified type using the context factory on this class.
 	 *
 	 * @param c The context class to create.
 	 * @return The new context object.
@@ -78,6 +79,7 @@ public abstract class CoreObject {
 
 	/**
 	 * Returns the bean context to use for this class.
+	 *
 	 * @return The bean context object.
 	 */
 	public BeanContext getBeanContext() {

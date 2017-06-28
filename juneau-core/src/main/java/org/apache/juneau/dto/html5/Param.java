@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/embedded-content-0.html#the-param-element">&lt;param&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-param-element">&lt;param&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,6 +35,8 @@ public class Param extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name">name</a> attribute.
+	 *
+	 * <p>
 	 * Name of parameter.
 	 *
 	 * @param name The new value for this attribute.
@@ -48,10 +50,13 @@ public class Param extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value">value</a>
 	 * attribute.
+	 *
+	 * <p>
 	 * Value of parameter.
 	 *
-	 * @param value The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Param value(Object value) {

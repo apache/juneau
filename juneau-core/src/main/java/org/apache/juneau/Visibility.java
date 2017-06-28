@@ -16,8 +16,11 @@ import java.lang.reflect.*;
 
 /**
  * Defines class/field/method visibilities.
+ *
  * <p>
  * Used to specify minimum levels of visibility when detecting bean classes, methods, and fields.
+ *
+ * <p>
  * Used in conjunction with the following bean context properties:
  * <ul>
  * 	<li>{@link BeanContext#BEAN_beanConstructorVisibility}
@@ -99,10 +102,13 @@ public enum Visibility {
 
 	/**
 	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
+	 *
+	 * <p>
 	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
 	 *
 	 * @param x The constructor.
-	 * @return The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
+	 * @return
+	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
 	 */
 	public <T> Constructor<T> transform(Constructor<T> x) {
@@ -116,10 +122,13 @@ public enum Visibility {
 
 	/**
 	 * Makes method accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
+	 *
+	 * <p>
 	 * Security exceptions thrown on the call to {@link Method#setAccessible(boolean)} are quietly ignored.
 	 *
 	 * @param x The method.
-	 * @return The same method if visibility requirements met, or <jk>null</jk> if visibility requirement not
+	 * @return
+	 * 	The same method if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Method#setAccessible(boolean)} throws a security exception.
 	 */
 	public <T> Method transform(Method x) {
@@ -133,10 +142,13 @@ public enum Visibility {
 
 	/**
 	 * Makes field accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
+	 *
+	 * <p>
 	 * Security exceptions thrown on the call to {@link Field#setAccessible(boolean)} are quietly ignored.
 	 *
 	 * @param x The field.
-	 * @return The same field if visibility requirements met, or <jk>null</jk> if visibility requirement not
+	 * @return
+	 * 	The same field if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Field#setAccessible(boolean)} throws a security exception.
 	 */
 	public Field transform(Field x) {

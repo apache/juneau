@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Server</l> HTTP response header.
+ *
  * <p>
  * A name for the server.
  *
@@ -29,17 +30,21 @@ package org.apache.juneau.http;
  * The field can contain multiple product tokens (section 3.8) and comments identifying the server and any significant
  * sub-products.
  * The product tokens are listed in order of their significance for identifying the application.
+ *
  * <p class='bcode'>
  * 	Server         = "Server" ":" 1*( product | comment )
  * </p>
+ *
  * <p>
  * Example:
  * <p class='bcode'>
  * 	Server: CERN/3.0 libwww/2.17
  * </p>
+ *
  * <p>
  * If the response is being forwarded through a proxy, the proxy application MUST NOT modify the Server response-header.
  * Instead, it SHOULD include a Via field (as described in section 14.45).
+ *
  * <p>
  * Note: Revealing the specific software version of the server might allow the server machine to become more vulnerable
  * to attacks against software that is known to contain security holes.

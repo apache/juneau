@@ -16,6 +16,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * A metadata object that allows for more fine-tuned XML model definitions.
+ *
  * <p>
  * When using arrays, XML element names are not inferred (for singular/plural forms) and the name property should be
  * used to add that information.
@@ -47,8 +48,11 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Replaces the name of the element/attribute used for the described schema property.
+	 *
+	 * <p>
 	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
 	 * within the list.
 	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
@@ -63,8 +67,11 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>name</property>.
+	 *
 	 * <p>
 	 * Replaces the name of the element/attribute used for the described schema property.
+	 *
+	 * <p>
 	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
 	 * within the list.
 	 * When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
@@ -91,6 +98,7 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>namespace</property>.
+	 *
 	 * <p>
 	 * The URL of the namespace definition. Value SHOULD be in the form of a URL.
 	 *
@@ -102,6 +110,7 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>namespace</property>.
+	 *
 	 * <p>
 	 * The URL of the namespace definition. Value SHOULD be in the form of a URL.
 	 *
@@ -125,6 +134,7 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>prefix</property>.
+	 *
 	 * <p>
 	 * The prefix to be used for the name.
 	 *
@@ -136,6 +146,7 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>prefix</property>.
+	 *
 	 * <p>
 	 * The prefix to be used for the name.
 	 *
@@ -159,8 +170,11 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>attribute</property>.
+	 *
 	 * <p>
 	 * Declares whether the property definition translates to an attribute instead of an element.
+	 *
+	 * <p>
 	 * Default value is <jk>false</jk>.
 	 *
 	 * @return The value of the <property>attribute</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -171,8 +185,11 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>attribute</property>.
+	 *
 	 * <p>
 	 * Declares whether the property definition translates to an attribute instead of an element.
+	 *
+	 * <p>
 	 * Default value is <jk>false</jk>.
 	 *
 	 * @param attribute The new value for the <property>attribute</property> property on this bean.
@@ -195,8 +212,11 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>wrapped</property>.
+	 *
 	 * <p>
 	 * MAY be used only for an array definition.
+	 *
+	 * <p>
 	 * Signifies whether the array is wrapped (for example,
 	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
 	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
@@ -212,8 +232,11 @@ public class Xml extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>wrapped</property>.
+	 *
 	 * <p>
 	 * MAY be used only for an array definition.
+	 *
+	 * <p>
 	 * Signifies whether the array is wrapped (for example,
 	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
 	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).

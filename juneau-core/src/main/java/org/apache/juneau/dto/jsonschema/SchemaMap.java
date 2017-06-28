@@ -22,6 +22,7 @@ import org.apache.juneau.json.*;
 
 /**
  * A container for retrieving JSON {@link Schema} objects by URI.
+ *
  * <p>
  * Subclasses must implement one of the following methods to load schemas from external sources:
  * <ul class='spaced-list'>
@@ -52,10 +53,14 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 
 	/**
 	 * Return the {@link Schema} object at the specified URI.
+	 *
+	 * <p>
 	 * If this schema object has not been loaded yet, calls {@link #load(URI)}.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
@@ -81,6 +86,7 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 
 	/**
 	 * Convenience method for pre-populating this map with the specified schemas.
+	 *
 	 * <p>
 	 * The schemas passed in through this method MUST have their ID properties set.
 	 *
@@ -100,7 +106,10 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 
 	/**
 	 * Subclasses must implement either this method or {@link #getReader(URI)} to load the schema with the specified URI.
+	 *
+	 * <p>
 	 * It's up to the implementer to decide where these come from.
+	 *
 	 * <p>
 	 * The default implementation calls {@link #getReader(URI)} and parses the schema document.
 	 * If {@link #getReader(URI)} returns <jk>null</jk>, this method returns <jk>null</jk> indicating this is an
@@ -128,7 +137,10 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 
 	/**
 	 * Subclasses must implement either this method or {@link #load(URI)} to load the schema with the specified URI.
+	 *
+	 * <p>
 	 * It's up to the implementer to decide where these come from.
+	 *
 	 * <p>
 	 * The default implementation returns <jk>null</jk>.
 	 *

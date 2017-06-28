@@ -21,10 +21,12 @@ import org.apache.juneau.ini.*;
 
 /**
  * Identifies a setter as a method for adding a parent reference to a child object.
+ *
  * <p>
  * Used by the parsers to add references to parent objects in child objects.
  * For example, the {@link Section} class cannot exist outside the scope of a parent {@link ConfigFileImpl} class, so
  * parsers will add a reference to the config file using the {@link Section#setParent(ConfigFileImpl)} method.
+ *
  * <p>
  * A commonly-used case is when you're parsing beans, and a child bean has a reference to a parent bean.
  * <p class='bcode'>
@@ -38,7 +40,6 @@ import org.apache.juneau.ini.*;
  * 		<jk>public char</jk> <jf>sex</jf>;
  * 	}
  * </p>
- * <p>
  *
  * <h5 class='section'>Notes:</h5>
  * <ul>

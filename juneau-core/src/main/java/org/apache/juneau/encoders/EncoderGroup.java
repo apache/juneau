@@ -21,22 +21,25 @@ import org.apache.juneau.http.*;
  * Represents the group of {@link Encoder encoders} keyed by codings.
  *
  * <h5 class='section'>Description:</h5>
+ *
  * <p>
  * Maintains a set of encoders and the codings that they can handle.
+ *
  * <p>
- * The {@link #getEncoderMatch(String)} and {@link #getEncoder(String)} methods are then
- * 	used to find appropriate encoders for specific <code>Accept-Encoding</code>
- * 	and <code>Content-Encoding</code> header values.
+ * The {@link #getEncoderMatch(String)} and {@link #getEncoder(String)} methods are then used to find appropriate
+ * encoders for specific <code>Accept-Encoding</code> and <code>Content-Encoding</code> header values.
  *
  * <h6 class='topic'>Match ordering</h6>
  * <p>
  * Encoders are matched against <code>Accept-Encoding</code> strings in the order they exist in this group.
+ *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous encoders to be overridden through subsequent calls.
+ *
  * <p>
  * For example, calling <code>groupBuilder.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,
- * 	E4.<jk>class</jk>)</code> will result in the order <code>E3, E4, E1, E2</code>.
+ * E4.<jk>class</jk>)</code> will result in the order <code>E3, E4, E1, E2</code>.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -84,9 +87,11 @@ public final class EncoderGroup {
 
 	/**
 	 * Returns the coding string for the matching encoder that can handle the specified <code>Accept-Encoding</code>
-	 * 	or <code>Content-Encoding</code> header value.
+	 * or <code>Content-Encoding</code> header value.
+	 *
 	 * <p>
 	 * Returns <jk>null</jk> if no encoders can handle it.
+	 *
 	 * <p>
 	 * This method is fully compliant with the RFC2616/14.3 and 14.11 specifications.
 	 *

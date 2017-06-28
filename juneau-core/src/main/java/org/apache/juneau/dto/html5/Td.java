@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/tabular-data.html#the-td-element">&lt;td&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-td-element">&lt;td&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,10 +35,13 @@ public class Td extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
+	 *
+	 * <p>
 	 * Number of columns that the cell is to span.
 	 *
-	 * @param colspan The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param colspan
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Td colspan(Object colspan) {
@@ -48,6 +51,8 @@ public class Td extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
+	 *
+	 * <p>
 	 * The header cells for this cell.
 	 *
 	 * @param headers The new value for this attribute.
@@ -60,10 +65,13 @@ public class Td extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
+	 *
+	 * <p>
 	 * Number of rows that the cell is to span.
 	 *
-	 * @param rowspan The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param rowspan
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Td rowspan(Object rowspan) {

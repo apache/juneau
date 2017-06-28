@@ -44,6 +44,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public CoreObjectBuilder(PropertyStore propertyStore) {
@@ -208,6 +209,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Beans require no-arg constructors.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireDefaultConstructor"</js>
@@ -215,9 +217,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 *
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
@@ -236,6 +240,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Beans require {@link Serializable} interface.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSerializable"</js>
@@ -243,9 +248,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 *
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
@@ -264,6 +271,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Beans require setters for getters.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSettersForGetters"</js>
@@ -271,6 +279,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * Otherwise, they will be ignored.
@@ -290,6 +299,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Beans require at least one property.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSomeProperties"</js>
@@ -297,9 +307,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 *
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
@@ -319,6 +331,7 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * value.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
@@ -326,10 +339,12 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * values.
 	 * Otherwise, it returns <jk>null</jk>.
+	 *
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty.
 	 *
@@ -348,6 +363,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean constructors with the specified minimum visibility.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility"</js>
@@ -355,10 +371,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Constructors not meeting this minimum visibility will be ignored.
-	 * For example, if the visibility is <code>PUBLIC</code> and the constructor is <jk>protected</jk>, then
-	 * 	the constructor will be ignored.
+	 * For example, if the visibility is <code>PUBLIC</code> and the constructor is <jk>protected</jk>, then the
+	 * constructor will be ignored.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -375,6 +392,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean classes with the specified minimum visibility.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility"</js>
@@ -382,10 +400,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then
-	 * 	the class will not be interpreted as a bean class.
+	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
+	 * will not be interpreted as a bean class.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -402,6 +421,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean fields with the specified minimum visibility.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility"</js>
@@ -409,10 +429,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then
-	 * 	the field will not be interpreted as a bean property.
+	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then the field
+	 * will not be interpreted as a bean property.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -430,6 +451,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean methods with the specified minimum visibility.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility"</js>
@@ -437,10 +459,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then
-	 * 	the method will not be interpreted as a bean getter or setter.
+	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then the method
+	 * will not be interpreted as a bean getter or setter.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -458,6 +481,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Use Java {@link Introspector} for determining bean properties.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.useJavaBeanIntrospector"</js>
@@ -465,6 +489,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 *
@@ -484,6 +509,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Use interface proxies.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.useInterfaceProxies"</js>
@@ -491,6 +517,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
@@ -510,6 +537,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownBeanProperties"</js>
@@ -517,6 +545,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -536,6 +565,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties with null values.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownNullBeanProperties"</js>
@@ -543,6 +573,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -562,6 +593,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Ignore properties without setters.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignorePropertiesWithoutSetters"</js>
@@ -569,6 +601,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -588,6 +621,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on getters.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnGetters"</js>
@@ -595,6 +629,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -614,6 +649,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on setters.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnSetters"</js>
@@ -621,6 +657,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -640,6 +677,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Sort bean properties in alphabetical order.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.sortProperties"</js>
@@ -647,17 +685,19 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-	 * Otherwise, the natural order of the bean properties is used which is dependent on the
-	 * 	JVM vendor.
+	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * On Oracle JVMs, the bean properties are not ordered (which follows the offical JVM specs).
+	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_sortProperties</jsf>, value)</code>.
-	 * 	<li>This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
+	 * 	<li>
+	 * 		This is equivalent to calling <code>property(<jsf>BEAN_sortProperties</jsf>, value)</code>.
+	 * 	<li>
+	 * 		This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
 	 * 		to force bean properties to be in a particular order and can just alter the order of the fields/methods
 	 * 		in the Java file.
 	 * </ul>
@@ -672,6 +712,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanPackages.set"</js>
@@ -689,10 +730,13 @@ public abstract class CoreObjectBuilder {
 	 * 	</ul>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
+	 *
 	 * <p>
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
+	 *
 	 * <p>
 	 * Note that you can specify prefix patterns to include all subpackages.
 	 *
@@ -711,6 +755,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
+	 *
 	 * <p>
 	 * Same as {@link #setNotBeanPackages(String...)} but using a <code>Collection</code>.
 	 *
@@ -741,6 +786,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to packages whose classes should not be considered beans.
+	 *
 	 * <p>
 	 * Same as {@link #notBeanPackages(String...)} but using a <code>Collection</code>.
 	 *
@@ -772,6 +818,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from packages whose classes should not be considered beans.
+	 *
 	 * <p>
 	 * Same as {@link #removeNotBeanPackages(String...)} but using a <code>Collection</code>.
 	 *
@@ -786,6 +833,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanClasses.set"</js>
@@ -793,9 +841,10 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> empty set
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
-	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they
-	 * appear to be bean-like.
+	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
+	 * bean-like.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -812,6 +861,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
+	 *
 	 * <p>
 	 * Same as {@link #setNotBeanClasses(Class...)} but using a <code>Collection</code>.
 	 *
@@ -843,6 +893,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to classes that should not be considered beans.
+	 *
 	 * <p>
 	 * Same as {@link #notBeanClasses(Class...)} but using a <code>Collection</code>.
 	 *
@@ -875,6 +926,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from classes that should not be considered beans.
+	 *
 	 * <p>
 	 * Same as {@link #removeNotBeanClasses(Class...)} but using a <code>Collection</code>.
 	 *
@@ -889,6 +941,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Bean filters to apply to beans.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFilters.list"</js>
@@ -896,10 +949,12 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability
-	 * 	to alter the bean classes.
+	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter the
+	 * bean classes.
+	 *
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul class='spaced-list'>
@@ -928,6 +983,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Bean filters to apply to beans.
+	 *
 	 * <p>
 	 * Same as {@link #setBeanFilters(Class...)} but using a <code>Collection</code>.
 	 *
@@ -959,6 +1015,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to bean filters.
+	 *
 	 * <p>
 	 * Same as {@link #beanFilters(Class...)} but using a <code>Collection</code>.
 	 *
@@ -991,6 +1048,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from bean filters.
+	 *
 	 * <p>
 	 * Same as {@link #removeBeanFilters(Class...)} but using a <code>Collection</code>.
 	 *
@@ -1005,6 +1063,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.pojoSwaps.list"</js>
@@ -1012,6 +1071,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul>
@@ -1034,6 +1094,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
+	 *
 	 * <p>
 	 * Same as {@link #setPojoSwaps(Class...)} but using a <code>Collection</code>.
 	 *
@@ -1065,6 +1126,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to POJO swaps.
+	 *
 	 * <p>
 	 * Same as {@link #pojoSwaps(Class...)} but using a <code>Collection</code>.
 	 *
@@ -1097,6 +1159,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from POJO swaps.
+	 *
 	 * <p>
 	 * Same as {@link #removePojoSwaps(Class...)} but using a <code>Collection</code>.
 	 *
@@ -1111,6 +1174,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.map"</js>
@@ -1118,10 +1182,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> empty map
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
-	 * For interfaces and abstract classes this method can be used to specify an implementation
-	 * 	class for the interface/abstract class so that instances of the implementation
-	 * 	class are used when instantiated (e.g. during a parse).
+	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
+	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
+	 * parse).
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1158,6 +1223,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties"</js>
@@ -1165,15 +1231,18 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <code>{}</code>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Specifies to only include the specified list of properties for the specified bean classes.
+	 *
 	 * <p>
 	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
 	 * names.
 	 * The key <js>"*"</js> means all bean classes.
+	 *
 	 * <p>
 	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means only serialize the <code>foo</code> and <code>bar</code>
-	 * 	properties on the specified bean.
+	 * properties on the specified bean.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1228,6 +1297,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties"</js>
@@ -1235,15 +1305,18 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <code>{}</code>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
+	 *
 	 * <p>
 	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
 	 * names.
 	 * The key <js>"*"</js> means all bean classes.
+	 *
 	 * <p>
 	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means don't serialize the <code>foo</code> and <code>bar</code>
-	 * 	properties on the specified bean.
+	 * properties on the specified bean.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1298,6 +1371,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.list"</js>
@@ -1305,6 +1379,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * This list can consist of the following class types:
 	 * <ul>
@@ -1330,6 +1405,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
+	 *
 	 * <p>
 	 * Same as {@link #setBeanDictionary(Class...)} but using a <code>Collection</code>.
 	 *
@@ -1361,6 +1437,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Add to bean dictionary.
+	 *
 	 * <p>
 	 * Same as {@link #beanDictionary(Class...)} but using a <code>Collection</code>.
 	 *
@@ -1393,6 +1470,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Remove from bean dictionary.
+	 *
 	 * <p>
 	 * Same as {@link #removeFromBeanDictionary(Class...)} but using a <code>Collection</code>.
 	 *
@@ -1407,6 +1485,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Name to use for the bean type properties used to represent a bean type.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanTypePropertyName"</js>
@@ -1430,6 +1509,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Default parser to use when converting <code>Strings</code> to POJOs.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.defaultParser"</js>
@@ -1437,6 +1517,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> {@link JsonSerializer}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 *
@@ -1455,6 +1536,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Locale.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.locale"</js>
@@ -1478,6 +1560,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  TimeZone.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.timeZone"</js>
@@ -1501,6 +1584,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Media type.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.mediaType"</js>
@@ -1508,6 +1592,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
 	 *
@@ -1526,6 +1611,7 @@ public abstract class CoreObjectBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Debug mode.
+	 *
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.debug"</js>
@@ -1533,6 +1619,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Enables the following additional information during serialization:
 	 * <ul class='spaced-list'>
@@ -1542,6 +1629,7 @@ public abstract class CoreObjectBuilder {
 	 * 	<li>
 	 * 		Enables {@link SerializerContext#SERIALIZER_detectRecursions}.
 	 * </ul>
+	 *
 	 * <p>
 	 * Enables the following additional information during parsing:
 	 * <ul class='spaced-list'>

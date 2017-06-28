@@ -18,6 +18,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents a URL broken into authority/context-root/servlet-path/path-info parts.
+ *
  * <p>
  * A typical request against a URL takes the following form:
  * <p class='bcode'>
@@ -25,6 +26,7 @@ import org.apache.juneau.annotation.*;
  * 	|   authority   |  context   |  resource  |  path  |
  * 	+--------------------------------------------------+
  * </p>
+ *
  * <p>
  * This class allows you to convert URL strings to absolute (e.g. <js>"http://host:port/foo/bar"</js>) or root-relative
  * (e.g. <js>"/foo/bar"</js>) URLs.
@@ -34,6 +36,8 @@ public class UriContext {
 
 	/**
 	 * Default URI context.
+	 *
+	 * <p>
 	 * No information about authority, servlet-root, context-root, or path-info is known.
 	 */
 	public static final UriContext DEFAULT = new UriContext();
@@ -45,16 +49,21 @@ public class UriContext {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * Leading and trailing slashes are trimmed of all parameters.
+	 *
 	 * <p>
 	 * Any parameter can be <jk>null</jk>.  Blanks and nulls are equivalent.
 	 *
-	 * @param authority - The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
-	 * @param contextRoot - The context root of the application (e.g. <js>"/context-root"</js>, or
-	 * <js>"context-root"</js>)
-	 * @param servletPath - The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
-	 * @param pathInfo - The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
+	 * @param authority
+	 * 	The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
+	 * @param contextRoot
+	 * 	The context root of the application (e.g. <js>"/context-root"</js>, or <js>"context-root"</js>)
+	 * @param servletPath
+	 * 	The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
+	 * @param pathInfo
+	 * 	The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
 	 */
 	@BeanConstructor(properties="authority,contextRoot,servletPath,pathInfo")
 	public UriContext(String authority, String contextRoot, String servletPath, String pathInfo) {
@@ -68,6 +77,8 @@ public class UriContext {
 
 	/**
 	 * Default constructor.
+	 *
+	 * <p>
 	 * All <jk>null</jk> values.
 	 */
 	public UriContext() {
@@ -76,12 +87,15 @@ public class UriContext {
 
 	/**
 	 * Returns the absolute URI of just the authority portion of this URI context.
+	 *
 	 * <p>
 	 * Example:  <js>"http://hostname:port"</js>
+	 *
 	 * <p>
 	 * If the authority is null/empty, returns <js>"/"</js>.
 	 *
-	 * @return The absolute URI of just the authority portion of this URI context.
+	 * @return
+	 * 	The absolute URI of just the authority portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsoluteAuthority() {
@@ -90,10 +104,12 @@ public class UriContext {
 
 	/**
 	 * Returns the absolute URI of the context-root portion of this URI context.
+	 *
 	 * <p>
 	 * Example:  <js>"http://hostname:port/context-root"</js>
 	 *
-	 * @return The absolute URI of the context-root portion of this URI context.
+	 * @return
+	 * 	The absolute URI of the context-root portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsoluteContextRoot() {
@@ -112,10 +128,12 @@ public class UriContext {
 
 	/**
 	 * Returns the root-relative URI of the context portion of this URI context.
+	 *
 	 * <p>
 	 * Example:  <js>"/context-root"</js>
 	 *
-	 * @return The root-relative URI of the context portion of this URI context.
+	 * @return
+	 * 	The root-relative URI of the context portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativeContextRoot() {
@@ -126,10 +144,12 @@ public class UriContext {
 
 	/**
 	 * Returns the absolute URI of the resource portion of this URI context.
+	 *
 	 * <p>
 	 * Example:  <js>"http://hostname:port/context-root/servlet-path"</js>
 	 *
-	 * @return The absolute URI of the resource portion of this URI context.
+	 * @return
+	 * 	The absolute URI of the resource portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsoluteServletPath() {
@@ -156,10 +176,12 @@ public class UriContext {
 
 	/**
 	 * Returns the root-relative URI of the resource portion of this URI context.
+	 *
 	 * <p>
 	 * Example:  <js>"/context-root/servlet-path"</js>
 	 *
-	 * @return The root-relative URI of the resource portion of this URI context.
+	 * @return
+	 * 	The root-relative URI of the resource portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativeServletPath() {
@@ -200,10 +222,12 @@ public class UriContext {
 
 	/**
 	 * Returns the absolute URI of the path portion of this URI context.
+	 *
 	 * <p>
 	 * Example:  <js>"http://hostname:port/context-root/servlet-path/path-info"</js>
 	 *
-	 * @return The absolute URI of the path portion of this URI context.
+	 * @return
+	 * 	The absolute URI of the path portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsolutePathInfo() {
@@ -244,10 +268,12 @@ public class UriContext {
 
 	/**
 	 * Returns the root-relative URI of the path portion of this URI context.
+	 *
 	 * <p>
 	 * Example:  <js>"/context-root/servlet-path/path-info"</js>
 	 *
-	 * @return The root-relative URI of the path portion of this URI context.
+	 * @return
+	 * 	The root-relative URI of the path portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativePathInfo() {

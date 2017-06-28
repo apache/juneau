@@ -19,8 +19,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/document-metadata.html#the-link-element">&lt;link&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-link-element">&lt;link&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -38,8 +38,10 @@ import org.apache.juneau.annotation.*;
 public class Link extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink"
-	 * href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a>
+	 * attribute.
+	 *
+	 * <p>
 	 * How the element handles cross-origin requests.
 	 *
 	 * @param crossorigin The new value for this attribute.
@@ -52,15 +54,20 @@ public class Link extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-href">href</a> attribute.
+	 *
+	 * <p>
 	 * Address of the hyperlink.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param href The new value for this attribute.
-	 * Typically a {@link URL} or {@link String}.
+	 * @param href
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Link href(Object href) {
@@ -71,6 +78,8 @@ public class Link extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-hreflang">hreflang</a>
 	 * attribute.
+	 *
+	 * <p>
 	 * Language of the linked resource.
 	 *
 	 * @param hreflang The new value for this attribute.
@@ -83,6 +92,8 @@ public class Link extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-media">media</a> attribute.
+	 *
+	 * <p>
 	 * Applicable media.
 	 *
 	 * @param media The new value for this attribute.
@@ -95,6 +106,8 @@ public class Link extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel">rel</a> attribute.
+	 *
+	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
 	 *
 	 * @param rel The new value for this attribute.
@@ -107,6 +120,8 @@ public class Link extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes">sizes</a> attribute.
+	 *
+	 * <p>
 	 * Sizes of the icons (for rel="icon").
 	 *
 	 * @param sizes The new value for this attribute.
@@ -119,6 +134,8 @@ public class Link extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type">type</a> attribute.
+	 *
+	 * <p>
 	 * Hint for the type of the referenced resource.
 	 *
 	 * @param type The new value for this attribute.

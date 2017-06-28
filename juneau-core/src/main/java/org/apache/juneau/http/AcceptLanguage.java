@@ -18,6 +18,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Accept-Language</l> HTTP request header.
+ *
  * <p>
  * List of acceptable human languages for response.
  *
@@ -37,6 +38,7 @@ import org.apache.juneau.internal.*;
  * 	                  1#( language-range [ ";" "q" "=" qvalue ] )
  * 	language-range  = ( ( 1*8ALPHA *( "-" 1*8ALPHA ) ) | "*" )
  * </p>
+ *
  * <p>
  * Each language-range MAY be given an associated quality value which represents an estimate of the user's preference
  * for the languages specified by that range.
@@ -47,36 +49,46 @@ import org.apache.juneau.internal.*;
  * </p>
  * <p>
  * ...would mean: "I prefer Danish, but will accept British English and other types of English."
+ *
  * <p>
  * A language-range matches a language-tag if it exactly equals the tag, or if it exactly equals a prefix of the tag
  * such that the first tag character following the prefix is "-".
+ *
  * <p>
  * The special range "*", if present in the Accept-Language field, matches every tag not matched by any other range
  * present in the Accept-Language field.
+ *
  * <p>
  * Note: This use of a prefix matching rule does not imply that language tags are assigned to languages in such a way
  * that it is always true that if a user understands a language with a certain
  * tag, then this user will also understand all languages with tags for which this tag is a prefix.
  * The prefix rule simply allows the use of prefix tags if this is the case.
+ *
  * <p>
  * The language quality factor assigned to a language-tag by the Accept-Language field is the quality value of the
  * longest language- range in the field that matches the language-tag.
+ *
  * <p>
  * If no language- range in the field matches the tag, the language quality factor assigned is 0.
+ *
  * <p>
  * If no Accept-Language header is present in the request, the server SHOULD assume that all languages are equally
  * acceptable.
+ *
  * <p>
  * If an Accept-Language header is present, then all languages which are assigned a quality factor greater than 0 are
  * acceptable.
+ *
  * <p>
  * It might be contrary to the privacy expectations of the user to send an Accept-Language header with the complete
  * linguistic preferences of the user in every request.
  * For a discussion of this issue, see section 15.1.4.
+ *
  * <p>
  * As intelligibility is highly dependent on the individual user, it is recommended that client applications make the
  * choice of linguistic preference available to the user.
  * If the choice is not made available, then the Accept-Language header field MUST NOT be given in the request.
+ *
  * <p>
  * Note: When making the choice of linguistic preference available to the user, we remind implementors of the fact that
  * users are not familiar with the details of language matching as described above, and should provide appropriate

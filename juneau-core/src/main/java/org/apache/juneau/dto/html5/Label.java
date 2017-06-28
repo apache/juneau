@@ -35,6 +35,8 @@ public class Label extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-label-for">for</a> attribute.
+	 *
+	 * <p>
 	 * Associate the label with form control.
 	 *
 	 * @param _for The new value for this attribute.
@@ -47,6 +49,8 @@ public class Label extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
+	 *
+	 * <p>
 	 * Associates the control with a form element.
 	 *
 	 * @param form The new value for this attribute.

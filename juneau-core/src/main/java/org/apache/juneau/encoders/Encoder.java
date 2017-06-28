@@ -18,8 +18,10 @@ import java.io.*;
  * Used for enabling decompression on requests and compression on responses, such as support for GZIP compression.
  *
  * <h5 class='section'>Description:</h5>
+ *
  * <p>
  * Used to wrap input and output streams within compression/decompression streams.
+ *
  * <p>
  * Encoders are registered with <code>RestServlets</code> through the <ja>@RestResource.encoders()</ja> annotation.
  */
@@ -44,8 +46,8 @@ public abstract class Encoder {
 	public abstract OutputStream getOutputStream(OutputStream os) throws IOException;
 
 	/**
-	 * Returns the codings in <code>Content-Encoding</code> and <code>Accept-Encoding</code> headers
-	 * 	that this encoder handles (e.g. <js>"gzip"</js>).
+	 * Returns the codings in <code>Content-Encoding</code> and <code>Accept-Encoding</code> headers that this encoder
+	 * handles (e.g. <js>"gzip"</js>).
 	 *
 	 * @return The codings that this encoder handles.
 	 */

@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Trailer</l> HTTP response header.
+ *
  * <p>
  * The Trailer general field value indicates that the given set of header fields is present in the trailer of a message
  * encoded with chunked transfer coding.
@@ -27,16 +28,20 @@ package org.apache.juneau.http;
  *
  * The Trailer general field value indicates that the given set of header fields is present in the trailer of a message
  * encoded with chunked transfer-coding.
+ *
  * <p class='bcode'>
  * 	Trailer  = "Trailer" ":" 1#field-name
  * </p>
+ *
  * <p>
  * An HTTP/1.1 message SHOULD include a Trailer header field in a message using chunked transfer-coding with a non-empty
  * trailer.
  * Doing so allows the recipient to know which header fields to expect in the trailer.
+ *
  * <p>
  * If no Trailer header field is present, the trailer SHOULD NOT include any header fields.
  * See section 3.6.1 for restrictions on the use of trailer fields in a "chunked" transfer-coding.
+ *
  * <p>
  * Message header fields listed in the Trailer header field MUST NOT include the following header fields:
  * <ul>

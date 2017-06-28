@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Content-Encoding</l> HTTP response header.
+ *
  * <p>
  * The type of encoding used on the data.
  *
@@ -33,22 +34,27 @@ package org.apache.juneau.http;
  * <p class='bcode'>
  * 	Content-Encoding  = "Content-Encoding" ":" 1#content-coding
  * </p>
+ *
  * <p>
  * Content codings are defined in section 3.5. An example of its use is...
  * <p class='bcode'>
  * 	Content-Encoding: gzip
  * </p>
+ *
  * <p>
  * The content-coding is a characteristic of the entity identified by the Request-URI.
  * Typically, the entity-body is stored with this encoding and is only decoded before rendering or analogous usage.
  * However, a non-transparent proxy MAY modify the content-coding if the new coding is known to be acceptable to the
  * recipient, unless the "no-transform" cache-control directive is present in the message.
+ *
  * <p>
  * If the content-coding of an entity is not "identity", then the response MUST include a Content-Encoding
  * entity-header (section 14.11) that lists the non-identity content-coding(s) used.
+ *
  * <p>
  * If the content-coding of an entity in a request message is not acceptable to the origin server, the server SHOULD
  * respond with a status code of 415 (Unsupported Media Type).
+ *
  * <p>
  * If multiple encodings have been applied to an entity, the content codings MUST be listed in the order in which they
  * were applied.

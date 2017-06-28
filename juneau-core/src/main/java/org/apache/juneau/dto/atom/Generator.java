@@ -88,9 +88,11 @@ public class Generator extends Common {
 
 	/**
 	 * Sets the URI of this generator statement.
+	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
+	 *
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *

@@ -86,8 +86,9 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns whether this bean property should be serialized as plain text instead of HTML.
 	 *
-	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#asPlainText()} is
-	 * <jk>true</jk>.
+	 * @return
+	 * 	<jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#asPlainText()} is
+	 * 	<jk>true</jk>.
 	 */
 	protected boolean isAsPlainText() {
 		return asPlainText;
@@ -96,8 +97,9 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns whether this bean property should not be serialized as an HTML table.
 	 *
-	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTables()} is
-	 * <jk>true</jk>.
+	 * @return
+	 * 	<jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTables()} is
+	 * 	<jk>true</jk>.
 	 */
 	protected boolean isNoTables() {
 		return noTables;
@@ -106,8 +108,9 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns whether this bean property should not include table headers when serialized as an HTML table.
 	 *
-	 * @return <jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTableHeaders()} is
-	 * <jk>true</jk>.
+	 * @return
+	 * 	<jk>true</jk> if the the {@link Html} annotation is specified, and {@link Html#noTableHeaders()} is
+	 * 	<jk>true</jk>.
 	 */
 	public boolean isNoTableHeaders() {
 		return noTableHeaders;
@@ -115,6 +118,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the render class for rendering the style and contents of this property value in HTML.
+	 *
 	 * <p>
 	 * This value is specified via the {@link Html#render()} annotation.
 	 *
@@ -126,6 +130,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Adds a hyperlink to this value in HTML.
+	 *
 	 * <p>
 	 * This value is specified via the {@link Html#link()} annotation.
 	 *

@@ -22,15 +22,17 @@ import org.apache.juneau.utils.*;
 
 /**
  * Java implementation of a JSON array.
+ *
  * <p>
- * An extension of {@link LinkedList}, so all methods available to in that class are also available
- * 	to this class.
+ * An extension of {@link LinkedList}, so all methods available to in that class are also available to this class.
+ *
  * <p>
- * Note that the use of this class is optional.  The serializers will accept any objects that implement
- * 	the {@link Collection} interface.  But this class provides some useful additional functionality
- * 	when working with JSON models constructed from Java Collections Framework objects.  For example, a
- * 	constructor is provided for converting a JSON array string directly into a {@link List}.  It also contains
- * 	accessor methods for to avoid common typecasting when accessing elements in a list.
+ * Note that the use of this class is optional.
+ * The serializers will accept any objects that implement the {@link Collection} interface.
+ * But this class provides some useful additional functionality when working with JSON models constructed from Java
+ * Collections Framework objects.
+ * For example, a constructor is provided for converting a JSON array string directly into a {@link List}.
+ * It also contains accessor methods for to avoid common typecasting when accessing elements in a list.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -87,6 +89,7 @@ import org.apache.juneau.utils.*;
  * 		<jc>// Do something with p</jc>
  * 	}
  * </p>
+ *
  * <p>
  * This class is not thread safe.
  */
@@ -161,8 +164,9 @@ public class ObjectList extends LinkedList<Object> {
 	/**
 	 * Construct a JSON array directly from a reader using the specified parser.
 	 *
-	 * @param r The reader to read from.  Will automatically be wrapped in a {@link BufferedReader} if it isn't already
-	 * a BufferedReader.
+	 * @param r
+	 * 	The reader to read from.
+	 * 	Will automatically be wrapped in a {@link BufferedReader} if it isn't already a BufferedReader.
 	 * @param p The parser to use to parse the input.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -175,7 +179,9 @@ public class ObjectList extends LinkedList<Object> {
 	/**
 	 * Shortcut for <code><jk>new</jk> ObjectList(reader, JsonParser.<jsf>DEFAULT</jsf>)</code>.
 	 *
-	 * @param r The reader to read from.  The reader will be wrapped in a {@link BufferedReader} if it isn't already.
+	 * @param r
+	 * 	The reader to read from.
+	 * 	The reader will be wrapped in a {@link BufferedReader} if it isn't already.
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
@@ -227,8 +233,10 @@ public class ObjectList extends LinkedList<Object> {
 
 	/**
 	 * Override the default bean session used for converting POJOs.
+	 *
 	 * <p>
 	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
+	 *
 	 * <p>
 	 * Useful if you're serializing/parsing beans with transforms defined.
 	 *
@@ -242,6 +250,7 @@ public class ObjectList extends LinkedList<Object> {
 
 	/**
 	 * Convenience method for adding multiple objects to this list.
+	 *
 	 * @param o The objects to add to the list.
 	 * @return This object (for method chaining).
 	 */
@@ -253,6 +262,7 @@ public class ObjectList extends LinkedList<Object> {
 
 	/**
 	 * Get the entry at the specified index, converted to the specified type (if possible).
+	 *
 	 * <p>
 	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
@@ -353,8 +363,9 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Same as {@link #get(Class,int) get(Class,int)}, but the key is a slash-delimited
-	 * 	path used to traverse entries in this POJO.
+	 * Same as {@link #get(Class,int) get(Class,int)}, but the key is a slash-delimited path used to traverse entries in
+	 * this POJO.
+	 *
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
@@ -367,9 +378,10 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	<jc>// Using this method</jc>
 	 * 	<jk>long</jk> l = m.getAt(<jk>long</jk>.<jk>class</jk>, <js>"foo/bar/0/baz"</js>);
 	 * </p>
+	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -381,8 +393,9 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Same as {@link #set(int,Object) set(int,Object)}, but the key is a slash-delimited
-	 * 	path used to traverse entries in this POJO.
+	 * Same as {@link #set(int,Object) set(int,Object)}, but the key is a slash-delimited path used to traverse entries
+	 * in this POJO.
+	 *
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
@@ -395,9 +408,10 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	<jc>// Using this method</jc>
 	 * 	m.putAt(<js>"foo/bar/0/baz"</js>, 123);
 	 * </p>
+	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
@@ -408,8 +422,8 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Similar to {@link #putAt(String,Object) putAt(String,Object)}, but used to append
-	 * 	to collections and arrays.
+	 * Similar to {@link #putAt(String,Object) putAt(String,Object)}, but used to append to collections and arrays.
+	 *
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
@@ -422,9 +436,10 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	<jc>// Using this method</jc>
 	 * 	m.postAt(<js>"foo/bar"</js>, 123);
 	 * </p>
+	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
@@ -435,8 +450,9 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Similar to {@link #remove(int) remove(int)},but the key is a slash-delimited
-	 * 	path used to traverse entries in this POJO.
+	 * Similar to {@link #remove(int) remove(int)},but the key is a slash-delimited path used to traverse entries in
+	 * this POJO.
+	 *
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
@@ -449,9 +465,10 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	<jc>// Using this method</jc>
 	 * 	m.deleteAt(<js>"foo/bar/0/baz"</js>);
 	 * </p>
+	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
@@ -462,11 +479,14 @@ public class ObjectList extends LinkedList<Object> {
 
 	/**
 	 * Creates an {@link Iterable} with elements of the specified child type.
+	 *
 	 * <p>
 	 * Attempts to convert the child objects to the correct type if they aren't already the correct type.
+	 *
 	 * <p>
 	 * The <code>next()</code> method on the returned iterator may throw a {@link InvalidDataConversionException} if
-	 * 	the next element cannot be converted to the specified type.
+	 * the next element cannot be converted to the specified type.
+	 *
 	 * <p>
 	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
 	 *
@@ -564,8 +584,8 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Convenience method for serializing this ObjectList to the specified Writer using
-	 * the JsonSerializer.DEFAULT serializer.
+	 * Convenience method for serializing this ObjectList to the specified Writer using the JsonSerializer.DEFAULT
+	 * serializer.
 	 *
 	 * @param w The writer to send the serialized contents of this object.
 	 * @throws IOException If a problem occurred trying to write to the writer.

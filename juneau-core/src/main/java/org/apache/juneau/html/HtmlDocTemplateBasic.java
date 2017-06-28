@@ -18,6 +18,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * A basic template for the HTML doc serializer.
+ *
  * <p>
  * This class can be subclassed to customize page rendering.
  */

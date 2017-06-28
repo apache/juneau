@@ -19,11 +19,13 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents a single value in a comma-delimited header value that optionally contains a quality
- * metric for comparison and extension parameters.
+ * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
+ * comparison and extension parameters.
+ *
  * <p>
  * Similar in concept to {@link MediaTypeRange} except instead of media types (e.g. <js>"text/json"</js>),
  * it's a simple type (e.g. <js>"iso-8601"</js>).
+ *
  * <p>
  * An example of a type range is a value in an <code>Accept-Encoding</code> header.
  *
@@ -47,6 +49,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Parses a header such as an <code>Accept-Encoding</code> header value into an array of type ranges.
+	 *
 	 * <p>
 	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
@@ -55,6 +58,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * 	                   1#( codings [ ";" "q" "=" qvalue ] )
 	 * 	codings          = ( content-coding | "*" )
 	 * </p>
+	 *
 	 * <p>
 	 * Examples of its use are:
 	 * <p class='bcode'>
@@ -65,11 +69,13 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * 	Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
 	 * </p>
 	 *
-	 * @param value The value to parse.  If <jk>null</jk> or empty, returns a single <code>TypeRange</code> is returned
-	 * that represents all types.
-	 * @return The type ranges described by the string.
-	 * <br>The ranges are sorted such that the most acceptable type is available at ordinal position <js>'0'</js>, and
-	 * the least acceptable at position n-1.
+	 * @param value
+	 * 	The value to parse.
+	 * 	If <jk>null</jk> or empty, returns a single <code>TypeRange</code> is returned that represents all types.
+	 * @return
+	 * 	The type ranges described by the string.
+	 * 	<br>The ranges are sorted such that the most acceptable type is available at ordinal position <js>'0'</js>, and
+	 * 	the least acceptable at position n-1.
 	 */
 	public static StringRange[] parse(String value) {
 
@@ -162,8 +168,10 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
+	 *
 	 * <p>
 	 * The quality value is a float between <code>0.0</code> (unacceptable) and <code>1.0</code> (most acceptable).
+	 *
 	 * <p>
 	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
 	 * header, as opposed to <js>"accept-*"</js> header, its value will always be <js>"1"</js>.
@@ -176,6 +184,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Returns the optional set of custom extensions defined for this type.
+	 *
 	 * <p>
 	 * Values are lowercase and never <jk>null</jk>.
 	 *
@@ -187,6 +196,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Provides a string representation of this media range, suitable for use as an <code>Accept</code> header value.
+	 *
 	 * <p>
 	 * The literal text generated will be all lowercase.
 	 *
@@ -250,6 +260,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Compares two MediaRanges for equality.
+	 *
 	 * <p>
 	 * The values are first compared according to <code>qValue</code> values.
 	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in
@@ -275,6 +286,7 @@ public final class StringRange implements Comparable<StringRange>  {
 
 	/**
 	 * Checks if the specified type matches this range.
+	 *
 	 * <p>
 	 * The type will match this range if the range type string is the same or <js>"*"</js>.
 	 *

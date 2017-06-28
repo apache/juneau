@@ -14,10 +14,11 @@ package org.apache.juneau.dto.jsonschema;
 
 /**
  * Represents possible JSON types in the JSON-Schema core specification.
+ *
  * <p>
- * Implements custom <code>toString()</code> and <code>fromString(String)</code> methods
- * 	that override the default serialization/parsing behavior of <code>Enum</code> types
- * 	so that they are represented in lowercase form (as per the specification).
+ * Implements custom <code>toString()</code> and <code>fromString(String)</code> methods that override the default
+ * serialization/parsing behavior of <code>Enum</code> types so that they are represented in lowercase form (as per the
+ * specification).
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

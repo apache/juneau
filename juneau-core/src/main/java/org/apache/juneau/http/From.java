@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>From</l> HTTP request header.
+ *
  * <p>
  * The email address of the user making the request.
  *
@@ -27,14 +28,17 @@ package org.apache.juneau.http;
  * The From request-header field, if given, SHOULD contain an Internet e-mail address for the human user who controls
  * the requesting user agent.
  * The address SHOULD be machine-usable, as defined by "mailbox" in RFC 822 [9] as updated by RFC 1123 [8]:
+ *
  * <p class='bcode'>
  * 	From   = "From" ":" mailbox
  * </p>
+ *
  * <p>
  * An example is:
  * <p class='bcode'>
  * 	From: webmaster@w3.org
  * </p>
+ *
  * <p>
  * This header field MAY be used for logging purposes and as a means for identifying the source of invalid or unwanted
  * requests.
@@ -43,9 +47,11 @@ package org.apache.juneau.http;
  * responsibility for the method performed.
  * In particular, robot agents SHOULD include this header so that the person responsible for running the robot can be
  * contacted if problems occur on the receiving end.
+ *
  * <p>
  * The Internet e-mail address in this field MAY be separate from the Internet host which issued the request.
  * For example, when a request is passed through a proxy the original issuer's address SHOULD be used.
+ *
  * <p>
  * The client SHOULD NOT send the From header field without the user's approval, as it might conflict with the user's
  * privacy interests or their site's security policy.

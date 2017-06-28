@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Allow</l> HTTP response header.
+ *
  * <p>
  * Valid methods for a specified resource. To be used for a 405 Method not allowed.
  *
@@ -31,22 +32,28 @@ package org.apache.juneau.http;
  * <p class='bcode'>
  * 	Allow   = "Allow" ":" #Method
  * </p>
+ *
  * <p>
  * Example of use:
  * <p class='bcode'>
  * 	Allow: GET, HEAD, PUT
  * </p>
+ *
  * <p>
  * This field cannot prevent a client from trying other methods.
  * However, the indications given by the Allow header field value SHOULD be followed.
+ *
  * <p>
  * The actual set of allowed methods is defined by the origin server at the time of each request.
+ *
  * <p>
  * The Allow header field MAY be provided with a PUT request to recommend the methods to be supported by the new or
  * modified resource.
+ *
  * <p>
  * The server is not required to support these methods and SHOULD include an Allow header in the response giving the
  * actual supported methods.
+ *
  * <p>
  * A proxy MUST NOT modify the Allow header field even if it does not understand all the methods specified, since the
  * user agent might

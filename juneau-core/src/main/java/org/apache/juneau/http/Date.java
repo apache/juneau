@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Date</l> HTTP request/response header.
+ *
  * <p>
  * The date and time that the message was sent (in "HTTP-date" format as defined by RFC 7231).
  *
@@ -30,31 +31,37 @@ package org.apache.juneau.http;
  * <p class='bcode'>
  * 	Date  = "Date" ":" HTTP-date
  * </p>
+ *
  * <p>
  * An example is...
  * <p class='bcode'>
  * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
  * </p>
+ *
  * <p>
  * Origin servers MUST include a Date header field in all responses, except in these cases:
  * <ol>
  * 	<li>If the response status code is 100 (Continue) or 101 (Switching Protocols), the response MAY include a Date
- * header field, at the server's option.
+ * 		header field, at the server's option.
  * 	<li>If the response status code conveys a server error, e.g. 500 (Internal Server Error) or 503 (Service
- * Unavailable), and it is inconvenient or impossible to generate a valid Date.
+ * 		Unavailable), and it is inconvenient or impossible to generate a valid Date.
  * 	<li>If the server does not have a clock that can provide a reasonable approximation of the current time, its
- * responses MUST NOT include a Date header field.
+ * 		responses MUST NOT include a Date header field.
  * 		In this case, the rules in section 14.18.1 MUST be followed.
  * </ol>
+ *
+ * <p>
  * A received message that does not have a Date header field MUST be assigned one by the recipient if the message will
  * be cached by that recipient or gatewayed via a protocol which requires a Date.
  * An HTTP implementation without a clock MUST NOT cache responses without revalidating them on every use.
  * An HTTP cache, especially a shared cache, SHOULD use a mechanism, such as NTP, to synchronize its clock with a
  * reliable external standard.
+ *
  * <p>
  * Clients SHOULD only send a Date header field in messages that include an entity-body, as in the case of the PUT and
  * POST requests, and even then it is optional.
  * A client without a clock MUST NOT send a Date header field in a request.
+ *
  * <p>
  * The HTTP-date sent in a Date header SHOULD NOT represent a date and time subsequent to the generation of the message.
  * It SHOULD represent the best available approximation of the date and time of message generation, unless the

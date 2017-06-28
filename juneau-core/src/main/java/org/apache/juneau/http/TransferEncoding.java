@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 /**
  * Represents a parsed <l>Transfer-Encoding</l> HTTP response header.
+ *
  * <p>
  * The form of encoding used to safely transfer the entity to the user.
  * Currently defined methods are: chunked, compress, deflate, gzip, identity.
@@ -28,19 +29,24 @@ package org.apache.juneau.http;
  * The Transfer-Encoding general-header field indicates what (if any) type of transformation has been applied to the
  * message body in order to safely transfer it between the sender and the recipient.
  * This differs from the content-coding in that the transfer-coding is a property of the message, not of the entity.
+ *
  * <p class='bcode'>
  * 	Transfer-Encoding       = "Transfer-Encoding" ":" 1#transfer-coding
  * </p>
+ *
  * <p>
  * Transfer-codings are defined in section 3.6. An example is:
+ *
  * <p class='bcode'>
  * 	Transfer-Encoding: chunked
  * </p>
+ *
  * <p>
  * If multiple encodings have been applied to an entity, the transfer-codings MUST be listed in the order in which
  * they were applied.
  * Additional information about the encoding parameters MAY be provided by other entity-header fields not defined by
  * this specification.
+ *
  * <p>
  * Many older HTTP/1.0 applications do not understand the Transfer-Encoding header.
  *

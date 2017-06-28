@@ -15,8 +15,8 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink"
- * href="https://www.w3.org/TR/html5/forms.html#the-option-element">&lt;option&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-option-element">&lt;option&gt;</a>
+ * element.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>
@@ -35,10 +35,13 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-disabled">disabled</a> attribute.
+	 *
+	 * <p>
 	 * Whether the form control is disabled.
 	 *
-	 * @param disabled The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param disabled
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Option disabled(Object disabled) {
@@ -48,6 +51,8 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-label">label</a> attribute.
+	 *
+	 * <p>
 	 * User-visible label.
 	 *
 	 * @param label The new value for this attribute.
@@ -60,10 +65,13 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-selected">selected</a> attribute.
+	 *
+	 * <p>
 	 * Whether the option is selected by default.
 	 *
-	 * @param selected The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param selected
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Option selected(Object selected) {
@@ -73,10 +81,13 @@ public class Option extends HtmlElementText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-value">value</a> attribute.
+	 *
+	 * <p>
 	 * Value to be used for form submission.
 	 *
-	 * @param value The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Option value(Object value) {

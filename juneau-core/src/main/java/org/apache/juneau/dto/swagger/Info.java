@@ -65,6 +65,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>title</property>.
+	 *
 	 * <p>
 	 * Required.  The title of the application.
 	 *
@@ -76,6 +77,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>title</property>.
+	 *
 	 * <p>
 	 * Required.  The title of the application.
 	 *
@@ -99,11 +101,12 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description of the application. GFM syntax can be used for rich text representation.
 	 *
-	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not
-	 * set.
+	 * @return
+	 * 	The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
 		return description;
@@ -111,6 +114,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>description</property>.
+	 *
 	 * <p>
 	 * A short description of the application. GFM syntax can be used for rich text representation.
 	 *
@@ -134,6 +138,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>termsOfService</property>.
+	 *
 	 * <p>
 	 * The Terms of Service for the API.
 	 *
@@ -146,6 +151,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>termsOfService</property>.
+	 *
 	 * <p>
 	 * The Terms of Service for the API.
 	 *
@@ -169,6 +175,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>contact</property>.
+	 *
 	 * <p>
 	 * The contact information for the exposed API.
 	 *
@@ -180,6 +187,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>contact</property>.
+	 *
 	 * <p>
 	 * The contact information for the exposed API.
 	 *
@@ -203,6 +211,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>license</property>.
+	 *
 	 * <p>
 	 * The license information for the exposed API.
 	 *
@@ -214,6 +223,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>license</property>.
+	 *
 	 * <p>
 	 * The license information for the exposed API.
 	 *
@@ -237,6 +247,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property getter:  <property>version</property>.
+	 *
 	 * <p>
 	 * Required.  Provides the version of the application API (not to be confused with the specification version).
 	 *
@@ -248,6 +259,7 @@ public class Info extends SwaggerElement {
 
 	/**
 	 * Bean property setter:  <property>version</property>.
+	 *
 	 * <p>
 	 * Required.  Provides the version of the application API (not to be confused with the specification version).
 	 *

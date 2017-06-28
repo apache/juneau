@@ -35,10 +35,13 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.
+	 *
+	 * <p>
 	 * Low limit of high range.
 	 *
-	 * @param high The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param high
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Meter high(Object high) {
@@ -48,10 +51,13 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-low">low</a> attribute.
+	 *
+	 * <p>
 	 * High limit of low range.
 	 *
-	 * @param low The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param low
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Meter low(Object low) {
@@ -61,10 +67,13 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-max">max</a> attribute.
+	 *
+	 * <p>
 	 * Upper bound of range.
 	 *
-	 * @param max The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param max
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Meter max(Object max) {
@@ -74,10 +83,13 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-min">min</a> attribute.
+	 *
+	 * <p>
 	 * Lower bound of range.
 	 *
-	 * @param min The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param min
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Meter min(Object min) {
@@ -87,10 +99,13 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-optimum">optimum</a> attribute.
+	 *
+	 * <p>
 	 * Optimum value in gauge.
 	 *
-	 * @param optimum The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param optimum
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Meter optimum(Object optimum) {
@@ -100,10 +115,13 @@ public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-value">value</a> attribute.
+	 *
+	 * <p>
 	 * Current value of the element.
 	 *
-	 * @param value The new value for this attribute.
-	 * Typically a {@link Number} or {@link String}.
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Meter value(Object value) {

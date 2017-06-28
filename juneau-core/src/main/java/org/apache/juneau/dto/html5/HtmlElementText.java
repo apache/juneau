@@ -47,7 +47,7 @@ public class HtmlElementText extends HtmlElement {
 	}
 
 	/**
-	 * Sets the innter text of this element.
+	 * Sets the inner text of this element.
 	 *
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object (for method chaining).

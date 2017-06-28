@@ -17,18 +17,21 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Allows custom rendering of bean property values when serialized as HTML.
+ *
  * <p>
  * Associated with bean properties using the {@link Html#render() @Html.render()} annotation.
+ *
  * <p>
  * Using this class, you can alter the CSS style and HTML content of the bean property.
+ *
  * <p>
  * The following example shows two render classes that customize the appearance of the <code>pctFull</code> and
- * 	<code>status</code> columns shown below:
+ * <code>status</code> columns shown below:
+ *
  * <p>
  * <img class='bordered' src='doc-files/HtmlRender_1.png'>
  *
  * <p class='bcode'>
- *
  * 	<jc>// Our bean class</jc>
  * 	<jk>public class</jk> FileSpace {
  *
@@ -116,6 +119,7 @@ import org.apache.juneau.serializer.*;
  * 		}
  * 	}
  * </p>
+ *
  * @param <T> The bean property type.
  */
 public abstract class HtmlRender<T> {
@@ -123,7 +127,8 @@ public abstract class HtmlRender<T> {
 	/**
 	 * Returns the CSS style of the element containing the bean property value.
 	 *
-	 * @param session The current serializer session.
+	 * @param session
+	 * 	The current serializer session.
 	 * 	Can be used to retrieve properties and session-level information.
 	 * @param value The bean property value.
 	 * @return The CSS style string, or <jk>null</jk> if no style should be added.
@@ -134,11 +139,13 @@ public abstract class HtmlRender<T> {
 
 	/**
 	 * Returns the delegate value for the specified bean property value.
+	 *
 	 * <p>
 	 * The default implementation simply returns the same value.
 	 * A typical use is to return an HTML element using one of the HTML5 DOM beans.
 	 *
-	 * @param session The current serializer session.
+	 * @param session
+	 * 	The current serializer session.
 	 * 	Can be used to retrieve properties and session-level information.
 	 * @param value The bean property value.
 	 * @return The new bean property value.

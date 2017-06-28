@@ -25,6 +25,7 @@ import org.apache.juneau.serializer.*;
  * <h5 class='section'>Description:</h5>
  * <p>
  * Provides a way to define the contents of {@link Serializer#getMediaTypes()} through an annotation.
+ *
  * <p>
  * The {@link Serializer#getMediaTypes()} default implementation gathers the media types by looking for this annotation.
  * <br>It should be noted that this annotation is optional and that the {@link Serializer#getMediaTypes()} method can
@@ -37,6 +38,7 @@ import org.apache.juneau.serializer.*;
  * 	<ja>@Produces</ja>(<js>"application/json,text/json"</js>)
  * 	<jk>public class</jk> JsonSerializer <jk>extends</jk> WriterSerializer {...}
  * </p>
+ *
  * <p>
  * The media types can also be <code>media-range</code> values per
  * <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>.
@@ -61,6 +63,7 @@ public @interface Produces {
 
 	/**
 	 * A comma-delimited list of the media types that the serializer can handle.
+	 *
 	 * <p>
 	 * Can contain meta-characters per the <code>media-type</code> specification of
 	 * <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
@@ -71,6 +74,7 @@ public @interface Produces {
 
 	/**
 	 * The content type that this serializer produces.
+	 *
 	 * <p>
 	 * Can be used to override the <code>Content-Type</code> response type if the media types are
 	 * <code>media-ranges</code> with meta-characters, or the <code>Content-Type</code> differs from the media type for some reason.
