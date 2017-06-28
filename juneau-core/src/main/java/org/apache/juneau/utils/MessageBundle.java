@@ -24,6 +24,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Wraps a {@link ResourceBundle} to provide some useful additional functionality.
+ *
  * <ul class='spaced-list'>
  * 	<li>
  * 		Instead of throwing {@link MissingResourceException}, the {@link #getString(String)} method
@@ -72,8 +73,8 @@ public class MessageBundle extends ResourceBundle {
 	private final ConcurrentHashMap<Locale,MessageBundle> localizedBundles = new ConcurrentHashMap<Locale,MessageBundle>();
 
 	/**
-	 * Sets the locale for this thread so that calls to {@link #getClientString(String, Object...)} return
-	 * messages in that locale.
+	 * Sets the locale for this thread so that calls to {@link #getClientString(String, Object...)} return messages in
+	 * that locale.
 	 *
 	 * @param locale The new client locale.
 	 */
@@ -85,10 +86,10 @@ public class MessageBundle extends ResourceBundle {
 	 * Constructor.
 	 *
 	 * @param forClass The class using this resource bundle.
-	 * @param bundlePath The path of the resource bundle to wrap.
-	 * This can be an absolute path (e.g. <js>"com.foo.MyMessages"</js>) or a path
-	 * relative to the package of the <l>forClass</l> (e.g. <js>"MyMessages"</js> if <l>forClass</l> is
-	 * <js>"com.foo.MyClass"</js>).
+	 * @param bundlePath
+	 * 	The path of the resource bundle to wrap.
+	 * 	This can be an absolute path (e.g. <js>"com.foo.MyMessages"</js>) or a path relative to the package of the
+	 * 	<l>forClass</l> (e.g. <js>"MyMessages"</js> if <l>forClass</l> is <js>"com.foo.MyClass"</js>).
 	 */
 	public MessageBundle(Class<?> forClass, String bundlePath) {
 		this(forClass, bundlePath, Locale.getDefault());
@@ -136,7 +137,10 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Add another bundle path to this resource bundle.
+	 *
+	 * <p>
 	 * Order of property lookup is first-to-last.
+	 *
 	 * <p>
 	 * This method must be called from the same thread as the call to the constructor.
 	 * This eliminates the need for synchronization.
@@ -166,9 +170,10 @@ public class MessageBundle extends ResourceBundle {
 	 *
 	 * @param key The resource bundle key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @return The resolved value.  Never <jk>null</jk>.
-	 * <js>"{!!key}"</js> if the bundle is missing.
-	 * <js>"{!key}"</js> if the key is missing.
+	 * @return
+	 * 	The resolved value.  Never <jk>null</jk>.
+	 * 	<js>"{!!key}"</js> if the bundle is missing.
+	 * 	<js>"{!key}"</js> if the key is missing.
 	 */
 	public String getString(String key, Object...args) {
 		String s = getString(key);
@@ -183,9 +188,10 @@ public class MessageBundle extends ResourceBundle {
 	 * @param locale The locale of the resource bundle to retrieve message from.
 	 * @param key The resource bundle key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @return The resolved value.  Never <jk>null</jk>.
-	 * <js>"{!!key}"</js> if the bundle is missing.
-	 * <js>"{!key}"</js> if the key is missing.
+	 * @return
+	 * 	The resolved value.  Never <jk>null</jk>.
+	 * 	<js>"{!!key}"</js> if the bundle is missing.
+	 * 	<js>"{!key}"</js> if the key is missing.
 	 */
 	public String getString(Locale locale, String key, Object...args) {
 		if (locale == null)
@@ -194,14 +200,14 @@ public class MessageBundle extends ResourceBundle {
 	}
 
 	/**
-	 * Same as {@link #getString(String, Object...)} but uses the locale specified on the call to
-	 * {@link #setClientLocale(Locale)}.
+	 * Same as {@link #getString(String, Object...)} but uses the locale specified on the call to {@link #setClientLocale(Locale)}.
 	 *
 	 * @param key The resource bundle key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @return The resolved value.  Never <jk>null</jk>.
-	 * <js>"{!!key}"</js> if the bundle is missing.
-	 * <js>"{!key}"</js> if the key is missing.
+	 * @return
+	 * 	The resolved value.  Never <jk>null</jk>.
+	 * 	<js>"{!!key}"</js> if the bundle is missing.
+	 * 	<js>"{!key}"</js> if the key is missing.
 	 */
 	public String getClientString(String key, Object...args) {
 		return getString(clientLocale.get(), key, args);
@@ -283,10 +289,12 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Returns this resource bundle as an {@link ObjectMap}.
+	 *
 	 * <p>
 	 * Useful for debugging purposes.
 	 * Note that any class that implements a <code>toObjectMap()</code> method will automatically be serialized by
 	 * calling this method and serializing the result.
+	 *
 	 * <p>
 	 * This method always constructs a new {@link ObjectMap} on each call.
 	 *

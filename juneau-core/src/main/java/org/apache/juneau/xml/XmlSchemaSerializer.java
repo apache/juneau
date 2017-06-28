@@ -37,17 +37,18 @@ import org.w3c.dom.ls.*;
  * Serializes POJO metadata to HTTP responses as XML.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>text/xml+schema</code>
+ *
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link XmlSerializerContext}
@@ -97,9 +98,10 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	/**
 	 * Returns an XML-Schema validator based on the output returned by {@link #doSerialize(SerializerSession, Object)};
 	 *
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale,
-	 * TimeZone, MediaType, UriContext)}.
-	 * Can be <jk>null</jk>.
+	 * @param session
+	 * 	The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone,
+	 * 	MediaType, UriContext)}.
+	 * 	Can be <jk>null</jk>.
 	 * @param o The object to serialize.
 	 * @return The new validator.
 	 * @throws Exception If a problem was detected in the XML-Schema output produced by this serializer.

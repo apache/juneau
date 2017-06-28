@@ -28,14 +28,16 @@ import org.apache.juneau.soap.*;
  * Parent class for all Juneau serializers.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Base serializer class that serves as the parent class for all serializers.
+ *
  * <p>
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer}.
  *
  * <h6 class='topic'>@Produces annotation</h6>
- * <p>
+ *
  * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
+ *
  * <p>
  * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
  * and {@link #getResponseContentType()} methods.
@@ -83,11 +85,14 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
+	 *
 	 * <p>
 	 * This method should NOT close the context object.
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale,
-	 * TimeZone, MediaType, UriContext)}.
-	 * If <jk>null</jk>, session is created using {@link #createSession(Object)}.
+	 *
+	 * @param session
+	 * 	The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone,
+	 * 	MediaType, UriContext)}.
+	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
@@ -95,13 +100,13 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Shortcut method for serializing objects directly to either a <code>String</code> or <code><jk>byte</jk>[]</code>
-	 * 	depending on the serializer type.
-	 * <p>
+	 * depending on the serializer type.
 	 *
 	 * @param o The object to serialize.
-	 * @return The serialized object.
-	 * <br>Character-based serializers will return a <code>String</code>
-	 * <br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
+	 * @return
+	 * 	The serialized object.
+	 * 	<br>Character-based serializers will return a <code>String</code>
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public abstract Object serialize(Object o) throws SerializeException;
@@ -113,9 +118,10 @@ public abstract class Serializer extends CoreObject {
 	/**
 	 * Serialize the specified object using the specified session.
 	 *
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale,
-	 * TimeZone, MediaType, UriContext)}.
-	 * If <jk>null</jk>, session is created using {@link #createSession(Object)}.
+	 * @param session
+	 * 	The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone,
+	 * 	MediaType, UriContext)}.
+	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -136,22 +142,24 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
+	 *
 	 * <p>
 	 * Equivalent to calling <code>serializer.serialize(o, out, <jk>null</jk>);</code>
 	 *
 	 * @param o The object to serialize.
-	 * @param output The output object.
-	 * <br>Character-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link Writer}
-	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
-	 * </ul>
-	 * <br>Stream-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link OutputStream}
-	 * 	<li>{@link File}
-	 * </ul>
+	 * @param output
+	 * 	The output object.
+	 * 	<br>Character-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 	</ul>
+	 * 	<br>Stream-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final void serialize(Object o, Object output) throws SerializeException {
@@ -161,32 +169,38 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Create the session object that will be passed in to the serialize method.
+	 *
 	 * <p>
 	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
 	 * subclass of {@link SerializerSession}.
 	 *
-	 * @param output The output object.
-	 * <br>Character-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link Writer}
-	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
-	 * </ul>
-	 * <br>Stream-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link OutputStream}
-	 * 	<li>{@link File}
-	 * </ul>
+	 * @param output
+	 * 	The output object.
+	 * 	<br>Character-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 	</ul>
+	 * 	<br>Stream-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
 	 * @param op Optional additional properties.
-	 * @param javaMethod Java method that invoked this serializer.
-	 * When using the REST API, this is the Java method invoked by the REST call.
-	 * Can be used to access annotations defined on the method or class.
-	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param javaMethod
+	 * 	Java method that invoked this serializer.
+	 * 	When using the REST API, this is the Java method invoked by the REST call.
+	 * 	Can be used to access annotations defined on the method or class.
+	 * @param locale
+	 * 	The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone
+	 * 	The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext The URI context.
+	 * @param uriContext
+	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 * @return The new session.
 	 */
@@ -197,21 +211,23 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Create a basic session object without overriding properties or specifying <code>javaMethod</code>.
+	 *
 	 * <p>
 	 * Equivalent to calling <code>createSession(<jk>null</jk>, <jk>null</jk>)</code>.
 	 *
-	 * @param output The output object.
-	 * <br>Character-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link Writer}
-	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
-	 * </ul>
-	 * <br>Stream-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link OutputStream}
-	 * 	<li>{@link File}
-	 * </ul>
+	 * @param output
+	 * 	The output object.
+	 * 	<br>Character-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 	</ul>
+	 * 	<br>Stream-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
 	 * @return The new session.
 	 */
 	protected SerializerSession createSession(Object output) {
@@ -220,8 +236,10 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Converts the contents of the specified object array to a list.
+	 *
 	 * <p>
 	 * Works on both object and primitive arrays.
+	 *
 	 * <p>
 	 * In the case of multi-dimensional arrays, the outgoing list will contain elements of type n-1 dimension.
 	 * i.e. if {@code type} is <code><jk>int</jk>[][]</code> then {@code list} will have entries of type
@@ -245,6 +263,7 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Returns the media types handled based on the value of the {@link Produces} annotation on the serializer class.
+	 *
 	 * <p>
 	 * This method can be overridden by subclasses to determine the media types programmatically.
 	 *
@@ -265,17 +284,20 @@ public abstract class Serializer extends CoreObject {
 
 	/**
 	 * Optional method that specifies HTTP request headers for this serializer.
+	 *
 	 * <p>
 	 * For example, {@link SoapXmlSerializer} needs to set a <code>SOAPAction</code> header.
+	 *
 	 * <p>
 	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
 	 * or client).
 	 *
-	 * @param properties Optional run-time properties (the same that are passed to
-	 * {@link WriterSerializer#doSerialize(SerializerSession, Object)}.
-	 * Can be <jk>null</jk>.
-	 * @return The HTTP headers to set on HTTP requests.
-	 * Can be <jk>null</jk>.
+	 * @param properties
+	 * 	Optional run-time properties (the same that are passed to {@link WriterSerializer#doSerialize(SerializerSession, Object)}.
+	 * 	Can be <jk>null</jk>.
+	 * @return
+	 * 	The HTTP headers to set on HTTP requests.
+	 * 	Can be <jk>null</jk>.
 	 */
 	public ObjectMap getResponseHeaders(ObjectMap properties) {
 		return ObjectMap.EMPTY_MAP;
@@ -284,11 +306,13 @@ public abstract class Serializer extends CoreObject {
 	/**
 	 * Optional method that returns the response <code>Content-Type</code> for this serializer if it is different from
 	 * the matched media type.
+	 *
 	 * <p>
 	 * This method is specified to override the content type for this serializer.
 	 * For example, the {@link org.apache.juneau.json.JsonSerializer.Simple} class returns that it handles media type
 	 * <js>"text/json+simple"</js>, but returns <js>"text/json"</js> as the actual content type.
 	 * This allows clients to request specific 'flavors' of content using specialized <code>Accept</code> header values.
+	 *
 	 * <p>
 	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
 	 * or client).

@@ -18,6 +18,7 @@ import java.util.*;
 
 /**
  * Utility class for defining an iterator over one or more iterables.
+ *
  * @param <E> The element class type.
  */
 public class MultiIterable<E> implements Iterable<E> {

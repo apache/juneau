@@ -28,9 +28,9 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * This is functionally equivalent to the following code...
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
@@ -52,6 +52,7 @@ public @interface Header {
 
 	/**
 	 * A synonym for {@link #name()}.
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

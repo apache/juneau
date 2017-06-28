@@ -51,6 +51,7 @@ import org.apache.juneau.urlencoding.*;
  * 		String myProxyMethod4(<ja>@Header</ja> MyBean myBean);
  * 	}
  * </p>
+ *
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
  * {@link RequestBean @RequestBean}:
@@ -97,11 +98,11 @@ import org.apache.juneau.urlencoding.*;
  * 	 	MyBean getBean();
  * 	}
  * </p>
+ *
  * <p>
  * The {@link #name()} and {@link #value()} elements are synonyms for specifying the header name.
  * Only one should be used.
  * <br>The following annotations are fully equivalent:
- * <p>
  * <p class='bcode'>
  * 	<ja>@Header</ja>(name=<js>"Foo"</js>)
  *
@@ -124,11 +125,14 @@ public @interface Header {
 
 	/**
 	 * The HTTP header name.
+	 *
 	 * <p>
 	 * A blank value (the default) indicates to reuse the bean property name when used on a request bean property.
+	 *
 	 * <p>
 	 * The value should be either <js>"*"</js> to represent multiple name/value pairs, or a label that defines the
 	 * header name.
+	 *
 	 * <p>
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
@@ -176,6 +180,7 @@ public @interface Header {
 
 	/**
 	 * A synonym for {@link #name()}.
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */
@@ -183,6 +188,7 @@ public @interface Header {
 
 	/**
 	 * Skips this value if it's an empty string or empty collection/array.
+	 *
 	 * <p>
 	 * Note that <jk>null</jk> values are already ignored.
 	 */
@@ -190,9 +196,11 @@ public @interface Header {
 
 	/**
 	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
+	 *
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
 	 * then on the client which by default is {@link UrlEncodingSerializer}.
+	 *
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */

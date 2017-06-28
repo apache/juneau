@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
  * Subclass of {@link Serializer} for byte-based serializers.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * This class is typically the parent class of all byte-based serializers.
  * It has 1 abstract method to implement...
  * <ul>
@@ -31,8 +31,9 @@ import org.apache.juneau.annotation.*;
  * </ul>
  *
  * <h6 class='topic'>@Produces annotation</h6>
- * <p>
+ *
  * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
+ *
  * <p>
  * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
  * and {@link #getResponseContentType()} methods.

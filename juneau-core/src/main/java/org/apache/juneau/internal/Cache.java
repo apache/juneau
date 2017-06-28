@@ -16,6 +16,7 @@ import java.util.concurrent.*;
 
 /**
  * Simple in-memory cache of objects.
+ *
  * <p>
  * Essentially just a wrapper around a ConcurrentHashMap.
  *
@@ -59,8 +60,9 @@ public class Cache<K,V> {
 	 *
 	 * @param key The key.
 	 * @param value The value.
-	 * @return Either the value already in the cache if it already exists, or the same value passed in.
-	 * Always returns the same value if the cache is disabled.
+	 * @return
+	 * 	Either the value already in the cache if it already exists, or the same value passed in.
+	 * 	Always returns the same value if the cache is disabled.
 	 */
 	public V put(K key, V value) {
 		if (nocache)

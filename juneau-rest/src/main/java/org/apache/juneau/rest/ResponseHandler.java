@@ -22,9 +22,11 @@ import org.apache.juneau.rest.response.*;
 
 /**
  * Defines the interface for handlers that convert POJOs to appropriate HTTP responses.
+ *
  * <p>
  * The {@link RestServlet} API uses the concept of registered response handlers for converting objects returned by REST
  * methods or set through {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+ *
  * <p>
  * Response handlers can be associated with {@link RestServlet RestServlets} through the following ways:
  * <ul class='spaced-list'>
@@ -34,6 +36,7 @@ import org.apache.juneau.rest.response.*;
  * 		By calling the {@link RestConfig#addResponseHandlers(Class...)} and augmenting or creating your
  * 		own list of handlers.
  * </ul>
+ *
  * <p>
  * By default, {@link RestServlet RestServlets} are registered with the following response handlers:
  * <ul class='spaced-list'>
@@ -52,9 +55,11 @@ import org.apache.juneau.rest.response.*;
  * 	<li>
  * 		{@link StreamableHandler} - Handles {@link Streamable} objects.
  * </ul>
+ *
  * <p>
  * Response handlers can be used to process POJOs that cannot normally be handled through Juneau serializers, or
  * because it's simply easier to define response handlers for special cases.
+ *
  * <p>
  * The following example shows how to create a response handler to handle special <code>Foo</code> objects outside the
  * normal Juneau architecture.
@@ -96,10 +101,12 @@ public interface ResponseHandler {
 	 * @param res The HTTP servlet response;
 	 * @param output The POJO returned by the REST method that now needs to be sent to the response.
 	 * @return true If this handler handled the response.
-	 * @throws IOException If low-level exception occurred on output stream.
-	 * Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
-	 * @throws RestException If some other exception occurred.
-	 * Can be used to provide an appropriate HTTP response code and message.
+	 * @throws IOException
+	 * 	If low-level exception occurred on output stream.
+	 * 	Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
+	 * @throws RestException
+	 * 	If some other exception occurred.
+	 * 	Can be used to provide an appropriate HTTP response code and message.
 	 */
 	boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException;
 }

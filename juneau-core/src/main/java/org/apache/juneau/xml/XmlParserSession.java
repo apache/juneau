@@ -30,6 +30,7 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlParser}.
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -47,24 +48,30 @@ public class XmlParserSession extends ParserSession {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for this object.
-	 * @param input The input.  Can be any of the following types:
-	 * <ul>
-	 * 	<li><jk>null</jk>
-	 * 	<li>{@link Reader}
-	 * 	<li>{@link CharSequence}
-	 * 	<li>{@link InputStream} containing UTF-8 encoded text.
-	 * 	<li>{@link File} containing system encoded text.
-	 * </ul>
-	 * @param op The override properties.
-	 * These override any context properties defined in the context.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
+	 * @param input
+	 * 	The input.
+	 * 	Can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text.
+	 * 		<li>{@link File} containing system encoded text.
+	 * 	</ul>
+	 * @param op
+	 * 	The override properties.
+	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param locale
+	 * 	The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone
+	 * 	The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
 	public XmlParserSession(XmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer,
@@ -128,6 +135,7 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Decodes and trims the specified string.
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
@@ -146,6 +154,7 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Returns the name of the current XML element.
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
@@ -159,6 +168,7 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Returns the name of the specified attribute on the current XML element.
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
@@ -173,6 +183,7 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Returns the value of the specified attribute on the current XML element.
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
@@ -187,8 +198,10 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Returns the text content of the current XML element.
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 *
 	 * <p>
 	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
 	 *
@@ -203,14 +216,17 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Returns the content of the current CHARACTERS node.
+	 *
 	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 *
 	 * <p>
 	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
 	 *
 	 * @param r The reader to read the element text from.
-	 * @param trim If <jk>true</jk>, trim the contents of the text node BEFORE decoding escape sequences.
-	 * Typically <jk>true</jk> for {@link XmlFormat#MIXED_PWS} and {@link XmlFormat#TEXT_PWS}.
+	 * @param trim
+	 * 	If <jk>true</jk>, trim the contents of the text node BEFORE decoding escape sequences.
+	 * 	Typically <jk>true</jk> for {@link XmlFormat#MIXED_PWS} and {@link XmlFormat#TEXT_PWS}.
 	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
 	 * @throws XMLStreamException
 	 */
@@ -236,6 +252,7 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Takes the element being read from the XML stream reader and reconstructs it as XML.
+	 *
 	 * <p>
 	 * Used when reconstructing bean properties of type {@link XmlFormat#XMLTEXT}.
 	 *
@@ -258,6 +275,8 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Parses the current element as text.
+	 *
+	 * <p>
 	 * Note that this is different than {@link #getText(XMLStreamReader)} since it assumes that we're pointing to a
 	 * whitespace element.
 	 *
@@ -291,6 +310,7 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Returns <jk>true</jk> if the current element is a whitespace element.
+	 *
 	 * <p>
 	 * For the XML parser, this always returns <jk>false</jk>.
 	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.
@@ -304,6 +324,7 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Parses the current whitespace element.
+	 *
 	 * <p>
 	 * For the XML parser, this always returns <jk>null</jk> since there is no concept of a whitespace element.
 	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.

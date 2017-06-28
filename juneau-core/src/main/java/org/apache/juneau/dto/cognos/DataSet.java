@@ -51,7 +51,7 @@ import org.apache.juneau.xml.annotation.*;
  * Only 2-dimensional POJOs (arrays or collections of maps or beans) can be serialized to Cognos.
  *
  * <h5 class='section'>Example:</h5>
- * <p>
+ *
  * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of
  * <code>LinkedList&lt;Person&gt;</code>.
  * The code for generating the XML is as follows...

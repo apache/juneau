@@ -22,7 +22,6 @@ import org.apache.juneau.http.*;
  *
  * <h5 class='section'>Description:</h5>
  *
- * <p>
  * Maintains a set of encoders and the codings that they can handle.
  *
  * <p>
@@ -30,7 +29,7 @@ import org.apache.juneau.http.*;
  * encoders for specific <code>Accept-Encoding</code> and <code>Content-Encoding</code> header values.
  *
  * <h6 class='topic'>Match ordering</h6>
- * <p>
+ *
  * Encoders are matched against <code>Accept-Encoding</code> strings in the order they exist in this group.
  *
  * <p>

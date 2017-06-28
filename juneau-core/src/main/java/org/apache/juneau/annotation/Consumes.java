@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
  * Annotation used on subclasses of {@link Parser} to identify the media types that it consumes.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Provides a way to define the contents of {@link Parser#getMediaTypes()} through an annotation.
  *
  * <p>
@@ -32,7 +32,7 @@ import org.apache.juneau.parser.*;
  * overridden by subclasses to return the media types programmatically.
  *
  * <h5 class='section'>Example:</h5>
- * <p>
+ *
  * Standard example:
  * <p class='bcode'>
  * 	<ja>@Consumes</ja>(<js>"application/json,text/json"</js>)

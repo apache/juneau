@@ -28,13 +28,13 @@ import org.apache.juneau.transform.*;
  * Serializes POJO metadata to HTTP responses as JSON.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>application/json+schema, text/json+schema</code>
  * <p>
  * Produces <code>Content-Type</code> types: <code>application/json</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  */
 @Produces(value="application/json+schema,text/json+schema",contentType="application/json")

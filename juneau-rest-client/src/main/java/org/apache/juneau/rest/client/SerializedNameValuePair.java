@@ -18,8 +18,8 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries
- * 	using the {@link UrlEncodingSerializer class}.
+ * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries using the
+ * {@link UrlEncodingSerializer class}.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

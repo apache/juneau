@@ -19,7 +19,6 @@ import java.io.*;
  *
  * <h5 class='section'>Description:</h5>
  *
- * <p>
  * Used to wrap input and output streams within compression/decompression streams.
  *
  * <p>

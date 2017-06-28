@@ -21,6 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * A parsed path pattern constructed from a {@link RestMethod#path()} value.
+ *
  * <p>
  * Handles aspects of matching and precedence ordering.
  */
@@ -77,8 +78,9 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
 	 *
 	 * @param path The path to match against.
-	 * @return An array of values matched against <js>"{var}"</js> variable in the pattern, or an empty array if the
-	 * pattern matched but no vars were present, or <jk>null</jk> if the specified path didn't match the pattern.
+	 * @return
+	 * 	An array of values matched against <js>"{var}"</js> variable in the pattern, or an empty array if the
+	 * 	pattern matched but no vars were present, or <jk>null</jk> if the specified path didn't match the pattern.
 	 */
 	protected String[] match(String path) {
 
@@ -111,6 +113,8 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Comparator for this object.
+	 *
+	 * <p>
 	 * The comparator is designed to order URL pattern from most-specific to least-specific.
 	 * For example, the following patterns would be ordered as follows:
 	 * <ol>
@@ -161,6 +165,8 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
 	/**
 	 * Returns this path pattern as the compiled regular expression.
+	 *
+	 * <p>
 	 * Useful for debugging.
 	 *
 	 * @return The path pattern.

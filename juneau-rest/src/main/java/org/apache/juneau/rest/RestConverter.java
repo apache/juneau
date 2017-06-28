@@ -19,9 +19,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * REST method response converter.
+ *
  * <p>
  * Implements a filter mechanism for REST method calls that allows response objects to be converted to some other POJO
  * after invocation of the REST method.
+ *
  * <p>
  * Converters are associated with REST methods through the {@link RestMethod#converters()} annotation.
  *
@@ -37,20 +39,22 @@ import org.apache.juneau.serializer.*;
  * 		}
  * 	}
  * </p>
+ *
  * <p>
  * Converters can also be associated at the servlet level using the {@link RestResource#converters()} annotation.
  * Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  *
  * <h6 class='topic'>How to implement</h6>
- * <p>
+ *
  * Implementers should simply implement the {@link #convert(RestRequest, Object, ClassMeta)} and return back a
  * 'converted' object.
  * It's up to the implementer to decide what this means.
+ *
  * <p>
  * Converters must implement a no-args constructor.
  *
  * <h6 class='topic'>Predefined converters</h6>
- * <p>
+ *
  * The following converters are available by default.
  * <ul class='spaced-list'>
  * 	<li>
@@ -68,8 +72,9 @@ public interface RestConverter {
 	 *
 	 * @param req The servlet request.
 	 * @param res The response object set by the REST method through the {@link RestResponse#setOutput(Object)} method.
-	 * @param cm The {@link ClassMeta} on the object from the bean context of the servlet.
-	 * Can be used to check if the object has any filters.
+	 * @param cm
+	 * 	The {@link ClassMeta} on the object from the bean context of the servlet.
+	 * 	Can be used to check if the object has any filters.
 	 * @return The converted object.
 	 * @throws RestException Thrown if any errors occur during conversion.
 	 * @throws SerializeException

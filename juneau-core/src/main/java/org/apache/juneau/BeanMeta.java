@@ -30,14 +30,14 @@ import org.apache.juneau.utils.*;
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
  * 	is present on the class, or the class has a {@link BeanFilter} registered with it in the bean context,
  * 	then that information is used to determine the properties on the class.
  * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
  *
  * <h6 class='topic'>Bean property ordering</h6>
- * <p>
+ *
  * The order of the properties are as follows:
  * <ul class='spaced-list'>
  * 	<li>

@@ -39,12 +39,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF language.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.language"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
@@ -79,7 +80,7 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
 	 * 	<li><b>Data type:</b> {@link Namespace}
@@ -90,7 +91,7 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
 	 * 	<li><b>Data type:</b> {@link Namespace}
@@ -101,12 +102,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
@@ -115,14 +117,16 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>iri_rules</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.iri-rules"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"lax"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Set the engine for checking and resolving.
+	 * 
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -142,14 +146,16 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>error-mode</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.error-mode"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"lax"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
+	 * 
 	 * <p>
 	 * Possible values:
 	 * <ul>
@@ -161,6 +167,7 @@ public interface RdfCommonContext {
 	 * 	<li><js>"strict-error"</js>
 	 * 	<li><js>"strict-fatal"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * See also:
 	 * <ul class='spaced-list'>
@@ -178,14 +185,16 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>embedding</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.embedding"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
+	 * 
 	 * <p>
 	 * See also:
 	 * <ul class='spaced-list'>
@@ -197,13 +206,15 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>ERR_xxx</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.ERR_"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Provides fine-grained control over detected error conditions.
+	 * 
 	 * <p>
 	 * Possible values:
 	 * <ul>
@@ -212,6 +223,7 @@ public interface RdfCommonContext {
 	 * 	<li><js>"EM_ERROR"</js>
 	 * 	<li><js>"EM_FATAL"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * See also:
 	 * <ul class='spaced-list'>
@@ -225,11 +237,12 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>WARN_xxx</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.WARN_"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * See {@link #RDF_arp_err_} for details.
 	 */
@@ -237,11 +250,12 @@ public interface RdfCommonContext {
 
 	/**
 	 * RDF/XML ARP property: <code>IGN_xxx</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.IGN_"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * See {@link #RDF_arp_err_} for details.
 	 */
@@ -249,12 +263,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>xmlbase</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.xmlbase"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 */
@@ -262,12 +277,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>longId</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.longId"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Whether to use long ID's for anon resources.
 	 * Short ID's are easier to read, but can run out of memory on very large models.
@@ -276,12 +292,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>allowBadURIs</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.allowBadURIs"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
 	 */
@@ -289,14 +306,16 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>relativeURIs</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.relativeURIs"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"same-document, absolute, relative, parent"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * What sort of relative URIs should be used.
+	 * 
 	 * <p>
 	 * A comma separate list of options:
 	 * <ul class='spaced-list'>
@@ -313,6 +332,7 @@ public interface RdfCommonContext {
 	 * 	<li>
 	 * 		<js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * The default value is <js>"same-document, absolute, relative, parent"</js>.
 	 * To switch off relative URIs use the value <js>""</js>.
@@ -322,12 +342,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>showXmlDeclaration</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.showXmlDeclaration"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"default"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -345,12 +366,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>showDoctypeDeclaration</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.showDoctypeDeclaration"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * If true, an XML doctype declaration is included in the output.
 	 * This declaration includes a <code>!ENTITY</code> declaration for each prefix mapping in the model, and any 
@@ -361,12 +383,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>tab</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.tab"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>2</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
 	 */
@@ -374,12 +397,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>attributeQuoteChar</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.attributeQuoteChar"</js>
 	 * 	<li><b>Data type:</b> <code>Character</code>
 	 * 	<li><b>Default:</b> <js>'"'</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * The XML attribute quote character.
 	 */
@@ -387,12 +411,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF/XML property: <code>blockRules</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.blockRules"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>""</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from 
 	 * <a class="doclink" href="http://www.w3.org/TR/rdf-syntax-grammar">RDF Syntax Grammar</a> indicating grammar 
@@ -402,12 +427,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>minGap</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.minGap"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>1</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Minimum gap between items on a line.
 	 */
@@ -415,12 +441,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>objectLists</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.objectLists"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Print object lists as comma separated lists.
 	 */
@@ -428,12 +455,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>subjectColumn</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.subjectColumn"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> indentProperty
 	 * </ul>
+	 * 
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
 	 */
@@ -441,12 +469,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>propertyColumn</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.propertyColumn"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>8</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Width of the property column.
 	 */
@@ -454,12 +483,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>indentProperty</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.indentProperty"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>6</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Width to indent properties.
 	 */
@@ -467,12 +497,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>widePropertyLen</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.widePropertyLen"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>20</code>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Width of the property column.
 	 * Must be longer than <code>propertyColumn</code>.
@@ -481,12 +512,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>abbrevBaseURI</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.abbrevBaseURI"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Control whether to use abbreviations <code>&lt;&gt;</code> or <code>&lt;#&gt;</code>.
 	 */
@@ -494,12 +526,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>usePropertySymbols</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.usePropertySymbols"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Control whether to use <code>a</code>, <code>=</code> and <code>=&gt;</code> in output
 	 */
@@ -507,12 +540,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>useTripleQuotedStrings</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.useTripleQuotedStrings"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Allow the use of <code>"""</code> to delimit long strings.
 	 */
@@ -520,12 +554,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  N3/Turtle property: <code>useDoubles</code>.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.useDoubles"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Allow the use doubles as <code>123.456</code>.
 	 */
@@ -533,12 +568,13 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -564,19 +600,22 @@ public interface RdfCommonContext {
 
 	/**
 	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 * 
 	 * <p>
 	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
 	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
 	 * when serialized as loose collections.
+	 * 
 	 * <p>
 	 * This setting is typically only useful if the beans being parsed into do not have a bean property
 	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.

@@ -17,8 +17,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Manifest file entries variable resolver.
+ *
  * <p>
  * The format for this var is <js>"$MF{key}"</js> or <js>"$MF{key,defaultValue}"</js>
+ *
  * <p>
  * This variable resolver requires that a {@link ManifestFile} object be set as a context object on the resolver or a
  * session object on the resolver session.
@@ -35,6 +37,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"The main class is $MF{Main-Class}"</js>));
  * </p>
+ *
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.

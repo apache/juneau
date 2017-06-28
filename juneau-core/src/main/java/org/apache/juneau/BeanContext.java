@@ -51,7 +51,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Bean Contexts</h5>
  *
- * <p>
  * Bean contexts are created through the {@link PropertyStore#getContext(Class)} method.
  * These context objects are read-only, reusable, and thread-safe.
  * The {@link PropertyStore} class will typically cache copies of <code>Context</code> objects based on
@@ -67,7 +66,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Bean Sessions</h5>
  *
- * <p>
  * Whereas <code>BeanContext</code> objects are permanent, unchangeable, cached, and thread-safe,
  * {@link BeanSession} objects are ephemeral and not thread-safe.
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
@@ -75,7 +73,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>BeanContext configuration properties</h5>
  *
- * <p>
  * <code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are
  * handled.  These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
  *
@@ -115,7 +112,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Bean Maps</h5>
  *
- * <p>
  * {@link BeanMap BeanMaps} are wrappers around Java beans that allow properties to be retrieved and
  * set using the common {@link Map#put(Object,Object)} and {@link Map#get(Object)} methods.
  *
@@ -156,7 +152,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Bean Annotations</h5>
  *
- * <p>
  * This package contains annotations that can be applied to class definitions to override what properties are detected
  * on a bean.
  *
@@ -178,7 +173,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Beans with read-only properties</h5>
  *
- * <p>
  * Bean maps can also be defined on top of beans with read-only properties by adding a
  * {@link BeanConstructor @BeanConstructor} annotation to one of the constructors on the
  * bean class.  This will allow read-only properties to be set through constructor arguments.
@@ -203,7 +197,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>BeanFilters and PojoSwaps</h5>
  *
- * <p>
  * 	{@link BeanFilter BeanFilters} and {@link PojoSwap PojoSwaps} are used to tailor how beans and POJOs are handled.
  * 	<ol class='spaced-list'>
  * 		<li>
@@ -222,7 +215,6 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>ClassMetas</h5>
  *
- * <p>
  * The {@link ClassMeta} class is a wrapper around {@link Class} object that provides cached information about that
  * class (e.g. whether it's a {@link Map} or {@link Collection} or bean).
  *
@@ -241,7 +233,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Beans require no-arg constructors.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireDefaultConstructor"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -260,7 +251,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Beans require {@link Serializable} interface.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSerializable"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -279,7 +269,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Beans require setters for getters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSettersForGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -296,7 +285,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Beans require at least one property.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSomeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -316,7 +304,6 @@ public class BeanContext extends Context {
 	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * value.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -336,7 +323,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Look for bean constructors with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -349,7 +335,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Look for bean classes with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -367,7 +352,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Look for bean fields with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -388,7 +372,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Look for bean methods with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -406,7 +389,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Use Java {@link Introspector} for determining bean properties.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.useJavaBeanIntrospector"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -423,7 +405,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Use interface proxies.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.useInterfaceProxies"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -440,7 +421,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -457,7 +437,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties with null values.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownNullBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -474,7 +453,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Ignore properties without setters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignorePropertiesWithoutSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -491,7 +469,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on getters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -508,7 +485,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on setters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -525,7 +501,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Sort bean properties in alphabetical order.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.sortProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -549,7 +524,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanPackages.set"</js>
 	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
@@ -591,7 +565,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanClasses.set"</js>
 	 * 	<li><b>Data type:</b> <code>Set&lt;Class&gt;</code>
@@ -618,7 +591,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Bean filters to apply to beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFilters.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
@@ -659,7 +631,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.pojoSwaps.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
@@ -689,7 +660,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.map"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;Class,Class&gt;</code>
@@ -712,7 +682,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
@@ -745,7 +714,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
@@ -778,7 +746,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
@@ -811,7 +778,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Name to use for the bean type properties used to represent a bean type.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanTypePropertyName"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -824,7 +790,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Default parser to use when converting <code>Strings</code> to POJOs.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.defaultParser"</js>
 	 * 	<li><b>Data type:</b> <code>Class</code>
@@ -840,7 +805,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Locale.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.locale"</js>
 	 * 	<li><b>Data type:</b> <code>Locale</code>
@@ -856,7 +820,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  TimeZone.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.timeZone"</js>
 	 * 	<li><b>Data type:</b> <code>TimeZone</code>
@@ -872,7 +835,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Media type.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.mediaType"</js>
 	 * 	<li><b>Data type:</b> <code>MediaType</code>
@@ -888,7 +850,6 @@ public class BeanContext extends Context {
 	/**
 	 * <b>Configuration property:</b>  Debug mode.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.debug"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>

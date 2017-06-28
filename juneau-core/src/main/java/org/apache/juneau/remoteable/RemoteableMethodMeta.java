@@ -21,6 +21,7 @@ import java.util.*;
 
 /**
  * Contains the meta-data about a Java method on a remoteable interface.
+ *
  * <p>
  * Captures the information in {@link RemoteMethod @RemoteMethod} annotations for caching and reuse.
  *

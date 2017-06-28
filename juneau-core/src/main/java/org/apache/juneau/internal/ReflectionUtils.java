@@ -53,6 +53,7 @@ public final class ReflectionUtils {
 
 	/**
 	 * Returns the specified annotation only if it's been declared on the specified class.
+	 *
 	 * <p>
 	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
 	 * up the parent chain.
@@ -72,9 +73,9 @@ public final class ReflectionUtils {
 
 	/**
 	 * Returns all instances of the specified annotation on the specified class.
+	 *
 	 * <p>
 	 * Searches all superclasses and superinterfaces.
-	 * <p>
 	 * Results are ordered child-to-parent.
 	 *
 	 * @param <T> The annotation class type.
@@ -102,8 +103,9 @@ public final class ReflectionUtils {
 	}
 
 	/**
-	 * Same as {@link #findAnnotations(Class, Class)} except returns the annotations as a map
-	 * with the keys being the class on which the annotation was found.
+	 * Same as {@link #findAnnotations(Class, Class)} except returns the annotations as a map with the keys being the
+	 * class on which the annotation was found.
+	 *
 	 * <p>
 	 * Results are ordered child-to-parent.
 	 *
@@ -189,6 +191,7 @@ public final class ReflectionUtils {
 
 	/**
 	 * Similar to {@link #getResource(Class, String)} except looks for localized versions of the specified resource.
+	 *
 	 * <p>
 	 * For example, if looking in the Japanese locale, the order of lookup on the <js>"MyResource.txt"</js> file is:
 	 * <ol>

@@ -19,8 +19,10 @@ import org.apache.juneau.svl.*;
 
 /**
  * Resolver for resolving widget variables <js>"$W{name}"</js>.
+ *
  * <p>
  * Widgets are simple class that produce some sort of string based on a passed-in HTTP request.
+ *
  * <p>
  * They're registered via the following mechanisms:
  * <ul>

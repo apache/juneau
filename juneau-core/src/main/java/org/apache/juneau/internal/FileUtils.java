@@ -81,6 +81,8 @@ public class FileUtils {
 
 	/**
 	 * Creates a file if it doesn't already exist using {@link File#createNewFile()}.
+	 *
+	 * <p>
 	 * Throws a {@link RuntimeException} if the file could not be created.
 	 *
 	 * @param f The file to create.
@@ -98,6 +100,8 @@ public class FileUtils {
 
 	/**
 	 * Updates the modified timestamp on the specified file.
+	 *
+	 * <p>
 	 * Method ensures that the timestamp changes even if it's been modified within the past millisecond.
 	 *
 	 * @param f The file to modify the modified timestamp on.
@@ -120,9 +124,11 @@ public class FileUtils {
 
 	/**
 	 * Create a temporary file with the specified name.
+	 *
 	 * <p>
 	 * The name is broken into file name and suffix, and the parts are passed to
 	 * {@link File#createTempFile(String, String)}.
+	 *
 	 * <p>
 	 * {@link File#deleteOnExit()} is called on the resulting file before being returned by this method.
 	 *
@@ -169,6 +175,7 @@ public class FileUtils {
 
 	/**
 	 * Returns the candidate file names for the specified file name in the specified locale.
+	 *
 	 * <p>
 	 * For example, if looking for the <js>"MyResource.txt"</js> file in the Japanese locale, the iterator will return
 	 * names in the following order:
@@ -177,6 +184,7 @@ public class FileUtils {
 	 * 	<li><js>"MyResource_ja.txt"</js>
 	 * 	<li><js>"MyResource.txt"</js>
 	 * </ol>
+	 *
 	 * <p>
 	 * If the locale is null, then it will only return <js>"MyResource.txt"</js>.
 	 *
@@ -220,6 +228,7 @@ public class FileUtils {
 
 	/**
 	 * Returns the candidate locales for the specified locale.
+	 *
 	 * <p>
 	 * For example, if <code>locale</code> is <js>"ja_JP"</js>, then this method will return:
 	 * <ol>

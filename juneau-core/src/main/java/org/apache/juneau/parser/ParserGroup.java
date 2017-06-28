@@ -22,7 +22,7 @@ import org.apache.juneau.http.*;
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
@@ -36,11 +36,13 @@ import org.apache.juneau.http.*;
  * </ul>
  *
  * <h6 class='topic'>Match ordering</h6>
- * <p>
+ *
  * Parsers are matched against <code>Content-Type</code> strings in the order they exist in this group.
+ *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous parsers to be overridden through subsequent calls.
+ *
  * <p>
  * For example, calling <code>g.append(P1.<jk>class</jk>,P2.<jk>class</jk>).append(P3.<jk>class</jk>,P4.<jk>class</jk>)</code>
  * will result in the order <code>P3, P4, P1, P2</code>.
@@ -81,11 +83,13 @@ public final class ParserGroup {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The modifiable properties that were used to initialize the parsers.
-	 * A snapshot of these will be made so that we can clone and modify this group.
-	 * @param parsers The parsers defined in this group.
-	 * The order is important because they will be tried in reverse order (e.g. newer first) in which they will be tried
-	 * to match against media types.
+	 * @param propertyStore
+	 * 	The modifiable properties that were used to initialize the parsers.
+	 * 	A snapshot of these will be made so that we can clone and modify this group.
+	 * @param parsers
+	 * 	The parsers defined in this group.
+	 * 	The order is important because they will be tried in reverse order (e.g. newer first) in which they will be
+	 * 	tried to match against media types.
 	 */
 	public ParserGroup(PropertyStore propertyStore, Parser[] parsers) {
 		this.propertyStore = PropertyStore.create(propertyStore);
@@ -161,6 +165,7 @@ public final class ParserGroup {
 
 	/**
 	 * Returns the media types that all parsers in this group can handle
+	 *
 	 * <p>
 	 * Entries are ordered in the same order as the parsers in the group.
 	 *
@@ -172,6 +177,8 @@ public final class ParserGroup {
 
 	/**
 	 * Returns a copy of the property store that was used to create the parsers in this group.
+	 *
+	 * <p>
 	 * This method returns a new factory each time so is somewhat expensive.
 	 *
 	 * @return A new copy of the property store passed in to the constructor.

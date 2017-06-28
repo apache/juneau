@@ -63,6 +63,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	/**
 	 * Returns the RDF namespace associated with this bean property.
+	 * 
 	 * <p>
 	 * Namespace is determined in the following order:
 	 * <ol>

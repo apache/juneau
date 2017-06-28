@@ -24,6 +24,7 @@ import org.apache.juneau.rest.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.
+ *
  * <p>
  * The variable it resolves is <js>"$W{contentTypeLinksColumn}"</js>.
  */

@@ -19,9 +19,11 @@ import java.util.*;
 import javax.xml.bind.*;
 
 /**
- * A utility class for parsing and formatting HTTP dates as used in cookies and
- * other headers.  This class handles dates as defined by RFC 2616 section
- * 3.3.1 as well as some other common non-standard formats.
+ * A utility class for parsing and formatting HTTP dates as used in cookies and other headers.
+ *
+ * <p>
+ * This class handles dates as defined by RFC 2616 section 3.3.1 as well as some other common non-standard formats.
+ *
  * <p>
  * This class was copied from HttpClient 4.3.
  */
@@ -78,9 +80,10 @@ public final class DateUtils {
 	 *
 	 * @param dateValue the date value to parse
 	 * @param dateFormats the date formats to use
-	 * @param startDate During parsing, two digit years will be placed in the range <code>startDate</code> to
-	 * <code>startDate + 100 years</code>. This value may be <code>null</code>. When
-	 * <code>null</code> is given as a parameter, year <code>2000</code> will be used.
+	 * @param startDate
+	 * 	During parsing, two digit years will be placed in the range <code>startDate</code> to
+	 * 	<code>startDate + 100 years</code>. This value may be <code>null</code>. When
+	 * 	<code>null</code> is given as a parameter, year <code>2000</code> will be used.
 	 * @return the parsed date or null if input could not be parsed
 	 */
 	public static Date parseDate(final String dateValue, final String[] dateFormats, final Date startDate) {
@@ -128,8 +131,10 @@ public final class DateUtils {
 	}
 
 	/**
-	 * Formats the given date according to the specified pattern. The pattern must conform to that used by the
-	 * {@link SimpleDateFormat simple date format} class.
+	 * Formats the given date according to the specified pattern.
+	 *
+	 * <p>
+	 * The pattern must conform to that used by the {@link SimpleDateFormat simple date format} class.
 	 *
 	 * @param date The date to format.
 	 * @param pattern The pattern to use for formatting the date.
@@ -150,9 +155,11 @@ public final class DateUtils {
 	}
 
 	/**
-	 * A factory for {@link SimpleDateFormat}s. The instances are stored in a thread-local way because SimpleDateFormat
-	 * is not thread-safe as noted in {@link SimpleDateFormat its javadoc}.
+	 * A factory for {@link SimpleDateFormat}s.
 	 *
+	 * <p>
+	 * The instances are stored in a thread-local way because SimpleDateFormat is not thread-safe as noted in
+	 * {@link SimpleDateFormat its javadoc}.
 	 */
 	final static class DateFormatHolder {
 		private static final ThreadLocal<SoftReference<Map<String,SimpleDateFormat>>> THREADLOCAL_FORMATS =
@@ -166,10 +173,13 @@ public final class DateUtils {
 		/**
 		 * Creates a {@link SimpleDateFormat} for the requested format string.
 		 *
-		 * @param pattern a non-<code>null</code> format String according to {@link SimpleDateFormat}. The format is not
-		 * checked against <code>null</code> since all paths go through {@link DateUtils}.
-		 * @return the requested format. This simple date-format should not be used to
-		 * {@link SimpleDateFormat#applyPattern(String) apply} to a different pattern.
+		 * @param pattern
+		 * 	A non-<code>null</code> format String according to {@link SimpleDateFormat}.
+		 * 	The format is not checked against <code>null</code> since all paths go through {@link DateUtils}.
+		 * @return
+		 * 	The requested format.
+		 * 	This simple date-format should not be used to {@link SimpleDateFormat#applyPattern(String) apply} to a
+		 * 	different pattern.
 		 */
 		public static SimpleDateFormat formatFor(final String pattern) {
 			final SoftReference<Map<String,SimpleDateFormat>> ref = THREADLOCAL_FORMATS.get();
@@ -194,6 +204,7 @@ public final class DateUtils {
 
 	/**
 	 * Pads out an ISO8601 string so that it can be parsed using {@link DatatypeConverter#parseDateTime(String)}.
+	 *
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js> --&gt; <js>"2001-07-04T15:30:45-05:00"</js>
 	 * 	<li><js>"2001-07-04T15:30:45Z"</js> --&gt; <js>"2001-07-04T15:30:45Z"</js>

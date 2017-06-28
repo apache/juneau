@@ -22,6 +22,7 @@ import org.apache.juneau.rest.*;
 /**
  * Identical to {@link FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form
  * posts.
+ *
  * <p>
  * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
  * URL-encoded form posts.
@@ -36,9 +37,9 @@ import org.apache.juneau.rest.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * This is functionally equivalent to the following code...
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
@@ -62,6 +63,7 @@ public @interface Query {
 
 	/**
 	 * A synonym for {@link #name()}.
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */
@@ -69,11 +71,13 @@ public @interface Query {
 
 	/**
 	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
+	 *
 	 * <p>
 	 * Normally, we expect single parameters to be specified in UON notation for representing collections of values
 	 * (e.g. <js>"&amp;key=(1,2,3)"</js>.
 	 * This annotation allows the use of multi-part parameters to represent collections
 	 * (e.g. <js>"&amp;key=1&amp;key=2&amp;key=3"</js>.
+	 *
 	 * <p>
 	 * This setting should only be applied to Java parameters of type array or Collection.
 	 */
@@ -81,6 +85,7 @@ public @interface Query {
 
 	/**
 	 * The expected format of the request parameter.
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -95,6 +100,7 @@ public @interface Query {
 	 * 		<js>"INHERIT"</js> (default) - Inherit from the {@link RestContext#REST_paramFormat} property on the
 	 * 		servlet method or class.
 	 * </ul>
+	 *
 	 * <p>
 	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
 	 * <js>"foo"</js> when using UON mode.

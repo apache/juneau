@@ -53,13 +53,14 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Simple JSON mode.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
@@ -88,13 +89,14 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 * The JSON specification allows for either format.

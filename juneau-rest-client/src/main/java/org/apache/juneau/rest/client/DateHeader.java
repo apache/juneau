@@ -19,6 +19,7 @@ import org.apache.http.message.*;
 
 /**
  * Convenience class for setting date headers in RFC2616 format.
+ *
  * <p>
  * Equivalent to the following code:
  * <p class='bcode'>

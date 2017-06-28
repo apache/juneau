@@ -40,6 +40,7 @@ public class SerializerGroupBuilder {
 
 	/**
 	 * Create an empty serializer group using the specified property store for settings.
+	 *
 	 * <p>
 	 * Note:  Modifying the specified property store externally will also modify it here.
 	 *
@@ -96,6 +97,7 @@ public class SerializerGroupBuilder {
 
 	/**
 	 * Creates a new {@link SerializerGroup} object using a snapshot of the settings defined in this builder.
+	 *
 	 * <p>
 	 * This method can be called multiple times to produce multiple serializer groups.
 	 *
@@ -1114,9 +1116,11 @@ public class SerializerGroupBuilder {
 
 	/**
 	 * Specifies the classloader to use when resolving classes from strings for all serializers in this group.
+	 *
 	 * <p>
 	 * Can be used for resolving class names when the classes being created are in a different classloader from the
 	 * Juneau code.
+	 *
 	 * <p>
 	 * If <jk>null</jk>, the system classloader will be used to resolve classes.
 	 *

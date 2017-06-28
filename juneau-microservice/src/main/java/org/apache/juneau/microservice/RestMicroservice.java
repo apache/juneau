@@ -43,17 +43,17 @@ import org.eclipse.jetty.util.ssl.*;
  * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.
  *
  * <h6 class='topic'>Jetty Server Details</h6>
- * <p>
+ * 
  * The Jetty server is created by the {@link #createServer()} method and started with the {@link #startServer()} method.
  * These methods can be overridden to provided customized behavior.
  *
  * <h6 class='topic'>Defining REST Resources</h6>
- * <p>
+ * 
  * Top-level REST resources are defined by the {@link #getResourceMap()} method.
  * This method can be overridden to provide a customized list of REST resources.
  *
  * <h6 class='topic'>Logging</h6>
- * <p>
+ * 
  * Logging is initialized by the {@link #initLogging()} method.
  * This method can be overridden to provide customized logging behavior.
  *
@@ -85,6 +85,8 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Main method.
+	 * 
+	 * <p>
 	 * Subclasses must also implement this method!
 	 *
 	 * @param args Command line arguments.
@@ -185,8 +187,10 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Initialize the logging for this microservice.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide customized logging.
+	 * 
 	 * <p>
 	 * The default implementation uses the <cs>Logging</cs> section in the config file to set up logging:
 	 * <p class='bcode'>
@@ -286,11 +290,12 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Method used to create (but not start) an instance of a Jetty server.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to customize the Jetty server before it is started.
+	 * 
 	 * <p>
 	 * The default implementation is configured by the following values in the config file:
-	 * <p>
 	 * <p class='bcode'>
 	 * 	<cc>#================================================================================
 	 * 	# REST settings
@@ -419,6 +424,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Method used to start the Jetty server created by {@link #createServer()}.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to customize server startup.
 	 *
@@ -435,12 +441,12 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Returns the resource map to use for this microservice.
-	 * <p>
+	 * 
 	 * <p>
 	 * Subclasses can override this method to programmatically specify their resources.
+	 * 
 	 * <p>
 	 * The default implementation is configured by the following values in the config file:
-	 * <p>
 	 * <p class='bcode'>
 	 *
 	 * 	<cc>#================================================================================
@@ -465,10 +471,10 @@ public class RestMicroservice extends Microservice {
 	 * 	# the manifest file.</cc>
 	 * 	<ck>resources</ck> =
 	 * </p>
+	 * 
 	 * <p>
-	 * In most cases, the rest resources will be specified in the manifest file since
-	 * 	it's not likely to be a configurable property:
-	 * <p>
+	 * In most cases, the rest resources will be specified in the manifest file since it's not likely to be a 
+	 * configurable property:
 	 * <p class='bcode'>
 	 * 	<mk>Rest-Resources:</mk> org.apache.juneau.microservice.sample.RootResources
 	 * </p>
@@ -510,9 +516,9 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called when {@link ConfigFile#save()} is called on the config file.
+	 * 
 	 * <p>
 	 * The default behavior is configured by the following value in the config file:
-	 * <p>
 	 * <p class='bcode'>
 	 * 	<cs>[REST]</cs>
 	 *
@@ -556,6 +562,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called before {@link #createServer()} is called.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -563,6 +570,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called before {@link #startServer()} is called.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -570,6 +578,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called after the Jetty server is started.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -577,6 +586,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called before the Jetty server is stopped.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -584,6 +594,7 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Called after the Jetty server is stopped.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */

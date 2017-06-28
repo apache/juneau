@@ -69,6 +69,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 
 	/**
 	 * Returns the RDF namespace associated with this class.
+	 * 
 	 * <p>
 	 * Namespace is determined in the following order:
 	 * <ol>

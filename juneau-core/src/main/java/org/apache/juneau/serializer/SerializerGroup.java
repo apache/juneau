@@ -22,7 +22,7 @@ import org.apache.juneau.http.*;
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
@@ -36,11 +36,13 @@ import org.apache.juneau.http.*;
  * </ul>
  *
  * <h6 class='topic'>Match ordering</h6>
- * <p>
+ *
  * Serializers are matched against <code>Accept</code> strings in the order they exist in this group.
+ *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous serializers to be overridden through subsequent calls.
+ *
  * <p>
  * For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
  * will result in the order <code>S3, S4, S1, S2</code>.
@@ -77,11 +79,13 @@ public final class SerializerGroup {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The modifiable properties that were used to initialize the serializers.
-	 * A snapshot of these will be made so that we can clone and modify this group.
-	 * @param serializers The serializers defined in this group.
-	 * The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
-	 * to match against media types.
+	 * @param propertyStore
+	 * 	The modifiable properties that were used to initialize the serializers.
+	 * 	A snapshot of these will be made so that we can clone and modify this group.
+	 * @param serializers
+	 * 	The serializers defined in this group.
+	 * 	The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
+	 * 	to match against media types.
 	 */
 	public SerializerGroup(PropertyStore propertyStore, Serializer[] serializers) {
 		this.propertyStore = PropertyStore.create(propertyStore);
@@ -104,6 +108,7 @@ public final class SerializerGroup {
 
 	/**
 	 * Searches the group for a serializer that can handle the specified <code>Accept</code> value.
+	 *
 	 * <p>
 	 * The <code>accept</code> value complies with the syntax described in RFC2616, Section 14.1, as described below:
 	 * <p class='bcode'>
@@ -117,6 +122,7 @@ public final class SerializerGroup {
 	 * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
 	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
 	 * </p>
+	 *
 	 * <p>
 	 * The general idea behind having the serializer resolution be a two-step process is so that the matched media type
 	 * can be passed in to the {@link WriterSerializer#doSerialize(SerializerSession, Object)} method.
@@ -183,6 +189,7 @@ public final class SerializerGroup {
 
 	/**
 	 * Returns the media types that all serializers in this group can handle.
+	 *
 	 * <p>
 	 * Entries are ordered in the same order as the serializers in the group.
 	 *
@@ -194,6 +201,8 @@ public final class SerializerGroup {
 
 	/**
 	 * Returns a copy of the property store that was used to create the serializers in this group.
+	 *
+	 * <p>
 	 * This method returns a new factory each time so is somewhat expensive.
 	 *
 	 * @return A new copy of the property store passed in to the constructor.

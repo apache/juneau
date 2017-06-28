@@ -31,6 +31,7 @@ import org.apache.juneau.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
@@ -41,6 +42,7 @@ import org.apache.juneau.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * ...or this...
  * <p class='bcode'>
@@ -50,6 +52,7 @@ import org.apache.juneau.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * The parameter type can be one of the following:
  * <ul>

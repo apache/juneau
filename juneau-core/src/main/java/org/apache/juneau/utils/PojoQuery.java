@@ -25,8 +25,10 @@ import org.apache.juneau.internal.*;
 
 /**
  * Designed to provide search/view/sort/paging filtering on tabular in-memory POJO models.
+ *
  * <p>
  * It can also perform just view filtering on beans/maps.
+ *
  * <p>
  * Examples of tabular POJO models:
  * <ul>
@@ -35,6 +37,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>Map[]</tt>
  * 	<li><tt>Bean[]</tt>
  * </ul>
+ *
  * <p>
  * Tabular POJO models can be thought of as tables of data.  For example, a list of the following beans...
  * <p class='bcode'>
@@ -46,11 +49,12 @@ import org.apache.juneau.internal.*;
  * <p>
  * 	... can be thought of a table containing the following columns...
  * <p>
- * 	<table class='styled code'>
- * 		<tr><th>myInt</th><th>myString</th><th>myDate</th></tr>
- * 		<tr><td>123</td><td>'foobar'</td><td>yyyy/MM/dd HH:mm:ss</td></tr>
- * 		<tr><td colspan=3>...</td></tr>
- * 	</table>
+ * <table class='styled code'>
+ * 	<tr><th>myInt</th><th>myString</th><th>myDate</th></tr>
+ * 	<tr><td>123</td><td>'foobar'</td><td>yyyy/MM/dd HH:mm:ss</td></tr>
+ * 	<tr><td colspan=3>...</td></tr>
+ * </table>
+ *
  * <p>
  * From this table, you can perform the following functions:
  * <ul class='spaced-list'>
@@ -65,7 +69,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='topic'>Search</h5>
- * <p>
+ *
  * The search capabilities allow you to filter based on query patterns against strings, dates, and numbers.
  * Queries take the form of a Map with column names as keys, and search patterns as values.
  * <br>Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
@@ -81,7 +85,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='topic'>String Patterns</h5>
- * <p>
+ *
  * Any objects can be queried against using string patterns.
  * If the objects being searched are not strings, then the patterns are matched against whatever is return by the
  * {@code Object#toString()} method.
@@ -107,7 +111,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='topic'>Numeric Patterns</h5>
- * <p>
+ *
  * Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.
  *
  * <h6 class='topic'>Example numeric query patterns:</h6>
@@ -131,11 +135,12 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='topic'>Date Patterns</h5>
- * <p>
+ *
  * Any object of type {@link Date} or {@link Calendar} can be searched using date patterns.
+ *
  * <p>
- * The default valid input timestamp formats (which can be overridden via the
- * {@link #setValidTimestampFormats(String...)} method are...
+ * The default valid input timestamp formats (which can be overridden via the {@link #setValidTimestampFormats(String...)}
+ * method are...
  *
  * <ul>
  * 	<li><tt>yyyy.MM.dd.HH.mm.ss</tt>
@@ -162,7 +167,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='topic'>View</h5>
- * <p>
+ *
  * The view capability allows you to return only the specified subset of columns in the specified order.
  * <br>The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
  *
@@ -173,7 +178,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='topic'>Sort</h5>
- * <p>
+ *
  * The sort capability allows you to sort values by the specified rows.
  * <br>The sort parameter is a list of strings with an optional <js>'+'</js> or <js>'-'</js> suffix representing
  * ascending and descending order accordingly.
@@ -187,7 +192,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='topic'>Paging</h5>
- * <p>
+ *
  * Use the <tt>position</tt> and <tt>limit</tt> parameters to specify a subset of rows to return.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -672,6 +677,8 @@ public final class PojoQuery {
 
 		/**
 		 * Returns <jk>true</jk> if the specified date matches the pattern passed in through the constructor.
+		 *
+		 * <p>
 		 * <br>The Object can be of type {@link Date} or {@link Calendar}.
 		 * <br>Always returns <jk>false</jk> on <jk>null</jk> input.
 		 */
@@ -1124,6 +1131,8 @@ public final class PojoQuery {
 
 	/**
 	 * Replaces tokens in a string with a different token.
+	 *
+	 * <p>
 	 * replace("A and B and C", "and", "or") -> "A or B or C"
 	 * replace("andandand", "and", "or") -> "ororor"
 	 * replace(null, "and", "or") -> null

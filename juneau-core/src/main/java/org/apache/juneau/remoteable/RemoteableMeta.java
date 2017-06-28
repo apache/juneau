@@ -21,9 +21,10 @@ import java.util.*;
 
 /**
  * Contains the meta-data about a remoteable interface.
+ *
  * <p>
- * Captures the information in {@link Remoteable @Remoteable} and {@link RemoteMethod @RemoteMethod}
- * annotations for caching and reuse.
+ * Captures the information in {@link Remoteable @Remoteable} and {@link RemoteMethod @RemoteMethod} annotations for
+ * caching and reuse.
  *
  * <h6 class='topic'>Additional Information</h6>
  * <ul class='doctree'>

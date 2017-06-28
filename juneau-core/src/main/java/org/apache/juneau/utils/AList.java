@@ -16,6 +16,7 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedList} with a convenience {@link #append(Object)} method.
+ *
  * <p>
  * Primarily used for testing purposes for quickly creating populated lists.
  * <p class='bcode'>

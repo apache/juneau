@@ -27,6 +27,7 @@ import org.apache.juneau.http.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -48,37 +49,41 @@ public class ParserSession extends BeanSession {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for this object.
-	 * @param input The input.
-	 * <br>For character-based parsers, this can be any of the following types:
-	 * <ul>
-	 * 	<li><jk>null</jk>
-	 * 	<li>{@link Reader}
-	 * 	<li>{@link CharSequence}
-	 * 	<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 		{@link ParserContext#PARSER_inputStreamCharset}).
-	 * 	<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 		{@link ParserContext#PARSER_inputStreamCharset}).
-	 * 	<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 		{@link ParserContext#PARSER_fileCharset}).
-	 * </ul>
-	 * <br>For byte-based parsers, this can be any of the following types:
-	 * <ul>
-	 * 	<li><jk>null</jk>
-	 * 	<li>{@link InputStream}
-	 * 	<li><code><jk>byte</jk>[]</code>
-	 * 	<li>{@link File}
-	 * </ul>
-	 *
-	 * @param op The override properties.
-	 * These override any context properties defined in the context.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
+	 * @param input
+	 * 	The input.
+	 * 	<br>For character-based parsers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
+	 * 			{@link ParserContext#PARSER_inputStreamCharset}).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
+	 * 			{@link ParserContext#PARSER_inputStreamCharset}).
+	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
+	 * 			{@link ParserContext#PARSER_fileCharset}).
+	 * 	</ul>
+	 * 	<br>For byte-based parsers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @param op
+	 * 	The override properties.
+	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param locale
+	 * 	The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone
+	 * 	The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
 	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale,
@@ -106,6 +111,8 @@ public class ParserSession extends BeanSession {
 
 	/**
 	 * Wraps the specified input object inside an input stream.
+	 *
+	 * <p>
 	 * Subclasses can override this method to implement their own input streams.
 	 *
 	 * @return The input object wrapped in an input stream, or <jk>null</jk> if the object is null.
@@ -150,6 +157,8 @@ public class ParserSession extends BeanSession {
 
 	/**
 	 * Wraps the specified input object inside a reader.
+	 *
+	 * <p>
 	 * Subclasses can override this method to implement their own readers.
 	 *
 	 * @return The input object wrapped in a Reader, or <jk>null</jk> if the object is null.
@@ -248,6 +257,7 @@ public class ParserSession extends BeanSession {
 
 	/**
 	 * Returns the Java method that invoked this parser.
+	 *
 	 * <p>
 	 * When using the REST API, this is the Java method invoked by the REST call.
 	 * Can be used to access annotations defined on the method or class.
@@ -260,6 +270,8 @@ public class ParserSession extends BeanSession {
 
 	/**
 	 * Returns the outer object used for instantiating top-level non-static member classes.
+	 *
+	 * <p>
 	 * When using the REST API, this is the servlet object.
 	 *
 	 * @return The outer object.
@@ -336,8 +348,8 @@ public class ParserSession extends BeanSession {
 	 * @param m The map to convert to a bean.
 	 * @param pMeta The current bean property being parsed.
 	 * @param eType The current expected type being parsed.
-	 * @return The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a
-	 * bean.
+	 * @return
+	 * 	The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a bean.
 	 */
 	public final Object cast(ObjectMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 
@@ -407,8 +419,9 @@ public class ParserSession extends BeanSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param line The line number where the property was found.  <code>-1</code> if line numbers are not available.
 	 * @param col The column number where the property was found.  <code>-1</code> if column numbers are not available.
-	 * @throws ParseException Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting
-	 * on this parser is <jk>false</jk>
+	 * @throws ParseException
+	 * 	Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting on this parser is
+	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
 	public <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
@@ -425,6 +438,7 @@ public class ParserSession extends BeanSession {
 
 	/**
 	 * Returns the input to this parser as a plain string.
+	 *
 	 * <p>
 	 * This method only returns a value if {@link BeanContext#BEAN_debug} is enabled.
 	 *

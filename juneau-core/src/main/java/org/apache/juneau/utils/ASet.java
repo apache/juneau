@@ -16,6 +16,7 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
+ *
  * <p>
  * Primarily used for testing purposes for quickly creating populated sets.
  * <p class='bcode'>

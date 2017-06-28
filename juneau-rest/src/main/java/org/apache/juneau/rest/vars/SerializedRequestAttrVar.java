@@ -22,11 +22,14 @@ import org.apache.juneau.svl.*;
 
 /**
  * Serialized request attribute variable resolver.
+ *
  * <p>
  * The format for this var is <js>"$SA{contentType,key}"</js> or <js>"$SA{contentType,key,defaultValue}"</js>.
+ *
  * <p>
  * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * 	session object on the resolver session.
+ * session object on the resolver session.
+ *
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.

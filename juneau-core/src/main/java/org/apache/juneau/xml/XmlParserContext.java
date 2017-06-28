@@ -20,9 +20,11 @@ import org.apache.juneau.parser.*;
 
 /**
  * Configurable properties on the {@link XmlParser} class.
+ *
  * <p>
  * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
  * passed into the constructor.
+ *
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  *
@@ -43,13 +45,14 @@ public class XmlParserContext extends ParserContext {
 
 	/**
 	 * <b>Configuration property:</b>  Enable validation.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParser.validating"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
@@ -58,13 +61,14 @@ public class XmlParserContext extends ParserContext {
 
 	/**
 	 * <b>Configuration property:</b>  XML reporter.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParser.reporter"</js>
 	 * 	<li><b>Data type:</b> {@link XMLReporter}
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
@@ -77,13 +81,14 @@ public class XmlParserContext extends ParserContext {
 
 	/**
 	 * <b>Configuration property:</b>  XML resolver.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParser.resolver"</js>
 	 * 	<li><b>Data type:</b> {@link XMLResolver}
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 */
@@ -91,13 +96,14 @@ public class XmlParserContext extends ParserContext {
 
 	/**
 	 * <b>Configuration property:</b>  XML event allocator.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParser.eventAllocator"</js>
 	 * 	<li><b>Data type:</b> {@link XMLEventAllocator}
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 */
@@ -105,16 +111,18 @@ public class XmlParserContext extends ParserContext {
 
 	/**
 	 * <b>Configuration property:</b>  Preserve root element during generalized parsing.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParser.preserveRootElement"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
 	 * is the root element name.
+	 *
 	 * <p>
 	 * Example:
 	 * <table class='styled'>
@@ -141,6 +149,7 @@ public class XmlParserContext extends ParserContext {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *

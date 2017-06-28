@@ -74,8 +74,8 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 	/**
 	 * Returns properties defined on the specified method through the {@link RestMethod#properties()}
-	 * 	annotation specified on the method and the {@link JuneauProvider#properties()} annotation
-	 * 	specified on the provider class.
+	 * annotation specified on the method and the {@link JuneauProvider#properties()} annotation specified on the 
+	 * provider class.
 	 *
 	 * @param a All annotations defined on the method.
 	 * @return A map of all properties define on the method.

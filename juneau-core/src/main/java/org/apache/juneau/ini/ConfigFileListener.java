@@ -16,6 +16,7 @@ import java.util.*;
 
 /**
  * Listener that can be used to listen for change events in config files.
+ *
  * <p>
  * Use the {@link ConfigFile#addListener(ConfigFileListener)} method to register listeners.
  */

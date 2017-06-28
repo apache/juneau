@@ -22,6 +22,7 @@ import org.apache.juneau.rest.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify whether or not
  * the request has the specified multipart form POST parameter.
+ *
  * <p>
  * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
  *
@@ -32,9 +33,9 @@ import org.apache.juneau.rest.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * This is functionally equivalent to the following code...
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPost(RestRequest req) {
@@ -42,6 +43,7 @@ import org.apache.juneau.rest.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * The following table shows the behavioral differences between <code>@HasFormData</code> and <code>@FormData</code>...
  * <table class='styled'>
@@ -73,10 +75,11 @@ import org.apache.juneau.rest.*;
  * </table>
  *
  * <h6 class='topic'>Important note concerning FORM posts</h6>
- * <p>
+ *
  * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody()} method
  * for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet API to
  * parse the body content as key-value pairs, resulting in empty content.
+ *
  * <p>
  * The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
  * without triggering the servlet to drain the body content.
@@ -94,6 +97,7 @@ public @interface HasFormData {
 
 	/**
 	 * A synonym for {@link #name()}.
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

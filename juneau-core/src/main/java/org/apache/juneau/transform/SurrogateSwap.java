@@ -22,9 +22,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Specialized {@link PojoSwap} for surrogate classes.
+ *
  * <p>
  * Surrogate classes are used in place of other classes during serialization.
  * For example, you may want to use a surrogate class to change the names or order of bean properties on a bean.
+ *
  * <p>
  * The following is an example of a surrogate class change changes a property name:
  * <p class='bcode'>
@@ -36,6 +38,7 @@ import org.apache.juneau.serializer.*;
  * 		}
  * 	}
  * </p>
+ *
  * <p>
  * Optionally, a public static method can be used to un-transform a class during parsing:
  * <p class='bcode'>
@@ -46,6 +49,7 @@ import org.apache.juneau.serializer.*;
  * 		}
  * 	}
  * </p>
+ *
  * <p>
  * Surrogate classes must conform to the following:
  * <ul class='spaced-list'>
@@ -63,6 +67,7 @@ import org.apache.juneau.serializer.*;
  * 		transformed class can be instantiated by the parser before being converted into the normal class by the
  * 		un-transform method).
  * </ul>
+ *
  * <p>
  * Surrogate classes are associated with serializers and parsers using the {@link CoreObjectBuilder#pojoSwaps(Class...)}
  * method.
@@ -112,6 +117,7 @@ import org.apache.juneau.serializer.*;
  * 		}
  * 	}
  * </p>
+ *
  * <p>
  * It should be noted that a surrogate class is functionally equivalent to the following {@link PojoSwap}
  * implementation:
@@ -149,6 +155,8 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 
 	/**
 	 * Given the specified surrogate class, return the list of POJO swaps.
+	 *
+	 * <p>
 	 * A transform is returned for each public 1-arg constructor found.
 	 * Returns an empty list if no public 1-arg constructors are found.
 	 *

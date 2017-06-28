@@ -73,6 +73,8 @@ public final class MsgPackInputStream extends InputStream {
 
 	/**
 	 * Reads the data type flag from the stream.
+	 *
+	 * <p>
 	 * This is the byte that indicates what kind of data follows.
 	 */
 	DataType readDataType() throws IOException {
@@ -376,6 +378,8 @@ public final class MsgPackInputStream extends InputStream {
 
 	/**
 	 * Returns the length value for the field.
+	 *
+	 * <p>
 	 * For ints/floats/bins/strings, this is the number of bytes that the field takes up (minus the data-type flag).
 	 * For arrays, it's the number of array entries.
 	 * For maps, it's the number of map entries.

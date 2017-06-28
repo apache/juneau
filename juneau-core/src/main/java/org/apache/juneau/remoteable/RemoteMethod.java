@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 
 /**
  * Annotation applied to Java methods on interface proxy classes.
+ *
  * <p>
  * The return type on the Java method can be any of the following:
  * <ul>
@@ -49,6 +50,7 @@ public @interface RemoteMethod {
 
 	/**
 	 * The path to the REST service for this Java method relative to the parent proxy interface URL.
+	 *
 	 * <p>
 	 * The default value is the Java method name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface/myMethod"</js>)
 	 * if {@link Remoteable#methodPaths() @Remoteable.methodPaths()} is <js>"NAME"</js>, or the Java method signature
@@ -59,12 +61,14 @@ public @interface RemoteMethod {
 
 	/**
 	 * Defines the HTTP method to use for REST calls.
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul>
 	 * 	<li><js>"POST"</js> (default) - Parameters are serialized using the serializer registered with the RestClient.
 	 * 	<li><js>"GET"</js> - Parameters are serialized using the UrlEncodingSerializer registered with the RestClient.
 	 * </ul>
+	 *
 	 * <p>
 	 * The default value is <js>"POST"</js>.
 	 */
@@ -72,6 +76,7 @@ public @interface RemoteMethod {
 
 	/**
 	 * The value the remoteable method returns.
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul>

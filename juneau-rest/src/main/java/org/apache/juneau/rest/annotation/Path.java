@@ -29,12 +29,12 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * The <ja>@Path</ja> annotation is optional if the parameters are specified immediately following the
  * <code>RestRequest</code> and <code>RestResponse</code> parameters, and are specified in the same order as the
  * variables in the URL path pattern.
  * The following example is equivalent to the previous example.
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
@@ -42,12 +42,12 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * If the order of parameters is not the default order shown above, the attribute names must be specified (since
  * parameter names are lost during compilation).
  * The following example is equivalent to the previous example, except the parameter order has been switched, requiring
  * the use of the <ja>@Path</ja> annotations.
- * <p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
@@ -55,8 +55,9 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- * You can also use <code>{#}</code> notation to specify path parameters without specifying names.
+ *
  * <p>
+ * You can also use <code>{#}</code> notation to specify path parameters without specifying names.
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
@@ -73,6 +74,7 @@ public @interface Path {
 
 	/**
 	 * URL path variable name.
+	 *
 	 * <p>
 	 * Optional if the attributes are specified in the same order as in the URL path pattern.
 	 */
@@ -80,6 +82,7 @@ public @interface Path {
 
 	/**
 	 * A synonym for {@link #name()}.
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */

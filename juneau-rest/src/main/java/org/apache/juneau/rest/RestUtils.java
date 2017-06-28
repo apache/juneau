@@ -90,6 +90,7 @@ public final class RestUtils {
 
 	/**
 	 * Efficiently trims the path info part from a request URI.
+	 *
 	 * <p>
 	 * The result is the URI of the servlet itself.
 	 *

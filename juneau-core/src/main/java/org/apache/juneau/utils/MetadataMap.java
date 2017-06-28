@@ -20,8 +20,10 @@ import org.apache.juneau.*;
 
 /**
  * Utility class for quick lookup of class metadata instances.
+ *
  * <p>
  * Class instances are created once and then cached.
+ *
  * <p>
  * Classes must have a constructor that takes in a single argument.
  */

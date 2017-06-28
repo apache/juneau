@@ -19,6 +19,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Interface used to convert POJOs to simple strings in HTTP headers, query parameters, form-data parameters, and URI
  * path variables.
+ *
  * <p>
  * By default, the {@link UrlEncodingSerializer} class implements this interface so that it can be used to serialize
  * these HTTP parts.
@@ -35,6 +36,7 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>{@link RequestBean#serializer()}
  * 	<li><code>RestClientBuilder.partSerializer(Class)</code>
  * </ul>
+ *
  * <p>
  * Implementations must include a no-arg constructor.
  */
@@ -43,6 +45,7 @@ public interface PartSerializer {
 	/**
 	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
 	 * form-data parameter, or URI path variable.
+	 *
 	 * <p>
 	 * Returned values should NOT be URL-encoded.  This will happen automatically.
 	 *

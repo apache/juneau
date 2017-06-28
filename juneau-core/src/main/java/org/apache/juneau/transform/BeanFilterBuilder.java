@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 
 /**
  * Builder class for {@link BeanFilter} objects.
+ *
  * <p>
  * Bean filter builders must have a public no-arg constructor.
  * Builder settings should be set in the constructor using the provided setters on this class.
@@ -78,6 +79,8 @@ public abstract class BeanFilterBuilder {
 
 	/**
 	 * Specifies the set and order of names of properties associated with the bean class.
+	 *
+	 * <p>
 	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
 	 * related methods.
 	 * Entries in the list can also contain comma-delimited lists that will be split.
@@ -103,9 +106,11 @@ public abstract class BeanFilterBuilder {
 
 	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.
+	 *
 	 * <p>
 	 * When specified, only the list of properties defined on the interface class will be used during serialization.
 	 * Additional properties on subclasses will be ignored.
+	 *
 	 * <p class='bcode'>
 	 * 	<jc>// Parent class</jc>
 	 * 	<jk>public abstract class</jk> A {
@@ -130,6 +135,7 @@ public abstract class BeanFilterBuilder {
 	 * 	String r = s.serialize(a1);
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
 	 * </p>
+	 *
 	 * <p>
 	 * Note that this filter can be used on the parent class so that it filters to all child classes, or can be set
 	 * individually on the child classes.
@@ -144,12 +150,15 @@ public abstract class BeanFilterBuilder {
 
 	/**
 	 * Identifies a stop class for this class and all subclasses.
+	 *
 	 * <p>
 	 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
 	 * Any properties in the stop class or in its base classes will be ignored during analysis.
+	 *
 	 * <p>
 	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
 	 * but not <code>p1</code> or <code>p2</code>.
+	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> C1 {
 	 * 		<jk>public int</jk> getP1();

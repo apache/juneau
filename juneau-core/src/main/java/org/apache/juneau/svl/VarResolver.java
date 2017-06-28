@@ -21,14 +21,17 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.
+ *
  * <p>
  * Variables are of the form <code>$X{key}</code>, where <code>X</code> can consist of zero or more ASCII characters.
  * <br>The variable key can contain anything, even nested variables that get recursively resolved.
+ *
  * <p>
  * Variables are defined through the {@link VarResolverBuilder#vars(Class[])} method.
+ *
  * <p>
  * The {@link Var} interface defines how variables are converted to values.
- * <p>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>public class</jk> SystemPropertiesVar <jk>extends</jk> SimpleVar {
@@ -52,21 +55,24 @@ import org.apache.juneau.svl.vars.*;
  * </p>
  *
  * <h6 class='topic'>Context objects</h6>
- * <p>
+ *
  * Var resolvers can have zero or more context objects associated with them.
+ *
  * <p>
  * Context objects are arbitrary objects associated with this var resolver, such as a {@link ConfigFile} object.
  * They can be any class type.
+ *
  * <p>
  * Context objects can be retrieved by {@link Var} classes through the
  * {@link VarResolverSession#getSessionObject(Class, String)} method.
  *
  * <h6 class='topic'>Session objects</h6>
- * <p>
+ *
  * Session objects are considered more ephemeral than context objects.
  * While a context object is unlikely to ever change, a session object may change on every use of the var resolver.
  * For example, the server API defines various <code>Var</code> objects that use the <code>RestRequest</code>
  * object as a session object for the duration of a single HTTP request.
+ *
  * <p>
  * Session objects are used by calling the {@link #createSession()} or {@link #createSession(Map)} methods to create
  * an instance of a {@link VarResolverSession} object that contains {@link VarResolverSession#resolve(String)}
@@ -74,12 +80,13 @@ import org.apache.juneau.svl.vars.*;
  * {@link VarResolver#resolve(String)} and {@link VarResolver#resolveTo(String, Writer)} except that the
  * <code>Var</code> objects have access to the session objects through the
  * {@link VarResolverSession#getSessionObject(Class, String)} method.
+ *
  * <p>
  * Session objects are specified through either the {@link #createSession(Map)} method or the
  * {@link VarResolverSession#sessionObject(String, Object)} methods.
  *
  * <h6 class='topic'>Cloning</h6>
- * <p>
+ *
  * Var resolvers can be cloned by using the {@link #builder()} method.
  * Cloning a resolver will copy it's {@link Var} class names and context objects.
  *
@@ -96,7 +103,7 @@ public class VarResolver {
 
 	/**
 	 * Default string variable resolver with support for system properties and environment variables:
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - System properties.
 	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - Environment variables.
@@ -143,9 +150,10 @@ public class VarResolver {
 
 	/**
 	 * Creates a new resolver session with no session objects.
+	 *
 	 * <p>
-	 * Session objects can be associated with the specified session using the
-	 * {@link VarResolverSession#sessionObject(String, Object)} method.
+	 * Session objects can be associated with the specified session using the {@link VarResolverSession#sessionObject(String, Object)}
+	 * method.
 	 *
 	 * @return A new resolver session.
 	 */
@@ -165,6 +173,7 @@ public class VarResolver {
 
 	/**
 	 * Resolve variables in the specified string.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>createSession(<jk>null</jk>).resolve(s);</code>.
 	 * This method can only be used if the string doesn't contain variables that rely on the existence of session
@@ -179,6 +188,7 @@ public class VarResolver {
 
 	/**
 	 * Resolve variables in the specified string and sends the results to the specified writer.
+	 *
 	 * <p>
 	 * This is a shortcut for calling <code>createSession(<jk>null</jk>).resolveTo(s, w);</code>.
 	 * This method can only be used if the string doesn't contain variables that rely on the existence of session

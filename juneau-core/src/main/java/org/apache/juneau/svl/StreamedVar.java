@@ -14,11 +14,13 @@ package org.apache.juneau.svl;
 
 /**
  * Abstract superclass of all Simple Var Language variables that write their values directly to a writer.
+ *
  * <p>
  * Note the difference between this class and {@link SimpleVar} that returns simple string values.
  * Unlike the {@link SimpleVar} class, the output from this class cannot contain nested variables.
  * However, this class can be more efficient for variables that produce large amounts of output so that the creation
  * of large in-memory strings is avoided.
+ *
  * <p>
  * Subclasses must implement the {@link #resolveTo(VarResolverSession, java.io.Writer, String)} method.
  *

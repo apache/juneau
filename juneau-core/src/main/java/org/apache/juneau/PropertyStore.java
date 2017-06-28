@@ -44,7 +44,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  * <h6 class='topic'>PropertyStore objects</h6>
- * <p>
+ *
  * Property stores can be thought of as consisting of the following:
  * <ul>
  * 	<li>A <code>Map&lt;String,Object&gt;</code> of context properties.
@@ -66,7 +66,7 @@ import org.apache.juneau.parser.*;
  * etc... and can thus be used to retrieve context objects for those serializers.
  *
  * <h6 class='topic'>Context properties</h6>
- * <p>
+ *
  * Context properties are 'settings' for serializers and parsers.
  * <br>For example, the {@link BeanContext#BEAN_sortProperties} context property defines whether bean properties should be
  * serialized in alphabetical order.
@@ -212,7 +212,7 @@ import org.apache.juneau.parser.*;
  * As a general rule, only {@link Context} objects will use these read methods.
  *
  * <h6 class='topic'>Context objects</h6>
- * <p>
+ *
  * A Context object can be thought of as unmodifiable snapshot of a store.
  * <br>They should be 'fast' by avoiding synchronization by using final fields whenever possible.
  * <br>However, they MUST be thread safe.
@@ -239,7 +239,7 @@ import org.apache.juneau.parser.*;
  * </p>
  *
  * <h6 class='topic'>Session objects</h6>
- * <p>
+ *
  * Session objects are created through {@link Context} objects, typically through a <code>createContext()</code> method.
  * <br>Unlike context objects, they are NOT reusable and NOT thread safe.
  * <br>They are meant to be used one time and then thrown away.

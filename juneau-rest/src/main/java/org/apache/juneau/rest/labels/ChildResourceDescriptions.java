@@ -18,6 +18,7 @@ import org.apache.juneau.rest.*;
 
 /**
  * A POJO structure that describes the list of child resources associated with a resource.
+ *
  * <p>
  * Typically used in top-level GET methods of router resources to render a list of available child resources.
  */
@@ -40,8 +41,9 @@ public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
 	 *
 	 * @param context The servlet context that this bean describes.
 	 * @param req The HTTP servlet request.
-	 * @param sort If <jk>true</jk>, list will be ordered by name alphabetically.
-	 * Default is to maintain the order as specified in the annotation.
+	 * @param sort
+	 * 	If <jk>true</jk>, list will be ordered by name alphabetically.
+	 * 	Default is to maintain the order as specified in the annotation.
 	 */
 	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
 		for (Map.Entry<String,RestContext> e : context.getChildResources().entrySet())

@@ -26,9 +26,11 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Logging utility class.
+ *
  * <p>
  * Subclasses can override these methods to tailor logging of HTTP requests.
  * Subclasses MUST implement a no-arg public constructor.
+ *
  * <p>
  * RestLoggers are associated with servlets/resources in one of the following ways:
  * <ul>
@@ -40,6 +42,7 @@ public abstract class RestLogger {
 
 	/**
 	 * Returns the Java logger used for logging.
+	 *
 	 * <p>
 	 * Subclasses can provide their own logger.
 	 * The default implementation returns the logger created using <code>Logger.getLogger(getClass())</code>.
@@ -50,6 +53,7 @@ public abstract class RestLogger {
 
 	/**
 	 * Log a message to the logger.
+	 *
 	 * <p>
 	 * Subclasses can override this method if they wish to log messages using a library other than Java Logging
 	 * (e.g. Apache Commons Logging).
@@ -63,6 +67,7 @@ public abstract class RestLogger {
 
 	/**
 	 * Log a message.
+	 *
 	 * <p>
 	 * Equivalent to calling <code>log(level, <jk>null</jk>, msg, args);</code>
 	 *
@@ -75,8 +80,8 @@ public abstract class RestLogger {
 	}
 
 	/**
-	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through
-	 * {@link JsonSerializer#DEFAULT_LAX_READABLE}.
+	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link JsonSerializer#DEFAULT_LAX_READABLE}.
+	 *
 	 * <p>
 	 * Serialization of arguments do not occur if message is not logged, so it's safe to use this method from within
 	 * debug log statements.
@@ -98,13 +103,15 @@ public abstract class RestLogger {
 
 	/**
 	 * Callback method for logging errors during HTTP requests.
+	 *
 	 * <p>
 	 * Typically, subclasses will override this method and log errors themselves.
+	 *
 	 * <p>
 	 * The default implementation simply logs errors to the <code>RestServlet</code> logger.
+	 *
 	 * <p>
 	 * Here's a typical implementation showing how stack trace hashing can be used to reduce log file sizes...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<jk>protected void</jk> onError(HttpServletRequest req, HttpServletResponse res, RestException e, <jk>boolean</jk> noTrace) {
 	 * 		String qs = req.getQueryString();
@@ -148,8 +155,10 @@ public abstract class RestLogger {
 
 	/**
 	 * Returns <jk>true</jk> if the specified exception should be logged.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own logic for determining when exceptions are logged.
+	 *
 	 * <p>
 	 * The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string
 	 * or <code>No-Trace: true</code> is specified in the header.
@@ -167,12 +176,13 @@ public abstract class RestLogger {
 
 	/**
 	 * Returns <jk>true</jk> if a stack trace should be logged for this exception.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own logic for determining when stack traces are logged.
+	 *
 	 * <p>
 	 * The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns
 	 * <code>1</code> and the exception is not one of the following:
-	 * </p>
 	 * <ul>
 	 * 	<li>{@link HttpServletResponse#SC_UNAUTHORIZED}
 	 * 	<li>{@link HttpServletResponse#SC_FORBIDDEN}
@@ -206,6 +216,7 @@ public abstract class RestLogger {
 
 	/**
 	 * NO-OP logger.
+	 *
 	 * <p>
 	 * Disables all logging.
 	 *
@@ -224,6 +235,7 @@ public abstract class RestLogger {
 
 	/**
 	 * Default logger.
+	 *
 	 * <p>
 	 * Logs all messages to the logger returned by <code>Logger.<jsm>getLogger</jsm>(getClass().getName())</code>
 	 */

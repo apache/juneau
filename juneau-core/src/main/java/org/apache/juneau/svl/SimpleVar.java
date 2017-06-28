@@ -16,10 +16,12 @@ import java.io.*;
 
 /**
  * Abstract superclass of all Simple Var Language variables that resolve to simple returned string values.
+ * 
  * <p>
  * Note the difference between this class and {@link StreamedVar} that streams values to writers.
  * Unlike the {@link StreamedVar} class, the returned value from this class can contain nested variables that will be
  * recursively resolved by {@link VarResolver}.
+ * 
  * <p>
  * Subclasses must implement the {@link #resolve(VarResolverSession, String)} method.
  *

@@ -22,13 +22,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Max serialization depth.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.maxDepth"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>100</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Abort serialization if specified depth is reached in the POJO tree.
 	 * If this depth is exceeded, an exception is thrown.
@@ -38,13 +39,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Initial depth.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.initialDepth"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>0</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * The initial indentation level at the root.
 	 * Useful when constructing document fragments that need to be indented at a certain level.
@@ -53,19 +55,23 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Automatically detect POJO recursions.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.detectRecursions"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Specifies that recursions should be checked for during serialization.
+	 *
 	 * <p>
 	 * Recursions can occur when serializing models that aren't true trees, but rather contain loops.
+	 *
 	 * <p>
 	 * The behavior when recursions are detected depends on the value for {@link #SERIALIZER_ignoreRecursions}.
+	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
@@ -80,34 +86,37 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Ignore recursion errors.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.ignoreRecursions"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Used in conjunction with {@link #SERIALIZER_detectRecursions}.
 	 * Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
+	 *
 	 * <p>
-	 * If <jk>true</jk>, when we encounter the same object when serializing a tree,
-	 * 	we set the value to <jk>null</jk>.
+	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * Otherwise, an exception is thrown.
 	 */
 	public static final String SERIALIZER_ignoreRecursions = "Serializer.ignoreRecursions";
 
 	/**
 	 * <b>Configuration property:</b>  Use whitespace.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.useWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 *
 	 * <p>
 	 * This setting does not apply to the MessagePack serializer.
 	 */
@@ -115,15 +124,17 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Maximum indentation.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.maxIndent"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>100</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
+	 *
 	 * <p>
 	 * This setting does not apply to the MessagePack or RDF serializers.
 	 */
@@ -131,13 +142,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.addBeanTypeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
@@ -149,15 +161,17 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Quote character.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.quoteChar"</js>
 	 * 	<li><b>Data type:</b> <code>Character</code>
 	 * 	<li><b>Default:</b> <js>'"'</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * This is the character used for quoting attributes and values.
+	 *
 	 * <p>
 	 * This setting does not apply to the MessagePack or RDF serializers.
 	 */
@@ -165,15 +179,17 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Trim null bean property values.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimNullProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
@@ -185,15 +201,17 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Trim empty lists and arrays.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyLists"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
+	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
@@ -207,15 +225,17 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Trim empty maps.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyMaps"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
+	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
@@ -227,13 +247,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Trim strings.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimStrings"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
@@ -241,13 +262,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  URI context bean.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriContext"</js>
 	 * 	<li><b>Data type:</b> {@link UriContext}
 	 * 	<li><b>Default:</b> {@link UriContext#DEFAULT}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
@@ -260,13 +282,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  URI resolution.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution"</js>
 	 * 	<li><b>Data type:</b> {@link UriResolution}
 	 * 	<li><b>Default:</b> {@link UriResolution#NONE}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
 	 * <ul>
@@ -274,6 +297,7 @@ public class SerializerContext extends BeanContext {
 	 * 	<li>{@link java.net.URL}
 	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
 	 * </ul>
+	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
@@ -289,13 +313,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  URI relativity.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriRelativity"</js>
 	 * 	<li><b>Data type:</b> {@link UriRelativity}
 	 * 	<li><b>Default:</b> {@link UriRelativity#RESOURCE}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
 	 * <ul>
@@ -303,6 +328,7 @@ public class SerializerContext extends BeanContext {
 	 * 	<li>{@link java.net.URL}
 	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
 	 * </ul>
+	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
@@ -316,13 +342,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.sortCollections"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
@@ -330,13 +357,14 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Sort maps alphabetically.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.sortMaps"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
@@ -344,32 +372,34 @@ public class SerializerContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Abridged output.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.abridged"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
-	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed,
-	 * and therefore top-level type information that might normally be included to determine
-	 * the data type will not be serialized.
+	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
+	 *
 	 * <p>
-	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js>
-	 * will be added when this setting is disabled, but not added when it is enabled.
+	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
+	 * this setting is disabled, but not added when it is enabled.
 	 */
 	public static final String SERIALIZER_abridged = "Serializer.abridged";
 
 	/**
 	 * <b>Configuration property:</b>  Serializer listener.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.listener"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? extends SerializerListener&gt;</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 */

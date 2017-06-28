@@ -24,18 +24,18 @@ import org.apache.juneau.serializer.*;
  * Serializes POJOs to HTTP responses as HTML documents.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>text/html</code>
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/html</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</code>,
- * 	<code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
+ * <code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link HtmlDocSerializerContext}

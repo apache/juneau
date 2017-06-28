@@ -23,6 +23,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * A utility class for piping input streams and readers to output streams and writers.
+ *
  * <p>
  * A typical usage is as follows...
  * <p class='bcode'>
@@ -30,6 +31,7 @@ import org.apache.juneau.internal.*;
  * 	Writer out = getWriter();
  * 	IOPipe.create(in, out).closeOut().run();
  * </p>
+ *
  * <p>
  * By default, the input stream is closed and the output stream is not.
  * This can be changed by calling {@link #closeOut()} and {@link #close(boolean, boolean)}.
@@ -108,6 +110,8 @@ public class IOPipe {
 
 	/**
 	 * Specifies whether the content should be piped line-by-line.
+	 *
+	 * <p>
 	 * This can be useful if you're trying to pipe console-based input.
 	 *
 	 * @param byLines Pipe content line-by-line.  Default is <jk>false</jk>.

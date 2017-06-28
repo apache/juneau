@@ -25,8 +25,10 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Abstract class for defining Remoteable services.
+ *
  * <p>
  * Remoteable services are POJOs whose methods can be invoked remotely through proxy interfaces.
+ *
  * <p>
  * To implement a remoteable service, developers must simply subclass from this class and implement the
  * {@link #getServiceMap()} method that maps java interfaces to POJO instances.
@@ -44,6 +46,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 
 	/**
 	 * Returns the list of interfaces to their implementation objects.
+	 *
 	 * <p>
 	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.
 	 *

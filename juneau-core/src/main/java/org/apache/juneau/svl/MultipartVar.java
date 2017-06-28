@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Interface for the resolution of vars that consist of a comma-delimited list.
+ *
  * <p>
  * (e.g. <js>"$X{foo, bar, baz}"</js>)
  *

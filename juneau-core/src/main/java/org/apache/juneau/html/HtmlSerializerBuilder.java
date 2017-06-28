@@ -55,7 +55,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * <b>Configuration property:</b>  Anchor text source.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -101,7 +100,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * <b>Configuration property:</b>  Look for URLs in {@link String Strings}.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -130,7 +128,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * <b>Configuration property:</b>  Look for link labels in the <js>"label"</js> parameter of the URL.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -161,7 +158,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * <b>Configuration property:</b>  The parameter name to use when using {@link HtmlSerializerContext#HTML_lookForLabelParameters}.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -186,7 +182,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>

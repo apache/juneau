@@ -20,9 +20,11 @@ import org.apache.juneau.xml.*;
 
 /**
  * Configurable properties on the {@link RdfSerializer} class.
+ * 
  * <p>
  * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
  * passed into the constructor.
+ * 
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  *
@@ -49,7 +51,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 
 	/**
 	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -61,17 +63,19 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 
 	/**
 	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * to identify the root node in the graph.
 	 * This helps locate the root node during parsing.
+	 * 
 	 * <p>
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
 	 * identify root notes, which can introduce a considerable performance degradation.
@@ -80,31 +84,33 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 
 	/**
 	 * <b>Configuration property:</b>  Auto-detect namespace usage.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Detect namespace usage before serialization.
+	 * 
 	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for
-	 * namespaces that will be encountered before the root element is
-	 * serialized.
+	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
+	 * the root element is serialized.
 	 */
 	public static final String RDF_autoDetectNamespaces = "RdfSerializer.autoDetectNamespaces";
 
 	/**
 	 * <b>Configuration property:</b>  Default namespaces.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */
@@ -112,19 +118,21 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.addBeanTypeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred 
 	 * through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined 
 	 * from the value type.
+	 * 
 	 * <p>
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -148,6 +156,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 
 	/**
 	 * Constructor.
+	 * 
 	 * <p>
 	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *

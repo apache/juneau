@@ -205,7 +205,6 @@ public class MediaType implements Comparable<MediaType> {
 	/**
 	 * Returns a match metric against the specified media type where a larger number represents a better match.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li>Exact matches (e.g. <js>"text/json"<js>/</js>"text/json"</js>) should match
 	 * 		better than meta-character matches (e.g. <js>"text/*"<js>/</js>"text/json"</js>)

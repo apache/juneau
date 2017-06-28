@@ -32,12 +32,12 @@ import com.hp.hpl.jena.rdf.model.*;
  * Serializes POJOs to RDF.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ * 
  * Refer to <a class="doclink" href="package-summary.html#SerializerConfigurableProperties">Configurable Properties</a>
  * 	for the entire list of configurable properties.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- * <p>
+ * 
  * The following direct subclasses are provided for language-specific serializers:
  * <ul>
  * 	<li>{@link RdfSerializer.Xml} - RDF/XML.
@@ -48,7 +48,7 @@ import com.hp.hpl.jena.rdf.model.*;
  * </ul>
  *
  * <h5 class='section'>Additional information:</h5>
- * <p>
+ * 
  * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })

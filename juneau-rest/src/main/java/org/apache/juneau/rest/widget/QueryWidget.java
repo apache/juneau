@@ -18,6 +18,7 @@ import org.apache.juneau.rest.converters.*;
 
 /**
  * Adds a <code>QUERY</code> link to the page that allows you to perform search/view/sort/paging on the page data.
+ *
  * <p>
  * A typical usage of the query widget is to include it as a navigation link as shown in the example below
  * pulled from the <code>PetStoreResource</code> example:
@@ -31,20 +32,23 @@ import org.apache.juneau.rest.converters.*;
  * 		)
  * 	)
  * </p>
+ *
  * <p>
  * In the above example, this adds a <code>QUERY</code> that displays a search popup that can be used for filtering the
  * page results...
- * <p>
  * <img class='bordered' src='doc-files/PetStore_Query.png'>
+ *
  * <p>
  * Tooltips are provided by hovering over the field names.
- * <p>
  * <img class='bordered' src='doc-files/PetStore_Query_tooltip.png'>
+ *
  * <p>
  * When submitted, the form submits a GET request against the current URI with special GET search API query parameters.
  * (e.g. <js>"?s=column1=Foo*&amp;v=column1,column2&amp;o=column1,column2-&amp;p=100&amp;l=100"</js>).
+ *
  * <p>
  * The search arguments can be retrieved programmatically using {@link RequestQuery#getSearchArgs()}.
+ *
  * <p>
  * Typically, the search functionality is implemented by applying the predefined {@link Queryable} converter on the
  * method that's returning a 2-dimensional table of POJOs that you wish to filter:
@@ -56,6 +60,7 @@ import org.apache.juneau.rest.converters.*;
  * 	)
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>
+ *
  * <p>
  * The following shows various search arguments and their results on the page:
  * <table style='width:auto'>

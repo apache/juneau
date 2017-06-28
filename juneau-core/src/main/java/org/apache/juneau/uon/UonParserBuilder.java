@@ -54,13 +54,14 @@ public class UonParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
 	 * decoded before being passed to this parser.

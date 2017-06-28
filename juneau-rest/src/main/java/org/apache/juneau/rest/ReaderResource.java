@@ -27,6 +27,7 @@ import org.apache.juneau.svl.*;
 /**
  * Represents the contents of a text file with convenience methods for resolving {@link Parameter} variables and adding
  * HTTP response headers.
+ *
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
  */
@@ -41,14 +42,15 @@ public class ReaderResource implements Writable {
 	 * Constructor.
 	 *
 	 * @param mediaType The HTTP media type.
-	 * @param contents The contents of this resource.
-	 * <br>If multiple contents are specified, the results will be concatenated.
-	 * <br>Contents can be any of the following:
-	 * <ul>
-	 * 	<li><code>CharSequence</code>
-	 * 	<li><code>Reader</code>
-	 * 	<li><code>File</code>
-	 * </ul>
+	 * @param contents
+	 * 	The contents of this resource.
+	 * 	<br>If multiple contents are specified, the results will be concatenated.
+	 * 	<br>Contents can be any of the following:
+	 * 	<ul>
+	 * 		<li><code>CharSequence</code>
+	 * 		<li><code>Reader</code>
+	 * 		<li><code>File</code>
+	 * 	</ul>
 	 * @throws IOException
 	 */
 	protected ReaderResource(MediaType mediaType, Object...contents) throws IOException {
@@ -61,15 +63,16 @@ public class ReaderResource implements Writable {
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param varSession Optional variable resolver for resolving variables in the string.
-	 * @param contents The resource contents.
-	 * <br>If multiple contents are specified, the results will be concatenated.
-	 * <br>Contents can be any of the following:
-	 * <ul>
-	 * 	<li><code>InputStream</code>
-	 * 	<li><code>Reader</code> - Converted to UTF-8 bytes.
-	 * 	<li><code>File</code>
-	 * 	<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-	 *	</ul>
+	 * @param contents
+	 * 	The resource contents.
+	 * 	<br>If multiple contents are specified, the results will be concatenated.
+	 * 	<br>Contents can be any of the following:
+	 * 	<ul>
+	 * 		<li><code>InputStream</code>
+	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
+	 * 		<li><code>File</code>
+	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+	 *		</ul>
 	 * @throws IOException
 	 */
 	public ReaderResource(MediaType mediaType, Map<String,String> headers, VarResolverSession varSession, Object...contents) throws IOException {
@@ -134,18 +137,20 @@ public class ReaderResource implements Writable {
 
 		/**
 		 * Specifies the contents for this resource.
+		 *
 		 * <p>
 		 * This method can be called multiple times to add more content.
 		 *
-		 * @param contents The resource contents.
-		 * <br>If multiple contents are specified, the results will be concatenated.
-		 * <br>Contents can be any of the following:
-		 * <ul>
-		 * 	<li><code>InputStream</code>
-		 * 	<li><code>Reader</code> - Converted to UTF-8 bytes.
-		 * 	<li><code>File</code>
-		 * 	<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-		 *	</ul>
+		 * @param contents
+		 * 	The resource contents.
+		 * 	<br>If multiple contents are specified, the results will be concatenated.
+		 * 	<br>Contents can be any of the following:
+		 * 	<ul>
+		 * 		<li><code>InputStream</code>
+		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
+		 * 		<li><code>File</code>
+		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+		 *		</ul>
 		 * @return This object (for method chaining).
 		 */
 		public Builder contents(Object...contents) {
@@ -157,7 +162,9 @@ public class ReaderResource implements Writable {
 		 * Specifies an HTTP response header value.
 		 *
 		 * @param name The HTTP header name.
-		 * @param value The HTTP header value.  Will be converted to a <code>String</code> using {@link Object#toString()}.
+		 * @param value
+		 * 	The HTTP header value.
+		 * 	Will be converted to a <code>String</code> using {@link Object#toString()}.
 		 * @return This object (for method chaining).
 		 */
 		public Builder header(String name, Object value) {
@@ -168,7 +175,9 @@ public class ReaderResource implements Writable {
 		/**
 		 * Specifies HTTP response header values.
 		 *
-		 * @param headers The HTTP headers.  Values will be converted to <code>Strings</code> using {@link Object#toString()}.
+		 * @param headers
+		 * 	The HTTP headers.
+		 * 	Values will be converted to <code>Strings</code> using {@link Object#toString()}.
 		 * @return This object (for method chaining).
 		 */
 		public Builder headers(Map<String,Object> headers) {

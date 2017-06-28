@@ -21,13 +21,17 @@ import org.apache.juneau.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
+ *
  * <p>
  * Instances of this class are considered light-weight and fast to construct, use, and discard.
+ *
  * <p>
  * This class contains the workhorse code for var resolution.
+ *
  * <p>
  * Instances of this class are created through the {@link VarResolver#createSession()} and
  * {@link VarResolver#createSession(Map)} methods.
+ *
  * <p>
  * Instances of this class are NOT guaranteed to be thread safe.
  *
@@ -41,8 +45,9 @@ public class VarResolverSession {
 	/**
 	 * Constructor.
 	 *
-	 * @param context The {@link VarResolver} context object that contains the {@link Var Vars} and context objects
-	 * associated with that resolver.
+	 * @param context
+	 * 	The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with
+	 * 	that resolver.
 	 * @param sessionObjects The session objects.
 	 *
 	 */
@@ -67,8 +72,9 @@ public class VarResolverSession {
 	 * Resolve all variables in the specified string.
 	 *
 	 * @param s The string to resolve variables in.
-	 * @return The new string with all variables resolved, or the same string if no variables were found.
-	 * Null input results in a blank string.
+	 * @return
+	 * 	The new string with all variables resolved, or the same string if no variables were found.
+	 * 	Null input results in a blank string.
 	 */
 	public String resolve(String s) {
 
@@ -104,7 +110,7 @@ public class VarResolverSession {
 		}
 	}
 
-	/**
+	/*
 	 * Checks to see if string is of the simple form "$X{...}" with no embedded variables.
 	 * This is a common case, and we can avoid using StringWriters.
 	 */
@@ -144,6 +150,8 @@ public class VarResolverSession {
 
 	/**
 	 * Resolves variables in the specified string and sends the output to the specified writer.
+	 *
+	 * <p>
 	 * More efficient than first parsing to a string and then serializing to the writer since this method doesn't need
 	 * to construct a large string.
 	 *
@@ -259,6 +267,8 @@ public class VarResolverSession {
 
 	/**
 	 * Returns the session object with the specified name.
+	 *
+	 * <p>
 	 * Casts it to the specified class type for you.
 	 *
 	 * @param c The class type to cast to.

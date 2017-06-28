@@ -30,9 +30,10 @@ import org.apache.juneau.xml.*;
 
 /**
  * Subclass of {@link RestServlet} with default sets of serializers and parsers that include RDF support.
+ *
  * <p>
  * Extends the {@link org.apache.juneau.rest.RestServletDefault} class with additional RDF support.
- * <p>
+ *
  * <p>
  * Supports the following request <code>Accept</code> header values with the resulting response <code>Content-Type</code>:
  * </p>
@@ -200,6 +201,7 @@ import org.apache.juneau.xml.*;
  * 		<td>{@link org.apache.juneau.jena.RdfParser.Turtle}</td>
  * 	</tr>
  * </table>
+ *
  * <p>
  * Note that the list of serializers and parsers can be appended to using the
  * {@link RestResource#serializers() @RestResource.serializers()} and

@@ -35,18 +35,18 @@ import org.apache.juneau.utils.*;
 
 /**
  * REST resource that allows access to a file system directory.
+ * 
  * <p>
  * The root directory is specified in one of two ways:
- * </p>
  * <ul class='spaced-list'>
  * 	<li>
  * 		Specifying the location via a <l>DirectoryResource.rootDir</l> property.
  * 	<li>
  * 		Overriding the {@link #getRootDir()} method.
  * </ul>
+ * 
  * <p>
  * Read/write access control is handled through the following properties:
- * </p>
  * <ul class='spaced-list'>
  * 	<li>
  * 		<l>DirectoryResource.allowViews</l> - If <jk>true</jk>, allows view and download access to files.
@@ -55,6 +55,7 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
+ * 
  * <p>
  * Access can also be controlled by overriding the {@link #checkAccess(RestRequest)} method.
  */
@@ -95,7 +96,10 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * Returns the root directory defined by the 'rootDir' init parameter.
+	 * 
+	 * <p>
 	 * Subclasses can override this method to provide their own root directory.
+	 * 
 	 * @return The root directory.
 	 */
 	protected File getRootDir() {
@@ -109,9 +113,7 @@ public class DirectoryResource extends Resource {
 	}
 
 	/**
-	 * [GET /*]
-	 * On directories, returns a directory listing.
-	 * On files, returns information about the file.
+	 * [GET /*] - On directories, returns a directory listing.  On files, returns information about the file.
 	 *
 	 * @param req The HTTP request.
 	 * @return Either a FileResource or list of FileResources depending on whether it's a
@@ -149,8 +151,7 @@ public class DirectoryResource extends Resource {
 	}
 
 	/**
-	 * [DELETE /*]
-	 * Delete a file on the file system.
+	 * [DELETE /*] - Delete a file on the file system.
 	 *
 	 * @param req The HTTP request.
 	 * @return The message <js>"File deleted"</js> if successful.
@@ -171,8 +172,7 @@ public class DirectoryResource extends Resource {
 	}
 
 	/**
-	 * [PUT /*]
-	 * Add or overwrite a file on the file system.
+	 * [PUT /*] - Add or overwrite a file on the file system.
 	 *
 	 * @param req The HTTP request.
 	 * @return The message <js>"File added"</js> if successful.
@@ -194,8 +194,9 @@ public class DirectoryResource extends Resource {
 	}
 
 	/**
-	 * [VIEW /*]
-	 * View the contents of a file.
+	 * [VIEW /*] - View the contents of a file.  
+	 * 
+	 * <p>
 	 * Applies to files only.
 	 *
 	 * @param req The HTTP request.
@@ -222,8 +223,9 @@ public class DirectoryResource extends Resource {
 	}
 
 	/**
-	 * [DOWNLOAD /*]
-	 * Download the contents of a file.
+	 * [DOWNLOAD /*] - Download the contents of a file.
+	 * 
+	 * <p>
 	 * Applies to files only.
 	 *
 	 * @param req The HTTP request.
@@ -251,6 +253,8 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * Verify that the specified request is allowed.
+	 * 
+	 * <p>
 	 * Subclasses can override this method to provide customized behavior.
 	 * Method should throw a {@link RestException} if the request should be disallowed.
 	 *
@@ -275,6 +279,7 @@ public class DirectoryResource extends Resource {
 
 		/**
 		 * Constructor.
+		 * 
 		 * @param f The file.
 		 * @param url The URL of the file resource.
 		 */

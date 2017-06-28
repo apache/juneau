@@ -20,9 +20,10 @@ import java.util.regex.*;
 
 /**
  * Utility class for reading log files.
+ * 
  * <p>
- * Provides the capability of returning splices of log files based on dates and filtering based
- * on thread and logger names.
+ * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger 
+ * names.
  */
 public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry> {
 	private BufferedReader br;
@@ -113,8 +114,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 	}
 
 	/**
-	 * Serializes the contents of the parsed log file to the specified writer
-	 * and then closes the underlying reader.
+	 * Serializes the contents of the parsed log file to the specified writer and then closes the underlying reader.
 	 *
 	 * @param w The writer to write the log file to.
 	 * @throws IOException

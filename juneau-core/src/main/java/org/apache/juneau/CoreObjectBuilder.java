@@ -210,7 +210,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Beans require no-arg constructors.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireDefaultConstructor"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -241,7 +240,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Beans require {@link Serializable} interface.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSerializable"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -272,7 +270,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Beans require setters for getters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSettersForGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -300,7 +297,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Beans require at least one property.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSomeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -332,7 +328,6 @@ public abstract class CoreObjectBuilder {
 	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * value.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -364,7 +359,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Look for bean constructors with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -393,7 +387,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Look for bean classes with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -422,7 +415,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Look for bean fields with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -452,7 +444,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Look for bean methods with the specified minimum visibility.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
@@ -482,7 +473,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Use Java {@link Introspector} for determining bean properties.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.useJavaBeanIntrospector"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -510,7 +500,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Use interface proxies.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.useInterfaceProxies"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -538,7 +527,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -566,7 +554,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties with null values.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownNullBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -594,7 +581,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Ignore properties without setters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignorePropertiesWithoutSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -622,7 +608,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on getters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -650,7 +635,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on setters.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -678,7 +662,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Sort bean properties in alphabetical order.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.sortProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -713,7 +696,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanPackages.set"</js>
 	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
@@ -756,7 +738,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
 	 *
-	 * <p>
 	 * Same as {@link #setNotBeanPackages(String...)} but using a <code>Collection</code>.
 	 *
 	 * @param values The new value for this property.
@@ -834,7 +815,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanClasses.set"</js>
 	 * 	<li><b>Data type:</b> <code>Set&lt;Class&gt;</code>
@@ -942,7 +922,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Bean filters to apply to beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFilters.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
@@ -1064,7 +1043,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.pojoSwaps.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
@@ -1175,7 +1153,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.map"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;Class,Class&gt;</code>
@@ -1224,7 +1201,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
@@ -1298,7 +1274,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
@@ -1372,7 +1347,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
@@ -1486,7 +1460,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Name to use for the bean type properties used to represent a bean type.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanTypePropertyName"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -1510,7 +1483,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Default parser to use when converting <code>Strings</code> to POJOs.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.defaultParser"</js>
 	 * 	<li><b>Data type:</b> <code>Class</code>
@@ -1537,7 +1509,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Locale.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.locale"</js>
 	 * 	<li><b>Data type:</b> <code>Locale</code>
@@ -1561,7 +1532,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  TimeZone.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.timeZone"</js>
 	 * 	<li><b>Data type:</b> <code>TimeZone</code>
@@ -1585,7 +1555,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Media type.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.mediaType"</js>
 	 * 	<li><b>Data type:</b> <code>MediaType</code>
@@ -1612,7 +1581,6 @@ public abstract class CoreObjectBuilder {
 	/**
 	 * <b>Configuration property:</b>  Debug mode.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.debug"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>

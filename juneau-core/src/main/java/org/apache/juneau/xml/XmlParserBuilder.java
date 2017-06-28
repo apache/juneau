@@ -56,16 +56,18 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Enable validation.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParserBuilder.validating"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
@@ -85,13 +87,14 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  XML reporter.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParserBuilder.reporter"</js>
 	 * 	<li><b>Data type:</b> {@link XMLReporter}
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
@@ -99,6 +102,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <ul>
 	 * 	<li>Reporters are not copied to new parsers during a clone.
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
@@ -118,15 +122,17 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  XML resolver.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParserBuilder.resolver"</js>
 	 * 	<li><b>Data type:</b> {@link XMLResolver}
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
@@ -146,15 +152,17 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  XML event allocator.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParserBuilder.eventAllocator"</js>
 	 * 	<li><b>Data type:</b> {@link XMLEventAllocator}
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
@@ -174,16 +182,17 @@ public class XmlParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Preserve root element during generalized parsing.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlParserBuilder.preserveRootElement"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will
-	 * 	contain a single entry whose key is the root element name.
+	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key is
+	 * the root element name.
 	 *
 	 * Example:
 	 * <table class='styled'>

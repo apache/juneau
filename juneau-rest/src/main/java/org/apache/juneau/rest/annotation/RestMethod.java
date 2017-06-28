@@ -38,13 +38,16 @@ public @interface RestMethod {
 
 	/**
 	 * REST method name.
+	 *
 	 * <p>
 	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
+	 *
 	 * <p>
 	 * Method names are case-insensitive (always folded to upper-case).
+	 *
 	 * <p>
 	 * Besides the standard HTTP method names, the following can also be specified:
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<js>"*"</js>
 	 * 		- Denotes any method.
@@ -78,11 +81,12 @@ public @interface RestMethod {
 
 	/**
 	 * Optional path pattern for the specified method.
+	 *
 	 * <p>
 	 * Appending <js>"/*"</js> to the end of the path pattern will make it match any remainder too.
-	 * <br>
-	 * Not appending <js>"/*"</js> to the end of the pattern will cause a 404 (Not found) error to occur if the exact
+	 * <br>Not appending <js>"/*"</js> to the end of the pattern will cause a 404 (Not found) error to occur if the exact
 	 * pattern is not found.
+	 *
 	 * <p>
 	 * The path can contain variables that get resolved to {@link Path @Path} parameters:
 	 * <p class='bcode'>
@@ -92,6 +96,7 @@ public @interface RestMethod {
 	 * 	<jc>// Example 2</jc>
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
 	 * </p>
+	 *
 	 * <p>
 	 * Refer to {@link Path @Path} on how path variables get resolved.
 	 */
@@ -99,8 +104,10 @@ public @interface RestMethod {
 
 	/**
 	 * URL path pattern priority.
+	 *
 	 * <p>
 	 * To force path patterns to be checked before other path patterns, use a higher priority number.
+	 *
 	 * <p>
 	 * By default, it's <code>0</code>, which means it will use an internal heuristic to determine a best match.
 	 */
@@ -108,9 +115,11 @@ public @interface RestMethod {
 
 	/**
 	 * Method guards.
+	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with a method call.
 	 * These guards get called immediately before execution of the REST method.
+	 *
 	 * <p>
 	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
 	 * for other purposes like pre-call validation of a request.
@@ -119,12 +128,15 @@ public @interface RestMethod {
 
 	/**
 	 * Method response converters.
+	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter RestConverters} with a method call.
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
 	 * annotation.
+	 *
 	 * <p>
 	 * Can be used for performing post-processing on the response object before serialization.
+	 *
 	 * <p>
 	 * Default converters are available in the <a class='doclink'
 	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
@@ -133,11 +145,14 @@ public @interface RestMethod {
 
 	/**
 	 * Method matchers.
+	 *
 	 * <p>
 	 * Associates one more more {@link RestMatcher RestMatchers} with this method.
+	 *
 	 * <p>
 	 * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
 	 * differing based on some request attribute, such as a specific header value.
+	 *
 	 * <p>
 	 * See {@link RestMatcher} for details.
 	 */
@@ -145,9 +160,11 @@ public @interface RestMethod {
 
 	/**
 	 * Overrides the list of serializers assigned at the method level.
+	 *
 	 * <p>
 	 * Use this annotation when the list of serializers assigned to a method differs from the list of serializers
 	 * assigned at the servlet level.
+	 *
 	 * <p>
 	 * To append to the list of serializers assigned at the servlet level, use
 	 * <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
@@ -172,6 +189,7 @@ public @interface RestMethod {
 	/**
 	 * Used in conjunction with {@link #serializers()} to identify what class-level settings are inherited by the method
 	 * serializer group.
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul>
@@ -179,9 +197,9 @@ public @interface RestMethod {
 	 * 	<li>{@link Inherit#PROPERTIES} - Inherit class-level properties.
 	 * 	<li>{@link Inherit#TRANSFORMS} - Inherit class-level transforms.
 	 * </ul>
+	 *
 	 * <p>
 	 * For example, to inherit all serializers, properties, and transforms from the servlet class:
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		path=<js>"/foo"</js>,
@@ -194,9 +212,11 @@ public @interface RestMethod {
 
 	/**
 	 * Overrides the list of parsers assigned at the method level.
+	 *
 	 * <p>
 	 * Use this annotation when the list of parsers assigned to a method differs from the list of parsers assigned at
 	 * the servlet level.
+	 *
 	 * <p>
 	 * To append to the list of serializers assigned at the servlet level, use
 	 * <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
@@ -221,6 +241,7 @@ public @interface RestMethod {
 	/**
 	 * Used in conjunction with {@link #parsers()} to identify what class-level settings are inherited by the method
 	 * parser group.
+	 *
 	 * <p>
 	 * Possible values:
 	 * <ul>
@@ -228,6 +249,7 @@ public @interface RestMethod {
 	 * 	<li>{@link Inherit#PROPERTIES} - Inherit class-level properties.
 	 * 	<li>{@link Inherit#TRANSFORMS} - Inherit class-level transforms.
 	 * </ul>
+	 *
 	 * <p>
 	 * For example, to inherit all parsers, properties, and transforms from the servlet class:
 	 * <p class='bcode'>
@@ -242,9 +264,11 @@ public @interface RestMethod {
 
 	/**
 	 * Appends to the list of {@link Encoder encoders} specified on the servlet.
+	 *
 	 * <p>
 	 * Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at
 	 * the servlet level.
+	 *
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
@@ -261,6 +285,7 @@ public @interface RestMethod {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * If you want to OVERRIDE the set of encoders specified by the servlet, combine this annotation with
 	 * <code><ja>@RestMethod</ja>(inheritEncoders=<jk>false</jk>)</code>.
@@ -274,6 +299,7 @@ public @interface RestMethod {
 
 	/**
 	 * Same as {@link RestResource#properties()}, except defines property values by default when this method is called.
+	 *
 	 * <p>
 	 * This is equivalent to simply calling <code>res.addProperties()</code> in the Java method, but is provided for
 	 * convenience.
@@ -282,6 +308,7 @@ public @interface RestMethod {
 
 	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
+	 *
 	 * <p>
 	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
 	 */
@@ -299,9 +326,11 @@ public @interface RestMethod {
 
 	/**
 	 * Shortcut for specifying the {@link BeanContext#BEAN_includeProperties} property on all serializers.
+	 *
 	 * <p>
 	 * The typical use case is when you're rendering summary and details views of the same bean in a resource and
 	 * you want to expose or hide specific properties depending on the level of detail you want.
+	 *
 	 * <p>
 	 * In the example below, our 'summary' view is a list of beans where we only want to show the ID property,
 	 * and our detail view is a single bean where we want to expose different fields:
@@ -325,22 +354,22 @@ public @interface RestMethod {
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>, bpIncludes=<js>"{MyBean:'a,b'}"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
 	 * </p>
+	 *
 	 * <p>
 	 * The format of this value is a lax JSON object.
-	 * <br>
-	 * Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
-	 * <br>
-	 * Values are comma-delimited lists of bean property names.
-	 * <br>
-	 * Properties apply to specified class and all subclasses.
+	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * <br>Values are comma-delimited lists of bean property names.
+	 * <br>Properties apply to specified class and all subclasses.
 	 */
 	String bpIncludes() default "";
 
 	/**
 	 * Shortcut for specifying the {@link BeanContext#BEAN_excludeProperties} property on all serializers.
+	 *
 	 * <p>
 	 * Same as {@link #bpIncludes()} except you specify a list of bean property names that you want to exclude from
 	 * serialization.
+	 *
 	 * <p>
 	 * In the example below, our 'summary' view is a list of beans where we want to exclude some properties:
 	 * <p class='bcode'>
@@ -363,28 +392,31 @@ public @interface RestMethod {
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
 	 * </p>
+	 *
 	 * <p>
 	 * The format of this value is a lax JSON object.
-	 * <br>
-	 * Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
-	 * <br>
-	 * Values are comma-delimited lists of bean property names.
-	 * <br>
-	 * Properties apply to specified class and all subclasses.
+	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * <br>Values are comma-delimited lists of bean property names.
+	 * <br>Properties apply to specified class and all subclasses.
 	 */
 	String bpExcludes() default "";
 
 	/**
 	 * Specifies default values for request headers.
+	 *
 	 * <p>
 	 * Strings are of the format <js>"Header-Name: header-value"</js>.
+	 *
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 *
 	 * <p>
 	 * The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
 	 * specified so that a particular default {@link Serializer} is picked.
+	 *
 	 * <p>
 	 * Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+	 *
 	 * <p>
 	 * Header values specified at the method level override header values specified at the servlet level.
 	 *
@@ -396,6 +428,7 @@ public @interface RestMethod {
 	 * 		...
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * Key and value is trimmed of whitespace.
@@ -404,8 +437,10 @@ public @interface RestMethod {
 
 	/**
 	 * Specifies default values for query parameters.
+	 *
 	 * <p>
 	 * Strings are of the format <js>"name=value"</js>.
+	 *
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getQuery(String)} when the parameter is not present on the request.
 	 *
@@ -416,6 +451,7 @@ public @interface RestMethod {
 	 * 		...
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * Key and value is trimmed of whitespace.
@@ -424,8 +460,10 @@ public @interface RestMethod {
 
 	/**
 	 * Specifies default values for form-data parameters.
+	 *
 	 * <p>
 	 * Strings are of the format <js>"name=value"</js>.
+	 *
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getFormData(String)} when the parameter is not present on the
 	 * request.
@@ -437,6 +475,7 @@ public @interface RestMethod {
 	 * 		...
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * Key and value is trimmed of whitespace.
@@ -445,6 +484,7 @@ public @interface RestMethod {
 
 	/**
 	 * Optional summary for the exposed API.
+	 *
 	 * <p>
 	 * This summary is used in the following locations:
 	 * <ul class='spaced-list'>
@@ -455,11 +495,14 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>(className.?)[javaMethodName].summary</code> entry in the
 	 * servlet resource bundle. (e.g. <js>"MyClass.myMethod.summary = foo"</js> or <js>"myMethod.summary = foo"</js>).
+	 *
 	 * <p>
 	 * This field value can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/summary</code>.
 	 */
@@ -467,6 +510,7 @@ public @interface RestMethod {
 
 	/**
 	 * Optional description for the exposed API.
+	 *
 	 * <p>
 	 * This description is used in the following locations:
 	 * <ul class='spaced-list'>
@@ -477,12 +521,15 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>(className.?)[javaMethodName].description</code> entry in
 	 * the servlet resource bundle. (e.g. <js>"MyClass.myMethod.description = foo"</js> or
 	 * <js>"myMethod.description = foo"</js>).
+	 *
 	 * <p>
 	 * This field value can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/description</code>.
 	 */
@@ -490,14 +537,18 @@ public @interface RestMethod {
 
 	/**
 	 * Specifies whether this method can be called based on the client version.
+	 *
 	 * <p>
 	 * The client version is identified via the HTTP request header identified by
 	 * {@link RestResource#clientVersionHeader()} which by default is <js>"X-Client-Version"</js>.
+	 *
 	 * <p>
 	 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
 	 * method/path based on the client version.
+	 *
 	 * <p>
 	 * The format of the client version range is similar to that of OSGi versions.
+	 *
 	 * <p>
 	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
 	 * <p class='bcode'>
@@ -520,6 +571,7 @@ public @interface RestMethod {
 	 * 		...
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
 	 * backwards compatibility.
@@ -535,6 +587,7 @@ public @interface RestMethod {
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod()
 	 * 	}
+	 *
 	 * <p>
 	 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
 	 * an older form.
@@ -551,6 +604,7 @@ public @interface RestMethod {
 	/**
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
+	 *
 	 * <p>
 	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 */
@@ -563,6 +617,7 @@ public @interface RestMethod {
 
 	/**
 	 * Provides HTML-doc-specific metadata on this method.
+	 *
 	 * <p>
 	 * Information provided here overrides information provided in the servlet-level annotation.
 	 */

@@ -22,6 +22,7 @@ public class ObjectUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified objects are equal.
+	 *
 	 * <p>
 	 * Gracefully handles <jk>null</jk>s.
 	 *
@@ -39,6 +40,7 @@ public class ObjectUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is empty.
+	 *
 	 * <p>
 	 * Return <jk>true</jk> if the value is any of the following:
 	 * <ul>

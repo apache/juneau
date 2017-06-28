@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.
+ *
  * <p>
  * Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.
  *

@@ -28,32 +28,35 @@ public @interface RdfSchema {
 
 	/**
 	 * Sets the default RDF prefix for all classes in this and child packages.
+	 * 
 	 * <p>
-	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #rdfNs()} mapping with the
-	 * 	same {@link RdfNs#prefix} value.
+	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #rdfNs()} mapping with the same 
+	 * {@link RdfNs#prefix} value.
 	 */
 	public String prefix() default "";
 
 	/**
 	 * Sets the default RDF namespace URL for all classes in this and child packages.
+	 * 
 	 * <p>
-	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #rdfNs()} mapping with the
-	 * 	same {@link RdfNs#namespaceURI} value.
+	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #rdfNs()} mapping with the same 
+	 * {@link RdfNs#namespaceURI} value.
 	 */
 	public String namespace() default "";
 
 	/**
 	 * Lists all namespace mappings to be used on all classes within this package.
+	 * 
 	 * <p>
-	 * The purpose of this annotation is to allow namespace mappings to be defined in a single location
-	 * 	and referred to by name through just the {@link Rdf#prefix()} annotation.
+	 * The purpose of this annotation is to allow namespace mappings to be defined in a single location and referred to 
+	 * by name through just the {@link Rdf#prefix()} annotation.
+	 * 
 	 * <p>
 	 * Inherited by child packages.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p>
+	 * 
 	 * Contents of <code>package-info.java</code>...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<jc>// XML namespaces used within this package.</jc>
 	 * 	<ja>@RdfSchema</ja>(prefix=<js>"ab"</js>,
@@ -67,9 +70,9 @@ public @interface RdfSchema {
 	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 	 * 	<jk>import</jk> org.apache.juneau.rdf.annotation.*;
 	 * </p>
+	 * 
 	 * <p>
 	 * Class in package using defined namespaces...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 	 *

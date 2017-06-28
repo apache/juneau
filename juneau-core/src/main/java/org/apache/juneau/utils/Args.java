@@ -21,11 +21,14 @@ import org.apache.juneau.*;
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a
  * <code>main(String[] args)</code> method.
+ *
  * <p>
  * Used to parse command-line arguments of the form
  * <js>"[zero or more main arguments] [zero or more optional arguments]"</js>.
+ *
  * <p>
  * The format of a main argument is a token that does not start with <js>'-'</js>.
+ *
  * <p>
  * The format of an optional argument is <js>"-argName [zero or more tokens]"</js>.
  *
@@ -83,6 +86,7 @@ import org.apache.juneau.*;
  * 		List&lt;String&gt; a2 = a.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
  * 	}
  * </p>
+ *
  * <p>
  * Main arguments are available through numeric string keys (e.g. <js>"0"</js>, <js>"1"</js>, ...).
  * So you could use the {@link ObjectMap} API to convert main arguments directly to POJOs, such as an <code>Enum</code>
@@ -93,6 +97,7 @@ import org.apache.juneau.*;
  * 	<jc>// Get 1st main argument as an integer</jc>
  * 	int i = a.get(<jk>int</jk>.<jk>class</jk>, <js>"0"</js>);
  * </p>
+ *
  * <p>
  * Equivalent operations are available on optional arguments through the {@link #getArg(Class, String)} method.
  */
@@ -136,6 +141,7 @@ public final class Args extends ObjectMap {
 
 	/**
 	 * Returns main argument at the specified index, or <jk>null</jk> if the index is out of range.
+	 *
 	 * <p>
 	 * Can be used in conjunction with {@link #hasArg(int)} to check for existence of arg.
 	 * <p class='bcode'>
@@ -146,6 +152,7 @@ public final class Args extends ObjectMap {
 	 * 	<jc>// Get the first argument</jc>
 	 * 	String firstArg = args.getArg(0);
 	 * </p>
+	 *
 	 * <p>
 	 * Since main arguments are stored as numeric keys, this method is essentially equivalent to...
 	 * <p class='bcode'>
@@ -176,6 +183,7 @@ public final class Args extends ObjectMap {
 
 	/**
 	 * Returns the optional argument value, or blank if the optional argument was not specified.
+	 *
 	 * <p>
 	 * If the optional arg has multiple values, returns values as a comma-delimited list.
 	 *
@@ -193,6 +201,7 @@ public final class Args extends ObjectMap {
 
 	/**
 	 * Returns the optional argument value converted to the specified object type.
+	 *
 	 * <p>
 	 * If the optional arg has multiple values, returns only the first converted value.
 	 *

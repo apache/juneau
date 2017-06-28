@@ -33,6 +33,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public UrlEncodingSerializerBuilder(PropertyStore propertyStore) {
@@ -51,13 +52,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Serialize bean property collections/arrays as separate key/value pairs.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"UrlEncoding.expandedParams"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
@@ -75,6 +77,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
 	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
+	 *
 	 * <p>
 	 * This option only applies to beans.
 	 *
@@ -101,15 +104,17 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Format to use for top-level query names and simple parameters.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"UON"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
+	 *
 	 * <p>
 	 * The possible values are:
 	 * <ul class='spaced-list'>

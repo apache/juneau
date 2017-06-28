@@ -16,6 +16,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Simple bean with {@code name} and {@code description} properties.
+ *
  * <p>
  * Primarily used for constructing tables with name/description columns on REST OPTIONS requests.
  */

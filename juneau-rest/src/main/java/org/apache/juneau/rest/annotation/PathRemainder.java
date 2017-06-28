@@ -28,9 +28,9 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * This is functionally equivalent to the following code...
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {

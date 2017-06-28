@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
  * Annotation used on subclasses of {@link Serializer} to identify the media types that it produces.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Provides a way to define the contents of {@link Serializer#getMediaTypes()} through an annotation.
  *
  * <p>
@@ -32,7 +32,7 @@ import org.apache.juneau.serializer.*;
  * be overridden by subclasses to return the media types programmatically.
  *
  * <h5 class='section'>Example:</h5>
- * <p>
+ *
  * Standard example:
  * <p class='bcode'>
  * 	<ja>@Produces</ja>(<js>"application/json,text/json"</js>)

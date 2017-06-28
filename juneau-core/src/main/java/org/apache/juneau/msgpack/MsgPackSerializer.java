@@ -25,13 +25,13 @@ import org.apache.juneau.transform.*;
  * Serializes POJO models to MessagePack.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>octal/msgpack</code>
  * <p>
  * Produces <code>Content-Type</code> types: <code>octal/msgpack</code>
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link MsgPackSerializerContext}
@@ -64,8 +64,10 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	}
 
 	/**
-	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization
-	 * method.
+	 * Workhorse method.
+	 *
+	 * <p>
+	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	MsgPackOutputStream serializeAnything(MsgPackSerializerSession session, MsgPackOutputStream out, Object o,

@@ -21,8 +21,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the
- * request.
+ * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -33,6 +32,7 @@ import org.apache.juneau.serializer.*;
  * 		String myProxyMethod(<ja>@Body</ja> MyPojo pojo);
  * 	}
  * </p>
+ *
  * <p>
  * The argument can be any of the following types:
  * <ul class='spaced-list'>
@@ -48,6 +48,7 @@ import org.apache.juneau.serializer.*;
  * 	<li>
  * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
  * </ul>
+ *
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
  * {@link RequestBean @RequestBean}:

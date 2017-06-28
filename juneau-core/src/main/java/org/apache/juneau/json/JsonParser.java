@@ -30,13 +30,14 @@ import org.apache.juneau.transform.*;
  * Parses any valid JSON text into a POJO model.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Content-Type</code> types: <code>application/json, text/json</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
  * time that it takes the built-in Java DOM parsers to parse equivalent XML.
+ *
  * <p>
  * This parser handles all valid JSON syntax.
  * In addition, when strict mode is disable, the parser also handles the following:
@@ -50,7 +51,10 @@ import org.apache.juneau.transform.*;
  * 	<li>
  * 		Unquoted attributes.
  * </ul>
+ *
+ * <p>
  * Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
+ *
  * <p>
  * This parser handles the following input, and automatically returns the corresponding Java class.
  * <ul class='spaced-list'>
@@ -75,6 +79,7 @@ import org.apache.juneau.transform.*;
  * 	<li>
  * 		Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
  * </ul>
+ *
  * <p>
  * Input can be any of the following:
  * <ul class='spaced-list'>
@@ -97,6 +102,7 @@ import org.apache.juneau.transform.*;
  * 	<li>
  * 		<js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
  * </ul>
+ *
  * <p>
  * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the
  * {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)} or {@link ObjectList#ObjectList(CharSequence)
@@ -104,7 +110,7 @@ import org.apache.juneau.transform.*;
  * The end result should be the same.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link JsonParserContext}

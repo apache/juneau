@@ -30,19 +30,21 @@ import org.apache.juneau.uon.*;
  * Parses URL-encoded text into POJO models.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
+ *
  * <p>
  * Expects parameter values to be in UON notation.
+ *
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link UonParserContext}
@@ -61,6 +63,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public UrlEncodingParser(PropertyStore propertyStore) {

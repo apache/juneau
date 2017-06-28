@@ -57,13 +57,14 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Trim whitespace from text elements.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 * 
@@ -82,12 +83,13 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  RDF language.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.language"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
@@ -178,7 +180,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
 	 * 	<li><b>Data type:</b> {@link Namespace}
@@ -200,7 +202,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
 	 * 	<li><b>Data type:</b> {@link Namespace}
@@ -222,12 +224,13 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF parsers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
@@ -247,12 +250,13 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat"</js>
 	 * 	<li><b>Data type:</b> <code>RdfCollectionFormat</code>
 	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
 	 * </ul>
+	 * 
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -290,19 +294,22 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 * 
 	 * <p>
 	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
 	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
 	 * when serialized as loose collections.
+	 * 
 	 * <p>
 	 * This setting is typically only useful if the beans being parsed into do not have a bean property
 	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
@@ -316,16 +323,16 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(l);
-	 *
-	 * <jc>// Parse back into a Java collection</jc>
+	 * 
+	 * 	<jc>// Parse back into a Java collection</jc>
 	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	MyBean[] b = createArrayOfMyBeans();
 	 *
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(b);
-	 *
-	 * <jc>// Parse back into a bean array</jc>
+	 * 
+	 * 	<jc>// Parse back into a bean array</jc>
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
 	 * 

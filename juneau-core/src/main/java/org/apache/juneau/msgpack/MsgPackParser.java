@@ -27,11 +27,11 @@ import org.apache.juneau.transform.*;
  * Parses a MessagePack stream into a POJO model.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Content-Type</code> types: <code>octal/msgpack</code>
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link MsgPackParserContext}

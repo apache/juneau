@@ -28,13 +28,16 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all microservices.
+ * 
  * <p>
  * A microservice defines a simple API for starting and stopping simple Java services contained in executable jars.
+ * 
  * <p>
  * The general command for invoking these services is...
  * <p class='bcode'>
  * 	java -jar mymicroservice.jar [mymicroservice.cfg]
  * </p>
+ * 
  * <p>
  * Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice 
  * jar file.
@@ -42,7 +45,6 @@ import org.apache.juneau.utils.*;
  * <h6 class='topic'>Microservice Configuration</h6>
  *
  * This class defines the following method for accessing configuration for your microservice:
- * <p>
  * <ul class='spaced-list'>
  * 	<li>
  * 		{@link #getArgs()} - The command-line arguments passed to the jar file.
@@ -56,7 +58,6 @@ import org.apache.juneau.utils.*;
  *
  * Subclasses must implement a static void main method as the entry point for the microservice.
  * Typically, this method will simply consist of the following...
- * <p>
  * <p class='bcode'>
  * 	<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
  * 		<jk>new</jk> MyMicroservice(args).start();
@@ -66,7 +67,6 @@ import org.apache.juneau.utils.*;
  * <h6 class='topic'>Lifecycle Methods</h6>
  *
  * Subclasses must implement the following lifecycle methods:
- * <p>
  * <ul class='spaced-list'>
  * 	<li>
  * 		{@link #start()} - Gets executed during startup.
@@ -79,7 +79,6 @@ import org.apache.juneau.utils.*;
  * <h6 class='topic'>Lifecycle Listener Methods</h6>
  *
  * Subclasses can optionally implement the following event listener methods:
- * <p>
  * <ul class='spaced-list'>
  * 	<li>
  * 		{@link #onStart()} - Gets executed before {@link #start()}.
@@ -94,7 +93,6 @@ import org.apache.juneau.utils.*;
  * <h6 class='topic'>Other Methods</h6>
  *
  * Subclasses can optionally override the following methods to provide customized behavior:
- * <p>
  * <ul class='spaced-list'>
  * 	<li>
  * 		{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file 
@@ -121,6 +119,7 @@ public abstract class Microservice {
 
 	/**
 	 * Specifies the path of the config file for this microservice.
+	 * 
 	 * <p>
 	 * If you do not specify the config file location, we attempt to resolve it through the following methods:
 	 * <ol>
@@ -129,6 +128,8 @@ public abstract class Microservice {
 	 * 	<li>A config file in the same location and with the same name as the executable jar file.
 	 * 		(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
 	 * </ol>
+	 * 
+	 * <p>
 	 * If this path does not exist, a {@link FileNotFoundException} will be thrown from the {@link #start()} command.
 	 *
 	 * @param cfPath The absolute or relative path of the config file.
@@ -150,6 +151,7 @@ public abstract class Microservice {
 
 	/**
 	 * Specifies the config file for this microservice.
+	 * 
 	 * <p>
 	 * Note that if you use this method instead of {@link #setConfig(String,boolean)}, the config file will not use
 	 * the variable resolver constructed from {@link #createVarResolver()}.
@@ -164,6 +166,7 @@ public abstract class Microservice {
 
 	/**
 	 * Specifies the manifest file of the jar file this microservice is contained within.
+	 * 
 	 * <p>
 	 * If you do not specify the manifest file, we attempt to resolve it through the following methods:
 	 * <ol>
@@ -207,7 +210,7 @@ public abstract class Microservice {
 	}
 
 	/**
-	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the 
+	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the  
 	 * specified class is contained within.
 	 *
 	 * @param c The class whose jar file contains the manifest to use for this microservice.
@@ -220,8 +223,8 @@ public abstract class Microservice {
 	}
 
 	/**
-	 * Creates the {@link VarResolver} used to resolve variables in the
-	 * config file returned by {@link #getConfig()}.
+	 * Creates the {@link VarResolver} used to resolve variables in the config file returned by {@link #getConfig()}.
+	 * 
 	 * <p>
 	 * The default implementation resolves the following variables:
 	 * <ul>
@@ -234,6 +237,7 @@ public abstract class Microservice {
 	 * 	<li><code>$SWITCH{stringArg,pattern,thenVal...}</code>, 
 	 * 		<code>$SWITCH{stringArg,pattern,thenVal,elseVal...}</code>  - Switch-block logic.
 	 * </ul>
+	 * 
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
 	 *
@@ -280,8 +284,10 @@ public abstract class Microservice {
 
 	/**
 	 * Returns the command-line arguments passed into the application.
+	 * 
 	 * <p>
 	 * This method can be called from the class constructor.
+	 * 
 	 * <p>
 	 * See {@link Args} for details on using this method.
 	 *
@@ -293,6 +299,7 @@ public abstract class Microservice {
 
 	/**
 	 * Returns the external INI-style configuration file that can be used to configure your microservice.
+	 * 
 	 * <p>
 	 * The config file location is determined in the following order:
 	 * <ol class='spaced-list'>
@@ -304,12 +311,16 @@ public abstract class Microservice {
 	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g. 
 	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
 	 * </ol>
+	 * 
 	 * <p>
 	 * If all methods for locating the config file fail, then this method returns <jk>null</jk>.
+	 * 
 	 * <p>
 	 * Subclasses can set their own config file by calling the {@link #setConfig(ConfigFile)} method.
+	 * 
 	 * <p>
 	 * String variables defined by {@link #createVarResolver()} are automatically resolved when using this method.
+	 * 
 	 * <p>
 	 * This method can be called from the class constructor.
 	 *
@@ -358,8 +369,8 @@ public abstract class Microservice {
 	 *
 	 * 	<cc># A POJO with embedded variables</cc>
 	 * 	<ck>aBean2</ck> = {foo:'$ARG{0}',baz:$C{MySection/anInt}}
-	 *
 	 * </p>
+	 * 
 	 * <p class='bcode'>
 	 * 	<jc>// Java code for accessing config entries above.</jc>
 	 * 	ConfigFile cf = getConfig();
@@ -385,9 +396,10 @@ public abstract class Microservice {
 
 	/**
 	 * Returns the main jar manifest file contents as a simple {@link ObjectMap}.
+	 * 
 	 * <p>
-	 * This map consists of the contents of {@link Manifest#getMainAttributes()} with the keys
-	 * 	and entries converted to simple strings.
+	 * This map consists of the contents of {@link Manifest#getMainAttributes()} with the keys and entries converted to 
+	 * simple strings.
 	 * <p>
 	 * This method can be called from the class constructor.
 	 *
@@ -413,8 +425,10 @@ public abstract class Microservice {
 
 	/**
 	 * Start this application.
+	 * 
 	 * <p>
 	 * Default implementation simply calls {@link #onStart()}.
+	 * 
 	 * <p>
 	 * Overridden methods MUST call this method FIRST so that the {@link #onStart()} method is called.
 	 *
@@ -545,6 +559,7 @@ public abstract class Microservice {
 
 	/**
 	 * Joins the application with the current thread.
+	 * 
 	 * <p>
 	 * Default implementation is a no-op.
 	 *
@@ -557,8 +572,10 @@ public abstract class Microservice {
 
 	/**
 	 * Stop this application.
+	 * 
 	 * <p>
 	 * Default implementation simply calls {@link #onStop()}.
+	 * 
 	 * <p>
 	 * Overridden methods MUST call this method LAST so that the {@link #onStop()} method is called.
 	 *
@@ -585,6 +602,7 @@ public abstract class Microservice {
 
 	/**
 	 * Called at the beginning of the {@link #start()} call.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -592,6 +610,7 @@ public abstract class Microservice {
 
 	/**
 	 * Called at the end of the {@link #stop()} call.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to hook into the lifecycle of this application.
 	 */
@@ -599,6 +618,7 @@ public abstract class Microservice {
 
 	/**
 	 * Called if the {@link ConfigFile#save()} is called on the config file.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to listen for config file changes.
 	 *
@@ -608,6 +628,7 @@ public abstract class Microservice {
 
 	/**
 	 * Called if one or more changes occur in the config file.
+	 * 
 	 * <p>
 	 * Subclasses can override this method to listen for config file changes.
 	 *

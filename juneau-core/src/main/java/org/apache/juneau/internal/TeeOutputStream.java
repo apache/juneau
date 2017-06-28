@@ -44,8 +44,8 @@ public class TeeOutputStream extends OutputStream {
 	 * Adds an output stream to this tee output stream.
 	 *
 	 * @param os The output stream to add to this tee output stream.
-	 * @param close If <jk>false</jk>, then calling {@link #close()} on this stream will not filter to the specified
-	 * output stream.
+	 * @param close
+	 * 	If <jk>false</jk>, then calling {@link #close()} on this stream will not filter to the specified output stream.
 	 * @return This object (for method chaining).
 	 */
 	public TeeOutputStream add(OutputStream os, boolean close) {

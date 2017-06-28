@@ -32,14 +32,14 @@ import org.apache.juneau.xml.annotation.*;
  * Serializes POJO models to HTML.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>text/html</code>
  *
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/html</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * The conversion is as follows...
  * <ul class='spaced-list'>
  * 	<li>
@@ -63,7 +63,7 @@ import org.apache.juneau.xml.annotation.*;
  * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul class='spaced-list'>
  * 	<li>
@@ -71,7 +71,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- * <p>
+ *
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>

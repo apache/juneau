@@ -28,9 +28,11 @@ import org.apache.juneau.svl.*;
 
 /**
  * Class that provides documentation and other related information about a REST resource.
+ *
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST resources are documented.
  * Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
+ *
  * <p>
  * RestInfoProviders are associated with servlets/resources in one of the following ways:
  * <ul>
@@ -155,9 +157,11 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized Swagger from the file system.
+	 *
 	 * <p>
-	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package
-	 * as this servlet and returns it as a parsed {@link Swagger} object.
+	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package as this servlet and returns
+	 * it as a parsed {@link Swagger} object.
+	 *
 	 * <p>
 	 * Returned objects are cached for later quick-lookup.
 	 *
@@ -180,11 +184,12 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized summary of the specified java method on this servlet.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own summary.
+	 *
 	 * <p>
 	 * The default implementation returns the summary from the following locations (whichever matches first):
-	 * </p>
 	 * <ol>
 	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation on the method.
 	 * 	<li><ck>[ClassName].[javaMethodName].summary</ck> property in resource bundle identified by
@@ -206,11 +211,12 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized description of the specified java method on this servlet.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own description.
+	 *
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
-	 * </p>
 	 * <ol>
 	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation on the method.
 	 * 	<li><ck>[ClassName].[javaMethodName].description</ck> property in resource bundle identified by
@@ -232,11 +238,12 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized title of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own title.
+	 *
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
-	 * <p>
 	 * <ol>
 	 * 	<li>{@link RestResource#title() @RestResourcel.title()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].title</ck> property in resource bundle identified by
@@ -265,8 +272,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized description of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own description.
+	 *
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
@@ -297,8 +306,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized contact information of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own contact information.
+	 *
 	 * <p>
 	 * The default implementation returns the contact information from the following locations (whichever matches first):
 	 * <ol>
@@ -312,8 +323,8 @@ public class RestInfoProvider {
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
-	 * found.
+	 * @return
+	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
 	 */
 	public Contact getContact(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -335,8 +346,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the localized license information of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own license information.
+	 *
 	 * <p>
 	 * The default implementation returns the license information from the following locations (whichever matches first):
 	 * <ol>
@@ -350,8 +363,8 @@ public class RestInfoProvider {
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
-	 * found.
+	 * @return
+	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
 	 */
 	public License getLicense(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -373,8 +386,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the terms-of-service information of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own terms-of-service information.
+	 *
 	 * <p>
 	 * The default implementation returns the terms-of-service information from the following locations (whichever
 	 * matches first):
@@ -389,8 +404,8 @@ public class RestInfoProvider {
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
-	 * found.
+	 * @return
+	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
 	 */
 	public String getTermsOfService(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -407,8 +422,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the version information of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own version information.
+	 *
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
@@ -422,8 +439,8 @@ public class RestInfoProvider {
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
-	 * found.
+	 * @return
+	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
 	 */
 	public String getVersion(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -440,8 +457,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the version information of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own version information.
+	 *
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
@@ -455,8 +474,8 @@ public class RestInfoProvider {
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
-	 * found.
+	 * @return
+	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
 	 */
 	public List<Tag> getTags(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
@@ -478,8 +497,10 @@ public class RestInfoProvider {
 
 	/**
 	 * Returns the version information of this REST resource.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own version information.
+	 *
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
@@ -493,8 +514,8 @@ public class RestInfoProvider {
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was
-	 * found.
+	 * @return
+	 * 	The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
 	 */
 	public ExternalDocumentation getExternalDocs(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();

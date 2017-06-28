@@ -60,19 +60,20 @@ public final class StringUtils {
 	 * Parses a number from the specified reader stream.
 	 *
 	 * @param r The reader to parse the string from.
-	 * @param type The number type to created.
-	 * Can be any of the following:
-	 * <ul>
-	 * 	<li> Integer
-	 * 	<li> Double
-	 * 	<li> Float
-	 * 	<li> Long
-	 * 	<li> Short
-	 * 	<li> Byte
-	 * 	<li> BigInteger
-	 * 	<li> BigDecimal
-	 * </ul>
-	 * If <jk>null</jk>, uses the best guess.
+	 * @param type
+	 * 	The number type to created.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li> Integer
+	 * 		<li> Double
+	 * 		<li> Float
+	 * 		<li> Long
+	 * 		<li> Short
+	 * 		<li> Byte
+	 * 		<li> BigInteger
+	 * 		<li> BigDecimal
+	 * 	</ul>
+	 * 	If <jk>null</jk>, uses the best guess.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 * @return The parsed number.
 	 * @throws Exception
@@ -107,19 +108,20 @@ public final class StringUtils {
 	 * Parses a number from the specified string.
 	 *
 	 * @param s The string to parse the number from.
-	 * @param type The number type to created.
-	 * Can be any of the following:
-	 * <ul>
-	 * 	<li> Integer
-	 * 	<li> Double
-	 * 	<li> Float
-	 * 	<li> Long
-	 * 	<li> Short
-	 * 	<li> Byte
-	 * 	<li> BigInteger
-	 * 	<li> BigDecimal
-	 * </ul>
-	 * If <jk>null</jk>, uses the best guess.
+	 * @param type
+	 * 	The number type to created.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li> Integer
+	 * 		<li> Double
+	 * 		<li> Float
+	 * 		<li> Long
+	 * 		<li> Short
+	 * 		<li> Byte
+	 * 		<li> BigInteger
+	 * 		<li> BigDecimal
+	 * 	</ul>
+	 * 	If <jk>null</jk>, uses the best guess.
 	 * @return The parsed number.
 	 * @throws ParseException
 	 */
@@ -470,8 +472,12 @@ public final class StringUtils {
 
 	/**
 	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
 	 * Does not split on escaped-delimiters (e.g. "\,");
 	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
 	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
 	 * split("a,b,c",',') -> {"a","b","c"}
 	 * split("a, b ,c ",',') -> {"a","b","c"}
@@ -540,6 +546,7 @@ public final class StringUtils {
 
 	/**
 	 * Splits a list of key-value pairs into an ordered map.
+	 *
 	 * <p>
 	 * Example:
 	 * <p class='bcode'>
@@ -630,8 +637,8 @@ public final class StringUtils {
 	 * string.
 	 *
 	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty
-	 * string.
+	 * @return
+	 * 	<jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty string.
 	 */
 	public static boolean isEmpty(Object s) {
 		return s == null || s.toString().isEmpty();
@@ -854,8 +861,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>base64Decode(String)</code> and converting the
-	 * 	result to a UTF-8 encoded string.
+	 * Shortcut for calling <code>base64Decode(String)</code> and converting the result to a UTF-8 encoded string.
 	 *
 	 * @param in The BASE-64 encoded string to decode.
 	 * @return The decoded string.
@@ -914,7 +920,11 @@ public final class StringUtils {
 
 	/**
 	 * Generated a random UUID with the specified number of characters.
+	 *
+	 * <p>
 	 * Characters are composed of lower-case ASCII letters and numbers only.
+	 *
+	 * <p>
 	 * This method conforms to the restrictions for hostnames as specified in <a class="doclink"
 	 * href="https://tools.ietf.org/html/rfc952">RFC 952</a>
 	 * Since each character has 36 possible values, the square approximation formula for the number of generated IDs
@@ -922,6 +932,8 @@ public final class StringUtils {
 	 * <code>sqrt(36^N)</code>.
 	 * Dividing this number by 10 gives you an approximation of the number of generated IDs needed to produce a
 	 * &lt;1% chance of collision.
+	 *
+	 * <p>
 	 * For example, given 5 characters, the number of generated IDs need to produce a &lt;1% chance of collision would
 	 * be:
 	 * <code>sqrt(36^5)/10=777</code>
@@ -982,10 +994,13 @@ public final class StringUtils {
 
 	/**
 	 * Simple utility for replacing variables of the form <js>"{key}"</js> with values in the specified map.
+	 *
 	 * <p>
 	 * Nested variables are supported in both the input string and map values.
+	 *
 	 * <p>
 	 * If the map does not contain the specified value, the variable is not replaced.
+	 *
 	 * <p>
 	 * <jk>null</jk> values in the map are treated as blank strings.
 	 *
@@ -1106,6 +1121,7 @@ public final class StringUtils {
 
 	/**
 	 * Returns the specified field in a delimited string without splitting the string.
+	 *
 	 * <p>
 	 * Equivalent to the following:
 	 * <p class='bcode'>
@@ -1250,10 +1266,12 @@ public final class StringUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified string is one of the specified values.
 	 *
-	 * @param s The string to test.
-	 * Can be <jk>null</jk>.
-	 * @param values The values to test.
-	 * Can contain <jk>null</jk>.
+	 * @param s
+	 * 	The string to test.
+	 * 	Can be <jk>null</jk>.
+	 * @param values
+	 * 	The values to test.
+	 * 	Can contain <jk>null</jk>.
 	 * @return <jk>true</jk> if the specified string is one of the specified values.
 	 */
 	public static boolean isOneOf(String s, String...values) {
@@ -1353,8 +1371,9 @@ public final class StringUtils {
 	 * Returns the first non-whitespace character in the string.
 	 *
 	 * @param s The string to check.
-	 * @return The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
-	 * of only whitespace.
+	 * @return
+	 * 	The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
+	 * 	of only whitespace.
 	 */
 	public static char firstNonWhitespaceChar(String s) {
 		if (s != null)
@@ -1369,7 +1388,8 @@ public final class StringUtils {
 	 *
 	 * @param s The string.
 	 * @param i The index position.
-	 * @return The character at the specified index, or <code>0</code> if the index is out-of-range or the string
+	 * @return
+	 * 	The character at the specified index, or <code>0</code> if the index is out-of-range or the string
 	 * 	is <jk>null</jk>.
 	 */
 	public static char charAt(String s, int i) {
@@ -1431,8 +1451,10 @@ public final class StringUtils {
 
 	/**
 	 * Efficiently determines whether a URL is of the pattern "xxx:/xxx".
+	 *
 	 * <p>
 	 * The pattern matched is: <code>[a-z]{2,}\:\/.*</code>
+	 *
 	 * <p>
 	 * Note that this excludes filesystem paths such as <js>"C:/temp"</js>.
 	 *

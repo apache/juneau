@@ -21,6 +21,7 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Bean filter builder initialized from the contents of a {@link Bean @Bean} annotation found on a class.
+ *
  * <p>
  * <b>*** Internal class - Not intended for external use ***</b>
  */
@@ -30,8 +31,8 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 	 * Constructor.
 	 *
 	 * @param annotatedClass The class found to have a {@link Bean @Bean} annotation.
-	 * @param annotations The {@link Bean @Bean} annotations found on the class and all parent classes in
-	 * child-to-parent order.
+	 * @param annotations
+	 * 	The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 * @throws Exception Thrown from property namer constructor.
 	 */
 	public AnnotationBeanFilterBuilder(Class<?> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {

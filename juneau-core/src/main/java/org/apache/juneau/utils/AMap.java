@@ -16,6 +16,7 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedHashMap} with a convenience {@link #append(Object,Object)} method.
+ *
  * <p>
  * Primarily used for testing purposes for quickly creating populated maps.
  * <p class='bcode'>

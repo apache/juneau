@@ -53,9 +53,11 @@ public @interface QueryIfNE {
 
 	/**
 	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
+	 *
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
 	 * then on the client which by default is {@link UrlEncodingSerializer}.
+	 *
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */

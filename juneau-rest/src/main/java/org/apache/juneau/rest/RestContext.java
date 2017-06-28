@@ -50,6 +50,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
+ *
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  */
@@ -57,20 +58,24 @@ public final class RestContext extends Context {
 
 	/**
 	 * <b>Configuration property:</b>  Enable header URL parameters.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestServlet.allowHeaderParams"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
 	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 *
 	 * <p>
 	 * Parameter names are case-insensitive.
+	 *
 	 * <p>
 	 * Useful for debugging REST interface using only a browser.
+	 *
 	 * <p>
 	 * Applicable to servlet class only.
 	 */
@@ -78,27 +83,32 @@ public final class RestContext extends Context {
 
 	/**
 	 * <b>Configuration property:</b>  Enable <js>"method"</js> URL parameter for specific HTTP methods.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestServlet.allowMethodParam"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>""</js>
 	 * </ul>
+	 *
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
 	 * For example:  <js>"?method=OPTIONS"</js>
+	 *
 	 * <p>
 	 * Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
 	 * Parameter name is case-insensitive.
 	 * Use "*" to represent all methods.
 	 * For backwards compatibility, "true" also means "*".
+	 *
 	 * <p>
 	 * Note that per the <a class="doclink"
 	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
 	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
+	 *
 	 * <p>
 	 * Applicable to servlet class only.
+	 *
 	 * <p>
 	 * Example: <js>"HEAD,OPTIONS"</js>
 	 */
@@ -106,20 +116,24 @@ public final class RestContext extends Context {
 
 	/**
 	 * <b>Configuration property:</b>  Enable <js>"body"</js> URL parameter.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestServlet.allowBodyParam"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
 	 * For example:  <js>"?body={name:'John%20Smith',age:45}"</js>
+	 *
 	 * <p>
 	 * Parameter name is case-insensitive.
+	 *
 	 * <p>
 	 * Useful for debugging PUT and POST methods using only a browser.
+	 *
 	 * <p>
 	 * Applicable to servlet class only.
 	 */
@@ -127,17 +141,20 @@ public final class RestContext extends Context {
 
 	/**
 	 * <b>Configuration property:</b>  Render stack traces.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestServlet.renderResponseStackTraces"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
+	 *
 	 * <p>
 	 * When enabled, Java stack traces will be rendered in the output response.
 	 * Useful for debugging, although allowing stack traces to be rendered may cause security concerns.
+	 *
 	 * <p>
 	 * Applicable to servlet class only.
 	 */
@@ -145,15 +162,17 @@ public final class RestContext extends Context {
 
 	/**
 	 * <b>Configuration property:</b>  Use stack trace hashes.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestServlet.useStackTraceHashes"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
+	 *
 	 * <p>
 	 * Applicable to servlet class only.
 	 */
@@ -161,14 +180,16 @@ public final class RestContext extends Context {
 
 	/**
 	 * <b>Configuration property:</b>  Default character encoding.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestServlet.defaultCharset"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"utf-8"</js>
 	 * </ul>
+	 *
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
+	 *
 	 * <p>
 	 * Applicable to servlet class and methods.
 	 */
@@ -176,7 +197,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * <b>Configuration property:</b>  Expected format of request parameters.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestServlet.paramFormat"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -194,12 +215,15 @@ public final class RestContext extends Context {
 	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
 	 * 		mode.
 	 * </ul>
+	 *
 	 * <p>
 	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
 	 * <js>"foo"</js> when using UON mode.
+	 *
 	 * <p>
 	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and
 	 * {@link Query#format() @Query.format()} annotations.
+	 *
 	 * <p>
 	 * Applicable to servlet class and methods.
 	 */
@@ -212,9 +236,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The request servlet path.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletPath()}
 	 */
@@ -222,6 +248,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The request servlet URI.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link UriContext#getRootRelativeServletPath()}
 	 */
@@ -229,9 +256,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The request URI path info.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getPathInfo()}
 	 */
@@ -239,9 +268,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The request URI.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getRequestURI()}
 	 */
@@ -249,9 +280,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The request method.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethod()}
 	 */
@@ -259,9 +292,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The localized servlet title.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletTitle()}
 	 */
@@ -269,9 +304,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The localized servlet description.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletDescription()}
 	 */
@@ -279,9 +316,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The localized method summary.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethodSummary()}
 	 */
@@ -289,9 +328,11 @@ public final class RestContext extends Context {
 
 	/**
 	 * The localized method description.
+	 *
 	 * <p>
 	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
 	 * {@link ParserSession#getProperty(String)}.
+	 *
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethodDescription()}
 	 */
@@ -779,6 +820,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the variable resolver for this servlet.
+	 *
 	 * <p>
 	 * Variable resolvers are used to replace variables in property values.
 	 *
@@ -797,9 +839,9 @@ public final class RestContext extends Context {
 	 * 	)
 	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> RestServletDefault {
 	 * </p>
+	 *
 	 * <p>
 	 * A typical usage pattern is using variables for resolving URL links when rendering HTML:
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"GET"</js>, path=<js>"/{name}/*"</js>,
@@ -812,6 +854,7 @@ public final class RestContext extends Context {
 	 * 	)
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Path</ja> String name) <jk>throws</jk> Exception {
 	 * </p>
+	 *
 	 * <p>
 	 * Calls to <code>req.getProperties().getString(<js>"key"</js>)</code> returns strings with variables resolved.
 	 *
@@ -823,6 +866,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the config file associated with this servlet.
+	 *
 	 * <p>
 	 * The config file is identified via one of the following:
 	 * <ul>
@@ -838,6 +882,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Resolve a static resource file.
+	 *
 	 * <p>
 	 * The location of static resources are defined via one of the following:
 	 * <ul>
@@ -883,8 +928,10 @@ public final class RestContext extends Context {
 	/**
 	 * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource on this class, searches
 	 * up the parent hierarchy chain.
+	 *
 	 * <p>
 	 * If the resource cannot be found in the classpath, then an attempt is made to look in the JVM working directory.
+	 *
 	 * <p>
 	 * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
 	 * For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
@@ -947,6 +994,7 @@ public final class RestContext extends Context {
 	/**
 	 * Reads the input stream from {@link #getResource(String, Locale)} and parses it into a POJO using the parser
 	 * matched by the specified media type.
+	 *
 	 * <p>
 	 * Useful if you want to load predefined POJOs from JSON files in your classpath.
 	 *
@@ -982,8 +1030,10 @@ public final class RestContext extends Context {
 	/**
 	 * Returns the path for this resource as defined by the {@link RestResource#path()} annotation or
 	 * {@link RestConfig#setPath(String)} method concatenated with those on all parent classes.
+	 *
 	 * <p>
 	 * If path is not specified, returns <js>"/"</js>.
+	 *
 	 * <p>
 	 * Path always starts with <js>"/"</js>.
 	 *
@@ -995,6 +1045,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page title.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#title()} annotation or {@link RestConfig#setHtmlTitle(String)} method.
 	 *
@@ -1006,6 +1057,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page description.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#description()} annotation or {@link RestConfig#setHtmlDescription(String)} method.
 	 *
@@ -1017,6 +1069,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page branding.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#branding()} annotation or {@link RestConfig#setHtmlBranding(String)} method.
 	 *
@@ -1028,6 +1081,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page header contents.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#header()} annotation or {@link RestConfig#setHtmlHeader(String)} method.
 	 *
@@ -1039,6 +1093,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page nav section links.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#links()} annotation or {@link RestConfig#setHtmlLinks(String)} method.
 	 *
@@ -1050,6 +1105,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page nav section contents.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#nav()} annotation or {@link RestConfig#setHtmlNav(String)} method.
 	 *
@@ -1061,6 +1117,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page aside section contents.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#aside()} annotation or {@link RestConfig#setHtmlAside(String)} method.
 	 *
@@ -1072,6 +1129,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page footer section contents.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#footer()} annotation or {@link RestConfig#setHtmlFooter(String)} method.
 	 *
@@ -1083,6 +1141,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page CSS URL.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#cssUrl()} annotation or {@link RestConfig#setHtmlCssUrl(String)} method.
 	 *
@@ -1094,6 +1153,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page CSS contents.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#css()} annotation or {@link RestConfig#setHtmlCss(String)} method.
 	 *
@@ -1105,6 +1165,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page nowrap setting.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#nowrap()} annotation or {@link RestConfig#setHtmlNoWrap(boolean)} method.
 	 *
@@ -1116,6 +1177,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page template.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#template()} annotation or {@link RestConfig#setHtmlTemplate(Class)} method.
 	 *
@@ -1127,6 +1189,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The HTML page no-results message.
+	 *
 	 * <p>
 	 * Defined by the {@link HtmlDoc#noResultsMessage()} annotation or {@link RestConfig#setHtmlNoResultsMessage(String)}
 	 * method.
@@ -1139,6 +1202,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * The widgets used for resolving <js>"$W{...}"<js> variables.
+	 *
 	 * <p>
 	 * Defined by the {@link RestResource#widgets()} annotation or {@link RestConfig#addWidget(Class)} method.
 	 *
@@ -1150,6 +1214,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the logger to use for this resource.
+	 *
 	 * <p>
 	 * The logger for a resource is defined via one of the following:
 	 * <ul>
@@ -1165,6 +1230,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the resource bundle used by this resource.
+	 *
 	 * <p>
 	 * The resource bundle is defined via one of the following:
 	 * <ul>
@@ -1179,6 +1245,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the REST information provider used by this resource.
+	 *
 	 * <p>
 	 * The information provider is defined via one of the following:
 	 * <ul>
@@ -1194,6 +1261,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the REST call handler used by this resource.
+	 *
 	 * <p>
 	 * The call handler is defined via one of the following:
 	 * <ul>
@@ -1218,6 +1286,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the resource object.
+	 *
 	 * <p>
 	 * This is the instance of the class annotated with the {@link RestResource @RestResource} annotation, usually
 	 * an instance of {@link RestServlet}.
@@ -1231,8 +1300,9 @@ public final class RestContext extends Context {
 	/**
 	 * Returns the resource object as a {@link RestServlet}.
 	 *
-	 * @return The resource object cast to {@link RestServlet}, or
-	 * <jk>null</jk> if the resource doesn't subclass from {@link RestServlet}
+	 * @return
+	 * 	The resource object cast to {@link RestServlet}, or <jk>null</jk> if the resource doesn't subclass from
+	 * 	{@link RestServlet}
 	 */
 	public RestServlet getRestServlet() {
 		return resource instanceof RestServlet ? (RestServlet)resource : null;
@@ -1250,6 +1320,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the parent resource context (if this resource was initialized from a parent).
+	 *
 	 * <p>
 	 * From this object, you can get access to the parent resource class itself using {@link #getResource()} or
 	 * {@link #getRestServlet()}
@@ -1271,6 +1342,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the class-level properties associated with this servlet.
+	 *
 	 * <p>
 	 * Properties at the class level are defined via one of the following:
 	 * <ul>
@@ -1292,6 +1364,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the serializers registered with this resource.
+	 *
 	 * <p>
 	 * Serializers at the class level are defined via one of the following:
 	 * <ul>
@@ -1307,6 +1380,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the parsers registered with this resource.
+	 *
 	 * <p>
 	 * Parsers at the class level are defined via one of the following:
 	 * <ul>
@@ -1333,8 +1407,9 @@ public final class RestContext extends Context {
 	/**
 	 * Returns the child resources associated with this servlet.
 	 *
-	 * @return An unmodifiable map of child resources.
-	 * Keys are the {@link RestResource#path() @RestResource.path()} annotation defined on the child resource.
+	 * @return
+	 * 	An unmodifiable map of child resources.
+	 * 	Keys are the {@link RestResource#path() @RestResource.path()} annotation defined on the child resource.
 	 */
 	public Map<String,RestContext> getChildResources() {
 		return Collections.unmodifiableMap(childResources);
@@ -1344,8 +1419,9 @@ public final class RestContext extends Context {
 	 * Returns the number of times this exception was thrown based on a hash of its stacktrace.
 	 *
 	 * @param e The exception to check.
-	 * @return The number of times this exception was thrown, or <code>0</code> if <code>stackTraceHashes</code>
-	 * setting is not enabled.
+	 * @return
+	 * 	The number of times this exception was thrown, or <code>0</code> if <code>stackTraceHashes</code>
+	 * 	setting is not enabled.
 	 */
 	protected int getStackTraceOccurrence(Throwable e) {
 		if (! useStackTraceHashes)
@@ -1402,8 +1478,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the name of the client version header name used by this resource.
+	 *
 	 * <p>
 	 * The client version header is the name of the HTTP header on requests that identify a client version.
+	 *
 	 * <p>
 	 * The client version header is defined via one of the following:
 	 * <ul>
@@ -1429,6 +1507,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the bean filters associated with this resource.
+	 *
 	 * <p>
 	 * Bean filters at the class level are defined via one of the following:
 	 * <ul>
@@ -1444,6 +1523,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the POJO swaps associated with this resource.
+	 *
 	 * <p>
 	 * POJO swaps at the class level are defined via one of the following:
 	 * <ul>
@@ -1558,8 +1638,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the encoders associated with this resource.
+	 *
 	 * <p>
 	 * Encoders are used to provide various types of encoding such as <code>gzip</code> encoding.
+	 *
 	 * <p>
 	 * Encoders at the class level are defined via one of the following:
 	 * <ul>
@@ -1576,6 +1658,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the explicit list of supported accept types for this resource.
+	 *
 	 * <p>
 	 * By default, this is simply the list of accept types supported by the registered parsers, but
 	 * can be overridden via the {@link RestConfig#setSupportedAcceptTypes(MediaType...)}/{@link RestConfig#setSupportedAcceptTypes(String...)}
@@ -1589,6 +1672,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the explicit list of supported content types for this resource.
+	 *
 	 * <p>
 	 * By default, this is simply the list of content types supported by the registered serializers, but can be
 	 * overridden via the {@link RestConfig#setSupportedContentTypes(MediaType...)}/{@link RestConfig#setSupportedContentTypes(String...)}
@@ -1602,8 +1686,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the default request headers for this resource.
+	 *
 	 * <p>
 	 * These are headers automatically added to requests if not present.
+	 *
 	 * <p>
 	 * Default request headers are defined via one of the following:
 	 * <ul>
@@ -1619,8 +1705,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the default response headers for this resource.
+	 *
 	 * <p>
 	 * These are headers automatically added to responses if not otherwise specified during the request.
+	 *
 	 * <p>
 	 * Default response headers are defined via one of the following:
 	 * <ul>
@@ -1637,8 +1725,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the converters associated with this resource at the class level.
+	 *
 	 * <p>
 	 * Converters are used to 'convert' POJOs from one form to another before being passed of to the response handlers.
+	 *
 	 * <p>
 	 * Converters at the class level are defined via one of the following:
 	 * <ul>
@@ -1654,8 +1744,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the guards associated with this resource at the class level.
+	 *
 	 * <p>
 	 * Guards are used to restrict access to resources.
+	 *
 	 * <p>
 	 * Guards at the class level are defined via one of the following:
 	 * <ul>
@@ -1671,8 +1763,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the response handlers associated with this resource.
+	 *
 	 * <p>
 	 * Response handlers are used to convert POJOs returned by REST Java methods into actual HTTP responses.
+	 *
 	 * <p>
 	 * Response handlers are defined via one of the following:
 	 * <ul>
@@ -1689,6 +1783,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the media type for the specified file name.
+	 *
 	 * <p>
 	 * The list of MIME-type mappings can be augmented through the {@link RestConfig#addMimeTypes(String...)} method.
 	 * See that method for a description of predefined MIME-type mappings.
@@ -1702,8 +1797,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the favicon of the resource.
+	 *
 	 * <p>
 	 * This is the icon served up under <js>"/favicon.ico"</jk> recognized by browsers.
+	 *
 	 * <p>
 	 * The favicon is defined via one of the following:
 	 * <ul>
@@ -1719,8 +1816,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the stylesheet for use in the HTML views of the resource.
+	 *
 	 * <p>
 	 * This is the contents of the page served up under <js>"/styles.css"</jk>.
+	 *
 	 * <p>
 	 * The stylesheet is defined via one of the following:
 	 * <ul>
@@ -1736,8 +1835,10 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns <jk>true</jk> if the specified path refers to a static file.
+	 *
 	 * <p>
 	 * Static files are files pulled from the classpath and served up directly to the browser.
+	 *
 	 * <p>
 	 * Static files are defined via one of the following:
 	 * <ul>
@@ -1754,6 +1855,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the REST Java methods defined in this resource.
+	 *
 	 * <p>
 	 * These are the methods annotated with the {@link RestMethod @RestMethod} annotation.
 	 *

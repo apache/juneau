@@ -25,6 +25,7 @@ import org.apache.juneau.utils.IOPipe.*;
 
 /**
  * Utility class for running operating system processes.
+ *
  * <p>
  * Similar to {@link java.lang.ProcessBuilder} but with additional features.
  */
@@ -41,6 +42,8 @@ public class ProcBuilder {
 
 	/**
 	 * Creates a process builder with the specified arguments.
+	 *
+	 * <p>
 	 * Equivalent to calling <code>ProcessBuilder.create().command(args);</code>
 	 *
 	 * @param args The command-line arguments.
@@ -61,6 +64,8 @@ public class ProcBuilder {
 
 	/**
 	 * Command arguments.
+	 *
+	 * <p>
 	 * Arguments can be collections or arrays and will be automatically expanded.
 	 *
 	 * @param args The command-line arguments.
@@ -72,6 +77,8 @@ public class ProcBuilder {
 
 	/**
 	 * Command arguments if the specified matcher matches.
+	 *
+	 * <p>
 	 * Can be used for specifying OS-specific commands.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -96,6 +103,8 @@ public class ProcBuilder {
 
 	/**
 	 * Append to the command arguments.
+	 *
+	 * <p>
 	 * Arguments can be collections or arrays and will be automatically expanded.
 	 *
 	 * @param args The command-line arguments.
@@ -107,6 +116,8 @@ public class ProcBuilder {
 
 	/**
 	 * Append to the command arguments if the specified matcher matches.
+	 *
+	 * <p>
 	 * Arguments can be collections or arrays and will be automatically expanded.
 	 *
 	 * @param m The matcher.
@@ -131,6 +142,8 @@ public class ProcBuilder {
 
 	/**
 	 * Use by-lines mode.
+	 *
+	 * <p>
 	 * Flushes output after every line of input.
 	 *
 	 * @return This object (for method chaining).
@@ -142,6 +155,8 @@ public class ProcBuilder {
 
 	/**
 	 * Pipe output to the specified writer.
+	 *
+	 * <p>
 	 * The method can be called multiple times to write to multiple writers.
 	 *
 	 * @param w The writer to pipe to.
@@ -165,6 +180,8 @@ public class ProcBuilder {
 
 	/**
 	 * Pipe output to the specified writer, including the command and return code.
+	 *
+	 * <p>
 	 * The method can be called multiple times to write to multiple writers.
 	 *
 	 * @param w The writer to pipe to.
@@ -179,6 +196,8 @@ public class ProcBuilder {
 
 	/**
 	 * Pipe output to the specified writer, including the command and return code.
+	 *
+	 * <p>
 	 * The method can be called multiple times to write to multiple writers.
 	 * Don't close the writer afterwards.
 	 *
@@ -262,6 +281,8 @@ public class ProcBuilder {
 
 	/**
 	 * Sets the maximum allowed return code on the process call.
+	 *
+	 * <p>
 	 * If the return code exceeds this value, an IOException is returned on the {@link #run()} command.
 	 * The default value is '0'.
 	 *
@@ -327,6 +348,8 @@ public class ProcBuilder {
 
 	/**
 	 * Destroys the underlying process.
+	 *
+	 * <p>
 	 * This method is only needed if the {@link #getScanner()} method was used.
 	 */
 	private void close() {

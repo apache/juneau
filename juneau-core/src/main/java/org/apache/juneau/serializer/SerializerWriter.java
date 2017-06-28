@@ -19,6 +19,7 @@ import org.apache.juneau.*;
 
 /**
  * Simple wrapper around a standard {@link Writer} with additional methods.
+ *
  * <p>
  * Modeled after the Java ProcessBuilder class so that you can chain commands to reduce the need for string
  * concatenation for performance reasons.
@@ -50,8 +51,9 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * @param out The writer being wrapped.
-	 * @param useWhitespace If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling
-	 * 	{@link #s()} will write a space character.
+	 * @param useWhitespace
+	 * 	If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling {@link #s()} will write a
+	 * 	space character.
 	 * @param maxIndent The maximum indentation level.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The character to write when {@link #q()} is called.
@@ -69,6 +71,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Performs a carriage return.
+	 *
 	 * <p>
 	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
 	 *
@@ -84,6 +87,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Performs a carriage return at the end of a line.
+	 *
 	 * <p>
 	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
 	 *
@@ -165,9 +169,11 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Appends the specified object as a URI.
+	 *
 	 * <p>
 	 * Object is converted to a <code>String</code> using <code>toString()</code>, so this will work on {@link URL} or
 	 * {@link URI} objects, or any other type that returns a URI via it's <code>toString()</code> method.
+	 *
 	 * <p>
 	 * The URI is resolved based on the {@link SerializerContext#SERIALIZER_uriRelativity} and
 	 * {@link SerializerContext#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the

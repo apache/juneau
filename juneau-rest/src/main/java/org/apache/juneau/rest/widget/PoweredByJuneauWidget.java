@@ -16,6 +16,7 @@ import org.apache.juneau.rest.*;
 
 /**
  * Widget that places a powered-by-Juneau message on the page.
+ *
  * <p>
  * The variable it resolves is <js>"$W{poweredByJuneau}"</js>.
  */

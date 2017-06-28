@@ -24,6 +24,7 @@ import java.util.regex.*;
 
 /**
  * Log entry formatter.
+ * 
  * <p>
  * Uses three simple parameter for configuring log entry formats:
  * <ul class='spaced-list'>
@@ -35,6 +36,7 @@ import java.util.regex.*;
  * 		<code>useStackTraceHashes</code> - A setting that causes duplicate stack traces to be replaced with 8-character
  * 		 hash strings.
  * </ul>
+ * 
  * <p>
  * This class converts the format strings into a regular expression that can be used to parse the resulting log file.
  */
@@ -49,21 +51,24 @@ public class LogEntryFormatter extends Formatter {
 	/**
 	 * Create a new formatter.
 	 *
-	 * @param format The log entry format.  e.g. <js>"[{date} {level}] {msg}%n"</js>
-	 * The string can contain any of the following variables:
-	 * <ol>
-	 * 	<li><js>"{date}"</js> - The date, formatted per <js>"Logging/dateFormat"</js>.
-	 * 	<li><js>"{class}"</js> - The class name.
-	 * 	<li><js>"{method}"</js> - The method name.
-	 * 	<li><js>"{logger}"</js> - The logger name.
-	 * 	<li><js>"{level}"</js> - The log level name.
-	 * 	<li><js>"{msg}"</js> - The log message.
-	 * 	<li><js>"{threadid}"</js> - The thread ID.
-	 * 	<li><js>"{exception}"</js> - The localized exception message.
-	 * </ol>
-	 * @param dateFormat The {@link SimpleDateFormat} format to use for dates.  e.g. <js>"yyyy.MM.dd hh:mm:ss"</js>.
-	 * @param useStackTraceHashes If <jk>true</jk>, only print unique stack traces once and then refer to them by a
-	 * 	simple 8 character hash identifier.
+	 * @param format 
+	 * 	The log entry format.  e.g. <js>"[{date} {level}] {msg}%n"</js>
+	 * 	The string can contain any of the following variables:
+	 * 	<ol>
+	 * 		<li><js>"{date}"</js> - The date, formatted per <js>"Logging/dateFormat"</js>.
+	 * 		<li><js>"{class}"</js> - The class name.
+	 * 		<li><js>"{method}"</js> - The method name.
+	 * 		<li><js>"{logger}"</js> - The logger name.
+	 * 		<li><js>"{level}"</js> - The log level name.
+	 * 		<li><js>"{msg}"</js> - The log message.
+	 * 		<li><js>"{threadid}"</js> - The thread ID.
+	 * 		<li><js>"{exception}"</js> - The localized exception message.
+	 * 	</ol>
+	 * @param dateFormat 
+	 * 	The {@link SimpleDateFormat} format to use for dates.  e.g. <js>"yyyy.MM.dd hh:mm:ss"</js>.
+	 * @param useStackTraceHashes 
+	 * 	If <jk>true</jk>, only print unique stack traces once and then refer to them by a simple 8 character hash 
+	 * 	identifier.
 	 */
 	public LogEntryFormatter(String format, String dateFormat, boolean useStackTraceHashes) {
 		this.df = new SimpleDateFormat(dateFormat);
@@ -194,10 +199,12 @@ public class LogEntryFormatter extends Formatter {
 	}
 
 	/**
-	 * Given a matcher that has matched the pattern specified by {@link #getLogEntryPattern()},
-	 * returns the field value from the match.
+	 * Given a matcher that has matched the pattern specified by {@link #getLogEntryPattern()}, returns the field value 
+	 * from the match.
 	 *
-	 * @param fieldName The field name.  Possible values are:
+	 * @param fieldName 
+	 * 	The field name.  
+	 * 	Possible values are:
 	 * 	<ul>
 	 * 		<li><js>"date"</js>
 	 * 		<li><js>"class"</js>

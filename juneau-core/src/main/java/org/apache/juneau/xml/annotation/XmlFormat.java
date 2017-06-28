@@ -19,8 +19,10 @@ public enum XmlFormat {
 
 	/**
 	 * Normal formatting (default).
+	 *
 	 * <p>
 	 * On a bean class, implies {@link #ELEMENTS} meaning bean properties will be serialized as child elements by default.
+	 *
 	 * <p>
 	 * On a bean property, implies {@link #ELEMENT} meaning the bean property will be serialized as a child element.
 	 */
@@ -28,8 +30,10 @@ public enum XmlFormat {
 
 	/**
 	 * Render a bean property as an attribute instead of an element.
+	 *
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.
+	 *
 	 * <p>
 	 * Can only be applied to properties (methods/fields) of class types that can be convertible to <code>Strings</code>.
 	 */
@@ -37,8 +41,10 @@ public enum XmlFormat {
 
 	/**
 	 * Render property as attributes instead of an element.
+	 *
 	 * <p>
 	 * On a bean class, implies bean properties will be serialized as attributes instead of child elements by default.
+	 *
 	 * <p>
 	 * On bean properties, implies that the bean property value itself should be serialized as attributes on the bean
 	 * element.
@@ -49,8 +55,10 @@ public enum XmlFormat {
 
 	/**
 	 * Render property as an element instead of an attribute.
+	 *
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.
+	 *
 	 * <p>
 	 * Used to override the behavior of the {@link #ATTRS} format applied to the bean class.
 	 */
@@ -58,11 +66,14 @@ public enum XmlFormat {
 
 	/**
 	 * Render property value directly as the contents of the element.
+	 *
 	 * <p>
 	 * On a bean class, implies that bean properties will be serialized as child elements.
 	 * Note that this is equivalent to {@link #DEFAULT}.
+	 *
 	 * <p>
 	 * Only applicable for objects of type array/Collection.
+	 *
 	 * <p>
 	 * On a bean property, implies that the bean property value itself should be serialized as child elements of the
 	 * bean element.
@@ -71,10 +82,13 @@ public enum XmlFormat {
 
 	/**
 	 * Same as {@link #ELEMENTS} except primitive types (e.g. string/boolean/number/null) are not wrapped in elements.
+	 *
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.
+	 *
 	 * <p>
 	 * Only applicable for objects of type array/Collection.
+	 *
 	 * <p>
 	 * Use of this format may cause data type loss during parsing if the types cannot be inferred through reflection.
 	 */
@@ -82,6 +96,7 @@ public enum XmlFormat {
 
 	/**
 	 * Same as {@link XmlFormat#MIXED}, but whitespace in text nodes are not trimmed during parsing.
+	 *
 	 * <p>
 	 * An example use is HTML5 <xt>&lt;pre&gt;</xt> where whitespace should not be discarded.
 	 */
@@ -89,10 +104,13 @@ public enum XmlFormat {
 
 	/**
 	 * Render property value as the text content of the element.
+	 *
 	 * <p>
 	 * Similar to {@link #MIXED} but value must be a single value, not a collection.
+	 *
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.
+	 *
 	 * <p>
 	 * Use of this format may cause data type loss during parsing if the type cannot be inferred through reflection.
 	 */
@@ -104,12 +122,14 @@ public enum XmlFormat {
 	TEXT_PWS,
 
 	/**
-	 * Same as {@link #TEXT} except the content is expected to be fully-formed XML that will
-	 * get serialized as-is.
+	 * Same as {@link #TEXT} except the content is expected to be fully-formed XML that will get serialized as-is.
+	 *
 	 * <p>
 	 * During parsing, this XML text will be re-serialized and set on the property.
+	 *
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.
+	 *
 	 * <p>
 	 * Use of this format may cause data type loss during parsing if the type cannot be inferred through reflection.
 	 */
@@ -117,6 +137,7 @@ public enum XmlFormat {
 
 	/**
 	 * Prevents collections and arrays from being enclosed in <xt>&lt;array&gt;</xt> elements.
+	 *
 	 * <p>
 	 * Can only be applied to properties (methods/fields) of type collection or array, or collection classes.
 	 */
@@ -124,15 +145,17 @@ public enum XmlFormat {
 
 	/**
 	 * Identifies a void element.
+	 *
 	 * <p>
 	 * Only applicable for bean classes.
+	 *
 	 * <p>
 	 * Identifies an element that never contains content.
+	 *
 	 * <p>
-	 * The main difference in behavior is how non-void empty elements are handled
-	 * in the HTML serializer.
-	 * Void elements are serialized as collapsed nodes (e.g. <js>"&lt;br/&gt;"</js>)
-	 * whereas non-void empty elements are serialized with an end tag (e.g. "&lt;p&gt;&lt;/p&gt;").
+	 * The main difference in behavior is how non-void empty elements are handled in the HTML serializer.
+	 * Void elements are serialized as collapsed nodes (e.g. <js>"&lt;br/&gt;"</js>) whereas non-void empty elements are
+	 * serialized with an end tag (e.g. "&lt;p&gt;&lt;/p&gt;").
 	 */
 	VOID;
 

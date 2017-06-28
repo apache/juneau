@@ -29,15 +29,15 @@ import org.apache.juneau.transform.*;
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Content-Type</code> types: <code>text/uon</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * This parser uses a state machine, which makes it very fast and efficient.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link UonParserContext}
@@ -104,8 +104,9 @@ public class UonParser extends ReaderParser {
 	 * @param eType The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param r The reader being parsed.
 	 * @param outer The outer object (for constructing nested inner classes).
-	 * @param isUrlParamValue If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit
-	 * different than the default case.
+	 * @param isUrlParamValue
+	 * 	If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit different than the
+	 * 	default case.
 	 * @param pMeta The current bean property being parsed.
 	 * @return The parsed object.
 	 * @throws Exception
@@ -676,7 +677,7 @@ public class UonParser extends ReaderParser {
 	private static final AsciiSet endCharsParam = new AsciiSet(""+AMP), endCharsNormal = new AsciiSet(",)"+AMP);
 
 
-	/**
+	/*=
 	 * Parses a string of the form "'foo'"
 	 * All whitespace within parenthesis are preserved.
 	 */

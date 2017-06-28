@@ -33,14 +33,16 @@ import org.apache.juneau.xml.annotation.*;
  * Serializes POJO models to XML.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>text/xml</code>
+ *
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * See the {@link JsonSerializer} class for details on how Java models map to JSON.
+ *
  * <p>
  * For example, the following JSON...
  * <p class='bcode'>
@@ -81,6 +83,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		<xt>&lt;height&gt;</xt>62.4<xt>&lt;/height&gt;</xt>
  * 		<xt>&lt;fico_x0020_score&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
+ *
  * <p>
  * An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
  * <p class='bcode'>
@@ -100,16 +103,19 @@ import org.apache.juneau.xml.annotation.*;
  * 		<xt>&lt;height</xt> <xa>_type</xa>=<xs>'number'</xs><xt>&gt;</xt>62.4<xt>&lt;/height&gt;</xt>
  * 		<xt>&lt;fico_x0020_score</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
+ * </p>
+ *
  * <p>
  * This serializer provides several serialization options.
  * Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
+ *
  * <p>
  * If an attribute name contains any non-valid XML element characters, they will be escaped using standard
  * {@code _x####_} notation.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link XmlSerializerContext}
@@ -117,7 +123,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- * <p>
+ *
  * The following direct subclasses are provided for convenience:
  * <ul>
  * 	<li>{@link Sq} - Default serializer, single quotes.
@@ -353,8 +359,8 @@ public class XmlSerializer extends WriterSerializer {
 	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
 	 * @param format The format to serialize the output to.
 	 * @param isMixed We're serializing mixed content, so don't use whitespace.
-	 * @param preserveWhitespace <jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or
-	 * {@link XmlFormat#TEXT_PWS}.
+	 * @param preserveWhitespace
+	 * 	<jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws Exception If a problem occurred trying to convert the output.

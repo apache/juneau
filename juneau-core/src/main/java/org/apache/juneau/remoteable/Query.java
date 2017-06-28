@@ -61,6 +61,7 @@ import org.apache.juneau.urlencoding.*;
  * 		String myProxyMethod6(<ja>@Query</ja> Reader reader);
  * 	}
  * </p>
+ *
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
  * {@link RequestBean @RequestBean}:
@@ -112,6 +113,7 @@ import org.apache.juneau.urlencoding.*;
  * 		Reader getReader();
  * 	}
  * </p>
+ *
  * <p>
  * The {@link #name()} and {@link #value()} elements are synonyms for specifying the parameter name.
  * Only one should be used.
@@ -138,11 +140,14 @@ public @interface Query {
 
 	/**
 	 * The query parameter name.
+	 *
 	 * <p>
 	 * Note that {@link #name()} and {@link #value()} are synonyms.
+	 *
 	 * <p>
 	 * The value should be either <js>"*"</js> to represent multiple name/value pairs, or a label that defines the
 	 * query parameter name.
+	 *
 	 * <p>
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
@@ -189,6 +194,7 @@ public @interface Query {
 
 	/**
 	 * A synonym for {@link #name()}.
+	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */
@@ -196,6 +202,7 @@ public @interface Query {
 
 	/**
 	 * Skips this value if it's an empty string or empty collection/array.
+	 *
 	 * <p>
 	 * Note that <jk>null</jk> values are already ignored.
 	 */
@@ -203,9 +210,11 @@ public @interface Query {
 
 	/**
 	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
+	 *
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
 	 * then on the client which by default is {@link UrlEncodingSerializer}.
+	 *
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */

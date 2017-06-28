@@ -23,6 +23,7 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Contains information about the matched path on the HTTP request.
+ *
  * <p>
  * Provides access to the matched path variables and path match remainder.
  */
@@ -65,6 +66,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Returns the specified path parameter converted to a POJO.
+	 *
 	 * <p>
 	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
 	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
@@ -99,9 +101,11 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Returns the specified path parameter converted to a POJO.
+	 *
 	 * <p>
 	 * The type can be any POJO type convertible from a <code>String</code> (See <a class="doclink"
 	 * href="package-summary.html#PojosConvertibleFromString">POJOs Convertible From Strings</a>).
+	 *
 	 * <p>
 	 * Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
 	 *
@@ -121,13 +125,15 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * </p>
 	 *
 	 * @param name The attribute name.
-	 * @param type The type of object to create.
-	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * {@link GenericArrayType}
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * {@link GenericArrayType}
-	 * <br>Ignored if the main type is not a map or collection.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the attribute value to.
 	 * @return The attribute value converted to the specified class type.
 	 * @throws ParseException
@@ -149,9 +155,9 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	/**
 	 * Returns the decoded remainder of the URL following any path pattern matches.
+	 *
 	 * <p>
 	 * The behavior of path remainder is shown below given the path pattern "/foo/*":
-	 * <p>
 	 * <table class='styled'>
 	 * 	<tr>
 	 * 		<th>URL</th>

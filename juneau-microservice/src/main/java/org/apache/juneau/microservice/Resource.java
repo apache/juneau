@@ -18,6 +18,7 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Superclass for all REST resources.
+ * 
  * <p>
  * In additional to the functionality of the {@link RestServletDefault} group,
  * augments the {@link RestContext#getVarResolver()} method with the following additional variable types:

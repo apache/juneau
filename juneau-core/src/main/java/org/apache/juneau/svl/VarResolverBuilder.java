@@ -40,8 +40,9 @@ public class VarResolverBuilder {
 	/**
 	 * Register new variables with this resolver.
 	 *
-	 * @param vars The variable resolver classes.
-	 * These classes must subclass from {@link Var} and have no-arg constructors.
+	 * @param vars
+	 * 	The variable resolver classes.
+	 * 	These classes must subclass from {@link Var} and have no-arg constructors.
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
@@ -55,6 +56,7 @@ public class VarResolverBuilder {
 
 	/**
 	 * Adds the default variables to this builder.
+	 *
 	 * <p>
 	 * The default variables are:
 	 * <ul>
@@ -72,6 +74,7 @@ public class VarResolverBuilder {
 
 	/**
 	 * Associates a context object with this resolver.
+	 *
 	 * <p>
 	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
 	 * output.
@@ -87,6 +90,7 @@ public class VarResolverBuilder {
 
 	/**
 	 * Associates multiple context objects with this resolver.
+	 *
 	 * <p>
 	 * A context object is essentially some environmental object that doesn't change but is used by vars to customize
 	 * output.

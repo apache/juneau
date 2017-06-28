@@ -19,8 +19,10 @@ import java.lang.annotation.*;
 
 /**
  * Annotation for specifying various XML options for the XML and RDF/XML serializers.
+ *
  * <p>
  * Can be applied to Java packages, types, fields, and methods.
+ *
  * <p>
  * Can be used for the following:
  * <ul>
@@ -37,6 +39,7 @@ public @interface Xml {
 
 	/**
 	 * Sets the name of the XML child elements for bean properties of type collection and array.
+	 *
 	 * <p>
 	 * Applies only to collection and array bean properties.
 	 *
@@ -47,9 +50,9 @@ public @interface Xml {
 	 * 		<jk>public</jk> String[] <jf>children</jf> = {<js>"foo"</js>,<js>"bar"</js>};
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * Without the <ja>@Xml</ja> annotation, serializing this bean as XML would have produced the following...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<xt>&lt;object&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
@@ -58,9 +61,9 @@ public @interface Xml {
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
 	 * </p>
+	 *
 	 * <p>
 	 * With the annotations, serializing this bean as XML produces the following...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<xt>&lt;object&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
@@ -74,6 +77,7 @@ public @interface Xml {
 
 	/**
 	 * Sets the XML prefix of this property or class.
+	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		When applied to a {@link ElementType#TYPE}, namespace is applied to all properties in the class, and all
@@ -82,6 +86,7 @@ public @interface Xml {
 	 * 		When applied to bean properties on {@link ElementType#METHOD} and {@link ElementType#FIELD}, applies
 	 * 		to the bean property.
 	 * </ul>
+	 *
 	 * <p>
 	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a
 	 * {@link XmlNs} with the same name through the {@link XmlSchema#xmlNs()} annotation on the package.
@@ -90,6 +95,7 @@ public @interface Xml {
 
 	/**
 	 * Sets the namespace URI of this property or class.
+	 *
 	 * <p>
 	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link XmlNs} with the
 	 * same name through the {@link XmlSchema#xmlNs()} annotation on the package.
@@ -120,9 +126,9 @@ public @interface Xml {
 	 * 		<jk>public</jk> String[] <jf>children</jf> = <js>"foo"</js>,<js>"bar"</js>};
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * Without the <ja>@Xml</ja> annotations, serializing this bean as XML would have produced the following...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<xt>&lt;object</xt> <xa>href</xa>=<js>'http://foo'</js><xt>&gt;</xt>
 	 * 		<xt>&lt;f1&gt;</xt>123<xt>&lt;/f1&gt;</xt>
@@ -132,9 +138,9 @@ public @interface Xml {
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
 	 * </p>
+	 *
 	 * <p>
 	 * With the annotations, serializing this bean as XML produces the following...
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<xt>&lt;object</xt> <xa>f1</xa>=<js>'123'</js><xt>&gt;</xt>
 	 * 		<xt>&lt;href&gt;</xt>http://foo<xt>&lt;/href&gt;</xt>

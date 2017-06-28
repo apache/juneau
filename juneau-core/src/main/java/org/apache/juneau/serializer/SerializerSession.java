@@ -28,6 +28,7 @@ import org.apache.juneau.transform.*;
 
 /**
  * Context object that lives for the duration of a single use of {@link Serializer}.
+ *
  * <p>
  * Used by serializers for the following purposes:
  * <ul class='spaced-list'>
@@ -40,6 +41,7 @@ import org.apache.juneau.transform.*;
  * 	<li>
  * 		Allowing serializer properties to be overridden on method calls.
  * </ul>
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -79,30 +81,36 @@ public class SerializerSession extends BeanSession {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for this object.
-	 * @param output The output object.
-	 * <br>Character-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link Writer}
-	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
-	 * </ul>
-	 * <br>Stream-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link OutputStream}
-	 * 	<li>{@link File}
-	 * </ul>
-	 * @param op The override properties.
-	 * These override any context properties defined in the context.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
+	 * @param output
+	 * 	The output object.
+	 * 	<br>Character-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 	</ul>
+	 * 	<br>Stream-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @param op
+	 * 	The override properties.
+	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param locale
+	 * 	The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone
+	 * 	The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext The URI context.
-	 * Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param uriContext
+	 * 	The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
 	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
@@ -166,7 +174,10 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Wraps the specified output object inside an output stream.
+	 *
+	 * <p>
 	 * Subclasses can override this method to implement their own specialized output streams.
+	 *
 	 * <p>
 	 * This method can be used if the output object is any of the following class types:
 	 * <ul>
@@ -193,7 +204,10 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Wraps the specified output object inside a writer.
+	 *
+	 * <p>
 	 * Subclasses can override this method to implement their own specialized writers.
+	 *
 	 * <p>
 	 * This method can be used if the output object is any of the following class types:
 	 * <ul>
@@ -252,6 +266,7 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the Java method that invoked this serializer.
+	 *
 	 * <p>
 	 * When using the REST API, this is the Java method invoked by the REST call.
 	 * Can be used to access annotations defined on the method or class.
@@ -403,8 +418,9 @@ public class SerializerSession extends BeanSession {
 	 * @param attrName The attribute name.
 	 * @param o The current object being serialized.
 	 * @param eType The expected class type.
-	 * @return The {@link ClassMeta} of the object so that <code>instanceof</code> operations only need to be performed
-	 * once (since they can be expensive).
+	 * @return
+	 * 	The {@link ClassMeta} of the object so that <code>instanceof</code> operations only need to be performed
+	 * 	once (since they can be expensive).
 	 * @throws SerializeException If recursion occurred.
 	 */
 	public ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
@@ -607,27 +623,28 @@ public class SerializerSession extends BeanSession {
 	/**
 	 * Converts a String to an absolute URI based on the {@link UriContext} on this session.
 	 *
-	 * @param uri The input URI.
-	 * Can be any of the following:
-	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
-	 * 	<li>{@link CharSequence}
-	 * </ul>
-	 * URI can be any of the following forms:
-	 * <ul>
-	 * 	<li><js>"foo://foo"</js> - Absolute URI.
-	 * 	<li><js>"/foo"</js> - Root-relative URI.
-	 * 	<li><js>"/"</js> - Root URI.
-	 * 	<li><js>"context:/foo"</js> - Context-root-relative URI.
-	 * 	<li><js>"context:/"</js> - Context-root URI.
-	 * 	<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
-	 *		<li><js>"servlet:/"</js> - Servlet-path URI.
-	 * 	<li><js>"request:/foo"</js> - Request-path-relative URI.
-	 * 	<li><js>"request:/"</js> - Request-path URI.
-	 * 	<li><js>"foo"</js> - Path-info-relative URI.
-	 * 	<li><js>""</js> - Path-info URI.
-	 * </ul>
+	 * @param uri
+	 * 	The input URI.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link java.net.URI}
+	 * 		<li>{@link java.net.URL}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	URI can be any of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"foo://foo"</js> - Absolute URI.
+	 * 		<li><js>"/foo"</js> - Root-relative URI.
+	 * 		<li><js>"/"</js> - Root URI.
+	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI.
+	 * 		<li><js>"context:/"</js> - Context-root URI.
+	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+	 *			<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI.
+	 * 		<li><js>"request:/"</js> - Request-path URI.
+	 * 		<li><js>"foo"</js> - Path-info-relative URI.
+	 * 		<li><js>""</js> - Path-info URI.
+	 * 	</ul>
 	 * @return The resolved URI.
 	 */
 	public String resolveUri(Object uri) {
@@ -636,8 +653,10 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Opposite of {@link #resolveUri(Object)}.
+	 *
 	 * <p>
 	 * Converts the URI to a value relative to the specified <code>relativeTo</code> parameter.
+	 *
 	 * <p>
 	 * Both parameters can be any of the following:
 	 * <ul>
@@ -645,6 +664,8 @@ public class SerializerSession extends BeanSession {
 	 * 	<li>{@link java.net.URL}
 	 * 	<li>{@link CharSequence}
 	 * </ul>
+	 *
+	 * <p>
 	 * Both URIs can be any of the following forms:
 	 * <ul>
 	 * 	<li><js>"foo://foo"</js> - Absolute URI.
@@ -824,6 +845,7 @@ public class SerializerSession extends BeanSession {
 
 	/**
 	 * Returns the parser-side expected type for the object.
+	 *
 	 * <p>
 	 * The return value depends on the {@link SerializerContext#SERIALIZER_abridged} setting.
 	 * When enabled, the parser already knows the Java POJO type being parsed, so there is

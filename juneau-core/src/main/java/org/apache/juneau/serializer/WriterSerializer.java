@@ -25,7 +25,7 @@ import org.apache.juneau.utils.*;
  * Subclass of {@link Serializer} for character-based serializers.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * This class is typically the parent class of all character-based serializers.
  * It has 2 abstract methods to implement...
  * <ul class='spaced-list'>
@@ -36,8 +36,9 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h6 class='topic'>@Produces annotation</h6>
- * <p>
+ *
  * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
+ *
  * <p>
  * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
  * and {@link #getResponseContentType()} methods.
@@ -78,8 +79,9 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	/**
-	 * Identical to {@link #serialize(Object)} except throws a {@link RuntimeException}
-	 * instead of a {@link SerializeException}.
+	 * Identical to {@link #serialize(Object)} except throws a {@link RuntimeException} instead of a {@link SerializeException}.
+	 *
+	 * <p>
 	 * This is typically good enough for debugging purposes.
 	 *
 	 * @param o The object to serialize.

@@ -22,13 +22,14 @@ public class ParserContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Trim parsed strings.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.trimStrings"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
@@ -37,7 +38,7 @@ public class ParserContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Strict mode.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.strict"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -46,10 +47,10 @@ public class ParserContext extends BeanContext {
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
+	 *
 	 * <p>
 	 * Strict mode can mean different things for different parsers.
-	 * However, all reader-based parsers will
-	 * <p>
+	 *
 	 * <table class='styled'>
 	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
 	 * 	<tr>
@@ -79,15 +80,17 @@ public class ParserContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Input stream charset.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"UTF-8"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 *
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 	 */
@@ -95,17 +98,20 @@ public class ParserContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  File charset.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.fileCharset"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"default"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
+	 *
 	 * <p>
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
+	 *
 	 * <p>
 	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
 	 */
@@ -113,13 +119,14 @@ public class ParserContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Parser listener.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.listener"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? extends ParserListener&gt;</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 */

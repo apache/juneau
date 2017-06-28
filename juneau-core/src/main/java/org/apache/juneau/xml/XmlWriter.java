@@ -135,6 +135,8 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Closes a tag.
+	 *
+	 * <p>
 	 * Shortcut for <code>append(<js>'>'</js>);</code>
 	 *
 	 * @return This object (for method chaining).
@@ -147,6 +149,8 @@ public class XmlWriter extends SerializerWriter {
 
 	/**
 	 * Closes an empty tag.
+	 *
+	 * <p>
 	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'>'</js>);</code>
 	 *
 	 * @return This object (for method chaining).
@@ -534,8 +538,8 @@ public class XmlWriter extends SerializerWriter {
 	 * Serializes and encodes the specified object as valid XML text.
 	 *
 	 * @param o The object being serialized.
-	 * @param preserveWhitespace If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or
-	 * {@link XmlFormat#TEXT_PWS} content.
+	 * @param preserveWhitespace
+	 * 	If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */

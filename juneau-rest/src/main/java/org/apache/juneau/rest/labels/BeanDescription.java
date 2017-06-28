@@ -17,9 +17,11 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Simple serializable bean description.
+ *
  * <p>
  * Given a particular class type, this serializes the class into the fully-qualified class name and the properties
  * associated with the class.
+ *
  * <p>
  * Useful for rendering simple information about a bean during REST OPTIONS requests.
  */

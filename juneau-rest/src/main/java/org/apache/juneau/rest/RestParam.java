@@ -18,8 +18,10 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * REST java method parameter resolver.
+ *
  * <p>
  * Used to resolve instances of classes being passed to Java REST methods.
+ *
  * <p>
  * This class is associated with REST classes via the {@link RestResource#paramResolvers()} annotation and
  * {@link RestConfig#addParamResolvers(Class...)} method.
@@ -34,8 +36,9 @@ public abstract class RestParam {
 	 * Constructor.
 	 *
 	 * @param paramType The Swagger parameter type.
-	 * @param name The parameter name.
-	 * Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
+	 * @param name
+	 * 	The parameter name.
+	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
 	 */
 	protected RestParam(RestParamType paramType, String name, Type type) {

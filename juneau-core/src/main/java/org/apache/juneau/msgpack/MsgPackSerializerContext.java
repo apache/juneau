@@ -17,9 +17,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Configurable properties on the {@link MsgPackSerializer} class.
+ *
  * <p>
  * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
  * passed into the constructor.
+ *
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  *
@@ -40,19 +42,21 @@ public final class MsgPackSerializerContext extends SerializerContext {
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"MsgPackSerializer.addBeanTypeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
 	 * the value type.
+	 *
 	 * <p>
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
@@ -64,6 +68,7 @@ public final class MsgPackSerializerContext extends SerializerContext {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *

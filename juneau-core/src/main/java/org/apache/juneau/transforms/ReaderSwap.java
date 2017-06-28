@@ -28,16 +28,18 @@ import org.apache.juneau.xml.*;
  * Transforms the contents of a {@link Reader} into an {@code Object}.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * The {@code Reader} must contain JSON, Juneau-generated XML (output from {@link XmlSerializer}), or Juneau-generated
  * HTML (output from {@link JsonSerializer}) in order to be parsed correctly.
+ *
  * <p>
  * Useful for serializing models that contain {@code Readers} created by {@code RestCall} instances.
+ *
  * <p>
  * This is a one-way transform, since {@code Readers} cannot be reconstituted.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- * <p>
+ *
  * The following direct subclasses are provided for convenience:
  * <ul>
  * 	<li>{@link Json} - Parses JSON text.

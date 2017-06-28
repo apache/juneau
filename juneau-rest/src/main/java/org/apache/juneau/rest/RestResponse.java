@@ -34,9 +34,11 @@ import org.apache.juneau.xml.*;
 
 /**
  * Represents an HTTP response for a REST resource.
+ *
  * <p>
  * Essentially an extended {@link HttpServletResponse} with some special convenience methods that allow you to easily
  * output POJOs as responses.
+ *
  * <p>
  * Since this class extends {@link HttpServletResponse}, developers are free to use these convenience methods, or
  * revert to using lower level methods like any other servlet response.
@@ -49,6 +51,7 @@ import org.apache.juneau.xml.*;
  * 			.setOutput(<js>"Simple string response"</js>);
  * 	}
  * </p>
+ *
  * <p>
  * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
  * class.
@@ -151,8 +154,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTTP output on the response.
+	 *
 	 * <p>
 	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
+	 *
 	 * <p>
 	 * Can be of any of the following types:
 	 * <ul>
@@ -161,6 +166,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<li> Any serializable type defined in <a class="doclink"
 	 * 		href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>
 	 * </ul>
+	 *
 	 * <p>
 	 * If it's an {@link InputStream} or {@link Reader}, you must also specify the <code>Content-Type</code> using the
 	 * {@link #setContentType(String)} method.
@@ -176,6 +182,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Add a serializer property to send to the serializers to override a default value.
+	 *
 	 * <p>
 	 * Can be any value specified in the following classes:
 	 * <ul>
@@ -329,6 +336,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Returns the writer to the response body.
+	 *
+	 * <p>
 	 * This methods bypasses any specified encoders and returns a regular unbuffered writer.
 	 * Use the {@link #getNegotiatedWriter()} method if you want to use the matched encoder (if any).
 	 */
@@ -339,6 +348,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Convenience method meant to be used when rendering directly to a browser with no buffering.
+	 *
+	 * <p>
 	 * Sets the header <js>"x-content-type-options=nosniff"</js> so that output is rendered immediately on IE and Chrome
 	 * without any buffering for content-type sniffing.
 	 *
@@ -394,6 +405,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Redirects to the specified URI.
+	 *
 	 * <p>
 	 * Relative URIs are always interpreted as relative to the context root.
 	 * This is similar to how WAS handles redirect requests, and is different from how Tomcat handles redirect requests.
@@ -427,11 +439,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML page title.
+	 *
 	 * <p>
 	 * The format of this value is plain text.
+	 *
 	 * <p>
 	 * It gets wrapped in a <code><xt>&lt;h3&gt; <xa>class</xa>=<xs>'title'</xs>&gt;</xt></code> element and then added
 	 * to the <code><xt>&lt;header&gt;</code> section on the page.
+	 *
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
@@ -441,11 +456,13 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<li><code>{servletClass}.title</code> resource bundle value.
 	 * 	<li><code>info/title</code> entry in swagger file.
 	 * </ol>
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
-	 * <p>
+	 *
 	 * <ul class='doctree'>
 	 * 	<li class='info'>
 	 * 		In most cases, you'll simply want to use the <code>@RestResource(title)</code> annotation to specify the
@@ -453,10 +470,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		However, this annotation is provided in cases where you want the page title to be different that the one
 	 * 		shown in the swagger document.
 	 * </ul>
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#title() @HtmlDoc.title()} annotation.
 	 *
-	 * @param value The HTML page title.
+	 * @param value
+	 * 	The HTML page title.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
 	 * 	<ul class='doctree'>
@@ -472,11 +491,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML page description.
+	 *
 	 * <p>
 	 * The format of this value is plain text.
+	 *
 	 * <p>
 	 * It gets wrapped in a <code><xt>&lt;h5&gt; <xa>class</xa>=<xs>'description'</xs>&gt;</xt></code> element and then
 	 * added to the <code><xt>&lt;header&gt;</code> section on the page.
+	 *
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
@@ -488,11 +510,13 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<li><code>{servletClass}.description</code> resource bundle value.
 	 * 	<li><code>info/description</code> entry in swagger file.
 	 * </ol>
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
-	 * <p>
+	 *
 	 * <ul class='doctree'>
 	 * 	<li class='info'>
 	 * 		In most cases, you'll simply want to use the <code>@RestResource(description)</code> or
@@ -500,10 +524,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		However, this annotation is provided in cases where you want the text to be different that the values shown
 	 * 		in the swagger document.
 	 * </ul>
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#description() @HtmlDoc.description()} annotation.
 	 *
-	 * @param value The HTML page description.
+	 * @param value
+	 * 	The HTML page description.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
 	 * 	<ul class='doctree'>
@@ -519,19 +545,25 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML page branding in the header section of the page generated by the default HTML doc template.
+	 *
 	 * <p>
 	 * The format of this value is HTML.
+	 *
 	 * <p>
 	 * This is arbitrary HTML that can be added to the header section to provide basic custom branding on the page.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#branding() @HtmlDoc.branding()} annotation.
 	 *
-	 * @param value The HTML page branding.
-	 * Object will be converted to a string using {@link Object#toString()}.
+	 * @param value
+	 * 	The HTML page branding.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlBranding(Object value) {
@@ -540,29 +572,36 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML header section contents.
+	 *
 	 * <p>
 	 * The format of this value is HTML.
+	 *
 	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
 	 * to be whatever you want.
+	 *
 	 * <p>
 	 * When a value is specified, the {@link #setHtmlTitle(Object)} and {@link #setHtmlDescription(Object)} values will
 	 * be ignored.
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no header.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#header() @HtmlDoc.header()} annotation.
 	 *
-	 * @param value The HTML header section contents.
-	 * Object will be converted to a string using {@link Object#toString()}.
-	 * <p>
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 			waste string concatenation cycles on non-HTML views.
-	 * </ul>
+	 * @param value
+	 * 	The HTML header section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlHeader(Object value) {
@@ -571,28 +610,35 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the links in the HTML nav section.
+	 *
 	 * <p>
 	 * The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
 	 * relative (to the servlet) or absolute URLs.
+	 *
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
 	 * <p>
 	 * This field can also use URIs of any support type in {@link UriResolver}.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#links() @HtmlDoc.links()} annotation.
 	 *
-	 * @param value The HTML nav section links links.
-	 * Object will be converted to a string using {@link Object#toString()}.
-	 * <p>
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 			waste string concatenation cycles on non-HTML views.
-	 * </ul>
+	 * @param value
+	 * 	The HTML nav section links links.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlLinks(Object value) {
@@ -602,29 +648,37 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML nav section contents.
+	 *
 	 * <p>
 	 * The format of this value is HTML.
+	 *
 	 * <p>
 	 * The nav section of the page contains the links.
+	 *
 	 * <p>
 	 * The format of this value is HTML.
+	 *
 	 * <p>
 	 * When a value is specified, the {@link #setHtmlLinks(Object)} value will be ignored.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#nav() @HtmlDoc.nav()} annotation.
 	 *
-	 * @param value The HTML nav section contents.
-	 * Object will be converted to a string using {@link Object#toString()}.
-	 * <p>
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 			waste string concatenation cycles on non-HTML views.
-	 * </ul>
+	 * @param value
+	 * 	The HTML nav section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlNav(Object value) {
@@ -634,25 +688,31 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML aside section contents.
+	 *
 	 * <p>
 	 * The format of this value is HTML.
+	 *
 	 * <p>
 	 * The aside section typically floats on the right side of the page.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#aside() @HtmlDoc.aside()} annotation.
 	 *
-	 * @param value The HTML aside section contents.
-	 * Object will be converted to a string using {@link Object#toString()}.
-	 * <p>
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to waste
-	 * 			string concatenation cycles on non-HTML views.
-	 * </ul>
+	 * @param value
+	 * 	The HTML aside section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to waste
+	 * 				string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlAside(Object value) {
@@ -662,25 +722,31 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML footer section contents.
+	 *
 	 * <p>
 	 * The format of this value is HTML.
+	 *
 	 * <p>
 	 * The footer section typically floats on the bottom of the page.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#footer() @HtmlDoc.footer()} annotation.
 	 *
-	 * @param value The HTML footer section contents.
-	 * Object will be converted to a string using {@link Object#toString()}.
-	 * <p>
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 			waste string concatenation cycles on non-HTML views.
-	 * </ul>
+	 * @param value
+	 * 	The HTML footer section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlFooter(Object value) {
@@ -690,23 +756,28 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the HTML CSS style section contents.
+	 *
 	 * <p>
 	 * The format of this value is CSS.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#css() @HtmlDoc.css()} annotation.
 	 *
-	 * @param value The HTML CSS style section contents.
-	 * Object will be converted to a string using {@link Object#toString()}.
-	 * <p>
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 			waste string concatenation cycles on non-HTML views.
-	 * </ul>
+	 * @param value
+	 * 	The HTML CSS style section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlCss(Object value) {
@@ -716,26 +787,32 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Sets the CSS URL in the HTML CSS style section.
+	 *
 	 * <p>
 	 * The format of this value is a URL.
+	 *
 	 * <p>
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
+	 *
 	 * <p>
 	 * The format of this value is CSS.
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols defined
 	 * by {@link UriResolver}.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#cssUrl() @HtmlDoc.cssUrl()} annotation.
 	 *
-	 * @param value The CSS URL in the HTML CSS style section.
-	 * Object will be converted to a string using {@link Object#toString()}.
-	 * <p>
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 			waste string concatenation cycles on non-HTML views.
-	 * </ul>
+	 * @param value
+	 * 	The CSS URL in the HTML CSS style section.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setHtmlCssUrl(Object value) {
@@ -745,6 +822,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#nowrap() @HtmlDoc.nowrap()} annotation.
 	 *
@@ -758,6 +836,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Specifies the text to display when serializing an empty array or collection.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc.noResultsMessage()}
 	 * annotation.
@@ -772,9 +851,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
+	 *
 	 * <p>
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
 	 *
@@ -788,9 +869,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Specifies the template class to use for rendering the HTML page.
+	 *
 	 * <p>
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
 	 *

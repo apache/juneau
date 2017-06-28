@@ -17,6 +17,7 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Defines an interface for defining resolvers for <js>"$W{...}"</js> string variables.
+ *
  * <p>
  * Widgets are associated with resources through the following
  * <ul>
@@ -30,8 +31,9 @@ public abstract class Widget {
 	/**
 	 * The widget key (i.e. The contents of the <js>"$W{...}"</js> variable).
 	 *
-	 * @return The widget key.
-	 * Must not be <jk>null</jk>.
+	 * @return
+	 * 	The widget key.
+	 * 	Must not be <jk>null</jk>.
 	 */
 	public abstract String getName();
 

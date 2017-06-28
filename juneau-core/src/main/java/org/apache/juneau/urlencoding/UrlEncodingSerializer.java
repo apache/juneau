@@ -33,26 +33,26 @@ import org.apache.juneau.uon.*;
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>application/x-www-form-urlencoded</code>
  * <p>
  * Produces <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link UonSerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
+ *
  * <p>
  * The following shows a sample object defined in Javascript:
- * </p>
  * <p class='bcode'>
  * 	{
  * 		id: 1,
@@ -75,10 +75,9 @@ import org.apache.juneau.uon.*;
  * 		]
  * 	}
  * </p>
+ *
  * <p>
- * Using the "strict" syntax defined in this document, the equivalent
- * 	URL-encoded notation would be as follows:
- * </p>
+ * Using the "strict" syntax defined in this document, the equivalent URL-encoded notation would be as follows:
  * <p class='bcode'>
  * 	<ua>id</ua>=<un>1</un>
  * 	&amp;<ua>name</ua>=<us>'John+Smith'</us>,
@@ -155,6 +154,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Expanded(PropertyStore propertyStore) {
@@ -174,6 +174,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore propertyStore) {
@@ -193,6 +194,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 		/**
 		 * Constructor.
+		 *
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public PlainText(PropertyStore propertyStore) {
@@ -209,6 +211,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public UrlEncodingSerializer(PropertyStore propertyStore) {
@@ -227,8 +230,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	}
 
 	/**
-	 * Workhorse method. Determines the type of object, and then calls the
-	 * appropriate type-specific serialization method.
+	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeAnything(UrlEncodingSerializerSession session, UonWriter out, Object o) throws Exception {
@@ -405,15 +407,19 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Converts the specified object to a string using this serializers {@link BeanSession#convertToType(Object, Class)} method
-	 * 	and runs {@link URLEncoder#encode(String,String)} against the results.
+	 * Converts the specified object to a string using this serializers {@link BeanSession#convertToType(Object, Class)}
+	 * method and runs {@link URLEncoder#encode(String,String)} against the results.
+	 *
+	 * <p>
 	 * Useful for constructing URL parts.
 	 *
 	 * @param o The object to serialize.
-	 * @param urlEncode URL-encode the string if necessary.
-	 * If <jk>null</jk>, then uses the value of the {@link UonSerializerContext#UON_encodeChars} setting.
-	 * @param plainTextParams Whether we're using plain-text params.
-	 * If <jk>null</jk>, then uses the value from the {@link UrlEncodingSerializerContext#URLENC_paramFormat} setting.
+	 * @param urlEncode
+	 * 	URL-encode the string if necessary.
+	 * 	If <jk>null</jk>, then uses the value of the {@link UonSerializerContext#UON_encodeChars} setting.
+	 * @param plainTextParams
+	 * 	Whether we're using plain-text params.
+	 * 	If <jk>null</jk>, then uses the value from the {@link UrlEncodingSerializerContext#URLENC_paramFormat} setting.
 	 * @return The serialized object.
 	 */
 	private String serializePart(Object o, Boolean urlEncode, Boolean plainTextParams) {
@@ -446,7 +452,8 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		return new UrlEncodingSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 

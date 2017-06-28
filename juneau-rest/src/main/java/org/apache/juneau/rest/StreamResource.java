@@ -24,10 +24,12 @@ import org.apache.juneau.rest.response.*;
 
 /**
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.
+ *
  * <p>
  * The purpose of this class is to maintain an in-memory reusable byte array of a streamed resource for the fastest
  * possible streaming.
  * Therefore, this object is designed to be reused and thread-safe.
+ *
  * <p>
  * This class is handled special by the {@link StreamableHandler} class.
  * This allows these objects to be returned as responses by REST methods.
@@ -42,16 +44,17 @@ public class StreamResource implements Streamable {
 	 * Constructor.
 	 *
 	 * @param mediaType The resource media type.
-	 * @param contents The resource contents.
-	 * <br>If multiple contents are specified, the results will be concatenated.
-	 * <br>Contents can be any of the following:
-	 * <ul>
-	 * 	<li><code><jk>byte</jk>[]</code>
-	 * 	<li><code>InputStream</code>
-	 * 	<li><code>Reader</code> - Converted to UTF-8 bytes.
-	 * 	<li><code>File</code>
-	 * 	<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-	 *	</ul>
+	 * @param contents
+	 * 	The resource contents.
+	 * 	<br>If multiple contents are specified, the results will be concatenated.
+	 * 	<br>Contents can be any of the following:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li><code>InputStream</code>
+	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
+	 * 		<li><code>File</code>
+	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+	 *		</ul>
 	 * @throws IOException
 	 */
 	public StreamResource(MediaType mediaType, Object...contents) throws IOException {
@@ -63,16 +66,17 @@ public class StreamResource implements Streamable {
 	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
-	 * @param contents The resource contents.
-	 * <br>If multiple contents are specified, the results will be concatenated.
-	 * <br>Contents can be any of the following:
-	 * <ul>
-	 * 	<li><code><jk>byte</jk>[]</code>
-	 * 	<li><code>InputStream</code>
-	 * 	<li><code>Reader</code> - Converted to UTF-8 bytes.
-	 * 	<li><code>File</code>
-	 * 	<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-	 *	</ul>
+	 * @param contents
+	 * 	The resource contents.
+	 * 	<br>If multiple contents are specified, the results will be concatenated.
+	 * 	<br>Contents can be any of the following:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li><code>InputStream</code>
+	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
+	 * 		<li><code>File</code>
+	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+	 *		</ul>
 	 * @throws IOException
 	 */
 	public StreamResource(MediaType mediaType, Map<String,Object> headers, Object...contents) throws IOException {
@@ -137,19 +141,21 @@ public class StreamResource implements Streamable {
 
 		/**
 		 * Specifies the contents for this resource.
+		 *
 		 * <p>
 		 * This method can be called multiple times to add more content.
 		 *
-		 * @param contents The resource contents.
-		 * <br>If multiple contents are specified, the results will be concatenated.
-		 * <br>Contents can be any of the following:
-		 * <ul>
-		 * 	<li><code><jk>byte</jk>[]</code>
-		 * 	<li><code>InputStream</code>
-		 * 	<li><code>Reader</code> - Converted to UTF-8 bytes.
-		 * 	<li><code>File</code>
-		 * 	<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-		 *	</ul>
+		 * @param contents
+		 * 	The resource contents.
+		 * 	<br>If multiple contents are specified, the results will be concatenated.
+		 * 	<br>Contents can be any of the following:
+		 * 	<ul>
+		 * 		<li><code><jk>byte</jk>[]</code>
+		 * 		<li><code>InputStream</code>
+		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
+		 * 		<li><code>File</code>
+		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+		 *		</ul>
 		 * @return This object (for method chaining).
 		 */
 		public Builder contents(Object...contents) {

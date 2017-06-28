@@ -21,6 +21,7 @@ import org.apache.juneau.parser.*;
 
 /**
  * Factory class for getting unique instances of {@link Namespace} objects.
+ *
  * <p>
  * For performance reasons, {@link Namespace} objects are stored in {@link IdentityList IdentityLists}.
  * For this to work property, namespaces with the same name and URI must only be represented by a single
@@ -52,6 +53,7 @@ public final class NamespaceFactory {
 
 	/**
 	 * Converts the specified object into a {@link Namespace} object.
+	 *
 	 * <p>
 	 * Can be any of following types:
 	 * <ul>
@@ -84,6 +86,7 @@ public final class NamespaceFactory {
 
 	/**
 	 * Converts the specified object into an array of {@link Namespace} object.
+	 *
 	 * <p>
 	 * Can be any of following types:
 	 * <ul>

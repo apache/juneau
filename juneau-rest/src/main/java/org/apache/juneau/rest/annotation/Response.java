@@ -50,12 +50,15 @@ public @interface Response {
 
 	/**
 	 * Optional description.
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"myMethod.res.[code].description = foo"</js> or
 	 * <js>"MyServlet.myMethod.res.[code].description = foo"</js>).
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/responses/{code}/description</code>.
 	 */
@@ -63,6 +66,7 @@ public @interface Response {
 
 	/**
 	 * A definition of the response structure.
+	 *
 	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
@@ -85,6 +89,7 @@ public @interface Response {
 
 	/**
 	 * Optional response headers.
+	 *
 	 * <p>
 	 * Response variables can also be defined in the servlet resource bundle.
 	 * (e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or

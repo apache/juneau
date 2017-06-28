@@ -24,20 +24,23 @@ import org.apache.juneau.serializer.*;
  * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during parsing.
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * <code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle
  * POJOs that aren't automatically handled by the serializers or parsers.  For example, JSON does not have a standard
  * representation for rendering dates.
  * By defining a special {@code Date} swap and associating it with a serializer and parser, you can convert a
  * {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into a
  * {@code Date} object during parsing.
+ *
  * <p>
  * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
+ *
  * <p>
  * <code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap
  * class to the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
  * <br>When associated with a bean context, fields of the specified type will automatically be converted when the
  * {@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.
+ *
  * <p>
  * <code>PojoSwaps</code> have two parameters:
  * <ol>
@@ -50,7 +53,7 @@ import org.apache.juneau.serializer.*;
  * {@link BeanMap#put(String,Object)}.
  *
  * <h6 class='topic'>Subtypes</h6>
- * <p>
+ *
  * The following abstract subclasses are provided for common swap types:
  * <ol>
  * 	<li>{@link StringSwap} - Objects swapped with strings.
@@ -58,7 +61,7 @@ import org.apache.juneau.serializer.*;
  * </ol>
  *
  * <h6 class='topic'>Localization</h6>
- * <p>
+ *
  * Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and
  * {@link BeanSession#getTimeZone()} methods.
  * This allows you to specify localized swap values when needed.
@@ -66,7 +69,7 @@ import org.apache.juneau.serializer.*;
  * <code>Time-Zone</code> headers on the request.
  *
  * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
- * <p>
+ *
  * The swapped object representation of an object must be an object type that the serializers can natively convert to
  * JSON (or language-specific equivalent).
  * The list of valid transformed types are as follows...
@@ -88,11 +91,11 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
- * <p>
+ *
  * The normal object representation of an object.
  *
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
- * <p>
+ *
  * Note that while there is a unified interface for handling swaps during both serialization and parsing,
  * in many cases only one of the {@link #swap(BeanSession, Object)} or {@link #unswap(BeanSession, Object, ClassMeta)}
  * methods will be defined because the swap is one-way.
@@ -105,6 +108,7 @@ import org.apache.juneau.serializer.*;
  * {@code Date} from just the JSON or XML text.
  *
  * <h5 class='section'>Additional information:</h5>
+ *
  * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
  *
  * @param <T> The normal form of the class.
@@ -144,6 +148,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * If this transform is to be used to serialize non-serializable POJOs, it must implement this method.
+	 *
 	 * <p>
 	 * The object must be converted into one of the following serializable types:
 	 * <ul class='spaced-list'>
@@ -163,8 +168,9 @@ public abstract class PojoSwap<T,S> {
 	 * 		An array of anything on this list.
 	 * </ul>
 	 *
-	 * @param session The bean session to use to get the class meta.
-	 * This is always going to be the same bean context that created this swap.
+	 * @param session
+	 * 	The bean session to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
 	 * @param o The object to be transformed.
 	 * @return The transformed object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -176,12 +182,15 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * If this transform is to be used to reconstitute POJOs that aren't true Java beans, it must implement this method.
 	 *
-	 * @param session The bean session to use to get the class meta.
-	 * This is always going to be the same bean context that created this swap.
+	 * @param session
+	 * 	The bean session to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
 	 * @param f The transformed object.
-	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
-	 * on a serialized date, this may tell you that the object being created must be of type {@code GregorianCalendar}.
-	 * <br>This may be <jk>null</jk> if the parser cannot make this determination.
+	 * @param hint
+	 * 	If possible, the parser will try to tell you the object type being created.
+	 * 	For example, on a serialized date, this may tell you that the object being created must be of type
+	 * 	{@code GregorianCalendar}.
+	 * 	<br>This may be <jk>null</jk> if the parser cannot make this determination.
 	 * @return The narrowed object.
 	 * @throws ParseException If this method is not implemented.
 	 */
@@ -200,6 +209,7 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns the G class, the generalized form of the class.
+	 *
 	 * <p>
 	 * Subclasses must override this method if the generalized class is {@code Object}, meaning it can produce multiple
 	 * generalized forms.
@@ -212,10 +222,13 @@ public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Returns the {@link ClassMeta} of the transformed class type.
+	 *
+	 * <p>
 	 * This value is cached for quick lookup.
 	 *
-	 * @param beanContext The bean context to use to get the class meta.
-	 * This is always going to be the same bean context that created this swap.
+	 * @param beanContext
+	 * 	The bean context to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
 	public ClassMeta<?> getSwapClassMeta(BeanContext beanContext) {
@@ -228,8 +241,9 @@ public abstract class PojoSwap<T,S> {
 	 * Checks if the specified object is an instance of the normal class defined on this swap.
 	 *
 	 * @param o The object to check.
-	 * @return <jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
-	 * <jk>null</jk> always return <jk>false</jk>.
+	 * @return
+	 * 	<jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
+	 * 	<jk>null</jk> always return <jk>false</jk>.
 	 */
 	public boolean isNormalObject(Object o) {
 		if (o == null)
@@ -241,8 +255,9 @@ public abstract class PojoSwap<T,S> {
 	 * Checks if the specified object is an instance of the swap class defined on this swap.
 	 *
 	 * @param o The object to check.
-	 * @return <jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
-	 * <jk>null</jk> always return <jk>false</jk>.
+	 * @return
+	 * 	<jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
+	 * 	<jk>null</jk> always return <jk>false</jk>.
 	 */
 	public boolean isSwappedObject(Object o) {
 		if (o == null)

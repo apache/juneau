@@ -55,6 +55,7 @@ public class CollectionUtils {
 
 	/**
 	 * Adds the contents of one list to the other in reverse order.
+	 *
 	 * <p>
 	 * i.e. add values from 2nd list from end-to-start order to the end of the 1st list.
 	 *
@@ -71,6 +72,7 @@ public class CollectionUtils {
 
 	/**
 	 * Adds the contents of the array to the list in reverse order.
+	 *
 	 * <p>
 	 * i.e. add values from the array from end-to-start order to the end of the list.
 	 *

@@ -20,9 +20,11 @@ import org.apache.juneau.xml.*;
 
 /**
  * Configurable properties on the {@link RdfParser} class.
+ * 
  * <p>
  * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
  * passed into the constructor.
+ * 
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  *
@@ -49,13 +51,14 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 
 	/**
 	 * <b>Configuration property:</b>  Trim whitespace from text elements.
-	 * <p>
+	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 * 
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 */
@@ -69,6 +72,7 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 
 	/**
 	 * Constructor.
+	 * 
 	 * <p>
 	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *

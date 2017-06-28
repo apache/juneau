@@ -58,13 +58,14 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * Get logger for specified class using the specified resource bundle name.
 	 *
 	 * @param forClass The class to create a logger for.
-	 * @param resourceBundleName The name of the resource bundle.
-	 * Can be any of the following formats:
-	 * <ol>
-	 * 	<li>An absolute path.  E.g. <js>"com/foo/nls/Messages"</js>.
-	 * 	<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
-	 * </ol>
-	 * Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
+	 * @param resourceBundleName
+	 * 	The name of the resource bundle.
+	 * 	Can be any of the following formats:
+	 * 	<ol>
+	 * 		<li>An absolute path.  E.g. <js>"com/foo/nls/Messages"</js>.
+	 * 		<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
+	 * 	</ol>
+	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
 	 * @return A new <l>Logger</l>.
 	 */
 	public static JuneauLogger getLogger(Class<?> forClass, String resourceBundleName) {
@@ -75,13 +76,14 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * Get logger with specified name using the specified resource bundle name.
 	 *
 	 * @param name The name of the logger to use.
-	 * @param resourceBundleName The name of the resource bundle.
-	 * Can be any of the following formats:
-	 * <ol>
-	 * 	<li>An absolute path.  E.g. <js>"com/foo/nls/Messages"</js>.
-	 * 	<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
-	 * </ol>
-	 * Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
+	 * @param resourceBundleName
+	 * 	The name of the resource bundle.
+	 * 	Can be any of the following formats:
+	 * 	<ol>
+	 *			<li>An absolute path.  E.g. <js>"com/foo/nls/Messages"</js>.
+	 * 		<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
+	 * 	</ol>
+	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
 	 * @return A new <l>Logger</l>.
 	 */
 	public static synchronized JuneauLogger getLogger(String name, String resourceBundleName) {
@@ -245,6 +247,8 @@ public class JuneauLogger extends java.util.logging.Logger {
 	/**
 	 * Similar to {@link #log(Level, String, Object[])}, except arguments are converted to objects
 	 * that are serialized using the {@link JsonSerializer#toStringObject(Object)} method.
+	 *
+	 * <p>
 	 * This allows arbitrary POJOs to be serialized as message parameters.
 	 *
 	 * @param level The level of the given message.
@@ -292,5 +296,4 @@ public class JuneauLogger extends java.util.logging.Logger {
 		}
 		return ("".equals(rb) ? null : rb);
 	}
-
 }

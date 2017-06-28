@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as the HTTP
  * method.
+ *
  * <p>
  * Typically used for HTTP method handlers of type <js>"*"</js> (i.e. handle all requests).
  *
@@ -30,9 +31,9 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * This is functionally equivalent to the following code...
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"*"</js>)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res) {

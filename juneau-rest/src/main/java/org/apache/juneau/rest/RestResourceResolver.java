@@ -20,8 +20,10 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Class used to resolve {@link Class} objects to instances.
+ *
  * <p>
  * Used to convert classes defined via {@link RestResource#children() @RestResource.children()} into child instances.
+ *
  * <p>
  * Subclasses can be created to provide customized resource resolution.
  * These can be associated with REST resources in one of the following ways:
@@ -30,15 +32,19 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li>{@link RestConfig#setResourceResolver(Class)}/{@link RestConfig#setResourceResolver(RestResourceResolver)}
  * 		methods.
  * </ul>
+ *
  * <p>
  * The default implementation simply instantiates the class using one of the following constructors:
  * <ul>
  * 	<li><code><jk>public</jk> T(RestConfig)</code>
  * 	<li><code><jk>public</jk> T()</code>
  * </ul>
+ *
+ * <p>
  * The former constructor can be used to get access to the {@link RestConfig} object to get access to the
  * config file and initialization information or make programmatic modifications to the resource before
  * full initialization.
+ *
  * <p>
  * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
  * {@link RestConfig} and {@link RestContext} objects:
@@ -56,8 +62,10 @@ public class RestResourceResolver {
 
 	/**
 	 * Resolves the specified class to a resource object.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own custom resolution.
+	 *
 	 * <p>
 	 * The default implementation simply creates a new class instance using {@link Class#newInstance()}.
 	 *

@@ -26,6 +26,7 @@ import org.apache.juneau.xml.*;
 
 /**
  * Property name/value pair used in the {@link RestResource#properties()} annotation.
+ *
  * <p>
  * Any of the following property names can be specified:
  * <ul>
@@ -39,9 +40,11 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link XmlSerializerContext}
  * 	<li>{@link XmlParserContext}
  * </ul>
+ *
  * <p>
  * Property values types that are not <code>Strings</code> will automatically be converted to the correct type
  * (e.g. <code>Boolean</code>, etc...).
+ *
  * <p>
  * See {@link RestResource#properties} for more information.
  */

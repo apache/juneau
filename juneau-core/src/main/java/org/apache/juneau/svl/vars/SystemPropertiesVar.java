@@ -16,6 +16,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * System property variable resolver.
+ *
  * <p>
  * The format for this var is <js>"$S{systemProperty}"</js> or <js>"$S{systemProperty,defaultValue}"</js>
  *
@@ -27,6 +28,7 @@ import org.apache.juneau.svl.*;
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"java.home is set to $S{java.home}"</js>));
  * </p>
+ *
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.

@@ -16,9 +16,10 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents a simple namespace mapping between a simple name and URI.
+ *
  * <p>
- * In general, the simple name will be used as the XML prefix mapping unless there are conflicts or prefix
- * re-mappings in the serializer.
+ * In general, the simple name will be used as the XML prefix mapping unless there are conflicts or prefix re-mappings
+ * in the serializer.
  */
 @Bean(sort=true)
 public final class Namespace implements Comparable<Namespace> {
@@ -27,6 +28,7 @@ public final class Namespace implements Comparable<Namespace> {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * Use this constructor when the long name and short name are the same value.
 	 *

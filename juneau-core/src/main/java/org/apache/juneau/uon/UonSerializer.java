@@ -28,27 +28,28 @@ import org.apache.juneau.transform.*;
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>text/uon</code>
+ *
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/uon</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * This serializer provides several serialization options.
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link UonSerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
+ *
  * <p>
  * The following shows a sample object defined in Javascript:
- * </p>
  * <p class='bcode'>
  * 	{
  * 		id: 1,
@@ -71,10 +72,9 @@ import org.apache.juneau.transform.*;
  * 		]
  * 	}
  * </p>
+ *
  * <p>
- * Using the "strict" syntax defined in this document, the equivalent
- * 	UON notation would be as follows:
- * </p>
+ * Using the "strict" syntax defined in this document, the equivalent UON notation would be as follows:
  * <p class='bcode'>
  * 	(
  * 		<ua>id</ua>=<un>1</un>,
@@ -208,8 +208,9 @@ public class UonSerializer extends WriterSerializer {
 	 * @param out The writer to serialize to.
 	 * @param o The object being serialized.
 	 * @param eType The expected type of the object if this is a bean property.
-	 * @param attrName The bean property name if this is a bean property.
-	 * <jk>null</jk> if this isn't a bean property being serialized.
+	 * @param attrName
+	 * 	The bean property name if this is a bean property.
+	 * 	<jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
 	 * @return The same writer passed in.
 	 * @throws Exception

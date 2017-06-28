@@ -29,9 +29,9 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * This is functionally equivalent to the following code...
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
@@ -39,10 +39,10 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ *
  * <p>
  * {@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
  * When specified, any registered parsers are bypassed.
- * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPostPerson(<ja>@Header</ja>(<js>"Content-Type"</js>) String mediaType, <ja>@Body</ja> InputStream input) {

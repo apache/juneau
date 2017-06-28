@@ -16,13 +16,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI
- * path variables to POJOs
+ * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
+ *
  * <p>
- * By default, the {@link UrlEncodingParser} class implements this interface so that it can be used to parse
- * these HTTP parts.
+ * By default, the {@link UrlEncodingParser} class implements this interface so that it can be used to parse these HTTP
+ * parts.
  * However, the interface is provided to allow custom parsing of these objects by providing your own implementation
  * class.
+ *
  * <p>
  * Implementations must include a no-arg constructor.
  */

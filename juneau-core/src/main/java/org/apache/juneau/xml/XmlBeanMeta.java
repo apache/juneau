@@ -229,6 +229,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * Returns the format of the inner XML content of this bean.
+	 *
 	 * <p>
 	 * Can be one of the following:
 	 * <ul>
@@ -250,9 +251,10 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * Returns bean property meta with the specified name.
-	 * This is identical to calling {@link BeanMeta#getPropertyMeta(String)} except it first retrieves
-	 * the bean property meta based on the child name (e.g. a property whose name is "people", but whose child name is
-	 * "person").
+	 *
+	 * <p>
+	 * This is identical to calling {@link BeanMeta#getPropertyMeta(String)} except it first retrieves the bean property
+	 * meta based on the child name (e.g. a property whose name is "people", but whose child name is "person").
 	 *
 	 * @param fieldName The bean property name.
 	 * @return The property metadata.

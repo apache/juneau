@@ -16,14 +16,17 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Class used for defining method-level matchers using the {@link RestMethod#matchers()} annotation.
+ *
  * <p>
  * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
  * differing based on some request attribute, such as a specific header value.
  * For example, matchers can be used to provide two different methods for handling requests from two different client
  * versions.
+ *
  * <p>
  * Java methods with matchers associated with them are always attempted before Java methods without matchers.
  * This allows a 'default' method to be defined to handle requests where no matchers match.
+ *
  * <p>
  * When multiple matchers are specified on a method, only one matcher is required to match.
  * This is opposite from the {@link RestMethod#guards()} annotation, where all guards are required to match in order to
@@ -64,6 +67,7 @@ public abstract class RestMatcher {
 
 	/**
 	 * Returns <jk>true</jk> if this matcher is required to match in order for the method to be invoked.
+	 *
 	 * <p>
 	 * If <jk>false</jk>, then only one of the matchers must match.
 	 *

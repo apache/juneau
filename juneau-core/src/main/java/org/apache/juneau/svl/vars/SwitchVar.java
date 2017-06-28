@@ -20,6 +20,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * A basic switch/case logic variable resolver.
+ *
  * <p>
  * The format for this var is one of the following:
  * <ul>
@@ -29,6 +30,7 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"$SWITCH{stringArg,pattern,thenValue,pattern,thenValue,elsePattern}"</js>
  * 	<li>...
  * </ul>
+ *
  * <p>
  * The pattern can be any string optionally containing <js>'*'</js> or <js>'?'</js> representing any or one character
  * respectively.
@@ -41,6 +43,7 @@ import org.apache.juneau.svl.*;
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"We are running on $SWITCH{$P{os.name},*win*,Windows,Something else}!"</js>));
  * </p>
+ *
  * <p>
  * Since this is a {@link MultipartVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.

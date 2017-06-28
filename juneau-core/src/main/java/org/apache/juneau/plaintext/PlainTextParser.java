@@ -20,25 +20,27 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Parsers HTTP plain text request bodies into <a class="doclink"
- * href="../../../../overview-summary.html#Core.PojoCategories">Group 5</a> POJOs.
+ * Parsers HTTP plain text request bodies into <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">Group 5</a>
+ * POJOs.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>text/plain</code>
+ *
  * <p>
  * Produces <code>Content-Type</code> types: <code>text/plain</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * Essentially just converts plain text to POJOs via static <code>fromString()</code> or <code>valueOf()</code>, or
  * through constructors that take a single string argument.
+ *
  * <p>
  * Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform
  * defined on it.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link ParserContext}

@@ -28,6 +28,7 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * Represents the headers in an HTTP request.
+ *
  * <p>
  * Entries are stored in a case-insensitive map.
  */
@@ -59,6 +60,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Adds default entries to these headers.
+	 *
 	 * <p>
 	 * This includes the default headers defined on the servlet and method levels.
 	 *
@@ -98,10 +100,11 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the specified header value, or <jk>null</jk> if the header doesn't exist.
+	 *
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the
 	 * URL query string.
-	 * <p>
+	 *
 	 * @param name The header name.
 	 * @return The header value, or <jk>null</jk> if it doesn't exist.
 	 */
@@ -118,6 +121,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the specified header value, or a default value if the header doesn't exist.
+	 *
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the
 	 * URL query string.
@@ -187,6 +191,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the specified header value converted to a POJO.
+	 *
 	 * <p>
 	 * The type can be any POJO type convertible from a <code>String</code>
 	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertible From Strings</a>).
@@ -228,6 +233,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the specified header value converted to a POJO.
+	 *
 	 * <p>
 	 * The type can be any POJO type convertible from a <code>String</code>
 	 * (See <a class="doclink" href="package-summary.html#PojosConvertableFromString">POJOs Convertible From Strings</a>).
@@ -239,13 +245,15 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * </p>
 	 *
 	 * @param name The HTTP header name.
-	 * @param type The type of object to create.
-	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * {@link GenericArrayType}
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * {@link GenericArrayType}
-	 * <br>Ignored if the main type is not a map or collection.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException If the header could not be converted to the specified type.
@@ -282,6 +290,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Accept</code> header on the request.
+	 *
 	 * <p>
 	 * Content-Types that are acceptable for the response.
 	 *
@@ -298,6 +307,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Accept-Charset</code> header on the request.
+	 *
 	 * <p>
 	 * Character sets that are acceptable.
 	 *
@@ -314,6 +324,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Accept-Encoding</code> header on the request.
+	 *
 	 * <p>
 	 * List of acceptable encodings.
 	 *
@@ -330,6 +341,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Accept-Language</code> header on the request.
+	 *
 	 * <p>
 	 * List of acceptable human languages for response.
 	 *
@@ -346,6 +358,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Authorization</code> header on the request.
+	 *
 	 * <p>
 	 * Authentication credentials for HTTP authentication.
 	 *
@@ -362,6 +375,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Cache-Control</code> header on the request.
+	 *
 	 * <p>
 	 * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
 	 *
@@ -378,6 +392,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Connection</code> header on the request.
+	 *
 	 * <p>
 	 * Control options for the current connection and list of hop-by-hop request fields.
 	 *
@@ -395,6 +410,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Content-Length</code> header on the request.
+	 *
 	 * <p>
 	 * The length of the request body in octets (8-bit bytes).
 	 *
@@ -411,6 +427,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Content-Type</code> header on the request.
+	 *
 	 * <p>
 	 * The MIME type of the body of the request (used with POST and PUT requests).
 	 *
@@ -427,6 +444,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Date</code> header on the request.
+	 *
 	 * <p>
 	 * The date and time that the message was originated (in "HTTP-date" format as defined by RFC 7231 Date/Time Formats).
 	 *
@@ -443,6 +461,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Expect</code> header on the request.
+	 *
 	 * <p>
 	 * Indicates that particular server behaviors are required by the client.
 	 *
@@ -459,6 +478,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>From</code> header on the request.
+	 *
 	 * <p>
 	 * The email address of the user making the request.
 	 *
@@ -475,6 +495,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Host</code> header on the request.
+	 *
 	 * <p>
 	 * The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening.
 	 * The port number may be omitted if the port is the standard port for the service requested.
@@ -493,6 +514,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>If-Match</code> header on the request.
+	 *
 	 * <p>
 	 * Only perform the action if the client supplied entity matches the same entity on the server.
 	 * This is mainly for methods like PUT to only update a resource if it has not been modified since the user last
@@ -511,6 +533,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>If-Modified-Since</code> header on the request.
+	 *
 	 * <p>
 	 * Allows a 304 Not Modified to be returned if content is unchanged.
 	 *
@@ -527,6 +550,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>If-None-Match</code> header on the request.
+	 *
 	 * <p>
 	 * Allows a 304 Not Modified to be returned if content is unchanged, see HTTP ETag.
 	 *
@@ -543,6 +567,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>If-Range</code> header on the request.
+	 *
 	 * <p>
 	 * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.
 	 *
@@ -559,6 +584,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>If-Unmodified-Since</code> header on the request.
+	 *
 	 * <p>
 	 * Only send the response if the entity has not been modified since a specific time.
 	 *
@@ -575,6 +601,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Max-Forwards</code> header on the request.
+	 *
 	 * <p>
 	 * Limit the number of times the message can be forwarded through proxies or gateways.
 	 *
@@ -591,6 +618,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Pragma</code> header on the request.
+	 *
 	 * <p>
 	 * Implementation-specific fields that may have various effects anywhere along the request-response chain.
 	 *
@@ -607,6 +635,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Proxy-Authorization</code> header on the request.
+	 *
 	 * <p>
 	 * Authorization credentials for connecting to a proxy.
 	 *
@@ -623,6 +652,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Range</code> header on the request.
+	 *
 	 * <p>
 	 * Request only part of an entity. Bytes are numbered from 0.
 	 *
@@ -639,6 +669,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Referer</code> header on the request.
+	 *
 	 * <p>
 	 * This is the address of the previous web page from which a link to the currently requested page was followed.
 	 *
@@ -655,6 +686,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>TE</code> header on the request.
+	 *
 	 * <p>
 	 * The transfer encodings the user agent is willing to accept: the same values as for the response header field
 	 * Transfer-Encoding can be used, plus the "trailers" value (related to the "chunked" transfer method) to notify the
@@ -673,6 +705,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Time-Zone</code> header value on the request if there is one.
+	 *
 	 * <p>
 	 * Example: <js>"GMT"</js>.
 	 *
@@ -687,6 +720,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>User-Agent</code> header on the request.
+	 *
 	 * <p>
 	 * The user agent string of the user agent.
 	 *
@@ -703,6 +737,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Upgrade</code> header on the request.
+	 *
 	 * <p>
 	 * Ask the server to upgrade to another protocol.
 	 *
@@ -719,6 +754,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Via</code> header on the request.
+	 *
 	 * <p>
 	 * Informs the server of proxies through which the request was sent.
 	 *
@@ -735,6 +771,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 
 	/**
 	 * Returns the <code>Warning</code> header on the request.
+	 *
 	 * <p>
 	 * A general warning about possible problems with the entity body.
 	 *

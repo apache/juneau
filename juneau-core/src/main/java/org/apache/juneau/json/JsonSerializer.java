@@ -27,13 +27,13 @@ import org.apache.juneau.transform.*;
  * Serializes POJO models to JSON.
  *
  * <h5 class='section'>Media types:</h5>
- * <p>
+ *
  * Handles <code>Accept</code> types: <code>application/json, text/json</code>
  * <p>
  * Produces <code>Content-Type</code> types: <code>application/json</code>
  *
  * <h5 class='section'>Description:</h5>
- * <p>
+ *
  * The conversion is as follows...
  * <ul class='spaced-list'>
  * 	<li>
@@ -54,18 +54,21 @@ import org.apache.juneau.transform.*;
  * 	<li>
  * 		{@code beans} are converted to JSON objects.
  * </ul>
+ *
  * <p>
- * The types above are considered "JSON-primitive" object types.  Any non-JSON-primitive object types are transformed
- * into JSON-primitive object types through {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated
- * through the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
+ * The types above are considered "JSON-primitive" object types.
+ * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
+ * {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the
+ * {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
+ *
  * <p>
- * This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will
- * be sufficient.
+ * This serializer provides several serialization options.
+ * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ *
  * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link JsonSerializerContext}
@@ -74,7 +77,7 @@ import org.apache.juneau.transform.*;
  * </ul>
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- * <p>
+ *
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>
@@ -218,8 +221,10 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * Workhorse method. Determines the type of object, and then calls the
-	 * appropriate type-specific serialization method.
+	 * Workhorse method.
+	 *
+	 * <p>
+	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	SerializerWriter serializeAnything(JsonSerializerSession session, JsonWriter out, Object o, ClassMeta<?> eType,

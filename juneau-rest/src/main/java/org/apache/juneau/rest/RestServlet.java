@@ -28,6 +28,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Servlet implementation of a REST resource.
+ *
  * <p>
  * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
  * class.
@@ -76,14 +77,18 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Resource initialization method.
+	 *
 	 * <p>
 	 * Identical to {@link Servlet#init(ServletConfig)} except the config object provides access to the external config
 	 * file, configuration properties, and variable resolver defined for this resource.
+	 *
 	 * <p>
 	 * Classes can also use {@link HttpServlet#init()} and {@link RestServlet#getServletConfig()} as well to perform
 	 * initialization.
+	 *
 	 * <p>
 	 * Note that if you override this method, you must first call <code><jk>super</jk>.init(servletConfig)</code>!
+	 *
 	 * <p>
 	 * Resource classes that don't extend from {@link RestServlet} can add this method to their class to get access to
 	 * the config object.
@@ -102,8 +107,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Convenience method if you want to perform initialization on your resource after all configuration settings
 	 * have been made.
+	 *
 	 * <p>
 	 * This allows you to get access to the {@link RestContext} object during initialization.
+	 *
 	 * <p>
 	 * The default implementation does nothing.
 	 *
@@ -128,6 +135,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * The main service method.
+	 *
 	 * <p>
 	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
 	 */
@@ -156,9 +164,11 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Returns the read-only context object that contains all the configuration information about this resource.
+	 *
 	 * <p>
 	 * This object is <jk>null</jk> during the call to {@link #init(RestConfig)} but is populated by the time
 	 * {@link #init()} is called.
+	 *
 	 * <p>
 	 * Resource classes that don't extend from {@link RestServlet} can add the following method to their class to get
 	 * access to this context object:
@@ -174,10 +184,13 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Callback method for listening for successful completion of requests.
+	 *
 	 * <p>
 	 * Subclasses can override this method for gathering performance statistics.
+	 *
 	 * <p>
 	 * The default implementation does nothing.
+	 *
 	 * <p>
 	 * Resources that don't extend from {@link RestServlet} can implement an equivalent method by overriding the
 	 * {@link RestCallHandler#onSuccess(RestRequest, RestResponse, long)} method.
@@ -190,9 +203,11 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Callback method that gets invoked right before the REST Java method is invoked.
+	 *
 	 * <p>
 	 * Subclasses can override this method to override request headers or set request-duration properties before the
 	 * Java method is invoked.
+	 *
 	 * <p>
 	 * Resources that don't extend from {@link RestServlet} can implement an equivalent method by overriding the
 	 * {@link RestCallHandler#onPreCall(RestRequest)} method.
@@ -205,9 +220,11 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is
 	 * invoked.
+	 *
 	 * <p>
 	 * Subclasses can override this method to override request and response headers, or set/override properties used by
 	 * the serializer.
+	 *
 	 * <p>
 	 * Resources that don't extend from {@link RestServlet} can implement an equivalent method by overriding the
 	 * {@link RestCallHandler#onPostCall(RestRequest,RestResponse)} method.

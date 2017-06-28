@@ -24,6 +24,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Convenience class for constructing instances of <code>List&lt;NameValuePair&gt;</code> for the
  * {@link UrlEncodedFormEntity} class.
+ *
  * <p>
  * Instances of this method can be passed directly to the {@link RestClient#doPost(Object, Object)} method or
  * {@link RestCall#input(Object)} methods to perform URL-encoded form posts.
@@ -53,6 +54,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 
 	/**
 	 * Appends the specified name/value pair to the end of this list.
+	 *
 	 * <p>
 	 * The value is simply converted to a string using <code>toString()</code>, or <js>"null"</js> if <jk>null</jk>.
 	 *
@@ -67,6 +69,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 
 	/**
 	 * Appends the specified name/value pair to the end of this list.
+	 *
 	 * <p>
 	 * The value is converted to UON notation using the {@link UrlEncodingSerializer} defined on the client.
 	 *

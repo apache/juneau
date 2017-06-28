@@ -44,8 +44,8 @@ public class TeeWriter extends Writer {
 	 * Adds a writer to this tee writer.
 	 *
 	 * @param w The writer to add to this tee writer.
-	 * @param close If <jk>false</jk>, then calling {@link #close()} on this tee writer will not filter to the
-	 * specified writer.
+	 * @param close
+	 * 	If <jk>false</jk>, then calling {@link #close()} on this tee writer will not filter to the specified writer.
 	 * @return This object (for method chaining).
 	 */
 	public TeeWriter add(Writer w, boolean close) {

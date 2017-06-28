@@ -19,6 +19,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Response handler for {@link Reader} objects.
+ *
  * <p>
  * Simply pipes the contents of the {@link Reader} to {@link RestResponse#getNegotiatedWriter()}.
  */

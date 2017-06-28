@@ -21,6 +21,7 @@ import org.apache.juneau.urlencoding.*;
 
 /**
  * REST methods can return this object as a shortcut for performing <code>HTTP 302</code> redirects.
+ *
  * <p>
  * The following example shows the difference between handling redirects via the {@link RestRequest}/{@link RestResponse},
  * and the simplified approach of using this class.
@@ -39,6 +40,7 @@ import org.apache.juneau.urlencoding.*;
  * 		<jk>return new</jk> Redirect(<js>"foobar"</js>);
  * 	}
  * </p>
+ *
  * <p>
  * The constructor can use a {@link MessageFormat}-style pattern with multiple arguments:
  * <p class='bcode'>
@@ -47,10 +49,12 @@ import org.apache.juneau.urlencoding.*;
  * 		<jk>return new</jk> Redirect(<js>"foo/{0}/bar/{1}"</js>, id1, id2);
  * 	}
  * </p>
+ *
  * <p>
  * The arguments are serialized to strings using the servlet's {@link UrlEncodingSerializer}, so any filters defined on
  * the serializer or REST method/class will be used when present.
  * The arguments will also be automatically URL-encoded.
+ *
  * <p>
  * Redirecting to the servlet root can be accomplished by simply using the no-arg constructor.
  * <p class='bcode'>
@@ -61,6 +65,7 @@ import org.apache.juneau.urlencoding.*;
  * 		<jk>return new</jk> Redirect();
  * 	}
  * </p>
+ *
  * <p>
  * This class is handled by {@link org.apache.juneau.rest.response.RedirectHandler}, a built-in default response
  * handler created in {@link RestConfig}.
@@ -72,15 +77,18 @@ public final class Redirect {
 
 	/**
 	 * Redirect to the specified URL.
+	 *
+	 * <p>
 	 * Relative paths are interpreted as relative to the servlet path.
 	 *
-	 * @param uri The URL to redirect to.
-	 * <br>Can be any of the following:
-	 * <ul>
-	 * 	<li><code>URL</code>
-	 * 	<li><code>URI</code>
-	 * 	<li><code>CharSequence</code>
-	 * </ul>
+	 * @param uri
+	 * 	The URL to redirect to.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><code>URL</code>
+	 * 		<li><code>URI</code>
+	 * 		<li><code>CharSequence</code>
+	 * 	</ul>
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public Redirect(Object uri, Object...args) {
@@ -89,15 +97,18 @@ public final class Redirect {
 
 	/**
 	 * Convenience method for redirecting to instance of {@link URL} and {@link URI}.
+	 *
+	 * <p>
 	 * Same as calling <code>toString()</code> on the object and using the other constructor.
 	 *
-	 * @param uri The URL to redirect to.
-	 * <br>Can be any of the following:
-	 * <ul>
-	 * 	<li><code>URL</code>
-	 * 	<li><code>URI</code>
-	 * 	<li><code>CharSequence</code>
-	 * </ul>
+	 * @param uri
+	 * 	The URL to redirect to.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><code>URL</code>
+	 * 		<li><code>URI</code>
+	 * 		<li><code>CharSequence</code>
+	 * 	</ul>
 	 */
 	public Redirect(Object uri) {
 		this(0, uri, (Object[])null);
@@ -105,16 +116,19 @@ public final class Redirect {
 
 	/**
 	 * Redirect to the specified URL.
+	 *
+	 * <p>
 	 * Relative paths are interpreted as relative to the servlet path.
 	 *
 	 * @param httpResponseCode The HTTP response code.
-	 * @param url The URL to redirect to.
-	 * <br>Can be any of the following:
-	 * <ul>
-	 * 	<li><code>URL</code>
-	 * 	<li><code>URI</code>
-	 * 	<li><code>CharSequence</code>
-	 * </ul>
+	 * @param url
+	 * 	The URL to redirect to.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><code>URL</code>
+	 * 		<li><code>URI</code>
+	 * 		<li><code>CharSequence</code>
+	 * 	</ul>
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public Redirect(int httpResponseCode, Object url, Object...args) {

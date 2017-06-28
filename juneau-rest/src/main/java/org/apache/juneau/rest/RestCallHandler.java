@@ -28,9 +28,11 @@ import org.apache.juneau.rest.vars.*;
 
 /**
  * Class that handles the basic lifecycle of an HTTP REST call.
+ *
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST calls are handled.
  * Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
+ *
  * <p>
  * RestCallHandlers are associated with servlets/resources in one of the following ways:
  * <ul>
@@ -59,6 +61,7 @@ public class RestCallHandler {
 
 	/**
 	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
+	 *
 	 * <p>
 	 * Subclasses may choose to override this method to provide a specialized request object.
 	 *
@@ -73,6 +76,7 @@ public class RestCallHandler {
 	/**
 	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
 	 * and the request returned by {@link #createRequest(HttpServletRequest)}.
+	 *
 	 * <p>
 	 * Subclasses may choose to override this method to provide a specialized response object.
 	 *
@@ -87,6 +91,7 @@ public class RestCallHandler {
 
 	/**
 	 * The main service method.
+	 *
 	 * <p>
 	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
 	 *
@@ -191,9 +196,11 @@ public class RestCallHandler {
 	/**
 	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or
 	 * returned by the Java method.
+	 *
 	 * <p>
 	 * Subclasses may override this method if they wish to modify the way the output is rendered or support other output
 	 * formats.
+	 *
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
 	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse, Object)} method returns
@@ -215,6 +222,7 @@ public class RestCallHandler {
 
 	/**
 	 * Handle the case where a matching method was not found.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide a 2nd-chance for specifying a response.
 	 * The default implementation will simply throw an exception with an appropriate message.
@@ -240,9 +248,11 @@ public class RestCallHandler {
 
 	/**
 	 * Method for handling response errors.
+	 *
 	 * <p>
 	 * The default implementation logs the error and calls
 	 * {@link #renderError(HttpServletRequest,HttpServletResponse,RestException)}.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
@@ -259,9 +269,11 @@ public class RestCallHandler {
 
 	/**
 	 * Method for rendering response errors.
+	 *
 	 * <p>
 	 * The default implementation renders a plain text English message, optionally with a stack trace if
 	 * {@link RestContext#REST_renderResponseStackTraces} is enabled.
+	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
@@ -302,8 +314,10 @@ public class RestCallHandler {
 
 	/**
 	 * Callback method for listening for successful completion of requests.
+	 *
 	 * <p>
 	 * Subclasses can override this method for gathering performance statistics.
+	 *
 	 * <p>
 	 * The default implementation does nothing.
 	 *
@@ -318,6 +332,7 @@ public class RestCallHandler {
 
 	/**
 	 * Callback method that gets invoked right before the REST Java method is invoked.
+	 *
 	 * <p>
 	 * Subclasses can override this method to override request headers or set request-duration properties before the
 	 * Java method is invoked.
@@ -333,6 +348,7 @@ public class RestCallHandler {
 	/**
 	 * Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is
 	 * invoked.
+	 *
 	 * <p>
 	 * Subclasses can override this method to override request and response headers, or set/override properties used by
 	 * the serializer.
@@ -348,6 +364,7 @@ public class RestCallHandler {
 
 	/**
 	 * Returns the session objects for the specified request.
+	 *
 	 * <p>
 	 * The default implementation simply returns a single map containing <code>{'req':req}</code>.
 	 *

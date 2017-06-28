@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Represents a version string such as <js>"1.2"</js> or <js>"1.2.3"</js>
+ *
  * <p>
  * Used to compare version numbers.
  */
@@ -26,15 +27,16 @@ public class Version {
 	/**
 	 * Constructor
 	 *
-	 * @param versionString A string of the form <js>"#.#..."</js> where there can be any number of parts.
-	 * <br>Valid values:
-	 * <ul>
-	 * 	<li><js>"1.2"</js>
-	 * 	<li><js>"1.2.3"</js>
-	 * 	<li><js>"0.1"</js>
-	 * 	<li><js>".1"</js>
-	 * </ul>
-	 * Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
+	 * @param versionString
+	 * 	A string of the form <js>"#.#..."</js> where there can be any number of parts.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"1.2"</js>
+	 * 		<li><js>"1.2.3"</js>
+	 * 		<li><js>"0.1"</js>
+	 * 		<li><js>".1"</js>
+	 * 	</ul>
+	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
 	 */
 	public Version(String versionString) {
 		if (isEmpty(versionString))
@@ -52,6 +54,7 @@ public class Version {
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is at least this version.
+	 *
 	 * <p>
 	 * Note that the following is true:
 	 * <p class='bcode'>
@@ -80,6 +83,7 @@ public class Version {
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is at most this version.
+	 *
 	 * <p>
 	 * Note that the following is true:
 	 * <p class='bcode'>
@@ -108,6 +112,7 @@ public class Version {
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is equal to this version.
+	 *
 	 * <p>
 	 * Note that the following is true:
 	 * <p class='bcode'>

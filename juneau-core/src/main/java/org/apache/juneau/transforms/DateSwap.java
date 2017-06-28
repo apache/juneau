@@ -28,7 +28,7 @@ import org.apache.juneau.transform.*;
  * Transforms {@link Date Dates} to {@link String Strings}.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- * <p>
+ *
  * The following direct subclasses are provided for convenience to the following formats:
  * <ul>
  * 	<li>{@link ToString} - To {@link String Strings} using the {@code Date.toString()} method.
@@ -65,19 +65,24 @@ public class DateSwap extends StringSwap<Date> {
 
 	/**
 	 * Constructor.
+	 *
 	 * <p>
 	 * Only one of the <code>pattern</code> or <code>style</code> parameters should
 	 *
-	 * @param pattern The {@link SimpleDateFormat} pattern.
-	 * If <jk>null</jk>, <code>style</code> is used instead.
-	 * @param dateStyle The {@link DateFormat} date style (e.g. {@link DateFormat#SHORT}).
-	 * Ignored if <code>pattern</code> is not <jk>null</jk>.
-	 * Ignored if <code>-1</code>.
-	 * @param timeStyle The {@link DateFormat} time style (e.g. {@link DateFormat#SHORT}).
-	 * Ignored if <code>pattern</code> is not <jk>null</jk>.
-	 * Ignored if <code>-1</code>.
-	 * @param timeZone The timeZone to use for dates.  If <jk>null</jk> then the timezone returned by
-	 * {@link BeanSession#getTimeZone()} is used.
+	 * @param pattern
+	 * 	The {@link SimpleDateFormat} pattern.
+	 * 	If <jk>null</jk>, <code>style</code> is used instead.
+	 * @param dateStyle
+	 * 	The {@link DateFormat} date style (e.g. {@link DateFormat#SHORT}).
+	 * 	Ignored if <code>pattern</code> is not <jk>null</jk>.
+	 * 	Ignored if <code>-1</code>.
+	 * @param timeStyle
+	 * 	The {@link DateFormat} time style (e.g. {@link DateFormat#SHORT}).
+	 * 	Ignored if <code>pattern</code> is not <jk>null</jk>.
+	 * 	Ignored if <code>-1</code>.
+	 * @param timeZone
+	 * 	The timeZone to use for dates.
+	 * 	If <jk>null</jk> then the timezone returned by {@link BeanSession#getTimeZone()} is used.
 	 */
 	protected DateSwap(String pattern, int dateStyle, int timeStyle, TimeZone timeZone) {
 		this.pattern = pattern;
@@ -531,8 +536,9 @@ public class DateSwap extends StringSwap<Date> {
 	 * Returns the {@link DateFormat} object for this session for formatting dates.
 	 *
 	 * @param session The current bean session.
-	 * @return The {@link DateFormat} object.  Multiple calls to this method on the same session will return a cached
-	 * copy of date format object.
+	 * @return
+	 * 	The {@link DateFormat} object.
+	 * 	Multiple calls to this method on the same session will return a cached copy of date format object.
 	 */
 	protected DateFormat getDateFormat(BeanSession session) {
 		DateFormat df = session.getFromCache(DateFormat.class, this.getClass().getName());

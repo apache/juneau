@@ -22,6 +22,7 @@ public enum RdfCollectionFormat {
 
 	/**
 	 * Default formatting (default).
+	 * 
 	 * <p>
 	 * Inherit formatting from parent class or parent package.
 	 * If no formatting specified at any level, default is {@link #SEQ}.
@@ -45,6 +46,7 @@ public enum RdfCollectionFormat {
 
 	/**
 	 * Causes collections and arrays to be rendered as multi-valued RDF properties instead of sequences.
+	 * 
 	 * <p>
 	 * Note that enabling this setting will cause order of elements in the collection to be lost.
 	 */

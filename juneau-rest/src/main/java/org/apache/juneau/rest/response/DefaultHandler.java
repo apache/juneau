@@ -25,10 +25,13 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Response handler for POJOs not handled by other handlers.
+ *
  * <p>
  * This uses the serializers defined on the response to serialize the POJO.
+ *
  * <p>
  * The {@link Serializer} used is based on the <code>Accept</code> header on the request.
+ *
  * <p>
  * The <code>Content-Type</code> header is set to the mime-type defined on the selected serializer based on the
  * {@link Produces#contentType() @Produces.contentType} annotation.

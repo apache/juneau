@@ -79,7 +79,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Page title.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.title"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -139,7 +138,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Page description.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.description"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -203,7 +201,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Page branding.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.branding"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -223,7 +220,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Header section contents.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.header"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -256,7 +252,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Page links.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.links.map"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
@@ -322,7 +317,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Nav section contents.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nav"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -354,7 +348,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Aside section contents.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.aside"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -387,7 +380,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Footer section contents.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.footer"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -418,7 +410,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  No-results message.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.noResultsMessage"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -446,7 +437,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Prevent word wrap on page.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -462,7 +452,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  Stylesheet URL.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.cssUrl"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -485,7 +474,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  CSS code.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.css.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -526,7 +514,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * <b>Configuration property:</b>  HTML document template.
 	 *
-	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.template"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> HtmlDocTemplate&gt;</code> or {@link HtmlDocTemplate}

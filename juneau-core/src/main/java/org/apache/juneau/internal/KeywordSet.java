@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 /**
  * Stores a set of language keywords for quick lookup.
+ *
  * <p>
  * Keywords must be:
  * <ul class='spaced-list'>

@@ -60,20 +60,25 @@ public class SearchArgs {
 
 		/**
 		 * Adds search terms to this builder.
+		 *
 		 * <p>
 		 * The search terms are a comma-delimited list of key/value pairs of column-names and search tokens.
+		 *
 		 * <p>
 		 * For example:
 		 * <p class='bcode'>
 		 * 	builder.search(<js>"column1=foo*, column2=bar baz"</js>);
 		 * </p>
+		 *
 		 * <p>
 		 * It's up to implementers to decide the syntax and meaning of the search terms.
+		 *
 		 * <p>
 		 * Whitespace is trimmed from column names and search tokens.
 		 *
-		 * @param searchTerms The search terms string.
-		 * Can be <jk>null</jk>.
+		 * @param searchTerms
+		 * 	The search terms string.
+		 * 	Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder search(String searchTerms) {
@@ -91,6 +96,7 @@ public class SearchArgs {
 
 		/**
 		 * Adds a search term to this builder.
+		 *
 		 * <p>
 		 * It's up to implementers to decide the syntax and meaning of the search term.
 		 *
@@ -105,20 +111,25 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the list of columns to view.
+		 *
 		 * <p>
 		 * The columns argument is a simple comma-delimited list of column names.
+		 *
 		 * <p>
 		 * For example:
 		 * <p class='bcode'>
 		 * 	builder.view(<js>"column1, column2"</js>);
 		 * </p>
+		 *
 		 * <p>
 		 * Whitespace is trimmed from column names.
+		 *
 		 * <p>
 		 * Empty view columns imply view all columns.
 		 *
-		 * @param columns The columns being viewed.
-		 * Can be <jk>null</jk>.
+		 * @param columns
+		 * 	The columns being viewed.
+		 * 	Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder view(String columns) {
@@ -129,6 +140,7 @@ public class SearchArgs {
 
 		/**
 		 * Specifies the list of columns to view.
+		 *
 		 * <p>
 		 * Empty view columns imply view all columns.
 		 *
@@ -161,8 +173,9 @@ public class SearchArgs {
 		 * <p>
 		 * Whitespace is trimmed from column names.
 		 *
-		 * @param sortArgs The columns to sort by.
-		 * Can be <jk>null</jk>.
+		 * @param sortArgs
+		 * 	The columns to sort by.
+		 * 	Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder sort(String sortArgs) {
@@ -181,8 +194,9 @@ public class SearchArgs {
 		 * <p>
 		 * Note that the order of the sort is important.
 		 *
-		 * @param sortArgs The columns to sort by.
-		 * Can be <jk>null</jk>.
+		 * @param sortArgs
+		 * 	The columns to sort by.
+		 * 	Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder sort(Collection<String> sortArgs) {
@@ -211,8 +225,9 @@ public class SearchArgs {
 		/**
 		 * Specifies the number of rows to return.
 		 *
-		 * @param limit The number of rows to return.
-		 * If <code>&lt;=0</code>, all rows should be returned.
+		 * @param limit
+		 * 	The number of rows to return.
+		 * 	If <code>&lt;=0</code>, all rows should be returned.
 		 * @return This object (for method chaining).
 		 */
 		public Builder limit(int limit) {
@@ -222,6 +237,7 @@ public class SearchArgs {
 
 		/**
 		 * Specifies whether case-insensitive search should be used.
+		 *
 		 * <p>
 		 * The default is <jk>false</jk>.
 		 *
@@ -235,6 +251,7 @@ public class SearchArgs {
 
 		/**
 		 * Construct the {@link SearchArgs} object.
+		 *
 		 * <p>
 		 * This method can be called multiple times to construct new objects.
 		 *
@@ -247,8 +264,10 @@ public class SearchArgs {
 
 	/**
 	 * The query search terms.
+	 *
 	 * <p>
 	 * The search terms are key/value pairs consisting of column-names and search tokens.
+	 *
 	 * <p>
 	 * It's up to implementers to decide the syntax and meaning of the search term.
 	 *
@@ -260,6 +279,7 @@ public class SearchArgs {
 
 	/**
 	 * The view columns.
+	 *
 	 * <p>
 	 * The view columns are the list of columns that should be displayed.
 	 * An empty list implies all columns should be displayed.
@@ -272,9 +292,10 @@ public class SearchArgs {
 
 	/**
 	 * The sort columns.
+	 *
 	 * <p>
 	 * The sort columns are key/value pairs consisting of column-names and direction flags
-	 * 	(<jk>false</jk> = ascending, <jk>true</jk> = descending).
+	 * (<jk>false</jk> = ascending, <jk>true</jk> = descending).
 	 *
 	 * @return An unmodifiable ordered map of sort columns and directions.
 	 */
@@ -285,8 +306,9 @@ public class SearchArgs {
 	/**
 	 * The first-row position.
 	 *
-	 * @return The zero-indexed row number of the first row to display.
-	 * Default is <code>0</code>
+	 * @return
+	 * 	The zero-indexed row number of the first row to display.
+	 * 	Default is <code>0</code>
 	 */
 	public int getPosition() {
 		return position;
@@ -295,8 +317,9 @@ public class SearchArgs {
 	/**
 	 * The number of rows to return.
 	 *
-	 * @return The number of rows to return in the result.
-	 * Default is <code>0</code> which means return all rows.
+	 * @return
+	 * 	The number of rows to return in the result.
+	 * 	Default is <code>0</code> which means return all rows.
 	 */
 	public int getLimit() {
 		return limit;
@@ -304,11 +327,13 @@ public class SearchArgs {
 
 	/**
 	 * The ignore-case flag.
+	 *
 	 * <p>
 	 * Used in conjunction with {@link #getSearch()} to specify whether case-insensitive searches should be performed.
 	 *
-	 * @return The number of rows to return in the result.
-	 * Default is <jk>false</jk>.
+	 * @return
+	 * 	The number of rows to return in the result.
+	 * 	Default is <jk>false</jk>.
 	 */
 	public boolean isIgnoreCase() {
 		return ignoreCase;

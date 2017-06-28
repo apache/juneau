@@ -28,6 +28,7 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlSerializer}.
+ *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
@@ -50,19 +51,24 @@ public class XmlSerializerSession extends SerializerSession {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for this object.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
-	 * @param op The override properties.
-	 * These override any context properties defined in the context.
+	 * @param op
+	 * 	The override properties.
+	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param locale
+	 * 	The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone
+	 * 	The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext The URI context.
-	 * Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param uriContext
+	 * 	The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
 	public XmlSerializerSession(XmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
@@ -186,6 +192,7 @@ public class XmlSerializerSession extends SerializerSession {
 
 	/**
 	 * Returns <jk>true</jk> if we're serializing HTML.
+	 *
 	 * <p>
 	 * The difference in behavior is how empty non-void elements are handled.
 	 * The XML serializer will produce a collapsed tag, whereas the HTML serializer will produce a start and end tag.

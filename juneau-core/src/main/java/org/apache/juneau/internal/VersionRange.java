@@ -14,6 +14,7 @@ package org.apache.juneau.internal;
 
 /**
  * Represents an OSGi-style version range like <js>"1.2"</js> or <js>"[1.0,2.0)"</js>.
+ *
  * <p>
  * The range can be any of the following formats:
  * <ul>

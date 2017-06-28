@@ -21,8 +21,10 @@ import org.apache.juneau.serializer.*;
 
 /**
  * A serializer/object pair used for delayed object serialization.
+ *
  * <p>
  * Useful in certain conditions such as logging when you don't want to needlessly serialize objects.
+ *
  * <p>
  * Instances of this method are created by the {@link WriterSerializer#toStringObject(Object)} method.
  *

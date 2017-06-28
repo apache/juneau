@@ -175,9 +175,9 @@ public final class XmlUtils {
 	 * @param o The object being encoded.
 	 * @param trim Trim the text before serializing it.
 	 * @param preserveWhitespace
-	 * Specifies whether we're in preserve-whitespace mode.
-	 * (e.g. {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
-	 * If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
+	 * 	Specifies whether we're in preserve-whitespace mode.
+	 * 	(e.g. {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
+	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 * @throws IOException Thrown from the writer.
 	 */
@@ -309,8 +309,9 @@ public final class XmlUtils {
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
-	 * @param trim Trim the text before serializing it.
-	 * If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
+	 * @param trim
+	 * 	Trim the text before serializing it.
+	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 * @throws IOException Thrown from the writer.
 	 */
@@ -478,6 +479,8 @@ public final class XmlUtils {
 
 	/**
 	 * Find the namespace given a list of <ja>@Xml</ja> and <ja>@XmlSchema</ja> annotations.
+	 *
+	 * <p>
 	 * The annotations should be a child-to-parent ordering of annotations found on a class or method.
 	 *
 	 * @param xmls The list of <ja>@Xml</ja> annotations.

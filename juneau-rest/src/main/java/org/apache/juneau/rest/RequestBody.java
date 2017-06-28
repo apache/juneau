@@ -86,9 +86,11 @@ public class RequestBody {
 
 	/**
 	 * Reads the input from the HTTP request as JSON, XML, or HTML and converts the input to a POJO.
+	 *
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &body=xxx} in the URL
 	 * query string.
+	 *
 	 * <p>
 	 * If type is <jk>null</jk> or <code>Object.<jk>class</jk></code>, then the actual type will be determined
 	 * automatically based on the following input:
@@ -131,6 +133,7 @@ public class RequestBody {
 	 * 		<td><jk>null</jk></td>
 	 * 	</tr>
 	 * </table>
+	 *
 	 * <p>
 	 * Refer to <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a> for
 	 * a complete definition of supported POJOs.
@@ -157,8 +160,9 @@ public class RequestBody {
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
 	 * @throws IOException If a problem occurred trying to read from the reader.
-	 * @throws ParseException If the input contains a syntax error or is malformed for the requested {@code Accept}
-	 * header or is not valid for the specified type.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed for the requested {@code Accept} header or is not valid
+	 * 	for the specified type.
 	 */
 	public <T> T asType(Class<T> type) throws IOException, ParseException {
 		return parse(beanSession.getClassMeta(type));
@@ -182,13 +186,15 @@ public class RequestBody {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; body = req.getBody().asType(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * @param type The type of object to create.
-	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * {@link GenericArrayType}
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * <br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 * {@link GenericArrayType}
-	 * <br>Ignored if the main type is not a map or collection.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
 	 */
@@ -198,6 +204,7 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as a plain string.
+	 *
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
 	 * string.
@@ -225,9 +232,11 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as a {@link Reader}.
+	 *
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
 	 * string.
+	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 *
@@ -257,6 +266,7 @@ public class RequestBody {
 
 	/**
 	 * Returns the HTTP body content as an {@link InputStream}.
+	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 *
@@ -281,9 +291,10 @@ public class RequestBody {
 	/**
 	 * Returns the parser and media type matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser
-	 * was found.
-	 * Includes the matching media type.
+	 * @return
+	 * 	The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser was
+	 * 	found.
+	 * 	Includes the matching media type.
 	 */
 	public ParserMatch getParserMatch() {
 		MediaType mediaType = headers.getContentType();
@@ -305,8 +316,9 @@ public class RequestBody {
 	/**
 	 * Returns the parser matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser
-	 * was found.
+	 * @return
+	 * 	The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser was
+	 * 	found.
 	 */
 	public Parser getParser() {
 		ParserMatch pm = getParserMatch();
@@ -316,8 +328,9 @@ public class RequestBody {
 	/**
 	 * Returns the reader parser matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The reader parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
-	 * reader parser was found, or the matching parser was an input stream parser.
+	 * @return
+	 * 	The reader parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
+	 * 	reader parser was found, or the matching parser was an input stream parser.
 	 */
 	public ReaderParser getReaderParser() {
 		Parser p = getParser();

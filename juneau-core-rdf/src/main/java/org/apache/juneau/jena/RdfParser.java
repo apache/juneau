@@ -32,12 +32,12 @@ import com.hp.hpl.jena.util.iterator.*;
  * Parses RDF into POJOs.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * <p>
+ * 
  * Refer to <a class="doclink" href="package-summary.html#ParserConfigurableProperties">Configurable Properties</a>
  * for the entire list of configurable properties.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
- * <p>
+ * 
  * The following direct subclasses are provided for language-specific parsers:
  * <ul class='spaced-list'>
  * 	<li>
@@ -51,7 +51,7 @@ import com.hp.hpl.jena.util.iterator.*;
  * </ul>
  *
  * <h5 class='section'>Additional information:</h5>
- * <p>
+ * 
  * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
 @Consumes(value="text/xml+rdf")

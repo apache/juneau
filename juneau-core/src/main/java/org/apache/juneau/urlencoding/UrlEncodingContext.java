@@ -14,17 +14,20 @@ package org.apache.juneau.urlencoding;
 
 /**
  * Configurable properties on the {@link UrlEncodingSerializer} and {@link UrlEncodingParser} classes.
+ *
  * <p>
  * Use the {@link UrlEncodingSerializerBuilder#property(String, Object)} and
- * 	{@link UrlEncodingParserBuilder#property(String, Object)} methods to set property values.
+ * {@link UrlEncodingParserBuilder#property(String, Object)} methods to set property values.
  */
 public final class UrlEncodingContext implements Cloneable {
 
 	/**
 	 * Serialize bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
+	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 *
 	 * <p>
 	 * Example:
 	 * <p class='bcode'>
@@ -39,6 +42,7 @@ public final class UrlEncodingContext implements Cloneable {
 	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
 	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
+	 *
 	 * <p>
 	 * This option only applies to beans.
 	 *

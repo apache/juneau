@@ -22,8 +22,10 @@ import org.apache.juneau.utils.ZipFileList.*;
 
 /**
  * Response handler for ZipFileList objects.
+ *
  * <p>
  * Can be associated with a REST resource using the {@link RestResource#responseHandlers} annotation.
+ *
  * <p>
  * Sets the following headers:
  * <ul class='spaced-list'>

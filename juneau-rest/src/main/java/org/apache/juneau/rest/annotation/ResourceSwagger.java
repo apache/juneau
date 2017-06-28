@@ -37,8 +37,10 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Optional contact information for the exposed API.
+	 *
 	 * <p>
 	 * It is used to populate the Swagger contact field and to display on HTML pages.
+	 *
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -48,6 +50,7 @@ public @interface ResourceSwagger {
 	 * 		email: string
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>contact</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or
@@ -61,10 +64,13 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/contact</code>.
+	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getContact(RestRequest)} method.
 	 */
@@ -72,8 +78,10 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Optional license information for the exposed API.
+	 *
 	 * <p>
 	 * It is used to populate the Swagger license field and to display on HTML pages.
+	 *
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -82,6 +90,7 @@ public @interface ResourceSwagger {
 	 * 		url: string
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>license</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or
@@ -95,10 +104,13 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/license</code>.
+	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getLicense(RestRequest)} method.
 	 */
@@ -106,15 +118,20 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Provides the version of the application API (not to be confused with the specification version).
+	 *
 	 * <p>
 	 * It is used to populate the Swagger version field and to display on HTML pages.
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/version</code>.
+	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getVersion(RestRequest)} method.
 	 */
@@ -122,8 +139,10 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Optional tagging information for the exposed API.
+	 *
 	 * <p>
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
+	 *
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -138,6 +157,7 @@ public @interface ResourceSwagger {
 	 * 		}
 	 * 	]
 	 * </p>
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>tags</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or
@@ -151,10 +171,13 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
+	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTags(RestRequest)} method.
 	 */
@@ -162,8 +185,10 @@ public @interface ResourceSwagger {
 
 	/**
 	 * Optional external documentation information for the exposed API.
+	 *
 	 * <p>
 	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
+	 *
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -172,6 +197,7 @@ public @interface ResourceSwagger {
 	 * 		url: string
 	 * 	}
 	 * </p>
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
@@ -185,10 +211,13 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
+	 *
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
+	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)}
 	 * method.

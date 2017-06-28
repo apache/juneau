@@ -42,8 +42,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents an HTTP request for a REST resource.
+ *
  * <p>
  * Equivalent to {@link HttpServletRequest} except with some additional convenience methods.
+ *
  * <p>
  * For reference, given the URL <js>"http://localhost:9080/contextRoot/servletPath/foo?bar=baz#qux"</js>, the
  * following methods return the following values....
@@ -57,6 +59,7 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>{@code getRequestURL()}</td><td>{@code http://localhost:9080/contextRoot/servletPath/foo}</td></tr>
  * 	<tr><td>{@code getServletPath()}</td><td>{@code /servletPath}</td></tr>
  * </table>
+ *
  * <p>
  * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
  * class.
@@ -241,6 +244,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Retrieve the properties active for this request.
+	 *
 	 * <p>
 	 * These properties can be modified by the request.
 	 *
@@ -362,9 +366,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Equivalent to {@link #getParameterMap()}, but only looks for query parameters in the URL, not form posts.
+	 *
 	 * <p>
 	 * This method can be used to retrieve query parameters without triggering the underlying servlet API to load and
 	 * parse the request body.
+	 *
 	 * <p>
 	 * This object is modifiable.
 	 *
@@ -455,9 +461,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP body content as a {@link Reader}.
+	 *
 	 * <p>
 	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
 	 * string.
+	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 */
@@ -468,6 +476,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP body content as an {@link InputStream}.
+	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 *
@@ -490,6 +499,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the URI context of the request.
+	 *
 	 * <p>
 	 * The URI context contains all the information about the URI of the request, such as the servlet URI, context
 	 * path, etc...
@@ -536,6 +546,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized servlet title.
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.
 	 *
@@ -547,6 +558,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized servlet description.
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.
 	 *
@@ -558,6 +570,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method summary.
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(String, RestRequest)} with this object.
 	 *
@@ -569,6 +582,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method description.
+	 *
 	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(String, RestRequest)} with this object.
 	 *
@@ -603,6 +617,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the method of this request.
+	 *
 	 * <p>
 	 * If <code>allowHeaderParams</code> init parameter is <jk>true</jk>, then first looks for
 	 * <code>&amp;method=xxx</code> in the URL query string.
@@ -614,6 +629,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the HTTP 1.1 method name of the request as an enum.
+	 *
 	 * <p>
 	 * Note that non-RFC2616 method names resolve as {@link HttpMethod#OTHER}.
 	 *
@@ -634,9 +650,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns <jk>true</jk> if <code>&amp;plainText=true</code> was specified as a URL parameter.
+	 *
 	 * <p>
 	 * This indicates that the <code>Content-Type</code> of the output should always be set to <js>"text/plain"</js>
 	 * to make it easy to render in a browser.
+	 *
 	 * <p>
 	 * This feature is useful for debugging.
 	 *
@@ -668,6 +686,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the servlet handling the request.
+	 *
 	 * <p>
 	 * Can be used to access servlet-init parameters or annotations during requests, such as in calls to
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}..
@@ -680,6 +699,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the java method handling the request.
+	 *
 	 * <p>
 	 * Can be used to access the method name or method annotations during requests, such as in calls to
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}.
@@ -732,8 +752,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * classpath.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @param resolveVars If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
-	 * resolved by the variable resolver returned by {@link #getVarResolverSession()}.
+	 * @param resolveVars
+	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
+	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
 	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
@@ -753,8 +774,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * constructed using {@link RestConfig#addMimeTypes(String...)} to determine the media type.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @param resolveVars If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
-	 * resolved by the variable resolver returned by {@link #getVarResolverSession()}.
+	 * @param resolveVars
+	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
+	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
 	 */
@@ -776,8 +798,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the config file associated with the servlet.
 	 *
-	 * @return The config file associated with the servlet, or <jk>null</jk> if servlet does not have a config file
-	 * associated with it.
+	 * @return
+	 * 	The config file associated with the servlet, or <jk>null</jk> if servlet does not have a config file
+	 * 	associated with it.
 	 */
 	public ConfigFile getConfigFile() {
 		if (cf == null)
@@ -788,8 +811,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the localized swagger associated with the servlet.
 	 *
-	 * @return The swagger associated with the servlet.
-	 * Never <jk>null</jk>.
+	 * @return
+	 * 	The swagger associated with the servlet.
+	 * 	Never <jk>null</jk>.
 	 */
 	public Swagger getSwagger() {
 		if (swagger == null)
@@ -800,8 +824,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the widgets used for resolving <js>"$W{...}"</js> string variables.
 	 *
-	 * @return The widgets used for resolving <js>"$W{...}"</js> string variables.
-	 * Never <jk>null</jk>.
+	 * @return
+	 * 	The widgets used for resolving <js>"$W{...}"</js> string variables.
+	 * 	Never <jk>null</jk>.
 	 */
 	public Map<String,Widget> getWidgets() {
 		return widgets;
@@ -809,9 +834,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized Swagger from the file system.
+	 *
 	 * <p>
 	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package as this servlet and returns
 	 * it as a parsed {@link Swagger} object.
+	 *
 	 * <p>
 	 * Returned objects are cached for later quick-lookup.
 	 *

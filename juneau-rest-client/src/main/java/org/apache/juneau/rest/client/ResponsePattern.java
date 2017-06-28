@@ -17,13 +17,14 @@ import java.util.regex.*;
 
 /**
  * Used to find regular expression matches in REST responses made through {@link RestCall}.
+ *
  * <p>
  * Response patterns are applied to REST calls through the {@link RestCall#responsePattern(ResponsePattern)} method.
  *
  * <h5 class='section'>Example:</h5>
+ *
  * This example shows how to use a response pattern finder to find and capture patterns for <js>"x=number"</js> and
  * <js>"y=string"</js> from a response body.
- * <p>
  * <p class='bcode'>
  * 	<jk>final</jk> List&lt;Number&gt; xList = <jk>new</jk> ArrayList&lt;Number&gt;();
  * 	<jk>final</jk> List&lt;String&gt; yList = <jk>new</jk> ArrayList&lt;String&gt;();

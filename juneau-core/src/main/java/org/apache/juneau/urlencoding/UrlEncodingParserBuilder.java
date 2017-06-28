@@ -35,6 +35,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public UrlEncodingParserBuilder(PropertyStore propertyStore) {
@@ -53,13 +54,14 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b> Serialize bean property collections/arrays as separate key/value pairs.
-	 * <p>
+	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"UrlEncoding.expandedParams"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
@@ -77,6 +79,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * 	String ss1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
 	 * 	String ss2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
+	 *
 	 * <p>
 	 * This option only applies to beans.
 	 *
