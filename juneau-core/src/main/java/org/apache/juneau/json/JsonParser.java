@@ -291,7 +291,7 @@ public class JsonParser extends ReaderParser {
 			// Lax allows blank strings to represent 0.
 			// Strict does not allow blank strings.
 			if (s.length() == 0)
-				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+				throw new ParseException(session, "Invalid JSON number: ''{0}''", s);
 
 			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.
 			// Don't weed out 0 or -0.
@@ -304,19 +304,19 @@ public class JsonParser extends ReaderParser {
 
 			// JSON doesn't allow '.123' and '-.123'.
 			if (c == '.')
-				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+				throw new ParseException(session, "Invalid JSON number: ''{0}''", s);
 
 			// '01' is not a valid number, but '0.1', '0e1', '0e+1' are valid.
 			if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
 				char c2 = s.charAt((isNegative ? 2 : 1));
 				if (c2 != '.' && c2 != 'e' && c2 != 'E')
-					throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+					throw new ParseException(session, "Invalid JSON number: ''{0}''", s);
 			}
 
 			// JSON doesn't allow '1.' or '0.e1'.
 			int i = s.indexOf('.');
 			if (i != -1 && (s.length() == (i+1) || ! decChars.contains(s.charAt(i+1))))
-				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+				throw new ParseException(session, "Invalid JSON number: ''{0}''", s);
 
 		}
 		return StringUtils.parseNumber(s, type);

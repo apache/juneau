@@ -108,6 +108,9 @@ public class XmlParserSession extends ParserSession {
 	 * @throws Exception If problem occurred trying to create reader.
 	 */
 	public final XMLStreamReader getXmlStreamReader() throws Exception {
+		if (xmlStreamReader != null)
+			return xmlStreamReader;
+
 		try {
 			Reader r = getBufferedReader(getReader());
 			XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -207,9 +210,9 @@ public class XmlParserSession extends ParserSession {
 	 *
 	 * @param r The reader to read the element text from.
 	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
-	 * @throws XMLStreamException
+	 * @throws Exception
 	 */
-	public String getElementText(XMLStreamReader r) throws XMLStreamException {
+	public String getElementText(XMLStreamReader r) throws Exception {
 		String s = r.getElementText().trim();
 		return decodeString(s);
 	}
@@ -282,9 +285,9 @@ public class XmlParserSession extends ParserSession {
 	 *
 	 * @param r
 	 * @return The parsed text.
-	 * @throws XMLStreamException
+	 * @throws Exception
 	 */
-	public String parseText(XMLStreamReader r) throws XMLStreamException {
+	public String parseText(XMLStreamReader r) throws Exception {
 		StringBuilder sb2 = getStringBuilder();
 
 		int depth = 0;
@@ -332,8 +335,9 @@ public class XmlParserSession extends ParserSession {
 	 * @param r The XML stream reader to read the current event from.
 	 * @return The whitespace character or characters.
 	 * @throws XMLStreamException
+	 * @throws Exception
 	 */
-	public String parseWhitespaceElement(XMLStreamReader r) throws XMLStreamException {
+	public String parseWhitespaceElement(XMLStreamReader r) throws Exception {
 		return null;
 	}
 

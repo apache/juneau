@@ -26,7 +26,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -857,7 +856,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 				}
 			}
 			if (! (ignoreUnknownProperties || keys.isEmpty()))
-				throw new ParseException("Invalid properties found in config file section ["+sectionName+"]: " + JsonSerializer.DEFAULT_LAX.toString(keys));
+				throw new ParseException("Invalid properties found in config file section ''{0}'': {1}", sectionName, keys);
 			return om;
 		} finally {
 			readUnlock();

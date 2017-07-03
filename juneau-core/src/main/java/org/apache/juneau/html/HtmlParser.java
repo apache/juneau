@@ -24,7 +24,6 @@ import javax.xml.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -91,7 +90,7 @@ public class HtmlParser extends XmlParser {
 
 		int event = r.getEventType();
 		if (event != START_ELEMENT)
-			throw new XMLStreamException("parseAnything must be called on outer start element.", r.getLocation());
+			throw new XmlParseException(r.getLocation(), "parseAnything must be called on outer start element.");
 
 		if (! isRoot)
 			event = r.next();
@@ -102,7 +101,7 @@ public class HtmlParser extends XmlParser {
 			event = skipWs(r);
 
 		if (event == END_DOCUMENT)
-			throw new XMLStreamException("Unexpected end of stream in parseAnything for type '"+eType+"'", r.getLocation());
+			throw new XmlParseException(r.getLocation(), "Unexpected end of stream in parseAnything for type ''{0}''", eType);
 
 		// Handle @Html(asXml=true) beans.
 		HtmlClassMeta hcm = sType.getExtendedMeta(HtmlClassMeta.class);
@@ -251,7 +250,7 @@ public class HtmlParser extends XmlParser {
 		}
 
 		if (! isValid)
-			throw new XMLStreamException("Unexpected tag '"+tag+"' for type '"+eType+"'", r.getLocation());
+			throw new XmlParseException(r.getLocation(), "Unexpected tag ''{0}'' for type ''{1}''", tag, eType);
 
 		if (transform != null && o != null)
 			o = transform.unswap(session, o, eType);
@@ -266,7 +265,7 @@ public class HtmlParser extends XmlParser {
 	/**
 	 * For parsing output from HtmlDocSerializer, this skips over the head, title, and links.
 	 */
-	private static HtmlTag skipToData(XMLStreamReader r) throws XMLStreamException {
+	private static HtmlTag skipToData(XMLStreamReader r) throws Exception {
 		while (true) {
 			int event = r.next();
 			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
@@ -277,7 +276,7 @@ public class HtmlParser extends XmlParser {
 				if (! isEmpty)
 					event = skipWs(r);
 				if (event == END_DOCUMENT)
-					throw new XMLStreamException("Unexpected end of stream looking for data.", r.getLocation());
+					throw new XmlParseException(r.getLocation(), "Unexpected end of stream looking for data.");
 				return (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
 			}
 		}
@@ -294,7 +293,7 @@ public class HtmlParser extends XmlParser {
 	 * Reads an anchor tag and converts it into a bean.
 	 */
 	private static <T> T parseAnchor(HtmlParserSession session, XMLStreamReader r, ClassMeta<T> beanType)
-			throws XMLStreamException {
+			throws Exception {
 		String href = r.getAttributeValue(null, "href");
 		String name = session.getElementText(r);
 		Class<T> beanClass = beanType.getInnerClass();
@@ -493,14 +492,14 @@ public class HtmlParser extends XmlParser {
 	 * Precondition:  Must be pointing before the event we want to parse.
 	 * Postcondition:  Pointing at the tag just parsed.
 	 */
-	private static HtmlTag nextTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
+	private static HtmlTag nextTag(XMLStreamReader r, HtmlTag...expected) throws Exception {
 		int et = r.next();
 
 		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
 			et = r.next();
 
 		if (et == END_DOCUMENT)
-			throw new XMLStreamException("Unexpected end of document: " + r.getLocation());
+			throw new XmlParseException(r.getLocation(), "Unexpected end of document.");
 
 		HtmlTag tag = HtmlTag.forEvent(r);
 		if (expected.length == 0)
@@ -509,9 +508,7 @@ public class HtmlParser extends XmlParser {
 			if (t == tag)
 				return tag;
 
-		throw new XMLStreamException(
-			"Unexpected tag: " + tag + ".  Expected one of the following: "
-			+ JsonSerializer.DEFAULT.toString(expected), r.getLocation());
+		throw new XmlParseException(r.getLocation(), "Unexpected tag: ''{0}''.  Expected one of the following: {1}", tag, expected);
 	}
 
 	/*
@@ -523,13 +520,15 @@ public class HtmlParser extends XmlParser {
 	 * @param r The stream being read from.
 	 * @throws XMLStreamException
 	 */
-	private static void skipTag(XMLStreamReader r) throws XMLStreamException {
+	private static void skipTag(XMLStreamReader r) throws Exception {
 		int et = r.getEventType();
 
 		if (et != START_ELEMENT)
-			throw new XMLStreamException(
-				"skipToNextTag() call on invalid event ["+XmlUtils.toReadableEvent(r)
-				+"].  Must only be called on START_ELEMENT events.");
+			throw new XmlParseException(
+				r.getLocation(),
+				"skipToNextTag() call on invalid event ''{0}''.  Must only be called on START_ELEMENT events.",
+				XmlUtils.toReadableEvent(r)
+			);
 
 		String n = r.getLocalName();
 
@@ -550,14 +549,15 @@ public class HtmlParser extends XmlParser {
 		}
 	}
 
-	private static void skipTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
+	private static void skipTag(XMLStreamReader r, HtmlTag...expected) throws Exception {
 		HtmlTag tag = HtmlTag.forEvent(r);
 		if (tag.isOneOf(expected))
 			r.next();
 		else
-			throw new XMLStreamException(
-				"Unexpected tag: " + tag + ".  Expected one of the following: "
-				+ JsonSerializer.DEFAULT.toString(expected), r.getLocation());
+			throw new XmlParseException(
+				r.getLocation(),
+				"Unexpected tag: ''{0}''.  Expected one of the following: {1}",
+				tag, expected);
 	}
 
 	private static int skipWs(XMLStreamReader r)  throws XMLStreamException {

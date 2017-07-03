@@ -23,7 +23,7 @@ import org.apache.juneau.json.*;
 /**
  * Exception that indicates invalid syntax encountered during parsing.
  */
-public final class ParseException extends FormattedException {
+public class ParseException extends FormattedException {
 
 	private static final long serialVersionUID = 1L;
 

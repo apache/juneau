@@ -71,16 +71,16 @@ enum HtmlTag {
 		cache.put(id, this);
 	}
 
-	static HtmlTag forEvent(XMLStreamReader r) throws XMLStreamException {
+	static HtmlTag forEvent(XMLStreamReader r) throws Exception {
 		int et = r.getEventType();
 		if (et == START_ELEMENT)
 			return forString(r.getLocalName(), false);
 		else if (et == END_ELEMENT)
 			return forString(r.getLocalName(), true);
-		throw new XMLStreamException("Invalid call to HtmlTag.forEvent on event of type ["+XmlUtils.toReadableEvent(r)+"]");
+		throw new XmlParseException(r.getLocation(), "Invalid call to HtmlTag.forEvent on event of type ''{0}''", XmlUtils.toReadableEvent(r));
 	}
 
-	static HtmlTag forString(String tag, boolean end) throws XMLStreamException {
+	static HtmlTag forString(String tag, boolean end) throws Exception {
 		char c = tag.charAt(0);
 		HtmlTag t = null;
 		if (c == 'u')
@@ -130,7 +130,7 @@ enum HtmlTag {
 		else if (c == 'h')
 			t = (end ? xHTML : HTML);
 		if (t == null)
-			throw new XMLStreamException("Unknown tag '"+tag+"' encountered");
+			throw new XmlParseException(null, "Unknown tag ''{0}'' encountered", tag);
 		return t;
 	}
 

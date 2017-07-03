@@ -85,7 +85,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @throws XMLStreamException
 	 */
 	@Override /* XmlParserSession */
-	public String parseText(XMLStreamReader r) throws XMLStreamException {
+	public String parseText(XMLStreamReader r) throws Exception {
 
 		StringBuilder sb = getStringBuilder();
 
@@ -176,7 +176,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @throws XMLStreamException
 	 */
 	@Override /* XmlParserSession */
-	public String getElementText(XMLStreamReader r) throws XMLStreamException {
+	public String getElementText(XMLStreamReader r) throws Exception {
 		r.next();
 		return parseText(r);
 	}
@@ -188,7 +188,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	}
 
 	@Override /* XmlParserSession */
-	public String parseWhitespaceElement(XMLStreamReader r) throws XMLStreamException {
+	public String parseWhitespaceElement(XMLStreamReader r) throws Exception {
 
 		HtmlTag tag = HtmlTag.forEvent(r);
 		int et = r.next();
@@ -208,7 +208,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			}
 			return "";
 		} else {
-			throw new XMLStreamException("Invalid tag found in parseWhitespaceElement(): " + tag);
+			throw new XmlParseException(r.getLocation(), "Invalid tag found in parseWhitespaceElement(): ''{0}''", tag);
 		}
 	}
 }

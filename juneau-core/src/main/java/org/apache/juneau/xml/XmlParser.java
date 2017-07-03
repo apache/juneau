@@ -427,7 +427,7 @@ public class XmlParser extends ReaderParser {
 
 	private Object getUnknown(XmlParserSession session, XMLStreamReader r) throws Exception {
 		if (r.getEventType() != XMLStreamConstants.START_ELEMENT) {
-			throw new XMLStreamException("parser must be on START_ELEMENT to read next text", r.getLocation());
+			throw new XmlParseException(r.getLocation(), "Parser must be on START_ELEMENT to read next text.");
 		}
 		ObjectMap m = null;
 
@@ -449,7 +449,7 @@ public class XmlParser extends ReaderParser {
 			} else if (eventType == XMLStreamConstants.PROCESSING_INSTRUCTION || eventType == XMLStreamConstants.COMMENT) {
 				// skipping
 			} else if (eventType == XMLStreamConstants.END_DOCUMENT) {
-				throw new XMLStreamException("Unexpected end of document when reading element text content", r.getLocation());
+				throw new XmlParseException(r.getLocation(), "Unexpected end of document when reading element text content");
 			} else if (eventType == XMLStreamConstants.START_ELEMENT) {
 				// Oops...this has an element in it.
 				// Parse it as a map.
@@ -482,7 +482,7 @@ public class XmlParser extends ReaderParser {
 				} while (depth > 0);
 				break;
 			} else {
-				throw new XMLStreamException("Unexpected event type " + eventType, r.getLocation());
+				throw new XmlParseException(r.getLocation(), "Unexpected event type ''{0}''", eventType);
 			}
 			eventType = r.next();
 		}
