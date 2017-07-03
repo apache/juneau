@@ -43,10 +43,10 @@ import org.apache.juneau.svl.vars.*;
 @SuppressWarnings("serial")
 @RestResource(
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS'}"
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS'}",
+		styleImport="$C{REST/stylesheet,servlet:/styles/devops.css}"
 	),
-	config="$S{juneau.configFile}",
-	stylesheet="$C{REST/stylesheet,styles/juneau.css}"
+	config="$S{juneau.configFile}"
 )
 public abstract class Resource extends RestServletDefault {
 

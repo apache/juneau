@@ -43,12 +43,18 @@ import org.apache.juneau.utils.*;
 	path="/addressBook",
 	messages="nls/AddressBookResource",
 
+	// Widgets for $W variables above.
+	widgets={
+		PoweredByJuneauWidget.class,
+		ContentTypeMenuItem.class
+	},
+
 	// Links on the HTML rendition page.
 	// "request:/..." URIs are relative to the request URI.
 	// "servlet:/..." URIs are relative to the servlet URI.
 	// "$C{...}" variables are pulled from the config file.
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java',contentTypes:'$W{contentTypeMenuItem}'}",
 			aside=""
 				+ "<div style='max-width:400px;min-width:200px'>"
 				+ "	<p>Proof-of-concept resource that shows off the capabilities of working with POJO resources.</p>"
@@ -58,17 +64,9 @@ import org.apache.juneau.utils.*;
 				+ "			<li>Swagger documentation"
 				+ "			<li>Widgets"
 				+ "		</ul>"
-				+ "	<p style='text-weight:bold;text-decoration:underline;'>Available Content Types</p>"
-				+ "	$W{contentTypeLinksColumn}"
 				+ "</div>",
 		footer="$W{poweredByJuneau}"
 	),
-
-	// Widgets for $W variables above.
-	widgets={
-		PoweredByJuneauWidget.class,
-		ContentTypeLinksColumnWidget.class
-	},
 
 	// Properties that get applied to all serializers and parsers.
 	properties={
@@ -91,9 +89,6 @@ import org.apache.juneau.utils.*;
 		// Make the anchor text on URLs be just the path relative to the servlet.
 		@Property(name=HTML_uriAnchorText, value="SERVLET_RELATIVE")
 	},
-
-	// Our stylesheet for the HTML rendition.
-	stylesheet="styles/devops.css",
 
 	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,

@@ -12,13 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
 
@@ -26,24 +22,61 @@ import org.apache.juneau.rest.*;
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.
  *
  * <p>
- * The variable it resolves is <js>"$W{contentTypeLinksColumn}"</js>.
+ * The variable it resolves is <js>"$W{contentTypeMenuItem}"</js>.
+ *
+ * <p>
+ * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
+ * a drop-down menu item for rendering all other supported content types in plain text:
+ * <p class='bcode'>
+ * 	<ja>@RestMethod</ja>(
+ * 		name=<js>"GET"</js>,
+ * 		path=<js>"/"</js>,
+ * 		widgets={
+ * 			ContentTypeMenuItem.<jk>class</jk>,
+ * 		},
+ * 		htmldoc=<ja>@HtmlDoc</ja>(
+ * 			links=<js>"{up:'...',options:'...',query:'...',contentTypes:'$W{contentTypeMenuItem}',source:'...'}"</js>
+ * 		)
+ * 	)
+ * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
+ * </p>
+ *
+ * <p>
+ * It renders the following popup-box:
+ * <br><img class='bordered' src='doc-files/ContentTypeMenuItem.png'>
  */
-public class ContentTypeLinksColumnWidget extends Widget {
+public class ContentTypeMenuItem extends MenuItemWidget {
 
+	/**
+	 * Returns <js>"contentTypeMenuItem"</js>.
+	 */
 	@Override /* Widget */
 	public String getName() {
-		return "contentTypeLinksColumn";
+		return "contentTypeMenuItem";
 	}
 
+	/**
+	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data
+	 * as plain-text.
+	 */
 	@Override /* Widget */
-	public String resolve(RestRequest req) throws Exception {
-		UriResolver uriResolver = req.getUriResolver();
-		P p = p();
+	public String getHtml(RestRequest req) throws Exception {
+		UriResolver r = req.getUriResolver();
+		StringBuilder sb = new StringBuilder();
+		sb.append(""
+			+ "<div class='menu-item'>"
+			+ "\n\t<a class='link' onclick='menuClick(this)'>content-types</a>"
+			+ "\n\t<div class='popup-content'>"
+		);
 		List<MediaType> l = new ArrayList<MediaType>(req.getSerializerGroup().getSupportedMediaTypes());
 		Collections.sort(l);
 		for (MediaType mt : l)
-			p.child(a()._class("link").href(uriResolver.resolve("request:/?plainText=true&Accept="+mt)).child(mt)).child(br());
-		return HtmlSerializer.DEFAULT_SQ.serialize(p);
+			sb.append("\n\t\t<a class='link' href='").append(r.resolve("request:/?plainText=true&Accept="+mt))
+				.append("'>").append(mt).append("</a><br>");
+		sb.append(""
+			+ "\n\t</div>"
+			+ "\n</div>"
+		);
+		return sb.toString();
 	}
-
 }

@@ -21,6 +21,7 @@ import org.apache.commons.fileupload.servlet.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -30,8 +31,11 @@ import org.apache.juneau.utils.*;
 	path="/tempDir",
 	title="Temp Directory View Service",
 	description="View and download files in the '$S{java.io.tmpdir}' directory.",
+	widgets={
+		ContentTypeMenuItem.class
+	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',upload:'servlet:/upload',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',upload:'servlet:/upload',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>Shows how to use the predefined DirectoryResource class.</p>"
@@ -43,8 +47,7 @@ import org.apache.juneau.utils.*;
 		@Property(name="allowViews", value="true"),
 		@Property(name="allowDeletes", value="true"),
 		@Property(name="allowPuts", value="false")
-	},
-	stylesheet="styles/devops.css"
+	}
 )
 public class TempDirResource extends DirectoryResource {
 	private static final long serialVersionUID = 1L;

@@ -143,8 +143,6 @@ public class RestCallHandler {
 				String p = pathInfo.substring(1);
 				if (p.equals("favicon.ico"))
 					r = context.getFavIcon();
-				else if (p.equals("style.css"))
-					r = context.getStyleSheet();
 				else if (context.isStaticFile(p))
 					r = context.resolveStaticFile(p);
 			}

@@ -398,4 +398,22 @@ public final class ArrayUtils {
 		}
 		return null;
 	}
+
+	/**
+	 * Converts the specified collection to an array of strings.
+	 *
+	 * <p>
+	 * Entries are converted to strings using {@link #toString()}.
+	 * <jk>null</jk> values remain <jk>null</jk>.
+	 *
+	 * @param c The collection to convert.
+	 * @return The collection as a string array.
+	 */
+	public static String[] toStringArray(Collection<?> c) {
+		String[] r = new String[c.size()];
+		int i = 0;
+		for (Object o : c)
+			r[i++] = StringUtils.toString(o);
+		return r;
+	}
 }

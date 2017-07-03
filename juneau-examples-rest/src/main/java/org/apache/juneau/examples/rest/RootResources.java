@@ -25,23 +25,23 @@ import org.apache.juneau.rest.widget.*;
 	path="/",
 	title="Root resources",
 	description="Example of a router resource page.",
+	widgets={
+		PoweredByApacheWidget.class,
+		ContentTypeMenuItem.class
+	},
 	htmldoc=@HtmlDoc(
-		links="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}",
+		links="{options:'?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}",
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>"
 			+ "	<p>Resources can be nested arbitrarily deep through router pages.</p>"
 			+ "	<p>Note the <span class='link'>OPTIONS</span> link provided that lets you see the generated swagger doc for this page.</p>"
 			+ "	<p>Also note the <span class='link'>SOURCE</span> link on these pages to view the source code for the page.</p>"
-			+ "	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties.</p>"
+			+ "	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>"
 			+ "	<p>Other features (such as this aside) are added through annotations.</p>"
 			+ "</div>",
 		footer="$W{poweredByApache}"
 	),
-	widgets={
-		PoweredByJuneauWidget.class,
-		PoweredByApacheWidget.class
-	},
 	children={
 		HelloWorldResource.class,
 		PetStoreResource.class,
@@ -61,10 +61,9 @@ import org.apache.juneau.rest.widget.*;
 		ConfigResource.class,
 		LogsResource.class,
 		DockerRegistryResource.class,
-		FileSpaceResource.class,
 		ShutdownResource.class
 	}
 )
-public class RootResources extends ResourceGroup {
+public class RootResources extends ResourceJenaGroup {
 	private static final long serialVersionUID = 1L;
 }

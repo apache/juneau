@@ -109,12 +109,11 @@ public class RestConfig implements ServletConfig {
 	List<Object> responseHandlers = new ArrayList<Object>();
 	List<Object> childResources = new ArrayList<Object>();
 	List<MediaType> supportedContentTypes, supportedAcceptTypes;
-	List<Object> styleSheets;
 	Object favIcon;
 	List<Object> staticFiles;
 	RestContext parentContext;
 	String path, htmlTitle, htmlDescription, htmlBranding, htmlLinks, htmlHeader, htmlNav, htmlAside, htmlFooter,
-		htmlCss, htmlCssUrl, htmlNoResultsMessage;
+		htmlStyle, htmlStyleImport, htmlScript, htmlNoResultsMessage;
 	String clientVersionHeader = "X-Client-Version";
 
 	Object resourceResolver = RestResourceResolver.class;
@@ -202,8 +201,6 @@ public class RestConfig implements ServletConfig {
 				addParamResolvers(r.paramResolvers());
 				serializerListener(r.serializerListener());
 				parserListener(r.parserListener());
-				if (! r.stylesheet().isEmpty())
-					setStyleSheet(c, r.stylesheet());
 				if (! r.favicon().isEmpty())
 					setFavIcon(c, r.favicon());
 				if (! r.staticFiles().isEmpty())
@@ -242,10 +239,10 @@ public class RestConfig implements ServletConfig {
 					setHtmlAside(hd.aside());
 				if (! hd.footer().isEmpty())
 					setHtmlFooter(hd.footer());
-				if (! hd.css().isEmpty())
-					setHtmlCss(hd.css());
-				if (! hd.cssUrl().isEmpty())
-					setHtmlCssUrl(hd.cssUrl());
+				if (! hd.style().isEmpty())
+					setHtmlStyle(hd.style());
+				if (! hd.styleImport().isEmpty())
+					setHtmlStyleImport(hd.styleImport());
 				if (! hd.noResultsMessage().isEmpty())
 					setHtmlNoResultsMessage(hd.noResultsMessage());
 				if (hd.nowrap())
@@ -967,89 +964,6 @@ public class RestConfig implements ServletConfig {
 	}
 
 	/**
-	 * Specifies the stylesheets that make up the contents of the page <js>"/resource-path/styles.css"</js>.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#stylesheet() @RestResource.stylesheet()} annotation.
-	 *
-	 * <p>
-	 * The object types can be any of the following:
-	 * <ul>
-	 * 	<li>{@link InputStream}
-	 * 	<li>{@link Reader}
-	 * 	<li>{@link File}
-	 * 	<li>{@link CharSequence}
-	 * 	<li><code><jk>byte</jk>[]</code>
-	 * </ul>
-	 *
-	 * <p>
-	 * The contents of all these stylesheets will be aggregated into a single page in the order they are specified in
-	 * this list.
-	 *
-	 * @param styleSheets The new list of style sheets that make up the <code>styles.css</code> page.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setStyleSheet(Object...styleSheets) {
-		this.styleSheets = new ArrayList<Object>(Arrays.asList(styleSheets));
-		return this;
-	}
-
-	/**
-	 * Specifies the stylesheet that make up the contents of the page <js>"/resource-path/styles.css"</js>.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#stylesheet() @RestResource.stylesheet()} annotation.
-	 *
-	 * <p>
-	 * Use this method to specify a resource located in the classpath.
-	 * This call uses the {@link Class#getResourceAsStream(String)} method to retrieve the stylesheet contents.
-	 *
-	 * @param resourceClass The resource class used to resolve the resource stream.
-	 * @param resourcePath
-	 * 	The path passed to the {@link Class#getResourceAsStream(String)} method.
-	 * 	Can also be a path starting with <js>"file://"</js> denoting a location to pull from the file system.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setStyleSheet(Class<?> resourceClass, String resourcePath) {
-		this.styleSheets = new ArrayList<Object>();
-		this.styleSheets.add(new Pair<Class<?>,String>(resourceClass, resourcePath));
-		return this;
-	}
-
-	/**
-	 * Adds to the stylesheet that make up the contents of the page <js>"/resource-path/styles.css"</js>.
-	 *
-	 * <p>
-	 * Same as {@link #setStyleSheet(Object...)} except appends to the existing list instead of replacing.
-	 *
-	 * @param styleSheets The list of style sheets to add that make up the <code>styles.css</code> page.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig addStyleSheet(Object...styleSheets) {
-		if (this.styleSheets == null)
-			this.styleSheets = new ArrayList<Object>();
-		this.styleSheets.addAll(Arrays.asList(styleSheets));
-		return this;
-	}
-
-	/**
-	 * Adds to the stylesheet that make up the contents of the page <js>"/resource-path/styles.css"</js>.
-	 *
-	 * <p>
-	 * Same as {@link #setStyleSheet(Class,String)} except appends to the existing list instead of replacing.
-	 *
-	 * @param resourceClass The resource class used to resolve the resource stream.
-	 * @param resourcePath The path passed to the {@link Class#getResourceAsStream(String)} method.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig addStyleSheet(Class<?> resourceClass, String resourcePath) {
-		if (this.styleSheets == null)
-			this.styleSheets = new ArrayList<Object>();
-		this.styleSheets.add(new Pair<Class<?>,String>(resourceClass, resourcePath));
-		return this;
-	}
-
-	/**
 	 * Specifies the icon contents that make up the contents of the page <js>"/resource-path/favicon.ico"</js>.
 	 *
 	 * <p>
@@ -1458,13 +1372,13 @@ public class RestConfig implements ServletConfig {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#css() @HtmlDoc.css()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#style() @HtmlDoc.style()} annotation.
 	 *
 	 * @param value The HTML CSS style section contents.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setHtmlCss(String value) {
-		this.htmlCss = value;
+	public RestConfig setHtmlStyle(String value) {
+		this.htmlStyle = value;
 		return this;
 	}
 
@@ -1485,13 +1399,36 @@ public class RestConfig implements ServletConfig {
 	 * by {@link UriResolver}.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#cssUrl() @HtmlDoc.cssUrl()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#styleImport() @HtmlDoc.styleImport()} annotation.
 	 *
 	 * @param value The CSS URL in the HTML CSS style section.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setHtmlCssUrl(String value) {
-		this.htmlCssUrl = value;
+	public RestConfig setHtmlStyleImport(String value) {
+		this.htmlStyleImport = value;
+		return this;
+	}
+
+	/**
+	 * Sets the HTML script section contents.
+	 *
+	 * <p>
+	 * The format of this value is Javascript.
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#script() @HtmlDoc.script()} annotation.
+	 *
+	 * @param value The HTML script section contents.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setHtmlScript(String value) {
+		this.htmlScript = value;
 		return this;
 	}
 

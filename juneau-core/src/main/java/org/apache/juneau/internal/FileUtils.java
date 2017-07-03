@@ -15,16 +15,11 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
-import java.util.*;
-import java.util.ResourceBundle.*;
 
 /**
  * File utilities.
  */
 public class FileUtils {
-
-	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
-	private static final List<Locale> ROOT_LOCALE = Arrays.asList(Locale.ROOT);
 
 	/**
 	 * Same as {@link File#mkdirs()} except throws a RuntimeExeption if directory could not be created.
@@ -171,78 +166,5 @@ public class FileUtils {
 		if (i == -1)
 			return "";
 		return name.substring(i+1);
-	}
-
-	/**
-	 * Returns the candidate file names for the specified file name in the specified locale.
-	 *
-	 * <p>
-	 * For example, if looking for the <js>"MyResource.txt"</js> file in the Japanese locale, the iterator will return
-	 * names in the following order:
-	 * <ol>
-	 * 	<li><js>"MyResource_ja_JP.txt"</js>
-	 * 	<li><js>"MyResource_ja.txt"</js>
-	 * 	<li><js>"MyResource.txt"</js>
-	 * </ol>
-	 *
-	 * <p>
-	 * If the locale is null, then it will only return <js>"MyResource.txt"</js>.
-	 *
-	 * @param fileName The name of the file to get candidate file names on.
-	 * @param l The locale.
-	 * @return An iterator of file names to look at.
-	 */
-	public static Iterable<String> getCandidateFileNames(final String fileName, final Locale l) {
-		return new Iterable<String>() {
-			@Override
-			public Iterator<String> iterator() {
-				return new Iterator<String>() {
-					final Iterator<Locale> locales = getCandidateLocales(l).iterator();
-					String baseName, ext;
-
-					@Override
-					public boolean hasNext() {
-						return locales.hasNext();
-					}
-
-					@Override
-					public String next() {
-						Locale l2 = locales.next();
-						if (l2.toString().isEmpty())
-							return fileName;
-						if (baseName == null)
-							baseName = getBaseName(fileName);
-						if (ext == null)
-							ext = getExtension(fileName);
-						return baseName + "_" + l2.toString() + (ext.isEmpty() ? "" : ('.' + ext));
-					}
-					@Override
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
-	}
-
-
-	/**
-	 * Returns the candidate locales for the specified locale.
-	 *
-	 * <p>
-	 * For example, if <code>locale</code> is <js>"ja_JP"</js>, then this method will return:
-	 * <ol>
-	 * 	<li><js>"ja_JP"</js>
-	 * 	<li><js>"ja"</js>
-	 * 	<li><js>""</js>
-	 * </ol>
-	 *
-	 * @param locale The locale to get the list of candidate locales for.
-	 * @return The list of candidate locales.
-	 */
-	public static List<Locale> getCandidateLocales(Locale locale) {
-		if (locale == null)
-			return ROOT_LOCALE;
-		return RB_CONTROL.getCandidateLocales("", locale);
 	}
 }

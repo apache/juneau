@@ -450,12 +450,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_nowrap = "HtmlDocSerializer.nowrap";
 
 	/**
-	 * <b>Configuration property:</b>  Stylesheet URL.
+	 * <b>Configuration property:</b>  Stylesheet import URLs.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.cssUrl"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"style.css"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.styleImport"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -463,19 +463,23 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * Adds a link to the specified stylesheet URL.
 	 *
 	 * <p>
-	 * If not specified, defaults to the built-in stylesheet located at <js>"style.css"</js>.
-	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
+	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.styleImport()</code> annotation.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_cssUrl = "HtmlDocSerializer.cssUrl";
+	public static final String HTMLDOC_styleImport = "HtmlDocSerializer.styleImport";
 
 	/**
-	 * <b>Configuration property:</b>  CSS code.
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_styleImport} property.
+	 */
+	public static final String HTMLDOC_styleImport_add = "HtmlDocSerializer.styleImport.list.add";
+
+	/**
+	 * <b>Configuration property:</b>  CSS style code.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.css.list"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.style.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -488,7 +492,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_css</jsf>,
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_style</jsf>,
 	 * 				value=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>)
 	 * 		}
 	 * 	)
@@ -499,17 +503,57 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
-	 * 			css=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>
+	 * 			style=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>
 	 * 		)
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_css = "HtmlDocSerializer.css.list";
+	public static final String HTMLDOC_style = "HtmlDocSerializer.style.list";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_css} property.
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_style} property.
 	 */
-	public static final String HTMLDOC_css_add = "HtmlDocSerializer.css.list.add";
+	public static final String HTMLDOC_style_add = "HtmlDocSerializer.style.list.add";
+
+	/**
+	 * <b>Configuration property:</b>  Javascript code.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.script.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Adds the specified Javascript code to the HTML page.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_script</jsf>,
+	 * 				value=<js>"alert('hello!');"</js>)
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=@HtmlDoc(
+	 * 			script=<js>"alert('hello!');"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
+	public static final String HTMLDOC_script = "HtmlDocSerializer.script.list";
+
+	/**
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_script} property.
+	 */
+	public static final String HTMLDOC_script_add = "HtmlDocSerializer.script.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  HTML document template.
@@ -540,9 +584,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_template = "HtmlDocSerializer.template";
 
 
-	final String[] css;
+	final String[] style, styleImport, script;
 	final Map<String,Object> links;
-	final String title, description, branding, header, nav, aside, footer, cssUrl, noResultsMessage;
+	final String title, description, branding, header, nav, aside, footer, noResultsMessage;
 	final boolean nowrap;
 	final HtmlDocTemplate template;
 
@@ -556,7 +600,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 */
 	public HtmlDocSerializerContext(PropertyStore ps) {
 		super(ps);
-		css = ps.getProperty(HTMLDOC_css, String[].class, new String[0]);
+		style = ps.getProperty(HTMLDOC_style, String[].class, new String[0]);
+		styleImport = ps.getProperty(HTMLDOC_styleImport, String[].class, new String[0]);
+		script = ps.getProperty(HTMLDOC_script, String[].class, new String[0]);
 		title = ps.getProperty(HTMLDOC_title, String.class, null);
 		description = ps.getProperty(HTMLDOC_description, String.class, null);
 		branding = ps.getProperty(HTMLDOC_branding, String.class, null);
@@ -564,7 +610,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		nav = ps.getProperty(HTMLDOC_nav, String.class, null);
 		aside = ps.getProperty(HTMLDOC_aside, String.class, null);
 		footer = ps.getProperty(HTMLDOC_footer, String.class, null);
-		cssUrl = ps.getProperty(HTMLDOC_cssUrl, String.class, null);
 		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
 		links = ps.getMap(HTMLDOC_links, String.class, Object.class, null);
 		noResultsMessage = ps.getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");
@@ -575,7 +620,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("HtmlDocSerializerContext", new ObjectMap()
-				.append("cssImports", css)
 				.append("title", title)
 				.append("text", description)
 				.append("branding", branding)
@@ -584,7 +628,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 				.append("links", links)
 				.append("aside", aside)
 				.append("footer", footer)
-				.append("cssUrl", cssUrl)
+				.append("style", style)
+				.append("styleImport", styleImport)
 				.append("nowrap", nowrap)
 				.append("template", template)
 				.append("noResultsMessage", noResultsMessage)

@@ -623,6 +623,9 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Specialized method that calls {@link #getString(String)} and splits the results as a simple comma-delimited list.
+	 * 
+	 * <p>
+	 * If the value is already a collection, the individual entries are converted to strings using {@link #toString()}.
 	 *
 	 * @param key the key.
 	 * @return
@@ -631,8 +634,13 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String[] getStringArray(String key) {
-		String s = get(String.class, key);
-		return (s == null ? new String[0] : split(s));
+		Object s = get(Object.class, key);
+		if (s == null)
+			return new String[0];
+		if (s instanceof Collection) 
+			return ArrayUtils.toStringArray((Collection<?>)s);
+		String[] r = split(StringUtils.toString(s));
+		return r;
 	}
 
 	/**
@@ -643,8 +651,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @return The value converted to a string array.
 	 */
 	public String[] getStringArray(String key, String[] def) {
-		String s = get(String.class, key);
-		String[] r = (s == null ? new String[0] : split(s));
+		Object s = get(Object.class, key);
+		if (s == null)
+			return def;
+		if (s instanceof Collection) 
+			return ArrayUtils.toStringArray((Collection<?>)s);
+		String[] r = split(StringUtils.toString(s));
 		return (r.length == 0 ? def : r);
 	}
 

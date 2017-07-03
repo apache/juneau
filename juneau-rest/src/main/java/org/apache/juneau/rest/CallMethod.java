@@ -69,7 +69,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final RestContext context;
 	private final BeanContext beanContext;
 	private final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlLinks, htmlNav, htmlAside,
-		htmlFooter, htmlCss, htmlCssUrl, htmlNoResultsMessage;
+		htmlFooter, htmlStyle, htmlStyleImport, htmlScript, htmlNoResultsMessage;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> widgets;
@@ -112,8 +112,9 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.htmlNav = b.htmlNav;
 		this.htmlAside = b.htmlAside;
 		this.htmlFooter = b.htmlFooter;
-		this.htmlCss = b.htmlCss;
-		this.htmlCssUrl = b.htmlCssUrl;
+		this.htmlStyle = b.htmlStyle;
+		this.htmlStyleImport = b.htmlStyleImport;
+		this.htmlScript = b.htmlScript;
 		this.htmlNoWrap = b.htmlNoWrap;
 		this.htmlTemplate = b.htmlTemplate;
 		this.htmlNoResultsMessage = b.htmlNoResultsMessage;
@@ -122,7 +123,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 	private static class Builder  {
 		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlTitle, htmlDescription,
-			htmlBranding, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlCssUrl, htmlCss, htmlHeader, htmlNoResultsMessage;
+			htmlBranding, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStyleImport, htmlScript, htmlHeader, htmlNoResultsMessage;
 		private boolean htmlNoWrap;
 		private HtmlDocTemplate htmlTemplate;
 		private UrlPathPattern pathPattern;
@@ -188,8 +189,9 @@ class CallMethod implements Comparable<CallMethod>  {
 				htmlNav = hd.nav().isEmpty() ? context.getHtmlNav() : hd.nav();
 				htmlAside = hd.aside().isEmpty() ? context.getHtmlAside() : hd.aside();
 				htmlFooter = hd.footer().isEmpty() ? context.getHtmlFooter() : hd.footer();
-				htmlCss = hd.css().isEmpty() ? context.getHtmlCss() : hd.css();
-				htmlCssUrl = hd.cssUrl().isEmpty() ? context.getHtmlCssUrl() : hd.cssUrl();
+				htmlStyle = hd.style().isEmpty() ? context.getHtmlStyle() : hd.style();
+				htmlStyleImport = hd.styleImport().isEmpty() ? context.getHtmlStyleImport() : hd.styleImport();
+				htmlScript = hd.script().isEmpty() ? context.getHtmlScript() : hd.script();
 				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();
 				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.header();
 				htmlTemplate =
@@ -935,10 +937,40 @@ class CallMethod implements Comparable<CallMethod>  {
 						return htmlAside == null ? null : req.resolveVars(htmlAside);
 					if (k.equals(HTMLDOC_footer))
 						return htmlFooter == null ? null : req.resolveVars(htmlFooter);
-					if (k.equals(HTMLDOC_css))
-						return htmlCss == null ? null : req.resolveVars(htmlCss);
-					if (k.equals(HTMLDOC_cssUrl))
-						return htmlCssUrl == null ? null : req.resolveVars(htmlCssUrl);
+					if (k.equals(HTMLDOC_style)) {
+						Set<String> l = new LinkedHashSet<String>();
+						if (htmlStyle != null)
+							l.add(req.resolveVars(htmlStyle));
+						for (Widget w : req.getWidgets().values()) {
+							String style;
+							try {
+								style = w.getStyle(req);
+							} catch (Exception e) {
+								style = e.getLocalizedMessage();
+							}
+							if (style != null)
+								l.add(req.resolveVars(style));
+						}
+						return l;
+					}
+					if (k.equals(HTMLDOC_script)) {
+						Set<String> l = new LinkedHashSet<String>();
+						if (htmlScript != null)
+							l.add(req.resolveVars(htmlScript));
+						for (Widget w : req.getWidgets().values()) {
+							String script;
+							try {
+								script = w.getScript(req);
+							} catch (Exception e) {
+								script = e.getLocalizedMessage();
+							}
+							if (script != null)
+								l.add(req.resolveVars(script));
+						}
+						return l;
+					}
+					if (k.equals(HTMLDOC_styleImport))
+						return htmlStyleImport == null ? null : req.resolveVars(htmlStyleImport);
 					if (k.equals(HTMLDOC_template))
 						return htmlTemplate;
 					if (k.equals(HTMLDOC_nowrap))

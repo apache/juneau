@@ -64,6 +64,7 @@ footer {
 	text-decoration: none;
 	margin: 0px 15px;
 	text-transform: uppercase;
+	cursor: pointer;
 }
 .link:active, .link:hover {
 	color: white;
@@ -93,6 +94,35 @@ h5.description, h5.description * {
 	text-decoration: none;
 	font-weight: normal;
 }
+
+/************************************************************************************/
+/**  Pop-ups                                                                       **/
+/************************************************************************************/
+
+.popup-content {
+	display: none;
+	position: absolute;
+	background-color: #f4f6f9;
+	white-space: nowrap;
+	padding: 5px;
+	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+	z-index: 1;
+	margin-top: 10px;
+	border-radius: 4px;
+}
+
+.popup-content * {
+	color: black;
+	font-size: 10pt;
+}
+
+.popup-content a:hover {
+	color: #94A3AB;
+}
+
+
+.popup-show {display:block;}
+
 
 /************************************************************************************/
 /**  Data section                                                                  **/

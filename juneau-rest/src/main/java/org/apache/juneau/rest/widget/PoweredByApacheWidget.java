@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -19,17 +20,45 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The variable it resolves is <js>"$W{poweredByApache}"</js>.
+ *
+ * <p>
+ * It produces a simple Apache icon floating on the right.
+ * Typically it's used in the footer of the page, as shown below in the <code>RootResources</code> from the examples:
+ *
+ * <p class='bcode'>
+ * 	<ja>@RestResource</ja>(
+ * 		path=<js>"/"</js>,
+ * 		title=<js>"Root resources"</js>,
+ * 		description=<js>"Example of a router resource page."</js>,
+ * 		widgets={
+ * 			PoweredByApacheWidget.<jk>class</jk>
+ * 		},
+ * 		htmldoc=<ja>@HtmlDoc</ja>(
+ * 			footer=<js>"$W{poweredByApache}"</js>
+ * 		)
+ * </p>
+ *
+ * <p>
+ * It renders the following image:
+ * <img class='bordered' src='doc-files/PoweredByApacheWidget.png'>
  */
 public class PoweredByApacheWidget extends Widget {
 
+	/**
+	 * Returns <js>"poweredByApache"</js>.
+	 */
 	@Override /* Widget */
 	public String getName() {
 		return "poweredByApache";
 	}
 
+	/**
+	 * Returns an Apache image tag hyperlinked to <js>"http://apache.org"</js>
+	 */
 	@Override /* Widget */
-	public String resolve(RestRequest req) throws Exception {
-		return "<a href='http://apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+req.getUriResolver().resolve("servlet:/htdocs/asf.png")+"'>";
+	public String getHtml(RestRequest req) throws Exception {
+		UriResolver r = req.getUriResolver();
+		return "<a href='http://apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/asf.png")+"'>";
 	}
 }
 

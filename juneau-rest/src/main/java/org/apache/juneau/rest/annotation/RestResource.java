@@ -479,75 +479,10 @@ public @interface RestResource {
 	String config() default "";
 
 	/**
-	 * The stylesheet to use for HTML views.
-	 *
-	 * <p>
-	 * The name is a path to a stylesheet located in either the classpath or working directory.
-	 * The resulting stylesheet becomes available through the servlet via the URL <js>"[servlet-path]/style.css"</js>.
-	 *
-	 * <p>
-	 * The default set of styles located in the <code>org.apache.juneau.rest.styles</code> package are:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"styles/juneau.css"</js> - Theme based on Jazz look-and-feel.
-	 * 	<li>
-	 * 		<js>"styles/devops.css"</js> - Theme based on IBM DevOps look-and-feel.
-	 * </ul>
-	 *
-	 * <p>
-	 * The classpath search starts with the child servlet class and proceeds up the class hierarchy chain.
-	 * Since the {@link RestServlet} class is in the <code>org.apache.juneau.rest</code> package and the predefined
-	 * styles are in the <code>org.apache.juneau.rest.styles</code> package, the paths to the predefined styles are
-	 * prefixed with <js>"styles/"</js>.
-	 *
-	 * <p>
-	 * If the stylesheet cannot be found on the classpath, an attempt to look in the working directory for it will be
-	 * made.
-	 * This allows for stylesheets to be placed on the file system in the working directory.
-	 *
-	 * <p>
-	 * If the file cannot be located, the request to <js>"[servlet-path]/style.css"</js> will return
-	 * {@link HttpServletResponse#SC_NOT_FOUND}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.foo.mypackage;
-	 *
-	 * 	<ja>@RestResource</ja>(
-	 * 		stylesheet=<js>"mystyles/mycss.css"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * In this example, the servlet will attempt to find the <code>mycss.css</code> file in the following ordered
-	 * locations:
-	 * </p>
-	 * <ol>
-	 * 	<li><code>com.foo.mypackage.mystyles</code> package.
-	 * 	<li><code>org.apache.juneau.rest.mystyles</code> package (since <code>RestServletDefault</code> is in
-	 * 		<code>org.apache.juneau.rest</code>).
-	 * 	<li><code>[working-dir]/mystyles</code> directory.
-	 * </ol>
-	 *
-	 * <p>
-	 * Multiple stylesheets can be specified as a comma-delimited list.
-	 * When multiple stylesheets are specified, their contents will be concatenated and return in the order specified
-	 * in the list.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addStyleSheet(Object...)}/
-	 * {@link RestConfig#addStyleSheet(Class, String)} methods.
-	 */
-	String stylesheet() default "";
-
-	/**
 	 * The favicon to use for HTML views.
 	 *
 	 * <p>
-	 * The name is a path to an icon file located in either the classpath or working directory in a similar way to how
-	 * the {@link #stylesheet()} stylesheet is resolved.
+	 * The name is a path to an icon file located in either the classpath or working directory.
 	 * The resulting favicon becomes available in the servlet via the URL <js>"[servlet-path]/favicon.ico"</js>.
 	 *
 	 * <p>

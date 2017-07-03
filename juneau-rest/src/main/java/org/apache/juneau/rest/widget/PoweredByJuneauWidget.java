@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -19,17 +20,43 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The variable it resolves is <js>"$W{poweredByJuneau}"</js>.
+ *
+ * <p>
+ * It produces a simple Apache Juneau icon floating on the right.
+ * Typically it's used in the footer of the page, as shown below in the <code>AddressBookResource</code> from the examples:
+ *
+ * <p class='bcode'>
+ * 	<ja>@RestResource</ja>(
+ * 		path=<js>"/addressBook"</js>,
+ * 		widgets={
+ * 			PoweredByJuneauWidget.<jk>class</jk>
+ * 		},
+ * 		htmldoc=<ja>@HtmlDoc</ja>(
+ * 			footer=<js>"$W{poweredByJuneau}"</js>
+ * 		)
+ * </p>
+ *
+ * <p>
+ * It renders the following image:
+ * <img class='bordered' src='doc-files/PoweredByJuneauWidget.png'>
  */
 public class PoweredByJuneauWidget extends Widget {
 
+	/**
+	 * Returns <js>"poweredByJuneau"</js>.
+	 */
 	@Override /* Widget */
 	public String getName() {
 		return "poweredByJuneau";
 	}
 
+	/**
+	 * Returns an Apache Juneau image tag hyperlinked to <js>"http://juneau.apache.org"</js>
+	 */
 	@Override /* Widget */
-	public String resolve(RestRequest req) throws Exception {
-		return "<a href='http://apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+req.getUriResolver().resolve("servlet:/htdocs/juneau.png")+"'>";
+	public String getHtml(RestRequest req) throws Exception {
+		UriResolver r = req.getUriResolver();
+		return "<a href='http://juneau.apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/juneau.png")+"'>";
 	}
 }
 

@@ -13,7 +13,6 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -35,8 +34,8 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
-	private final String title, description, branding, header, nav, aside, footer, cssUrl, noResultsMessage;
-	private final String[] css;
+	private final String title, description, branding, header, nav, aside, footer, noResultsMessage;
+	private final String[] style, styleImport, script;
 	private final Map<String,Object> links;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
@@ -78,8 +77,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			aside = ctx.aside;
 			footer = ctx.footer;
 			links = ctx.links;
-			cssUrl = ctx.cssUrl;
-			css = ctx.css;
+			style = ctx.style;
+			styleImport = ctx.styleImport;
+			script = ctx.script;
 			nowrap = ctx.nowrap;
 			noResultsMessage = ctx.noResultsMessage;
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, ctx.template);
@@ -93,8 +93,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			footer = op.getString(HTMLDOC_footer, ctx.footer);
 			Map m = op.getMap(HTMLDOC_links, ctx.links);
 			links = ObjectUtils.isEmpty(m) ? null : new LinkedHashMap(m);
-			cssUrl = op.getString(HTMLDOC_cssUrl, ctx.cssUrl);
-			css = split(op.getString(HTMLDOC_css, null));
+			style = op.getStringArray(HTMLDOC_style, ctx.style);
+			styleImport = op.getStringArray(HTMLDOC_styleImport, ctx.styleImport);
+			script = op.getStringArray(HTMLDOC_script, ctx.script);
 			nowrap = op.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
 			noResultsMessage = op.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, op.get(HTMLDOC_template, ctx.template));
@@ -102,26 +103,39 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_cssUrl} setting value in this context.
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_style} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_cssUrl} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 * 	Never an empty string.
+	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_style} setting value in this context.
+	 * 	An empty array if not specified.
+	 * 	Never <jk>null</jk>.
 	 */
-	public final String getCssUrl() {
-		return cssUrl;
+	public final String[] getStyle() {
+		return style;
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_css} setting value in this context.
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_styleImport} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_css} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty array.
+	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_styleImport} setting value in this context.
+	 * 	An empty array if not specified.
+	 * 	Never <jk>null</jk>.
 	 */
-	public final String[] getCss() {
-		return css;
+	public final String[] getStyleImport() {
+		return styleImport;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_script} setting value in this context.
+	 *
+	 * @return
+	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_script} setting value in this context.
+	 * 	An empty array if not specified.
+	 * 	Never <jk>null</jk>.
+	 */
+	public final String[] getScript() {
+		return script;
 	}
 
 	/**

@@ -26,27 +26,40 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public void head(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
-		if (hasCss(session)) {
-			w.oTag(1, "style").attr("type", "text/css").appendln(">").nl(1);
-			css(session, w, s, o);
+		if (hasStyle(session)) {
+			w.sTag(1, "style").nl(1);
+			style(session, w, s, o);
 			w.ie(1).eTag("style").nl(1);
+		}
+		if (hasScript(session)) {
+			w.sTag(1, "script").nl(1);
+			script(session, w, s, o);
+			w.ie(1).eTag("script").nl(1);
 		}
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void css(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void style(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
 
-		String cssUrl = session.getCssUrl();
-		if (cssUrl == null)
-			cssUrl = "servlet:/style.css";
-		cssUrl = session.resolveUri(cssUrl);
+		String[] styleImport = session.getStyleImport();
+		if (! ArrayUtils.contains("NONE", styleImport)) 
+			for (String si : styleImport)
+				w.append(2, "@import ").q().append(session.resolveUri(si)).q().appendln(";");
 
-		w.append(2, "@import ").q().append(cssUrl).q().appendln(";");
 		if (session.isNoWrap())
 			w.appendln("\ndiv.data * {white-space:nowrap;}");
-		if (session.getCss() != null)
-			for (String css : session.getCss())
-				w.appendln(css);
+
+		if (session.getStyle() != null)
+			for (String style : session.getStyle())
+				w.appendln(style);
+	}
+
+	@Override /* HtmlDocTemplate */
+	public void script(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+
+		if (session.getScript() != null)
+			for (String script : session.getScript())
+				w.appendln(script);
 	}
 
 	@Override /* HtmlDocTemplate */
@@ -167,7 +180,12 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	}
 
 	@Override /* HtmlDocTemplate */
-	public boolean hasCss(HtmlDocSerializerSession session) {
+	public boolean hasStyle(HtmlDocSerializerSession session) {
+		return true;
+	}
+
+	@Override /* HtmlDocTemplate */
+	public boolean hasScript(HtmlDocSerializerSession session) {
 		return true;
 	}
 

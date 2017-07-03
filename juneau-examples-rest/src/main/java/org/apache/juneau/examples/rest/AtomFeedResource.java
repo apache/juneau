@@ -32,22 +32,16 @@ import org.apache.juneau.rest.widget.*;
 	path="/atom",
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",
+	widgets={
+		ContentTypeMenuItem.class
+	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}",
-		aside=""
-			+ "<div style='min-width:200px' class='text'>"
-			+ "	<p>Shows how to produce ATOM feeds in a variety of languages.</p>"
-			+ "	<p>$W{contentTypeLinksRow}</p>"
-			+ "</div>",
-		css="aside {display:table-caption;}"
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}"
 	),
 	properties={
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
 		@Property(name=RDF_addRootProperty, value="true")
-	},
-	widgets={
-		ContentTypeLinksRowWidget.class
 	},
 	encoders=GzipEncoder.class
 )

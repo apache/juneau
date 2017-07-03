@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -358,8 +357,9 @@ public final class RestContext extends Context {
 		htmlLinks,
 		htmlNav,
 		htmlAside,
-		htmlCss,
-		htmlCssUrl,
+		htmlStyle,
+		htmlStyleImport,
+		htmlScript,
 		htmlFooter,
 		htmlNoResultsMessage;
 	private final boolean htmlNoWrap;
@@ -388,7 +388,7 @@ public final class RestContext extends Context {
 	private final RestGuard[] guards;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
-	private final StreamResource styleSheet, favIcon;
+	private final StreamResource favIcon;
 	private final Map<String,String> staticFilesMap;
 	private final String[] staticFilesPrefixes;
 	private final MessageBundle msgs;
@@ -405,8 +405,8 @@ public final class RestContext extends Context {
 
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
 	private final Map<String,StreamResource> staticFilesCache = new ConcurrentHashMap<String,StreamResource>();
-	private final Map<String,byte[]> resourceStreams = new ConcurrentHashMap<String,byte[]>();
-	private final Map<String,String> resourceStrings = new ConcurrentHashMap<String,String>();
+
+	private final ResourceFinder resourceFinder;
 	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<Integer,AtomicInteger>();
 
 
@@ -424,6 +424,7 @@ public final class RestContext extends Context {
 		try {
 			this.resource = resource;
 			this.config = config;
+			this.resourceFinder = new ResourceFinder(resource.getClass());
 			this.parentContext = config.parentContext;
 
 			Builder b = new Builder(resource, config);
@@ -455,7 +456,6 @@ public final class RestContext extends Context {
 			this.guards = b.guards.toArray(new RestGuard[b.guards.size()]);
 			this.responseHandlers = toObjectArray(b.responseHandlers, ResponseHandler.class);
 			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
-			this.styleSheet = b.styleSheet;
 			this.favIcon = b.favIcon;
 			this.staticFilesMap = Collections.unmodifiableMap(b.staticFilesMap);
 			this.staticFilesPrefixes = b.staticFilesPrefixes;
@@ -472,8 +472,9 @@ public final class RestContext extends Context {
 			this.htmlLinks = b.htmlLinks;
 			this.htmlNav = b.htmlNav;
 			this.htmlAside = b.htmlAside;
-			this.htmlCss = b.htmlCss;
-			this.htmlCssUrl = b.htmlCssUrl;
+			this.htmlStyle = b.htmlStyle;
+			this.htmlStyleImport = b.htmlStyleImport;
+			this.htmlScript = b.htmlScript;
 			this.htmlFooter = b.htmlFooter;
 			this.htmlNoWrap = b.htmlNoWrap;
 			this.htmlNoResultsMessage = b.htmlNoResultsMessage;
@@ -652,7 +653,7 @@ public final class RestContext extends Context {
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
 		String clientVersionHeader = "", defaultCharset, paramFormat, htmlTitle, htmlDescription, htmlBranding,
-			htmlHeader, htmlLinks, htmlNav, htmlAside, htmlCss, htmlCssUrl, htmlFooter, htmlNoResultsMessage;
+			htmlHeader, htmlLinks, htmlNav, htmlAside, htmlStyle, htmlStyleImport, htmlScript, htmlFooter, htmlNoResultsMessage;
 		boolean htmlNoWrap;
 		HtmlDocTemplate htmlTemplate;
 
@@ -664,7 +665,7 @@ public final class RestContext extends Context {
 		List<RestGuard> guards = new ArrayList<RestGuard>();
 		List<ResponseHandler> responseHandlers = new ArrayList<ResponseHandler>();
 		MimetypesFileTypeMap mimetypesFileTypeMap;
-		StreamResource styleSheet, favIcon;
+		StreamResource favIcon;
 		Map<String,String> staticFilesMap;
 		String[] staticFilesPrefixes;
 		MessageBundle messageBundle;
@@ -752,23 +753,6 @@ public final class RestContext extends Context {
 
 			VarResolver vr = sc.getVarResolverBuilder().build();
 
-			if (sc.styleSheets != null) {
-				List<InputStream> contents = new ArrayList<InputStream>();
-				for (Object o : sc.styleSheets) {
-					if (o instanceof Pair) {
-						Pair<Class<?>,String> p = (Pair<Class<?>,String>)o;
-						for (String path : split(vr.resolve(StringUtils.toString(p.second()))))
-							if (path.startsWith("file://"))
-								contents.add(new FileInputStream(path));
-							else
-								contents.add(ReflectionUtils.getResource(p.first(), path));
-					} else {
-						contents.add(toInputStream(o));
-					}
-				}
-				styleSheet = new StreamResource(MediaType.forString("text/css"), contents.toArray());
-			}
-
 			if (sc.favIcon != null) {
 				Object o = sc.favIcon;
 				InputStream is = null;
@@ -809,8 +793,9 @@ public final class RestContext extends Context {
 			htmlLinks = sc.htmlLinks;
 			htmlNav = sc.htmlNav;
 			htmlAside = sc.htmlAside;
-			htmlCss = sc.htmlCss;
-			htmlCssUrl = sc.htmlCssUrl;
+			htmlStyle = sc.htmlStyle;
+			htmlStyleImport = sc.htmlStyleImport;
+			htmlScript = sc.htmlScript;
 			htmlFooter = sc.htmlFooter;
 			htmlNoWrap = sc.htmlNoWrap;
 			htmlNoResultsMessage = sc.htmlNoResultsMessage;
@@ -948,28 +933,7 @@ public final class RestContext extends Context {
 	 * @throws IOException
 	 */
 	protected InputStream getResource(String name, Locale locale) throws IOException {
-		String n = (locale == null || locale.toString().isEmpty() ? name : name + '|' + locale);
-		if (! resourceStreams.containsKey(n)) {
-			InputStream is = getLocalizedResource(resource.getClass(), name, locale);
-			if (is == null && name.indexOf("..") == -1) {
-				for (String n2 : getCandidateFileNames(name, locale)) {
-					File f = new File(n2);
-					if (f.exists() && f.canRead()) {
-						is = new FileInputStream(f);
-						break;
-					}
-				}
-			}
-			if (is != null) {
-				try {
-					resourceStreams.put(n, ByteArrayCache.DEFAULT.cache(is));
-				} finally {
-					is.close();
-				}
-			}
-		}
-		byte[] b = resourceStreams.get(n);
-		return b == null ? null : new ByteArrayInputStream(b);
+		return resourceFinder.getResourceAsStream(name, locale);
 	}
 
 	/**
@@ -981,14 +945,7 @@ public final class RestContext extends Context {
 	 * @throws IOException If resource could not be found.
 	 */
 	public String getResourceAsString(String name, Locale locale) throws IOException {
-		String n = (locale == null || locale.toString().isEmpty() ? name : name + '|' + locale);
-		if (! resourceStrings.containsKey(n)) {
-			String s = read(getResource(name, locale));
-			if (s == null)
-				throw new IOException("Resource '"+name+"' not found.");
-			resourceStrings.put(n, s);
-		}
-		return resourceStrings.get(n);
+		return resourceFinder.getResourceAsString(name, locale);
 	}
 
 	/**
@@ -1140,27 +1097,39 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * The HTML page CSS URL.
+	 * The HTML page stylesheet URL.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#cssUrl()} annotation or {@link RestConfig#setHtmlCssUrl(String)} method.
+	 * Defined by the {@link HtmlDoc#styleImport()} annotation or {@link RestConfig#setHtmlStyleImport(String)} method.
 	 *
 	 * @return The HTML page CSS URL.
 	 */
-	public String getHtmlCssUrl() {
-		return htmlCssUrl;
+	public String getHtmlStyleImport() {
+		return htmlStyleImport;
 	}
 
 	/**
 	 * The HTML page CSS contents.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#css()} annotation or {@link RestConfig#setHtmlCss(String)} method.
+	 * Defined by the {@link HtmlDoc#style()} annotation or {@link RestConfig#setHtmlStyle(String)} method.
 	 *
 	 * @return The HTML page CSS contents.
 	 */
-	public String getHtmlCss() {
-		return htmlCss;
+	public String getHtmlStyle() {
+		return htmlStyle;
+	}
+
+	/**
+	 * The HTML page Javascript contents.
+	 *
+	 * <p>
+	 * Defined by the {@link HtmlDoc#script()} annotation or {@link RestConfig#setHtmlScript(String)} method.
+	 *
+	 * @return The HTML page Javascript contents.
+	 */
+	public String getHtmlScript() {
+		return htmlScript;
 	}
 
 	/**
@@ -1812,25 +1781,6 @@ public final class RestContext extends Context {
 	 */
 	protected StreamResource getFavIcon() {
 		return favIcon;
-	}
-
-	/**
-	 * Returns the stylesheet for use in the HTML views of the resource.
-	 *
-	 * <p>
-	 * This is the contents of the page served up under <js>"/styles.css"</jk>.
-	 *
-	 * <p>
-	 * The stylesheet is defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#stylesheet() @RestResource.stylesheet()} annotation.
-	 * 	<li>{@link RestConfig#setStyleSheet(Object...)}/{@link RestConfig#setStyleSheet(Class, String)} methods.
-	 * </ul>
-	 *
-	 * @return The aggregated stylesheet of this resource.  Never <jk>null</jk>.
-	 */
-	protected StreamResource getStyleSheet() {
-		return styleSheet;
 	}
 
 	/**

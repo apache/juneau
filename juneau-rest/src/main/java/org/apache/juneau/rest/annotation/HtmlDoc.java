@@ -360,7 +360,7 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			css=<js>".red{color:red;}\n.blue{color:blue}"</js>
+	 * 			style=<js>".red{color:red;}\n.blue{color:blue}"</js>
 	 * 		)
 	 * 	)
 	 * </p>
@@ -373,9 +373,9 @@ public @interface HtmlDoc {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlCss(String)}/{@link RestResponse#setHtmlCss(Object)} methods.
+	 * {@link RestConfig#setHtmlStyle(String)}/{@link RestResponse#setHtmlStyle(Object)} methods.
 	 */
-	String css() default "";
+	String style() default "";
 
 	/**
 	 * Sets the CSS URL in the HTML CSS style section.
@@ -404,9 +404,36 @@ public @interface HtmlDoc {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlCssUrl(String)}/{@link RestResponse#setHtmlCssUrl(Object)} methods.
+	 * {@link RestConfig#setHtmlStyleImport(String)}/{@link RestResponse#setHtmlStyleImport(Object)} methods.
 	 */
-	String cssUrl() default "servlet:/style.css";
+	String styleImport() default "";
+
+	/**
+	 * Sets the HTML script section contents.
+	 *
+	 * <p>
+	 * The format of this value is Javascript.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			script=<js>"alert('Hello!')"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation are the
+	 * {@link RestConfig#setHtmlScript(String)}/{@link RestResponse#setHtmlScript(Object)} methods.
+	 */
+	String script() default "";
 
 	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.

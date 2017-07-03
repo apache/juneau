@@ -2503,61 +2503,7 @@
 	<a id="RestResources.Stylesheet"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.17 - Stylesheet</h3>	
 	<div class='topic'>
-		<p>
-			The {@link org.apache.juneau.rest.annotation.RestResource#stylesheet @RestResource.stylesheet()} annotation
-			is used to identify the stylesheet to use when rendering POJOs as HTML.
-		</p>
-		<p>
-			The value is a path to a stylesheet located in either the classpath or working directory.
-			The resulting stylesheet becomes available as a static file through the servlet via the URL 
-			<js>"[servletpath]/style.css"</js>.
-		</p>		
-		<p>
-			The default set of styles located in the <l>org.apache.juneau.rest.styles</l> package are:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				<l>"styles/devops.css"</l> - Theme based on IBM DevOps look-and-feel.
-			<li>
-				<l>"styles/juneau.css"</l> - Theme based on Jazz look-and-feel.
-		</ul>
-		<p>
-			The DevOps look-and-feel is the newer style:
-		</p>
-		<img class='bordered' src='doc-files/AddressBook.png'>
-		<p>
-			The Juneau look-and-feel is an older style based on the Jazz Framework:
-		</p>
-		<img class='bordered' src='doc-files/AddressBook_juneaustyle.png'>
-		<p>
-			Stylesheets are first found in the classpath relative to the servlet class.
-			If the stylesheet cannot be found on the classpath, an attempt to look in the working directory.
-		</p>	
-		<p>
-			If the file cannot be located, the request to <l>"[servletpath]/style.css"</l> will return 
-			{@link javax.servlet.http.HttpServletResponse#SC_NOT_FOUND}.
-		</p>
-		<p>
-			Custom stylesheets can be defined by specifying your own stylesheet annotation value:
-		</p>
-		<p class='bcode'>
-	<jk>package</jk> com.foo.mypackage;
-	<ja>@RestResource</ja>(
-		stylesheet=<js>"mystyles/mycss.css"</js>
-	)
-	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
-	}
-		</p>
-		<p>
-			In this example, the servlet will attempt to find the <l>mycss.css</l> file in the following ordered 
-			locations:
-		</p>			
-		<ol>
-			<li><l>com.foo.mypackage.mystyles</l> package.
-			<li><l>org.apache.juneau.rest.mystyles</l> package (since <l>RestServletDefault</l> is in 
-				<l>org.apache.juneau.rest</l>).
-			<li><l>[working-dir]/mystyles</l> directory.
-		</ol>
+		TODO
 	</div>
 
 	<!-- ======================================================================================================== -->
@@ -2770,8 +2716,10 @@
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
-		<jc>// Get stylesheet from myconfig.cfg, but default to juneau.css if it's not specified</jc>
-		stylesheet=<js>"$C{MyServlet/stylesheet,styles/juneau.css}"</js>,
+		<jc>// Get stylesheet from myconfig.cfg, but default to devops.css if it's not specified</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			styleImport=<js>"$C{MyServlet/stylesheet,servlet:/styles/devops.css}"</js>,
+		)
 		...
 	)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
@@ -2980,12 +2928,6 @@
 				<td>{@link org.apache.juneau.rest.annotation.RestResource#config() config()}</td>
 				<td>
 					Config file is searched for in child-to-parent order.
-				</td>
-			</tr>
-			<tr>
-				<td>{@link org.apache.juneau.rest.annotation.RestResource#stylesheet() stylesheet()}</td>
-				<td>
-					Stylesheet is searched for in child-to-parent order.
 				</td>
 			</tr>
 			<tr>
@@ -3495,6 +3437,9 @@
 		// "$C{...}" variables are pulled from the config file.</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
 			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>
+		
+			<jc>// Our stylesheet for the HTML rendition.</jc>
+			styleImport=<js>"servlet:/styles/devops.css"</js>,
 		),
 
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
@@ -3519,19 +3464,18 @@
 			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<js>"SERVLET_RELATIVE"</js>)
 		},
 		
-		<jc>// Our stylesheet for the HTML rendition.</jc>
-		stylesheet=<js>"styles/devops.css"</js>,
-		
 		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
 		encoders=GzipEncoder.<jk>class</jk>,
 		
 		<jc>// Swagger info.</jc>
-		contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
-		license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
-		version=<js>"2.0"</js>,
-		termsOfService=<js>"You're on your own."</js>,
-		tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
-		externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		swagger=<ja>@ResourceSwagger</ja>(
+			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+			version=<js>"2.0"</js>,
+			termsOfService=<js>"You're on your own."</js>,
+			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		)
 	) 
 	<jk>public class</jk> AddressBookResource <jk>extends</jk> ResourceJena { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 

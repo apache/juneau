@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
 			+ "	<p>Utility for adding code syntax tags to Java and XML/HTML code.</p>"
 			+ "	<p>It's by no means perfect, but provides a good starting point.</p>"
 			+ "</div>",
-		css="aside {display:table-caption;}"
+		style="aside {display:table-caption;}"
 	)
 )
 @SuppressWarnings({"serial"})

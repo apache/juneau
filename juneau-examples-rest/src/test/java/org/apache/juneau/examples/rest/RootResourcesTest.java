@@ -89,19 +89,6 @@ public class RootResourcesTest extends RestTestcase {
 	}
 
 	//====================================================================================================
-	// /htdoces/styles.css
-	//====================================================================================================
-	@Test
-	public void testStyleSheet() throws Exception {
-		RestClient client = SamplesMicroservice.client().accept("text/css").build();
-		RestCall r = client.doGet("/style.css");
-		String css = r.getResponseAsString();
-		if (debug) System.err.println(css);
-		assertTrue(css, css.indexOf("table {") != -1);
-		client.closeQuietly();
-	}
-
-	//====================================================================================================
 	// application/json+schema
 	//====================================================================================================
 	@Test

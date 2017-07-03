@@ -36,10 +36,10 @@ import org.apache.juneau.transforms.*;
 	description="An example of a typical REST resource where beans are rendered in summary and details views.",
 	path="/petstore",
 	widgets={
-		QueryWidget.class
+		ContentTypeMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{query}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}",
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>This page shows a standard REST resource that renders bean summaries and details.</p>"
@@ -68,6 +68,14 @@ public class PetStoreResource extends Resource {
 		path="/",
 		summary="The complete list of pets in the store",
 		bpExcludes="{Pet:'breed,getsAlongWith'}",
+		
+		// Add a 'query' menu item and queryable support.
+		widgets={
+			QueryMenuItem.class,
+		},
+		htmldoc=@HtmlDoc(
+			links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{queryMenuItem}',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}"
+		),
 		converters=Queryable.class
 	)
 	public Collection<Pet> getPets() {

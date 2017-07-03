@@ -22,6 +22,7 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.transforms.*;
 
 /**
@@ -31,8 +32,11 @@ import org.apache.juneau.transforms.*;
 	path="/echo",
 	title="Request echo service",
 	description="Echos the current HttpServletRequest object back to the browser.",
+	widgets={
+		ContentTypeMenuItem.class
+	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}",
 		aside=""
 			+ "<div style='max-width:400px;min-width:200px' class='text'>"
 			+ "	<p>Shows how even arbitrary POJOs such as <code>HttpServletRequest</code> can be serialized by the framework.</p>"

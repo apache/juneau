@@ -767,7 +767,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#css() @HtmlDoc.css()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#style() @HtmlDoc.style()} annotation.
 	 *
 	 * @param value
 	 * 	The HTML CSS style section contents.
@@ -780,8 +780,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setHtmlCss(Object value) {
-		properties.put(HtmlDocSerializerContext.HTMLDOC_css, value);
+	public RestResponse setHtmlStyle(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_style, value);
 		return this;
 	}
 
@@ -789,7 +789,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Sets the CSS URL in the HTML CSS style section.
 	 *
 	 * <p>
-	 * The format of this value is a URL.
+	 * The format of this value is a comma-delimited list of URLs.
 	 *
 	 * <p>
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
@@ -802,7 +802,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * by {@link UriResolver}.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#cssUrl() @HtmlDoc.cssUrl()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#styleImport() @HtmlDoc.styleImport()} annotation.
 	 *
 	 * @param value
 	 * 	The CSS URL in the HTML CSS style section.
@@ -815,8 +815,39 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setHtmlCssUrl(Object value) {
-		properties.put(HtmlDocSerializerContext.HTMLDOC_cssUrl, value);
+	public RestResponse setHtmlStyleImport(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_styleImport, value);
+		return this;
+	}
+
+	/**
+	 * Sets the HTML script section contents.
+	 *
+	 * <p>
+	 * The format of this value is Javascript.
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 *
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#script() @HtmlDoc.script()} annotation.
+	 *
+	 * @param value
+	 * 	The HTML script section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlScript(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_script, value);
 		return this;
 	}
 

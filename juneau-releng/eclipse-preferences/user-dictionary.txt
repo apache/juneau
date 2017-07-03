@@ -474,3 +474,9 @@ yyyy
 zip
 zipped
 zzz
+mylink
+myimage
+myalert
+onclick
+popup
+hyperlinked

@@ -24,6 +24,7 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.widget.*;
 
 @RestResource(
 	path="/systemProperties",
@@ -33,17 +34,22 @@ import org.apache.juneau.rest.annotation.Body;
 	title="System properties resource",
 	description="REST interface for performing CRUD operations on system properties.",
 
+	// Widget used for content-type pull-down menu.		
+	widgets={
+		ContentTypeMenuItem.class
+	},
+
 	// Links on the HTML rendition page.
 	// "request:/..." URIs are relative to the request URI.
 	// "servlet:/..." URIs are relative to the servlet URI.
 	// "$C{...}" variables are pulled from the config file.
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',form:'servlet:/formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',form:'servlet:/formPage',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
 		aside=""
 			+ "<div style='max-width:800px' class='text'>"
 			+ "	<p>Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.</p>"
 			+ "</div>",
-		css="aside {display:table-caption;}"
+		style="aside {display:table-caption;}"
 	),
 
 	// Properties that get applied to all serializers and parsers.
@@ -51,9 +57,6 @@ import org.apache.juneau.rest.annotation.Body;
 		// Use single quotes.
 		@Property(name=SERIALIZER_quoteChar, value="'")
 	},
-
-	// Our stylesheet for the HTML rendition.
-	stylesheet="styles/devops.css",
 
 	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,
@@ -65,7 +68,7 @@ import org.apache.juneau.rest.annotation.Body;
 		termsOfService="You're on your own.",
 		tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
 		externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
-	)
+	) 
 )
 public class SystemPropertiesResource extends Resource {
 	private static final long serialVersionUID = 1L;
@@ -191,7 +194,7 @@ public class SystemPropertiesResource extends Resource {
 				+ "<div style='max-width:400px' class='text'>"
 				+ "	<p>Shows how HTML5 beans can be used to quickly create arbitrary HTML.</p>"
 				+ "</div>",
-			css="aside {display:table-cell;}"
+			style="aside {display:table-cell;}"
 		)
 	)
 	public Form getFormPage() {

@@ -21,9 +21,12 @@ package org.apache.juneau.html;
  * <p class='bcode'>
  * 	<xt>&lt;html&gt;
  * 		&lt;head&gt;
- * 			&lt;style <xa>type</xa>=<xs>'text/css'</xs>&gt;
+ * 			&lt;style&gt;
  * 				<xv>CSS styles and links to stylesheets</xv>
  * 			&lt;/style&gt;
+ * 			&lt;script&gt;
+ * 				<xv>Javascript</xv>
+ * 			&lt;/script&gt;
  * 		&lt;/head&gt;
  * 		&lt;body&gt;
  * 			&lt;header&gt;
@@ -64,8 +67,7 @@ public interface HtmlDocTemplate {
 	public void head(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
 
 	/**
-	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style</xt>
-	 * <xa>type</xa>=<xs>"text/css"</xs><xt>&gt;</xt></code> element.
+	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
@@ -73,7 +75,18 @@ public interface HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void css(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void style(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+
+	/**
+	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
+	 *
+	 * @param session The current serializer session.
+	 * @param w The writer being written to.
+	 * @param s The serializer calling this method.
+	 * @param o The object being serialized.
+	 * @throws Exception Any exception can be thrown.
+	 */
+	public void script(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt></code> element.
@@ -142,13 +155,20 @@ public interface HtmlDocTemplate {
 	public void footer(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
 
 	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style</xt>
-	 * <xa>type</xa>=<xs>"text/css"</xs><xt>&gt;</xt></code> element.
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
-	public boolean hasCss(HtmlDocSerializerSession session);
+	public boolean hasStyle(HtmlDocSerializerSession session);
+
+	/**
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
+	 *
+	 * @param session The current serializer session.
+	 * @return A boolean flag.
+	 */
+	public boolean hasScript(HtmlDocSerializerSession session);
 
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code>

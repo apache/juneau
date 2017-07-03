@@ -59,7 +59,7 @@ public class WidgetVar extends SimpleVar {
 		if (w == null)
 			return "unknown-widget-"+key;
 		try {
-			return w.resolve(req);
+			return w.getHtml(req);
 		} catch (Exception e) {
 			return "widget-error-"+e.getLocalizedMessage();
 		}

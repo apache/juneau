@@ -12,11 +12,35 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.jena.*;
+import org.apache.juneau.svl.vars.*;
 
 /**
- * Superclass for all REST resources with RDF support.
+ * Superclass for all REST resource groups.
+ * 
+ * <p>
+ * In additional to the functionality of the {@link RestServletGroupDefault} group,
+ * augments the {@link RestContext#getVarResolver()} method with the following additional variable types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		<jk>$ARG{...}</jk> - Command line arguments.
+ * 		<br>Resolves values from {@link Microservice#getArgs()}.
+ * 		
+ * 		<h6>Example:</h6>
+ * 		<p class='bcode'>
+ * 	String firstArg = request.getVarResolver().resolve(<js>"$ARG{0}"</js>);  <jc>// First argument.</jc>
+ * 	String namedArg = request.getVarResolver().resolve(<js>"$ARG{myarg}"</js>);  <jc>// Named argument (e.g. "myarg=foo"). </jc>
+ * 		</p>
+ * 	<li>
+ * 		<jk>$MF{...}</jk> - Manifest file entries.
+ * 		
+ * 		<h6>Example:</h6>
+ * 		<p class='bcode'>
+ * 	String mainClass = request.getVarResolver().resolve(<js>"$MF{Main-Class}"</js>);  <jc>// Main class. </jc>
+ * 		</p>
+ * </ul>
  */
 @SuppressWarnings("serial")
 @RestResource(
@@ -26,4 +50,14 @@ import org.apache.juneau.rest.jena.*;
 	),
 	config="$S{juneau.configFile}"
 )
-public abstract class ResourceJena extends RestServletJenaDefault {}
+public abstract class ResourceJenaGroup extends RestServletJenaGroupDefault {
+
+	@Override /* RestServlet */
+	public synchronized void init(RestConfig config) throws Exception {
+		config
+			.addVars(ArgsVar.class, ManifestFileVar.class)
+			.addVarContextObject(ArgsVar.SESSION_args, Microservice.getArgs())
+			.addVarContextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
+		super.init(config);
+	}
+}
