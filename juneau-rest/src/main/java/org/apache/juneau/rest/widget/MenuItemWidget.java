@@ -58,7 +58,7 @@ public abstract class MenuItemWidget extends Widget {
 	 */
 	@Override
 	public String getScript(RestRequest req) throws Exception {
-		return getResourceAsString("MenuItemWidget.js").replaceAll("(?s)\\/\\*{2}(.*?)\\/\\*\\s*", "");
+		return loadScript("MenuItemWidget.js");
 	}
 
 	/**
@@ -67,6 +67,6 @@ public abstract class MenuItemWidget extends Widget {
 	 */
 	@Override
 	public String getStyle(RestRequest req) throws Exception {
-		return getResourceAsString("MenuItemWidget.css").replaceAll("(?s)\\/\\*{2}(.*?)\\/\\*\\s*", "");
+		return loadStyle("MenuItemWidget.css");
 	}
 }

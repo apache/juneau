@@ -16,8 +16,8 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
 
 /**
  * Allows the definition of a security scheme that can be used by the operations.
@@ -117,9 +117,10 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public SecurityScheme setType(String type) {
 		if (isStrict() && ! contains(type, VALID_TYPES))
-			throw new RuntimeException(
-				"Invalid value passed in to setType(String).  Value='"+type+"', valid values="
-				+ JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
+			throw new FormattedRuntimeException(
+				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
+				type, VALID_TYPES
+			);
 		this.type = type;
 		return this;
 	}

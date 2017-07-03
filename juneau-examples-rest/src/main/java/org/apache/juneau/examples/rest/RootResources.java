@@ -30,7 +30,11 @@ import org.apache.juneau.rest.widget.*;
 		ContentTypeMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{options:'?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}",
+		links="{"
+			+ "options:'?method=OPTIONS',"
+			+ "contentTypes:'$W{contentTypeMenuItem}',"
+			+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'"
+		+ "}",
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>"

@@ -130,7 +130,7 @@ public final class Args extends ObjectMap {
 			if (startsWith(s, '-')) {
 				key = s.substring(1);
 				if (key.matches("\\d*"))
-					throw new RuntimeException("Invalid optional key name '"+key+"'");
+					throw new FormattedRuntimeException("Invalid optional key name ''{0}''", key);
 				if (! containsKey(key))
 					put(key, new ObjectList());
 			} else {

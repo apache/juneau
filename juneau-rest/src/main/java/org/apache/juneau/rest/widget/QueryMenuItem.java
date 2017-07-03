@@ -74,7 +74,7 @@ public class QueryMenuItem extends MenuItemWidget {
 	public String getStyle(RestRequest req) throws Exception {
 		return super.getStyle(req)
 			+ "\n"
-			+ getResourceAsString("QueryMenuItem.css").replaceFirst("(?s)\\/\\*{2}(.*?)\\/\\*\\s*", "");
+			+ loadStyle("QueryMenuItem.css");
 	}
 
 	/**
@@ -82,6 +82,6 @@ public class QueryMenuItem extends MenuItemWidget {
 	 */
 	@Override /* Widget */
 	public String getHtml(RestRequest req) throws Exception {
-		return getResourceAsString("QueryMenuItem.html").replaceFirst("(?s)<!--(.*?)-->\\s*", "");
+		return getResourceAsString("QueryMenuItem.html");
 	}
 }

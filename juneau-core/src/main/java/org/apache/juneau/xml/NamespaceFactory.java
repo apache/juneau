@@ -76,7 +76,7 @@ public final class NamespaceFactory {
 			if (m.size() == 0)
 				return null;
 			if (m.size() > 1)
-				throw new RuntimeException("Too many namespaces specified.  Only one allowed. '"+o+"'");
+				throw new FormattedRuntimeException("Too many namespaces specified.  Only one allowed. ''{0}''", o);
 			Map.Entry<?,?> e = m.entrySet().iterator().next();
 			return get(e.getKey().toString(), e.getValue().toString());
 		} catch (ParseException e) {
@@ -121,7 +121,7 @@ public final class NamespaceFactory {
 				for (Map.Entry e : m.entrySet())
 					n[i++] = get(e.getKey().toString(), e.getValue().toString());
 			} else {
-				throw new RuntimeException("Invalid type passed to NamespaceFactory.listFromObject: '"+o+"'");
+				throw new FormattedRuntimeException("Invalid type passed to NamespaceFactory.listFromObject: ''{0}''", o);
 			}
 			return n;
 		} catch (ParseException e) {

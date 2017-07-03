@@ -44,14 +44,26 @@ import org.apache.juneau.rest.widget.*;
 	// "servlet:/..." URIs are relative to the servlet URI.
 	// "$C{...}" variables are pulled from the config file.
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',form:'servlet:/formPage',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
+		
+		// Custom navigation links.
+		links="{"
+			+ "up:'request:/..',"
+			+ "options:'servlet:/?method=OPTIONS',"
+			+ "form:'servlet:/formPage',"
+			+ "contentTypes:'$W{contentTypeMenuItem}',"
+			+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'"
+			+"}",
+
+		// Custom page text in aside section.
 		aside=""
 			+ "<div style='max-width:800px' class='text'>"
 			+ "	<p>Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.</p>"
 			+ "</div>",
-		style="aside {display:table-caption;}"
+			
+		// Custom CSS styles applied to HTML view.
+		style="aside {display:table-caption} aside p {margin: 0px 20px;}"
 	),
-
+		
 	// Properties that get applied to all serializers and parsers.
 	properties={
 		// Use single quotes.

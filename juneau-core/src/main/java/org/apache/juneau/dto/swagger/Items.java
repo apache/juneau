@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 
@@ -245,9 +246,10 @@ public class Items extends SwaggerElement {
 	 */
 	public Items setCollectionFormat(String collectionFormat) {
 		if (isStrict() && ! contains(collectionFormat, VALID_COLLECTION_FORMATS))
-			throw new RuntimeException(
-				"Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values="
-			+ JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
+			throw new FormattedRuntimeException(
+				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
+				collectionFormat, VALID_COLLECTION_FORMATS
+			);
 		this.collectionFormat = collectionFormat;
 		return this;
 	}

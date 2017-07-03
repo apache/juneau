@@ -493,9 +493,9 @@ public final class ClassUtils {
 					throw new RuntimeException(e);
 				}
 			}
-			throw new RuntimeException("Could not resolve type: " + actualType);
+			throw new FormattedRuntimeException("Could not resolve type: {0}", actualType);
 		} else {
-			throw new RuntimeException("Invalid type found in resolveParameterType: " + actualType);
+			throw new FormattedRuntimeException("Invalid type found in resolveParameterType: {0}", actualType);
 		}
 	}
 

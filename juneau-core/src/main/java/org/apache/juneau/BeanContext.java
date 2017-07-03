@@ -1496,7 +1496,7 @@ public class BeanContext extends Context {
 			if (cm2.isMap()) {
 				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class, Object.class} : p.params());
 				if (pParams.length != 2)
-					throw new RuntimeException("Invalid number of parameters specified for Map (must be 2): " + pParams.length);
+					throw new FormattedRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
 				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
 				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
@@ -1507,7 +1507,7 @@ public class BeanContext extends Context {
 			if (cm2.isCollection()) {
 				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class} : p.params());
 				if (pParams.length != 1)
-					throw new RuntimeException("Invalid number of parameters specified for Collection (must be 1): " + pParams.length);
+					throw new FormattedRuntimeException("Invalid number of parameters specified for Collection (must be 1): {0}", pParams.length);
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;

@@ -16,8 +16,8 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
 
 /**
  * Describes a single operation parameter.
@@ -200,9 +200,10 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setIn(String in) {
 		if (isStrict() && ! contains(in, VALID_IN))
-			throw new RuntimeException(
-				"Invalid value passed in to setIn(String).  Value='"+in+"', valid values="
-					+ JsonSerializer.DEFAULT_LAX.toString(VALID_IN));
+			throw new FormattedRuntimeException(
+				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
+				in, VALID_IN
+			);
 		this.in = in;
 		if ("path".equals(in))
 			required = true;
@@ -387,9 +388,10 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setType(String type) {
 		if (isStrict() && ! contains(type, VALID_TYPES))
-			throw new RuntimeException(
-				"Invalid value passed in to setType(String).  Value='"+type+"', valid values="
-					+ JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
+			throw new FormattedRuntimeException(
+				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
+				type, VALID_TYPES
+			);
 		this.type = type;
 		return this;
 	}
@@ -592,7 +594,10 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setCollectionFormat(String collectionFormat) {
 		if (isStrict() && ! contains(collectionFormat, VALID_COLLECTION_FORMATS))
-			throw new RuntimeException("Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
+			throw new FormattedRuntimeException(
+				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
+				collectionFormat, VALID_COLLECTION_FORMATS
+			);
 		this.collectionFormat = collectionFormat;
 		return this;
 	}

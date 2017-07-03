@@ -42,16 +42,16 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	public void style(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
 
 		String[] styleImport = session.getStyleImport();
-		if (! ArrayUtils.contains("NONE", styleImport)) 
+		if (! ArrayUtils.contains("NONE", styleImport))
 			for (String si : styleImport)
-				w.append(2, "@import ").q().append(session.resolveUri(si)).q().appendln(";");
+				w.append(2, "@import ").q().append(session.resolveUri(si)).q().appendln("; ");
 
 		if (session.isNoWrap())
-			w.appendln("\ndiv.data * {white-space:nowrap;}");
+			w.appendln("div.data * {white-space:nowrap;} ");
 
 		if (session.getStyle() != null)
 			for (String style : session.getStyle())
-				w.appendln(style);
+				w.append(style).appendln(" ");
 	}
 
 	@Override /* HtmlDocTemplate */
@@ -59,7 +59,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 		if (session.getScript() != null)
 			for (String script : session.getScript())
-				w.appendln(script);
+				w.append(script);
 	}
 
 	@Override /* HtmlDocTemplate */

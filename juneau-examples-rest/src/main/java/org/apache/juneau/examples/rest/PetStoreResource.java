@@ -49,7 +49,7 @@ import org.apache.juneau.transforms.*;
 			+ "</div>"
 	)
 )
-public class PetStoreResource extends Resource {
+public class PetStoreResource extends ResourceJena {
 	private static final long serialVersionUID = 1L;
 
 	// Our database.
@@ -69,14 +69,25 @@ public class PetStoreResource extends Resource {
 		summary="The complete list of pets in the store",
 		bpExcludes="{Pet:'breed,getsAlongWith'}",
 		
-		// Add a 'query' menu item and queryable support.
+		// Add 'query' and 'content-types' menu items.
 		widgets={
 			QueryMenuItem.class,
+			ContentTypeMenuItem.class,
 		},
+
+		// Add our converter for POJO query support.
+		converters=Queryable.class,
+		
+		// Add our menu items in the nav links.
 		htmldoc=@HtmlDoc(
-			links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{queryMenuItem}',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}"
-		),
-		converters=Queryable.class
+			links="{"
+				+ "up:'request:/..',"
+				+ "options:'servlet:/?method=OPTIONS',"
+				+ "query:'$W{queryMenuItem}',"
+				+ "contentTypes:'$W{contentTypeMenuItem}',"
+				+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'"
+			+ "}"
+		)
 	)
 	public Collection<Pet> getPets() {
 		return petDB.values();
@@ -115,13 +126,7 @@ public class PetStoreResource extends Resource {
 
 	@Html(render=KindRender.class)  // Render as an icon in HTML.
 	public static enum Kind {
-		CAT,
-		DOG,
-		BIRD,
-		FISH,
-		MOUSE,
-		RABBIT,
-		SNAKE
+		CAT, DOG, BIRD, FISH, MOUSE, RABBIT, SNAKE
 	}
 
 	public static class KindRender extends HtmlRender<Kind> {

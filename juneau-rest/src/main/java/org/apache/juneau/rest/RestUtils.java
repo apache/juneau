@@ -16,6 +16,7 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -152,7 +153,7 @@ public final class RestUtils {
 				return requestURI;
 			throw new Exception("case=6");
 		} catch (Exception e) {
-			throw new RuntimeException("Could not find servlet path in request URI.  URI=["+requestURI+"], servletPath=["+servletPath+"]", e);
+			throw new FormattedRuntimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
 		}
 	}
 

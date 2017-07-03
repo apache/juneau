@@ -213,4 +213,58 @@ public abstract class Widget {
 	protected String getResourceAsString(String name, Locale locale) throws IOException {
 		return resourceFinder.getResourceAsString(name, locale);
 	}
+
+	/**
+	 * Convenience method for calling {@link #getResourceAsString(String)} except also strips Javascript comments from
+	 * the file.
+	 *
+	 * <p>
+	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
+	 *
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException
+	 */
+	protected String loadScript(String name) throws IOException {
+		String s = getResourceAsString(name);
+		if (s != null)
+			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
+		return s;
+	}
+
+	/**
+	 * Convenience method for calling {@link #getResourceAsString(String)} except also strips CSS comments from
+	 * the file.
+	 *
+	 * <p>
+	 * Comments are assumed to be Java-style block comments: <js>"/*"</js>.
+	 *
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException
+	 */
+	protected String loadStyle(String name) throws IOException {
+		String s = getResourceAsString(name);
+		if (s != null)
+			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
+		return s;
+	}
+
+	/**
+	 * Convenience method for calling {@link #getResourceAsString(String)} except also strips HTML comments from the
+	 * file.
+	 *
+	 * <p>
+	 * Comment are assumed to be <js>"<!-- -->"</js> code blocks.
+	 *
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException
+	 */
+	protected String loadHtml(String name) throws IOException {
+		String s = getResourceAsString(name);
+		if (s != null)
+			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
+		return s;
+	}
 }

@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -286,7 +287,10 @@ public class ConfigFileBuilder {
 					for (String val : vals) {
 						String[] x = val.split("\\=");
 						if (x.length != 2)
-							throw new RuntimeException("Invalid format for value: '"+val+"'.  Must be in the format 'key=value'");
+							throw new FormattedRuntimeException(
+								"Invalid format for value: ''{0}''.  Must be in the format 'key=value'",
+								val
+							);
 						cf.put(x[0], x[1]);
 					}
 					cf.save();

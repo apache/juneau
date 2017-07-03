@@ -191,7 +191,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				ns = defaultNs;
 			Schema s = get(ns);
 			if (s == null)
-				throw new RuntimeException("No schema defined for namespace '"+ns+"'");
+				throw new FormattedRuntimeException("No schema defined for namespace ''{0}''", ns);
 			return s;
 		}
 

@@ -125,7 +125,7 @@ public final class RdfSerializerSession extends SerializerSession {
 		// Only apply properties with this prefix!
 		String propPrefix = RdfCommonContext.LANG_PROP_MAP.get(rdfLanguage);
 		if (propPrefix == null)
-			throw new RuntimeException("Unknown RDF language encountered: '"+rdfLanguage+"'");
+			throw new FormattedRuntimeException("Unknown RDF language encountered: ''{0}''", rdfLanguage);
 
 		for (Map.Entry<String,Object> e : jenaSettings.entrySet())
 			if (e.getKey().startsWith(propPrefix))
