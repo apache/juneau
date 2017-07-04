@@ -41,8 +41,8 @@ import org.apache.juneau.rest.widget.*;
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>"
 			+ "	<p>Resources can be nested arbitrarily deep through router pages.</p>"
-			+ "	<p>Note the <span class='link'>OPTIONS</span> link provided that lets you see the generated swagger doc for this page.</p>"
-			+ "	<p>Also note the <span class='link'>SOURCE</span> link on these pages to view the source code for the page.</p>"
+			+ "	<p>Note the <span class='link'>options</span> link provided that lets you see the generated swagger doc for this page.</p>"
+			+ "	<p>Also note the <span class='link'>sources</span> link on these pages to view the source code for the page.</p>"
 			+ "	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>"
 			+ "	<p>Other features (such as this aside) are added through annotations.</p>"
 			+ "</div>",

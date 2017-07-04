@@ -36,11 +36,12 @@ body {
 	);
 	background-repeat: no-repeat;
 	background-attachment: fixed;
-	margin: 20px;
 	font-family: sans-serif;
 	font-size: 12px;
 	color: rgb(44, 69, 87);
 	height: 100%;
+	margin: 0px;
+	padding: 0px;
 }
 
 p {
@@ -50,6 +51,12 @@ p {
 
 p.links {
 	margin-left: 10px;
+}
+
+.link {
+	text-decoration: underline;
+	cursor: pointer;
+	color: -webkit-link;
 }
 
 th, .header {
@@ -119,6 +126,7 @@ h3.title {
     font-size:1.5em;
 	color: rgb(44,69,87);
 	margin-bottom: 10px;
+	margin-right: 40px;
 	padding: 5px 30px;
 	border-radius: 15px;
 	text-decoration: none;
@@ -139,3 +147,62 @@ h5.description {
 .row {display:table-row;}
 .cell {display:table-cell;}
 .monospace {font-family:monospace;}
+
+/************************************************************************************/
+/**  Pop-ups                                                                       **/
+/************************************************************************************/
+
+.popup-content {
+	display: none;
+	position: absolute;
+	background-color: #eef3f7;
+	white-space: nowrap;
+	padding: 5px;
+	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+	z-index: 1;
+	margin-top: 10px;
+	border-radius: 4px;
+}
+
+.popup-content * {
+	color: black;
+	font-size: 10pt;
+}
+
+.popup-content a:hover {
+	color: #94A3AB;
+}
+
+
+.popup-show {display:block;}
+
+/************************************************************************************/
+/**  Sections                                                                      **/
+/************************************************************************************/
+
+header {
+	margin: 20px
+}
+nav {
+	margin: 20px;	
+}
+section {
+	display: table;
+	width: 100%;
+	margin: 20px;
+}
+article {
+	display: table-cell;
+}
+aside {
+	display: table-cell;
+	vertical-align: top;
+	padding: 20px 20px;
+}
+footer { 
+	padding: 10px 20px;
+	width: 100%;
+	bottom: 0;
+	position: fixed;
+	background-color: #e8ebef;
+}

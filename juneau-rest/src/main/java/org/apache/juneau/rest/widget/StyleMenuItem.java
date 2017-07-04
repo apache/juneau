@@ -40,7 +40,7 @@ import org.apache.juneau.rest.*;
  */
 public class StyleMenuItem extends MenuItemWidget {
 
-	private static final String[] BUILT_IN_STYLES = {"devops", "light"};
+	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original"};
 
 	/**
 	 * Returns <js>"styleMenuItem"</js>.
