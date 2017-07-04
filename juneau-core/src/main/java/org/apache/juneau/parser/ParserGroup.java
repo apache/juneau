@@ -112,6 +112,9 @@ public final class ParserGroup {
 	/**
 	 * Searches the group for a parser that can handle the specified <l>Content-Type</l> header value.
 	 *
+	 * <p>
+	 * The returned object includes both the parser and media type that matched.
+	 *
 	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header value.
 	 * @return The parser and media type that matched the content type header, or <jk>null</jk> if no match was made.
 	 */

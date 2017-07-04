@@ -122,15 +122,24 @@
 		classes.
 	</p>
 	<p class='bcode'>
+	<jd>/** Serializer for converting images to byte streams */</jd>
 	<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
-	<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
-		<ja>@Override</ja>
-		<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) 
-				<jk>throws</jk> IOException, SerializeException {
+	<jk>public class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
+
+		<jd>/**
+		 * Constructor.
+		 * <ja>@param</ja> propertyStore The property store containing all the settings for this object.
+		 */</jd>
+		<jk>public</jk> ImageSerializer(PropertyStore propertyStore) {
+			<jk>super</jk>(propertyStore);
+		}
+
+		<ja>@Override</ja> <jc>/* Serializer */</jc>
+		<jk>protected void</jk> doSerialize(SerializerSession session, Object o) <jk>throws</jk> Exception {
 			RenderedImage image = (RenderedImage)o;
-			String mediaType = ctx.getMediaType();
-			ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), out);
-		}	
+			String mediaType = session.getProperty(<js>"mediaType"</js>);
+			ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), session.getOutputStream());
+		}
 	}
 	</p>
 	<p>

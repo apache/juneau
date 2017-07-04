@@ -119,12 +119,21 @@
 		The following example shows a simple parser that converts input streams to images using standard JRE classes.
 	</p>
 	<p class='bcode'>
+	<jd>/** Parser for converting byte streams to images */</jd>
 	<ja>@Consumes</ja>(<js>"image/png,image/jpeg"</js>)
-	<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
-		<ja>@Override</ja>
-		<jk>public</jk> &lt;T&gt; T parse(InputStream in, ClassMeta&lt;T&gt; type, ParserSession session) <jk>throws</jk> ParseException, IOException {
-			BufferedImage image = ImageIO.<jsm>read</jsm>(in);
-			<jk>return</jk> (T)image;
+	<jk>public class</jk> ImageParser <jk>extends</jk> InputStreamParser {
+
+		<jd>/**
+		 * Constructor.
+		 * <ja>@param</ja> propertyStore The property store containing all the settings for this object.
+		 */</jd>
+		<jk>public</jk> ImageParser(PropertyStore propertyStore) {
+			<jk>super</jk>(propertyStore);
+		}
+
+		<ja>@Override</ja> <jc>/* Parser */</jc>
+		<jk>protected</jk> &lt;T&gt; T doParse(ParserSession session, ClassMeta&lt;T&gt; type) <jk>throws</jk> Exception {
+			<jk>return</jk> (T)ImageIO.<jsm>read</jsm>(session.getInputStream());
 		}
 	}
 	</p>

@@ -124,17 +124,7 @@ public final class SerializerGroup {
 	 * </p>
 	 *
 	 * <p>
-	 * The general idea behind having the serializer resolution be a two-step process is so that the matched media type
-	 * can be passed in to the {@link WriterSerializer#doSerialize(SerializerSession, Object)} method.
-	 * <br>For example...
-	 * <p class='bcode'>
-	 * 	String acceptHeaderValue = request.getHeader(<js>"Accept"</js>);
-	 * 	String matchingMediaType = group.findMatch(acceptHeaderValue);
-	 * 	if (matchingMediaType == <jk>null</jk>)
-	 * 		<jk>throw new</jk> RestException(<jsf>SC_NOT_ACCEPTABLE</jsf>);
-	 * 	WriterSerializer s = (WriterSerializer)group.getSerializer(matchingMediaType);
-	 * 	s.serialize(getPojo(), response.getWriter(), response.getProperties(), matchingMediaType);
-	 * </p>
+	 * The returned object includes both the serializer and media type that matched.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
 	 * @return The serializer and media type that matched the accept header, or <jk>null</jk> if no match was made.
