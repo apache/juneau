@@ -69,7 +69,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final RestContext context;
 	private final BeanContext beanContext;
 	private final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlLinks, htmlNav, htmlAside,
-		htmlFooter, htmlStyle, htmlStyleImport, htmlScript, htmlNoResultsMessage;
+		htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> widgets;
@@ -113,7 +113,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.htmlAside = b.htmlAside;
 		this.htmlFooter = b.htmlFooter;
 		this.htmlStyle = b.htmlStyle;
-		this.htmlStyleImport = b.htmlStyleImport;
+		this.htmlStylesheet = b.htmlStylesheet;
 		this.htmlScript = b.htmlScript;
 		this.htmlNoWrap = b.htmlNoWrap;
 		this.htmlTemplate = b.htmlTemplate;
@@ -123,7 +123,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 	private static class Builder  {
 		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlTitle, htmlDescription,
-			htmlBranding, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStyleImport, htmlScript, htmlHeader, htmlNoResultsMessage;
+			htmlBranding, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlHeader, htmlNoResultsMessage;
 		private boolean htmlNoWrap;
 		private HtmlDocTemplate htmlTemplate;
 		private UrlPathPattern pathPattern;
@@ -190,7 +190,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				htmlAside = hd.aside().isEmpty() ? context.getHtmlAside() : hd.aside();
 				htmlFooter = hd.footer().isEmpty() ? context.getHtmlFooter() : hd.footer();
 				htmlStyle = hd.style().isEmpty() ? context.getHtmlStyle() : hd.style();
-				htmlStyleImport = hd.styleImport().isEmpty() ? context.getHtmlStyleImport() : hd.styleImport();
+				htmlStylesheet = hd.stylesheet().isEmpty() ? context.getHtmlStylesheet() : hd.stylesheet();
 				htmlScript = hd.script().isEmpty() ? context.getHtmlScript() : hd.script();
 				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();
 				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.header();
@@ -969,8 +969,13 @@ class CallMethod implements Comparable<CallMethod>  {
 						}
 						return l;
 					}
-					if (k.equals(HTMLDOC_styleImport))
-						return htmlStyleImport == null ? null : req.resolveVars(htmlStyleImport);
+					if (k.equals(HTMLDOC_stylesheet)) {
+						String s = req.getStylesheet();
+						// Exclude absolute URIs to stylesheets for security reasons.
+						if (s == null || isAbsoluteUri(s))
+							s = htmlStylesheet;
+						return s == null ? null : req.resolveVars(s);
+					}
 					if (k.equals(HTMLDOC_template))
 						return htmlTemplate;
 					if (k.equals(HTMLDOC_nowrap))

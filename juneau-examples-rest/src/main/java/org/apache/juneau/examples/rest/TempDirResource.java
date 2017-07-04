@@ -32,10 +32,11 @@ import org.apache.juneau.utils.*;
 	title="Temp Directory View Service",
 	description="View and download files in the '$S{java.io.tmpdir}' directory.",
 	widgets={
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',upload:'servlet:/upload',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',upload:'servlet:/upload',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>Shows how to use the predefined DirectoryResource class.</p>"

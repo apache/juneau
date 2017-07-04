@@ -148,7 +148,7 @@ import org.apache.juneau.xml.*;
  * <h6 class='topic'>Other Notes</h6>
  * <ul class='spaced-list'>
  * 	<li>
- * 		Provides a default HTML stylesheet by setting {@link HtmlDoc#styleImport() @HtmlDoc.styleImport()}
+ * 		Provides a default HTML stylesheet by setting {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()}
  * 		to <js>"styles/juneau.css"</js>.
  * 	<li>
  * 		Provides a default favicon by setting {@link RestResource#favicon() @RestResource.favicon()} to
@@ -191,12 +191,12 @@ import org.apache.juneau.xml.*;
 	},
 	htmldoc=@HtmlDoc(
 		branding="<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'></a>",
-		styleImport="servlet:/styles/devops.css"
+		stylesheet="servlet:/styles/devops.css"
 	),
-	
+
 	// The location on the classpath or file system of the fav-icon.
 	favicon="htdocs/juneau.png",
-	
+
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	staticFiles="{htdocs:'htdocs',styles:'styles'}"
 )

@@ -26,10 +26,11 @@ import org.apache.juneau.rest.widget.*;
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
 	widgets={
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}",
 		aside=""
 			+ "<div style='min-width:200px' class='text'>"
 			+ "	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>"

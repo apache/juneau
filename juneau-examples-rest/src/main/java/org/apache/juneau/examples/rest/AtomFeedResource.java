@@ -33,10 +33,11 @@ import org.apache.juneau.rest.widget.*;
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",
 	widgets={
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}"
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}"
 	),
 	properties={
 		@Property(name=SERIALIZER_quoteChar, value="'"),
@@ -61,7 +62,6 @@ public class AtomFeedResource extends ResourceJena {
 					link("alternate", "text/html", "http://www.sample.com/").hreflang("en"),
 					link("self", "application/atom+xml", "http://www.sample.com/feed.atom")
 				)
-				.rights("Copyright (c) 2016, Apache Foundation")
 				.generator(
 					generator("Juneau").uri("http://juneau.apache.org/").version("1.0")
 				)

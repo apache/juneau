@@ -574,10 +574,16 @@
 				{@link org.apache.juneau.ObjectList#serializeTo(java.io.Writer)} methods.
 			<li>
 				Passing them to one of the {@link org.apache.juneau.serializer.Serializer} serialize methods.
+			<li>
+				Simply calling the {@link org.apache.juneau.ObjectMap#toString()} or {@link org.apache.juneau.ObjectList#toString()}
+				methods which will serialize it as Simplified JSON.
 		</ol>
 		<p>
 			Any valid JSON can be parsed into an unstructured model consisting of generic 
-				{@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} objects. 
+			{@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} objects. 
+			<br>
+			(In theory, any valid XML can also be parsed into an unstructured model, although this has not been 
+			officially 'tested')
 		</p>
 		<p class='bcode'>
 	<jc>// Parse an arbitrary JSON document into an unstructered data model
@@ -594,6 +600,9 @@
 	
 	<jc>// Or convert it to XML.</jc>
 	String xml = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
+
+	<jc>// Or just use toString().</jc>
+	json = m.toString();
 		</p>
 		<ul class='doctree'>
 			<li class='info'>
@@ -2185,7 +2194,7 @@
 			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).hreflang(<js>"en"</js>),
 			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
 		)
-		.rights(<js>"Copyright (c) 2016, Apache Foundation"</js>)
+		.rights(<js>"Copyright (c) ..."</js>)
 		.generator(
 			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
 		)
@@ -2234,7 +2243,7 @@
 		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> 
 			<xa>type</xa>=<xs>'application/atom+xml'</xs>/<xt>&gt;</xt>
 		<xt>&lt;rights&gt;</xt>
-			Copyright (c) 2016, Apache Foundation
+			Copyright (c) ...
 		<xt>&lt;/rights&gt;</xt>
 		<xt>&lt;title</xt> <xa>type</xa>=<xs>'text'</xs>&gt;</xt>
 			Juneau ATOM specification
@@ -2479,7 +2488,7 @@
 		},
 		
 		<jc>// Our stylesheet for the HTML rendition.</jc>
-		styleImport=<js>"styles/devops.css"</js>,
+		stylesheet=<js>"styles/devops.css"</js>,
 		
 		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
 		encoders=GzipEncoder.<jk>class</jk>,
@@ -4681,7 +4690,7 @@
 		},
 		
 		<jc>// Our stylesheet for the HTML rendition.</jc>
-		styleImport=<js>"styles/devops.css"</js>,
+		stylesheet=<js>"styles/devops.css"</js>,
 		
 		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
 		encoders=GzipEncoder.<jk>class</jk>,
@@ -5504,7 +5513,7 @@
 			<ja>@Property</ja>(name=<js>"DirectoryResource.allowDeletes"</js>, value=<js>"true"</js>), 
 			<ja>@Property</ja>(name=<js>"DirectoryResource.allowPuts"</js>, value=<js>"false"</js>) 
 		}, 
-		styleImport=<js>"styles/devops.css"</js> 
+		stylesheet=<js>"styles/devops.css"</js> 
 	) 
 	<jk>public class</jk> TempDirResource <jk>extends</jk> DirectoryResource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5650,7 +5659,7 @@
 						<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/"</js>).setHreflang(<js>"en"</js>), 
 						<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
 					) 
-					.setRights(<jk>new</jk> Text(<js>"Copyright (c) 2016, Apache Foundation"</js>)) 
+					.setRights(<jk>new</jk> Text(<js>"Copyright (c) ..."</js>)) 
 					.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setVersion(<js>"1.0"</js>)) 
 					.addEntries( 
 						<jk>new</jk> Entry() 
@@ -6842,7 +6851,7 @@
 				<ul>
 					<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_script HTMLDOC_script}
 					<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_style HTMLDOC_style} - Was <jsf>HTMLDOC_css</jsf>.
-					<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_styleImport HTMLDOC_styleImport} - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
+					<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_stylesheet HTMLDOC_stylesheet} - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
 				</ul>
 			<li>
 				New {@link org.apache.juneau.utils.ResourceFinder} utility class.
@@ -6852,6 +6861,11 @@
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
 		<ul class='spaced-list'>
+			<li>
+				New 'light' stylesheet:
+				<br><img src='doc-files/ReleaseNotes_631_LightStyle.png'>
+				<br>Compared with previous 'devops':
+				<br><img src='doc-files/ReleaseNotes_631_DevopsStyle.png'>
 			<li>
 				Improvements made to the {@link org.apache.juneau.rest.widget.Widget} API.
 				<ul>
@@ -6874,12 +6888,16 @@
 						of a search/view/order-by/page form:
 						<br><img src='doc-files/ReleaseNotes_631_QueryMenuItem.png'>
 						<br>Fields are now pre-filled with current query parameters.
+					<li>
+						New {@link org.apache.juneau.rest.widget.StyleMenuItem} widget that provides a pull-down menu 
+						with hyperlinks to show the content in the default stylesheets:
+						<br><img src='doc-files/ReleaseNotes_631_StyleMenuItem.png'>
 				</ul>
 			<li>
 				New/modified annotations on {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#style() style()} - Renamed from <code>css()</code>.
-					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#styleImport() styleImport()} - Renamed from <code>cssUrl()</code>.
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#stylesheet() stylesheet()} - Renamed from <code>cssUrl()</code>.
 						<br>Can now be a comma-delimited list of URLs.
 					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#script() script()} - Add arbitrary Javascript to page header.
 				</ul>

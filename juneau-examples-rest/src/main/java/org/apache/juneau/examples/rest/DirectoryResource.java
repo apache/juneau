@@ -37,10 +37,11 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	messages="nls/DirectoryResource",
 	widgets={
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DirectoryResource.java'}"
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DirectoryResource.java'}"
 	),
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),

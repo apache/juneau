@@ -246,7 +246,7 @@ import org.apache.juneau.xml.*;
 	},
 	htmldoc=@HtmlDoc(
 		branding="<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'></a>",
-		styleImport="servlet:/styles/devops.css"
+		stylesheet="servlet:/styles/devops.css"
 	),
 	favicon="htdocs/juneau.png",
 	staticFiles="{htdocs:'htdocs',styles:'styles'}"

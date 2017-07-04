@@ -393,7 +393,7 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			cssUrl=<js>"http://someOtherHost/stealTheir.css"</js>
+	 * 			stylesheet=<js>"http://someOtherHost/stealTheir.css"</js>
 	 * 		)
 	 * 	)
 	 * </p>
@@ -404,9 +404,9 @@ public @interface HtmlDoc {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlStyleImport(String)}/{@link RestResponse#setHtmlStyleImport(Object)} methods.
+	 * {@link RestConfig#setHtmlStylesheet(String)}/{@link RestResponse#setHtmlStylesheet(Object)} methods.
 	 */
-	String styleImport() default "";
+	String stylesheet() default "";
 
 	/**
 	 * Sets the HTML script section contents.

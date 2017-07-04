@@ -46,7 +46,8 @@ import org.apache.juneau.utils.*;
 	// Widgets for $W variables above.
 	widgets={
 		PoweredByJuneauWidget.class,
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 
 	// Links on the HTML rendition page.
@@ -54,7 +55,7 @@ import org.apache.juneau.utils.*;
 	// "servlet:/..." URIs are relative to the servlet URI.
 	// "$C{...}" variables are pulled from the config file.
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java',contentTypes:'$W{contentTypeMenuItem}'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}'}",
 			aside=""
 				+ "<div style='max-width:400px;min-width:200px'>"
 				+ "	<p>Proof-of-concept resource that shows off the capabilities of working with POJO resources.</p>"

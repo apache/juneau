@@ -41,10 +41,10 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	@Override /* HtmlDocTemplate */
 	public void style(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
 
-		String[] styleImport = session.getStyleImport();
-		if (! ArrayUtils.contains("NONE", styleImport))
-			for (String si : styleImport)
-				w.append(2, "@import ").q().append(session.resolveUri(si)).q().appendln("; ");
+		String[] stylesheet = session.getStylesheet();
+		if (! ArrayUtils.contains("NONE", stylesheet))
+			for (String ss : stylesheet)
+				w.append(2, "@import ").q().append(session.resolveUri(ss)).q().appendln("; ");
 
 		if (session.isNoWrap())
 			w.appendln("div.data * {white-space:nowrap;} ");

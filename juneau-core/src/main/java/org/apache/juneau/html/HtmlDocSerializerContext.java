@@ -453,7 +453,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <b>Configuration property:</b>  Stylesheet import URLs.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.styleImport"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.stylesheet"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -463,17 +463,17 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * Adds a link to the specified stylesheet URL.
 	 *
 	 * <p>
-	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.styleImport()</code> annotation.
+	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_styleImport = "HtmlDocSerializer.styleImport";
+	public static final String HTMLDOC_stylesheet = "HtmlDocSerializer.stylesheet";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_styleImport} property.
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_stylesheet} property.
 	 */
-	public static final String HTMLDOC_styleImport_add = "HtmlDocSerializer.styleImport.list.add";
+	public static final String HTMLDOC_stylesheet_add = "HtmlDocSerializer.stylesheet.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  CSS style code.
@@ -584,7 +584,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_template = "HtmlDocSerializer.template";
 
 
-	final String[] style, styleImport, script;
+	final String[] style, stylesheet, script;
 	final Map<String,Object> links;
 	final String title, description, branding, header, nav, aside, footer, noResultsMessage;
 	final boolean nowrap;
@@ -601,7 +601,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public HtmlDocSerializerContext(PropertyStore ps) {
 		super(ps);
 		style = ps.getProperty(HTMLDOC_style, String[].class, new String[0]);
-		styleImport = ps.getProperty(HTMLDOC_styleImport, String[].class, new String[0]);
+		stylesheet = ps.getProperty(HTMLDOC_stylesheet, String[].class, new String[0]);
 		script = ps.getProperty(HTMLDOC_script, String[].class, new String[0]);
 		title = ps.getProperty(HTMLDOC_title, String.class, null);
 		description = ps.getProperty(HTMLDOC_description, String.class, null);
@@ -629,7 +629,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 				.append("aside", aside)
 				.append("footer", footer)
 				.append("style", style)
-				.append("styleImport", styleImport)
+				.append("stylesheet", stylesheet)
 				.append("nowrap", nowrap)
 				.append("template", template)
 				.append("noResultsMessage", noResultsMessage)

@@ -36,7 +36,8 @@ import org.apache.juneau.rest.widget.*;
 
 	// Widget used for content-type pull-down menu.		
 	widgets={
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 
 	// Links on the HTML rendition page.
@@ -51,6 +52,7 @@ import org.apache.juneau.rest.widget.*;
 			+ "options:'servlet:/?method=OPTIONS',"
 			+ "form:'servlet:/formPage',"
 			+ "contentTypes:'$W{contentTypeMenuItem}',"
+			+ "styles:'$W{styleMenuItem}',"
 			+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'"
 			+"}",
 

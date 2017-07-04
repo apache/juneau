@@ -1,0 +1,211 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+ 
+/**********************************************************************************************************************/
+/**  Sections                                                                                                        **/
+/**********************************************************************************************************************/
+html {
+}
+body {
+	background-color: white;
+	margin: 0px;
+	font-size: 11pt;
+	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	color: #2c4557;
+	height: 100%;	
+}
+header {
+	background-color: #e8ebef;
+	font-size: 14pt;
+	height: 50px;
+	padding: 10px 20px;
+	box-shadow: 5px 5px 2px #999999;
+	text-shadow: rgba(0,0,0,.2) 2px 4px 5px, rgba(125,32,191,.4) 0 -4px 30px;
+	white-space: nowrap;
+}
+header * {
+	color: #af2222;;
+	font-weight: lighter;
+}
+nav {
+    margin: 10px;
+    padding: 5px;
+    box-shadow: 5px 5px 2px #999999;
+    color: #2c4557;
+    background-color: #eef3f7;
+    font-size: 1.0em;
+    font-weight: lighter;
+}
+section {
+	display: table;
+	width: 100%;
+}
+article {
+	display: table-cell;
+}
+aside {
+	display: table-cell;
+	vertical-align: top;
+	padding: 20px 20px;
+}
+footer { 
+	padding: 10px;
+	width: 100%;
+	bottom: 0;
+	position: fixed;
+	background-color: #e8ebef;
+}
+
+/**********************************************************************************************************************/
+/**  Page elements                                                                                                   **/
+/**********************************************************************************************************************/
+
+/* Hyperlinks */
+.link {
+	font-size: 10pt;
+	color: #2c4557;
+	text-decoration: none;
+	margin: 0px 10px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+.link:active, .link:hover {
+	text-decoration: none;
+	color: #94a3ab;
+}
+
+/* Title */
+h3.title {
+}
+h3.title, h3.title * {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* Description */
+h5.description {
+}
+h5.description, h5.description * {
+	margin: 0px;
+	padding: 0px;
+}
+
+/************************************************************************************/
+/**  Pop-ups                                                                       **/
+/************************************************************************************/
+
+.popup-content {
+	display: none;
+	position: absolute;
+	background-color: #eef3f7;
+	white-space: nowrap;
+	padding: 5px;
+	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+	z-index: 1;
+	margin-top: 10px;
+	border-radius: 4px;
+}
+
+.popup-content * {
+	color: black;
+	font-size: 10pt;
+}
+
+.popup-content a:hover {
+	color: #94A3AB;
+}
+
+
+.popup-show {display:block;}
+
+
+/************************************************************************************/
+/**  Data section                                                                  **/
+/************************************************************************************/
+div.outerdata {
+	width: 100%;
+	height: 100%;
+}
+
+div.data {
+	padding:10px;
+	border-radius: 4px;
+	margin: 15px 30px;
+	display: inline-block;
+	overflow-x: auto;
+	color:#26343F;
+}
+div.data * {
+	font-size: 9pt;
+	color: #26343F;
+}
+div.data td {
+	vertical-align: top;
+	border-bottom:1px solid #d9dcde;
+	border-right:1px solid #d9dcde;
+	padding:0.2em 0.5em;
+}
+
+
+/************************************************************************************/
+/**  Other                                                                         **/
+/************************************************************************************/
+
+table {
+	border: none;
+}
+
+div.data a {
+	color: #416e8e;
+	text-decoration: none;
+}
+
+div.data a:hover {
+	text-decoration: underline;
+}
+
+div.data th, .header {
+	padding: 4px 8px;
+	font-weight: bold;
+	text-align:center;
+	background-color: #eef3f7;
+	box-shadow: 1px 1px 2px #999999;
+}
+
+div.data ul {
+	margin:0px;
+	padding-left:20px;
+}
+
+div.data textarea, pre { 
+	-moz-tab-size:3; 
+	-o-tab-size:3; 
+	-webkit-tab-size:3; 
+	tab-size:3; 
+}
+
+.table {
+	display:table;
+}
+.row {display:table-row;}
+.cell {display:table-cell;}
+.monospace {font-family:monospace;}
+
+iframe.output {
+	background-color: #F6F7F9;
+    border: 1px solid gray;
+    padding: 0px;
+    overflow: hidden;
+    width:100%;
+	min-height:400px;
+}

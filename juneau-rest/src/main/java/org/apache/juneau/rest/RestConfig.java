@@ -113,7 +113,7 @@ public class RestConfig implements ServletConfig {
 	List<Object> staticFiles;
 	RestContext parentContext;
 	String path, htmlTitle, htmlDescription, htmlBranding, htmlLinks, htmlHeader, htmlNav, htmlAside, htmlFooter,
-		htmlStyle, htmlStyleImport, htmlScript, htmlNoResultsMessage;
+		htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
 	String clientVersionHeader = "X-Client-Version";
 
 	Object resourceResolver = RestResourceResolver.class;
@@ -241,8 +241,8 @@ public class RestConfig implements ServletConfig {
 					setHtmlFooter(hd.footer());
 				if (! hd.style().isEmpty())
 					setHtmlStyle(hd.style());
-				if (! hd.styleImport().isEmpty())
-					setHtmlStyleImport(hd.styleImport());
+				if (! hd.stylesheet().isEmpty())
+					setHtmlStylesheet(hd.stylesheet());
 				if (! hd.noResultsMessage().isEmpty())
 					setHtmlNoResultsMessage(hd.noResultsMessage());
 				if (hd.nowrap())
@@ -1399,13 +1399,13 @@ public class RestConfig implements ServletConfig {
 	 * by {@link UriResolver}.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#styleImport() @HtmlDoc.styleImport()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
 	 *
 	 * @param value The CSS URL in the HTML CSS style section.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setHtmlStyleImport(String value) {
-		this.htmlStyleImport = value;
+	public RestConfig setHtmlStylesheet(String value) {
+		this.htmlStylesheet = value;
 		return this;
 	}
 

@@ -35,7 +35,7 @@ import org.apache.juneau.serializer.*;
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	private final String title, description, branding, header, nav, aside, footer, noResultsMessage;
-	private final String[] style, styleImport, script;
+	private final String[] style, stylesheet, script;
 	private final Map<String,Object> links;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
@@ -78,7 +78,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			footer = ctx.footer;
 			links = ctx.links;
 			style = ctx.style;
-			styleImport = ctx.styleImport;
+			stylesheet = ctx.stylesheet;
 			script = ctx.script;
 			nowrap = ctx.nowrap;
 			noResultsMessage = ctx.noResultsMessage;
@@ -94,7 +94,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			Map m = op.getMap(HTMLDOC_links, ctx.links);
 			links = ObjectUtils.isEmpty(m) ? null : new LinkedHashMap(m);
 			style = op.getStringArray(HTMLDOC_style, ctx.style);
-			styleImport = op.getStringArray(HTMLDOC_styleImport, ctx.styleImport);
+			stylesheet = op.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
 			script = op.getStringArray(HTMLDOC_script, ctx.script);
 			nowrap = op.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
 			noResultsMessage = op.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
@@ -115,15 +115,15 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_styleImport} setting value in this context.
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_stylesheet} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_styleImport} setting value in this context.
+	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_stylesheet} setting value in this context.
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
-	public final String[] getStyleImport() {
-		return styleImport;
+	public final String[] getStylesheet() {
+		return stylesheet;
 	}
 
 	/**

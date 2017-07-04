@@ -2718,7 +2718,7 @@
 	<ja>@RestResource</ja>(
 		<jc>// Get stylesheet from myconfig.cfg, but default to devops.css if it's not specified</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
-			styleImport=<js>"$C{MyServlet/stylesheet,servlet:/styles/devops.css}"</js>,
+			stylesheet=<js>"$C{MyServlet/stylesheet,servlet:/styles/devops.css}"</js>,
 		)
 		...
 	)
@@ -3439,7 +3439,7 @@
 			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>
 		
 			<jc>// Our stylesheet for the HTML rendition.</jc>
-			styleImport=<js>"servlet:/styles/devops.css"</js>,
+			stylesheet=<js>"servlet:/styles/devops.css"</js>,
 		),
 
 		<jc>// Properties that get applied to all serializers and parsers.</jc>

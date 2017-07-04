@@ -802,7 +802,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * by {@link UriResolver}.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#styleImport() @HtmlDoc.styleImport()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
 	 *
 	 * @param value
 	 * 	The CSS URL in the HTML CSS style section.
@@ -815,8 +815,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setHtmlStyleImport(Object value) {
-		properties.put(HtmlDocSerializerContext.HTMLDOC_styleImport, value);
+	public RestResponse setHtmlStylesheet(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_stylesheet, value);
 		return this;
 	}
 

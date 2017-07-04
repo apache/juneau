@@ -27,12 +27,14 @@ import org.apache.juneau.rest.widget.*;
 	description="Example of a router resource page.",
 	widgets={
 		PoweredByApacheWidget.class,
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
 		links="{"
 			+ "options:'?method=OPTIONS',"
 			+ "contentTypes:'$W{contentTypeMenuItem}',"
+			+ "styles:'$W{styleMenuItem}',"
 			+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'"
 		+ "}",
 		aside=""

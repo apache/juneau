@@ -36,10 +36,11 @@ import org.apache.juneau.transforms.*;
 	description="An example of a typical REST resource where beans are rendered in summary and details views.",
 	path="/petstore",
 	widgets={
-		ContentTypeMenuItem.class
+		ContentTypeMenuItem.class,
+		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}",
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}",
 		aside=""
 			+ "<div style='max-width:400px' class='text'>"
 			+ "	<p>This page shows a standard REST resource that renders bean summaries and details.</p>"
@@ -85,6 +86,7 @@ public class PetStoreResource extends ResourceJena {
 				+ "options:'servlet:/?method=OPTIONS',"
 				+ "query:'$W{queryMenuItem}',"
 				+ "contentTypes:'$W{contentTypeMenuItem}',"
+				+ "styles:'$W{styleMenuItem}',"
 				+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'"
 			+ "}"
 		)

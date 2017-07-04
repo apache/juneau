@@ -69,7 +69,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	private final RestContext context;
 
-	private final String method;
+	private final String method, stylesheet;
 	private RequestBody body;
 	private Method javaMethod;
 	private ObjectMap properties;
@@ -119,6 +119,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				_method = m;
 
 			method = _method;
+
+			stylesheet = getQuery().getString("stylesheet");
 
 			headers = new RequestHeaders();
 			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
@@ -595,6 +597,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
+
+	/**
+	 * Returns the value of the <jk>"stylesheet"</js> parameter.
+	 *
+	 * @return The value of the <jk>"stylesheet"</js> parameter, or <jk>null</jk> if it wasn't specified.
+	 */
+	protected String getStylesheet() {
+		return stylesheet;
+	}
 
 	/**
 	 * Returns the serializers associated with this request.

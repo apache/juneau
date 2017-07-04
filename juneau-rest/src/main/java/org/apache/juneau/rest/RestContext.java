@@ -358,7 +358,7 @@ public final class RestContext extends Context {
 		htmlNav,
 		htmlAside,
 		htmlStyle,
-		htmlStyleImport,
+		htmlStylesheet,
 		htmlScript,
 		htmlFooter,
 		htmlNoResultsMessage;
@@ -473,7 +473,7 @@ public final class RestContext extends Context {
 			this.htmlNav = b.htmlNav;
 			this.htmlAside = b.htmlAside;
 			this.htmlStyle = b.htmlStyle;
-			this.htmlStyleImport = b.htmlStyleImport;
+			this.htmlStylesheet = b.htmlStylesheet;
 			this.htmlScript = b.htmlScript;
 			this.htmlFooter = b.htmlFooter;
 			this.htmlNoWrap = b.htmlNoWrap;
@@ -653,7 +653,7 @@ public final class RestContext extends Context {
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
 		String clientVersionHeader = "", defaultCharset, paramFormat, htmlTitle, htmlDescription, htmlBranding,
-			htmlHeader, htmlLinks, htmlNav, htmlAside, htmlStyle, htmlStyleImport, htmlScript, htmlFooter, htmlNoResultsMessage;
+			htmlHeader, htmlLinks, htmlNav, htmlAside, htmlStyle, htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
 		boolean htmlNoWrap;
 		HtmlDocTemplate htmlTemplate;
 
@@ -794,7 +794,7 @@ public final class RestContext extends Context {
 			htmlNav = sc.htmlNav;
 			htmlAside = sc.htmlAside;
 			htmlStyle = sc.htmlStyle;
-			htmlStyleImport = sc.htmlStyleImport;
+			htmlStylesheet = sc.htmlStylesheet;
 			htmlScript = sc.htmlScript;
 			htmlFooter = sc.htmlFooter;
 			htmlNoWrap = sc.htmlNoWrap;
@@ -1100,12 +1100,12 @@ public final class RestContext extends Context {
 	 * The HTML page stylesheet URL.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#styleImport()} annotation or {@link RestConfig#setHtmlStyleImport(String)} method.
+	 * Defined by the {@link HtmlDoc#stylesheet()} annotation or {@link RestConfig#setHtmlStylesheet(String)} method.
 	 *
 	 * @return The HTML page CSS URL.
 	 */
-	public String getHtmlStyleImport() {
-		return htmlStyleImport;
+	public String getHtmlStylesheet() {
+		return htmlStylesheet;
 	}
 
 	/**
