@@ -32,7 +32,6 @@ public class AtomTest {
 				link("alternate", "text/html", "http://foo.org/").hreflang("en"),
 				link("self", "application/atom+xml", "http://foo.org/feed.atom")
 			)
-			.rights("Copyright (c) 2016, Apache Foundation")
 			.generator(
 				generator("Example Toolkit").uri("http://www.foo.org/").version("1.0")
 			)
@@ -92,7 +91,6 @@ public class AtomTest {
 			+"	<id>tag:foo.org</id>\n"
 			+"	<link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>\n"
 			+"	<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
-			+"	<rights>Copyright (c) 2016, Apache Foundation</rights>\n"
 			+"	<subtitle type='html'>Subtitle</subtitle>\n"
 			+"	<title>Title</title>\n"
 			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
@@ -138,7 +136,6 @@ public class AtomTest {
 			+"	<atom:id>tag:foo.org</atom:id>\n"
 			+"	<atom:link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>\n"
 			+"	<atom:link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
-			+"	<atom:rights>Copyright (c) 2016, Apache Foundation</atom:rights>\n"
 			+"	<atom:subtitle type='html'>Subtitle</atom:subtitle>\n"
 			+"	<atom:title>Title</atom:title>\n"
 			+"	<atom:updated>2016-12-31T01:02:03-04:00</atom:updated>\n"
@@ -184,7 +181,6 @@ public class AtomTest {
 			+"	<id>tag:foo.org</id>\n"
 			+"	<link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>\n"
 			+"	<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
-			+"	<rights>Copyright (c) 2016, Apache Foundation</rights>\n"
 			+"	<subtitle type='html'>Subtitle</subtitle>\n"
 			+"	<title>Title</title>\n"
 			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
