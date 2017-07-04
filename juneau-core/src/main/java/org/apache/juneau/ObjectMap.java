@@ -567,7 +567,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Similar to {@link #remove(Object) remove(Object)},but the key is a slash-delimited path used to traverse entries
+	 * Similar to {@link #remove(Object) remove(Object)}, but the key is a slash-delimited path used to traverse entries
 	 * in this POJO.
 	 *
 	 * <p>
@@ -577,7 +577,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
-	 * 	m.getObjectMap(<js>"foo"</js>).getObjectList(<js>"bar"</js>).getObjectMap(1).remove(<js>"baz"</js>);
+	 * 	m.getObjectMap(<js>"foo"</js>).getObjectList(<js>"bar"</js>).getObjectMap(0).remove(<js>"baz"</js>);
 	 *
 	 * 	<jc>// Using this method</jc>
 	 * 	m.deleteAt(<js>"foo/bar/0/baz"</js>);
@@ -623,7 +623,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Specialized method that calls {@link #getString(String)} and splits the results as a simple comma-delimited list.
-	 * 
+	 *
 	 * <p>
 	 * If the value is already a collection, the individual entries are converted to strings using {@link #toString()}.
 	 *
@@ -637,7 +637,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		Object s = get(Object.class, key);
 		if (s == null)
 			return new String[0];
-		if (s instanceof Collection) 
+		if (s instanceof Collection)
 			return ArrayUtils.toStringArray((Collection<?>)s);
 		String[] r = split(StringUtils.toString(s));
 		return r;
@@ -654,7 +654,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		Object s = get(Object.class, key);
 		if (s == null)
 			return def;
-		if (s instanceof Collection) 
+		if (s instanceof Collection)
 			return ArrayUtils.toStringArray((Collection<?>)s);
 		String[] r = split(StringUtils.toString(s));
 		return (r.length == 0 ? def : r);
