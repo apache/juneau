@@ -47,6 +47,7 @@ import org.apache.juneau.utils.*;
 	widgets={
 		PoweredByJuneauWidget.class,
 		ContentTypeMenuItem.class,
+		QueryMenuItem.class,
 		StyleMenuItem.class
 	},
 
@@ -129,9 +130,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [GET /]
 	 * Get root page.
 	 */
-	@RestMethod(name="GET", path="/",
-		converters=Queryable.class
-	)
+	@RestMethod(name="GET", path="/")
 	public Link[] getRoot() throws Exception {
 		return new Link[] {
 			new Link("people", "people"),
@@ -146,7 +145,10 @@ public class AddressBookResource extends ResourceJena {
 	 * Introspectable filtering enabled to allow public methods on the returned object to be invoked.
 	 */
 	@RestMethod(name="GET", path="/people/*",
-		converters={Traversable.class,Queryable.class,Introspectable.class}
+		converters={Traversable.class,Queryable.class,Introspectable.class},
+		htmldoc=@HtmlDoc(
+			links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{queryMenuItem}',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"
+		)
 	)
 	public AddressBook getAllPeople() throws Exception {
 		return addressBook;
@@ -159,7 +161,7 @@ public class AddressBookResource extends ResourceJena {
 	 * Introspectable filtering enabled to allow public methods on the returned object to be invoked.
 	 */
 	@RestMethod(name="GET", path="/people/{id}/*",
-		converters={Traversable.class,Queryable.class,Introspectable.class}
+		converters={Traversable.class,Introspectable.class}
 	)
 	public Person getPerson(@Path int id) throws Exception {
 		return findPerson(id);
@@ -170,7 +172,10 @@ public class AddressBookResource extends ResourceJena {
 	 * Get all addresses in the address book.
 	 */
 	@RestMethod(name="GET", path="/addresses/*",
-		converters={Traversable.class,Queryable.class}
+		converters={Traversable.class,Queryable.class},
+		htmldoc=@HtmlDoc(
+			links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{queryMenuItem}',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"
+		)
 	)
 	public List<Address> getAllAddresses() throws Exception {
 		return addressBook.getAddresses();
@@ -181,7 +186,7 @@ public class AddressBookResource extends ResourceJena {
 	 * Get a single address by ID.
 	 */
 	@RestMethod(name="GET", path="/addresses/{id}/*",
-		converters={Traversable.class,Queryable.class}
+		converters={Traversable.class}
 	)
 	public Address getAddress(@Path int id) throws Exception {
 		return findAddress(id);
