@@ -261,11 +261,13 @@ public abstract class RestServletJenaDefault extends RestServlet {
 	 * @return The bean containing the contents of the OPTIONS page.
 	 */
 	@RestMethod(name="OPTIONS", path="/*",
-		summary="Resource options",
-		description="Resource options",
 		htmldoc=@HtmlDoc(
-			links="{back:'$R{servletURI}'}"
-		)
+			links="{back:'servlet:/',json:'servlet:/?method=OPTIONS&Accept=text/json&plainText=true'}",
+			description="Swagger documentation",
+			aside="NONE"
+		),
+		summary="Resource options",
+		description="Swagger documentation"
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();

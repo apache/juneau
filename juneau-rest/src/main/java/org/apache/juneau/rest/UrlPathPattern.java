@@ -94,6 +94,11 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 		if (path == null)
 			return (patternString.equals("/") ? new String[]{} : null);
 
+		// If we're not doing a /* match, ignore all trailing slashes.
+		if (! isDotAll)
+			while (path.length() > 1 && path.charAt(path.length()-1) == '/')
+				path = path.substring(0, path.length()-1);
+
 		Matcher m = pattern.matcher(path);
 		if (! m.matches())
 			return null;

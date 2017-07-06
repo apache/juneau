@@ -30,7 +30,7 @@ header {
 	height: 50px;
 	padding: 10px 20px;
 	box-shadow: 5px 5px 2px #999999;
-	text-shadow: rgba(0,0,0,.2) 2px 4px 5px, rgba(125,32,191,.4) 0 -4px 30px;
+	text-shadow: rgba(1,1,1,.2) 2px 4px 5px, rgba(125,32,191,.05) 0 -10px 30px;
 	white-space: nowrap;
 }
 header * {

@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.
@@ -61,7 +62,6 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 	 */
 	@Override /* Widget */
 	public String getHtml(RestRequest req) throws Exception {
-		UriResolver r = req.getUriResolver();
 		StringBuilder sb = new StringBuilder();
 		sb.append(""
 			+ "<div class='menu-item'>"
@@ -70,9 +70,10 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 		);
 		List<MediaType> l = new ArrayList<MediaType>(req.getSerializerGroup().getSupportedMediaTypes());
 		Collections.sort(l);
-		for (MediaType mt : l)
-			sb.append("\n\t\t<a class='link' href='").append(r.resolve("request:/?plainText=true&Accept="+mt))
-				.append("'>").append(mt).append("</a><br>");
+		for (MediaType mt : l) {
+			URI uri = req.getUri(true, new AMap<String,String>().append("plainText","true").append("Accept",mt.toString()));
+			sb.append("\n\t\t<a class='link' href='").append(uri).append("'>").append(mt).append("</a><br>");
+		}
 		sb.append(""
 			+ "\n\t</div>"
 			+ "\n</div>"

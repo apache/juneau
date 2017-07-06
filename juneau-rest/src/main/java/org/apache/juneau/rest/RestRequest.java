@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.net.*;
 import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
@@ -541,6 +542,35 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return new UriResolver(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, getUriContext());
 	}
 
+	/**
+	 * Returns the URI for this request.
+	 *
+	 * <p>
+	 * Similar to {@link #getRequestURL()} but returns the value as a {@link URI}.
+	 * It also gives you the capability to override the query parameters (e.g. add new query parameters to the existing
+	 * URI).
+	 *
+	 * @param includeQuery If <jk>true</jk> include the query parameters on the request.
+	 * @param addQueryParams Augment the request URI with the specified query parameters.
+	 * @return A new URI.
+	 */
+	public URI getUri(boolean includeQuery, Map<String,?> addQueryParams) {
+		StringBuffer sb = getRequestURL();
+		if (includeQuery || addQueryParams != null) {
+			RequestQuery rq = this.queryParams.copy();
+			if (addQueryParams != null)
+				for (Map.Entry<String,?> e : addQueryParams.entrySet())
+					rq.put(e.getKey(), e.getValue());
+			if (! rq.isEmpty())
+				sb.append('?').append(rq.toQueryString());
+		}
+		try {
+			return new URI(sb.toString());
+		} catch (URISyntaxException e) {
+			// Shouldn't happen.
+			throw new RuntimeException(e);
+		}
+	}
 
 	//--------------------------------------------------------------------------------
 	// Labels

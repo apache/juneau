@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
-import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in the various default styles.
@@ -56,7 +56,6 @@ public class StyleMenuItem extends MenuItemWidget {
 	 */
 	@Override /* Widget */
 	public String getHtml(RestRequest req) throws Exception {
-		UriResolver r = req.getUriResolver();
 		StringBuilder sb = new StringBuilder();
 		sb.append(""
 			+ "<div class='menu-item'>"
@@ -64,8 +63,8 @@ public class StyleMenuItem extends MenuItemWidget {
 			+ "\n\t<div class='popup-content'>"
 		);
 		for (String s : BUILT_IN_STYLES) {
-			sb.append("\n\t\t<a class='link' href='").append(r.resolve("request:/?stylesheet=styles/"+s+".css"))
-			.append("'>").append(s).append("</a><br>");
+			java.net.URI uri = req.getUri(true, new AMap<String,String>().append("stylesheet", "styles/"+s+".css"));
+			sb.append("\n\t\t<a class='link' href='").append(uri).append("'>").append(s).append("</a><br>");
 		}
 		sb.append(""
 			+ "\n\t</div>"

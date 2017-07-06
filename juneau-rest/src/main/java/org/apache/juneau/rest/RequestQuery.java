@@ -25,6 +25,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Represents the query parameters in an HTTP request.
@@ -44,6 +45,15 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	RequestQuery setBeanSession(BeanSession beanSession) {
 		this.beanSession = beanSession;
 		return this;
+	}
+
+	/**
+	 * Create a copy of the request query parameters.
+	 */
+	RequestQuery copy() {
+		RequestQuery rq = new RequestQuery();
+		rq.putAll(this);
+		return rq;
 	}
 
 	/**
@@ -466,6 +476,26 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 			m.put(e.getKey(), v.length == 1 ? v[0] : v);
 		}
 		return JsonSerializer.DEFAULT_LAX.toString(m);
+	}
+
+	/**
+	 * Converts this object to a query string.
+	 *
+	 * <p>
+	 * Returned query string does not start with <js>'?'</js>.
+	 *
+	 * @return A new query string, or an empty string if this object is empty.
+	 */
+	public String toQueryString() {
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String,String[]> e : this.entrySet()) {
+			for (int i = 0; i < e.getValue().length; i++) {
+				if (sb.length() > 0)
+					sb.append("&");
+				sb.append(XmlUtils.urlEncode(e.getKey())).append('=').append(XmlUtils.urlEncode(e.getValue()[i]));
+			}
+		}
+		return sb.toString();
 	}
 
 	@Override /* Object */
