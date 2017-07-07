@@ -50,14 +50,16 @@ header * {
 	font-weight: normal;
 }
 
-header h3 {
+header h1 {
 	padding: 10px 20px;
+	font-size: 16px;
 	border-bottom: 2px solid #34534B;
 	color: white;
 }
 
-header h5 {
+header h2 {
 	padding: 10px 20px;
+	font-size: 14px;
 	border-bottom: 2px solid #34534B;
 }
 
@@ -68,6 +70,20 @@ header h5 {
 nav {
 	margin: 10px 20px 10px 20px;
 	color: #94A3AB;
+}
+
+nav ol {
+	list-style-type: none;
+	margin: 0px 10px;
+	padding: 0px;
+}
+
+nav li {
+	display: inline;
+}
+
+nav li:not(:first-child):before {
+    content: " - ";
 }
 
 nav a {
@@ -91,6 +107,7 @@ nav a:active, nav a:hover {
 section {
 	display: table;
 	width: 100%;
+	margin-bottom: 50px;
 }
 
 article {

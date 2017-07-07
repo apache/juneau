@@ -30,8 +30,8 @@ package org.apache.juneau.html;
  * 		&lt;/head&gt;
  * 		&lt;body&gt;
  * 			&lt;header&gt;
- * 				&lt;h3 <xa>class</xa>=<xs>'title'</xs>&gt;<xv>Page title</xv>&lt;/h3&gt;
- * 				&lt;h5 <xa>class</xa>=<xs>'description'</xs>&gt;<xv>Page description</xv>&lt;/h5&gt;
+ * 				&lt;h1&gt;<xv>Page title</xv>&lt;/h1&gt;
+ * 				&lt;h2&gt;<xv>Page description</xv>&lt;/h2&gt;
  * 				<xv>Arbitrary page branding</xv>
  * 			&lt;/header&gt;
  * 			&lt;nav&gt;

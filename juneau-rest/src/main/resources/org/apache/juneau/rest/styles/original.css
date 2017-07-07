@@ -23,7 +23,6 @@ body {
 	color: #2c4557;
 	height: 100%;
 	margin: 0px;
-	padding: 0px;
 }
 
 body * {
@@ -42,10 +41,10 @@ body textarea, body pre {
 /**********************************************************************************************************************/
 
 header {
-	margin: 20px;
+	padding: 10px 20px;
 }
 
-header h3 {
+header h1 {
     font-size: 16px;
 	margin-bottom: 10px;
 	margin-right: 40px;
@@ -57,7 +56,7 @@ header h3 {
 	background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9));
 }
 
-header h5 {
+header h2 {
 	font-weight: normal;
 	margin-left: 20px;
 }
@@ -67,7 +66,21 @@ header h5 {
 /**********************************************************************************************************************/
 
 nav {
-	margin: 10px 25px;	
+	margin: 0px 25px;	
+}
+
+nav ol {
+	list-style-type: none;
+	margin: 0px 10px;
+	padding: 0px;
+}
+
+nav li {
+	display: inline;
+}
+
+nav li:not(:first-child):before {
+    content: " - ";
 }
 
 nav a {
@@ -83,11 +96,12 @@ nav a {
 section {
 	display: table;
 	width: 100%;
-	margin: 20px;
+	margin: 0px 0px 50px 0px;
 }
 
 article {
 	display: table-cell;
+	padding: 20px 40px;
 }
 
 aside {
@@ -128,11 +142,7 @@ article ul {
 /**********************************************************************************************************************/
 
 footer { 
-	padding: 10px 20px;
-	width: 100%;
-	bottom: 0;
-	position: fixed;
-	background-color: #e8ebef;
+	display: none;
 }
 
 /**********************************************************************************************************************/

@@ -51,13 +51,13 @@ header * {
 	font-weight: lighter;
 }
 
-header h3 {
+header h1 {
 	font-size: 18px;
 	margin: 0px;
 	padding: 2px;
 }
 
-header h5 {
+header h2 {
 	font-size: 14px;
 	margin: 0px;
 	padding: 2px;
@@ -77,6 +77,20 @@ nav {
 nav * {
     font-size: 12px;
     font-weight: lighter;
+}
+
+nav ol {
+	list-style-type: none;
+	margin: 0px 10px;
+	padding: 0px;
+}
+
+nav li {
+	display: inline;
+}
+
+nav li:not(:first-child):before {
+    content: " - ";
 }
 
 nav a {
@@ -100,12 +114,12 @@ nav a:active, nav a:hover {
 section {
 	display: table;
 	width: 100%;
-	margin: 15px 30px;
+	margin: 0px 0px 50px 0px;
 }
 
 article {
 	display: table-cell;
-	padding: 10px;
+	padding: 20px 40px;
 	overflow-x: auto;
 }
 

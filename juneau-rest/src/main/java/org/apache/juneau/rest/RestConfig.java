@@ -1103,7 +1103,7 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is plain text.
 	 *
 	 * <p>
-	 * It gets wrapped in a <code><xt>&lt;h3&gt; <xa>class</xa>=<xs>'title'</xs>&gt;</xt></code> element and then added
+	 * It gets wrapped in a <code><xt>&lt;h1&gt;</xt></code> element and then added
 	 * to the <code><xt>&lt;header&gt;</code> section on the page.
 	 *
 	 * <p>
@@ -1148,7 +1148,7 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is plain text.
 	 *
 	 * <p>
-	 * It gets wrapped in a <code><xt>&lt;h5&gt; <xa>class</xa>=<xs>'description'</xs>&gt;</xt></code> element and then
+	 * It gets wrapped in a <code><xt>&lt;h2&gt;</xt></code> element and then
 	 * added to the <code><xt>&lt;header&gt;</code> section on the page.
 	 *
 	 * <p>

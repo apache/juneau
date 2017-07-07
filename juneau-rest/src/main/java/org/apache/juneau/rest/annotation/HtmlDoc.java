@@ -55,8 +55,8 @@ import org.apache.juneau.rest.*;
  * 		&lt;/head&gt;
  * 		&lt;body&gt;
  * 			&lt;header&gt;
- * 				&lt;h3 <xa>class</xa>=<xs>'title'</xs>&gt;<xv>Page title</xv>&lt;/h3&gt;
- * 				&lt;h5 <xa>class</xa>=<xs>'description'</xs>&gt;<xv>Page description</xv>&lt;/h5&gt;
+ * 				&lt;h1&gt;<xv>Page title</xv>&lt;/h1&gt;
+ * 				&lt;h2&gt;<xv>Page description</xv>&lt;/h2&gt;
  * 				<xv>Arbitrary page branding</xv>
  * 			&lt;/header&gt;
  * 			&lt;nav&gt;
@@ -84,7 +84,7 @@ public @interface HtmlDoc {
 	 * The format of this value is HTML (phrasing content only).
 	 *
 	 * <p>
-	 * It gets wrapped in a <code><xt>&lt;h3&gt; <xa>class</xa>=<xs>'title'</xs>&gt;</xt></code> element and then added
+	 * It gets wrapped in a <code><xt>&lt;h1&gt;</xt></code> element and then added
 	 * to the <code><xt>&lt;header&gt;</code> section on the page.
 	 *
 	 * <p>
@@ -127,7 +127,7 @@ public @interface HtmlDoc {
 	 * The format of this value is HTML (phrasing content only).
 	 *
 	 * <p>
-	 * It gets wrapped in a <code><xt>&lt;h5&gt; <xa>class</xa>=<xs>'description'</xs>&gt;</xt></code> element and then
+	 * It gets wrapped in a <code><xt>&lt;h2&gt;</xt></code> element and then
 	 * added to the <code><xt>&lt;header&gt;</code> section on the page.
 	 *
 	 * <p>

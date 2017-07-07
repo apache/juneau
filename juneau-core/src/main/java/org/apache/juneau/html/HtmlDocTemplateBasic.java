@@ -110,9 +110,9 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 			String description = session.getDescription();
 			String branding = session.getBranding();
 			if (exists(title))
-				w.oTag(3, "h3").attr("class", "title").append('>').append(title).eTag("h3").nl(3);
+				w.oTag(3, "h1").append('>').append(title).eTag("h1").nl(3);
 			if (exists(description))
-				w.oTag(3, "h5").attr("class", "description").append('>').append(description).eTag("h5").nl(3);
+				w.oTag(3, "h2").append('>').append(description).eTag("h2").nl(3);
 			if (exists(branding))
 				w.append(3, branding).nl(3);
 		}
@@ -127,19 +127,18 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 				w.append(2, nav).nl(2);
 		} else {
 			Map<String,Object> htmlLinks = session.getLinks();
-			boolean first = true;
 			if (htmlLinks != null) {
+				w.sTag("ol");
 				for (Map.Entry<String,Object> e : htmlLinks.entrySet()) {
+					w.sTag("li");
 					String v = e.getValue().toString();
-					if (! first)
-						w.append(3, " - ").nl(3);
-					first = false;
 					if (v.startsWith("<"))
 						w.append(v);
 					else
-						w.oTag("a").attr("class", "link").attr("href", session.resolveUri(v), true).cTag()
-							.text(e.getKey(), true).eTag("a");
+						w.oTag("a").attr("href", session.resolveUri(v), true).cTag().text(e.getKey(), true).eTag("a");
+					w.eTag("li");
 				}
+				w.eTag("ol");
 			}
 		}
 	}
