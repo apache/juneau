@@ -12,39 +12,160 @@
  ***************************************************************************************************************************/
  
 /**********************************************************************************************************************/
-/**  Sections                                                                                                        **/
+/**  Body                                                                                                            **/
 /**********************************************************************************************************************/
-html {
-}
+
 body {
 	background-color: #3B4B54;
 	margin: 0px;
-	font-size: 11pt;
 	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 	color: #B3B3B3;
 	height: 100%;	
 }
-header * {
-    font-size:11pt;
-	color: #B3B3B3;
+
+body {
+	font-size: 14px;
+}
+
+body textarea, body pre {
+	-moz-tab-size: 3; 
+	-o-tab-size: 3; 
+	-webkit-tab-size: 3; 
+	tab-size: 3; 
+}
+
+/**********************************************************************************************************************/
+/**  Header                                                                                                        **/
+/**********************************************************************************************************************/
+
+header {
 	background-color: #26343F;
 }
+
+header * {
+    font-size: 14px;
+	color: #B3B3B3;
+	margin: 0px;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+header h3 {
+	padding: 10px 20px;
+	border-bottom: 2px solid #34534B;
+	color: white;
+}
+
+header h5 {
+	padding: 10px 20px;
+	border-bottom: 2px solid #34534B;
+}
+
+/**********************************************************************************************************************/
+/**  Nav                                                                                                             **/
+/**********************************************************************************************************************/
+
 nav {
 	margin: 10px 20px 10px 20px;
 	color: #94A3AB;
 }
+
+nav a {
+	font-size: 10pt;
+	color: #94A3AB;
+	text-decoration: none;
+	margin: 0px 15px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+nav a:active, nav a:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+/**********************************************************************************************************************/
+/**  Content                                                                                                        **/
+/**********************************************************************************************************************/
+
 section {
 	display: table;
 	width: 100%;
 }
+
 article {
 	display: table-cell;
 }
+
+article * {
+	font-size: 9pt;
+	color: #26343F;
+}
+
+article div.data {
+	padding: 10px;
+	background-color: white;
+	border-radius: 4px;
+	margin: 20px;
+	display: inline-block;
+	overflow-x: auto;
+	box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+	font-family: sans-serif;
+	color: #26343F;
+}
+
+article table {
+	border: none;
+}
+
+article th {
+	border-top: 1px solid #D9DCDE;
+	padding: 4px 8px;
+	font-weight: bold;
+	text-align: center;
+	background-color: #F4F6F9;
+}
+
+article td {
+	vertical-align: top;
+	border-bottom: 1px solid #d9dcde;
+	border-right: 1px solid #d9dcde;
+	padding: 2px 5px;
+}
+
+article ul {
+	margin: 0px;
+	padding-left: 20px;
+}
+
+article a {
+	color: #116998;
+	text-decoration: none;
+}
+
+article a:hover {
+	text-decoration: underline;
+}
+
+article iframe {
+	background-color: #F6F7F9;
+    border: 1px solid gray;
+    padding: 0px;
+    overflow: hidden;
+    width: 100%;
+	min-height: 400px;
+}
+
 aside {
 	display: table-cell;
 	vertical-align: top;
 	padding: 20px 20px;
 }
+
+/**********************************************************************************************************************/
+/**  Footer                                                                                                          **/
+/**********************************************************************************************************************/
+
 footer { 
 	padding: 10px;
 	width: 100%;
@@ -54,50 +175,8 @@ footer {
 }
 
 /**********************************************************************************************************************/
-/**  Page elements                                                                                                   **/
+/**  Popup windows                                                                                                   **/
 /**********************************************************************************************************************/
-
-/* Hyperlinks */
-.link {
-	font-size:10pt;
-	color: #94A3AB;
-	text-decoration: none;
-	margin: 0px 15px;
-	text-transform: uppercase;
-	cursor: pointer;
-}
-.link:active, .link:hover {
-	color: white;
-	text-decoration: underline;
-}
-
-/* Title */
-h3.title {
-	margin: 0px;
-	padding: 10px 20px;
-	border-bottom: 2px solid #34534B;
-}
-h3.title, h3.title * {
-	color: white;
-	text-decoration: none;
-	font-weight: normal;
-}
-
-/* Description */
-h5.description {
-	margin: 0;
-	padding: 10px 20px;
-	border-bottom: 2px solid #34534B;
-}
-h5.description, h5.description * {
-	color: #B3B3B3;
-	text-decoration: none;
-	font-weight: normal;
-}
-
-/************************************************************************************/
-/**  Pop-ups                                                                       **/
-/************************************************************************************/
 
 .popup-content {
 	display: none;
@@ -113,97 +192,22 @@ h5.description, h5.description * {
 
 .popup-content * {
 	color: black;
-	font-size: 10pt;
+	font-size: 11px;
 }
 
 .popup-content a:hover {
 	color: #94A3AB;
 }
 
-
-.popup-show {display:block;}
-
-
-/************************************************************************************/
-/**  Data section                                                                  **/
-/************************************************************************************/
-div.outerdata {
-	width: 100%;
-	height: 100%;
+.popup-show {
+	display:block;
 }
 
-div.data {
-	padding:10px;
-	background-color: white;
-	border-radius: 4px;
-	margin: 20px;
-	display: inline-block;
-	overflow-x: auto;
-	box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
-	font-family: sans-serif;
-	color:#26343F;
-}
-div.data * {
-	font-size: 9pt;
-	color: #26343F;
-}
-div.data td {
-	vertical-align: top;
-	border-bottom:1px solid #d9dcde;
-	border-right:1px solid #d9dcde;
-	padding:0.2em 0.5em;
-}
+/**********************************************************************************************************************/
+/**  Other classes                                                                                                   **/
+/**********************************************************************************************************************/
 
-
-/************************************************************************************/
-/**  Other                                                                         **/
-/************************************************************************************/
-
-table {
-	border: none;
-}
-
-div.data a {
-	color: #116998;
-	text-decoration: none;
-}
-
-div.data a:hover {
-	text-decoration: underline;
-}
-
-div.data th, .header {
-	border-top:1px solid #D9DCDE;
-	padding: 4px 8px;
-	font-weight: bold;
-	text-align:center;
-	background-color: #F4F6F9;
-}
-
-div.data ul {
-	margin:0px;
-	padding-left:20px;
-}
-
-div.data textarea, pre { 
-	-moz-tab-size:3; 
-	-o-tab-size:3; 
-	-webkit-tab-size:3; 
-	tab-size:3; 
-}
-
-.table {
-	display:table;
-}
+.table {display:table;}
 .row {display:table-row;}
 .cell {display:table-cell;}
 .monospace {font-family:monospace;}
-
-iframe.output {
-	background-color: #F6F7F9;
-    border: 1px solid gray;
-    padding: 0px;
-    overflow: hidden;
-    width:100%;
-	min-height:400px;
-}
