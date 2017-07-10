@@ -29,12 +29,17 @@ import org.apache.juneau.utils.*;
 	path="/methodExample",
 	messages="nls/MethodExampleResource",
 	htmldoc=@HtmlDoc(
-		links="{up:'servlet:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}",
-		aside=""
-			+ "<div style='max-width:400px' class='text'>"
-			+ "	<p>Shows the different methods for retrieving HTTP query/form-data parameters, headers, and path variables.</p>"
-			+ "	<p>Each method is functionally equivalent but demonstrate different ways to accomplish the same tasks.</p>"
-			+ "</div>"
+		links={
+			"up: servlet:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java"
+		},
+		aside={
+			"<div style='max-width:400px' class='text'>",
+			"	<p>Shows the different methods for retrieving HTTP query/form-data parameters, headers, and path variables.</p>",
+			"	<p>Each method is functionally equivalent but demonstrate different ways to accomplish the same tasks.</p>",
+			"</div>"
+		}
 	)
 )
 public class MethodExampleResource extends Resource {

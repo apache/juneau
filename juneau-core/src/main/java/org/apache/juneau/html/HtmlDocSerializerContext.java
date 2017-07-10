@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 
 /**
@@ -44,7 +42,10 @@ import org.apache.juneau.*;
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			title=<js>"$L{title}"</js>,
  * 			description=<js>"$L{description}"</js>,
- * 			links=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+ * 			links={
+ * 				<js>"options: ?method=OPTIONS"</js>,
+ * 				<js>"doc: doc"</js>
+ * 			}
  * 		)
  * 	)
  * </p>
@@ -235,7 +236,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav=<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
+	 * 			header={
+	 * 				<js>"&lt;h1&gt;My own header&lt;/h1&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -253,9 +256,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <b>Configuration property:</b>  Page links.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.links.map"</js>
-	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b> empty map
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.links.list"</js>
+	 * 	<li><b>Data type:</b> <code>String[]</code>
+	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -266,7 +269,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
 	 *
 	 * <p>
-	 * The value is a JSON object string where the keys are anchor text and the values are URLs.
+	 * The value is an array of strings with two possible values:
+	 * <ul>
+	 * 	<li>A key-value pair representing a hyperlink label and href:
+	 * 		<br><js>"google: http://google.com"</js>
+	 * 	<li>Arbitrary HTML.
+	 * </ul>
 	 *
 	 * <p>
 	 * Relative URLs are considered relative to the servlet path.
@@ -283,7 +291,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>,
-	 * 				value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
+	 * 				value=<js>"['options: ?method=OPTIONS', 'doc: doc']"</js>)
 	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
@@ -298,21 +306,21 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
-	 * 			links=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+	 * 			links={
+	 * 				<js>"options: ?method=OPTIONS"</js>,
+	 * 				<js>"doc: doc"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
-	 *
-	 * <p>
-	 * Values that start with <js>'&lt;'</js> are assumed to be HTML and rendered as-is.
 	 */
-	public static final String HTMLDOC_links = "HtmlDocSerializer.links.map";
+	public static final String HTMLDOC_links = "HtmlDocSerializer.links.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_links} property.
 	 */
-	public static final String HTMLDOC_links_put = "HtmlDocSerializer.links.map.put";
+	public static final String HTMLDOC_links_add = "HtmlDocSerializer.links.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Nav section contents.
@@ -332,7 +340,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav=<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
+	 * 			nav={
+	 * 				<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -367,7 +377,13 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			aside=<js>"&lt;ul&gt;&lt;li&gt;Item 1&lt;li&gt;Item 2&lt;li&gt;Item 3&lt;/ul&gt;"</js>
+	 * 			aside={
+	 * 				<js>"&lt;ul&gt;"</js>,
+	 * 				<js>"	&lt;li&gt;Item 1"</js>,
+	 * 				<js>"	&lt;li&gt;Item 2"</js>,
+	 * 				<js>"	&lt;li&gt;Item 3"</js>,
+	 * 				<js>"&lt;/ul&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -397,7 +413,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			footer=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+	 * 			footer={
+	 * 				<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -503,7 +521,10 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
-	 * 			style=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>
+	 * 			style={
+	 * 				<js>"h3 { color: red; }"</js>,
+	 * 				<js>"h5 { font-weight: bold; }"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -543,7 +564,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
-	 * 			script=<js>"alert('hello!');"</js>
+	 * 			script={
+	 * 				<js>"alert('hello!');"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -584,8 +607,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_template = "HtmlDocSerializer.template";
 
 
-	final String[] style, stylesheet, script;
-	final Map<String,Object> links;
+	final String[] style, stylesheet, script, links;
 	final String title, description, branding, header, nav, aside, footer, noResultsMessage;
 	final boolean nowrap;
 	final HtmlDocTemplate template;
@@ -611,7 +633,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		aside = ps.getProperty(HTMLDOC_aside, String.class, null);
 		footer = ps.getProperty(HTMLDOC_footer, String.class, null);
 		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
-		links = ps.getMap(HTMLDOC_links, String.class, Object.class, null);
+		links = ps.getProperty(HTMLDOC_links, String[].class, new String[0]);
 		noResultsMessage = ps.getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");
 		template = ps.getTypedProperty(HTMLDOC_template, HtmlDocTemplate.class, HtmlDocTemplateBasic.class);
 	}

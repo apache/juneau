@@ -632,7 +632,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @param value
 	 * 	The HTML nav section links links.
-	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
 	 * 	<ul class='doctree'>
 	 * 		<li class='info'>
@@ -641,7 +640,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setHtmlLinks(Object value) {
+	public RestResponse setHtmlLinks(String[] value) {
 		properties.put(HtmlDocSerializerContext.HTMLDOC_links, value);
 		return this;
 	}
@@ -659,7 +658,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * The format of this value is HTML.
 	 *
 	 * <p>
-	 * When a value is specified, the {@link #setHtmlLinks(Object)} value will be ignored.
+	 * When a value is specified, the {@link #setHtmlLinks(String[])} value will be ignored.
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).

@@ -546,7 +546,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the URI for this request.
 	 *
 	 * <p>
-	 * Similar to {@link #getRequestURL()} but returns the value as a {@link URI}.
+	 * Similar to {@link #getRequestURI()} but returns the value as a {@link URI}.
 	 * It also gives you the capability to override the query parameters (e.g. add new query parameters to the existing
 	 * URI).
 	 *
@@ -555,17 +555,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new URI.
 	 */
 	public URI getUri(boolean includeQuery, Map<String,?> addQueryParams) {
-		StringBuffer sb = getRequestURL();
+		String uri = getRequestURI();
 		if (includeQuery || addQueryParams != null) {
+			StringBuilder sb = new StringBuilder(uri);
 			RequestQuery rq = this.queryParams.copy();
 			if (addQueryParams != null)
 				for (Map.Entry<String,?> e : addQueryParams.entrySet())
 					rq.put(e.getKey(), e.getValue());
 			if (! rq.isEmpty())
 				sb.append('?').append(rq.toQueryString());
+			uri = sb.toString();
 		}
 		try {
-			return new URI(sb.toString());
+			return new URI(uri);
 		} catch (URISyntaxException e) {
 			// Shouldn't happen.
 			throw new RuntimeException(e);

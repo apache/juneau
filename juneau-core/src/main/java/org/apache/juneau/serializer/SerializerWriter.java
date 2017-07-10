@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 
@@ -160,8 +161,18 @@ public class SerializerWriter extends Writer {
 	 * @return This object (for method chaining).
 	 */
 	private SerializerWriter append(int indent, boolean newline, String text) throws IOException {
-		i(indent);
-		out.write(text);
+		
+		// If text contains newlines, we break it up into lines and indent them separately.
+		if (text.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
+			for (StringTokenizer st = new StringTokenizer(text, "\n"); st.hasMoreTokens();) {
+				i(indent);
+				out.write(st.nextToken());
+				out.write("\n");
+			}
+		} else {
+			i(indent);
+			out.write(text);
+		}
 		if (newline)
 			nl(indent);
 		return this;

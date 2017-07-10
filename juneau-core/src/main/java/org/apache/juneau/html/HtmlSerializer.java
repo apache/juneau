@@ -298,8 +298,12 @@ public class HtmlSerializer extends XmlSerializer {
 
 			if (render != null) {
 				Object o2 = render.getContent(session, o);
-				if (o2 != o)
-					return serializeAnything(session, out, o2, null, typeName, 2, null, false);
+				if (o2 != o) {
+					session.indent -= indent;
+					session.pop();
+					out.nl(session.indent);
+					return serializeAnything(session, out, o2, null, typeName, indent, null, false);
+				}
 			}
 
 			if (html.isAsXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsXml())) {
@@ -597,7 +601,7 @@ public class HtmlSerializer extends XmlSerializer {
 							out.attr("style", style);
 						out.cTag();
 						if (link != null)
-							out.oTag(i+3, "a").attrUri("href", m2.resolveVars(link)).cTag();
+							out.oTag("a").attrUri("href", m2.resolveVars(link)).cTag();
 						ContentResult cr = serializeAnything(session, out, value, pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);

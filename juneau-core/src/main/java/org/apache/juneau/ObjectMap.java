@@ -654,9 +654,15 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		Object s = get(Object.class, key);
 		if (s == null)
 			return def;
+		String[] r = null;
 		if (s instanceof Collection)
-			return ArrayUtils.toStringArray((Collection<?>)s);
-		String[] r = split(StringUtils.toString(s));
+			r = ArrayUtils.toStringArray((Collection<?>)s);
+		else if (s instanceof String[])
+			r = (String[])s;
+		else if (s instanceof Object[])
+			r = ArrayUtils.toStringArray(Arrays.asList((Object[])s));
+		else
+			r = split(StringUtils.toString(s));
 		return (r.length == 0 ? def : r);
 	}
 

@@ -26,6 +26,7 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample resource that shows how Juneau can serialize ResultSets.
@@ -35,13 +36,20 @@ import org.apache.juneau.rest.annotation.Body;
 	messages="nls/SqlQueryResource",
 	title="SQL query service",
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
+	widgets={ StyleMenuItem.class },
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}",
-		aside=""
-			+ "<div style='min-width:200px' class='text'>"
-			+ "	<p>An example of a REST interface over a relational database.</p>"
-			+ "	<p><a class='link' href='?sql=select+*+from sys.systables'>try me</a></p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/..",
+			"$W{stylesMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java"
+		},
+		aside={
+			"<div style='min-width:200px' class='text'>",
+			"	<p>An example of a REST interface over a relational database.</p>",
+			"	<p><a class='link' href='?sql=select+*+from sys.systables'>try me</a></p>",
+			"</div>"
+		}
 	)
 )
 public class SqlQueryResource extends Resource {

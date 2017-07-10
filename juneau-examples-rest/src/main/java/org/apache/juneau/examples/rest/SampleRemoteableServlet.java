@@ -30,14 +30,19 @@ import org.apache.juneau.rest.remoteable.*;
 	title="Remoteable Service Proxy API",
 	description="Sample class showing how to use remoteable proxies.",
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SampleRemoteableServlet.java'}",
-		aside=""
-			+ "<div style='max-width:400px;min-width:200px' class='text'>"
-			+ "	<p>Shows how to use the <code>RemoteableServlet</code> class to define RPC-style remoteable interfaces using REST as a protocol.</p>"
-			+ "	<p>Remoteable proxies are retrieved on the client side using <code>RestClient.getInterfaceProxy(Class)</code>.</p>"
-			+ "	<p>Methods are invoked using POSTs of serialized arrays of objects and the returned value is marshalled back as a response.</p>"
-			+ "	<p>GET requests (as shown here) show the available methods on the interface.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SampleRemoteableServlet.java"
+		},
+		aside={
+			"<div style='max-width:400px;min-width:200px' class='text'>",
+			"	<p>Shows how to use the <code>RemoteableServlet</code> class to define RPC-style remoteable interfaces using REST as a protocol.</p>",
+			"	<p>Remoteable proxies are retrieved on the client side using <code>RestClient.getInterfaceProxy(Class)</code>.</p>",
+			"	<p>Methods are invoked using POSTs of serialized arrays of objects and the returned value is marshalled back as a response.</p>",
+			"	<p>GET requests (as shown here) show the available methods on the interface.</p>",
+			"</div>"
+		}
 	),
 	properties={
 		// Allow us to use method=POST from a browser.

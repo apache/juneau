@@ -28,12 +28,17 @@ import org.apache.juneau.rest.labels.*;
 	path="/docker",
 	title="Sample Docker resource",
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DockerRegistryResource.java'}",
-		aside=""
-			+ "<div style='min-width:200px' class='text'>"
-			+ "	<p>REST API for searching Docker registries.</p>"
-			+ "	<p>To use, you must first specify the Docker registry URL in the <code>[Docker]</code> section of the config file.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/DockerRegistryResource.java"
+		},
+		aside={
+			"<div style='min-width:200px' class='text'>",
+			"	<p>REST API for searching Docker registries.</p>",
+			"	<p>To use, you must first specify the Docker registry URL in the <code>[Docker]</code> section of the config file.</p>",
+			"</div>"
+		}
 	)
 )
 public class DockerRegistryResource extends Resource {

@@ -22,6 +22,7 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Body;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.transforms.*;
 
 /**
@@ -30,32 +31,42 @@ import org.apache.juneau.transforms.*;
 @RestResource(
 	path="/urlEncodedForm",
 	messages="nls/UrlEncodedFormResource",
-	title="Tumblr parser service",
-	description="Specify a URL to a Tumblr blog and parse the results.",
+	title="URL-Encoded form example",
+	widgets={ StyleMenuItem.class },
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}",
-		aside=""
-			+ "<div style='min-width:200px' class='text'>"
-			+ "	<p>Shows how to process a FORM POST body into a bean using the <code>@Body</code> annotation.</p>"
-			+ "	<p>Submitting the form post will simply echo the bean back on the response.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"$W{styleMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java"
+		},
+		aside={
+			"<div style='min-width:200px' class='text'>",
+			"	<p>Shows how to process a FORM POST body into a bean using the <code>@Body</code> annotation.</p>",
+			"	<p>Submitting the form post will simply echo the bean back on the response.</p>",
+			"</div>"
+		}
 	)
 )
 public class UrlEncodedFormResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(
+		name="GET", 
+		path="/",
+		htmldoc=@HtmlDoc(
+			script={
+				"// Load results from IFrame into this document.",
+				"function loadResults(buff) {",
+				"	var doc = buff.contentDocument || buff.contentWindow.document;",
+				"	var buffBody = doc.getElementById('data');",
+				"	document.getElementById('results').innerHTML = buffBody.innerHTML;",
+				"}"
+			}
+		)
+	)
 	public Div doGet(RestRequest req) {
 		return div(
-			script("text/javascript",
-				"\n	// Load results from IFrame into this document."
-				+"\n	function loadResults(buff) {"
-				+"\n		var doc = buff.contentDocument || buff.contentWindow.document;"
-				+"\n		var buffBody = doc.getElementById('data');"
-				+"\n		document.getElementById('results').innerHTML = buffBody.innerHTML;"
-				+"\n	}"
-			),
 			form().id("form").action("servlet:/").method("POST").target("buff").children(
 				table(
 					tr(

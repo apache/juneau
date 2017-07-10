@@ -56,17 +56,24 @@ import org.apache.juneau.utils.*;
 	// "servlet:/..." URIs are relative to the servlet URI.
 	// "$C{...}" variables are pulled from the config file.
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}'}",
-			aside=""
-				+ "<div style='max-width:400px;min-width:200px'>"
-				+ "	<p>Proof-of-concept resource that shows off the capabilities of working with POJO resources.</p>"
-				+ "	<p>Provides examples of: </p>"
-				+ "		<ul>"
-				+ "			<li>XML and RDF namespaces"
-				+ "			<li>Swagger documentation"
-				+ "			<li>Widgets"
-				+ "		</ul>"
-				+ "</div>",
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java",
+			"$W{contentTypeMenuItem}",
+			"$W{styleMenuItem}"
+		},
+		aside={
+			"<div style='max-width:400px;min-width:200px'>",
+			"	<p>Proof-of-concept resource that shows off the capabilities of working with POJO resources.</p>",
+			"	<p>Provides examples of: </p>",
+			"	<ul>",
+			"		<li>XML and RDF namespaces",
+			"		<li>Swagger documentation",
+			"		<li>Widgets",
+			"	</ul>",
+			"</div>"
+		},
 		footer="$W{poweredByJuneau}"
 	),
 
@@ -147,7 +154,14 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="GET", path="/people/*",
 		converters={Traversable.class,Queryable.class,Introspectable.class},
 		htmldoc=@HtmlDoc(
-			links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{queryMenuItem}',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"
+			links={
+				"up: request:/..",
+				"options: servlet:/?method=OPTIONS",
+				"$W{queryMenuItem}",
+				"$W{contentTypeMenuItem}",
+				"$W{styleMenuItem}",
+				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"
+			}
 		)
 	)
 	public AddressBook getAllPeople() throws Exception {
@@ -174,7 +188,14 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="GET", path="/addresses/*",
 		converters={Traversable.class,Queryable.class},
 		htmldoc=@HtmlDoc(
-			links="{up:'request:/..',options:'servlet:/?method=OPTIONS',query:'$W{queryMenuItem}',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"
+			links={
+				"up: request:/..",
+				"options: servlet:/?method=OPTIONS",
+				"$W{queryMenuItem}",
+				"$W{contentTypeMenuItem}",
+				"$W{styleMenuItem}",
+				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"
+			}
 		)
 	)
 	public List<Address> getAllAddresses() throws Exception {

@@ -29,12 +29,17 @@ import org.apache.juneau.rest.annotation.*;
 	title="Code Formatter",
 	description="Utility for generating HTML code-formatted source code",
 	htmldoc=@HtmlDoc(
-		links="{up:'servlet:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java'}",
-		aside=""
-			+ "<div style='min-width:200px' class='text'>"
-			+ "	<p>Utility for adding code syntax tags to Java and XML/HTML code.</p>"
-			+ "	<p>It's by no means perfect, but provides a good starting point.</p>"
-			+ "</div>",
+		links={
+			"up: servlet:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java"
+		},
+		aside={
+			"<div style='min-width:200px' class='text'>",
+			"	<p>Utility for adding code syntax tags to Java and XML/HTML code.</p>",
+			"	<p>It's by no means perfect, but provides a good starting point.</p>",
+			"</div>"
+		},
 		style="aside {display:table-caption;}"
 	)
 )

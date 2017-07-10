@@ -700,19 +700,24 @@ public @interface RestResource {
 	 * 		// "servlet:/..." URIs are relative to the servlet URI.
 	 * 		// "$C{...}" variables are pulled from the config file.</jc>
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>,
-	 * 				aside=<js>""</js>
-	 * 					+ <js>"&lt;div style='max-width:400px;min-width:200px'&gt;"</js>
-	 * 					+ <js>"	&lt;p&gt;Proof-of-concept resource that shows off the capabilities of working with POJO resources.&lt;/p&gt;"</js>
-	 * 					+ <js>"	&lt;p&gt;Provides examples of: &lt;/p&gt;"</js>
-	 * 					+ <js>"		&lt;ul&gt;"</js>
-	 * 					+ <js>"			&lt;li&gt;XML and RDF namespaces"</js>
-	 * 					+ <js>"			&lt;li&gt;Swagger documentation"</js>
-	 * 					+ <js>"			&lt;li&gt;Widgets"</js>
-	 * 					+ <js>"		&lt;/ul&gt;"</js>
-	 * 					+ <js>"	&lt;p style='text-weight:bold;text-decoration:underline;'&gt;Available Content Types&lt;/p&gt;"</js>
-	 * 					+ <js>"	$W{contentTypeLinks}"</js>
-	 * 					+ <js>"&lt;/div&gt;"</js>,
+	 * 			links={
+	 * 				<js>"up: request:/.."</js>,
+	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>,
+	 * 			},
+	 * 			aside={
+	 * 				<js>"&lt;div style='max-width:400px;min-width:200px'&gt;"</js>,
+	 * 				<js>"	&lt;p&gt;Proof-of-concept resource that shows off the capabilities of working with POJO resources.&lt;/p&gt;"</js>,
+	 * 				<js>"	&lt;p&gt;Provides examples of: &lt;/p&gt;"</js>,
+	 * 				<js>"		&lt;ul&gt;"</js>,
+	 * 				<js>"			&lt;li&gt;XML and RDF namespaces"</js>,
+	 * 				<js>"			&lt;li&gt;Swagger documentation"</js>,
+	 * 				<js>"			&lt;li&gt;Widgets"</js>,
+	 * 				<js>"		&lt;/ul&gt;"</js>,
+	 * 				<js>"	&lt;p style='text-weight:bold;text-decoration:underline;'&gt;Available Content Types&lt;/p&gt;"</js>,
+	 * 				<js>"	$W{contentTypeLinks}"</js>,
+	 * 				<js>"&lt;/div&gt;"</js>
+	 * 			},
 	 * 			footer=<js>"$W{poweredByJuneau}"</js>
 	 * 		),
 	 *

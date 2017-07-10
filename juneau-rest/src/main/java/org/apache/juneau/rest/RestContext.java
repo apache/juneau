@@ -354,7 +354,6 @@ public final class RestContext extends Context {
 		htmlDescription,
 		htmlBranding,
 		htmlHeader,
-		htmlLinks,
 		htmlNav,
 		htmlAside,
 		htmlStyle,
@@ -362,6 +361,8 @@ public final class RestContext extends Context {
 		htmlScript,
 		htmlFooter,
 		htmlNoResultsMessage;
+	private final String[]
+		htmlLinks;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> widgets;
@@ -653,7 +654,8 @@ public final class RestContext extends Context {
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
 		String clientVersionHeader = "", defaultCharset, paramFormat, htmlTitle, htmlDescription, htmlBranding,
-			htmlHeader, htmlLinks, htmlNav, htmlAside, htmlStyle, htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
+			htmlHeader, htmlNav, htmlAside, htmlStyle, htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
+		String[] htmlLinks;
 		boolean htmlNoWrap;
 		HtmlDocTemplate htmlTemplate;
 
@@ -1052,11 +1054,11 @@ public final class RestContext extends Context {
 	 * The HTML page nav section links.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#links()} annotation or {@link RestConfig#setHtmlLinks(String)} method.
+	 * Defined by the {@link HtmlDoc#links()} annotation or {@link RestConfig#setHtmlLinks(String[])} method.
 	 *
 	 * @return The HTML page nav section links.
 	 */
-	public String getHtmlLinks() {
+	public String[] getHtmlLinks() {
 		return htmlLinks;
 	}
 

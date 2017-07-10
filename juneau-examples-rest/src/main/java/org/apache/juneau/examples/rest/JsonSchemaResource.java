@@ -30,11 +30,18 @@ import org.apache.juneau.rest.widget.*;
 		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}",
-		aside=""
-			+ "<div style='min-width:200px' class='text'>"
-			+ "	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"$W{contentTypeMenuItem}",
+			"$W{styleMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java"
+		},
+		aside={
+			"<div style='min-width:200px' class='text'>",
+			"	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>",
+			"</div>"
+		}
 	)
 )
 public class JsonSchemaResource extends ResourceJena {

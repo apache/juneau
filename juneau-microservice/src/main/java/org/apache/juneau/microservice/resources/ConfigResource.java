@@ -34,7 +34,11 @@ import org.apache.juneau.rest.annotation.Body;
 	title="Configuration",
 	description="Contents of configuration file.",
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',edit:'servlet:/edit'}"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"edit: servlet:/edit"
+		}
 	)
 )
 public class ConfigResource extends Resource {

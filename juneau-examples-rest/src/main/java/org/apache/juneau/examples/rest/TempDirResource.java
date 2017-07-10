@@ -36,12 +36,20 @@ import org.apache.juneau.utils.*;
 		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',upload:'servlet:/upload',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
-		aside=""
-			+ "<div style='max-width:400px' class='text'>"
-			+ "	<p>Shows how to use the predefined DirectoryResource class.</p>"
-			+ "	<p>Also shows how to use HTML5 beans to create a form entry page.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"upload: servlet:/upload",
+			"$W{contentTypeMenuItem}",
+			"$W{styleMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java"
+		},
+		aside={
+			"<div style='max-width:400px' class='text'>",
+			"	<p>Shows how to use the predefined DirectoryResource class.</p>",
+			"	<p>Also shows how to use HTML5 beans to create a form entry page.</p>",
+			"</div>"
+		}
 	),
 	properties={
 		@Property(name="rootDir", value="$S{java.io.tmpdir}"),

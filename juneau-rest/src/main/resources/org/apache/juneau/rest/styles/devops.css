@@ -83,7 +83,7 @@ nav li {
 }
 
 nav li:not(:first-child):before {
-    content: " - ";
+	content: " - ";
 }
 
 nav a {
@@ -166,10 +166,10 @@ article a:hover {
 
 article iframe {
 	background-color: #F6F7F9;
-    border: 1px solid gray;
-    padding: 0px;
-    overflow: hidden;
-    width: 100%;
+	border: 1px solid gray;
+	padding: 0px;
+	overflow: hidden;
+	width: 100%;
 	min-height: 400px;
 }
 

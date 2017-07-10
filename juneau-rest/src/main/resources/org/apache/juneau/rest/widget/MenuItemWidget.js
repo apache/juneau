@@ -30,4 +30,3 @@ window.onclick = function(event) {
 		closePopup();
 	}
 };
-

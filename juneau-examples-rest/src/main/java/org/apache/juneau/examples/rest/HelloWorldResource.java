@@ -24,12 +24,17 @@ import org.apache.juneau.rest.annotation.*;
 	description="An example of the simplest-possible resource",
 	path="/helloWorld",
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}",
-		aside=""
-			+ "<div style='max-width:400px' class='text'>"
-			+ "	<p>This page shows a resource that simply response with a 'Hello world!' message</p>"
-			+ "	<p>The POJO serialized is a simple String.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java"
+		},
+		aside={
+			"<div style='max-width:400px' class='text'>",
+			"	<p>This page shows a resource that simply response with a 'Hello world!' message</p>",
+			"	<p>The POJO serialized is a simple String.</p>",
+			"</div>"
+		}
 	)
 )
 public class HelloWorldResource extends Resource {

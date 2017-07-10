@@ -47,23 +47,27 @@ import org.apache.juneau.rest.widget.*;
 	htmldoc=@HtmlDoc(
 		
 		// Custom navigation links.
-		links="{"
-			+ "up:'request:/..',"
-			+ "options:'servlet:/?method=OPTIONS',"
-			+ "form:'servlet:/formPage',"
-			+ "contentTypes:'$W{contentTypeMenuItem}',"
-			+ "styles:'$W{styleMenuItem}',"
-			+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'"
-			+"}",
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"form: servlet:/formPage",
+			"$W{contentTypeMenuItem}",
+			"$W{styleMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java"
+		},
 
 		// Custom page text in aside section.
-		aside=""
-			+ "<div style='max-width:800px' class='text'>"
-			+ "	<p>Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.</p>"
-			+ "</div>",
+		aside={
+			"<div style='max-width:800px' class='text'>",
+			"	<p>Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.</p>",
+			"</div>"
+		},
 			
 		// Custom CSS styles applied to HTML view.
-		style="aside {display:table-caption} aside p {margin: 0px 20px;}"
+		style={
+			"aside {display:table-caption} ",
+			"aside p {margin: 0px 20px;}"
+		}
 	),
 		
 	// Properties that get applied to all serializers and parsers.
@@ -204,10 +208,11 @@ public class SystemPropertiesResource extends Resource {
 		description="A form post page for setting a single system property value",
 		guards=AdminGuard.class,
 		htmldoc=@HtmlDoc(
-			aside=""
-				+ "<div style='max-width:400px' class='text'>"
-				+ "	<p>Shows how HTML5 beans can be used to quickly create arbitrary HTML.</p>"
-				+ "</div>",
+			aside={
+				"<div style='max-width:400px' class='text'>",
+				"	<p>Shows how HTML5 beans can be used to quickly create arbitrary HTML.</p>",
+				"</div>"
+			},
 			style="aside {display:table-cell;}"
 		)
 	)

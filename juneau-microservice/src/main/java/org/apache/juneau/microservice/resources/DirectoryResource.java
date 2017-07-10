@@ -64,15 +64,15 @@ import org.apache.juneau.utils.*;
 	description="Contents of $R{attribute.path}",
 	messages="nls/DirectoryResource",
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS'}"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS"
+		}
 	),
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
 		@Property(name=REST_allowMethodParam, value="*"),
-		@Property(name="DirectoryResource.rootDir", value=""),
-		@Property(name="DirectoryResource.allowViews", value="false"),
-		@Property(name="DirectoryResource.allowDeletes", value="false"),
-		@Property(name="DirectoryResource.allowPuts", value="false")
+		@Property(name="DirectoryResource.rootDir", value="")
 	}
 )
 public class DirectoryResource extends Resource {

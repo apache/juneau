@@ -68,8 +68,9 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final Response[] responses;
 	private final RestContext context;
 	private final BeanContext beanContext;
-	private final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlLinks, htmlNav, htmlAside,
+	private final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlNav, htmlAside,
 		htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
+	private final String[] htmlLinks;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> widgets;
@@ -123,7 +124,8 @@ class CallMethod implements Comparable<CallMethod>  {
 
 	private static class Builder  {
 		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlTitle, htmlDescription,
-			htmlBranding, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlHeader, htmlNoResultsMessage;
+			htmlBranding, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlHeader, htmlNoResultsMessage;
+		private String[] htmlLinks;
 		private boolean htmlNoWrap;
 		private HtmlDocTemplate htmlTemplate;
 		private UrlPathPattern pathPattern;
@@ -183,17 +185,17 @@ class CallMethod implements Comparable<CallMethod>  {
 				HtmlDoc hd = m.htmldoc();
 				htmlTitle = hd.title().isEmpty() ? context.getHtmlTitle() : hd.title();
 				htmlDescription = hd.description().isEmpty() ? context.getHtmlDescription() : hd.description();
-				htmlBranding = hd.branding().isEmpty() ? context.getHtmlBranding() : hd.branding();
-				htmlHeader = hd.header().isEmpty() ? context.getHtmlHeader() : hd.header();
-				htmlLinks = hd.links().isEmpty() ? context.getHtmlLinks() : hd.links();
-				htmlNav = hd.nav().isEmpty() ? context.getHtmlNav() : hd.nav();
-				htmlAside = hd.aside().isEmpty() ? context.getHtmlAside() : hd.aside();
-				htmlFooter = hd.footer().isEmpty() ? context.getHtmlFooter() : hd.footer();
-				htmlStyle = hd.style().isEmpty() ? context.getHtmlStyle() : hd.style();
+				htmlBranding = hd.branding().length == 0 ? context.getHtmlBranding() : join(hd.branding(), '\n');
+				htmlHeader = hd.header().length == 0 ? context.getHtmlHeader() : join(hd.header(), '\n');
+				htmlLinks = hd.links().length == 0 ? context.getHtmlLinks() : hd.links();
+				htmlNav = hd.nav().length == 0 ? context.getHtmlNav() : join(hd.nav(), '\n');
+				htmlAside = hd.aside().length == 0 ? context.getHtmlAside() : join(hd.aside(), '\n');
+				htmlFooter = hd.footer().length == 0 ? context.getHtmlFooter() : join(hd.footer(), '\n');
+				htmlStyle = hd.style().length == 0 ? context.getHtmlStyle() : join(hd.style(), '\n');
 				htmlStylesheet = hd.stylesheet().isEmpty() ? context.getHtmlStylesheet() : hd.stylesheet();
-				htmlScript = hd.script().isEmpty() ? context.getHtmlScript() : hd.script();
+				htmlScript = hd.script().length == 0 ? context.getHtmlScript() : join(hd.script(), '\n');
 				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();
-				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.header();
+				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.noResultsMessage();
 				htmlTemplate =
 					hd.template() == HtmlDocTemplate.class
 					? context.getHtmlTemplate()
@@ -920,13 +922,21 @@ class CallMethod implements Comparable<CallMethod>  {
 					if (k.equals(HTMLDOC_branding))
 						return htmlBranding == null ? null : req.resolveVars(htmlBranding);
 					if (k.equals(HTMLDOC_links)) {
-						if (htmlLinks == null)
+						if (htmlLinks == null || htmlLinks.length == 0)
 							return null;
 						try {
-							ObjectMap m = new ObjectMap(htmlLinks), m2 = new ObjectMap();
-							for (Map.Entry<String,Object> e : m.entrySet())
-								m2.put(req.resolveVars(e.getKey()), req.resolveVars(StringUtils.toString(e.getValue())));
-							return m2;
+							List<String> la = new ArrayList<String>();
+							for (String l : htmlLinks) {
+								// Temporary backwards compatibility with JSON object format.
+								if (l.startsWith("{")) {
+									ObjectMap m = new ObjectMap(l);
+									for (Map.Entry<String,Object> e : m.entrySet())
+										la.add(req.resolveVars(e.getKey()) + ":" + req.resolveVars(StringUtils.toString(e.getValue())));
+								} else {
+									la.add(req.resolveVars(l));
+								}
+							}
+							return la;
 						} catch (ParseException e) {
 							throw new RuntimeException(e);
 						}

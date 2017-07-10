@@ -40,12 +40,17 @@ import org.apache.juneau.serializer.*;
 	title="Photo REST service",
 	description="Sample resource that allows images to be uploaded and retrieved.",
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java'}",
-		aside=""
-			+ "<div style='max-width:400px;min-width:200px' class='text'>"
-			+ "	<p>Shows an example of using custom serializers and parsers to create REST interfaces over binary resources.</p>"
-			+ "	<p>In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a <code>TreeMap</code>).</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java"
+		},
+		aside={
+			"<div style='max-width:400px;min-width:200px' class='text'>",
+			"	<p>Shows an example of using custom serializers and parsers to create REST interfaces over binary resources.</p>",
+			"	<p>In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a <code>TreeMap</code>).</p>",
+			"</div>"
+		}
 	),
 	properties={
 		// Make the anchor text on URLs be just the path relative to the servlet.

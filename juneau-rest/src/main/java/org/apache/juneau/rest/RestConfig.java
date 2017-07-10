@@ -112,8 +112,9 @@ public class RestConfig implements ServletConfig {
 	Object favIcon;
 	List<Object> staticFiles;
 	RestContext parentContext;
-	String path, htmlTitle, htmlDescription, htmlBranding, htmlLinks, htmlHeader, htmlNav, htmlAside, htmlFooter,
+	String path, htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlNav, htmlAside, htmlFooter,
 		htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
+	String[] htmlLinks;
 	String clientVersionHeader = "X-Client-Version";
 
 	Object resourceResolver = RestResourceResolver.class;
@@ -227,20 +228,22 @@ public class RestConfig implements ServletConfig {
 					setHtmlTitle(hd.title());
 				if (! hd.description().isEmpty())
 					setHtmlDescription(hd.description());
-				if (! hd.branding().isEmpty())
-					setHtmlBranding(hd.branding());
-				if (! hd.header().isEmpty())
-					setHtmlHeader(hd.header());
-				if (! hd.links().isEmpty())
+				if (hd.branding().length > 0)
+					setHtmlBranding(join(hd.branding(), '\n'));
+				if (hd.header().length > 0)
+					setHtmlHeader(join(hd.header(), '\n'));
+				if (hd.links().length != 0)
 					setHtmlLinks(hd.links());
-				if (! hd.nav().isEmpty())
-					setHtmlNav(hd.nav());
-				if (! hd.aside().isEmpty())
-					setHtmlAside(hd.aside());
-				if (! hd.footer().isEmpty())
-					setHtmlFooter(hd.footer());
-				if (! hd.style().isEmpty())
-					setHtmlStyle(hd.style());
+				if (hd.nav().length > 0)
+					setHtmlNav(join(hd.nav(), '\n'));
+				if (hd.aside().length > 0)
+					setHtmlAside(join(hd.aside(), '\n'));
+				if (hd.footer().length > 0)
+					setHtmlFooter(join(hd.footer(), '\n'));
+				if (hd.style().length > 0)
+					setHtmlStyle(join(hd.style(), '\n'));
+				if (hd.script().length > 0)
+					setHtmlScript(join(hd.script(), '\n'));
 				if (! hd.stylesheet().isEmpty())
 					setHtmlStylesheet(hd.stylesheet());
 				if (! hd.noResultsMessage().isEmpty())
@@ -1270,7 +1273,7 @@ public class RestConfig implements ServletConfig {
 	 * @param value The HTML nav section links links.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setHtmlLinks(String value) {
+	public RestConfig setHtmlLinks(String[] value) {
 		this.htmlLinks = value;
 		return this;
 	}
@@ -1288,7 +1291,7 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is HTML.
 	 *
 	 * <p>
-	 * When a value is specified, the {@link #setHtmlLinks(String)} value will be ignored.
+	 * When a value is specified, the {@link #setHtmlLinks(String[])} value will be ignored.
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).

@@ -242,7 +242,10 @@
 	<ja>@RestResource</ja>(
 		messages=<js>"nls/HelloWorldResource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {
@@ -1186,7 +1189,10 @@
 	<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>,
 		summary=<js>"Resource options"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{back:'$R{servletURI}'}"</js>
+			links={
+				<js>"back: servlet:/,"</js>,
+				<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
+			}
 		)
 	)
 	<jk>public</jk> Swagger getOptions(RestRequest req) {
@@ -2368,7 +2374,10 @@
 		title=<js>"URL-encoded Form Post Resource"</js>, 
 		description=<js>"Shows how form posts are converted into beans."</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			} 
 		)
 	) 
 	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> Resource { 
@@ -3127,7 +3136,9 @@
 		title=<js>"Photo REST service"</js>,
 		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{options:'?method=OPTIONS'}"</js>
+			links={
+				<js>"options: ?method=OPTIONS"</js>
+			}
 		)
 	)
 	<jk>public class</jk> PhotosResource <jk>extends</jk> RestServletDefault {
@@ -3437,8 +3448,12 @@
 		// "servlet:/..." URIs are relative to the servlet URI.
 		// "$C{...}" variables are pulled from the config file.</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>
-		
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>
+			},
+			
 			<jc>// Our stylesheet for the HTML rendition.</jc>
 			stylesheet=<js>"servlet:/styles/devops.css"</js>,
 		),

@@ -49,8 +49,12 @@ import org.apache.juneau.utils.*;
  * 			MyWidget.<jk>class</jk>
  * 		}
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			links=<js>"{mylink:'$W{myWidget}'}"</js>,
- * 			aside=<js>"Check out this widget:  $W{myWidget}"</js>
+ * 			links={
+ * 				<js>"$W{myWidget}"</js>
+ * 			},
+ * 			aside={
+ * 				<js>"Check out this widget:  $W{myWidget}"</js>
+ * 			}
  * 		)
  * 	)
  * </p>

@@ -35,8 +35,7 @@ import org.apache.juneau.serializer.*;
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
 	private final String title, description, branding, header, nav, aside, footer, noResultsMessage;
-	private final String[] style, stylesheet, script;
-	private final Map<String,Object> links;
+	private final String[] style, stylesheet, script, links;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
 
@@ -64,7 +63,6 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
@@ -91,8 +89,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			nav = op.getString(HTMLDOC_nav, ctx.nav);
 			aside = op.getString(HTMLDOC_aside, ctx.aside);
 			footer = op.getString(HTMLDOC_footer, ctx.footer);
-			Map m = op.getMap(HTMLDOC_links, ctx.links);
-			links = ObjectUtils.isEmpty(m) ? null : new LinkedHashMap(m);
+			links = op.getStringArray(HTMLDOC_links, ctx.links);
 			style = op.getStringArray(HTMLDOC_style, ctx.style);
 			stylesheet = op.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
 			script = op.getStringArray(HTMLDOC_script, ctx.script);
@@ -202,7 +199,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 *		<jk>null</jk> if not specified.
 	 *		Never an empty map.
 	 */
-	public final Map<String,Object> getLinks() {
+	public final String[] getLinks() {
 		return links;
 	}
 

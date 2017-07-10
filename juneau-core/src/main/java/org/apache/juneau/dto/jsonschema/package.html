@@ -423,7 +423,9 @@
 		messages=<js>"nls/JsonSchemaResource"</js>,
 		title=<js>"Sample JSON-Schema document"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{options:'?method=OPTIONS'}"</js>
+			links={
+				<js>"options: ?method=OPTIONS"</js>
+			}
 		)
 	)
 	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> RestServletJenaDefault {

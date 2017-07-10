@@ -37,7 +37,14 @@ import org.apache.juneau.rest.converters.*;
  * 			QueryMenuItem.<jk>class</jk>,
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			links=<js>"{up:'...',options:'...',query:'$W{queryMenuItem}',contentTypes:'...',source:'...'}"</js>
+ * 			links={
+ * 				<js>"up: ..."</js>,
+ * 				<js>"options: ..."</js>,
+ * 				<js>"$W{queryMenuItem}"</js>,
+ * 				<js>"$W{contentTypeMenuItem}"</js>,
+ * 				<js>"$W{styleMenuItem}"</js>,
+ * 				<js>"source: ..."</js>
+ * 			}
  * 		),
  * 		converters=Queryable.<jk>class</jk>
  * 	)
@@ -82,6 +89,6 @@ public class QueryMenuItem extends MenuItemWidget {
 	 */
 	@Override /* Widget */
 	public String getHtml(RestRequest req) throws Exception {
-		return getResourceAsString("QueryMenuItem.html");
+		return loadHtml("QueryMenuItem.html");
 	}
 }

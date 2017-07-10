@@ -36,7 +36,14 @@ import org.apache.juneau.utils.*;
  * 			ContentTypeMenuItem.<jk>class</jk>,
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			links=<js>"{up:'...',options:'...',query:'...',contentTypes:'$W{contentTypeMenuItem}',source:'...'}"</js>
+ * 			links={
+ * 				<js>"up: ..."</js>,
+ * 				<js>"options: ..."</js>,
+ * 				<js>"$W{queryMenuItem}"</js>,
+ * 				<js>"$W{contentTypeMenuItem}"</js>,
+ * 				<js>"$W{styleMenuItem}"</js>,
+ * 				<js>"source: ..."</js>
+ * 			}
  * 		)
  * 	)
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {

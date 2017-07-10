@@ -40,14 +40,21 @@ import org.apache.juneau.transforms.*;
 		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'}",
-		aside=""
-			+ "<div style='max-width:400px' class='text'>"
-			+ "	<p>This page shows a standard REST resource that renders bean summaries and details.</p>"
-			+ "	<p>It shows how different properties can be rendered on the same bean in different views.</p>"
-			+ "	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>"
-			+ "	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"$W{contentTypeMenuItem}",
+			"$W{styleMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"
+		},
+		aside={
+			"<div style='max-width:400px' class='text'>",
+			"	<p>This page shows a standard REST resource that renders bean summaries and details.</p>",
+			"	<p>It shows how different properties can be rendered on the same bean in different views.</p>",
+			"	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>",
+			"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
+			"</div>"
+		}
 	)
 )
 public class PetStoreResource extends ResourceJena {
@@ -81,14 +88,14 @@ public class PetStoreResource extends ResourceJena {
 		
 		// Add our menu items in the nav links.
 		htmldoc=@HtmlDoc(
-			links="{"
-				+ "up:'request:/..',"
-				+ "options:'servlet:/?method=OPTIONS',"
-				+ "query:'$W{queryMenuItem}',"
-				+ "contentTypes:'$W{contentTypeMenuItem}',"
-				+ "styles:'$W{styleMenuItem}',"
-				+ "source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'"
-			+ "}"
+			links={
+				"up: request:/..",
+				"options: servlet:/?method=OPTIONS",
+				"$W{queryMenuItem}",
+				"$W{contentTypeMenuItem}",
+				"$W{styleMenuItem}",
+				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"
+			}
 		)
 	)
 	public Collection<Pet> getPets() {

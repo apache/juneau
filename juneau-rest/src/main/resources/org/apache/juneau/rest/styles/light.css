@@ -68,15 +68,15 @@ header h2 {
 /**********************************************************************************************************************/
 
 nav {
-    margin: 10px;
-    padding: 5px;
-    box-shadow: 5px 5px 2px #999999;
-    background-color: #eef3f7;
+	margin: 10px;
+	padding: 5px;
+	box-shadow: 5px 5px 2px #999999;
+	background-color: #eef3f7;
 }
 
 nav * {
-    font-size: 12px;
-    font-weight: lighter;
+	font-size: 12px;
+	font-weight: lighter;
 }
 
 nav ol {
@@ -90,7 +90,7 @@ nav li {
 }
 
 nav li:not(:first-child):before {
-    content: " - ";
+	content: " - ";
 }
 
 nav a {
@@ -157,10 +157,10 @@ article a {
 
 article iframe {
 	background-color: #F6F7F9;
-    border: 1px solid gray;
-    padding: 0px;
-    overflow: hidden;
-    width: 100%;
+	border: 1px solid gray;
+	padding: 0px;
+	overflow: hidden;
+	width: 100%;
 	min-height: 400px;
 }
 

@@ -181,10 +181,13 @@ public @interface HtmlDoc {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
+	 * Multiple values are combined with newlines into a single string.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the
 	 * {@link RestConfig#setHtmlBranding(String)}/{@link RestResponse#setHtmlBranding(Object)} methods.
 	 */
-	String branding() default "";
+	String[] branding() default {};
 
 	/**
 	 * Sets the HTML header section contents.
@@ -200,7 +203,9 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			header=<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
+	 * 			header={
+	 * 				<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -215,17 +220,24 @@ public @interface HtmlDoc {
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 *
 	 * <p>
+	 * Multiple values are combined with newlines into a single string.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the
 	 * {@link RestConfig#setHtmlHeader(String)}/{@link RestResponse#setHtmlHeader(Object)} methods.
 	 */
-	String header() default "";
+	String[] header() default {};
 
 	/**
 	 * Sets the links in the HTML nav section.
 	 *
 	 * <p>
-	 * The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
-	 * relative (to the servlet) or absolute URLs.
+	 * The value is an array of strings with two possible values:
+	 * <ul>
+	 * 	<li>A key-value pair representing a hyperlink label and href:
+	 * 		<br><js>"google: http://google.com"</js>
+	 * 	<li>Arbitrary HTML.
+	 * </ul>
 	 *
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
@@ -234,7 +246,10 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+	 * 			links={
+	 * 				<js>"up: request:/.."</js>,
+	 * 				<js>"options: servlet:/?method=OPTIONS"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -250,9 +265,9 @@ public @interface HtmlDoc {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlLinks(String)}/{@link RestResponse#setHtmlLinks(Object)} methods.
+	 * {@link RestConfig#setHtmlLinks(String[])}/{@link RestResponse#setHtmlLinks(String[])} methods.
 	 */
-	String links() default "";
+	String[] links() default {};
 
 	/**
 	 * Sets the HTML nav section contents.
@@ -270,7 +285,9 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav=<js>"&lt;p&gt;Custom nav content&lt;/p&gt;"</js>
+	 * 			nav={
+	 * 				<js>"&lt;p&gt;Custom nav content&lt;/p&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -285,10 +302,13 @@ public @interface HtmlDoc {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
+	 * Multiple values are combined with newlines into a single string.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the
 	 * {@link RestConfig#setHtmlNav(String)}/{@link RestResponse#setHtmlNav(Object)} methods.
 	 */
-	String nav() default "";
+	String[] nav() default {};
 
 	/**
 	 * Sets the HTML aside section contents.
@@ -303,7 +323,9 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			aside=<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>
+	 * 			aside={
+	 * 				<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -315,10 +337,13 @@ public @interface HtmlDoc {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
+	 * Multiple values are combined with newlines into a single string.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the
 	 * {@link RestConfig#setHtmlAside(String)}/{@link RestResponse#setHtmlAside(Object)} methods.
 	 */
-	String aside() default "";
+	String[] aside() default {};
 
 	/**
 	 * Sets the HTML footer section contents.
@@ -333,7 +358,9 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			footer=<js>"&lt;p&gt;Custom footer content&lt;/p&gt;"</js>
+	 * 			footer={
+	 * 				<js>"&lt;p&gt;Custom footer content&lt;/p&gt;"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -345,10 +372,13 @@ public @interface HtmlDoc {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
+	 * Multiple values are combined with newlines into a single string.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the
 	 * {@link RestConfig#setHtmlFooter(String)}/{@link RestResponse#setHtmlFooter(Object)} methods.
 	 */
-	String footer() default "";
+	String[] footer() default {};
 
 	/**
 	 * Sets the HTML CSS style section contents.
@@ -360,7 +390,10 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			style=<js>".red{color:red;}\n.blue{color:blue}"</js>
+	 * 			style={
+	 * 				<js>".red{color:red;}"</js>,
+	 * 				<js>".blue{color:blue;}"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -372,10 +405,13 @@ public @interface HtmlDoc {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
+	 * Multiple values are combined with newlines into a single string.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the
 	 * {@link RestConfig#setHtmlStyle(String)}/{@link RestResponse#setHtmlStyle(Object)} methods.
 	 */
-	String style() default "";
+	String[] style() default {};
 
 	/**
 	 * Sets the CSS URL in the HTML CSS style section.
@@ -418,7 +454,9 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			script=<js>"alert('Hello!')"</js>
+	 * 			script={
+	 * 				<js>"alert('Hello!')"</js>
+	 * 			}
 	 * 		)
 	 * 	)
 	 * </p>
@@ -430,10 +468,13 @@ public @interface HtmlDoc {
 	 * A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
+	 * Multiple values are combined with newlines into a single string.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the
 	 * {@link RestConfig#setHtmlScript(String)}/{@link RestResponse#setHtmlScript(Object)} methods.
 	 */
-	String script() default "";
+	String[] script() default {};
 
 	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.

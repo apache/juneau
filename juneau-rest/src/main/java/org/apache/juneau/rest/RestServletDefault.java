@@ -211,7 +211,10 @@ public abstract class RestServletDefault extends RestServlet {
 	 */
 	@RestMethod(name="OPTIONS", path="/*",
 		htmldoc=@HtmlDoc(
-			links="{back:'servlet:/',json:'servlet:/?method=OPTIONS&Accept=text/json&plainText=true'}",
+			links={
+				"back: servlet:/,",
+				"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
+			},
 			description="Swagger documentation",
 			aside="NONE"
 		),

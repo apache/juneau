@@ -25,12 +25,17 @@ import org.apache.juneau.rest.client.*;
 	title="Tumblr parser service",
 	description="Specify a URL to a Tumblr blog and parse the results.",
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}",
-		aside=""
-			+ "<div style='min-width:200px' class='text'>"
-			+ "	<p>An example of a REST interface that retrieves data from another REST interface.</p>"
-			+ "	<p><a class='link' href='$U{servlet:/ibmblr}'>try me</a></p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java"
+		},
+		aside={
+			"<div style='min-width:200px' class='text'>",
+			"	<p>An example of a REST interface that retrieves data from another REST interface.</p>",
+			"	<p><a class='link' href='$U{servlet:/ibmblr}'>try me</a></p>",
+			"</div>"
+		}
 	)
 )
 public class TumblrParserResource extends Resource {

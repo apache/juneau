@@ -37,13 +37,20 @@ import org.apache.juneau.transforms.*;
 		StyleMenuItem.class
 	},
 	htmldoc=@HtmlDoc(
-		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',contentTypes:'$W{contentTypeMenuItem}',styles:'$W{styleMenuItem}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}",
-		aside=""
-			+ "<div style='max-width:400px;min-width:200px' class='text'>"
-			+ "	<p>Shows how even arbitrary POJOs such as <code>HttpServletRequest</code> can be serialized by the framework.</p>"
-			+ "	<p>Also shows how to specify serializer properties, filters, and swaps at the servlet level to control how POJOs are serialized.</p>"
-			+ "	<p>Also provides an example of how to use the Traversable and Queryable APIs.</p>"
-			+ "</div>"
+		links={
+			"up: request:/..",
+			"options: servlet:/?method=OPTIONS",
+			"$W{contentTypeMenuItem}",
+			"$W{styleMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java"
+		},
+		aside={
+			"<div style='max-width:400px;min-width:200px' class='text'>",
+			"	<p>Shows how even arbitrary POJOs such as <code>HttpServletRequest</code> can be serialized by the framework.</p>",
+			"	<p>Also shows how to specify serializer properties, filters, and swaps at the servlet level to control how POJOs are serialized.</p>",
+			"	<p>Also provides an example of how to use the Traversable and Queryable APIs.</p>",
+			"</div>"
+		}
 	),
 	properties={
 		@Property(name=SERIALIZER_maxDepth, value="5"),

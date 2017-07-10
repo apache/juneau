@@ -11,7 +11,11 @@
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 {
-	1: {kind:'CAT',name:'Mr. Frisky',price:39.99,breed:'Persian',getsAlongWith:['CAT','FISH','RABBIT'],birthDate:'04 Jul 2012'},
-	2: {kind:'DOG',name:'Kibbles',price:99.99,breed:'Husky',getsAlongWith:['DOG','BIRD','FISH','MOUSE','RABBIT'],birthDate:'01 Sep 2014'},
-	3: {kind:'RABBIT',name:'Hoppy',price:49.99,breed:'Angora',getsAlongWith:['DOG','BIRD','FISH','MOUSE'],birthDate:'16 Apr 2017'}
+	101: {kind:'CAT',name:'Mr. Frisky',price:39.99,breed:'Persian',getsAlongWith:['CAT','FISH','RABBIT'],birthDate:'04 Jul 2012'},
+	102: {kind:'DOG',name:'Kibbles',price:99.99,breed:'Husky',getsAlongWith:['DOG','BIRD','FISH','MOUSE','RABBIT'],birthDate:'01 Sep 2014'},
+	103: {kind:'RABBIT',name:'Hoppy',price:49.99,breed:'Angora',getsAlongWith:['DOG','BIRD','FISH','MOUSE'],birthDate:'16 Apr 2017'},
+	104: {kind:'RABBIT',name:'Hoppy 2',price:49.99,breed:'Angora',getsAlongWith:['DOG','BIRD','FISH','MOUSE'],birthDate:'17 Apr 2017'},
+	105: {kind:'FISH',name:'Gorton',price:1.99,breed:'Gold',getsAlongWith:['FISH'],birthDate:'20 Jun 2017'},
+	106: {kind:'MOUSE',name:'Hackwrench',price:4.99,breed:'Gadget',getsAlongWith:['FISH','MOUSE'],birthDate:'20 Jun 2017'},
+	107: {kind:'SNAKE',name:'Just Snake',price:9.99,breed:'Human',getsAlongWith:['SNAKE'],birthDate:'21 Jun 2017'}
 }

@@ -2478,7 +2478,10 @@
 		// "request:/..." URIs are relative to the request URI.
 		// "servlet:/..." URIs are relative to the servlet URI.</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		),
 		
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
@@ -3429,7 +3432,9 @@
 		path=<js>"/"</js>,
 		messages=<js>"nls/RootResources"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{options:'?method=OPTIONS'}"</js>
+			links={
+				<js>"options: ?method=OPTIONS"</js>
+			}
 		),
 		children={
 			HelloWorldResource.<jk>class</jk>, 
@@ -3535,7 +3540,10 @@
 		messages=<js>"nls/HelloWorldResource"</js>, 
 		path=<js>"/helloWorld"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	) 
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource { 
@@ -3625,7 +3633,10 @@
 		path=<js>"/methodExample"</js>, 
 		messages=<js>"nls/MethodExampleResource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	) 
 	<jk>public class</jk> MethodExampleResource <jk>extends</jk> Resource { 
@@ -3854,7 +3865,9 @@
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{options:'?method=OPTIONS'}"</js>
+			links={
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	)
 		</p>
@@ -4140,7 +4153,10 @@
 		path=<js>"/echo"</js>,
 		messages=<js>"nls/RequestEchoResource"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>,
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		),
 		properties={
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_maxDepth</jsf>, value=<js>"10"</js>),
@@ -4664,8 +4680,11 @@
 		// "servlet:/..." URIs are relative to the servlet URI.
 		// "$C{...}" variables are pulled from the config file.</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', 
-				source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>
+			}
 		),
 
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
@@ -5387,7 +5406,10 @@
 		description=<js>"Sample class showing how to use remoteable proxies. The list below are exposed services that 
 			can be retrieved using RestClient.getProxyInterface(Class)."</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		),
 		properties={ 
 			<jc>// Allow us to use method=POST from a browser.</jc> 
@@ -5506,7 +5528,11 @@
 		path=<js>"/tempDir"</js>, 
 		messages=<js>"nls/TempDirResource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', upload:'servlet:/upload'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"upload: servlet:/upload"</js>
+			}
 		),
 		properties={ 
 			<ja>@Property</ja>(name=<js>"DirectoryResource.rootDir"</js>, value=<js>"$S{java.io.tmpdir}"</js>), 
@@ -5634,7 +5660,10 @@
 		path=<js>"/atom"</js>, 
 		messages=<js>"nls/AtomFeedResource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		),
 		properties={ 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
@@ -5753,7 +5782,10 @@
 		path=<js>"/docker"</js>, 
 		title=<js>"Sample Docker resource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	) 
 	<jk>public class</jk> DockerRegistryResource <jk>extends</jk> Resource { 
@@ -5843,7 +5875,10 @@
 		title=<js>"Tumblr parser service"</js>, 
 		description=<js>"Specify a URL to a Tumblr blog and parse the results."</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	) 
 	<jk>public class</jk> TumblrParserResource <jk>extends</jk> Resource { 
@@ -5929,7 +5964,9 @@
 		title=<js>"Photo REST service"</js>,
 		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{options:'?method=OPTIONS'}"</js>
+			links={
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	)
 	<jk>public class</jk> PhotosResource <jk>extends</jk> RestServletDefault {
@@ -6073,7 +6110,10 @@
 		messages=<js>"nls/JsonSchemaResource"</js>, 
 		title=<js>"Sample JSON-Schema document"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	) 
 	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> ResourceJena { 
@@ -6161,7 +6201,10 @@
 		title=<js>"SQL query service"</js>, 
 		description=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
 		)
 	) 
 	<jk>public class</jk> SqlQueryResource <jk>extends</jk> Resource { 
@@ -6354,7 +6397,11 @@
 		title=<js>"Configuration"</js>, 
 		description=<js>"Contents of configuration file."</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', edit:'servlet:/edit'}"</js>
+			links={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"edit: servlet:/edit"</js>
+			}
 		)
 	) 
 	<jk>public class</jk> ConfigResource <jk>extends</jk> Resource { 
@@ -6881,6 +6928,46 @@
 					<li>The nav links are now an ordered list of elements.
 				</ul>
 			<li>
+				Modifications to the following <ja>@HtmlDoc</ja> annotations:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#links() links()} - Now an array of strings instead of a JSON object.  Simplified syntax.
+						<br>For example:
+						<p class='bcode'>
+	<jc>// Old syntax</jc>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		links=<js>"{"</js>
+			+ <js>"up:'request:/..',"</js>
+			+ <js>"options:'servlet:/?method=OPTIONS',"</js>
+			+ <js>"contentTypes:'$W{contentTypeMenuItem}',"</js>
+			+ <js>"styles:'$W{styleMenuItem}',"</js>
+			+ <js>"source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'"</js>
+		+ <js>"}"</js>
+	)
+	
+	<jc>// New syntax</jc>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		links={
+			<js>"up: request:/.."</js>,
+			<js>"options: servlet:/?method=OPTIONS"</js>,
+			<js>"$W{contentTypeMenuItem}"</js>,
+			<js>"$W{styleMenuItem}"</js>,
+			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"</js>
+		}
+	)
+						</p>
+						Previous syntax will still work, but you're encouraged to use the simplified syntax.
+					<li>Several annotations are now arrays of strings instead of simple strings.
+						Values are simply concatenated with newlines which makes multi-line values cleaner.
+						<ul>
+							<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#header() header()}
+							<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#nav() nav()}
+							<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#aside() aside()}
+							<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#footer() footer()}
+							<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#script() script()}
+							<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#style() style()}
+						</ul>
+				</ul>
+			<li>
 				Improvements made to the {@link org.apache.juneau.rest.widget.Widget} API.
 				<ul>
 					<li>
@@ -7273,7 +7360,7 @@
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlDescription(String) setHtmlDescription(String)}
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlBranding(String) setHtmlBranding(String)}
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlHeader(String) setHtmlHeader(String)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlLinks(String) setHtmlLinks(String)}
+					<li><code><del>setHtmlLinks(String)</del></code>
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNav(String) setHtmlNav(String)}
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlAside(String) setHtmlAside(String)}
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlFooter(String) setHtmlFooter(String)}
@@ -7292,7 +7379,7 @@
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlDescription(Object) setHtmlDescription(Object)}
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlBranding(Object) setHtmlBranding(Object)}
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlHeader(Object) setHtmlHeader(Object)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlLinks(Object) setHtmlLinks(Object)}
+					<li><code><del>setHtmlLinks(Object)</del></code>
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNav(Object) setHtmlNav(Object)}
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlAside(Object) setHtmlAside(Object)}
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlFooter(Object) setHtmlFooter(Object)}
