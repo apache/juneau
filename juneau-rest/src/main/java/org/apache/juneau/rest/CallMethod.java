@@ -894,6 +894,8 @@ class CallMethod implements Comparable<CallMethod>  {
 						return req.getRequestURI();
 					if (k.equals(REST_method))
 						return req.getMethod();
+					if (k.equals(REST_siteName))
+						return req.getSiteName();
 					if (k.equals(REST_servletTitle))
 						return req.getServletTitle();
 					if (k.equals(REST_servletDescription))

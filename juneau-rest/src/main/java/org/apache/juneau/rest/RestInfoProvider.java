@@ -45,6 +45,7 @@ public class RestInfoProvider {
 
 	private final RestContext context;
 	private final String
+		siteName,
 		title,
 		description,
 		termsOfService,
@@ -64,6 +65,7 @@ public class RestInfoProvider {
 		this.context = context;
 
 		Builder b = new Builder(context);
+		this.siteName = b.siteName;
 		this.title = b.title;
 		this.description = b.description;
 		this.termsOfService = b.termsOfService;
@@ -76,6 +78,7 @@ public class RestInfoProvider {
 
 	private static class Builder {
 		private String
+			siteName,
 			title,
 			description,
 			termsOfService,
@@ -90,6 +93,8 @@ public class RestInfoProvider {
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
 
 			for (RestResource r : restResourceAnnotationsParentFirst.values()) {
+				if (! r.siteName().isEmpty())
+					siteName = r.siteName();
 				if (! r.title().isEmpty())
 					title = r.title();
 				if (! r.description().isEmpty())
@@ -237,6 +242,36 @@ public class RestInfoProvider {
 	}
 
 	/**
+	 * Returns the localized site name of this REST resource.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own site name.
+	 *
+	 * <p>
+	 * The default implementation returns the description from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#siteName() @RestResource.siteName()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].siteName</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @ResourceBundle.messages()} annotation for this class, then any parent
+	 * 		classes.
+	 * 	<li><ck>siteName</ck> in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
+	 */
+	public String getSiteName(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		if (this.siteName != null)
+			return vr.resolve(this.siteName);
+		String siteName = context.getMessages().findFirstString(req.getLocale(), "siteName");
+		if (siteName != null)
+			return vr.resolve(siteName);
+		return null;
+	}
+
+	/**
 	 * Returns the localized title of this REST resource.
 	 *
 	 * <p>
@@ -245,7 +280,7 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#title() @RestResourcel.title()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link RestResource#title() @RestResource.title()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].title</ck> property in resource bundle identified by
 	 * 		{@link RestResource#messages() @ResourceBundle.messages()} annotation for this class, then any parent
 	 * 		classes.

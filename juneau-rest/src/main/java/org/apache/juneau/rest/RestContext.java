@@ -290,6 +290,18 @@ public final class RestContext extends Context {
 	public static final String REST_method = "RestServlet.method";
 
 	/**
+	 * The localized site name.
+	 *
+	 * <p>
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and
+	 * {@link ParserSession#getProperty(String)}.
+	 *
+	 * <p>
+	 * Equivalent to the value returned by {@link RestRequest#getSiteName()}
+	 */
+	public static final String REST_siteName = "RestServlet.siteName";
+
+	/**
 	 * The localized servlet title.
 	 *
 	 * <p>

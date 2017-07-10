@@ -419,6 +419,21 @@ public @interface RestResource {
 	String path() default "";
 
 	/**
+	 * Optional site name.
+	 *
+	 * <p>
+	 * Used as a label for the overall site.
+	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getSiteName(RestRequest)} method.
+	 */
+	String siteName() default "";
+
+	/**
 	 * Optional servlet title.
 	 *
 	 * <p>

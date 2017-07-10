@@ -579,6 +579,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 
 	/**
+	 * Returns the localized site name.
+	 *
+	 * <p>
+	 * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.
+	 *
+	 * @return The localized servlet label.
+	 */
+	public String getSiteName() {
+		return context.getInfoProvider().getSiteName(this);
+	}
+
+	/**
 	 * Returns the localized servlet title.
 	 *
 	 * <p>

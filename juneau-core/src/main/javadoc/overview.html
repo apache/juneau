@@ -6983,6 +6983,13 @@
 						instead of separately on <ja>@RestResource</ja> and <ja>@RestMethod</ja> annotations.
 					<li>
 						{@link org.apache.juneau.rest.widget.Widget#getName()} now defaults to the simple class name.
+						<br>So now you can just refer to the class name: <js>"$W{ContentTypeMenuItem}"</js>.
+					<li>
+						Renamed widgets:
+						<ul>
+							<li><code>PoweredByApacheWidget</code> -&lt; <code>PoweredByApache</code>  
+							<li><code>PoweredByJuneauWidget</code> -&lt; <code>PoweredByJuneau</code>  
+						</ul>
 					<li>
 						New {@link org.apache.juneau.rest.widget.MenuItemWidget} can be used to create pull-down menu items.
 					<li>
@@ -7021,6 +7028,7 @@
 			<li>
 				Annotations added:
 				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#siteName()}
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#flags()}
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#flags()}
 				</ul>
@@ -7401,7 +7409,7 @@
 				New classes for widget support:
 				<ul>
 					<li>{@link org.apache.juneau.rest.widget.Widget}
-					<li>{@link org.apache.juneau.rest.widget.PoweredByJuneauWidget}
+					<li><code><del>PoweredByJuneauWidget</del></code>
 					<li><code><del>ContentTypeLinksColumnWidget</del></code>
 					<li><code><del>ContentTypeLinksRowWidget</del></code>
 					<li><code><del>QueryWidget</del></code>
