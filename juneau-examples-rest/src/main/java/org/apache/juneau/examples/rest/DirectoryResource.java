@@ -36,16 +36,16 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	messages="nls/DirectoryResource",
-	widgets={
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
 	htmldoc=@HtmlDoc(
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/DirectoryResource.java"
 		}
 	),

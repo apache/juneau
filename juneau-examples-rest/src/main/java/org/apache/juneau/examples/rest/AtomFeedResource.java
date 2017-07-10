@@ -32,16 +32,16 @@ import org.apache.juneau.rest.widget.*;
 	path="/atom",
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",
-	widgets={
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
 	htmldoc=@HtmlDoc(
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java"
 		}
 	),

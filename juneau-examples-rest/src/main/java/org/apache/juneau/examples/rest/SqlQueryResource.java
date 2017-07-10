@@ -36,12 +36,14 @@ import org.apache.juneau.rest.widget.*;
 	messages="nls/SqlQueryResource",
 	title="SQL query service",
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
-	widgets={ StyleMenuItem.class },
 	htmldoc=@HtmlDoc(
+		widgets={ 
+			StyleMenuItem.class 
+		},
 		links={
 			"up: request:/..",
 			"options: servlet:/..",
-			"$W{stylesMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java"
 		},
 		aside={

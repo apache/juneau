@@ -32,11 +32,13 @@ import org.apache.juneau.transforms.*;
 	path="/urlEncodedForm",
 	messages="nls/UrlEncodedFormResource",
 	title="URL-Encoded form example",
-	widgets={ StyleMenuItem.class },
 	htmldoc=@HtmlDoc(
+		widgets={ 
+			StyleMenuItem.class 
+		},
 		links={
 			"up: request:/..",
-			"$W{styleMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java"
 		},
 		aside={

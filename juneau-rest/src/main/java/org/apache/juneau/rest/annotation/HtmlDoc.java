@@ -15,6 +15,7 @@ package org.apache.juneau.rest.annotation;
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.widget.*;
 
 /**
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
@@ -501,4 +502,13 @@ public @interface HtmlDoc {
 	 * {@link RestConfig#setHtmlTemplate(Class)}/{@link RestResponse#setHtmlTemplate(Class)} methods.
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.class;
+
+	/**
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement HTML.
+	 *
+	 * <p>
+	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 */
+	Class<? extends Widget>[] widgets() default {};
 }

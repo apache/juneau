@@ -34,25 +34,24 @@ import org.apache.juneau.rest.widget.*;
 	title="System properties resource",
 	description="REST interface for performing CRUD operations on system properties.",
 
-	// Widget used for content-type pull-down menu.		
-	widgets={
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
-
-	// Links on the HTML rendition page.
-	// "request:/..." URIs are relative to the request URI.
-	// "servlet:/..." URIs are relative to the servlet URI.
-	// "$C{...}" variables are pulled from the config file.
 	htmldoc=@HtmlDoc(
 		
-		// Custom navigation links.
+		// Widget used for content-type and styles pull-down menus.		
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
+
+		// Links on the HTML rendition page.
+		// "request:/..." URIs are relative to the request URI.
+		// "servlet:/..." URIs are relative to the servlet URI.
+		// "$C{...}" variables are pulled from the config file.
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"form: servlet:/formPage",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java"
 		},
 

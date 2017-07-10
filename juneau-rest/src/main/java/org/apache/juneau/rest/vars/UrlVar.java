@@ -27,9 +27,8 @@ import org.apache.juneau.svl.*;
  * <p>
  * See {@link UriResolver} for the kinds of URIs that can be resolved.
  * <ul>
- * 	<li>{@link RestResource#widgets() @RestResource.widgets()}
- * 	<li>{@link RestMethod#widgets() @RestMethod.widgets()}
- * 	<li>{@link RestConfig#addWidget(Class)}
+ * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
+ * 	<li>{@link RestConfig#addHtmlWidget(Class)}
  * </ul>
  *
  * <p>

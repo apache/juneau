@@ -19,7 +19,7 @@ import org.apache.juneau.utils.*;
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in the various default styles.
  *
  * <p>
- * The variable it resolves is <js>"$W{styleMenuItem}"</js>.
+ * The variable it resolves is <js>"$W{StyleMenuItem}"</js>.
  *
  * <p>
  * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
@@ -35,9 +35,9 @@ import org.apache.juneau.utils.*;
  * 			links={
  * 				<js>"up: ..."</js>,
  * 				<js>"options: ..."</js>,
- * 				<js>"$W{queryMenuItem}"</js>,
- * 				<js>"$W{contentTypeMenuItem}"</js>,
- * 				<js>"$W{styleMenuItem}"</js>,
+ * 				<js>"$W{QueryMenuItem}"</js>,
+ * 				<js>"$W{ContentTypeMenuItem}"</js>,
+ * 				<js>"$W{StyleMenuItem}"</js>,
  * 				<js>"source: ..."</js>
  * 			}
  * 		)
@@ -48,14 +48,6 @@ import org.apache.juneau.utils.*;
 public class StyleMenuItem extends MenuItemWidget {
 
 	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original"};
-
-	/**
-	 * Returns <js>"styleMenuItem"</js>.
-	 */
-	@Override /* Widget */
-	public String getName() {
-		return "styleMenuItem";
-	}
 
 	/**
 	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data

@@ -35,16 +35,16 @@ import org.apache.juneau.transforms.*;
 	title="Pet Store",
 	description="An example of a typical REST resource where beans are rendered in summary and details views.",
 	path="/petstore",
-	widgets={
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
 	htmldoc=@HtmlDoc(
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"
 		},
 		aside={
@@ -77,23 +77,24 @@ public class PetStoreResource extends ResourceJena {
 		summary="The complete list of pets in the store",
 		bpExcludes="{Pet:'breed,getsAlongWith'}",
 		
-		// Add 'query' and 'content-types' menu items.
-		widgets={
-			QueryMenuItem.class,
-			ContentTypeMenuItem.class,
-		},
-
 		// Add our converter for POJO query support.
 		converters=Queryable.class,
 		
 		// Add our menu items in the nav links.
 		htmldoc=@HtmlDoc(
+			
+			widgets={
+				QueryMenuItem.class,
+				ContentTypeMenuItem.class,
+				StyleMenuItem.class
+			},
+
 			links={
 				"up: request:/..",
 				"options: servlet:/?method=OPTIONS",
-				"$W{queryMenuItem}",
-				"$W{contentTypeMenuItem}",
-				"$W{styleMenuItem}",
+				"$W{QueryMenuItem}",
+				"$W{ContentTypeMenuItem}",
+				"$W{StyleMenuItem}",
 				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"
 			}
 		)

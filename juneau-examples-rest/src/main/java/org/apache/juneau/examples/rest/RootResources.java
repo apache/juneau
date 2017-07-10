@@ -25,16 +25,16 @@ import org.apache.juneau.rest.widget.*;
 	path="/",
 	title="Root resources",
 	description="Example of a router resource page.",
-	widgets={
-		PoweredByApacheWidget.class,
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
 	htmldoc=@HtmlDoc(
+		widgets={
+			PoweredByApache.class,
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
 		links={
 			"options: ?method=OPTIONS",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java"
 		},
 		aside={
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.widget.*;
 			"	<p>Other features (such as this aside) are added through annotations.</p>",
 			"</div>"
 		},
-		footer="$W{poweredByApache}"
+		footer="$W{PoweredByApache}"
 	),
 	children={
 		HelloWorldResource.class,

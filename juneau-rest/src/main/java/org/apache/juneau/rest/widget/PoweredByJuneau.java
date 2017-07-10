@@ -19,7 +19,7 @@ import org.apache.juneau.rest.*;
  * Widget that places a powered-by-Juneau message on the page.
  *
  * <p>
- * The variable it resolves is <js>"$W{poweredByJuneau}"</js>.
+ * The variable it resolves is <js>"$W{PoweredByJuneau}"</js>.
  *
  * <p>
  * It produces a simple Apache Juneau icon floating on the right.
@@ -29,10 +29,10 @@ import org.apache.juneau.rest.*;
  * 	<ja>@RestResource</ja>(
  * 		path=<js>"/addressBook"</js>,
  * 		widgets={
- * 			PoweredByJuneauWidget.<jk>class</jk>
+ * 			PoweredByJuneau.<jk>class</jk>
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			footer=<js>"$W{poweredByJuneau}"</js>
+ * 			footer=<js>"$W{PoweredByJuneau}"</js>
  * 		)
  * </p>
  *
@@ -40,15 +40,8 @@ import org.apache.juneau.rest.*;
  * It renders the following image:
  * <img class='bordered' src='doc-files/PoweredByJuneauWidget.png'>
  */
-public class PoweredByJuneauWidget extends Widget {
+public class PoweredByJuneau extends Widget {
 
-	/**
-	 * Returns <js>"poweredByJuneau"</js>.
-	 */
-	@Override /* Widget */
-	public String getName() {
-		return "poweredByJuneau";
-	}
 
 	/**
 	 * Returns an Apache Juneau image tag hyperlinked to <js>"http://juneau.apache.org"</js>

@@ -26,9 +26,8 @@ import org.apache.juneau.svl.*;
  * <p>
  * They're registered via the following mechanisms:
  * <ul>
- * 	<li>{@link RestResource#widgets() @RestResource.widgets()}
- * 	<li>{@link RestMethod#widgets() @RestMethod.widgets()}
- * 	<li>{@link RestConfig#addWidget(Class)}
+ * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
+ * 	<li>{@link RestConfig#addHtmlWidget(Class)}
  * </ul>
  *
  * @see org.apache.juneau.svl

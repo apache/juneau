@@ -32,16 +32,16 @@ import org.apache.juneau.transforms.*;
 	path="/echo",
 	title="Request echo service",
 	description="Echos the current HttpServletRequest object back to the browser.",
-	widgets={
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
 	htmldoc=@HtmlDoc(
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java"
 		},
 		aside={

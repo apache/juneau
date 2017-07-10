@@ -119,7 +119,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.htmlNoWrap = b.htmlNoWrap;
 		this.htmlTemplate = b.htmlTemplate;
 		this.htmlNoResultsMessage = b.htmlNoResultsMessage;
-		this.widgets = Collections.unmodifiableMap(b.widgets);
+		this.widgets = Collections.unmodifiableMap(b.htmlWidgets);
 	}
 
 	private static class Builder  {
@@ -145,7 +145,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		private Integer priority;
 		private org.apache.juneau.rest.annotation.Parameter[] parameters;
 		private Response[] responses;
-		private Map<String,Widget> widgets;
+		private Map<String,Widget> htmlWidgets;
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
@@ -176,13 +176,13 @@ class CallMethod implements Comparable<CallMethod>  {
 				beanContext = context.getBeanContext();
 				encoders = context.getEncoders();
 				properties = context.getProperties();
-				widgets = new HashMap<String,Widget>(context.getWidgets());
-				for (Class<? extends Widget> wc : m.widgets()) {
-					Widget w = ClassUtils.newInstance(Widget.class, wc);
-					widgets.put(w.getName(), w);
-				}
 
 				HtmlDoc hd = m.htmldoc();
+				htmlWidgets = new HashMap<String,Widget>(context.getHtmlWidgets());
+				for (Class<? extends Widget> wc : hd.widgets()) {
+					Widget w = ClassUtils.newInstance(Widget.class, wc);
+					htmlWidgets.put(w.getName(), w);
+				}
 				htmlTitle = hd.title().isEmpty() ? context.getHtmlTitle() : hd.title();
 				htmlDescription = hd.description().isEmpty() ? context.getHtmlDescription() : hd.description();
 				htmlBranding = hd.branding().length == 0 ? context.getHtmlBranding() : join(hd.branding(), '\n');

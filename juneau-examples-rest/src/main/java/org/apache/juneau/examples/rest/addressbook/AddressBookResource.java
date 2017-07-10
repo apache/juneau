@@ -43,26 +43,29 @@ import org.apache.juneau.utils.*;
 	path="/addressBook",
 	messages="nls/AddressBookResource",
 
-	// Widgets for $W variables above.
-	widgets={
-		PoweredByJuneauWidget.class,
-		ContentTypeMenuItem.class,
-		QueryMenuItem.class,
-		StyleMenuItem.class
-	},
-
-	// Links on the HTML rendition page.
-	// "request:/..." URIs are relative to the request URI.
-	// "servlet:/..." URIs are relative to the servlet URI.
-	// "$C{...}" variables are pulled from the config file.
 	htmldoc=@HtmlDoc(
+		
+		// Widgets for $W variables.
+		widgets={
+			PoweredByJuneau.class,
+			ContentTypeMenuItem.class,
+			QueryMenuItem.class,
+			StyleMenuItem.class
+		},
+
+		// Links on the HTML rendition page.
+		// "request:/..." URIs are relative to the request URI.
+		// "servlet:/..." URIs are relative to the servlet URI.
+		// "$C{...}" variables are pulled from the config file.
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}"
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}"
 		},
+		
+		// Arbitrary HTML message on the left side of the page.
 		aside={
 			"<div style='max-width:400px;min-width:200px'>",
 			"	<p>Proof-of-concept resource that shows off the capabilities of working with POJO resources.</p>",
@@ -74,7 +77,9 @@ import org.apache.juneau.utils.*;
 			"	</ul>",
 			"</div>"
 		},
-		footer="$W{poweredByJuneau}"
+		
+		// Juneau icon added to footer.
+		footer="$W{PoweredByJuneau}"
 	),
 
 	// Properties that get applied to all serializers and parsers.
@@ -157,9 +162,9 @@ public class AddressBookResource extends ResourceJena {
 			links={
 				"up: request:/..",
 				"options: servlet:/?method=OPTIONS",
-				"$W{queryMenuItem}",
-				"$W{contentTypeMenuItem}",
-				"$W{styleMenuItem}",
+				"$W{QueryMenuItem}",
+				"$W{ContentTypeMenuItem}",
+				"$W{StyleMenuItem}",
 				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"
 			}
 		)
@@ -191,9 +196,9 @@ public class AddressBookResource extends ResourceJena {
 			links={
 				"up: request:/..",
 				"options: servlet:/?method=OPTIONS",
-				"$W{queryMenuItem}",
-				"$W{contentTypeMenuItem}",
-				"$W{styleMenuItem}",
+				"$W{QueryMenuItem}",
+				"$W{ContentTypeMenuItem}",
+				"$W{StyleMenuItem}",
 				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"
 			}
 		)

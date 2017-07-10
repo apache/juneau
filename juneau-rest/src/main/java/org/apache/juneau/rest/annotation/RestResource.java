@@ -26,7 +26,6 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -650,18 +649,6 @@ public @interface RestResource {
 	Class<? extends ParserListener> parserListener() default ParserListener.class;
 
 	/**
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement text.
-	 *
-	 * <p>
-	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
-	 *
-	 * <p>
-	 * See {@link #htmldoc()} for an example of usage.
-	 */
-	Class<? extends Widget>[] widgets() default {};
-
-	/**
 	 * Provides swagger-specific metadata on this resource.
 	 *
 	 * <p>
@@ -700,6 +687,11 @@ public @interface RestResource {
 	 * 		// "servlet:/..." URIs are relative to the servlet URI.
 	 * 		// "$C{...}" variables are pulled from the config file.</jc>
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			<jc>// Widgets for $W variables.</jc>
+	 * 			widgets={
+	 * 				PoweredByJuneau.<jk>class</jk>,
+	 * 				ContentTypeLinks.<jk>class</jk>
+	 * 			}
 	 * 			links={
 	 * 				<js>"up: request:/.."</js>,
 	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
@@ -715,17 +707,11 @@ public @interface RestResource {
 	 * 				<js>"			&lt;li&gt;Widgets"</js>,
 	 * 				<js>"		&lt;/ul&gt;"</js>,
 	 * 				<js>"	&lt;p style='text-weight:bold;text-decoration:underline;'&gt;Available Content Types&lt;/p&gt;"</js>,
-	 * 				<js>"	$W{contentTypeLinks}"</js>,
+	 * 				<js>"	$W{ContentTypeLinks}"</js>,
 	 * 				<js>"&lt;/div&gt;"</js>
 	 * 			},
-	 * 			footer=<js>"$W{poweredByJuneau}"</js>
-	 * 		),
-	 *
-	 * 		<jc>// Widgets for $W variables above.</jc>
-	 * 		widgets={
-	 * 			PoweredByJuneauWidget.<jk>class</jk>,
-	 * 			ContentTypeLinksWidget.<jk>class</jk>
-	 * 		}
+	 * 			footer=<js>"$W{PoweredByJuneau}"</js>
+	 * 		)
 	 * 	)
 	 * </p>
 	 */

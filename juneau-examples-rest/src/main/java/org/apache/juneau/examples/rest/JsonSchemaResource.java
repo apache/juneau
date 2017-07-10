@@ -25,16 +25,16 @@ import org.apache.juneau.rest.widget.*;
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
-	widgets={
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
 	htmldoc=@HtmlDoc(
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java"
 		},
 		aside={

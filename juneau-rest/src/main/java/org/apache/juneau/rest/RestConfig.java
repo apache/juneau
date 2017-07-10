@@ -126,7 +126,7 @@ public class RestConfig implements ServletConfig {
 	Object htmlTemplate = HtmlDocTemplateBasic.class;
 
 	Class<?> resourceClass;
-	Map<String,Widget> widgets = new HashMap<String,Widget>();
+	Map<String,Widget> htmlWidgets = new HashMap<String,Widget>();
 
 	/**
 	 * Constructor.
@@ -220,10 +220,9 @@ public class RestConfig implements ServletConfig {
 				if (r.infoProvider() != RestInfoProvider.class)
 					setInfoProvider(r.infoProvider());
 
-				for (Class<? extends Widget> cw : r.widgets())
-					addWidget(cw);
-
 				HtmlDoc hd = r.htmldoc();
+				for (Class<? extends Widget> cw : hd.widgets())
+					addHtmlWidget(cw);
 				if (! hd.title().isEmpty())
 					setHtmlTitle(hd.title());
 				if (! hd.description().isEmpty())
@@ -1510,9 +1509,9 @@ public class RestConfig implements ServletConfig {
 	 * @param value The widget class to add.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addWidget(Class<? extends Widget> value) {
+	public RestConfig addHtmlWidget(Class<? extends Widget> value) {
 		Widget w = ClassUtils.newInstance(Widget.class, value);
-		this.widgets.put(w.getName(), w);
+		this.htmlWidgets.put(w.getName(), w);
 		return this;
 	}
 

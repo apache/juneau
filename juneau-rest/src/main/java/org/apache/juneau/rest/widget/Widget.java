@@ -25,9 +25,8 @@ import org.apache.juneau.utils.*;
  * <p>
  * Widgets are associated with resources through the following
  * <ul>
- * 	<li>{@link RestResource#widgets() @RestResource.widgets}
- * 	<li>{@link RestMethod#widgets() @RestMethod.widgets}
- * 	<li>{@link RestConfig#addWidget(Class)}
+ * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets}
+ * 	<li>{@link RestConfig#addHtmlWidget(Class)}
  * </ul>
  *
  * <p>
@@ -50,10 +49,10 @@ import org.apache.juneau.utils.*;
  * 		}
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			links={
- * 				<js>"$W{myWidget}"</js>
+ * 				<js>"$W{MyWidget}"</js>
  * 			},
  * 			aside={
- * 				<js>"Check out this widget:  $W{myWidget}"</js>
+ * 				<js>"Check out this widget:  $W{MyWidget}"</js>
  * 			}
  * 		)
  * 	)
@@ -64,11 +63,6 @@ import org.apache.juneau.utils.*;
  * directory in your classpath (see {@link RestResource#staticFiles()}):
  * <p class='bcode'>
  * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
- *
- * 		<ja>@Override</ja>
- * 		<jk>public</jk> String getName(RestRequest req) {
- * 			return <js>"myWidget"</js>;
- * 		}
  *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String getHtml(RestRequest req) <jk>throws</jk> Exception {
@@ -125,14 +119,19 @@ public abstract class Widget {
 	 * The widget key.
 	 *
 	 * <p>
-	 * (i.e. The contents of the <js>"$W{...}"</js> variable).
+	 * (i.e. The variable name inside the <js>"$W{...}"</js> variable).
 	 *
 	 * <p>
 	 * The returned value must not be <jk>null</jk>.
 	 *
+	 * <p>
+	 * If not overridden, the default value is the class simple name.
+	 *
 	 * @return The widget key.
 	 */
-	public abstract String getName();
+	public String getName() {
+		return getClass().getSimpleName();
+	}
 
 	/**
 	 * Resolves the HTML content for this widget.

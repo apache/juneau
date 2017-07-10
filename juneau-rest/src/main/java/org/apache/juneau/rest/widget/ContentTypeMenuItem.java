@@ -23,7 +23,7 @@ import org.apache.juneau.utils.*;
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.
  *
  * <p>
- * The variable it resolves is <js>"$W{contentTypeMenuItem}"</js>.
+ * The variable it resolves is <js>"$W{ContentTypeMenuItem}"</js>.
  *
  * <p>
  * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
@@ -39,9 +39,9 @@ import org.apache.juneau.utils.*;
  * 			links={
  * 				<js>"up: ..."</js>,
  * 				<js>"options: ..."</js>,
- * 				<js>"$W{queryMenuItem}"</js>,
- * 				<js>"$W{contentTypeMenuItem}"</js>,
- * 				<js>"$W{styleMenuItem}"</js>,
+ * 				<js>"$W{QueryMenuItem}"</js>,
+ * 				<js>"$W{ContentTypeMenuItem}"</js>,
+ * 				<js>"$W{StyleMenuItem}"</js>,
  * 				<js>"source: ..."</js>
  * 			}
  * 		)
@@ -54,14 +54,6 @@ import org.apache.juneau.utils.*;
  * <br><img class='bordered' src='doc-files/ContentTypeMenuItem.png'>
  */
 public class ContentTypeMenuItem extends MenuItemWidget {
-
-	/**
-	 * Returns <js>"contentTypeMenuItem"</js>.
-	 */
-	@Override /* Widget */
-	public String getName() {
-		return "contentTypeMenuItem";
-	}
 
 	/**
 	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data

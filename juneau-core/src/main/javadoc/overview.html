@@ -6938,8 +6938,8 @@
 		links=<js>"{"</js>
 			+ <js>"up:'request:/..',"</js>
 			+ <js>"options:'servlet:/?method=OPTIONS',"</js>
-			+ <js>"contentTypes:'$W{contentTypeMenuItem}',"</js>
-			+ <js>"styles:'$W{styleMenuItem}',"</js>
+			+ <js>"contentTypes:'$W{ContentTypeMenuItem}',"</js>
+			+ <js>"styles:'$W{StyleMenuItem}',"</js>
 			+ <js>"source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'"</js>
 		+ <js>"}"</js>
 	)
@@ -6949,8 +6949,8 @@
 		links={
 			<js>"up: request:/.."</js>,
 			<js>"options: servlet:/?method=OPTIONS"</js>,
-			<js>"$W{contentTypeMenuItem}"</js>,
-			<js>"$W{styleMenuItem}"</js>,
+			<js>"$W{ContentTypeMenuItem}"</js>,
+			<js>"$W{StyleMenuItem}"</js>,
 			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"</js>
 		}
 	)
@@ -6978,6 +6978,11 @@
 							<li>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest)}
 						</ul>
 					</li>
+					<li>
+						Declaration of widgets moved to {@link org.apache.juneau.rest.annotation.HtmlDoc#widgets() @HtmlDoc.widgets()} 
+						instead of separately on <ja>@RestResource</ja> and <ja>@RestMethod</ja> annotations.
+					<li>
+						{@link org.apache.juneau.rest.widget.Widget#getName()} now defaults to the simple class name.
 					<li>
 						New {@link org.apache.juneau.rest.widget.MenuItemWidget} can be used to create pull-down menu items.
 					<li>
@@ -7336,14 +7341,14 @@
 				<ul>
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener() serializerListener()}
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener() parserListener()}
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#widgets() widgets()}
+					<li><code><del>widgets()</del></code>
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#swagger() swagger()}
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#htmldoc() htmldoc()}
 				</ul>
 			<li>
 				New attributes on {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#widgets() widgets()}
+					<li><code><del>widgets()</del></code>
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#swagger() swagger()}
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#htmldoc() htmldoc()}
 				</ul>
@@ -7370,7 +7375,7 @@
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNoResultsMessage(String) setHtmlNoResultsMessage(String)}
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTemplate(Class) setHtmlTemplate(Class)}
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTemplate(HtmlDocTemplate) setHtmlTemplate(HtmlDocTemplate)}
-					<li>{@link org.apache.juneau.rest.RestConfig#addWidget(Class) addWidget(Class)}
+					<li><code><del>addWidget(Class)</del></code>
 				</ul>
 			<li>
 				New methods on {@link org.apache.juneau.rest.RestResponse}:

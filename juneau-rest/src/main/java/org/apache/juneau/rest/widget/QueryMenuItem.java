@@ -19,7 +19,7 @@ import org.apache.juneau.rest.converters.*;
  * Widget that returns a menu-item drop-down form for entering search/view/sort arguments.
  *
  * <p>
- * The variable it resolves is <js>"$W{queryMenuItem}"</js>.
+ * The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
  *
  * <p>
  * This widget is designed to be used in conjunction with the {@link Queryable} converter, although implementations
@@ -40,9 +40,9 @@ import org.apache.juneau.rest.converters.*;
  * 			links={
  * 				<js>"up: ..."</js>,
  * 				<js>"options: ..."</js>,
- * 				<js>"$W{queryMenuItem}"</js>,
- * 				<js>"$W{contentTypeMenuItem}"</js>,
- * 				<js>"$W{styleMenuItem}"</js>,
+ * 				<js>"$W{QueryMenuItem}"</js>,
+ * 				<js>"$W{ContentTypeMenuItem}"</js>,
+ * 				<js>"$W{StyleMenuItem}"</js>,
  * 				<js>"source: ..."</js>
  * 			}
  * 		),
@@ -65,14 +65,6 @@ import org.apache.juneau.rest.converters.*;
  * <br>The {@link Queryable} class knows how to perform these filters against collections of POJOs.
  */
 public class QueryMenuItem extends MenuItemWidget {
-
-	/**
-	 * Returns <js>"queryMenuItem"</js>.
-	 */
-	@Override /* Widget */
-	public String getName() {
-		return "queryMenuItem";
-	}
 
 	/**
 	 * Returns CSS for the tooltips.

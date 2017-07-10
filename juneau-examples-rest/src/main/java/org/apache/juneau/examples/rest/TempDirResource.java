@@ -31,17 +31,17 @@ import org.apache.juneau.utils.*;
 	path="/tempDir",
 	title="Temp Directory View Service",
 	description="View and download files in the '$S{java.io.tmpdir}' directory.",
-	widgets={
-		ContentTypeMenuItem.class,
-		StyleMenuItem.class
-	},
 	htmldoc=@HtmlDoc(
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"upload: servlet:/upload",
-			"$W{contentTypeMenuItem}",
-			"$W{styleMenuItem}",
+			"$W{ContentTypeMenuItem}",
+			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java"
 		},
 		aside={

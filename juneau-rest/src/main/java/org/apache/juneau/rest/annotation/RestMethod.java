@@ -22,7 +22,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -600,15 +599,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String clientVersion() default "";
-
-	/**
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement text.
-	 *
-	 * <p>
-	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
-	 */
-	Class<? extends Widget>[] widgets() default {};
 
 	/**
 	 * Provides swagger-specific metadata on this method.

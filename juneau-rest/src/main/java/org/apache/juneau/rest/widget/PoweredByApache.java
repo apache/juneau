@@ -19,7 +19,7 @@ import org.apache.juneau.rest.*;
  * Widget that places a powered-by-Apache message on the page.
  *
  * <p>
- * The variable it resolves is <js>"$W{poweredByApache}"</js>.
+ * The variable it resolves is <js>"$W{PoweredByApache}"</js>.
  *
  * <p>
  * It produces a simple Apache icon floating on the right.
@@ -31,10 +31,10 @@ import org.apache.juneau.rest.*;
  * 		title=<js>"Root resources"</js>,
  * 		description=<js>"Example of a router resource page."</js>,
  * 		widgets={
- * 			PoweredByApacheWidget.<jk>class</jk>
+ * 			PoweredByApache.<jk>class</jk>
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			footer=<js>"$W{poweredByApache}"</js>
+ * 			footer=<js>"$W{PoweredByApache}"</js>
  * 		)
  * </p>
  *
@@ -42,15 +42,7 @@ import org.apache.juneau.rest.*;
  * It renders the following image:
  * <img class='bordered' src='doc-files/PoweredByApacheWidget.png'>
  */
-public class PoweredByApacheWidget extends Widget {
-
-	/**
-	 * Returns <js>"poweredByApache"</js>.
-	 */
-	@Override /* Widget */
-	public String getName() {
-		return "poweredByApache";
-	}
+public class PoweredByApache extends Widget {
 
 	/**
 	 * Returns an Apache image tag hyperlinked to <js>"http://apache.org"</js>

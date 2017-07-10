@@ -365,7 +365,7 @@ public final class RestContext extends Context {
 		htmlLinks;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
-	private final Map<String,Widget> widgets;
+	private final Map<String,Widget> htmlWidgets;
 
 	private final Set<String> allowMethodParams;
 
@@ -464,8 +464,8 @@ public final class RestContext extends Context {
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 			this.logger = b.logger;
 			this.fullPath = b.fullPath;
-			this.widgets = Collections.unmodifiableMap(b.widgets);
 
+			this.htmlWidgets = Collections.unmodifiableMap(b.htmlWidgets);
 			this.htmlTitle = b.htmlTitle;
 			this.htmlDescription = b.htmlDescription;
 			this.htmlBranding = b.htmlBranding;
@@ -674,7 +674,7 @@ public final class RestContext extends Context {
 		Set<String> allowMethodParams = new LinkedHashSet<String>();
 		RestLogger logger;
 		String fullPath;
-		Map<String,Widget> widgets;
+		Map<String,Widget> htmlWidgets;
 
 		@SuppressWarnings("unchecked")
 		private Builder(Object resource, RestConfig sc) throws Exception {
@@ -786,8 +786,7 @@ public final class RestContext extends Context {
 
 			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
 
-			widgets = sc.widgets;
-
+			htmlWidgets = sc.htmlWidgets;
 			htmlTitle = sc.htmlTitle;
 			htmlDescription = sc.htmlDescription;
 			htmlBranding = sc.htmlBranding;
@@ -1175,12 +1174,12 @@ public final class RestContext extends Context {
 	 * The widgets used for resolving <js>"$W{...}"<js> variables.
 	 *
 	 * <p>
-	 * Defined by the {@link RestResource#widgets()} annotation or {@link RestConfig#addWidget(Class)} method.
+	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestConfig#addHtmlWidget(Class)} method.
 	 *
 	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
 	 */
-	public Map<String,Widget> getWidgets() {
-		return widgets;
+	public Map<String,Widget> getHtmlWidgets() {
+		return htmlWidgets;
 	}
 
 	/**
