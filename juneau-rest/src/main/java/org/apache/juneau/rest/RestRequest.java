@@ -16,6 +16,7 @@ import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -31,9 +32,12 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -232,6 +236,227 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return this;
 	}
 
+
+	/**
+	 * Resolves the specified property.
+	 *
+	 * @param cm
+	 * 	The <code>CallMethod</code> object where the <code>HtmlDocSerializer</code> settings are defined.
+	 * 	Optional value.  If not specified, then won't resolve <code>HtmlDocSerializer</code> properties.
+	 * @param category
+	 * 	The property category.
+	 * 	The possible values are:
+	 * 	<ul>
+	 * 		<li>
+	 * 			<js>"Attribute"</js> - Value returned by {@link HttpServletRequest#getAttribute(String)}.
+	 * 		<li>
+	 * 			<js>"FormData"</js> - Value returned by {@link RestRequest#getFormData(String)}.
+	 * 		<li>
+	 * 			<js>"Header"</js> - Value returned by {@link RestRequest#getHeader(String)}.
+	 * 		<li>
+	 * 			<js>"HtmlDocSerializer"</js>
+	 * 			<br>Valid names:
+	 * 			<ul>
+	 * 				<li><js>"aside"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_aside}
+	 * 				<li><js>"branding"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_branding}
+	 * 				<li><js>"description"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_description}
+	 * 				<li><js>"footer"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_footer}
+	 * 				<li><js>"header"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_header}
+	 * 				<li><js>"links.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_links}
+	 * 				<li><js>"nav"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_nav}
+	 * 				<li><js>"noResultsMessage"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage}
+	 * 				<li><js>"nowrap"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_nowrap}
+	 * 				<li><js>"script.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_script}
+	 * 				<li><js>"style.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_style}
+	 * 				<li><js>"stylesheet"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_stylesheet}
+	 * 				<li><js>"template"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_template}
+	 * 				<li><js>"title"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_title}
+	 * 			</ul>
+	 * 		<li>
+	 * 			<js>"Path"</js> - Value returned by {@link RestRequest#getPath(String)}.
+	 * 		<li>
+	 * 			<js>"Query"</js> = Value returned by {@link RestRequest#getQuery(String)}.
+	 * 		<li>
+	 * 			<js>"Request"</js>
+	 * 			<br>Valid names:
+	 * 			<ul>
+	 * 				<li><js>"contextPath"</js> - Value returned by {@link RestRequest#getContextPath()}
+	 * 				<li><js>"method"</js> - Value returned by {@link RestRequest#getMethod()}
+	 * 				<li><js>"methodDescription"</js> - Value returned by {@link RestRequest#getMethodDescription()}
+	 * 				<li><js>"methodSummary"</js> - Value returned by {@link RestRequest#getMethodSummary()}
+	 * 				<li><js>"pathInfo"</js> - Value returned by {@link RestRequest#getPathInfo()}
+	 * 				<li><js>"requestParentURI"</js> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}
+	 * 				<li><js>"requestURI"</js> - Value returned by {@link RestRequest#getRequestURI()}
+	 * 				<li><js>"servletDescription"</js> - Value returned by {@link RestRequest#getServletDescription()}
+	 * 				<li><js>"servletParentURI"</js> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}
+	 * 				<li><js>"servletPath"</js> - See {@link RestRequest#getServletPath()}
+	 * 				<li><js>"servletTitle"</js> - See {@link RestRequest#getServletTitle()}
+	 * 				<li><js>"servletURI"</js> - See {@link UriContext#getRootRelativeServletPath()}
+	 * 				<li><js>"siteName"</js> - See {@link RestRequest#getSiteName()}
+	 * 			</ul>
+	 * 	</ul>
+	 * @param name The property name.
+	 * @return The resolve property, or <jk>null</jk> if it wasn't found.
+	 */
+	public Object resolveProperty(CallMethod cm, String category, String name) {
+		char c = category.charAt(0);
+		if (c == 'A') {
+			if ("Attribute".equals(category))
+				return getAttribute(name);
+		} else if (c == 'F') {
+			if ("FormData".equals(category))
+				return getFormData(name);
+		} else if (c == 'H') {
+			if ("Header".equals(category))
+				return getHeader(name);
+			if ("HtmlDocSerializer".equals(category) && cm != null) {
+				char c2 = StringUtils.charAt(name, 0);
+				if (c2 == 'a') {
+					if ("aside".equals(name))
+						return cm.htmlAside == null ? null : resolveVars(cm.htmlAside);
+				} else if (c2 == 'b') {
+					if ("branding".equals(name))
+						return cm.htmlBranding == null ? null : resolveVars(cm.htmlBranding);
+				} else if (c2 == 'd') {
+					if ("description".equals(name)) {
+						String s = cm.htmlDescription;
+						if (! StringUtils.isEmpty(s))
+							return resolveVars(s);
+						s = getMethodSummary();
+						if (StringUtils.isEmpty(s))
+							s = getServletDescription();
+						return s;
+					}
+				} else if (c2 == 'f') {
+					if ("footer".equals(name))
+						return cm.htmlFooter == null ? null : resolveVars(cm.htmlFooter);
+				} else if (c2 == 'h') {
+					if ("header".equals(name))
+						return cm.htmlHeader == null ? null : resolveVars(cm.htmlHeader);
+				} else if (c2 == 'l') {
+					if ("links.list".equals(name)) {
+						if (cm.htmlLinks == null || cm.htmlLinks.length == 0)
+							return null;
+						try {
+							List<String> la = new ArrayList<String>();
+							for (String l : cm.htmlLinks) {
+								// Temporary backwards compatibility with JSON object format.
+								if (l.startsWith("{")) {
+									ObjectMap m = new ObjectMap(l);
+									for (Map.Entry<String,Object> e : m.entrySet())
+										la.add(resolveVars(e.getKey()) + ":" + resolveVars(StringUtils.toString(e.getValue())));
+								} else {
+									la.add(resolveVars(l));
+								}
+							}
+							return la;
+						} catch (ParseException e) {
+							throw new RuntimeException(e);
+						}
+					}
+				} else if (c2 == 'n') {
+					if ("nav".equals(name))
+						return cm.htmlNav == null ? null : resolveVars(cm.htmlNav);
+					if ("noResultsMessage".equals(name))
+						return cm.htmlNoResultsMessage == null ? null : resolveVars(cm.htmlNoResultsMessage);
+					if ("nowrap".equals(name))
+						return cm.htmlNoWrap;
+				} else if (c2 == 's') {
+					if ("script.list".equals(name)) {
+						Set<String> l = new LinkedHashSet<String>();
+						if (cm.htmlScript != null)
+							l.add(resolveVars(cm.htmlScript));
+						for (Widget w : getWidgets().values()) {
+							String script;
+							try {
+								script = w.getScript(this);
+							} catch (Exception e) {
+								script = e.getLocalizedMessage();
+							}
+							if (script != null)
+								l.add(resolveVars(script));
+						}
+						return l;
+					}
+					if ("style.list".equals(name)) {
+						Set<String> l = new LinkedHashSet<String>();
+						if (cm.htmlStyle != null)
+							l.add(resolveVars(cm.htmlStyle));
+						for (Widget w : getWidgets().values()) {
+							String style;
+							try {
+								style = w.getStyle(this);
+							} catch (Exception e) {
+								style = e.getLocalizedMessage();
+							}
+							if (style != null)
+								l.add(resolveVars(style));
+						}
+						return l;
+					}
+					if ("stylesheet".equals(name)) {
+						String s = getStylesheet();
+						// Exclude absolute URIs to stylesheets for security reasons.
+						if (s == null || isAbsoluteUri(s))
+							s = cm.htmlStylesheet;
+						return s == null ? null : resolveVars(s);
+					}
+				} else if (c2 == 't') {
+					if ("template".equals(name))
+						return cm.htmlTemplate;
+					if ("title".equals(name)) {
+						String s = cm.htmlTitle;
+						if (! StringUtils.isEmpty(s))
+							return resolveVars(s);
+						return getServletTitle();
+					}
+				}
+			}
+		} else if (c == 'P') {
+			if ("Path".equals(category))
+				return getPath(name);
+		} else if (c == 'Q') {
+			if ("Query".equals(category))
+				return getQuery(name);
+		} else if (c == 'R') {
+			if ("Request".equals(category)) {
+				char c2 = StringUtils.charAt(name, 0);
+				if (c == 'c') {
+					if ("contextPath".equals(name))
+						return getContextPath();
+				} else if (c2 == 'm') {
+					if ("method".equals(name))
+						return getMethod();
+					if ("methodDescription".equals(name))
+						return getMethodDescription();
+					if ("methodSummary".equals(name))
+						return getMethodSummary();
+				} else if (c2 == 'p') {
+					if ("pathInfo".equals(name))
+						return getPathInfo();
+				} else if (c2 == 'r') {
+					if ("requestParentURI".equals(name))
+						return getUriContext().getRootRelativePathInfoParent();
+					if ("requestURI".equals(name))
+						return getRequestURI();
+				} else if (c2 == 's') {
+					if ("servletDescription".equals(name))
+						return getServletDescription();
+					if ("servletParentURI".equals(name))
+						return getUriContext().getRootRelativeServletPathParent();
+					if ("servletPath".equals(name))
+						return getServletPath();
+					if ("servletTitle".equals(name))
+						return getServletTitle();
+					if ("servletURI".equals(name))
+						return getUriContext().getRootRelativeServletPath();
+					if ("siteName".equals(name))
+						return getSiteName();
+				}
+			}
+		}
+		return null;
+	}
 
 	//--------------------------------------------------------------------------------
 	// Properties
@@ -448,6 +673,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return pathParams;
 	}
 
+	/**
+	 * Shortcut for calling <code>getPathMatch().get(name)</code>.
+	 *
+	 * @param name The path variable name.
+	 * @return The path variable value, or <jk>null<jk> if not found.
+	 */
+	public String getPath(String name) {
+		return getPathMatch().get(name);
+	}
 
 	//--------------------------------------------------------------------------------
 	// Body methods

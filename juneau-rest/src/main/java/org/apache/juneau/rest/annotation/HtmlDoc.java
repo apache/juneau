@@ -91,8 +91,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
-	 * 	<li><code>{servletClass}.{methodName}.pageTitle</code> resource bundle value.
-	 * 	<li><code>{servletClass}.pageTitle</code> resource bundle value.
+	 * 	<li><code>{servletClass}.{methodName}.title</code> resource bundle value.
+	 * 	<li><code>{servletClass}.title</code> resource bundle value.
 	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
 	 * 	<li><code>{servletClass}.title</code> resource bundle value.
 	 * 	<li><code>info/title</code> entry in swagger file.
@@ -134,8 +134,8 @@ public @interface HtmlDoc {
 	 * <p>
 	 * If not specified, the page title is pulled from one of the following locations:
 	 * <ol>
-	 * 	<li><code>{servletClass}.{methodName}.pageText</code> resource bundle value.
-	 * 	<li><code>{servletClass}.pageText</code> resource bundle value.
+	 * 	<li><code>{servletClass}.{methodName}.summary</code> resource bundle value.
+	 * 	<li><code>{servletClass}.summary</code> resource bundle value.
 	 * 	<li><code><ja>@RestMethod</ja>(summary)</code> annotation.
 	 * 	<li><code>{servletClass}.{methodName}.summary</code> resource bundle value.
 	 * 	<li><code>summary</code> entry in swagger file for method.

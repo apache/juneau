@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.vars;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -69,50 +68,17 @@ public class RequestVar extends SimpleVar {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
 		if (key.length() > 0) {
 				String k = key.toString();
-				if (k.indexOf('.') != -1) {
-					String prefix = k.substring(0, k.indexOf('.'));
-					String remainder = k.substring(k.indexOf('.')+1);
-					if ("path".equals(prefix))
-						return req.getPathMatch().get(remainder);
-					if ("query".equals(prefix))
-						return req.getQuery().getString(remainder);
-					if ("formData".equals(prefix))
-						return req.getFormData().getString(remainder);
-					if ("header".equals(prefix))
-						return req.getHeader(remainder);
-					if ("attribute".equals(prefix))
-						return StringUtils.toString(req.getAttribute(remainder));
-				}
-				char c = key.charAt(0);
-				if (c == 'c') {
-					if (key.equals("contextPath"))
-						return req.getContextPath();
-				} else if (c == 'm') {
-					if (key.equals("method"))
-						return req.getMethod();
-					if (key.equals("methodSummary"))
-						return req.getMethodSummary();
-					if (key.equals("methodDescription"))
-						return req.getMethodDescription();
-				} else if (c == 'p') {
-					if (key.equals("pathInfo"))
-						return req.getPathInfo();
-				} else if (c == 'r') {
-					if (key.equals("requestURI"))
-						return req.getRequestURI();
-					if (key.equals("requestParentURI"))
-						return req.getUriContext().getRootRelativePathInfoParent();
-				} else if (c == 's') {
-					if (key.equals("servletPath"))
-						return req.getServletPath();
-					if (key.equals("servletURI"))
-						return req.getUriContext().getRootRelativeServletPath();
-					if (key.equals("servletParentURI"))
-						return req.getUriContext().getRootRelativeServletPathParent();
-					if (key.equals("servletTitle"))
-						return req.getServletTitle();
-					if (key.equals("servletDescription"))
-						return req.getServletDescription();
+				int i = k.indexOf('.');
+				if (i != -1) {
+					String prefix = k.substring(0, i);
+					String remainder = k.substring(i+1);
+					Object o = req.resolveProperty(null, prefix, remainder);
+					if (o != null)
+						return o.toString();
+				} else {
+					Object o = req.resolveProperty(null, "Request", key);
+					if (o != null)
+						return o.toString();
 				}
 				Object o = req.getProperties().get(key);
 				if (o != null)

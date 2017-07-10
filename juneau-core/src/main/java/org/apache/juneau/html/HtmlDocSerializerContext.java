@@ -81,7 +81,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <b>Configuration property:</b>  Page title.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.title"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.title"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -134,13 +134,13 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_title = "HtmlSerializer.title";
+	public static final String HTMLDOC_title = "HtmlDocSerializer.title";
 
 	/**
 	 * <b>Configuration property:</b>  Page description.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.description"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.description"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -197,13 +197,13 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_description = "HtmlSerializer.description";
+	public static final String HTMLDOC_description = "HtmlDocSerializer.description";
 
 	/**
 	 * <b>Configuration property:</b>  Page branding.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.branding"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.branding"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -216,7 +216,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_branding = "HtmlSerializer.branding";
+	public static final String HTMLDOC_branding = "HtmlDocSerializer.branding";
 
 	/**
 	 * <b>Configuration property:</b>  Header section contents.

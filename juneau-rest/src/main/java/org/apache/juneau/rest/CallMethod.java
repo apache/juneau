@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
@@ -68,11 +67,11 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final Response[] responses;
 	private final RestContext context;
 	private final BeanContext beanContext;
-	private final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlNav, htmlAside,
+	final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlNav, htmlAside,
 		htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
-	private final String[] htmlLinks;
-	private final boolean htmlNoWrap;
-	private final HtmlDocTemplate htmlTemplate;
+	final String[] htmlLinks;
+	final boolean htmlNoWrap;
+	final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> widgets;
 
 	CallMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
@@ -872,128 +871,14 @@ class CallMethod implements Comparable<CallMethod>  {
 				Object o = super.get(key);
 				if (o == null) {
 					String k = key.toString();
-					if (k.indexOf('.') != -1) {
-						String prefix = k.substring(0, k.indexOf('.'));
-						String remainder = k.substring(k.indexOf('.')+1);
-						if ("path".equals(prefix))
-							return req.getPathMatch().get(remainder);
-						if ("query".equals(prefix))
-							return req.getQuery().get(remainder);
-						if ("formData".equals(prefix))
-							return req.getFormData().get(remainder);
-						if ("header".equals(prefix))
-							return req.getHeader(remainder);
+					int i = k.indexOf('.');
+					if (i != -1) {
+						String prefix = k.substring(0, i);
+						String remainder = k.substring(i+1);
+						Object v = req.resolveProperty(CallMethod.this, prefix, remainder);
+						if (v != null)
+							return v;
 					}
-					if (k.equals(REST_servletPath))
-						return req.getServletPath();
-					if (k.equals(REST_servletURI))
-						return req.getUriContext().getRootRelativeServletPath();
-					if (k.equals(REST_pathInfo))
-						return req.getPathInfo();
-					if (k.equals(REST_requestURI))
-						return req.getRequestURI();
-					if (k.equals(REST_method))
-						return req.getMethod();
-					if (k.equals(REST_siteName))
-						return req.getSiteName();
-					if (k.equals(REST_servletTitle))
-						return req.getServletTitle();
-					if (k.equals(REST_servletDescription))
-						return req.getServletDescription();
-					if (k.equals(REST_methodSummary))
-						return req.getMethodSummary();
-					if (k.equals(REST_methodDescription))
-						return req.getMethodDescription();
-					if (k.equals(HTMLDOC_title)) {
-						String s = htmlTitle;
-						if (! StringUtils.isEmpty(s))
-							return req.resolveVars(s);
-						return req.getServletTitle();
-					}
-					if (k.equals(HTMLDOC_description)) {
-						String s = htmlDescription;
-						if (! StringUtils.isEmpty(s))
-							return req.resolveVars(s);
-						s = req.getMethodSummary();
-						if (StringUtils.isEmpty(s))
-							s = req.getServletDescription();
-						return s;
-					}
-					if (k.equals(HTMLDOC_header))
-						return htmlHeader == null ? null : req.resolveVars(htmlHeader);
-					if (k.equals(HTMLDOC_branding))
-						return htmlBranding == null ? null : req.resolveVars(htmlBranding);
-					if (k.equals(HTMLDOC_links)) {
-						if (htmlLinks == null || htmlLinks.length == 0)
-							return null;
-						try {
-							List<String> la = new ArrayList<String>();
-							for (String l : htmlLinks) {
-								// Temporary backwards compatibility with JSON object format.
-								if (l.startsWith("{")) {
-									ObjectMap m = new ObjectMap(l);
-									for (Map.Entry<String,Object> e : m.entrySet())
-										la.add(req.resolveVars(e.getKey()) + ":" + req.resolveVars(StringUtils.toString(e.getValue())));
-								} else {
-									la.add(req.resolveVars(l));
-								}
-							}
-							return la;
-						} catch (ParseException e) {
-							throw new RuntimeException(e);
-						}
-					}
-					if (k.equals(HTMLDOC_nav))
-						return htmlNav == null ? null : req.resolveVars(htmlNav);
-					if (k.equals(HTMLDOC_aside))
-						return htmlAside == null ? null : req.resolveVars(htmlAside);
-					if (k.equals(HTMLDOC_footer))
-						return htmlFooter == null ? null : req.resolveVars(htmlFooter);
-					if (k.equals(HTMLDOC_style)) {
-						Set<String> l = new LinkedHashSet<String>();
-						if (htmlStyle != null)
-							l.add(req.resolveVars(htmlStyle));
-						for (Widget w : req.getWidgets().values()) {
-							String style;
-							try {
-								style = w.getStyle(req);
-							} catch (Exception e) {
-								style = e.getLocalizedMessage();
-							}
-							if (style != null)
-								l.add(req.resolveVars(style));
-						}
-						return l;
-					}
-					if (k.equals(HTMLDOC_script)) {
-						Set<String> l = new LinkedHashSet<String>();
-						if (htmlScript != null)
-							l.add(req.resolveVars(htmlScript));
-						for (Widget w : req.getWidgets().values()) {
-							String script;
-							try {
-								script = w.getScript(req);
-							} catch (Exception e) {
-								script = e.getLocalizedMessage();
-							}
-							if (script != null)
-								l.add(req.resolveVars(script));
-						}
-						return l;
-					}
-					if (k.equals(HTMLDOC_stylesheet)) {
-						String s = req.getStylesheet();
-						// Exclude absolute URIs to stylesheets for security reasons.
-						if (s == null || isAbsoluteUri(s))
-							s = htmlStylesheet;
-						return s == null ? null : req.resolveVars(s);
-					}
-					if (k.equals(HTMLDOC_template))
-						return htmlTemplate;
-					if (k.equals(HTMLDOC_nowrap))
-						return htmlNoWrap;
-					if (k.equals(HTMLDOC_noResultsMessage))
-						return htmlNoResultsMessage == null ? null : req.resolveVars(htmlNoResultsMessage);
 					o = req.getPathMatch().get(k);
 					if (o == null)
 						o = req.getHeader(k);
