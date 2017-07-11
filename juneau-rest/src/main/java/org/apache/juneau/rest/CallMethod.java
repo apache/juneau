@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.rest.RestUtils.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
 import java.lang.annotation.*;
@@ -177,14 +178,15 @@ class CallMethod implements Comparable<CallMethod>  {
 					Widget w = ClassUtils.newInstance(Widget.class, wc);
 					htmlWidgets.put(w.getName(), w);
 				}
-				htmlHeader = hd.header().length == 0 ? context.getHtmlHeader() : join(hd.header(), '\n');
-				htmlLinks = hd.links().length == 0 ? context.getHtmlLinks() : hd.links();
-				htmlNav = hd.nav().length == 0 ? context.getHtmlNav() : join(hd.nav(), '\n');
-				htmlAside = hd.aside().length == 0 ? context.getHtmlAside() : join(hd.aside(), '\n');
-				htmlFooter = hd.footer().length == 0 ? context.getHtmlFooter() : join(hd.footer(), '\n');
-				htmlStyle = hd.style().length == 0 ? context.getHtmlStyle() : join(hd.style(), '\n');
+
+				htmlHeader = resolveNewlineSeparatedAnnotation(hd.header(), context.getHtmlHeader());
+				htmlNav = resolveNewlineSeparatedAnnotation(hd.nav(), context.getHtmlNav());
+				htmlAside = resolveNewlineSeparatedAnnotation(hd.aside(), context.getHtmlAside());
+				htmlFooter = resolveNewlineSeparatedAnnotation(hd.footer(), context.getHtmlFooter());
+				htmlStyle = resolveNewlineSeparatedAnnotation(hd.style(), context.getHtmlStyle());
+				htmlScript = resolveNewlineSeparatedAnnotation(hd.script(), context.getHtmlScript());
+				htmlLinks = resolveLinks(hd.links(), context.getHtmlLinks());
 				htmlStylesheet = hd.stylesheet().isEmpty() ? context.getHtmlStylesheet() : hd.stylesheet();
-				htmlScript = hd.script().length == 0 ? context.getHtmlScript() : join(hd.script(), '\n');
 				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();
 				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.noResultsMessage();
 				htmlTemplate =

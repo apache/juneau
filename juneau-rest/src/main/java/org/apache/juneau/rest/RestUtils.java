@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
+import java.util.regex.*;
 
 import javax.servlet.http.*;
 
@@ -181,5 +184,43 @@ public final class RestUtils {
 		String name = s.substring(0, i).trim();
 		String val = s.substring(i+1).trim();
 		return new String[]{name,val};
+	}
+
+	static String resolveNewlineSeparatedAnnotation(String[] value, String fromParent) {
+		if (value.length == 0)
+			return fromParent;
+
+		List<String> l = new ArrayList<String>();
+		for (String v : value) {
+			if (! "INHERIT".equals(v))
+				l.add(v);
+			else if (fromParent != null)
+				l.addAll(Arrays.asList(fromParent));
+		}
+		return join(l, '\n');
+	}
+
+	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
+
+	static String[] resolveLinks(String[] links, String[] parentLinks) {
+		if (links.length == 0)
+			return parentLinks;
+
+		List<String> list = new ArrayList<String>();
+		for (String l : links) {
+			if ("INHERIT".equals(l))
+				list.addAll(Arrays.asList(parentLinks));
+			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
+					Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
+					lm.matches();
+					String key = lm.group(1);
+					int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
+					String remainder = lm.group(3);
+					list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+			} else {
+				list.add(l);
+			}
+		}
+		return list.toArray(new String[list.size()]);
 	}
 }

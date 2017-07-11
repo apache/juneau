@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.RestUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -223,20 +224,14 @@ public class RestConfig implements ServletConfig {
 				HtmlDoc hd = r.htmldoc();
 				for (Class<? extends Widget> cw : hd.widgets())
 					addHtmlWidget(cw);
-				if (hd.header().length > 0)
-					setHtmlHeader(join(hd.header(), '\n'));
-				if (hd.links().length != 0)
-					setHtmlLinks(hd.links());
-				if (hd.nav().length > 0)
-					setHtmlNav(join(hd.nav(), '\n'));
-				if (hd.aside().length > 0)
-					setHtmlAside(join(hd.aside(), '\n'));
-				if (hd.footer().length > 0)
-					setHtmlFooter(join(hd.footer(), '\n'));
-				if (hd.style().length > 0)
-					setHtmlStyle(join(hd.style(), '\n'));
-				if (hd.script().length > 0)
-					setHtmlScript(join(hd.script(), '\n'));
+				setHtmlHeader(resolveNewlineSeparatedAnnotation(hd.header(), htmlHeader));
+				setHtmlNav(resolveNewlineSeparatedAnnotation(hd.nav(), htmlNav));
+				setHtmlAside(resolveNewlineSeparatedAnnotation(hd.aside(), htmlAside));
+				setHtmlFooter(resolveNewlineSeparatedAnnotation(hd.footer(), htmlFooter));
+				setHtmlStyle(resolveNewlineSeparatedAnnotation(hd.style(), htmlStyle));
+				setHtmlScript(resolveNewlineSeparatedAnnotation(hd.script(), htmlScript));
+				setHtmlLinks(resolveLinks(hd.links(), htmlLinks));
+
 				if (! hd.stylesheet().isEmpty())
 					setHtmlStylesheet(hd.stylesheet());
 				if (! hd.noResultsMessage().isEmpty())

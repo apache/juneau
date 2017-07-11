@@ -464,6 +464,9 @@ public final class RestContext extends Context {
 					r = p.second();
 				} else if (o instanceof Class<?>) {
 					Class<?> c = (Class<?>)o;
+					// Don't allow specifying yourself as a child.  Causes an infinite loop.
+					if (c == config.resourceClass)
+						continue;
 					r = c;
 				} else {
 					r = o;

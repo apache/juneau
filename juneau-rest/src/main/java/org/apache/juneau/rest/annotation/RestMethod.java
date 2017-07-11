@@ -355,13 +355,18 @@ public @interface RestMethod {
 	 * </p>
 	 *
 	 * <p>
-	 * The format of each value is: <js>"Key: comma-delimited-tokens".
+	 * The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
 	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
 	 * <br>Values are comma-delimited lists of bean property names.
 	 * <br>Properties apply to specified class and all subclasses.
 	 *
 	 * <p>
-	 * Semicolons can be used as an additional separator for multiple values: <code>bpi="Bean1: foo; Bean2: bar,baz"</code>
+	 * Semicolons can be used as an additional separator for multiple values:
+	 * <p class='bcode'>
+	 * 	<jc>// Equivalent</jc>
+	 * 	bpi={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
+	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
+	 * </p>
 	 */
 	String[] bpi() default {};
 
@@ -396,13 +401,18 @@ public @interface RestMethod {
 	 * </p>
 	 *
 	 * <p>
-	 * The format of each value is: <js>"Key: comma-delimited-tokens".
+	 * The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
 	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
 	 * <br>Values are comma-delimited lists of bean property names.
 	 * <br>Properties apply to specified class and all subclasses.
 	 *
 	 * <p>
-	 * Semicolons can be used as an additional separator for multiple values: <code>bpi="Bean1: foo; Bean2: bar,baz"</code>
+	 * Semicolons can be used as an additional separator for multiple values:
+	 * <p class='bcode'>
+	 * 	<jc>// Equivalent</jc>
+	 * 	bpx={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
+	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
+	 * </p>
 	 */
 	String[] bpx() default {};
 

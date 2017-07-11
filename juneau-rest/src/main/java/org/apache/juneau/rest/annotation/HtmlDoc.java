@@ -113,7 +113,9 @@ public @interface HtmlDoc {
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
-	 * 		parent class.
+	 * 		parent class if not overridden.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 */
 	String[] header() default {};
@@ -161,6 +163,10 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * 	<li>
+	 * 		The parent links can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
+	 * 		to place a link inside the list of parent links.
 	 * </ul>
 	 */
 	String[] links() default {};
@@ -207,6 +213,8 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 */
 	String[] nav() default {};
@@ -248,6 +256,8 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 */
 	String[] aside() default {};
@@ -289,6 +299,8 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 */
 	String[] footer() default {};
@@ -328,6 +340,8 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 */
 	String[] style() default {};
@@ -405,6 +419,8 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
 	 * 		parent class.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * </ul>
 	 */
 	String[] script() default {};

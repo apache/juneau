@@ -37,6 +37,8 @@ import org.apache.juneau.rest.labels.*;
 		GzipResource.TestGzipOff.class,
 		GzipResource.TestGzipOn.class,
 		HeadersResource.class,
+		HtmlDocResource.class,
+		HtmlDocLinksResource.class,
 		InheritanceResource.TestEncoders.class,
 		InheritanceResource.TestTransforms.class,
 		InheritanceResource.TestParsers.class,
