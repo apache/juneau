@@ -75,7 +75,7 @@ public class PetStoreResource extends ResourceJena {
 		name="GET",
 		path="/",
 		summary="The complete list of pets in the store",
-		bpExcludes="{Pet:'breed,getsAlongWith'}",
+		bpx="Pet: breed,getsAlongWith",
 		
 		// Add our converter for POJO query support.
 		converters=Queryable.class,

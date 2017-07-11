@@ -97,19 +97,24 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no header.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * Multiple values are combined with newlines into a single string.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlHeader(String)}/{@link RestResponse#setHtmlHeader(Object)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no header.
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlHeader(String)} and {@link RestResponse#setHtmlHeader(Object)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String[] header() default {};
 
@@ -139,19 +144,24 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This field can also use URIs of any support type in {@link UriResolver}.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlLinks(String[])}/{@link RestResponse#setHtmlLinks(String[])} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		This field can also use URIs of any support type in {@link UriResolver}.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlLinks(String[])} and {@link RestResponse#setHtmlLinks(String[])} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String[] links() default {};
 
@@ -178,22 +188,26 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * When a value is specified, the {@link #links()} value will be ignored.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * Multiple values are combined with newlines into a single string.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlNav(String)}/{@link RestResponse#setHtmlNav(Object)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When a value is specified, the {@link #links()} value will be ignored.
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlNav(String)} and {@link RestResponse#setHtmlNav(Object)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String[] nav() default {};
 
@@ -217,19 +231,24 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * Multiple values are combined with newlines into a single string.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlAside(String)}/{@link RestResponse#setHtmlAside(Object)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlAside(String)} and {@link RestResponse#setHtmlAside(Object)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String[] aside() default {};
 
@@ -253,19 +272,24 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * Multiple values are combined with newlines into a single string.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlFooter(String)}/{@link RestResponse#setHtmlFooter(Object)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlFooter(String)} and {@link RestResponse#setHtmlFooter(Object)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String[] footer() default {};
 
@@ -287,19 +311,24 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * Multiple values are combined with newlines into a single string.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlStyle(String)}/{@link RestResponse#setHtmlStyle(Object)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlStyle(String)} and {@link RestResponse#setHtmlStyle(Object)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String[] style() default {};
 
@@ -324,14 +353,21 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols defined
-	 * by {@link UriResolver}.
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlStylesheet(String)}/{@link RestResponse#setHtmlStylesheet(Object)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols
+	 * 		defined by {@link UriResolver}.
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlStylesheet(String)}/{@link RestResponse#setHtmlStylesheet(Object)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String stylesheet() default "";
 
@@ -352,19 +388,24 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * Multiple values are combined with newlines into a single string.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlScript(String)}/{@link RestResponse#setHtmlScript(Object)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlScript(String)} and {@link RestResponse#setHtmlScript(Object)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	String[] script() default {};
 
@@ -388,9 +429,17 @@ public @interface HtmlDoc {
 	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setHtmlTemplate(Class)}/{@link RestResponse#setHtmlTemplate(Class)} methods.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlTemplate(Class)} and {@link RestResponse#setHtmlTemplate(Class)} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.class;
 
@@ -398,8 +447,11 @@ public @interface HtmlDoc {
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement HTML.
 	 *
-	 * <p>
-	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * </ul>
 	 */
 	Class<? extends Widget>[] widgets() default {};
 }

@@ -20,93 +20,93 @@ import org.apache.juneau.rest.jena.*;
  * JUnit automated testcase resource.
  */
 @RestResource(
-	path="/testBpIncludes"
+	path="/testBpi"
 )
-public class BpIncludesResource extends RestServletJenaDefault {
+public class BpiResource extends RestServletJenaDefault {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================
 	// Validates that the @RestMethod(bpIncludes,bpExcludes) properties work.
 	//====================================================================================================
 
-	@RestMethod(name="GET", path="/test/a1", bpIncludes="{MyBeanA:'a,_b'}")
+	@RestMethod(name="GET", path="/test/a1", bpi="MyBeanA: a,_b")
 	public Object testA1() throws Exception {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name="GET", path="/test/a2", bpIncludes="{MyBeanA:'a'}")
+	@RestMethod(name="GET", path="/test/a2", bpi="MyBeanA: a")
 	public Object testA2() throws Exception {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name="GET", path="/test/a3", bpIncludes="{MyBeanA:'_b'}")
+	@RestMethod(name="GET", path="/test/a3", bpi="MyBeanA: _b")
 	public Object testA3() throws Exception {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name="GET", path="/test/a4", bpExcludes="{MyBeanA:'a'}")
+	@RestMethod(name="GET", path="/test/a4", bpi="MyBeanA: a")
 	public Object testA4() throws Exception {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name="GET", path="/test/a5", bpExcludes="{MyBeanA:'_b'}")
+	@RestMethod(name="GET", path="/test/a5", bpi="MyBeanA: _b")
 	public Object testA5() throws Exception {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name="GET", path="/test/a6", bpExcludes="{MyBeanA:'a,_b'}")
+	@RestMethod(name="GET", path="/test/a6", bpi="MyBeanA: a,_b")
 	public Object testA6() throws Exception {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name="GET", path="/test/b1", bpIncludes="{MyBeanB:'a,_b'}")
+	@RestMethod(name="GET", path="/test/b1", bpi="MyBeanB: a,_b")
 	public Object testB1() throws Exception {
 		return new MyBeanB().init();
 	}
 
-	@RestMethod(name="GET", path="/test/b2", bpIncludes="{MyBeanB:'a'}")
+	@RestMethod(name="GET", path="/test/b2", bpi="MyBeanB: a")
 	public Object testB2() throws Exception {
 		return new MyBeanB().init();
 	}
 
-	@RestMethod(name="GET", path="/test/b3", bpIncludes="{MyBeanB:'_b'}")
+	@RestMethod(name="GET", path="/test/b3", bpi="MyBeanB: _b")
 	public Object testB3() throws Exception {
 		return new MyBeanB().init();
 	}
 
-	@RestMethod(name="GET", path="/test/b4", bpExcludes="{MyBeanB:'a'}")
+	@RestMethod(name="GET", path="/test/b4", bpi="MyBeanB: a")
 	public Object testB4() throws Exception {
 		return new MyBeanB().init();
 	}
 
-	@RestMethod(name="GET", path="/test/b5", bpExcludes="{MyBeanB:'_b'}")
+	@RestMethod(name="GET", path="/test/b5", bpi="MyBeanB: _b'")
 	public Object testB5() throws Exception {
 		return new MyBeanB().init();
 	}
 
-	@RestMethod(name="GET", path="/test/b6", bpExcludes="{MyBeanB:'a,_b'}")
+	@RestMethod(name="GET", path="/test/b6", bpi="MyBeanB: a,_b")
 	public Object testB6() throws Exception {
 		return new MyBeanB().init();
 	}
 
-	@RestMethod(name="GET", path="/test/c1", bpIncludes="{*:'a'}")
+	@RestMethod(name="GET", path="/test/c1", bpi="*: a")
 	public Object testC1() throws Exception {
 		return new MyBeanA().init();
 	}
 
-	@RestMethod(name="GET", path="/test/c2", bpIncludes="{org.apache.juneau.rest.test.BpIncludesResource$MyBeanA:'a'}")
+	@RestMethod(name="GET", path="/test/c2", bpi="org.apache.juneau.rest.test.BpIncludesResource$MyBeanA: a")
 	public Object testC2() throws Exception {
 		return new MyBeanA().init();
 	}
 
 	// Should not match.
-	@RestMethod(name="GET", path="/test/d1", bpIncludes="{MyBean:'a'}")
+	@RestMethod(name="GET", path="/test/d1", bpi="MyBean: a")
 	public Object testD1() throws Exception {
 		return new MyBeanA().init();
 	}
 
 	// Should not match.
-	@RestMethod(name="GET", path="/test/d2", bpIncludes="{MyBean*:'a'}")
+	@RestMethod(name="GET", path="/test/d2", bpi="MyBean*: a")
 	public Object testD2() throws Exception {
 		return new MyBeanA().init();
 	}

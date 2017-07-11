@@ -422,12 +422,26 @@ public @interface RestResource {
 	 * Optional site name.
 	 *
 	 * <p>
-	 * Used as a label for the overall site.
+	 * The site name is intended to be a title that can be applied to the entire site.
+	 *
+	 * <p>
 	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
 	 *
 	 * <p>
+	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
+	 * common parent class like so:
+	 * <p class='bcode'>
+	 * 	htmldoc=<ja>@HtmlDoc</ja>(
+	 * 		header={
+	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
+	 * 			<js>"&lt;h2&gt;$R{servletTitle}&lt;/h2&gt;"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getSiteName(RestRequest)} method.
@@ -447,7 +461,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/title</code>.
@@ -470,7 +484,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/description</code>.
@@ -488,7 +502,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestConfig#setConfigFile(ConfigFile)} method.

@@ -6929,8 +6929,6 @@
 			<li>
 				Simplified the stylesheets and HTML code.
 				<ul>
-					<li>Replaced <code><xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt></code> with just <code><xt>&lt;header&gt;</xt>/<xt>&lt;h1&gt;</xt></code>.
-					<li>Replaced <code><xt>&lt;h5</xt> <xa>class</xa>=<xs>'description'</xs><xt>&gt;</xt></code> with just <code><xt>&lt;header&gt;</xt>/<xt>&lt;h2&gt;</xt></code>.
 					<li>Replaced <code><xt>&lt;a</xt> <xa>class</xa>=<xs>'link'</xs><xt>&gt;</xt></code> with just <code><xt>&lt;nav&gt;</xt>/<xt>&lt;a&gt;</xt></code>.
 					<li>The nav links are now an ordered list of elements.
 				</ul>
@@ -6994,11 +6992,11 @@
 					<li>
 						Renamed widgets:
 						<ul>
-							<li><code>PoweredByApacheWidget</code> -&lt; <code>PoweredByApache</code>  
-							<li><code>PoweredByJuneauWidget</code> -&lt; <code>PoweredByJuneau</code>  
+							<li><code>PoweredByApacheWidget</code> -&gt; <code>PoweredByApache</code>  
+							<li><code>PoweredByJuneauWidget</code> -&gt; <code>PoweredByJuneau</code>  
 						</ul>
 					<li>
-						New {@link org.apache.juneau.rest.widget.MenuItemWidget} can be used to create pull-down menu items.
+						New {@link org.apache.juneau.rest.widget.MenuItemWidget} can be used as a starting point for creatint pull-down menu items.
 					<li>
 						New {@link org.apache.juneau.rest.widget.ContentTypeMenuItem} widget that provides a pull-down menu 
 						with hyperlinks for all supported languages for that page:
@@ -7069,12 +7067,19 @@
 				file from the classpath to populate the aside section of a page.
 				<p class='bcode'>
 	htmldoc=<ja>@HtmlDoc</ja>(
-		<js>// Pull in aside contents from file.</js>
+		<jc>// Pull in aside contents from file.</jc>
 		aside=<js>"$F{resources/DockerRegistryResourceAside.html}"</js>
 	)
 				</p>
 			<li>
 				New {@link org.apache.juneau.rest.ReaderResource#toCommentStrippedString()} method.
+			<li>
+				The <code>bpIncludes()</code> and <code>bpExcludes()</code> annotations on <ja>@RestMethod</ja>
+				has been replaced with the following:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpi() bpi()} - Now an array of simplified values instead of LAX JSON.
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpx() bpx()} - Now an array of simplified values instead of LAX JSON.
+				</ul>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.examples</h6>
@@ -7370,8 +7375,8 @@
 				<ul>
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultQuery() defaultQuery()}
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultFormData() defaultFormData()}
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpIncludes() bpIncludes()}
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpExcludes() bpExcludes()}
+					<li><code><del>bpIncludes()</del></code>
+					<li><code><del>bpExcludes()</del></code>
 				</ul>
 			<li>
 				Default values on header, query, and form-data annotations:

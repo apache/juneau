@@ -51,7 +51,7 @@ public @interface MethodSwagger {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
@@ -84,7 +84,7 @@ public @interface MethodSwagger {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
@@ -113,7 +113,7 @@ public @interface MethodSwagger {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
@@ -160,7 +160,7 @@ public @interface MethodSwagger {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/parameters</code>.
@@ -208,7 +208,7 @@ public @interface MethodSwagger {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 */
 	Response[] responses() default {};
 }

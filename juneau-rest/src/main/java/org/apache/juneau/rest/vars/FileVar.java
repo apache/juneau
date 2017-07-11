@@ -45,6 +45,8 @@ import org.apache.juneau.utils.*;
  * 	<li><js>"MyResource.txt"</js>
  * </ol>
  *
+ * <p>
+ * Example:
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -54,7 +56,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <p>
- * Files of type HTML, JSON, Javascript, or CSS will be stripped of comments.
+ * Files of type HTML, XHTML, XML, JSON, Javascript, and CSS will be stripped of comments.
  * This allows you to place license headers in files without them being serialized to the output.
  *
  * @see org.apache.juneau.svl

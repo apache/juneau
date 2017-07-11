@@ -25,7 +25,7 @@ import org.junit.runners.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
-public class BpIncludesTest extends RestTestcase {
+public class BpiTest extends RestTestcase {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
@@ -197,7 +197,7 @@ public class BpIncludesTest extends RestTestcase {
 	private String json, xml, html, uon, urlEnc, msgPack, rdfXml;
 	private RestClient client = TestMicroservice.DEFAULT_CLIENT;
 
-	public BpIncludesTest(String label, String json, String xml, String html, String uon, String urlEnc, String msgPack, String rdfXml) {
+	public BpiTest(String label, String json, String xml, String html, String uon, String urlEnc, String msgPack, String rdfXml) {
 		this.label = label;
 		this.json = json;
 		this.xml = xml;
@@ -210,43 +210,43 @@ public class BpIncludesTest extends RestTestcase {
 
 	@Test
 	public void a01_json() throws Exception {
-		String r = client.doGet("/testBpIncludes/test/" + label).accept("text/json+simple").getResponseAsString();
+		String r = client.doGet("/testBpi/test/" + label).accept("text/json+simple").getResponseAsString();
 		assertEquals(json, r);
 	}
 
 	@Test
 	public void a02_xml() throws Exception {
-		String r = client.doGet("/testBpIncludes/test/" + label).accept("text/xml").getResponseAsString().replace('"', '\'');
+		String r = client.doGet("/testBpi/test/" + label).accept("text/xml").getResponseAsString().replace('"', '\'');
 		assertEquals(xml, r);
 	}
 
 	@Test
 	public void a03_html() throws Exception {
-		String r = client.doGet("/testBpIncludes/test/" + label).accept("text/html+stripped").getResponseAsString();
+		String r = client.doGet("/testBpi/test/" + label).accept("text/html+stripped").getResponseAsString();
 		assertEquals(html, r);
 	}
 
 	@Test
 	public void a04_uon() throws Exception {
-		String r = client.doGet("/testBpIncludes/test/" + label).accept("text/uon").getResponseAsString();
+		String r = client.doGet("/testBpi/test/" + label).accept("text/uon").getResponseAsString();
 		assertEquals(uon, r);
 	}
 
 	@Test
 	public void a05_urlEnc() throws Exception {
-		String r = client.doGet("/testBpIncludes/test/" + label).accept("application/x-www-form-urlencoded").getResponseAsString();
+		String r = client.doGet("/testBpi/test/" + label).accept("application/x-www-form-urlencoded").getResponseAsString();
 		assertEquals(urlEnc, r);
 	}
 
 	@Test
 	public void a06_msgPack() throws Exception {
-		String r = client.doGet("/testBpIncludes/test/" + label).accept("octal/msgpack").parser(MsgPackParser.DEFAULT).getResponse(ObjectMap.class).toString();
+		String r = client.doGet("/testBpi/test/" + label).accept("octal/msgpack").parser(MsgPackParser.DEFAULT).getResponse(ObjectMap.class).toString();
 		assertEquals(msgPack, r);
 	}
 
 	@Test
 	public void a07_rdfXml() throws Exception {
-		String r = client.doGet("/testBpIncludes/test/" + label).accept("text/xml+rdf+abbrev").getResponseAsString();
+		String r = client.doGet("/testBpi/test/" + label).accept("text/xml+rdf+abbrev").getResponseAsString();
 		r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
 		TestUtils.assertEqualsAfterSort(rdfXml, r, "a07_rdfXml failed");
 	}

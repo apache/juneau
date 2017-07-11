@@ -794,6 +794,21 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the localized site name.
 	 *
 	 * <p>
+	 * The site name is intended to be a title that can be applied to the entire site.
+	 *
+	 * <p>
+	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
+	 * common parent class like so:
+	 * <p class='bcode'>
+	 * 	htmldoc=<ja>@HtmlDoc</ja>(
+	 * 		header={
+	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
+	 * 			<js>"&lt;h2&gt;$R{servletTitle}&lt;/h2&gt;"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
 	 * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.
 	 *
 	 * @return The localized servlet label.

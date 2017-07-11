@@ -22,7 +22,7 @@ import org.apache.juneau.rest.labels.*;
 	children={
 		AcceptCharsetResource.class,
 		BeanContextPropertiesResource.class,
-		BpIncludesResource.class,
+		BpiResource.class,
 		CallbackStringsResource.class,
 		CharsetEncodingsResource.class,
 		ClientFuturesResource.class,

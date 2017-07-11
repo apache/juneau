@@ -346,27 +346,30 @@ public @interface RestMethod {
 	 * 	}
 	 *
 	 *	<jc>// Only render "id" property.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpIncludes=<js>"{MyBean:'id'}"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpi=<js>"MyBean: id"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
 	 *
 	 *	<jc>// Only render "a" and "b" properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>, bpIncludes=<js>"{MyBean:'a,b'}"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>, bpi=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
 	 * </p>
 	 *
 	 * <p>
-	 * The format of this value is a lax JSON object.
+	 * The format of each value is: <js>"Key: comma-delimited-tokens".
 	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
 	 * <br>Values are comma-delimited lists of bean property names.
 	 * <br>Properties apply to specified class and all subclasses.
+	 *
+	 * <p>
+	 * Semicolons can be used as an additional separator for multiple values: <code>bpi="Bean1: foo; Bean2: bar,baz"</code>
 	 */
-	String bpIncludes() default "";
+	String[] bpi() default {};
 
 	/**
 	 * Shortcut for specifying the {@link BeanContext#BEAN_excludeProperties} property on all serializers.
 	 *
 	 * <p>
-	 * Same as {@link #bpIncludes()} except you specify a list of bean property names that you want to exclude from
+	 * Same as {@link #bpi()} except you specify a list of bean property names that you want to exclude from
 	 * serialization.
 	 *
 	 * <p>
@@ -384,7 +387,7 @@ public @interface RestMethod {
 	 * 	}
 	 *
 	 *	<jc>// Don't show "a" and "b" properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpExcludes=<js>"{MyBean:'a,b'}"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpx=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
 	 *
 	 *	<jc>// Render all properties.</jc>
@@ -393,12 +396,15 @@ public @interface RestMethod {
 	 * </p>
 	 *
 	 * <p>
-	 * The format of this value is a lax JSON object.
+	 * The format of each value is: <js>"Key: comma-delimited-tokens".
 	 * <br>Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
 	 * <br>Values are comma-delimited lists of bean property names.
 	 * <br>Properties apply to specified class and all subclasses.
+	 *
+	 * <p>
+	 * Semicolons can be used as an additional separator for multiple values: <code>bpi="Bean1: foo; Bean2: bar,baz"</code>
 	 */
-	String bpExcludes() default "";
+	String[] bpx() default {};
 
 	/**
 	 * Specifies default values for request headers.
@@ -501,7 +507,7 @@ public @interface RestMethod {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/summary</code>.
@@ -529,7 +535,7 @@ public @interface RestMethod {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/description</code>.

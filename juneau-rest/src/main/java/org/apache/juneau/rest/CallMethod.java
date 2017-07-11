@@ -142,7 +142,6 @@ class CallMethod implements Comparable<CallMethod>  {
 		private Response[] responses;
 		private Map<String,Widget> htmlWidgets;
 
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 
@@ -201,8 +200,8 @@ class CallMethod implements Comparable<CallMethod>  {
 				UrlEncodingParserBuilder uepb = null;
 
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
-						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpIncludes().length() > 0
-						|| m.bpExcludes().length() > 0) {
+						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
+						|| m.bpx().length > 0) {
 					sgb = new SerializerGroupBuilder();
 					pgb = new ParserGroupBuilder();
 					uepb = new UrlEncodingParserBuilder(urlEncodingParser.createPropertyStore());
@@ -264,20 +263,32 @@ class CallMethod implements Comparable<CallMethod>  {
 						sgb.property(p1.name(), p1.value());
 					for (String p1 : m.flags())
 						sgb.property(p1, true);
-					if (! m.bpIncludes().isEmpty())
-						try {
-							sgb.includeProperties((Map)JsonParser.DEFAULT.parse(m.bpIncludes(), Map.class, String.class, String.class));
-						} catch (ParseException e) {
-							throw new RestServletException(
-									"Invalid format for @RestMethod.bpIncludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpIncludes());
+					if (m.bpi().length > 0) {
+						Map<String,String> bpiMap = new LinkedHashMap<String,String>();
+						for (String s : m.bpi()) {
+							for (String s2 : split(s, ';')) {
+								int i = s2.indexOf(':');
+								if (i == -1)
+									throw new RestServletException(
+										"Invalid format for @RestMethod.bpi() on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
+								bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
+							}
 						}
-					if (! m.bpExcludes().isEmpty())
-						try {
-							sgb.excludeProperties((Map)JsonParser.DEFAULT.parse(m.bpExcludes(), Map.class, String.class, String.class));
-						} catch (ParseException e) {
-							throw new RestServletException(
-								"Invalid format for @RestMethod.bpExcludes() on method ''{0}''.  Must be a valid JSON object.  \nValue: {1}", sig, m.bpExcludes());
+						sgb.includeProperties(bpiMap);
+					}
+					if (m.bpx().length > 0) {
+						Map<String,String> bpxMap = new LinkedHashMap<String,String>();
+						for (String s : m.bpx()) {
+							for (String s2 : split(s, ';')) {
+								int i = s2.indexOf(':');
+								if (i == -1)
+									throw new RestServletException(
+										"Invalid format for @RestMethod.bpx() on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
+								bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
+							}
 						}
+						sgb.excludeProperties(bpxMap);
+					}
 					sgb.beanFilters(m.beanFilters());
 					sgb.pojoSwaps(m.pojoSwaps());
 				}

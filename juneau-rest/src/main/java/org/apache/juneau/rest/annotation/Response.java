@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.rest.*;
+
 /**
  * Annotation used in conjunction with {@link MethodSwagger#responses()} to identify possible responses by the method.
  *
@@ -58,6 +60,7 @@ public @interface Response {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/responses/{code}/description</code>.

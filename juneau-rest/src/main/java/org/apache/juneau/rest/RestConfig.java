@@ -1086,6 +1086,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#header() @HtmlDoc.header()} annotation.
@@ -1110,6 +1111,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
@@ -1145,6 +1147,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
@@ -1171,6 +1174,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
@@ -1197,6 +1201,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
@@ -1220,6 +1225,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.
@@ -1250,6 +1256,7 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols defined
 	 * by {@link UriResolver}.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
@@ -1270,6 +1277,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no value.

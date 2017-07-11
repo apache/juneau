@@ -724,7 +724,7 @@ public final class RestContext extends Context {
 	 * 				<js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
 	 * 			}
 	 * 			header={
-	 * 				"<h1>$L{MyLocalizedPageTitle}"</js>
+	 * 				<js>"&lt;h1&gt;$L{MyLocalizedPageTitle}&lt;/h1&gt;"</js>
 	 * 			},
 	 * 			aside={
 	 * 				<js>"$F{resources/AsideText.html}"</js>
@@ -737,20 +737,25 @@ public final class RestContext extends Context {
 	 * <p>
 	 * The following is the default list of supported variables:
 	 * <ul>
-	 * 	<li><code>$S{systemProperty[,defaultValue]}</code> - System property. See {@link SystemPropertiesVar}.
-	 * 	<li><code>$E{envVar[,defaultValue]}</code> - Environment variable. See {@link EnvVariablesVar}.
 	 * 	<li><code>$C{key[,defaultValue]}</code> - Config file entry. See {@link ConfigFileVar}.
-	 * 	<li><code>$F{key[,defaultValue]}</code> - File resource. See {@link FileVar}.
+	 * 	<li><code>$E{envVar[,defaultValue]}</code> - Environment variable. See {@link EnvVariablesVar}.
+	 * 	<li><code>$F{path[,defaultValue]}</code> - File resource. See {@link FileVar}.
+	 * 	<li><code>$I{name[,defaultValue]}</code> - Servlet init parameter. See {@link ServletInitParamVar}.
 	 * 	<li><code>$L{key[,args...]}</code> - Localized message. See {@link LocalizationVar}.
 	 * 	<li><code>$R{key[,args...]}</code> - Request variable. See {@link RequestVar}.
+	 * 	<li><code>$S{systemProperty[,defaultValue]}</code> - System property. See {@link SystemPropertiesVar}.
 	 * 	<li><code>$SA{contentType,key[,defaultValue]}</code> - Serialized request attribute. See {@link SerializedRequestAttrVar}.
-	 * 	<li><code>$I{key[,defaultValue]}</code> - Servlet init parameter. See {@link ServletInitParamVar}.
 	 * 	<li><code>$U{uri}</code> - URI resolver. See {@link UrlVar}.
 	 * 	<li><code>$UE{uriPart}</code> - URL-Encoder. See {@link UrlEncodeVar}.
 	 * 	<li><code>$W{widgetName}</code> - HTML widget variable. See {@link WidgetVar}.
+	 * </ul>
+	 *
+	 * <p>
+	 * The following syntax variables are also provided:
+	 * <ul>
 	 * 	<li><code>$IF{booleanArg,thenValue[,elseValue]}</code> - If/else variable. See {@link IfVar}.
 	 * 	<li><code>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</code> - Switch variable. See {@link SwitchVar}.
-	 * <p>
+	 * </ul>
 	 *
 	 * <p>
 	 * The list of variables can be extended using the {@link RestConfig#addVars(Class...)} method.

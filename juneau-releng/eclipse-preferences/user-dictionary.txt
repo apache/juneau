@@ -480,3 +480,5 @@ myalert
 onclick
 popup
 hyperlinked
+bpx
+bpi
