@@ -38,7 +38,6 @@ import org.junit.runners.Suite.*;
 	GroupsTest.class,
 	GzipTest.class,
 	HeadersTest.class,
-	HtmlPropertiesTest.class,
 	InheritanceTest.class,
 	InterfaceProxyTest.class,
 	JacocoDummyTest.class,

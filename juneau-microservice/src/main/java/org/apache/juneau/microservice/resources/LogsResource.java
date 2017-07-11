@@ -32,7 +32,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.transforms.*;
-import org.apache.juneau.utils.*;
 
 /**
  * REST resource for viewing and accessing log files.
@@ -107,12 +106,9 @@ public class LogsResource extends Resource {
 					l.add(new FileResource(fc, fUrl));
 				}
 			}
-			res.setHtmlDescription(new StringMessage("Contents of {0}", f.getAbsolutePath()));
-			properties.put(HTMLDOC_description, "Contents of " + f.getAbsolutePath());
 			return l;
 		}
 
-		res.setHtmlDescription(new StringMessage("File details on {0}", f.getAbsolutePath()));
 		return new FileResource(f, new URI("servlet:/"));
 	}
 

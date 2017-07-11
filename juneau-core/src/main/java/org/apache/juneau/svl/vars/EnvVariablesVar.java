@@ -18,7 +18,7 @@ import org.apache.juneau.svl.*;
  * Environment variable variable resolver.
  *
  * <p>
- * The format for this var is <js>"$E{envVar}"</js> or <js>"$E{envVar,defaultValue}"</js>
+ * The format for this var is <js>"$E{envVar[,defaultValue]}"</js>.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

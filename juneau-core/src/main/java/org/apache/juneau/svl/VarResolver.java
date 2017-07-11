@@ -108,7 +108,7 @@ public class VarResolver {
 	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - System properties.
 	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - Environment variables.
 	 * 	<li><code>$IF{booleanValue,thenValue[,elseValue]}</code> - If-else patterns.
-	 * 	<li><code>$SWITCH{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - Switch patterns.
+	 * 	<li><code>$SW{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - Switch patterns.
 	 * </ul>
 	 *
 	 * @see SystemPropertiesVar

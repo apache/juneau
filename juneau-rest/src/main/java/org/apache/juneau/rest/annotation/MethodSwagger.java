@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.rest.*;
+
 /**
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.
  */
@@ -48,7 +50,8 @@ public @interface MethodSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
@@ -80,7 +83,8 @@ public @interface MethodSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
@@ -108,7 +112,8 @@ public @interface MethodSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
@@ -154,7 +159,8 @@ public @interface MethodSwagger {
 	 * English), and use resource bundles if you need to support localization.
 	 *
 	 * <p>
-	 * These annotations can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/parameters</code>.
@@ -201,7 +207,8 @@ public @interface MethodSwagger {
 	 * English), and use resource bundles if you need to support localization.
 	 *
 	 * <p>
-	 * These annotations can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 */
 	Response[] responses() default {};
 }

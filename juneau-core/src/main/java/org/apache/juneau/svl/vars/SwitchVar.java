@@ -24,10 +24,10 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is one of the following:
  * <ul>
- * 	<li><js>"$SWITCH{stringArg,pattern,thenValue}"</js>
- * 	<li><js>"$SWITCH{stringArg,pattern,thenValue,elseValue}"</js>
- * 	<li><js>"$SWITCH{stringArg,pattern,thenValue,pattern,thenValue}"</js>
- * 	<li><js>"$SWITCH{stringArg,pattern,thenValue,pattern,thenValue,elsePattern}"</js>
+ * 	<li><js>"$SW{stringArg,pattern,thenValue}"</js>
+ * 	<li><js>"$SW{stringArg,pattern,thenValue,elseValue}"</js>
+ * 	<li><js>"$SW{stringArg,pattern,thenValue,pattern,thenValue}"</js>
+ * 	<li><js>"$SW{stringArg,pattern,thenValue,pattern,thenValue,elsePattern}"</js>
  * 	<li>...
  * </ul>
  *
@@ -37,11 +37,11 @@ import org.apache.juneau.svl.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<jc>// Create a variable resolver that resolves system properties and $SWITCH vars.</jc>
+ * 	<jc>// Create a variable resolver that resolves system properties and $SW vars.</jc>
  * 	VarResolver r = <jk>new</jk> VarResolver().addVars(SwitchVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>);
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"We are running on $SWITCH{$P{os.name},*win*,Windows,Something else}!"</js>));
+ * 	System.<jsf>out</jsf>.println(r.resolve(<js>"We are running on $SW{$P{os.name},*win*,Windows,Something else}!"</js>));
  * </p>
  *
  * <p>
@@ -51,7 +51,7 @@ import org.apache.juneau.svl.*;
 public class SwitchVar extends MultipartVar {
 
 	/** The name of this variable. */
-	public static final String NAME = "SWITCH";
+	public static final String NAME = "SW";
 
 	/**
 	 * Constructor.
@@ -63,7 +63,7 @@ public class SwitchVar extends MultipartVar {
 	@Override /* MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		if (args.length < 3)
-			illegalArg("Invalid number of arguments passed to $SWITCH var.  Must have 3 or more arguments.");
+			illegalArg("Invalid number of arguments passed to $SW var.  Must have 3 or more arguments.");
 
 		String stringArg = args[0];
 		for (int i = 1; i < args.length;) {

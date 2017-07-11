@@ -18,7 +18,10 @@ import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Resolver for resolving widget variables <js>"$W{name}"</js>.
+ * HTML widget variable resolver.
+ *
+ * <p>
+ * The format for this var is <js>"$W{widgetName}"</js>.
  *
  * <p>
  * Widgets are simple class that produce some sort of string based on a passed-in HTTP request.
@@ -52,15 +55,11 @@ public class WidgetVar extends SimpleVar {
 	}
 
 	@Override /* Parameter */
-	public String resolve(VarResolverSession session, String key) {
+	public String resolve(VarResolverSession session, String key) throws Exception {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
 		Widget w = req.getWidgets().get(key);
 		if (w == null)
 			return "unknown-widget-"+key;
-		try {
-			return w.getHtml(req);
-		} catch (Exception e) {
-			return "widget-error-"+e.getLocalizedMessage();
-		}
+		return w.getHtml(req);
 	}
 }

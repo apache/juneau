@@ -19,7 +19,7 @@ import org.apache.juneau.svl.*;
  * Config file variable resolver.
  *
  * <p>
- * The format for this var is <js>"$C{key}"</js> or <js>"$C{key,defaultValue}"</js>.
+ * The format for this var is <js>"$C{key[,defaultValue]}"</js>.
  * See {@link ConfigFile#getString(String)} for the format of the key.
  *
  * <p>

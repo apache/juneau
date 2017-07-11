@@ -95,8 +95,9 @@ public abstract class Var {
 	 * @param session The session object used for a single instance of a string resolution.
 	 * @param arg The inside argument of the variable.
 	 * @return The resolved value.
+	 * @throws Exception Any thrown exception will be serialized as <js>"{exceptionMessage}"</js>
 	 */
-	protected String doResolve(VarResolverSession session, String arg) {
+	protected String doResolve(VarResolverSession session, String arg) throws Exception {
 		return resolve(session, arg);
 	}
 
@@ -106,8 +107,9 @@ public abstract class Var {
 	 * @param session The session object used for a single instance of a var resolution.
 	 * @param arg The inside argument of the variable.
 	 * @return The resolved value.
+	 * @throws Exception Any thrown exception will be serialized as <js>"{exceptionMessage}"</js>
 	 */
-	public abstract String resolve(VarResolverSession session, String arg);
+	public abstract String resolve(VarResolverSession session, String arg) throws Exception;
 
 	/**
 	 * The interface that needs to be implemented for subclasses of {@link StreamedVar}.
@@ -115,6 +117,7 @@ public abstract class Var {
 	 * @param session The session object used for a single instance of a var resolution.
 	 * @param w The writer to send the resolved value to.
 	 * @param arg The inside argument of the variable.
+	 * @throws Exception Any thrown exception will be serialized as <js>"{exceptionMessage}"</js>
 	 */
-	public abstract void resolveTo(VarResolverSession session, Writer w, String arg);
+	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
 }

@@ -426,7 +426,8 @@ public @interface RestResource {
 	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getSiteName(RestRequest)} method.
@@ -437,7 +438,7 @@ public @interface RestResource {
 	 * Optional servlet title.
 	 *
 	 * <p>
-	 * It is used to populate the Swagger title field and as a default value for the {@link HtmlDoc#title()} value.
+	 * It is used to populate the Swagger title field.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
 	 *
 	 * <p>
@@ -445,7 +446,8 @@ public @interface RestResource {
 	 * (e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/title</code>.
@@ -459,8 +461,7 @@ public @interface RestResource {
 	 * Optional servlet description.
 	 *
 	 * <p>
-	 * It is used to populate the Swagger description field and as a default value for the {@link HtmlDoc#description()}
-	 * value.
+	 * It is used to populate the Swagger description field.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletDescription()} method.
 	 *
 	 * <p>
@@ -468,7 +469,8 @@ public @interface RestResource {
 	 * (e.g. <js>"description = foo"</js> or <js>"MyServlet.description = foo"</js>).
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/description</code>.
@@ -485,7 +487,8 @@ public @interface RestResource {
 	 * The configuration file .
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestConfig#setConfigFile(ConfigFile)} method.

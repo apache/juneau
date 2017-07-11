@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * Utility class for finding resources for a class.
  *
  * <p>
- * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource on this class, searches
+ * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource on this class, it searches
  * up the parent hierarchy chain.
  *
  * <p>
@@ -200,7 +200,7 @@ public class ResourceFinder {
 					if (url != null) {
 						Resource r = cacheByUrl.get(url);
 						if (r == null) {
-							r = new Resource(IOUtils.readBytes(c2.getResourceAsStream(key.name), 1024));
+							r = new Resource(IOUtils.readBytes(c2.getResourceAsStream(n), 1024));
 							cacheByUrl.putIfAbsent(url, r);
 							r = cacheByUrl.get(url);
 						}

@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  *
@@ -41,7 +43,6 @@ public abstract class MapVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String varVal) {
-		Object o = m.get(varVal);
-		return (o == null ? null : o.toString());
+		return StringUtils.toString(m.get(varVal));
 	}
 }

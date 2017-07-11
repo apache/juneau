@@ -21,7 +21,7 @@ import org.apache.juneau.svl.*;
  * URL-encoding variable resolver.
  *
  * <p>
- * The format for this var is <js>"$UE{innerValue}"</js>.
+ * The format for this var is <js>"$UE{uriPart}"</js>.
  *
  * <p>
  * This variable takes the contents inside the variable and replaces it with a value returned by calling

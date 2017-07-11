@@ -90,15 +90,19 @@ public class VarResolverSession {
 			String val = s.substring(s.indexOf('{')+1, s.length()-1);
 			Var v = getVar(var);
 			if (v != null) {
-				if (v.streamed) {
-					StringWriter sw = new StringWriter();
-					v.resolveTo(this, sw, val);
-					return sw.toString();
+				try {
+					if (v.streamed) {
+						StringWriter sw = new StringWriter();
+						v.resolveTo(this, sw, val);
+						return sw.toString();
+					}
+					s = v.doResolve(this, val);
+					if (s == null)
+						s = "";
+					return resolve(s);
+				} catch (Exception e) {
+					return '{' + e.getLocalizedMessage() + '}';
 				}
-				s = v.doResolve(this, val);
-				if (s == null)
-					s = "";
-				return resolve(s);
 			}
 			return s;
 		}
@@ -236,16 +240,20 @@ public class VarResolverSession {
 								out.append(s, x2, i+1);
 							x = i+1;
 						} else {
-							if (r.streamed)
-								r.resolveTo(this, out, varVal);
-							else {
-								String replacement = r.doResolve(this, varVal);
-								if (replacement == null)
-									replacement = "";
-								// If the replacement also contains variables, replace them now.
-								if (replacement.indexOf('$') != -1)
-									replacement = resolve(replacement);
-								out.append(replacement);
+							try {
+								if (r.streamed)
+									r.resolveTo(this, out, varVal);
+								else {
+									String replacement = r.doResolve(this, varVal);
+									if (replacement == null)
+										replacement = "";
+									// If the replacement also contains variables, replace them now.
+									if (replacement.indexOf('$') != -1)
+										replacement = resolve(replacement);
+									out.append(replacement);
+								}
+							} catch (Exception e) {
+								out.append('{').append(e.getLocalizedMessage()).append('}');
 							}
 							x = i+1;
 						}

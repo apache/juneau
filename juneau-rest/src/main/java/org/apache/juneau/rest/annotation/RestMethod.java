@@ -500,7 +500,8 @@ public @interface RestMethod {
 	 * servlet resource bundle. (e.g. <js>"MyClass.myMethod.summary = foo"</js> or <js>"myMethod.summary = foo"</js>).
 	 *
 	 * <p>
-	 * This field value can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/summary</code>.
@@ -527,7 +528,8 @@ public @interface RestMethod {
 	 * <js>"myMethod.description = foo"</js>).
 	 *
 	 * <p>
-	 * This field value can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/description</code>.

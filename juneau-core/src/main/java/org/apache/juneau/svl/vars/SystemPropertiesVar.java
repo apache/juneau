@@ -18,7 +18,7 @@ import org.apache.juneau.svl.*;
  * System property variable resolver.
  *
  * <p>
- * The format for this var is <js>"$S{systemProperty}"</js> or <js>"$S{systemProperty,defaultValue}"</js>
+ * The format for this var is <js>"$S{systemProperty[,defaultValue]}"</js></js>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

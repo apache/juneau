@@ -38,7 +38,7 @@ public abstract class DefaultingVar extends SimpleVar {
 	}
 
 	@Override /* Var*/
-	public String doResolve(VarResolverSession session, String s) {
+	public String doResolve(VarResolverSession session, String s) throws Exception {
 		int i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());

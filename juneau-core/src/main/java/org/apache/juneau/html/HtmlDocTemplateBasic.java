@@ -100,20 +100,8 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	public void header(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
 		// Write the title of the page.
 		String header = session.getHeader();
-		if (header != null) {
-			if (exists(header))
-				w.append(3, header).nl(3);
-		} else {
-			String title = session.getTitle();
-			String description = session.getDescription();
-			String branding = session.getBranding();
-			if (exists(title))
-				w.oTag(3, "h1").append('>').append(title).eTag("h1").nl(3);
-			if (exists(description))
-				w.oTag(3, "h2").append('>').append(description).eTag("h2").nl(3);
-			if (exists(branding))
-				w.append(3, branding).nl(3);
-		}
+		if (exists(header))
+			w.append(3, header).nl(3);
 	}
 
 
@@ -196,7 +184,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public boolean hasHeader(HtmlDocSerializerSession session) {
-		return exists(session.getHeader()) || exists(session.getTitle()) || exists(session.getDescription());
+		return exists(session.getHeader());
 	}
 
 	@Override /* HtmlDocTemplate */

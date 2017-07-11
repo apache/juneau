@@ -234,8 +234,8 @@ public abstract class Microservice {
 	 * 	<li><code>$MF{key}</code>, <code>$MF{key,default}</code> - Manifest file entries.
 	 * 	<li><code>$ARG{key}</code>, <code>$ARG{key,default}</code> - Command-line arguments.
 	 * 	<li><code>$IF{boolArg,thenValue}</code>, <code>$IF{boolArg,thenValue,elseValue}</code> - If-block logic.
-	 * 	<li><code>$SWITCH{stringArg,pattern,thenVal...}</code>, 
-	 * 		<code>$SWITCH{stringArg,pattern,thenVal,elseVal...}</code>  - Switch-block logic.
+	 * 	<li><code>$SW{stringArg,pattern,thenVal...}</code>, 
+	 * 		<code>$SW{stringArg,pattern,thenVal,elseVal...}</code>  - Switch-block logic.
 	 * </ul>
 	 * 
 	 * <p>

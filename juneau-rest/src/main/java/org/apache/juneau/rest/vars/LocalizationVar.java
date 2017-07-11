@@ -21,7 +21,7 @@ import org.apache.juneau.svl.*;
  * Localized string variable resolver.
  *
  * <p>
- * The format for this var is <js>"$L{key}"</js> or <js>"$L{key,args...}"</js>.
+ * The format for this var is <js>"$L{key[,args...]}"</js>.
  *
  * <p>
  * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a

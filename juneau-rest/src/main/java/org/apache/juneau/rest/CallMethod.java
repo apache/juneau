@@ -67,8 +67,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final Response[] responses;
 	private final RestContext context;
 	private final BeanContext beanContext;
-	final String htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlNav, htmlAside,
-		htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
+	final String htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
 	final String[] htmlLinks;
 	final boolean htmlNoWrap;
 	final HtmlDocTemplate htmlTemplate;
@@ -104,9 +103,6 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.priority = b.priority;
 		this.parameters = b.parameters;
 		this.responses = b.responses;
-		this.htmlTitle = b.htmlTitle;
-		this.htmlDescription = b.htmlDescription;
-		this.htmlBranding = b.htmlBranding;
 		this.htmlHeader = b.htmlHeader;
 		this.htmlLinks = b.htmlLinks;
 		this.htmlNav = b.htmlNav;
@@ -122,8 +118,8 @@ class CallMethod implements Comparable<CallMethod>  {
 	}
 
 	private static class Builder  {
-		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlTitle, htmlDescription,
-			htmlBranding, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlHeader, htmlNoResultsMessage;
+		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlNav, htmlAside,
+			htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlHeader, htmlNoResultsMessage;
 		private String[] htmlLinks;
 		private boolean htmlNoWrap;
 		private HtmlDocTemplate htmlTemplate;
@@ -182,9 +178,6 @@ class CallMethod implements Comparable<CallMethod>  {
 					Widget w = ClassUtils.newInstance(Widget.class, wc);
 					htmlWidgets.put(w.getName(), w);
 				}
-				htmlTitle = hd.title().isEmpty() ? context.getHtmlTitle() : hd.title();
-				htmlDescription = hd.description().isEmpty() ? context.getHtmlDescription() : hd.description();
-				htmlBranding = hd.branding().length == 0 ? context.getHtmlBranding() : join(hd.branding(), '\n');
 				htmlHeader = hd.header().length == 0 ? context.getHtmlHeader() : join(hd.header(), '\n');
 				htmlLinks = hd.links().length == 0 ? context.getHtmlLinks() : hd.links();
 				htmlNav = hd.nav().length == 0 ? context.getHtmlNav() : join(hd.nav(), '\n');

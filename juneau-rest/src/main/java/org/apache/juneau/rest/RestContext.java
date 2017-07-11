@@ -44,6 +44,7 @@ import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 
@@ -242,9 +243,6 @@ public final class RestContext extends Context {
 		paramFormat,
 		clientVersionHeader,
 		fullPath,
-		htmlTitle,
-		htmlDescription,
-		htmlBranding,
 		htmlHeader,
 		htmlNav,
 		htmlAside,
@@ -358,9 +356,6 @@ public final class RestContext extends Context {
 			this.fullPath = b.fullPath;
 
 			this.htmlWidgets = Collections.unmodifiableMap(b.htmlWidgets);
-			this.htmlTitle = b.htmlTitle;
-			this.htmlDescription = b.htmlDescription;
-			this.htmlBranding = b.htmlBranding;
 			this.htmlHeader = b.htmlHeader;
 			this.htmlLinks = b.htmlLinks;
 			this.htmlNav = b.htmlNav;
@@ -545,8 +540,8 @@ public final class RestContext extends Context {
 		UrlEncodingSerializer urlEncodingSerializer;
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
-		String clientVersionHeader = "", defaultCharset, paramFormat, htmlTitle, htmlDescription, htmlBranding,
-			htmlHeader, htmlNav, htmlAside, htmlStyle, htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
+		String clientVersionHeader = "", defaultCharset, paramFormat, htmlHeader, htmlNav, htmlAside, htmlStyle,
+				htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
 		String[] htmlLinks;
 		boolean htmlNoWrap;
 		HtmlDocTemplate htmlTemplate;
@@ -589,7 +584,7 @@ public final class RestContext extends Context {
 					allowMethodParams.add(m.toUpperCase());
 
 			varResolver = sc.varResolverBuilder
-				.vars(LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
+				.vars(FileVar.class, LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
 				.build()
 			;
 			configFile = sc.configFile.getResolving(this.varResolver);
@@ -679,9 +674,6 @@ public final class RestContext extends Context {
 			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
 
 			htmlWidgets = sc.htmlWidgets;
-			htmlTitle = sc.htmlTitle;
-			htmlDescription = sc.htmlDescription;
-			htmlBranding = sc.htmlBranding;
 			htmlHeader = sc.htmlHeader;
 			htmlLinks = sc.htmlLinks;
 			htmlNav = sc.htmlNav;
@@ -701,6 +693,8 @@ public final class RestContext extends Context {
 	 *
 	 * <p>
 	 * Variable resolvers are used to replace variables in property values.
+	 * They can be nested arbitrarily deep.
+	 * They can also return values that themselves contain other variables.
 	 *
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
@@ -711,7 +705,7 @@ public final class RestContext extends Context {
 	 * 			<ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"$S{java.vendor,Oracle}"</js>),  <jc>// System property with default value</jc>
 	 * 			<ja>@Property</ja>(name=<js>"foo"</js>,value=<js>"bar"</js>),
 	 * 			<ja>@Property</ja>(name=<js>"bar"</js>,value=<js>"baz"</js>),
-	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo}"</js>),  <jc>// Request variable. value="bar"</jc>
+	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo}"</js>),  <jc>// Request variable.  value="bar"</jc>
 	 * 			<ja>@Property</ja>(name=<js>"v2"</js>,value=<js>"$R{$R{foo}}"</js>)  <jc>// Nested request variable. value="baz"</jc>
 	 * 		}
 	 * 	)
@@ -719,22 +713,49 @@ public final class RestContext extends Context {
 	 * </p>
 	 *
 	 * <p>
-	 * A typical usage pattern is using variables for resolving URL links when rendering HTML:
+	 * A typical usage pattern involves using variables inside the {@link HtmlDoc} annotation:
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"GET"</js>, path=<js>"/{name}/*"</js>,
-	 * 		properties={
-	 * 			<ja>@Property</ja>(
-	 * 				name=<jsf>HTMLDOC_links</jsf>,
-	 * 				value=<js>"{up:'$R{requestParentURI}', options:'servlet:/?method=OPTIONS', editLevel:'servlet:/editLevel?logger=$R{attribute.name}'}"</js>
-	 * 			)
-	 * 		}
+	 * 		htmldoc=@HtmlDoc(
+	 * 			links={
+	 * 				<js>"up: $R{requestParentURI}"</js>,
+	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 				<js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
+	 * 			}
+	 * 			header={
+	 * 				"<h1>$L{MyLocalizedPageTitle}"</js>
+	 * 			},
+	 * 			aside={
+	 * 				<js>"$F{resources/AsideText.html}"</js>
+	 * 			}
+	 * 		)
 	 * 	)
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Path</ja> String name) <jk>throws</jk> Exception {
 	 * </p>
 	 *
 	 * <p>
-	 * Calls to <code>req.getProperties().getString(<js>"key"</js>)</code> returns strings with variables resolved.
+	 * The following is the default list of supported variables:
+	 * <ul>
+	 * 	<li><code>$S{systemProperty[,defaultValue]}</code> - System property. See {@link SystemPropertiesVar}.
+	 * 	<li><code>$E{envVar[,defaultValue]}</code> - Environment variable. See {@link EnvVariablesVar}.
+	 * 	<li><code>$C{key[,defaultValue]}</code> - Config file entry. See {@link ConfigFileVar}.
+	 * 	<li><code>$F{key[,defaultValue]}</code> - File resource. See {@link FileVar}.
+	 * 	<li><code>$L{key[,args...]}</code> - Localized message. See {@link LocalizationVar}.
+	 * 	<li><code>$R{key[,args...]}</code> - Request variable. See {@link RequestVar}.
+	 * 	<li><code>$SA{contentType,key[,defaultValue]}</code> - Serialized request attribute. See {@link SerializedRequestAttrVar}.
+	 * 	<li><code>$I{key[,defaultValue]}</code> - Servlet init parameter. See {@link ServletInitParamVar}.
+	 * 	<li><code>$U{uri}</code> - URI resolver. See {@link UrlVar}.
+	 * 	<li><code>$UE{uriPart}</code> - URL-Encoder. See {@link UrlEncodeVar}.
+	 * 	<li><code>$W{widgetName}</code> - HTML widget variable. See {@link WidgetVar}.
+	 * 	<li><code>$IF{booleanArg,thenValue[,elseValue]}</code> - If/else variable. See {@link IfVar}.
+	 * 	<li><code>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</code> - Switch variable. See {@link SwitchVar}.
+	 * <p>
+	 *
+	 * <p>
+	 * The list of variables can be extended using the {@link RestConfig#addVars(Class...)} method.
+	 * For example, this is used to add support for the Args and Manifest-File variables in the microservice
+	 * <code>Resource</code> class.
 	 *
 	 * @return The var resolver in use by this resource.
 	 */
@@ -891,42 +912,6 @@ public final class RestContext extends Context {
 	 */
 	public String getPath() {
 		return fullPath;
-	}
-
-	/**
-	 * The HTML page title.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#title()} annotation or {@link RestConfig#setHtmlTitle(String)} method.
-	 *
-	 * @return The HTML page title.
-	 */
-	public String getHtmlTitle() {
-		return htmlTitle;
-	}
-
-	/**
-	 * The HTML page description.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#description()} annotation or {@link RestConfig#setHtmlDescription(String)} method.
-	 *
-	 * @return The HTML page description.
-	 */
-	public String getHtmlDescription() {
-		return htmlDescription;
-	}
-
-	/**
-	 * The HTML page branding.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#branding()} annotation or {@link RestConfig#setHtmlBranding(String)} method.
-	 *
-	 * @return The HTML page description.
-	 */
-	public String getHtmlBranding() {
-		return htmlBranding;
 	}
 
 	/**

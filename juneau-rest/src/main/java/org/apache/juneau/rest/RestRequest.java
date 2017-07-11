@@ -258,8 +258,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 			<br>Valid names:
 	 * 			<ul>
 	 * 				<li><js>"aside"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_aside}
-	 * 				<li><js>"branding"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_branding}
-	 * 				<li><js>"description"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_description}
 	 * 				<li><js>"footer"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_footer}
 	 * 				<li><js>"header"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_header}
 	 * 				<li><js>"links.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_links}
@@ -270,7 +268,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 				<li><js>"style.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_style}
 	 * 				<li><js>"stylesheet"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_stylesheet}
 	 * 				<li><js>"template"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_template}
-	 * 				<li><js>"title"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_title}
 	 * 			</ul>
 	 * 		<li>
 	 * 			<js>"Path"</js> - Value returned by {@link RestRequest#getPath(String)}.
@@ -314,19 +311,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				if (c2 == 'a') {
 					if ("aside".equals(name))
 						return cm.htmlAside == null ? null : resolveVars(cm.htmlAside);
-				} else if (c2 == 'b') {
-					if ("branding".equals(name))
-						return cm.htmlBranding == null ? null : resolveVars(cm.htmlBranding);
-				} else if (c2 == 'd') {
-					if ("description".equals(name)) {
-						String s = cm.htmlDescription;
-						if (! StringUtils.isEmpty(s))
-							return resolveVars(s);
-						s = getMethodSummary();
-						if (StringUtils.isEmpty(s))
-							s = getServletDescription();
-						return s;
-					}
 				} else if (c2 == 'f') {
 					if ("footer".equals(name))
 						return cm.htmlFooter == null ? null : resolveVars(cm.htmlFooter);
@@ -404,12 +388,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				} else if (c2 == 't') {
 					if ("template".equals(name))
 						return cm.htmlTemplate;
-					if ("title".equals(name)) {
-						String s = cm.htmlTitle;
-						if (! StringUtils.isEmpty(s))
-							return resolveVars(s);
-						return getServletTitle();
-					}
 				}
 			}
 		} else if (c == 'P') {
@@ -1018,6 +996,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the variable resolver session for this request using session objects created by
 	 * {@link RestCallHandler#getSessionObjects(RestRequest)}.
 	 *
+	 * <p>
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 *
 	 * @return The variable resolver for this request.
 	 */
 	public VarResolverSession getVarResolverSession() {
@@ -1044,6 +1025,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param resolveVars
 	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
 	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
+	 * 	<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
@@ -1066,6 +1048,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param resolveVars
 	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
 	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
+	 * 	<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
 	 */

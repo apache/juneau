@@ -6908,6 +6908,13 @@
 				New {@link org.apache.juneau.utils.ResourceFinder} utility class.
 				Allows you to search for resources up the parent hierarchy chain.
 				Also allows you to search for localized resources.
+			<li>
+				Eliminated the following properties from {@link org.apache.juneau.html.HtmlDocSerializerContext}:
+				<jsf>HTMLDOC_title</jsf>, <jsf>HTMLDOC_description</jsf>, <jsf>HTMLDOC_description</jsf>
+				<br>See below on changes to simplify HTML headers.
+			<li>
+				{@link org.apache.juneau.svl.Var} implementations can now throw exceptions and will be converted to
+				<js>""{exceptionMessage}"</js> values.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -7037,8 +7044,37 @@
 				Eliminated the <code>@RestResource.stylesheet()</code> annotation.  
 				It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
 			<li>
-				{@link org.apache.juneau.rest.annotation.HtmlDoc#title()} and {@link org.apache.juneau.rest.annotation.HtmlDoc#description()}
-				can now take HTML (phrasing content only since it's still inside H3 and H5 tags).
+				Eliminated the following annotations since they are now redundant with {@link org.apache.juneau.rest.annotation.HtmlDoc#header()}:
+				<ul>
+					<li><code>title()</code>
+					<li><code>description()</code>
+					<li><code>branding()</code>
+				</ul>
+				Instead, the {@link org.apache.juneau.rest.RestServletDefault} class defines the following default header
+				that can be easily overridden: 
+				<p class='bcode'>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		header={
+			<js>"&lt;h1&gt;$R{servletTitle}&lt;/h1&gt;"</js>,
+			<js>"&lt;h2&gt;$R{methodSummary,$R{servletDescription}}&lt;/h2&gt;"</js>,
+			<js>"&lt;a href='http://juneau.apache.org'&gt;&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;"</js>
+		}
+	)
+				</p>
+				Note that the subtitle first tries using the method summary and then the servlet description.
+			<li>
+				New {@link org.apache.juneau.rest.vars.FileVar $F} variable resolver for resolving the contents of 
+				files in the classpath.
+				<br>The <code>DockerRegistryResource</code> examples shows how it can be used to pull in a localized
+				file from the classpath to populate the aside section of a page.
+				<p class='bcode'>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		<js>// Pull in aside contents from file.</js>
+		aside=<js>"$F{resources/DockerRegistryResourceAside.html}"</js>
+	)
+				</p>
+			<li>
+				New {@link org.apache.juneau.rest.ReaderResource#toCommentStrippedString()} method.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.examples</h6>
@@ -7187,9 +7223,9 @@
 						<br>Annotation can be applied to POJO classes and bean properties.
 					<li>Several new properties for customizing parts of the HTML page:
 						<ul>
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_title}
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_description}
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_branding}
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_title</del></code>
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_description</del></code>
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_branding</del></code>
 							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_header}
 							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_nav}
 							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_aside}
@@ -7369,9 +7405,9 @@
 			<li>
 				New methods on {@link org.apache.juneau.rest.RestConfig}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTitle(String) setHtmlTitle(String)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlDescription(String) setHtmlDescription(String)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlBranding(String) setHtmlBranding(String)}
+					<li><code><del>setHtmlTitle(String)</del></code>
+					<li><code><del>setHtmlDescription(String)</del></code>
+					<li><code><del>setHtmlBranding(String)</del></code>
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlHeader(String) setHtmlHeader(String)}
 					<li><code><del>setHtmlLinks(String)</del></code>
 					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNav(String) setHtmlNav(String)}
@@ -7388,9 +7424,9 @@
 			<li>
 				New methods on {@link org.apache.juneau.rest.RestResponse}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlTitle(Object) setHtmlTitle(Object)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlDescription(Object) setHtmlDescription(Object)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlBranding(Object) setHtmlBranding(Object)}
+					<li><code><del>setHtmlTitle(Object)</del></code>
+					<li><code><del>setHtmlDescription(Object)</del></code>
+					<li><code><del>setHtmlBranding(Object)</del></code>
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlHeader(Object) setHtmlHeader(Object)}
 					<li><code><del>setHtmlLinks(Object)</del></code>
 					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNav(Object) setHtmlNav(Object)}
@@ -7528,7 +7564,7 @@
 			<li>Improvements to {@link org.apache.juneau.svl.VarResolver}.
 				<ul>
 					<li>New {@link org.apache.juneau.svl.vars.IfVar $IF} variable for if-else block logic.
-					<li>New {@link org.apache.juneau.svl.vars.SwitchVar $SWITCH} variable for switch block logic.
+					<li><code><del>$SWITCH</del></code> variable for switch block logic.
 					<li>Whitespace wasn't being ignored in some cases.
 				</ul>
 			<li>{@link org.apache.juneau.html.HtmlParser} can now parse full body contents generated by {@link org.apache.juneau.html.HtmlDocSerializer}. 

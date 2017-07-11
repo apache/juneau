@@ -20,15 +20,21 @@ import org.apache.juneau.rest.*;
 public @interface ResourceSwagger {
 	/**
 	 * Optional servlet terms-of-service for this API.
+	 *
 	 * <p>
 	 * It is used to populate the Swagger terms-of-service field.
+	 *
 	 * <p>
 	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
+	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
+	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)}
 	 * method.
@@ -66,7 +72,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/contact</code>.
@@ -106,7 +113,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/license</code>.
@@ -127,7 +135,8 @@ public @interface ResourceSwagger {
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/version</code>.
@@ -173,7 +182,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
@@ -213,7 +223,8 @@ public @interface ResourceSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.

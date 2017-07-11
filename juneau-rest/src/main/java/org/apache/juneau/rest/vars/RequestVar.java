@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -20,22 +22,30 @@ import org.apache.juneau.svl.*;
  * Request attribute variable resolver.
  *
  * <p>
- * The format for this var is <js>"$R{key}"</js>.
+ * The format for this var is <js>"$R{key[,defaultValue]}"</js>.
+ * 
+ * <p>
  * The possible values are:
  * <ul>
- * 	<li><code>$R{contextPath}</code> - Value returned by {@link RestRequest#getContextPath()}.
- * 	<li><code>$R{method}</code> - Value returned by {@link RestRequest#getMethod()}.
- * 	<li><code>$R{methodDescription}</code> - Value returned by {@link RestRequest#getMethodDescription()}.
- * 	<li><code>$R{pathInfo}</code> - Value returned by {@link RestRequest#getPathInfo()}.
- * 	<li><code>$R{requestParentURI}</code> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}.
- * 	<li><code>$R{requestURI}</code> - Value returned by {@link RestRequest#getRequestURI()}.
- * 	<li><code>$R{servletDescription}</code> - Value returned by {@link RestRequest#getServletDescription()}.
- * 	<li><code>$R{servletTitle}</code> - Value returned by {@link RestRequest#getServletTitle()}.
- * 	<li><code>$R{servletParentURI}</code> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}.
- * 	<li><code>$R{servletPath}</code> - Value returned by {@link RestRequest#getServletPath()}.
- * 	<li><code>$R{servletURI}</code> - Value returned by {@link UriContext#getRootRelativeServletPath()}.
+ * 	<li><js>"contextPath"</js> - Value returned by {@link RestRequest#getContextPath()}
+ * 	<li><js>"method"</js> - Value returned by {@link RestRequest#getMethod()}
+ * 	<li><js>"methodDescription"</js> - Value returned by {@link RestRequest#getMethodDescription()}
+ * 	<li><js>"methodSummary"</js> - Value returned by {@link RestRequest#getMethodSummary()}
+ * 	<li><js>"pathInfo"</js> - Value returned by {@link RestRequest#getPathInfo()}
+ * 	<li><js>"requestParentURI"</js> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}
+ * 	<li><js>"requestURI"</js> - Value returned by {@link RestRequest#getRequestURI()}
+ * 	<li><js>"servletDescription"</js> - Value returned by {@link RestRequest#getServletDescription()}
+ * 	<li><js>"servletParentURI"</js> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}
+ * 	<li><js>"servletPath"</js> - See {@link RestRequest#getServletPath()}
+ * 	<li><js>"servletTitle"</js> - See {@link RestRequest#getServletTitle()}
+ * 	<li><js>"servletURI"</js> - See {@link UriContext#getRootRelativeServletPath()}
+ * 	<li><js>"siteName"</js> - See {@link RestRequest#getSiteName()}
+ * 	<li><js>"Attribute.x"</js> - Value returned by {@link HttpServletRequest#getAttribute(String)}.
+ * 	<li><js>"FormData.x"</js> - Value returned by {@link RestRequest#getFormData(String)}.
+ * 	<li><js>"Header.x"</js> - Value returned by {@link RestRequest#getHeader(String)}.
+ * 	<li><js>"Path.x"</js> - Value returned by {@link RestRequest#getPath(String)}.
+ * 	<li><js>"Query.x"</js> = Value returned by {@link RestRequest#getQuery(String)}.
  * </ul>
- *
  * <p>
  * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
  * session object on the resolver session.
@@ -46,7 +56,7 @@ import org.apache.juneau.svl.*;
  *
  * @see org.apache.juneau.svl
  */
-public class RequestVar extends SimpleVar {
+public class RequestVar extends DefaultingVar {
 
 	/**
 	 * The name of the session or context object that identifies the {@link RestRequest} object.

@@ -38,6 +38,7 @@ import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Defines the initial configuration of a <code>RestServlet</code> or <code>@RestResource</code> annotated object.
@@ -103,7 +104,7 @@ public class RestConfig implements ServletConfig {
 	EncoderGroupBuilder encoders = new EncoderGroupBuilder().append(IdentityEncoder.INSTANCE);
 	List<Object> converters = new ArrayList<Object>();
 	List<Object> guards = new ArrayList<Object>();
-	MimetypesFileTypeMap mimeTypes = new MimetypesFileTypeMap();
+	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
 	Map<String,String> defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
 	Map<String,Object> defaultResponseHeaders = new LinkedHashMap<String,Object>();
 	List<Object> responseHandlers = new ArrayList<Object>();
@@ -112,8 +113,7 @@ public class RestConfig implements ServletConfig {
 	Object favIcon;
 	List<Object> staticFiles;
 	RestContext parentContext;
-	String path, htmlTitle, htmlDescription, htmlBranding, htmlHeader, htmlNav, htmlAside, htmlFooter,
-		htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
+	String path, htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
 	String[] htmlLinks;
 	String clientVersionHeader = "X-Client-Version";
 
@@ -223,12 +223,6 @@ public class RestConfig implements ServletConfig {
 				HtmlDoc hd = r.htmldoc();
 				for (Class<? extends Widget> cw : hd.widgets())
 					addHtmlWidget(cw);
-				if (! hd.title().isEmpty())
-					setHtmlTitle(hd.title());
-				if (! hd.description().isEmpty())
-					setHtmlDescription(hd.description());
-				if (hd.branding().length > 0)
-					setHtmlBranding(join(hd.branding(), '\n'));
 				if (hd.header().length > 0)
 					setHtmlHeader(join(hd.header(), '\n'));
 				if (hd.links().length != 0)
@@ -262,16 +256,6 @@ public class RestConfig implements ServletConfig {
 				DefaultHandler.class
 			);
 
-			addMimeTypes(
-				"text/css css CSS",
-				"text/html html htm HTML",
-				"text/plain txt text TXT",
-				"application/javascript js",
-				"image/png png",
-				"image/gif gif",
-				"application/xml xml XML",
-				"application/json json JSON"
-			);
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
@@ -678,23 +662,12 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * Refer to {@link MimetypesFileTypeMap#addMimeTypes(String)} for an explanation of the format.
 	 *
-	 * <p>
-	 * By default, this config includes the following mime-type definitions:
-	 * <ul>
-	 * 	<li><js>"text/css css CSS"</js>
-	 * 	<li><js>"text/html html htm HTML"</js>
-	 * 	<li><js>"text/plain txt text TXT"</js>
-	 * 	<li><js>"application/javascript js"</js>
-	 * 	<li><js>"image/png png"</js>
-	 * 	<li><js>"image/gif gif"</js>
-	 * 	<li><js>"application/xml xml XML"</js>
-	 * 	<li><js>"application/json json JSON"</js>
-	 * </ul>
-	 *
 	 * @param mimeTypes The MIME-types to add to this config.
 	 * @return This object (for method chaining).
 	 */
 	public RestConfig addMimeTypes(String...mimeTypes) {
+		if (this.mimeTypes == ExtendedMimetypesFileTypeMap.DEFAULT)
+			this.mimeTypes = new ExtendedMimetypesFileTypeMap();
 		for (String mimeType : mimeTypes)
 			this.mimeTypes.addMimeTypes(mimeType);
 		return this;
@@ -1099,124 +1072,6 @@ public class RestConfig implements ServletConfig {
 	}
 
 	/**
-	 * Sets the HTML page title.
-	 *
-	 * <p>
-	 * The format of this value is plain text.
-	 *
-	 * <p>
-	 * It gets wrapped in a <code><xt>&lt;h1&gt;</xt></code> element and then added
-	 * to the <code><xt>&lt;header&gt;</code> section on the page.
-	 *
-	 * <p>
-	 * If not specified, the page title is pulled from one of the following locations:
-	 * <ol>
-	 * 	<li><code>{servletClass}.{methodName}.pageTitle</code> resource bundle value.
-	 * 	<li><code>{servletClass}.pageTitle</code> resource bundle value.
-	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
-	 * 	<li><code>{servletClass}.title</code> resource bundle value.
-	 * 	<li><code>info/title</code> entry in swagger file.
-	 * </ol>
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		In most cases, you'll simply want to use the <code>@RestResource(title)</code> annotation to specify the
-	 * 		page title.
-	 * 		However, this annotation is provided in cases where you want the page title to be different that the one
-	 * 		shown in the swagger document.
-	 * </ul>
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#title() @HtmlDoc.title()} annotation.
-	 *
-	 * @param value The HTML page title.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlTitle(String value) {
-		this.htmlTitle = value;
-		return this;
-	}
-
-	/**
-	 * Sets the HTML page description.
-	 *
-	 * <p>
-	 * The format of this value is plain text.
-	 *
-	 * <p>
-	 * It gets wrapped in a <code><xt>&lt;h2&gt;</xt></code> element and then
-	 * added to the <code><xt>&lt;header&gt;</code> section on the page.
-	 *
-	 * <p>
-	 * If not specified, the page title is pulled from one of the following locations:
-	 * <ol>
-	 * 	<li><code>{servletClass}.{methodName}.pageText</code> resource bundle value.
-	 * 	<li><code>{servletClass}.pageText</code> resource bundle value.
-	 * 	<li><code><ja>@RestMethod</ja>(summary)</code> annotation.
-	 * 	<li><code>{servletClass}.{methodName}.summary</code> resource bundle value.
-	 * 	<li><code>summary</code> entry in swagger file for method.
-	 * 	<li><code>{servletClass}.description</code> resource bundle value.
-	 * 	<li><code>info/description</code> entry in swagger file.
-	 * </ol>
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		In most cases, you'll simply want to use the <code>@RestResource(description)</code> or
-	 * 		<code>@RestMethod(summary)</code> annotations to specify the page text.
-	 * 		However, this annotation is provided in cases where you want the text to be different that the values shown
-	 * 		in the swagger document.
-	 * </ul>
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#description() @HtmlDoc.description()} annotation.
-	 *
-	 * @param value The HTML page description.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlDescription(String value) {
-		this.htmlDescription = value;
-		return this;
-	}
-
-	/**
-	 * Sets the HTML page branding in the header section of the page generated by the default HTML doc template.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * This is arbitrary HTML that can be added to the header section to provide basic custom branding on the page.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#branding() @HtmlDoc.branding()} annotation.
-	 *
-	 * @param value The HTML page branding.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlBranding(String value) {
-		this.htmlBranding = value;
-		return this;
-	}
-
-	/**
 	 * Sets the HTML header section contents.
 	 *
 	 * <p>
@@ -1225,10 +1080,6 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * The page header normally contains the title and description, but this value can be used to override the contents
 	 * to be whatever you want.
-	 *
-	 * <p>
-	 * When a value is specified, the {@link #setHtmlTitle(String)} and {@link #setHtmlDescription(String)} values will
-	 * be ignored.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to force no header.

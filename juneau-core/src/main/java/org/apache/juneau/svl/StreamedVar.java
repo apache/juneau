@@ -38,7 +38,7 @@ public abstract class StreamedVar extends Var {
 	}
 
 	@Override /* Var */
-	public String resolve(VarResolverSession session, String arg) {
+	public String resolve(VarResolverSession session, String arg) throws Exception {
 		throw new UnsupportedOperationException("Cannot call resolve() on StreamedVar class");
 	}
 }

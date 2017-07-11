@@ -16,12 +16,12 @@ import java.io.*;
 
 /**
  * Abstract superclass of all Simple Var Language variables that resolve to simple returned string values.
- * 
+ *
  * <p>
  * Note the difference between this class and {@link StreamedVar} that streams values to writers.
  * Unlike the {@link StreamedVar} class, the returned value from this class can contain nested variables that will be
  * recursively resolved by {@link VarResolver}.
- * 
+ *
  * <p>
  * Subclasses must implement the {@link #resolve(VarResolverSession, String)} method.
  *
@@ -39,7 +39,7 @@ public abstract class SimpleVar extends Var {
 	}
 
 	@Override /* Var */
-	public void resolveTo(VarResolverSession session, Writer w, String arg) {
+	public void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception {
 		throw new UnsupportedOperationException("Cannot call streamTo() on SimpleVar class");
 	}
 }

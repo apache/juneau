@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
-	private final String title, description, branding, header, nav, aside, footer, noResultsMessage;
+	private final String header, nav, aside, footer, noResultsMessage;
 	private final String[] style, stylesheet, script, links;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
@@ -67,9 +67,6 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
-			title = ctx.title;
-			description = ctx.description;
-			branding = ctx.branding;
 			header = ctx.header;
 			nav = ctx.nav;
 			aside = ctx.aside;
@@ -82,9 +79,6 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			noResultsMessage = ctx.noResultsMessage;
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, ctx.template);
 		} else {
-			title = op.getString(HTMLDOC_title, ctx.title);
-			description = op.getString(HTMLDOC_description, ctx.description);
-			branding = op.getString(HTMLDOC_branding, ctx.branding);
 			header = op.getString(HTMLDOC_header, ctx.nav);
 			nav = op.getString(HTMLDOC_nav, ctx.nav);
 			aside = op.getString(HTMLDOC_aside, ctx.aside);
@@ -142,41 +136,6 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 */
 	public final boolean isNoWrap() {
 		return nowrap;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
-	 * 	<jk>null</jk> if not specified.  Never an empty string.
-	 */
-	public final String getTitle() {
-		return title;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 * 	Never an empty string.
-	 */
-	public final String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_branding} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_branding} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 * 	Never an empty string.
-	 */
-	public final String getBranding() {
-		return branding;
 	}
 
 	/**

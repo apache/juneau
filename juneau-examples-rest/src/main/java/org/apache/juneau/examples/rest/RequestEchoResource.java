@@ -71,9 +71,6 @@ public class RequestEchoResource extends Resource {
 	/** GET request handler */
 	@RestMethod(name="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
 	public HttpServletRequest doGet(RestRequest req, RestResponse res, @Properties ObjectMap properties) {
-		// Set the HtmlDocSerializer title programmatically.
-		res.setHtmlTitle("Contents of HttpServletRequest object");
-
 		// Just echo the request back as the response.
 		return req;
 	}

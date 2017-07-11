@@ -245,7 +245,11 @@ import org.apache.juneau.xml.*;
 		@Property(name=REST_allowMethodParam, value="OPTIONS")
 	},
 	htmldoc=@HtmlDoc(
-		branding="<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'></a>",
+		header={
+			"<h1>$R{servletTitle}</h1>",
+			"<h2>$R{methodSummary,$R{servletDescription}}</h2>",
+			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
+		},
 		stylesheet="servlet:/styles/devops.css"
 	),
 	favicon="htdocs/juneau.png",
@@ -266,11 +270,10 @@ public abstract class RestServletJenaDefault extends RestServlet {
 				"back: servlet:/",
 				"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
 			},
-			description="Swagger documentation",
 			aside="NONE"
 		),
-		summary="Resource options",
-		description="Swagger documentation"
+		summary="Swagger documentation",
+		description="Auto-generated swagger documentation for this resource"
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();
