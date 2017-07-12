@@ -6972,7 +6972,8 @@
 							<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#style() style()}
 						</ul>
 						Additionally, the <js>"INHERIT"</js> string literal can be used to combine the value with
-						the value defined on the servlet or parent class.
+						the value defined on the servlet or parent class.  Links can also be inserted at specific
+						index positions.
 				</ul>
 			<li>
 				Improvements made to the {@link org.apache.juneau.rest.widget.Widget} API.
@@ -7082,6 +7083,8 @@
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpi() bpi()} - Now an array of simplified values instead of LAX JSON.
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpx() bpx()} - Now an array of simplified values instead of LAX JSON.
 				</ul>
+			<li>
+				Two new variables added to <code>$R</code> variable: <js>"$R{servletClass}"</js>, <js>"$R{servletClassSimple}"</js>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.examples</h6>
