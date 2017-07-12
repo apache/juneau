@@ -45,7 +45,7 @@ import org.apache.juneau.transforms.*;
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='max-width:400px' class='text'>",
@@ -90,12 +90,8 @@ public class PetStoreResource extends ResourceJena {
 			},
 
 			links={
-				"up: request:/..",
-				"options: servlet:/?method=OPTIONS",
-				"$W{QueryMenuItem}",
-				"$W{ContentTypeMenuItem}",
-				"$W{StyleMenuItem}",
-				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"
+				"INHERIT",  // Inherit links from class.
+				"[2]:$W{QueryMenuItem}"  // Insert QUERY link in position 2.
 			}
 		)
 	)

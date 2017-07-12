@@ -42,7 +42,7 @@ import org.apache.juneau.rest.widget.*;
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		}
 	),
 	properties={

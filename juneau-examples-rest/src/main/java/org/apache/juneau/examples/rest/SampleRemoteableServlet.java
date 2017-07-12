@@ -33,7 +33,7 @@ import org.apache.juneau.rest.remoteable.*;
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SampleRemoteableServlet.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='max-width:400px;min-width:200px' class='text'>",

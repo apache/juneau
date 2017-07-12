@@ -284,6 +284,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 				<li><js>"pathInfo"</js> - Value returned by {@link RestRequest#getPathInfo()}
 	 * 				<li><js>"requestParentURI"</js> - Value returned by {@link UriContext#getRootRelativePathInfoParent()}
 	 * 				<li><js>"requestURI"</js> - Value returned by {@link RestRequest#getRequestURI()}
+	 * 				<li><js>"servletClass"</js> - The class name of the servlet
+	 * 				<li><js>"servletClassSimple"</js> - The simple class name of the servlet.
 	 * 				<li><js>"servletDescription"</js> - Value returned by {@link RestRequest#getServletDescription()}
 	 * 				<li><js>"servletParentURI"</js> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}
 	 * 				<li><js>"servletPath"</js> - See {@link RestRequest#getServletPath()}
@@ -418,6 +420,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					if ("requestURI".equals(name))
 						return getRequestURI();
 				} else if (c2 == 's') {
+					if ("servletClass".equals(name))
+						return getContext().getResource().getClass().getName();
+					if ("servletClassSimple".equals(name))
+						return getContext().getResource().getClass().getSimpleName();
 					if ("servletDescription".equals(name))
 						return getServletDescription();
 					if ("servletParentURI".equals(name))

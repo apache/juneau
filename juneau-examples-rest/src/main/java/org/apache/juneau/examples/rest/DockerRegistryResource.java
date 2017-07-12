@@ -32,7 +32,7 @@ import org.apache.juneau.rest.labels.*;
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/DockerRegistryResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		// Pull in aside contents from file.
 		aside="$F{resources/DockerRegistryResourceAside.html}"

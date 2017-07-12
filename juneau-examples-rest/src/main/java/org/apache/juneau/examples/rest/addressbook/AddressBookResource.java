@@ -60,9 +60,9 @@ import org.apache.juneau.utils.*;
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java",
 			"$W{ContentTypeMenuItem}",
-			"$W{StyleMenuItem}"
+			"$W{StyleMenuItem}",
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/$R{servletClassSimple}.java"
 		},
 		
 		// Arbitrary HTML message on the left side of the page.
@@ -160,12 +160,8 @@ public class AddressBookResource extends ResourceJena {
 		converters={Traversable.class,Queryable.class,Introspectable.class},
 		htmldoc=@HtmlDoc(
 			links={
-				"up: request:/..",
-				"options: servlet:/?method=OPTIONS",
-				"$W{QueryMenuItem}",
-				"$W{ContentTypeMenuItem}",
-				"$W{StyleMenuItem}",
-				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"
+				"INHERIT",  // Inherit links from class.
+				"[2]:$W{QueryMenuItem}"  // Insert QUERY link in position 2.
 			}
 		)
 	)
@@ -194,12 +190,8 @@ public class AddressBookResource extends ResourceJena {
 		converters={Traversable.class,Queryable.class},
 		htmldoc=@HtmlDoc(
 			links={
-				"up: request:/..",
-				"options: servlet:/?method=OPTIONS",
-				"$W{QueryMenuItem}",
-				"$W{ContentTypeMenuItem}",
-				"$W{StyleMenuItem}",
-				"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"
+				"INHERIT",  // Inherit links from class.
+				"[2]:$W{QueryMenuItem}"  // Insert QUERY link in position 2.
 			}
 		)
 	)

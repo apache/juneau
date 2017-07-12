@@ -35,7 +35,7 @@ import org.apache.juneau.rest.widget.*;
 			"options: ?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='max-width:400px' class='text'>",

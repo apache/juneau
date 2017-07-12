@@ -39,7 +39,7 @@ import org.apache.juneau.transforms.*;
 		links={
 			"up: request:/..",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='min-width:200px' class='text'>",

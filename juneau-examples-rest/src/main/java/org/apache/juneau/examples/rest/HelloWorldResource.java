@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='max-width:400px' class='text'>",

@@ -52,7 +52,7 @@ import org.apache.juneau.rest.widget.*;
 			"form: servlet:/formPage",
 			"$W{ContentTypeMenuItem}",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 
 		// Custom page text in aside section.

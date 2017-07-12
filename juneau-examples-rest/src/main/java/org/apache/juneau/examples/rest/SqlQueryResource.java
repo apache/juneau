@@ -44,7 +44,7 @@ import org.apache.juneau.rest.widget.*;
 			"up: request:/..",
 			"options: servlet:/..",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='min-width:200px' class='text'>",

@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
 			"upload: servlet:/upload",
 			"$W{ContentTypeMenuItem}",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='max-width:400px' class='text'>",
