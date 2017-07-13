@@ -26,11 +26,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>juneau-microservice-template</groupId>
 	<artifactId>juneau-microservice-template</artifactId>
-	<version>6.2.1</version>
+	<version>6.3.2</version>
 	<name>Apache Juneau Microservice Template</name>
 	<description>A template project developers use to start with to create a microservice.</description>
 	<properties>
-		<juneau.version>6.2.1-incubating-SNAPSHOT</juneau.version>
+		<juneau.version>6.3.2-incubating-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>

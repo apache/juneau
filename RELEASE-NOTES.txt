@@ -11,6 +11,16 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+
+Release Notes - Juneau - Version 6.3.1
+
+** Bug
+    * [JUNEAU-59] - Fix "Copyright (c) 2016, Apache Foundation" year in documentation.
+
+** Improvement
+    * [JUNEAU-58] - Embed HTML in @HtmlDoc.description
+
+
 Release Notes - Juneau - Version 6.3.0
 
 ** Bug

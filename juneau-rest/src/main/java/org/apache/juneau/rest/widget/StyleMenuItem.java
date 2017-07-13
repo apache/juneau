@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
@@ -49,26 +52,21 @@ public class StyleMenuItem extends MenuItemWidget {
 
 	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original"};
 
+	@Override /* MenuItemWidget */
+	public String getLabel(RestRequest req) {
+		return "styles";
+	}
 	/**
 	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data
 	 * as plain-text.
 	 */
 	@Override /* Widget */
-	public String getHtml(RestRequest req) throws Exception {
-		StringBuilder sb = new StringBuilder();
-		sb.append(""
-			+ "<div class='menu-item'>"
-			+ "\n\t<a class='link' onclick='menuClick(this)'>styles</a>"
-			+ "\n\t<div class='popup-content'>"
-		);
+	public Div getContent(RestRequest req) throws Exception {
+		Div div = div();
 		for (String s : BUILT_IN_STYLES) {
 			java.net.URI uri = req.getUri(true, new AMap<String,String>().append("stylesheet", "styles/"+s+".css"));
-			sb.append("\n\t\t<a class='link' href='").append(uri).append("'>").append(s).append("</a><br>");
+			div.children(a(uri, s), br());
 		}
-		sb.append(""
-			+ "\n\t</div>"
-			+ "\n</div>"
-		);
-		return sb.toString();
+		return div;
 	}
 }

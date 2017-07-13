@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -232,6 +233,11 @@ public class SerializerSession extends BeanSession {
 		if (output instanceof File) {
 			if (writer == null)
 				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
+			return writer;
+		}
+		if (output instanceof StringBuilder) {
+			if (writer == null)
+				writer = new StringBuilderWriter((StringBuilder)output);
 			return writer;
 		}
 		throw new SerializeException("Cannot convert object of type {0} to a Writer.", output.getClass().getName());

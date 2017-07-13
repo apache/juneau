@@ -76,11 +76,13 @@ public class QueryMenuItem extends MenuItemWidget {
 			+ loadStyle("QueryMenuItem.css");
 	}
 
-	/**
-	 * Returns the HTML for rendering the query form and tooltips.
-	 */
-	@Override /* Widget */
-	public String getHtml(RestRequest req) throws Exception {
+	@Override /* MenuItemWidget */
+	public String getLabel(RestRequest req) throws Exception {
+		return "query";
+	}
+
+	@Override /* MenuItemWidget */
+	public String getContent(RestRequest req) throws Exception {
 		return loadHtml("QueryMenuItem.html");
 	}
 }

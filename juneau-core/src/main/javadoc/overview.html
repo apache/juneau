@@ -6813,6 +6813,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
+		<li><p><a class='doclink' href='#6.3.2'>6.3.2 (TBD)</a></p>
 		<li><p><a class='doclink' href='#6.3.1'>6.3.1 (TBD)</a></p>
 		<li><p><a class='doclink' href='#6.3.0'>6.3.0 (Jun 30, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.2.0'>6.2.0 (Apr 28, 2017)</a></p>
@@ -6882,10 +6883,34 @@
 	</ul>
 
 	<!-- ======================================================================================================== -->
+	<a id="6.3.2"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.3.2 (TBD)</h3>
+	<div class='topic'>
+		<p>
+		</p>
+
+		<h6 class='topic'>org.apache.juneau</h6>
+		<ul class='spaced-list'>
+			<li>
+				Serializers can now serialize to {@link StringBuilder StringBuilders}.
+		</ul>
+		
+		<h6 class='topic'>org.apache.juneau.rest</h6>
+		<ul class='spaced-list'>
+			<li>
+				Simplified {@link org.apache.juneau.rest.widget.MenuItemWidget}.
+				<br>Exposes an abstract method {@link org.apache.juneau.rest.widget.MenuItemWidget#getContent()} that
+				can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
+				get converted to HTML using {@link org.apache.juneau.html.HtmlSerializer#DEFAULT}.
+		</ul>
+	</div>
+	
+	<!-- ======================================================================================================== -->
 	<a id="6.3.1"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.3.1 (TBD)</h3>
 	<div class='topic'>
 		<p>
+			Juneau 6.3.1 is a minor release.
 		</p>
 
 		<h6 class='topic'>org.apache.juneau</h6>
@@ -6928,10 +6953,8 @@
 				<br><img src='doc-files/ReleaseNotes_631_OriginalStyle.png'>
 			<li>
 				Simplified the stylesheets and HTML code.
-				<ul>
-					<li>Replaced <code><xt>&lt;a</xt> <xa>class</xa>=<xs>'link'</xs><xt>&gt;</xt></code> with just <code><xt>&lt;nav&gt;</xt>/<xt>&lt;a&gt;</xt></code>.
-					<li>The nav links are now an ordered list of elements.
-				</ul>
+				<br>For example, the nav links are now an ordered list of elements which makes rendering as as side-bar
+				(for example) easier to do in CSS.
 			<li>
 				Modifications to the following <ja>@HtmlDoc</ja> annotations:
 				<ul>

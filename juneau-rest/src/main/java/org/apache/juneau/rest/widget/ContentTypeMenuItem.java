@@ -12,9 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
@@ -55,28 +58,20 @@ import org.apache.juneau.utils.*;
  */
 public class ContentTypeMenuItem extends MenuItemWidget {
 
-	/**
-	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data
-	 * as plain-text.
-	 */
-	@Override /* Widget */
-	public String getHtml(RestRequest req) throws Exception {
-		StringBuilder sb = new StringBuilder();
-		sb.append(""
-			+ "<div class='menu-item'>"
-			+ "\n\t<a class='link' onclick='menuClick(this)'>content-types</a>"
-			+ "\n\t<div class='popup-content'>"
-		);
+	@Override /* MenuItemWidget */
+	public String getLabel(RestRequest req) {
+		return "content-type";
+	}
+
+	@Override /* MenuItemWidget */
+	public Div getContent(RestRequest req) {
+		Div div = div();
 		List<MediaType> l = new ArrayList<MediaType>(req.getSerializerGroup().getSupportedMediaTypes());
 		Collections.sort(l);
 		for (MediaType mt : l) {
 			URI uri = req.getUri(true, new AMap<String,String>().append("plainText","true").append("Accept",mt.toString()));
-			sb.append("\n\t\t<a class='link' href='").append(uri).append("'>").append(mt).append("</a><br>");
+			div.children(a(uri, mt), br());
 		}
-		sb.append(""
-			+ "\n\t</div>"
-			+ "\n</div>"
-		);
-		return sb.toString();
+		return div;
 	}
 }

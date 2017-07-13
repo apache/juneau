@@ -33,6 +33,16 @@ public final class StringBuilderWriter extends Writer {
 	}
 
 	/**
+	 * Create a new string writer around an existing string builder.
+	 *
+	 * @param sb The string builder being wrapped.
+	 */
+	public StringBuilderWriter(StringBuilder sb) {
+		this.sb = sb;
+		lock = null;
+	}
+
+	/**
 	 * Create a new string writer using the specified initial string-builder size.
 	 *
 	 * @param initialSize

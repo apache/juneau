@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import java.io.*;
+
+import org.apache.juneau.html.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -19,32 +23,30 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * Defines some simple CSS and Javascript for enabling drop-down menus in the nav section of the page (although
- * nothing keeps you from using it in an arbirary location in the page).
+ * nothing keeps you from using it in an arbitrary location in the page).
  *
  * <p>
  * The script specifies a <js>"menuClick(element)"</js> function that toggles the visibility of the next sibling of the
  * element.
  *
  * <p>
- * Subclasses should implement a {@link #getHtml(RestRequest)} that returns the following content:
- * <p class='bcode'>
- * 	<xt>&lt;div</xt> <xa>class</xa>=<xs>'menu-item'</xs><xt>&gt;</xt>
- * 		<xc>&lt;!-- Normally visible content with onclick='menuClick(this)' --&gt;</xc>
- * 		<xt>&lt;div</xt> <xa>class</xa>=<xs>'popup-content'</xs><xt>&gt;</xt>
- *				<xc>&lt;!-- Normally hidden popup-content --&gt;</xc>
- * 		<xt>&lt;/div&gt;</xt>
- * 	<xt>&lt;/div&gt;</xt>
- * </p>
+ * Subclasses should implement the following two methods:
+ * <ul>
+ * 	<li>{@link #getLabel(RestRequest)} - The menu item label.
+ * 	<li>{@link #getContent(RestRequest)} - The menu item content.
  *
  * <p>
- * For example, to render a link that brings up a simple dialog:
+ * For example, to render a link that brings up a simple dialog in a div tag:
  * <p class='bcode'>
- * 	<xt>&lt;div</xt> <xa>class</xa>=<xs>'menu-item'</xs><xt>&gt;</xt>
- * 		<xt>&lt;a</xt> <xa>class</xa>=<xs>'link'</xs> <xa>onclick</xa>=<xs>'menuClick(this)'</xs><xt>&gt;</xt>my-menu-item<xt>&lt;/a&gt;</xt>
- * 		<xt>&lt;div</xt> <xa>class</xa>=<xs>'popup-content'</xs><xt>&gt;</xt>
- *				Surprise!
- * 		<xt>&lt;/div&gt;</xt>
- * 	<xt>&lt;/div&gt;</xt>
+ * 	<ja>@Override</ja>
+ * 	<jk>public</jk> String getLabel() {
+ * 		<jk>return</jk> <js>"my-menu-item"</js>;
+ * 	};
+ *
+ * 	<ja>@Override</ja>
+ * 	<jk>public</jk> Div getLabel() {
+ * 		<jk>return</jk> Html5Builder.<jsm>div</jsm>(<js>"Surprise!"</js>).style(<js>"color:red"</js>);
+ * 	};
  * </p>
  *
  * <p>
@@ -56,7 +58,7 @@ public abstract class MenuItemWidget extends Widget {
 	/**
 	 * Returns the Javascript needed for the show and hide actions of the menu item.
 	 */
-	@Override
+	@Override /* Widget */
 	public String getScript(RestRequest req) throws Exception {
 		return loadScript("MenuItemWidget.js");
 	}
@@ -65,8 +67,56 @@ public abstract class MenuItemWidget extends Widget {
 	 * Defines a <js>"menu-item"</js> class that needs to be used on the outer element of the HTML returned by the
 	 * {@link #getHtml(RestRequest)} method.
 	 */
-	@Override
+	@Override /* Widget */
 	public String getStyle(RestRequest req) throws Exception {
 		return loadStyle("MenuItemWidget.css");
 	}
+
+	@Override /* Widget */
+	public String getHtml(RestRequest req) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		sb.append(""
+			+ "<div class='menu-item'>"
+			+ "\n\t<a class='link' onclick='menuClick(this)'>"+getLabel(req)+"</a>"
+			+ "\n\t<div class='popup-content'>"
+		);
+		Object o = getContent(req);
+		if (o instanceof Reader)
+			IOUtils.pipe((Reader)o, new StringBuilderWriter(sb));
+		else if (o instanceof CharSequence)
+			sb.append((CharSequence)o);
+		else
+			HtmlSerializer.DEFAULT.serialize(getContent(req), sb);
+		sb.append(""
+			+ "\n\t</div>"
+			+ "\n</div>"
+		);
+		return sb.toString();
+	}
+
+	/**
+	 * The label for the menu item as it's rendered in the menu bar.
+	 *
+	 * @param req The HTTP request object.
+	 * @return The menu item label.
+	 * @throws Exception
+	 */
+	public abstract String getLabel(RestRequest req) throws Exception;
+
+	/**
+	 * The content of the popup.
+	 *
+	 * @param req The HTTP request object.
+	 * @return
+	 * 	The content of the popup.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Reader} - Serialized directly to the output.
+	 * 		<li>{@link CharSequence} - Serialized directly to the output.
+	 * 		<li>Other - Serialized as HTML using {@link HtmlSerializer#DEFAULT}.
+	 * 	</ul>
+	 * 	Note that this includes any of the {@link org.apache.juneau.dto.html5} beans.
+	 * @throws Exception
+	 */
+	public abstract Object getContent(RestRequest req) throws Exception;
 }
