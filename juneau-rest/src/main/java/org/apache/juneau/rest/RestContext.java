@@ -229,6 +229,23 @@ public final class RestContext extends Context {
 	 */
 	public static final String REST_paramFormat = "RestServlet.paramFormat";
 
+	/**
+	 * <b>Configuration property:</b>  REST resource resolver.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.resourceResolver"</js>
+	 * 	<li><b>Data type:</b> <code>Class</code> or {@link RestResourceResolver}
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * The resource resolver used to instantiate REST resource classes.
+	 *
+	 * <p>
+	 * Applicable to servlet class.
+	 * <br>Can be passed in through servlet context.
+	 */
+	public static final String REST_resourceResolver = "RestServlet.resourceResolver";
 
 
 	private final Object resource;
@@ -306,11 +323,14 @@ public final class RestContext extends Context {
 	 * Constructor.
 	 *
 	 * @param resource The resource class (a class annotated with {@link RestResource @RestResource}).
+	 * @param servletContext
+	 * 	The servlet context object.
+	 * 	Can be <jk>null</jk> if this isn't a
 	 * @param config The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestContext(Object resource, RestConfig config) throws Exception {
+	public RestContext(Object resource, ServletContext servletContext, RestConfig config) throws Exception {
 		super(null);
 		RestException _initException = null;
 		try {
@@ -319,7 +339,7 @@ public final class RestContext extends Context {
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 			this.parentContext = config.parentContext;
 
-			Builder b = new Builder(resource, config);
+			Builder b = new Builder(resource, servletContext, config);
 			this.allowHeaderParams = b.allowHeaderParams;
 			this.allowBodyParam = b.allowBodyParam;
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
@@ -455,7 +475,7 @@ public final class RestContext extends Context {
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = resolve(RestResourceResolver.class, config.resourceResolver);
+			resourceResolver = resolve(RestResourceResolver.class, b.resourceResolver);
 			for (Object o : config.childResources) {
 				String path = null;
 				Object r = null;
@@ -498,7 +518,7 @@ public final class RestContext extends Context {
 					if (m2 != null)
 						m2.invoke(r, childConfig);
 
-					RestContext rc2 = new RestContext(r, childConfig);
+					RestContext rc2 = new RestContext(r, servletContext, childConfig);
 
 					// Call the init(RestContext) method.
 					m2 = findPublicMethod(r.getClass(), "init", Void.class, RestContext.class);
@@ -566,9 +586,10 @@ public final class RestContext extends Context {
 		RestLogger logger;
 		String fullPath;
 		Map<String,Widget> htmlWidgets;
+		Object resourceResolver;
 
 		@SuppressWarnings("unchecked")
-		private Builder(Object resource, RestConfig sc) throws Exception {
+		private Builder(Object resource, ServletContext ctx, RestConfig sc) throws Exception {
 
 			PropertyStore ps = sc.createPropertyStore();
 
@@ -580,6 +601,9 @@ public final class RestContext extends Context {
 			useStackTraceHashes = ps.getProperty(REST_useStackTraceHashes, boolean.class, true);
 			defaultCharset = ps.getProperty(REST_defaultCharset, String.class, "utf-8");
 			paramFormat = ps.getProperty(REST_paramFormat, String.class, "");
+			resourceResolver = ps.getProperty(REST_resourceResolver, Object.class, ctx == null ? null : ctx.getAttribute(REST_resourceResolver));
+			if (resourceResolver == null)
+				resourceResolver = sc.resourceResolver;
 
 			for (String m : split(ps.getProperty(REST_allowMethodParam, String.class, "")))
 				if (m.equals("true"))  // For backwards compatibility when this was a boolean field.

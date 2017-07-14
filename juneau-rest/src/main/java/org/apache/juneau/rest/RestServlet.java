@@ -124,7 +124,7 @@ public abstract class RestServlet extends HttpServlet {
 		if (isInitialized)
 			return;
 		this.config = config;
-		this.context = new RestContext(this, config);
+		this.context = new RestContext(this, this.getServletContext(), config);
 		this.isInitialized = true;
 	}
 

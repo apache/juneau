@@ -632,8 +632,10 @@ public @interface RestResource {
 	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/
 	 * {@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
+	 * <br>The value (class or instance) can also be set via the servlet context attribute 
+	 * * {@link RestContext#REST_resourceResolver}.
 	 */
-	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolver.class;
+	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolver.Default.class;
 
 	/**
 	 * Specifies the logger class to use for logging.

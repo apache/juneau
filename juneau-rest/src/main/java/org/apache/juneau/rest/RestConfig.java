@@ -118,7 +118,7 @@ public class RestConfig implements ServletConfig {
 	String[] htmlLinks;
 	String clientVersionHeader = "X-Client-Version";
 
-	Object resourceResolver = RestResourceResolver.class;
+	Object resourceResolver = RestResourceResolver.Default.class;
 	Object logger = RestLogger.Normal.class;
 	Object callHandler = RestCallHandler.class;
 	Object infoProvider = RestInfoProvider.class;
@@ -156,7 +156,7 @@ public class RestConfig implements ServletConfig {
 		this.inner = config;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
-		this.resourceResolver = parentContext == null ? RestResourceResolver.class : parentContext.getResourceResolver();
+		this.resourceResolver = parentContext == null ? RestResourceResolver.Default.class : parentContext.getResourceResolver();
 		try {
 
 			ConfigFileBuilder cfb = new ConfigFileBuilder();
@@ -1024,7 +1024,7 @@ public class RestConfig implements ServletConfig {
 	 * <p>
 	 * The resource resolver is used to resolve instances from {@link Class} objects defined in the
 	 * {@link RestResource#children()} annotation.
-	 * The default value is the base class {@link RestResourceResolver}.
+	 * The default value is {@link RestResourceResolver.Default}.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the

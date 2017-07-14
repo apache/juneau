@@ -52,13 +52,32 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li><code><jk>public void</jk> init(RestConfig);</code>
  * 	<li><code><jk>public void</jk> init(RestContext);</code>
  * </ul>
+ * 
+ * <p>
+ * An instance of this class can also be passed in through the servlet context as the context attribute
+ * {@link RestContext#REST_resourceResolver}.
  */
-public class RestResourceResolver {
+public interface RestResourceResolver {
 
 	/**
 	 * Denotes the default resolver.
 	 */
-	public static final class DEFAULT extends RestResourceResolver {}
+	public static class Default implements RestResourceResolver {
+		@Override
+		public Object resolve(Class<?> c, RestConfig config) throws RestServletException {
+			try {
+				Constructor<?> c1 = findPublicConstructor(c, RestConfig.class);
+				if (c1 != null)
+					return c1.newInstance(config);
+				c1 = findPublicConstructor(c);
+				if (c1 != null)
+					return c1.newInstance();
+			} catch (Exception e) {
+				throw new RestServletException("Could not instantiate resource class ''{0}''", c.getName()).initCause(e);
+			}
+			throw new RestServletException("Could not find public constructor for class ''{0}''.", c);
+		}
+	}
 
 	/**
 	 * Resolves the specified class to a resource object.
@@ -74,17 +93,5 @@ public class RestResourceResolver {
 	 * @return The instance of that class.
 	 * @throws RestServletException If class could not be resolved.
 	 */
-	public Object resolve(Class<?> c, RestConfig config) throws RestServletException {
-		try {
-			Constructor<?> c1 = findPublicConstructor(c, RestConfig.class);
-			if (c1 != null)
-				return c1.newInstance(config);
-			c1 = findPublicConstructor(c);
-			if (c1 != null)
-				return c1.newInstance();
-		} catch (Exception e) {
-			throw new RestServletException("Could not instantiate resource class ''{0}''", c.getName()).initCause(e);
-		}
-		throw new RestServletException("Could not find public constructor for class ''{0}''.", c);
-	}
+	Object resolve(Class<?> c, RestConfig config) throws RestServletException;
 }

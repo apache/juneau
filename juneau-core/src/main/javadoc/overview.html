@@ -6905,6 +6905,11 @@
 			<li>
 				{@link org.apache.juneau.rest.RestResourceResolver} instances are now inherited from parent resources to child resources
 				unless explicitly overridden at the child level.
+				<br>It's also been changed to an interface.
+			<li>
+				New setting: {@link org.apache.juneau.rest.RestContext#REST_resourceResolver}.  
+				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
+				dependency injection frameworks.
 		</ul>
 	</div>
 	
