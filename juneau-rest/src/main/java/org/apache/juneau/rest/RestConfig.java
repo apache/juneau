@@ -140,6 +140,7 @@ public class RestConfig implements ServletConfig {
 		this.inner = config;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
+		this.resourceResolver = parentContext == null ? RestResourceResolver.class : parentContext.getResourceResolver();
 		try {
 
 			ConfigFileBuilder cfb = new ConfigFileBuilder();

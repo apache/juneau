@@ -627,6 +627,9 @@ public @interface RestResource {
 	 * Subclasses can be used to provide customized resolution of REST resource class instances.
 	 *
 	 * <p>
+	 * If not specified on a child resource, the resource resolver is inherited from the parent resource context.
+	 *
+	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/
 	 * {@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
 	 */

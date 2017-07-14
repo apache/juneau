@@ -6902,6 +6902,9 @@
 				<br>Exposes an abstract method {@link org.apache.juneau.rest.widget.MenuItemWidget#getContent()} that
 				can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
 				get converted to HTML using {@link org.apache.juneau.html.HtmlSerializer#DEFAULT}.
+			<li>
+				{@link org.apache.juneau.rest.RestResourceResolver} instances are now inherited from parent resources to child resources
+				unless explicitly overridden at the child level.
 		</ul>
 	</div>
 	

@@ -293,6 +293,7 @@ public final class RestContext extends Context {
 	private final RestInfoProvider infoProvider;
 	private final RestException initException;
 	private final RestContext parentContext;
+	private final RestResourceResolver resourceResolver;
 
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
 	private final Map<String,StreamResource> staticFilesCache = new ConcurrentHashMap<String,StreamResource>();
@@ -454,7 +455,7 @@ public final class RestContext extends Context {
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			RestResourceResolver rrr = resolve(RestResourceResolver.class, config.resourceResolver);
+			resourceResolver = resolve(RestResourceResolver.class, config.resourceResolver);
 			for (Object o : config.childResources) {
 				String path = null;
 				Object r = null;
@@ -477,7 +478,7 @@ public final class RestContext extends Context {
 				if (o instanceof Class) {
 					Class<?> oc = (Class<?>)o;
 					childConfig = new RestConfig(config.inner, oc, this);
-					r = rrr.resolve(oc, childConfig);
+					r = resourceResolver.resolve(oc, childConfig);
 				} else {
 					r = o;
 					childConfig = new RestConfig(config.inner, o.getClass(), this);
@@ -689,6 +690,24 @@ public final class RestContext extends Context {
 			htmlNoResultsMessage = sc.htmlNoResultsMessage;
 			htmlTemplate = ClassUtils.newInstance(HtmlDocTemplate.class, sc.htmlTemplate);
 		}
+	}
+
+	/**
+	 * Returns the resource resolver associated with this context.
+	 *
+	 * <p>
+	 * The resource resolver is used for instantiating child resource classes.
+	 *
+	 * <p>
+	 * Unless overridden via the {@link RestResource#resourceResolver()} annotation or the {@link RestConfig#setResourceResolver(Class)}
+	 * method, this value is always inherited from parent to child.
+	 * This allows a single resource resolver to be passed in to the top-level servlet to handle instantiation of all
+	 * child resources.
+	 *
+	 * @return The resource resolver associated with this context.
+	 */
+	protected RestResourceResolver getResourceResolver() {
+		return resourceResolver;
 	}
 
 	/**
