@@ -130,6 +130,22 @@ public class RestConfig implements ServletConfig {
 	Map<String,Widget> htmlWidgets = new HashMap<String,Widget>();
 
 	/**
+	 * Constructor for top-level servlets when using dependency injection.
+	 *
+	 * <p>
+	 * Work-in-progress.
+	 *
+	 * @param config
+	 * 	The servlet config object we're extending.
+	 * @param resourceClass
+	 * 	The class annotated with the {@link RestResource @RestResource} annotation.
+	 * @throws ServletException
+	 */
+	public RestConfig(ServletConfig config, Class<?> resourceClass) throws ServletException {
+		this(config, resourceClass, null);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param config The servlet config passed into the servlet by the servlet container.
