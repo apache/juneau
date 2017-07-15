@@ -77,7 +77,8 @@ import org.eclipse.jetty.util.ssl.*;
  * </ul>
  */
 public class RestMicroservice extends Microservice {
-
+	
+	ServletContextHandler servletContextHandler; 
 	Server server;
 	int port;
 	String contextPath;
@@ -393,19 +394,68 @@ public class RestMicroservice extends Microservice {
 			server = new Server(port);
 		}
 
-		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
 		String authType = cf.getString("REST/authType", mf.getString("Rest-AuthType", "NONE"));
 		if (authType.equals("BASIC"))
-			context.setSecurityHandler(basicAuth(cf, mf));
+			servletContextHandler.setSecurityHandler(basicAuth(cf, mf));
 
-		context.setContextPath(contextPath);
-		server.setHandler(context);
+		servletContextHandler.setContextPath(contextPath);
+		server.setHandler(servletContextHandler);
 
 		for (Map.Entry<String,Class<? extends Servlet>> e : getResourceMap().entrySet())
-			context.addServlet(e.getValue(), e.getKey()).setInitOrder(0);
-
+			servletContextHandler.addServlet(e.getValue(), e.getKey()).setInitOrder(0);
+		
 		return server;
+	}
+	
+	/**
+	 * Adds an arbitrary servlet to this microservice.
+	 * 
+	 * @param servlet The servlet instance.
+	 * @param pathSpec The context path of the servlet.
+	 * @return This object (for method chaining).
+	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
+	 */
+	public RestMicroservice addServlet(Servlet servlet, String pathSpec) {
+		if (servletContextHandler == null)
+			throw new RuntimeException("Servlet context handler not found.  createServer() must be called first.");
+		ServletHolder sh = new ServletHolder(servlet);
+		servletContextHandler.addServlet(sh, pathSpec);
+		return this;
+	}
+	
+	/**
+	 * Adds a servlet attribute to the Jetty server.
+	 * 
+	 * @param name The server attribute name.
+	 * @param value The context path of the servlet.
+	 * @return This object (for method chaining).
+	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
+	 */
+	public RestMicroservice addServletAttribute(String name, Object value) {
+		if (server == null)
+			throw new RuntimeException("Server not found.  createServer() must be called first.");
+		server.setAttribute(name, value);
+		return this;
+	}
+	
+	/**
+	 * Returns the underlying Jetty server.
+	 * 
+	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
+	 */
+	public Server getServer() {
+		return server;
+	}
+	
+	/**
+	 * Returns the underlying servlet context handler.
+	 * 
+	 * @return The underlying servlet context handler, or <jk>null</jk> if {@link #createServer()} has not yet been called.
+	 */
+	public ServletContextHandler getServletContextHandler() {
+		return servletContextHandler;
 	}
 
 	private static int findOpenPort(int[] ports) {

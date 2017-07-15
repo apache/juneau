@@ -6911,6 +6911,18 @@
 				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 				dependency injection frameworks.
 		</ul>
+
+		<h6 class='topic'>org.apache.juneau.rest.microservice</h6>
+		<ul class='spaced-list'>
+			<li>
+				New methods on {@link org.apache.juneau.microservice.RestMicroservice}:
+				<ul>
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#addServlet(Servlet,String) addServlet(Servlet,String)}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#addServletAttribute(String,Object) addServletAttribute(String,Object)}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#getServer() getServer()}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#getServletContextHandler() getServletContextHandler()}
+				</ul>
+		</ul>
 	</div>
 	
 	<!-- ======================================================================================================== -->
