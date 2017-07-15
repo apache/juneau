@@ -13,7 +13,6 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
@@ -24,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -71,9 +69,7 @@ public class SerializerSession extends BeanSession {
 	private final LinkedList<StackElement> stack = new LinkedList<StackElement>();  // Contains the current objects in the current branch of the model.
 	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
-	private final Object output;
-	private OutputStream outputStream;
-	private Writer writer, flushOnlyWriter;
+	private SerializerOutput output;
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private final SerializerListener listener;
@@ -117,7 +113,7 @@ public class SerializerSession extends BeanSession {
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
-		this.output = output;
+		this.output = new SerializerOutput(output);
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
@@ -190,16 +186,7 @@ public class SerializerSession extends BeanSession {
 	 * @throws Exception If object could not be converted to an output stream.
 	 */
 	public OutputStream getOutputStream() throws Exception {
-		if (output == null)
-			throw new SerializeException("Output cannot be null.");
-		if (output instanceof OutputStream)
-			return (OutputStream)output;
-		if (output instanceof File) {
-			if (outputStream == null)
-				outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
-			return outputStream;
-		}
-		throw new SerializeException("Cannot convert object of type {0} to an OutputStream.", output.getClass().getName());
+		return output.getOutputStream();
 	}
 
 
@@ -221,26 +208,7 @@ public class SerializerSession extends BeanSession {
 	 * @throws Exception If object could not be converted to a writer.
 	 */
 	public Writer getWriter() throws Exception {
-		if (output == null)
-			throw new SerializeException("Output cannot be null.");
-		if (output instanceof Writer)
-			return (Writer)output;
-		if (output instanceof OutputStream) {
-			if (flushOnlyWriter == null)
-				flushOnlyWriter = new OutputStreamWriter((OutputStream)output, UTF8);
-			return flushOnlyWriter;
-		}
-		if (output instanceof File) {
-			if (writer == null)
-				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
-			return writer;
-		}
-		if (output instanceof StringBuilder) {
-			if (writer == null)
-				writer = new StringBuilderWriter((StringBuilder)output);
-			return writer;
-		}
-		throw new SerializeException("Cannot convert object of type {0} to a Writer.", output.getClass().getName());
+		return output.getWriter();
 	}
 
 	/**
@@ -249,7 +217,7 @@ public class SerializerSession extends BeanSession {
 	 * @return The raw output object passed into this session.
 	 */
 	protected Object getOutput() {
-		return output;
+		return output.getRawOutput();
 	}
 
 	/**
@@ -715,16 +683,7 @@ public class SerializerSession extends BeanSession {
 	@Override
 	public boolean close() {
 		if (super.close()) {
-			try {
-				if (outputStream != null)
-					outputStream.close();
-				if (flushOnlyWriter != null)
-					flushOnlyWriter.flush();
-				if (writer != null)
-					writer.close();
-			} catch (IOException e) {
-				throw new BeanRuntimeException(e);
-			}
+			output.close();
 			return true;
 		}
 		return false;

@@ -14,12 +14,9 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.ParserContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -38,10 +35,7 @@ public class ParserSession extends BeanSession {
 
 	private final Method javaMethod;
 	private final Object outer;
-	private final Object input;
-	private String inputString;
-	private InputStream inputStream;
-	private Reader reader, noCloseReader;
+	private final ParserInput input;
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private final ParserListener listener;
@@ -103,7 +97,7 @@ public class ParserSession extends BeanSession {
 			fileCharset = op.getString(PARSER_fileCharset, ctx.fileCharset);
 			listenerClass = op.get(Class.class, PARSER_listener, ctx.listener);
 		}
-		this.input = input;
+		this.input = new ParserInput(input, isDebug(), strict, fileCharset, inputStreamCharset);
 		this.javaMethod = javaMethod;
 		this.outer = outer;
 		this.listener = newInstance(ParserListener.class, listenerClass);
@@ -119,39 +113,7 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException If object could not be converted to an input stream.
 	 */
 	public InputStream getInputStream() throws ParseException {
-		try {
-			if (input == null)
-				return null;
-			if (input instanceof InputStream) {
-				if (isDebug()) {
-					byte[] b = readBytes((InputStream)input, 1024);
-					inputString = toHex(b);
-					return new ByteArrayInputStream(b);
-				}
-				return (InputStream)input;
-			}
-			if (input instanceof byte[]) {
-				if (isDebug())
-					inputString = toHex((byte[])input);
-				return new ByteArrayInputStream((byte[])input);
-			}
-			if (input instanceof String) {
-				inputString = (String)input;
-				return new ByteArrayInputStream(fromHex((String)input));
-			}
-			if (input instanceof File) {
-				if (isDebug()) {
-					byte[] b = readBytes((File)input);
-					inputString = toHex(b);
-					return new ByteArrayInputStream(b);
-				}
-				inputStream = new FileInputStream((File)input);
-				return inputStream;
-			}
-		} catch (IOException e) {
-			throw new ParseException(e);
-		}
-		throw new ParseException("Cannot convert object of type {0} to an InputStream.", input.getClass().getName());
+		return input.getInputStream();
 	}
 
 
@@ -165,71 +127,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If object could not be converted to a reader.
 	 */
 	public Reader getReader() throws Exception {
-		if (input == null)
-			return null;
-		if (input instanceof Reader) {
-			if (isDebug()) {
-				inputString = read((Reader)input);
-				return new StringReader(inputString);
-			}
-			return (Reader)input;
-		}
-		if (input instanceof CharSequence) {
-			inputString = input.toString();
-			if (reader == null)
-				reader = new ParserReader((CharSequence)input);
-			return reader;
-		}
-		if (input instanceof InputStream || input instanceof byte[]) {
-			InputStream is = (
-				input instanceof InputStream
-				? (InputStream)input
-				: new ByteArrayInputStream((byte[])input)
-			);
-			if (noCloseReader == null) {
-				CharsetDecoder cd = (
-					"default".equalsIgnoreCase(inputStreamCharset)
-					? Charset.defaultCharset()
-					: Charset.forName(inputStreamCharset)
-				).newDecoder();
-				if (strict) {
-					cd.onMalformedInput(CodingErrorAction.REPORT);
-					cd.onUnmappableCharacter(CodingErrorAction.REPORT);
-				} else {
-					cd.onMalformedInput(CodingErrorAction.REPLACE);
-					cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
-				}
-				noCloseReader = new InputStreamReader(is, cd);
-			}
-			if (isDebug()) {
-				inputString = read(noCloseReader);
-				return new StringReader(inputString);
-			}
-			return noCloseReader;
-		}
-		if (input instanceof File) {
-			if (reader == null) {
-				CharsetDecoder cd = (
-					"default".equalsIgnoreCase(fileCharset)
-					? Charset.defaultCharset()
-					: Charset.forName(fileCharset)
-				).newDecoder();
-				if (strict) {
-					cd.onMalformedInput(CodingErrorAction.REPORT);
-					cd.onUnmappableCharacter(CodingErrorAction.REPORT);
-				} else {
-					cd.onMalformedInput(CodingErrorAction.REPLACE);
-					cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
-				}
-				reader = new InputStreamReader(new FileInputStream((File)input), cd);
-			}
-			if (isDebug()) {
-				inputString = read(reader);
-				return new StringReader(inputString);
-			}
-			return reader;
-		}
-		throw new ParseException("Cannot convert object of type {0} to a Reader.", input.getClass().getName());
+		return input.getReader();
 	}
 
 	/**
@@ -252,7 +150,7 @@ public class ParserSession extends BeanSession {
 	 * @return The raw input object passed into this session.
 	 */
 	protected Object getInput() {
-		return input;
+		return input.getRawInput();
 	}
 
 	/**
@@ -445,7 +343,7 @@ public class ParserSession extends BeanSession {
 	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
 	 */
 	public String getInputAsString() {
-		return inputString;
+		return input.getInputAsString();
 	}
 
 	/**
@@ -454,14 +352,7 @@ public class ParserSession extends BeanSession {
 	@Override
 	public boolean close() {
 		if (super.close()) {
-			try {
-				if (inputStream != null)
-					inputStream.close();
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-				throw new BeanRuntimeException(e);
-			}
+			input.close();
 			return true;
 		}
 		return false;
