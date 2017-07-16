@@ -38,8 +38,8 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			session.getWriter().write("text/a - " + o);
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+			out.getWriter().write("text/a - " + o);
 		}
 	}
 
@@ -51,8 +51,8 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			session.getWriter().write("text/b - " + o);
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+			out.getWriter().write("text/b - " + o);
 		}
 	}
 
@@ -88,8 +88,8 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			session.getWriter().write("text/c - " + o);
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+			out.getWriter().write("text/c - " + o);
 		}
 	}
 
@@ -109,8 +109,8 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			session.getWriter().write("text/d - " + o);
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+			out.getWriter().write("text/d - " + o);
 		}
 	}
 

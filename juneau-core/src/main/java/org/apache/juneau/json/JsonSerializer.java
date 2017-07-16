@@ -404,20 +404,19 @@ public class JsonSerializer extends WriterSerializer {
 		return schemaSerializer;
 	}
 
-
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public JsonSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new JsonSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new JsonSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		JsonSerializerSession s = (JsonSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null);
+		serializeAnything(s, s.getJsonWriter(out), o, s.getExpectedRootType(o), "root", null);
 	}
 }

@@ -66,22 +66,25 @@ public class DefaultHandler implements ResponseHandler {
 						OutputStreamSerializer s2 = (OutputStreamSerializer)s;
 						Writer w = res.getNegotiatedWriter();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						SerializerSession session = s.createSession(baos, p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
-						s2.serialize(session, output);
+						SerializerOutput sout = new SerializerOutput(baos);
+						SerializerSession session = s.createSession(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
+						s2.serialize(session, sout, output);
 						w.write(StringUtils.toHex(baos.toByteArray()));
 						w.close();
 					} else {
 						OutputStreamSerializer s2 = (OutputStreamSerializer)s;
 						OutputStream os = res.getNegotiatedOutputStream();
-						SerializerSession session = s.createSession(os, p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
-						s2.serialize(session, output);
+						SerializerOutput sout = new SerializerOutput(os);
+						SerializerSession session = s.createSession(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
+						s2.serialize(session, sout, output);
 						os.close();
 					}
 				} else {
 					WriterSerializer s2 = (WriterSerializer)s;
 					Writer w = res.getNegotiatedWriter();
-					SerializerSession session = s.createSession(w, p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
-					s2.serialize(session, output);
+					SerializerOutput sout = new SerializerOutput(w);
+					SerializerSession session = s.createSession(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
+					s2.serialize(session, sout, output);
 					w.close();
 				}
 			} catch (SerializeException e) {

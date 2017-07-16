@@ -20,7 +20,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -45,9 +44,6 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output
-	 * 	The output object.
-	 * 	See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -63,9 +59,9 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
+	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, ObjectMap op, Method javaMethod,
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			header = ctx.header;
 			nav = ctx.nav;
@@ -219,13 +215,5 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 */
 	public final String getNoResultsMessage() {
 		return noResultsMessage;
-	}
-
-	@Override /* XmlSerializerSession */
-	public HtmlWriter getWriter() throws Exception {
-		Object output = getOutput();
-		if (output instanceof HtmlWriter)
-			return (HtmlWriter)output;
-		return new HtmlWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
 	}
 }

@@ -68,16 +68,16 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public HtmlDocSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new HtmlDocSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new HtmlDocSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 
 		HtmlDocSerializerSession s = (HtmlDocSerializerSession)session;
-		HtmlWriter w = s.getWriter();
+		HtmlWriter w = s.getHtmlWriter(out);
 		HtmlDocTemplate t = s.getTemplate();
 
 		w.sTag("html").nl(0);
@@ -91,13 +91,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Calls the parent {@link #doSerialize(SerializerSession, Object)} method which invokes just the HTML serializer.
+	 * Calls the parent {@link #doSerialize(SerializerSession, SerializerOutput, Object)} method which invokes just the HTML serializer.
 	 *
 	 * @param session The serializer session.
+	 * @param out
+	 * 	Where to send the output from the serializer.
 	 * @param o The object being serialized.
 	 * @throws Exception
 	 */
-	public void parentSerialize(SerializerSession session, Object o) throws Exception {
-		super.doSerialize(session, o);
+	public void parentSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+		super.doSerialize(session, out, o);
 	}
 }

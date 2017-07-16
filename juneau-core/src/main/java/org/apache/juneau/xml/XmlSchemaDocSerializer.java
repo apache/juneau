@@ -46,13 +46,14 @@ public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		XmlSerializerSession s = (XmlSerializerSession)session;
-		XmlWriter w = s.getWriter();
+		XmlWriter w = s.getXmlWriter(out);
 		w.append("<?xml")
 			.attr("version", "1.0")
 			.attr("encoding", "UTF-8")
 			.appendln("?>");
-		super.doSerialize(s, o);
+		w.flush();
+		super.doSerialize(s, out, o);
 	}
 }

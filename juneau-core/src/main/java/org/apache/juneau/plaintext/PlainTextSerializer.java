@@ -70,7 +70,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
-		session.getWriter().write(o == null ? "null" : session.convertToType(o, String.class));
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+		out.getWriter().write(o == null ? "null" : session.convertToType(o, String.class));
 	}
 }

@@ -22,7 +22,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -54,7 +54,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -70,9 +69,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected HtmlSerializerSession(HtmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
+	protected HtmlSerializerSession(HtmlSerializerContext ctx, ObjectMap op, Method javaMethod,
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		String labelParameter;
 		if (op == null || op.isEmpty()) {
 			anchorText = Enum.valueOf(AnchorText.class, ctx.uriAnchorText);
@@ -92,12 +91,18 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
 	}
 
-	@Override /* XmlSerializerSession */
-	public HtmlWriter getWriter() throws Exception {
-		Object output = getOutput();
+	/**
+	 * Converts the specified output target object to an {@link HtmlWriter}.
+	 *
+	 * @param out The output target object.
+	 * @return The output target object wrapped in an {@link HtmlWriter}.
+	 * @throws Exception
+	 */
+	public HtmlWriter getHtmlWriter(SerializerOutput out) throws Exception {
+		Object output = out.getRawOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
-		return new HtmlWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(),
+		return new HtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(),
 			getUriResolver());
 	}
 

@@ -143,10 +143,10 @@ public class PhotosResource extends Resource {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object o) throws Exception {
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 			RenderedImage image = (RenderedImage)o;
 			String mediaType = session.getProperty("mediaType");
-			ImageIO.write(image, mediaType.substring(mediaType.indexOf('/')+1), session.getOutputStream());
+			ImageIO.write(image, mediaType.substring(mediaType.indexOf('/')+1), out.getOutputStream());
 		}
 	}
 

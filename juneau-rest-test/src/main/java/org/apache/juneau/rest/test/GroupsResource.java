@@ -44,8 +44,8 @@ public class GroupsResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object output) throws Exception {
-			session.getWriter().write("text/s," + output);
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object output) throws Exception {
+			out.getWriter().write("text/s," + output);
 		}
 	}
 

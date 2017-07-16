@@ -90,13 +90,15 @@ public abstract class Serializer extends CoreObject {
 	 * This method should NOT close the context object.
 	 *
 	 * @param session
-	 * 	The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone,
+	 * 	The serializer session object return by {@link #createSession(ObjectMap, Method, Locale, TimeZone,
 	 * 	MediaType, UriContext)}.
-	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
+	 * 	If <jk>null</jk>, session is created using {@link #createSession()}.
+	 * @param out
+	 * 	Where to send the output from the serializer.
 	 * @param o The object to serialize.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
-	protected abstract void doSerialize(SerializerSession session, Object o) throws Exception;
+	protected abstract void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception;
 
 	/**
 	 * Shortcut method for serializing objects directly to either a <code>String</code> or <code><jk>byte</jk>[]</code>
@@ -119,15 +121,17 @@ public abstract class Serializer extends CoreObject {
 	 * Serialize the specified object using the specified session.
 	 *
 	 * @param session
-	 * 	The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone,
+	 * 	The serializer session object return by {@link #createSession(ObjectMap, Method, Locale, TimeZone,
 	 * 	MediaType, UriContext)}.
-	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
+	 * 	If <jk>null</jk>, session is created using {@link #createSession()}.
+	 * @param out
+	 * 	Where to send the output from the serializer.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public final void serialize(SerializerSession session, Object o) throws SerializeException {
+	public final void serialize(SerializerSession session, SerializerOutput out, Object o) throws SerializeException {
 		try {
-			doSerialize(session, o);
+			doSerialize(session, out, o);
 		} catch (SerializeException e) {
 			throw e;
 		} catch (StackOverflowError e) {
@@ -164,8 +168,9 @@ public abstract class Serializer extends CoreObject {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final void serialize(Object o, Object output) throws SerializeException {
-		SerializerSession session = createSession(output);
-		serialize(session, o);
+		SerializerSession session = createSession();
+		SerializerOutput out = new SerializerOutput(output);
+		serialize(session, out, o);
 	}
 
 	/**
@@ -175,20 +180,6 @@ public abstract class Serializer extends CoreObject {
 	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
 	 * subclass of {@link SerializerSession}.
 	 *
-	 * @param output
-	 * 	The output object.
-	 * 	<br>Character-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link Writer}
-	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
-	 * 	</ul>
-	 * 	<br>Stream-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link OutputStream}
-	 * 		<li>{@link File}
-	 * 	</ul>
 	 * @param op Optional additional properties.
 	 * @param javaMethod
 	 * 	Java method that invoked this serializer.
@@ -206,9 +197,9 @@ public abstract class Serializer extends CoreObject {
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 * @return The new session.
 	 */
-	public SerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public SerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new SerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new SerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	/**
@@ -217,24 +208,10 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * Equivalent to calling <code>createSession(<jk>null</jk>, <jk>null</jk>)</code>.
 	 *
-	 * @param output
-	 * 	The output object.
-	 * 	<br>Character-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link Writer}
-	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
-	 * 	</ul>
-	 * 	<br>Stream-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link OutputStream}
-	 * 		<li>{@link File}
-	 * 	</ul>
 	 * @return The new session.
 	 */
-	protected SerializerSession createSession(Object output) {
-		return createSession(output, null, null, null, null, getPrimaryMediaType(), null);
+	protected SerializerSession createSession() {
+		return createSession(null, null, null, null, getPrimaryMediaType(), null);
 	}
 
 	/**
@@ -296,7 +273,7 @@ public abstract class Serializer extends CoreObject {
 	 * or client).
 	 *
 	 * @param properties
-	 * 	Optional run-time properties (the same that are passed to {@link WriterSerializer#doSerialize(SerializerSession, Object)}.
+	 * 	Optional run-time properties (the same that are passed to {@link WriterSerializer#doSerialize(SerializerSession, SerializerOutput, Object)}.
 	 * 	Can be <jk>null</jk>.
 	 * @return
 	 * 	The HTTP headers to set on HTTP requests.

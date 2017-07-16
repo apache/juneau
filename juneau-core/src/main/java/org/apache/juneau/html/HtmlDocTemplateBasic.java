@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * A basic template for the HTML doc serializer.
@@ -158,7 +159,8 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 				w.append(6, m).nl(6);
 		} else {
 			session.indent = 6;
-			s.parentSerialize(session, o);
+			w.flush();
+			s.parentSerialize(session, new SerializerOutput(w), o);
 		}
 
 		w.ie(5).eTag("div").nl(5);

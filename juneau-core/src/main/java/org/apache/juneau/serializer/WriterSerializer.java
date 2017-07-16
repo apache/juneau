@@ -30,9 +30,9 @@ import org.apache.juneau.utils.*;
  * It has 2 abstract methods to implement...
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType, UriContext)}
+ * 		{@link #createSession(ObjectMap, Method, Locale, TimeZone, MediaType, UriContext)}
  * 	<li>
- * 		{@link #doSerialize(SerializerSession, Object)}
+ * 		{@link #doSerialize(SerializerSession, SerializerOutput, Object)}
  * </ul>
  *
  * <h6 class='topic'>@Produces annotation</h6>
@@ -74,7 +74,8 @@ public abstract class WriterSerializer extends Serializer {
 	@Override
 	public final String serialize(Object o) throws SerializeException {
 		StringWriter w = new StringWriter();
-		serialize(createSession(w), o);
+		SerializerOutput out = new SerializerOutput(w);
+		serialize(createSession(), out, o);
 		return w.toString();
 	}
 
@@ -90,7 +91,8 @@ public abstract class WriterSerializer extends Serializer {
 	public final String toString(Object o) {
 		try {
 			StringWriter w = new StringWriter();
-			serialize(createSession(w), o);
+			SerializerOutput out = new SerializerOutput(w);
+			serialize(createSession(), out, o);
 			return w.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

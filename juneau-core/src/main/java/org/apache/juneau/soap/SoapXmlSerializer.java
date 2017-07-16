@@ -59,9 +59,9 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		XmlSerializerSession s = (XmlSerializerSession)session;
-		XmlWriter w = s.getWriter();
+		XmlWriter w = s.getXmlWriter(out);
 		w.append("<?xml")
 			.attr("version", "1.0")
 			.attr("encoding", "UTF-8")
@@ -71,7 +71,8 @@ public final class SoapXmlSerializer extends XmlSerializer {
 			.appendln(">");
 		w.sTag(1, "soap", "Body").nl(1);
 		s.indent += 2;
-		super.doSerialize(s, o);
+		w.flush();
+		super.doSerialize(s, out, o);
 		w.ie(1).eTag("soap", "Body").nl(1);
 		w.eTag("soap", "Envelope").nl(0);
 	}

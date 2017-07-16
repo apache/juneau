@@ -797,14 +797,14 @@ public class HtmlSerializer extends XmlSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public HtmlSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new HtmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new HtmlSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		HtmlSerializerSession s = (HtmlSerializerSession)session;
-		doSerialize(s, o, s.getWriter());
+		doSerialize(s, o, s.getHtmlWriter(out));
 	}
 }

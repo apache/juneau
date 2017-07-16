@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -39,9 +38,6 @@ public final class MsgPackSerializerSession extends SerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output
-	 * 	The output object.
-	 * 	See {@link JsonSerializerSession#getOutputStream()} for valid class types.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -57,9 +53,9 @@ public final class MsgPackSerializerSession extends SerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
+	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, ObjectMap op, Method javaMethod,
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
@@ -77,11 +73,18 @@ public final class MsgPackSerializerSession extends SerializerSession {
 		return addBeanTypeProperties;
 	}
 
-	@Override /*SerializerSession */
-	public MsgPackOutputStream getOutputStream() throws Exception {
-		Object output = getOutput();
+	/**
+	 * Converts the specified output target object to an {@link MsgPackOutputStream}.
+	 *
+	 * @param out The output target object.
+	 * @return The output target object wrapped in an {@link MsgPackOutputStream}.
+	 * @throws Exception
+	 */
+	@SuppressWarnings("static-method")
+	public MsgPackOutputStream getMsgPackOutputStream(SerializerOutput out) throws Exception {
+		Object output = out.getRawOutput();
 		if (output instanceof MsgPackOutputStream)
 			return (MsgPackOutputStream)output;
-		return new MsgPackOutputStream(super.getOutputStream());
+		return new MsgPackOutputStream(out.getOutputStream());
 	}
 }

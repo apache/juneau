@@ -67,8 +67,8 @@ public class PropertiesResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object output) throws Exception {
-			session.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object output) throws Exception {
+			out.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
 				session.getProperty("A1"), session.getProperty("A2"), session.getProperty("B1"), session.getProperty("B2"), session.getProperty("C"),
 				session.getProperty("R1a"), session.getProperty("R1b"), session.getProperty("R2"), session.getProperty("R3"), session.getProperty("R4"), session.getProperty("R5"), session.getProperty("R6")));
 		}
@@ -90,8 +90,8 @@ public class PropertiesResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object output) throws Exception {
-			session.getWriter().write(format("A=%s,P=%s,H=%s", session.getProperty("A"), session.getProperty("P"), session.getProperty("h")));
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object output) throws Exception {
+			out.getWriter().write(format("A=%s,P=%s,H=%s", session.getProperty("A"), session.getProperty("P"), session.getProperty("h")));
 		}
 	}
 }

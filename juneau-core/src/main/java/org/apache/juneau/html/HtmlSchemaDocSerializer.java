@@ -78,15 +78,15 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	}
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new HtmlDocSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+	public HtmlDocSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new HtmlDocSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* ISchemaSerializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		HtmlSerializerSession s = (HtmlSerializerSession)session;
 		ObjectMap schema = getSchema(s, session.getClassMetaForObject(o), "root", null);
-		super.doSerialize(s, schema);
+		super.doSerialize(s, out, schema);
 	}
 
 	/*

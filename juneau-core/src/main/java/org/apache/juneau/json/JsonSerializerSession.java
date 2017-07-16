@@ -40,9 +40,6 @@ public final class JsonSerializerSession extends SerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output
-	 * 	The output object.
-	 * 	See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -58,9 +55,9 @@ public final class JsonSerializerSession extends SerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected JsonSerializerSession(JsonSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
+	protected JsonSerializerSession(JsonSerializerContext ctx, ObjectMap op, Method javaMethod,
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			simpleMode = ctx.simpleMode;
 			escapeSolidus = ctx.escapeSolidus;
@@ -100,12 +97,18 @@ public final class JsonSerializerSession extends SerializerSession {
 		return addBeanTypeProperties;
 	}
 
-	@Override /* ParserSession */
-	public JsonWriter getWriter() throws Exception {
-		Object output = getOutput();
+	/**
+	 * Converts the specified output target object to an {@link JsonWriter}.
+	 *
+	 * @param out The output target object.
+	 * @return The output target object wrapped in an {@link JsonWriter}.
+	 * @throws Exception
+	 */
+	public JsonWriter getJsonWriter(SerializerOutput out) throws Exception {
+		Object output = out.getRawOutput();
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;
-		return new JsonWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(),
+		return new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(),
 			isSimpleMode(), isTrimStrings(), getUriResolver());
 	}
 }

@@ -33,7 +33,6 @@ public final class CsvSerializerSession extends SerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output The output object.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -48,8 +47,8 @@ public final class CsvSerializerSession extends SerializerSession {
 	 * @param uriContext The URI context.
 	 * Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected CsvSerializerSession(CsvSerializerContext ctx, ObjectMap op, Object output, Method javaMethod,
+	protected CsvSerializerSession(CsvSerializerContext ctx, ObjectMap op, Method javaMethod,
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

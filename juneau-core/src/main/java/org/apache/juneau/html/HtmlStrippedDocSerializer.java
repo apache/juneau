@@ -52,14 +52,14 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	//---------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		HtmlSerializerSession s = (HtmlSerializerSession)session;
-		HtmlWriter w = s.getWriter();
+		HtmlWriter w = s.getHtmlWriter(out);
 		if (o == null
 			|| (o instanceof Collection && ((Collection<?>)o).size() == 0)
 			|| (o.getClass().isArray() && Array.getLength(o) == 0))
 			w.sTag(1, "p").append("No Results").eTag("p").nl(1);
 		else
-			super.doSerialize(s, o);
+			super.doSerialize(s, out, o);
 	}
 }

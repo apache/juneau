@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -43,7 +42,6 @@ public class UonSerializerSession extends SerializerSession {
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
 	 * @param encode Override the {@link UonSerializerContext#UON_encodeChars} setting.
-	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -59,9 +57,9 @@ public class UonSerializerSession extends SerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected UonSerializerSession(UonSerializerContext ctx, Boolean encode, ObjectMap op, Object output,
+	protected UonSerializerSession(UonSerializerContext ctx, Boolean encode, ObjectMap op,
 			Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			encodeChars = encode == null ? ctx.encodeChars : encode;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
@@ -101,11 +99,17 @@ public class UonSerializerSession extends SerializerSession {
 		return plainTextParams;
 	}
 
-	@Override /* SerializerSession */
-	public final UonWriter getWriter() throws Exception {
-		Object output = getOutput();
+	/**
+	 * Converts the specified output target object to an {@link UonWriter}.
+	 *
+	 * @param out The output target object.
+	 * @return The output target object wrapped in an {@link UonWriter}.
+	 * @throws Exception
+	 */
+	public final UonWriter getUonWriter(SerializerOutput out) throws Exception {
+		Object output = out.getRawOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		return new UonWriter(this, super.getWriter(), isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), isPlainTextParams(), getUriResolver());
+		return new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), isPlainTextParams(), getUriResolver());
 	}
 }

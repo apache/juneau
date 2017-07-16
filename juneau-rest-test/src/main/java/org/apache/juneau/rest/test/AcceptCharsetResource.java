@@ -76,8 +76,8 @@ public class AcceptCharsetResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			Writer w = new OutputStreamWriter(session.getOutputStream());
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+			Writer w = new OutputStreamWriter(out.getOutputStream());
 			w.append(o.toString()).append('/').append(session.getProperty("characterEncoding"));
 			w.flush();
 			w.close();

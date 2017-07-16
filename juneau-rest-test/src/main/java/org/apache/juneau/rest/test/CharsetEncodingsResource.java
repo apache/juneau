@@ -54,8 +54,8 @@ public class CharsetEncodingsResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			session.getWriter().write(o.toString());
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+			out.getWriter().write(o.toString());
 		}
 	}
 

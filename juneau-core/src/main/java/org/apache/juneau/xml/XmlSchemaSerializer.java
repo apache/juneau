@@ -81,7 +81,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	}
 
 	@Override /* XmlSerializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		XmlSerializerSession s = (XmlSerializerSession)session;
 
 		if (s.isEnableNamespaces() && s.isAutoDetectNamespaces())
@@ -92,23 +92,24 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 		Schemas schemas = new Schemas(s, xs, s.getDefaultNamespace(), allNs);
 		schemas.process(s, o);
-		schemas.serializeTo(session.getWriter());
+		schemas.serializeTo(out.getWriter());
 	}
 
 	/**
-	 * Returns an XML-Schema validator based on the output returned by {@link #doSerialize(SerializerSession, Object)};
+	 * Returns an XML-Schema validator based on the output returned by {@link #doSerialize(SerializerSession, SerializerOutput, Object)};
 	 *
 	 * @param session
-	 * 	The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone,
+	 * 	The serializer session object return by {@link #createSession(ObjectMap, Method, Locale, TimeZone,
 	 * 	MediaType, UriContext)}.
 	 * 	Can be <jk>null</jk>.
+	 * @param out The target writer.
 	 * @param o The object to serialize.
 	 * @return The new validator.
 	 * @throws Exception If a problem was detected in the XML-Schema output produced by this serializer.
 	 */
-	public Validator getValidator(SerializerSession session, Object o) throws Exception {
-		doSerialize(session, o);
-		String xmlSchema = session.getWriter().toString();
+	public Validator getValidator(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+		doSerialize(session, out, o);
+		String xmlSchema = out.getWriter().toString();
 
 		// create a SchemaFactory capable of understanding WXS schemas
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -586,11 +587,11 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	}
 
 	@Override /* Serializer */
-	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+	public XmlSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		// This serializer must always have namespaces enabled.
 		if (op == null)
 			op = new ObjectMap();
 		op.put(XmlSerializerContext.XML_enableNamespaces, true);
-		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new XmlSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

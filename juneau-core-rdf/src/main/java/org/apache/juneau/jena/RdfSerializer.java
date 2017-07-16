@@ -185,7 +185,7 @@ public class RdfSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 
 		RdfSerializerSession s = (RdfSerializerSession)session;
 
@@ -210,7 +210,7 @@ public class RdfSerializer extends WriterSerializer {
 				r.addProperty(s.getRootProp(), "true");
 		}
 
-		s.getRdfWriter().write(model, session.getWriter(), "http://unknown/");
+		s.getRdfWriter().write(model, out.getWriter(), "http://unknown/");
 	}
 
 	private RDFNode serializeAnything(RdfSerializerSession session, Object o, boolean isURI, ClassMeta<?> eType, 
@@ -449,8 +449,8 @@ public class RdfSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public RdfSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, 
+	public RdfSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale, 
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new RdfSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new RdfSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

@@ -438,8 +438,9 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			}
 
 			StringWriter w = new StringWriter();
-			UonSerializerSession s = new UrlEncodingSerializerSession(ctx, urlEncode, null, w, null, null, null, MediaType.UON, null);
-			super.doSerialize(s, o);
+			SerializerOutput out = new SerializerOutput(w);
+			UonSerializerSession s = new UrlEncodingSerializerSession(ctx, urlEncode, null, null, null, null, MediaType.UON, null);
+			super.doSerialize(s, out, o);
 			return w.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -452,15 +453,15 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public UrlEncodingSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new UrlEncodingSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new UrlEncodingSerializerSession(ctx, null, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		UrlEncodingSerializerSession s = (UrlEncodingSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o);
+		serializeAnything(s, s.getUonWriter(out), o);
 	}
 
 	@Override /* PartSerializer */

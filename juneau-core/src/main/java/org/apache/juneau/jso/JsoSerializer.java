@@ -54,8 +54,8 @@ public class JsoSerializer extends OutputStreamSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* OutputStreamSerializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
-		ObjectOutputStream oos = new ObjectOutputStream(session.getOutputStream());
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+		ObjectOutputStream oos = new ObjectOutputStream(out.getOutputStream());
 		oos.writeObject(o);
 		oos.flush();
 		oos.close();

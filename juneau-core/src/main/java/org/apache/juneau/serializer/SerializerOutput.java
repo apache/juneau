@@ -41,16 +41,31 @@ import org.apache.juneau.internal.*;
 public class SerializerOutput {
 
 	private final Object output;
+	private final boolean autoClose;
 	private OutputStream outputStream;
 	private Writer writer, flushOnlyWriter;
 
 	/**
 	 * Constructor.
 	 *
+	 * <p>
+	 * Equivalent to calling <code>SerializerOutput(output, <jk>true</jk>);</code>.
+	 *
 	 * @param output The object to pipe the serializer output to.
 	 */
 	public SerializerOutput(Object output) {
+		this(output, true);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param output The object to pipe the serializer output to.
+	 * @param autoClose Close the stream or writer at the end of the session.
+	 */
+	public SerializerOutput(Object output, boolean autoClose) {
 		this.output = output;
+		this.autoClose = autoClose;
 	}
 
 	/**
@@ -137,12 +152,21 @@ public class SerializerOutput {
 	 */
 	public void close() {
 		try {
-			if (outputStream != null)
-				outputStream.close();
-			if (flushOnlyWriter != null)
-				flushOnlyWriter.flush();
-			if (writer != null)
-				writer.close();
+			if (! autoClose) {
+				if (outputStream != null)
+					outputStream.flush();
+				if (flushOnlyWriter != null)
+					flushOnlyWriter.flush();
+				if (writer != null)
+					writer.flush();
+			} else {
+				if (outputStream != null)
+					outputStream.close();
+				if (flushOnlyWriter != null)
+					flushOnlyWriter.flush();
+				if (writer != null)
+					writer.close();
+			}
 		} catch (IOException e) {
 			throw new BeanRuntimeException(e);
 		}

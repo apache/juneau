@@ -49,8 +49,8 @@ public final class CsvSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
-		Writer out = session.getWriter();
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
+		Writer w = out.getWriter();
 		ClassMeta cm = session.getClassMetaForObject(o);
 		Collection l = null;
 		if (cm.isArray()) {
@@ -66,19 +66,19 @@ public final class CsvSerializer extends WriterSerializer {
 				int i = 0;
 				for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
 					if (i++ > 0)
-						out.append(',');
-					append(out, pm.getName());
+						w.append(',');
+					append(w, pm.getName());
 				}
-				out.append('\n');
+				w.append('\n');
 				for (Object o2 : l) {
 					i = 0;
 					BeanMap bean = session.toBeanMap(o2);
 					for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
 						if (i++ > 0)
-							out.append(',');
-						append(out, pm.get(bean, pm.getName()));
+							w.append(',');
+						append(w, pm.get(bean, pm.getName()));
 					}
-					out.append('\n');
+					w.append('\n');
 				}
 			}
 		}

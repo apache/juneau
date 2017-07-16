@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -57,9 +56,6 @@ public final class RdfSerializerSession extends SerializerSession {
 	 * @param ctx 
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output 
-	 * 	The output object.  
-	 * 	See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op 
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -75,9 +71,9 @@ public final class RdfSerializerSession extends SerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected RdfSerializerSession(RdfSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, 
+	protected RdfSerializerSession(RdfSerializerContext ctx, ObjectMap op, Method javaMethod, 
 			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		ObjectMap jenaSettings = new ObjectMap();
 		jenaSettings.put("rdfXml.tab", isUseWhitespace() ? 2 : 0);
 		jenaSettings.put("rdfXml.attributeQuoteChar", Character.toString(getQuoteChar()));

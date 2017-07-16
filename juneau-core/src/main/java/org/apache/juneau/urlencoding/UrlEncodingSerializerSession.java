@@ -17,7 +17,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -37,7 +36,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
 	 * @param encode Overrides the {@link UonSerializerContext#UON_encodeChars} setting.
-	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -53,9 +51,9 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, ObjectMap op, Object output,
+	public UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, ObjectMap op,
 			Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, encode, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, encode, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			expandedParams = ctx.expandedParams;
 		} else {

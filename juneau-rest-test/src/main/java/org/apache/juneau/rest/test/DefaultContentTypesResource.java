@@ -129,8 +129,8 @@ public class DefaultContentTypesResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, Object output) throws Exception {
-			session.getWriter().write(name + "/" + output);
+		protected void doSerialize(SerializerSession session, SerializerOutput out, Object output) throws Exception {
+			out.getWriter().write(name + "/" + output);
 		}
 	}
 }

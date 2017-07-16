@@ -842,16 +842,16 @@ public class XmlSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		XmlSerializerSession s = (XmlSerializerSession)session;
 		if (s.isEnableNamespaces() && s.isAutoDetectNamespaces())
 			findNsfMappings(s, o);
-		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), null, null, s.isEnableNamespaces() && s.isAddNamespaceUrlsToRoot(), XmlFormat.DEFAULT, false, false, null);
+		serializeAnything(s, s.getXmlWriter(out), o, s.getExpectedRootType(o), null, null, s.isEnableNamespaces() && s.isAddNamespaceUrlsToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
 
 	@Override /* Serializer */
-	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public XmlSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new XmlSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

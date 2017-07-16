@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
-import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
@@ -69,7 +68,6 @@ public class SerializerSession extends BeanSession {
 	private final LinkedList<StackElement> stack = new LinkedList<StackElement>();  // Contains the current objects in the current branch of the model.
 	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
-	private SerializerOutput output;
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private final SerializerListener listener;
@@ -81,19 +79,6 @@ public class SerializerSession extends BeanSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output
-	 * 	The output object.
-	 * 	<br>Character-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link Writer}
-	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 	</ul>
-	 * 	<br>Stream-based serializers can handle the following output class types:
-	 * 	<ul>
-	 * 		<li>{@link OutputStream}
-	 * 		<li>{@link File}
-	 * 	</ul>
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -109,11 +94,10 @@ public class SerializerSession extends BeanSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale,
+	public SerializerSession(SerializerContext ctx, ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
-		this.output = new SerializerOutput(output);
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
@@ -167,57 +151,6 @@ public class SerializerSession extends BeanSession {
 		} else {
 			set = Collections.emptyMap();
 		}
-	}
-
-	/**
-	 * Wraps the specified output object inside an output stream.
-	 *
-	 * <p>
-	 * Subclasses can override this method to implement their own specialized output streams.
-	 *
-	 * <p>
-	 * This method can be used if the output object is any of the following class types:
-	 * <ul>
-	 * 	<li>{@link OutputStream}
-	 * 	<li>{@link File}
-	 * </ul>
-	 *
-	 * @return The output object wrapped in an output stream.
-	 * @throws Exception If object could not be converted to an output stream.
-	 */
-	public OutputStream getOutputStream() throws Exception {
-		return output.getOutputStream();
-	}
-
-
-	/**
-	 * Wraps the specified output object inside a writer.
-	 *
-	 * <p>
-	 * Subclasses can override this method to implement their own specialized writers.
-	 *
-	 * <p>
-	 * This method can be used if the output object is any of the following class types:
-	 * <ul>
-	 * 	<li>{@link Writer}
-	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
-	 * </ul>
-	 *
-	 * @return The output object wrapped in a Writer.
-	 * @throws Exception If object could not be converted to a writer.
-	 */
-	public Writer getWriter() throws Exception {
-		return output.getWriter();
-	}
-
-	/**
-	 * Returns the raw output object passed into this session.
-	 *
-	 * @return The raw output object passed into this session.
-	 */
-	protected Object getOutput() {
-		return output.getRawOutput();
 	}
 
 	/**
@@ -682,11 +615,7 @@ public class SerializerSession extends BeanSession {
 
 	@Override
 	public boolean close() {
-		if (super.close()) {
-			output.close();
-			return true;
-		}
-		return false;
+		return super.close();
 	}
 
 	private static class StackElement {

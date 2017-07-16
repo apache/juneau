@@ -218,14 +218,14 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public MsgPackSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public MsgPackSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new MsgPackSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new MsgPackSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		MsgPackSerializerSession s = (MsgPackSerializerSession)session;
-		serializeAnything(s, s.getOutputStream(), o, s.getExpectedRootType(o), "root", null);
+		serializeAnything(s, s.getMsgPackOutputStream(out), o, s.getExpectedRootType(o), "root", null);
 	}
 }

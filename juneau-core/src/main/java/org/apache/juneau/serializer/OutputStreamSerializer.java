@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * This class is typically the parent class of all byte-based serializers.
  * It has 1 abstract method to implement...
  * <ul>
- * 	<li>{@link #doSerialize(SerializerSession, Object)}
+ * 	<li>{@link #doSerialize(SerializerSession, SerializerOutput, Object)}
  * </ul>
  *
  * <h6 class='topic'>@Produces annotation</h6>
@@ -69,7 +69,8 @@ public abstract class OutputStreamSerializer extends Serializer {
 	@Override
 	public final byte[] serialize(Object o) throws SerializeException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		serialize(createSession(baos), o);
+		SerializerOutput out = new SerializerOutput(baos);
+		serialize(createSession(), out, o);
 		return baos.toByteArray();
 	}
 
@@ -82,7 +83,8 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 */
 	public final String serializeToHex(Object o) throws SerializeException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		serialize(createSession(baos), o);
+		SerializerOutput out = new SerializerOutput(baos);
+		serialize(createSession(), out, o);
 		return toHex(baos.toByteArray());
 	}
 }

@@ -390,14 +390,14 @@ public class UonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale,
+	public UonSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new UonSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		return new UonSerializerSession(ctx, null, op, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, Object o) throws Exception {
+	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
 		UonSerializerSession s = (UonSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null);
+		serializeAnything(s, s.getUonWriter(out), o, s.getExpectedRootType(o), "root", null);
 	}
 }

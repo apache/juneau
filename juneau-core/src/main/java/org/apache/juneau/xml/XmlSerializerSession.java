@@ -23,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -54,7 +53,6 @@ public class XmlSerializerSession extends SerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op
 	 * 	The override properties.
 	 * 	These override any context properties defined in the context.
@@ -70,9 +68,9 @@ public class XmlSerializerSession extends SerializerSession {
 	 * 	The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public XmlSerializerSession(XmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale,
+	public XmlSerializerSession(XmlSerializerContext ctx, ObjectMap op, Method javaMethod, Locale locale,
 			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
+		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			enableNamespaces = ctx.enableNamespaces;
 			autoDetectNamespaces = ctx.autoDetectNamespaces;
@@ -203,11 +201,17 @@ public class XmlSerializerSession extends SerializerSession {
 		return false;
 	}
 
-	@Override /* SerializerSession */
-	public XmlWriter getWriter() throws Exception {
-		Object output = getOutput();
+	/**
+	 * Converts the specified output target object to an {@link XmlWriter}.
+	 *
+	 * @param out The output target object.
+	 * @return The output target object wrapped in an {@link XmlWriter}.
+	 * @throws Exception
+	 */
+	public XmlWriter getXmlWriter(SerializerOutput out) throws Exception {
+		Object output = out.getRawOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
-		return new XmlWriter(super.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), getDefaultNamespace());
+		return new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), getDefaultNamespace());
 	}
 }
