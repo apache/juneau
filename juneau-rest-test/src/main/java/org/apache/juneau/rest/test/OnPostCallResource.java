@@ -12,11 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * JUnit automated testcase resource.
@@ -43,14 +47,22 @@ public class OnPostCallResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write("p1="+session.getProperty("p1")+",p2="+session.getProperty("p2")+",p3="+session.getProperty("p3")+",p4="+session.getProperty("p4")+",p5="+session.getProperty("p5")+",contentType="+session.getProperty("mediaType"));
-		}
-		@Override /* Serializer */
-		public ObjectMap getResponseHeaders(ObjectMap properties) {
-			if (properties.containsKey("Override-Content-Type"))
-				return new ObjectMap().append("Content-Type", properties.get("Override-Content-Type"));
-			return null;
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write("p1="+getProperty("p1")+",p2="+getProperty("p2")+",p3="+getProperty("p3")+",p4="+getProperty("p4")+",p5="+getProperty("p5")+",contentType="+getProperty("mediaType"));
+				}
+				
+				@Override /* SerializerSession */
+				public Map<String,String> getResponseHeaders() {
+					ObjectMap p = getProperties();
+					if (p.containsKey("Override-Content-Type"))
+						return new AMap<String,String>().append("Content-Type", p.getString("Override-Content-Type"));
+					return Collections.emptyMap();
+				}
+			};
 		}
 	}
 

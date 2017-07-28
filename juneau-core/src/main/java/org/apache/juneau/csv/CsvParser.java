@@ -25,6 +25,7 @@ public class CsvParser extends ReaderParser {
 	/** Default parser, all default settings.*/
 	public static final CsvParser DEFAULT = new CsvParser(PropertyStore.create());
 
+	private final CsvParserContext ctx;
 
 	/**
 	 * Constructor.
@@ -33,6 +34,7 @@ public class CsvParser extends ReaderParser {
 	 */
 	public CsvParser(PropertyStore propertyStore) {
 		super(propertyStore);
+		this.ctx = createContext(CsvParserContext.class);
 	}
 
 	@Override /* CoreObject */
@@ -40,22 +42,8 @@ public class CsvParser extends ReaderParser {
 		return new CsvParserBuilder(propertyStore);
 	}
 
-	@SuppressWarnings("unused")
-	private static <T> T parseAnything(ParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
-		throw new NoSuchMethodException("Not implemented.");
-	}
-
-	//--------------------------------------------------------------------------------
-	// Entry point methods
-	//--------------------------------------------------------------------------------
-
 	@Override /* Parser */
-	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-		CsvParserSession s = (CsvParserSession)session;
-		ParserReader r = s.getReader();
-		if (r == null)
-			return null;
-		T o = parseAnything(s, type, r, s.getOuter(), null);
-		return o;
+	public ReaderParserSession createSession(ParserSessionArgs args) {
+		return new CsvParserSession(ctx, args);
 	}
 }

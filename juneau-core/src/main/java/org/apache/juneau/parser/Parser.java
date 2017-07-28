@@ -145,12 +145,10 @@ public abstract class Parser extends CoreObject {
 
 	/** General parser properties currently set on this parser. */
 	private final MediaType[] mediaTypes;
-	private final ParserContext ctx;
 
 	// Hidden constructor to force subclass from InputStreamParser or ReaderParser.
 	Parser(PropertyStore propertyStore) {
 		super(propertyStore);
-		this.ctx = createContext(ParserContext.class);
 
 		Consumes c = getAnnotation(Consumes.class, getClass());
 		if (c == null)
@@ -168,27 +166,10 @@ public abstract class Parser extends CoreObject {
 		return new ParserBuilder(propertyStore);
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// Abstract methods
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * Workhorse method.  Subclasses are expected to implement this method.
-	 *
-	 * @param session
-	 * 	The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object,
-	 * 	Locale, TimeZone, MediaType)}.
-	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
-	 * @param type
-	 * 	The class type of the object to create.
-	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
-	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>,
-	 * 	<code>ObjectMap</code>, etc...
-	 * @param <T> The class type of the object to create.
-	 * @return The parsed object.
-	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
-	 */
-	protected abstract <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception;
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
@@ -197,45 +178,23 @@ public abstract class Parser extends CoreObject {
 	 */
 	public abstract boolean isReaderParser();
 
+	/**
+	 * Create the session object that will be passed in to the parse method.
+	 *
+	 * <p>
+	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
+	 * subclass of {@link ParserSession}.
+	 *
+	 * @param args
+	 * 	Runtime arguments.
+	 * @return The new session.
+	 */
+	public abstract ParserSession createSession(ParserSessionArgs args);
+
+
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * Entry point for all parsing calls.
-	 *
-	 * <p>
-	 * Calls the {@link #doParse(ParserSession, ClassMeta)} implementation class and catches/re-wraps any exceptions
-	 * thrown.
-	 *
-	 * @param session
-	 * 	The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale,
-	 * 	TimeZone, MediaType)}.
-	 * @param type The class type of the object to create.
-	 * @param <T> The class type of the object to create.
-	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 */
-	public final <T> T parseSession(ParserSession session, ClassMeta<T> type) throws ParseException {
-		try {
-			if (type.isVoid())
-				return null;
-			return doParse(session, type);
-		} catch (ParseException e) {
-			throw e;
-		} catch (StackOverflowError e) {
-			throw new ParseException(session, "Depth too deep.  Stack overflow occurred.");
-		} catch (IOException e) {
-			throw new ParseException(session, "I/O exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
-		} catch (Exception e) {
-			throw new ParseException(session, "Exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
-		} finally {
-			session.close();
-		}
-	}
 
 	/**
 	 * Parses input into the specified object type.
@@ -313,10 +272,13 @@ public abstract class Parser extends CoreObject {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	@SuppressWarnings("unchecked")
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
-		ParserSession session = createSession(input);
-		return (T)parseSession(session, session.getClassMeta(type, args));
+		ParserSession session = createSession();
+		try {
+			return session.parse(input, type, args);
+		} finally {
+			session.close();
+		}
 	}
 
 	/**
@@ -355,8 +317,12 @@ public abstract class Parser extends CoreObject {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
-		ParserSession session = createSession(input);
-		return parseSession(session, session.getClassMeta(type));
+		ParserSession session = createSession();
+		try {
+			return session.parse(input, type);
+		} finally {
+			session.close();
+		}
 	}
 
 	/**
@@ -376,37 +342,12 @@ public abstract class Parser extends CoreObject {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
-		return parseSession(createSession(input), type);
-	}
-
-	/**
-	 * Create the session object that will be passed in to the parse method.
-	 *
-	 * <p>
-	 * It's up to implementers to decide what the session object looks like, although typically it's going to be a
-	 * subclass of {@link ParserSession}.
-	 *
-	 * @param input
-	 * 	The input.
-	 * 	See {@link #parse(Object, ClassMeta)} for supported input types.
-	 * @param op Optional additional properties.
-	 * @param javaMethod
-	 * 	Java method that invoked this parser.
-	 * 	When using the REST API, this is the Java method invoked by the REST call.
-	 * 	Can be used to access annotations defined on the method or class.
-	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @return The new session.
-	 */
-	public ParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale,
-			TimeZone timeZone, MediaType mediaType) {
-		return new ParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
+		ParserSession session = createSession();
+		try {
+			return session.parse(input, type);
+		} finally {
+			session.close();
+		}
 	}
 
 	/**
@@ -415,11 +356,10 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Equivalent to calling <code>createSession(<jk>null</jk>, <jk>null</jk>)</code>.
 	 *
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @return The new context.
 	 */
-	protected final ParserSession createSession(Object input) {
-		return createSession(input, null, null, null, null, null, getPrimaryMediaType());
+	public final ParserSession createSession() {
+		return createSession(null);
 	}
 
 
@@ -452,36 +392,12 @@ public abstract class Parser extends CoreObject {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
-		ParserSession session = createSession(input);
+		ParserSession session = createSession();
 		try {
-			return doParseIntoMap(session, m, keyType, valueType);
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(session, e);
+			return session.parseIntoMap(input, m, keyType, valueType);
 		} finally {
 			session.close();
 		}
-	}
-
-	/**
-	 * Implementation method.
-	 *
-	 * <p>
-	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 *
-	 * @param session
-	 * 	The runtime session object returned by
-	 * 	{@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
-	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
-	 * @param m The map being loaded.
-	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
-	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
-	 * @return The same map that was passed in to allow this method to be chained.
-	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
-	 */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
 	}
 
 	/**
@@ -504,37 +420,13 @@ public abstract class Parser extends CoreObject {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
-	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType)
-			throws ParseException {
-		ParserSession session = createSession(input);
+	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
+		ParserSession session = createSession();
 		try {
-			return doParseIntoCollection(session, c, elementType);
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(session, e);
+			return session.parseIntoCollection(input, c, elementType);
 		} finally {
 			session.close();
 		}
-	}
-
-	/**
-	 * Implementation method.
-	 *
-	 * <p>
-	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 *
-	 * @param session
-	 * 	The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object,
-	 * 	Locale, TimeZone, MediaType)}.
-	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
-	 * @param c The collection being loaded.
-	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
-	 * @return The same collection that was passed in to allow this method to be chained.
-	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
-	 */
-	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
 	}
 
 	/**
@@ -561,13 +453,9 @@ public abstract class Parser extends CoreObject {
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
 			return new Object[0];
-		ParserSession session = createSession(input);
+		ParserSession session = createSession();
 		try {
-			return doParse(session, session.getArgsClassMeta(argTypes));
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(session, e);
+			return session.parseArgs(input, argTypes);
 		} finally {
 			session.close();
 		}
@@ -577,83 +465,6 @@ public abstract class Parser extends CoreObject {
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * Converts the specified string to the specified type.
-	 *
-	 * @param session The session object.
-	 * @param outer
-	 * 	The outer object if we're converting to an inner object that needs to be created within the context
-	 * 	of an outer object.
-	 * @param s The string to convert.
-	 * @param type The class type to convert the string to.
-	 * @return The string converted as an object of the specified type.
-	 * @throws Exception If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * @param <T> The class type to convert the string to.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected <T> T convertAttrToType(ParserSession session, Object outer, String s, ClassMeta<T> type) throws Exception {
-		if (s == null)
-			return null;
-
-		if (type == null)
-			type = (ClassMeta<T>)object();
-		PojoSwap transform = type.getPojoSwap();
-		ClassMeta<?> sType = type.getSerializedClassMeta();
-
-		Object o = s;
-		if (sType.isChar())
-			o = s.charAt(0);
-		else if (sType.isNumber())
-			if (type.canCreateNewInstanceFromNumber(outer))
-				o = type.newInstanceFromNumber(session, outer, parseNumber(s, type.getNewInstanceFromNumberClass()));
-			else
-				o = parseNumber(s, (Class<? extends Number>)sType.getInnerClass());
-		else if (sType.isBoolean())
-			o = Boolean.parseBoolean(s);
-		else if (! (sType.isCharSequence() || sType.isObject())) {
-			if (sType.canCreateNewInstanceFromString(outer))
-				o = sType.newInstanceFromString(outer, s);
-			else
-				throw new ParseException(session, "Invalid conversion from string to class ''{0}''", type);
-		}
-
-		if (transform != null)
-			o = transform.unswap(session, o, type);
-
-		return (T)o;
-	}
-
-	/**
-	 * Convenience method for calling the {@link ParentProperty @ParentProperty} method on the specified object if it
-	 * exists.
-	 *
-	 * @param cm The class type of the object.
-	 * @param o The object.
-	 * @param parent The parent to set.
-	 * @throws Exception
-	 */
-	protected void setParent(ClassMeta<?> cm, Object o, Object parent) throws Exception {
-		Setter m = cm.getParentProperty();
-		if (m != null)
-			m.set(o, parent);
-	}
-
-	/**
-	 * Convenience method for calling the {@link NameProperty @NameProperty} method on the specified object if it exists.
-	 *
-	 * @param cm The class type of the object.
-	 * @param o The object.
-	 * @param name The name to set.
-	 * @throws Exception
-	 */
-	protected void setName(ClassMeta<?> cm, Object o, Object name) throws Exception {
-		if (cm != null) {
-			Setter m = cm.getNameProperty();
-			if (m != null)
-				m.set(o, name);
-		}
-	}
 
 	/**
 	 * Returns the media types handled based on the value of the {@link Consumes} annotation on the parser class.

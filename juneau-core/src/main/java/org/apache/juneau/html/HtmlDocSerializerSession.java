@@ -14,11 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -31,7 +27,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
-public final class HtmlDocSerializerSession extends HtmlSerializerSession {
+public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	private final String header, nav, aside, footer, noResultsMessage;
 	private final String[] style, stylesheet, script, links;
@@ -44,25 +40,13 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext
-	 * 	The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param args
+	 * 	Runtime arguments.
 	 */
-	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, ObjectMap op, Method javaMethod,
-			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
-		if (op == null || op.isEmpty()) {
+	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, SerializerSessionArgs args) {
+		super(ctx, args);
+		ObjectMap p = getProperties();
+		if (p.isEmpty()) {
 			header = ctx.header;
 			nav = ctx.nav;
 			aside = ctx.aside;
@@ -75,17 +59,17 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			noResultsMessage = ctx.noResultsMessage;
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, ctx.template);
 		} else {
-			header = op.getString(HTMLDOC_header, ctx.nav);
-			nav = op.getString(HTMLDOC_nav, ctx.nav);
-			aside = op.getString(HTMLDOC_aside, ctx.aside);
-			footer = op.getString(HTMLDOC_footer, ctx.footer);
-			links = op.getStringArray(HTMLDOC_links, ctx.links);
-			style = op.getStringArray(HTMLDOC_style, ctx.style);
-			stylesheet = op.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
-			script = op.getStringArray(HTMLDOC_script, ctx.script);
-			nowrap = op.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
-			noResultsMessage = op.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
-			template = ClassUtils.newInstance(HtmlDocTemplate.class, op.get(HTMLDOC_template, ctx.template));
+			header = p.getString(HTMLDOC_header, ctx.nav);
+			nav = p.getString(HTMLDOC_nav, ctx.nav);
+			aside = p.getString(HTMLDOC_aside, ctx.aside);
+			footer = p.getString(HTMLDOC_footer, ctx.footer);
+			links = p.getStringArray(HTMLDOC_links, ctx.links);
+			style = p.getStringArray(HTMLDOC_style, ctx.style);
+			stylesheet = p.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
+			script = p.getStringArray(HTMLDOC_script, ctx.script);
+			nowrap = p.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
+			noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
+			template = ClassUtils.newInstance(HtmlDocTemplate.class, p.get(HTMLDOC_template, ctx.template));
 		}
 	}
 
@@ -215,5 +199,38 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 */
 	public final String getNoResultsMessage() {
 		return noResultsMessage;
+	}
+
+	@Override /* Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+
+		HtmlWriter w = getHtmlWriter(out);
+		HtmlDocTemplate t = getTemplate();
+
+		w.sTag("html").nl(0);
+		w.sTag(1, "head").nl(1);
+		t.head(this, w, o);
+		w.eTag(1, "head").nl(1);
+		w.sTag(1, "body").nl(1);
+		t.body(this, w, o);
+		w.eTag(1, "body").nl(1);
+		w.eTag("html").nl(0);
+	}
+
+	/**
+	 * Calls the parent {@link #doSerialize(SerializerPipe, Object)} method which invokes just the HTML serializer.
+	 *
+	 * @param out
+	 * 	Where to send the output from the serializer.
+	 * @param o The object being serialized.
+	 * @throws Exception
+	 */
+	public void parentSerialize(Object out, Object o) throws Exception {
+		SerializerPipe pipe = createPipe(out);
+		try {
+			super.doSerialize(pipe, o);
+		} finally  {
+			pipe.close();
+		}
 	}
 }

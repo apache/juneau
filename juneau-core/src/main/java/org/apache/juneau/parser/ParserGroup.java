@@ -92,7 +92,7 @@ public final class ParserGroup {
 	 * 	tried to match against media types.
 	 */
 	public ParserGroup(PropertyStore propertyStore, Parser[] parsers) {
-		this.propertyStore = PropertyStore.create(propertyStore);
+		this.propertyStore = propertyStore.copy();
 		this.parsers = Collections.unmodifiableList(new ArrayList<Parser>(Arrays.asList(parsers)));
 
 		List<MediaType> lmt = new ArrayList<MediaType>();
@@ -187,7 +187,7 @@ public final class ParserGroup {
 	 * @return A new copy of the property store passed in to the constructor.
 	 */
 	public PropertyStore createPropertyStore() {
-		return PropertyStore.create(propertyStore);
+		return propertyStore.copy();
 	}
 
 	/**

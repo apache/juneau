@@ -298,17 +298,6 @@ public final class PropertyStore {
 		return f;
 	}
 
-	/**
-	 * Create a new property store with settings copied from the specified store.
-	 *
-	 * @param copyFrom The existing store to copy properties from.
-	 * @return A new property store with default settings.
-	 */
-	public static PropertyStore create(PropertyStore copyFrom) {
-		return new PropertyStore().copyFrom(copyFrom);
-	}
-
-
 	PropertyStore() {}
 
 	/**
@@ -341,13 +330,12 @@ public final class PropertyStore {
 	}
 
 	/**
-	 * Creates a new store with the specified override properties applied to this store.
+	 * Creates a new modifiable copy of this property store.
 	 *
-	 * @param overrideProperties The properties to apply to the copy of this store.
-	 * @return Either this unmodified store, or a new store with override properties applied.
+	 * @return A new modifiable copy of this property store.
 	 */
-	public PropertyStore create(Map<String,Object> overrideProperties) {
-		return new PropertyStore(this).setProperties(overrideProperties);
+	public PropertyStore copy() {
+		return new PropertyStore(this);
 	}
 
 	/**
@@ -432,6 +420,27 @@ public final class PropertyStore {
 			wl.unlock();
 		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setProperty(String, Object)}.
+	 *
+	 * @param name
+	 * 	The configuration property name.
+	 * 	<br>If name ends with <l>.add</l>, then the specified value is added to the existing property value as an entry
+	 * 	in a SET or LIST property.
+	 * 	<br>If name ends with <l>.put</l>, then the specified value is added to the existing property value as a
+	 * 	key/value pair in a MAP property.
+	 * 	<br>If name ends with <l>.remove</l>, then the specified value is removed from the existing property property
+	 * 	value in a SET or LIST property.
+	 * @param value
+	 * 	The new value.
+	 * 	If <jk>null</jk>, the property value is deleted.
+	 * 	In general, the value type can be anything.
+	 * @return This object (for method chaining).
+	 */
+	public PropertyStore append(String name, Object value) {
+		return setProperty(name, value);
 	}
 
 	/**

@@ -53,17 +53,18 @@ public final class RestRequestEntity extends BasicHttpEntity {
 				if (serializer == null) {
 					// If no serializer specified, just close the stream.
 					os.close();
-				} else if (! serializer.isWriterSerializer()) {
-					OutputStreamSerializer s2 = (OutputStreamSerializer)serializer;
-					s2.serialize(output, os);
-					os.flush();
-					os.close();
 				} else {
-					Writer w = new OutputStreamWriter(os, UTF8);
-					WriterSerializer s2 = (WriterSerializer)serializer;
-					s2.serialize(output, w);
-					w.flush();
-					w.close();
+					SerializerSession session = serializer.createSession();
+					if (session.isWriterSerializer()) {
+						Writer w = new OutputStreamWriter(os, UTF8);
+						session.serialize(w, output);
+						w.flush();
+						w.close();
+					} else {
+						session.serialize(os, output);
+						os.flush();
+						os.close();
+					}
 				}
 			} catch (SerializeException e) {
 				throw new org.apache.juneau.rest.client.RestCallException(e);

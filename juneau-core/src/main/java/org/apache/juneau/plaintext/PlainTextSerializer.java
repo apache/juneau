@@ -49,6 +49,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	/** Default serializer, all default settings.*/
 	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore.create());
 
+	private final SerializerContext ctx;
 
 	/**
 	 * Constructor.
@@ -57,6 +58,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	 */
 	public PlainTextSerializer(PropertyStore propertyStore) {
 		super(propertyStore);
+		this.ctx = createContext(SerializerContext.class);
 	}
 
 	@Override /* CoreObject */
@@ -64,13 +66,8 @@ public class PlainTextSerializer extends WriterSerializer {
 		return new PlainTextSerializerBuilder(propertyStore);
 	}
 
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		out.getWriter().write(o == null ? "null" : session.convertToType(o, String.class));
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new PlainTextSerializerSession(ctx, args);
 	}
 }

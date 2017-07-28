@@ -46,12 +46,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Ns(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(XML_enableNamespaces, true);
+			super(propertyStore.copy().append(XML_enableNamespaces, true));
 		}
 	}
 
@@ -64,19 +59,8 @@ public class XmlDocSerializer extends XmlSerializer {
 		super(propertyStore);
 	}
 
-	//--------------------------------------------------------------------------------
-	// Entry point methods
-	//--------------------------------------------------------------------------------
-
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		XmlSerializerSession s = (XmlSerializerSession)session;
-		XmlWriter w = s.getXmlWriter(out);
-		w.append("<?xml")
-			.attr("version", "1.0")
-			.attr("encoding", "UTF-8")
-			.appendln("?>");
-		w.flush();
-		super.doSerialize(s, out, o);
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new XmlDocSerializerSession(ctx, args);
 	}
 }

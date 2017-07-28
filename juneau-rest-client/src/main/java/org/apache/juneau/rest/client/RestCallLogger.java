@@ -70,7 +70,7 @@ public class RestCallLogger extends RestCallInterceptor {
 	public void onRetry(RestCall restCall, int statusCode, HttpRequest req, HttpResponse res, Exception ex) {
 		if (log.isLoggable(level)) {
 			if (ex == null)
-			log.log(level, format("Call to {0} returned {1}.  Will retry.", req.getRequestLine().getUri(), statusCode));
+				log.log(level, format("Call to {0} returned {1}.  Will retry.", req.getRequestLine().getUri(), statusCode));
 			else
 				log.log(level, format("Call to {0} caused exception {1}.  Will retry.", req.getRequestLine().getUri(), ex.getLocalizedMessage()), ex);
 		}

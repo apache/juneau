@@ -39,10 +39,16 @@ public class CharsetEncodingsResource extends RestServlet {
 			super(propertyStore);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)read(session.getReader());
+		public ReaderParserSession createSession(ParserSessionArgs args) {
+			return new ReaderParserSession(args) {
+
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)read(pipe.getReader());
+				}
+			};
 		}
 	}
 
@@ -54,8 +60,14 @@ public class CharsetEncodingsResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write(o.toString());
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write(o.toString());
+				}
+			};
 		}
 	}
 

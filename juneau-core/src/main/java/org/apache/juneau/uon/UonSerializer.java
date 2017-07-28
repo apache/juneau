@@ -15,14 +15,9 @@ package org.apache.juneau.uon;
 import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.uon.UonSerializerContext.*;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
@@ -153,12 +148,7 @@ public class UonSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(SERIALIZER_useWhitespace, true);
+			super(propertyStore.copy().append(SERIALIZER_useWhitespace, true));
 		}
 	}
 
@@ -173,12 +163,7 @@ public class UonSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Encoding(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(UON_encodeChars, true);
+			super(propertyStore.copy().append(UON_encodeChars, true));
 		}
 	}
 
@@ -200,189 +185,6 @@ public class UonSerializer extends WriterSerializer {
 		return new UonSerializerBuilder(propertyStore);
 	}
 
-	/**
-	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization
-	 * method.
-	 *
-	 * @param session The context that exist for the duration of a serialize.
-	 * @param out The writer to serialize to.
-	 * @param o The object being serialized.
-	 * @param eType The expected type of the object if this is a bean property.
-	 * @param attrName
-	 * 	The bean property name if this is a bean property.
-	 * 	<jk>null</jk> if this isn't a bean property being serialized.
-	 * @param pMeta The bean property metadata.
-	 * @return The same writer passed in.
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected SerializerWriter serializeAnything(UonSerializerSession session, UonWriter out, Object o, ClassMeta<?> eType,
-			String attrName, BeanPropertyMeta pMeta) throws Exception {
-
-		if (o == null) {
-			out.appendObject(null, false);
-			return out;
-		}
-
-		if (eType == null)
-			eType = object();
-
-		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> sType;			// The serialized type
-
-		aType = session.push(attrName, o, eType);
-		boolean isRecursion = aType == null;
-
-		// Handle recursion
-		if (aType == null) {
-			o = null;
-			aType = object();
-		}
-
-		sType = aType.getSerializedClassMeta();
-		String typeName = session.getBeanTypeName(eType, aType, pMeta);
-
-		// Swap if necessary
-		PojoSwap swap = aType.getPojoSwap();
-		if (swap != null) {
-			o = swap.swap(session, o);
-
-			// If the getSwapClass() method returns Object, we need to figure out
-			// the actual type now.
-			if (sType.isObject())
-				sType = session.getClassMetaForObject(o);
-		}
-
-		// '\0' characters are considered null.
-		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
-			out.appendObject(null, false);
-		else if (sType.isBoolean())
-			out.appendBoolean(o);
-		else if (sType.isNumber())
-			out.appendNumber(o);
-		else if (sType.isBean())
-			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
-		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
-			out.appendUri(o);
-		else if (sType.isMap()) {
-			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, typeName);
-			else
-				serializeMap(session, out, (Map)o, eType);
-		}
-		else if (sType.isCollection()) {
-			serializeCollection(session, out, (Collection) o, eType);
-		}
-		else if (sType.isArray()) {
-			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
-		}
-		else {
-			out.appendObject(o, false);
-		}
-
-		if (! isRecursion)
-			session.pop();
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(UonSerializerSession session, UonWriter out, Map m, ClassMeta<?> type) throws Exception {
-
-		m = session.sort(m);
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		int depth = session.getIndent();
-
-		if (! session.isPlainTextParams())
-			out.append('(');
-
-		Iterator mapEntries = m.entrySet().iterator();
-
-		while (mapEntries.hasNext()) {
-			Map.Entry e = (Map.Entry) mapEntries.next();
-			Object value = e.getValue();
-			Object key = session.generalize(e.getKey(), keyType);
-			out.cr(depth).appendObject(key, false).append('=');
-			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null);
-			if (mapEntries.hasNext())
-				out.append(',');
-		}
-
-		if (m.size() > 0)
-			out.cre(depth-1);
-
-		if (! session.isPlainTextParams())
-			out.append(')');
-
-		return out;
-	}
-
-	private SerializerWriter serializeBeanMap(UonSerializerSession session, UonWriter out, BeanMap<?> m, String typeName) throws Exception {
-		int depth = session.getIndent();
-
-		if (! session.isPlainTextParams())
-			out.append('(');
-
-		boolean addComma = false;
-
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null)) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
-
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				session.onBeanGetterException(pMeta, t);
-
-			if (session.canIgnoreValue(cMeta, key, value))
-				continue;
-
-			if (addComma)
-				out.append(',');
-
-			out.cr(depth).appendObject(key, false).append('=');
-
-			serializeAnything(session, out, value, cMeta, key, pMeta);
-
-			addComma = true;
-		}
-
-		if (m.size() > 0)
-			out.cre(depth-1);
-		if (! session.isPlainTextParams())
-			out.append(')');
-
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeCollection(UonSerializerSession session, UonWriter out, Collection c, ClassMeta<?> type) throws Exception {
-
-		ClassMeta<?> elementType = type.getElementType();
-
-		c = session.sort(c);
-
-		if (! session.isPlainTextParams())
-			out.append('@').append('(');
-
-		int depth = session.getIndent();
-
-		for (Iterator i = c.iterator(); i.hasNext();) {
-			out.cr(depth);
-			serializeAnything(session, out, i.next(), elementType, "<iterator>", null);
-			if (i.hasNext())
-				out.append(',');
-		}
-
-		if (c.size() > 0)
-			out.cre(depth-1);
-		if (! session.isPlainTextParams())
-			out.append(')');
-
-		return out;
-	}
 
 
 	//--------------------------------------------------------------------------------
@@ -390,14 +192,7 @@ public class UonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UonSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
-			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new UonSerializerSession(ctx, null, op, javaMethod, locale, timeZone, mediaType, uriContext);
-	}
-
-	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		UonSerializerSession s = (UonSerializerSession)session;
-		serializeAnything(s, s.getUonWriter(out), o, s.getExpectedRootType(o), "root", null);
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new UonSerializerSession(ctx, null, args);
 	}
 }

@@ -28,7 +28,7 @@ public abstract class CoreObject {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	protected CoreObject(PropertyStore propertyStore) {
-		this.propertyStore = propertyStore.create(getOverrideProperties());
+		this.propertyStore = propertyStore.copy();
 		this.beanContext = createContext(BeanContext.class);
 	}
 
@@ -43,28 +43,14 @@ public abstract class CoreObject {
 	}
 
 	/**
-	 * Method used by subclasses to override context factory properties for just this instance without modifying the
-	 * context factory itself.
-	 *
-	 * <p>
-	 * Subclasses can call this parent method to append to override properties defined higher in the parent chain.
-	 *
-	 * @return The override properties.  Never <jk>null</jk>.
-	 */
-	protected ObjectMap getOverrideProperties() {
-		return new ObjectMap();
-	}
-
-	/**
-	 * Returns a copy of the context factory passed in to the constructor with any override properties applied from the
-	 * {@link #getOverrideProperties()}.
+	 * Returns a copy of the context factory passed in to the constructor.
 	 *
 	 * @return
-	 * 	The context factory on this class.
-	 * 	Multiple calls to this method returns the same factory.
+	 * 	A copy of the property store on this class.
+	 * 	Multiple calls to this method returns new modifiable copies.
 	 */
 	public PropertyStore createPropertyStore() {
-		return PropertyStore.create(propertyStore);
+		return propertyStore.copy();
 	}
 
 	/**

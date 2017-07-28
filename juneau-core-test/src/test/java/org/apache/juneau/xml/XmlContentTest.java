@@ -37,7 +37,7 @@ public class XmlContentTest {
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ,
 			s2 = new XmlSerializerBuilder().sq().ws().enableNamespaces(false).build();
 		XmlParser p = XmlParser.DEFAULT;
-		XmlSerializerSession session;
+		WriterSerializerSession session;
 		String r;
 		StringWriter sw;
 
@@ -47,18 +47,16 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		SerializerOutput out = new SerializerOutput(sw);
-		session = s1.createSession(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null);
-		s1.serialize(session, out, t);
+		session = s1.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session.serialize(sw, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		out = new SerializerOutput(sw);
-		session = s2.createSession(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null);
-		s2.serialize(session, out, t);
+		session = s2.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session.serialize(sw, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
 		t2 = p.parse(r, A.class);
@@ -147,7 +145,7 @@ public class XmlContentTest {
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ,
 			s2 = new XmlSerializerBuilder().sq().ws().enableNamespaces(false).build();
 		XmlParser p = XmlParser.DEFAULT;
-		XmlSerializerSession session;
+		WriterSerializerSession session;
 		String r;
 		StringWriter sw;
 
@@ -157,18 +155,16 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		SerializerOutput out = new SerializerOutput(sw);
-		session = s1.createSession(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null);
-		s1.serialize(session, out, t);
+		session = s1.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session.serialize(sw, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		out = new SerializerOutput(sw);
-		session = s2.createSession(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null);
-		s2.serialize(session, out, t);
+		session = s2.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session.serialize(sw, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
 		t2 = p.parse(r, B.class);

@@ -38,8 +38,14 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write("text/a - " + o);
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write("text/a - " + o);
+				}
+			};
 		}
 	}
 
@@ -51,8 +57,14 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write("text/b - " + o);
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write("text/b - " + o);
+				}
+			};
 		}
 	}
 
@@ -88,8 +100,14 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write("text/c - " + o);
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write("text/c - " + o);
+				}
+			};
 		}
 	}
 
@@ -109,8 +127,14 @@ public class SerializersResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write("text/d - " + o);
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write("text/d - " + o);
+				}
+			};
 		}
 	}
 

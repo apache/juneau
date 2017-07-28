@@ -15,6 +15,7 @@ package org.apache.juneau.rest.response;
 import static javax.servlet.http.HttpServletResponse.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -49,43 +50,35 @@ public class DefaultHandler implements ResponseHandler {
 			if (mediaType == null)
 				mediaType = sm.getMediaType();
 			res.setContentType(mediaType.toString());
-			ObjectMap headers = s.getResponseHeaders(res.getProperties());
-			if (headers != null)
-				for (String key : headers.keySet())
-					res.setHeader(key, headers.getString(key));
 
 			try {
 				ObjectMap p = res.getProperties();
 				if (req.isPlainText()) {
-					p.put(SerializerContext.SERIALIZER_useWhitespace, true);
 					res.setContentType("text/plain");
 				}
 				p.append("mediaType", mediaType).append("characterEncoding", res.getCharacterEncoding());
-				if (! s.isWriterSerializer()) {
+
+				SerializerSession session = s.createSession(new SerializerSessionArgs(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext()));
+
+				for (Map.Entry<String,String> h : session.getResponseHeaders().entrySet())
+					res.setHeader(h.getKey(), h.getValue());
+
+				if (! session.isWriterSerializer()) {
 					if (req.isPlainText()) {
-						OutputStreamSerializer s2 = (OutputStreamSerializer)s;
 						Writer w = res.getNegotiatedWriter();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						SerializerOutput sout = new SerializerOutput(baos);
-						SerializerSession session = s.createSession(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
-						s2.serialize(session, sout, output);
+						session.serialize(baos, output);
 						w.write(StringUtils.toHex(baos.toByteArray()));
-						w.close();
+						w.close();  // Leave open if exception occurs.
 					} else {
-						OutputStreamSerializer s2 = (OutputStreamSerializer)s;
 						OutputStream os = res.getNegotiatedOutputStream();
-						SerializerOutput sout = new SerializerOutput(os);
-						SerializerSession session = s.createSession(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
-						s2.serialize(session, sout, output);
-						os.close();
+						session.serialize(os, output);
+						os.close();  // Leave open if exception occurs.
 					}
 				} else {
-					WriterSerializer s2 = (WriterSerializer)s;
 					Writer w = res.getNegotiatedWriter();
-					SerializerOutput sout = new SerializerOutput(w);
-					SerializerSession session = s.createSession(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
-					s2.serialize(session, sout, output);
-					w.close();
+					session.serialize(w, output);
+					w.close();  // Leave open if exception occurs.
 				}
 			} catch (SerializeException e) {
 				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);

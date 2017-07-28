@@ -105,7 +105,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 	@Override /* MessageBodyWriter */
 	public void writeTo(Object o, Class<?> type, Type gType, Annotation[] a, MediaType mediaType,
-			MultivaluedMap<String,Object> headers, OutputStream out) throws IOException, WebApplicationException {
+			MultivaluedMap<String,Object> headers, OutputStream os) throws IOException, WebApplicationException {
 		try {
 			SerializerMatch sm = serializers.getSerializerMatch(mediaType.toString());
 			if (sm == null)
@@ -115,21 +115,16 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			mp.append("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
+			
+			SerializerSession session = s.createSession(new SerializerSessionArgs(mp, null, locale, timeZone, sm.getMediaType(), null));
+
 			if (s.isWriterSerializer()) {
-				WriterSerializer s2 = (WriterSerializer)s;
-				OutputStreamWriter w = new OutputStreamWriter(out, UTF8);
-				SerializerOutput sout = new SerializerOutput(w);
-				SerializerSession session = s.createSession(mp, null, locale, timeZone, sm.getMediaType(), null);
-				s2.serialize(session, sout, o);
-				w.flush();
-				w.close();
+				OutputStreamWriter w = new OutputStreamWriter(os, UTF8);
+				session.serialize(w, o);
+				w.close();  // Leave open if exception occurs.
 			} else {
-				OutputStreamSerializer s2 = (OutputStreamSerializer)s;
-				SerializerOutput sout = new SerializerOutput(s2);
-				SerializerSession session = s.createSession(mp, null, locale, timeZone, sm.getMediaType(), null);
-				s2.serialize(session, sout, o);
-				out.flush();
-				out.close();
+				session.serialize(os, o);
+				os.close();  // Leave open if exception occurs.
 			}
 		} catch (SerializeException e) {
 			throw new IOException(e);
@@ -153,15 +148,13 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			mp.put("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
-			if (p.isReaderParser()) {
-				ReaderParser p2 = (ReaderParser)p;
-				InputStreamReader r = new InputStreamReader(in, UTF8);
-				ParserSession session = p2.createSession(r, mp, null, null, locale, timeZone, pm.getMediaType());
-				return p2.parseSession(session, p.getBeanContext().getClassMeta(gType));
+			ParserSession session = p.createSession(new ParserSessionArgs(mp, null, locale, timeZone, pm.getMediaType(), null));
+			try {
+				Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
+				return session.parse(in2, p.getBeanContext().getClassMeta(gType));
+			} finally {
+				session.close();
 			}
-			InputStreamParser p2 = (InputStreamParser)p;
-			ParserSession session = p2.createSession(in, mp, null, null, locale, timeZone, pm.getMediaType());
-			return p2.parseSession(session, p.getBeanContext().getClassMeta(gType));
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}

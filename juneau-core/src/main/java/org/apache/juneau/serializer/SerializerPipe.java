@@ -38,34 +38,22 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link File}
  * </ul>
  */
-public class SerializerOutput {
+public final class SerializerPipe {
 
 	private final Object output;
 	private final boolean autoClose;
+	
 	private OutputStream outputStream;
-	private Writer writer, flushOnlyWriter;
-
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * Equivalent to calling <code>SerializerOutput(output, <jk>true</jk>);</code>.
-	 *
-	 * @param output The object to pipe the serializer output to.
-	 */
-	public SerializerOutput(Object output) {
-		this(output, true);
-	}
+	private Writer writer;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param output The object to pipe the serializer output to.
-	 * @param autoClose Close the stream or writer at the end of the session.
 	 */
-	public SerializerOutput(Object output, boolean autoClose) {
+	SerializerPipe(Object output) {
 		this.output = output;
-		this.autoClose = autoClose;
+		this.autoClose = (output instanceof File);
 	}
 
 	/**
@@ -82,19 +70,20 @@ public class SerializerOutput {
 	 * </ul>
 	 *
 	 * @return The output object wrapped in an output stream.
-	 * @throws Exception If object could not be converted to an output stream.
+	 * @throws IOException If object could not be converted to an output stream.
 	 */
-	public OutputStream getOutputStream() throws Exception {
+	public OutputStream getOutputStream() throws IOException {
 		if (output == null)
-			throw new SerializeException("Output cannot be null.");
+			throw new IOException("Output cannot be null.");
+
 		if (output instanceof OutputStream)
-			return (OutputStream)output;
-		if (output instanceof File) {
-			if (outputStream == null)
-				outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
-			return outputStream;
-		}
-		throw new SerializeException("Cannot convert object of type {0} to an OutputStream.", output.getClass().getName());
+			outputStream = (OutputStream)output;
+		else if (output instanceof File)
+			outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
+		else
+			throw new IOException("Cannot convert object of type "+output.getClass().getName()+" to an OutputStream.");
+
+		return outputStream;
 	}
 
 
@@ -113,29 +102,50 @@ public class SerializerOutput {
 	 * </ul>
 	 *
 	 * @return The output object wrapped in a Writer.
-	 * @throws Exception If object could not be converted to a writer.
+	 * @throws IOException If object could not be converted to a writer.
 	 */
-	public Writer getWriter() throws Exception {
+	public Writer getWriter() throws IOException {
 		if (output == null)
-			throw new SerializeException("Output cannot be null.");
+			throw new IOException("Output cannot be null.");
+
 		if (output instanceof Writer)
-			return (Writer)output;
-		if (output instanceof OutputStream) {
-			if (flushOnlyWriter == null)
-				flushOnlyWriter = new OutputStreamWriter((OutputStream)output, UTF8);
-			return flushOnlyWriter;
-		}
-		if (output instanceof File) {
-			if (writer == null)
-				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
-			return writer;
-		}
-		if (output instanceof StringBuilder) {
-			if (writer == null)
-				writer = new StringBuilderWriter((StringBuilder)output);
-			return writer;
-		}
-		throw new SerializeException("Cannot convert object of type {0} to a Writer.", output.getClass().getName());
+			writer = (Writer)output;
+		else if (output instanceof OutputStream)
+			writer = new OutputStreamWriter((OutputStream)output, UTF8);
+		else if (output instanceof File)
+			writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
+		else if (output instanceof StringBuilder)
+			writer = new StringBuilderWriter((StringBuilder)output);
+		else
+			throw new IOException("Cannot convert object of type "+output.getClass().getName()+" to a Writer.");
+
+		return writer;
+	}
+
+	/**
+	 * Overwrites the writer in this pipe.
+	 *
+	 * <p>
+	 * Used when wrapping the writer returned by {@link #getWriter()} so that the wrapped writer will be flushed
+	 * and closed when {@link #close()} is called.
+	 *
+	 * @param writer The wrapped writer.
+	 */
+	public void setWriter(Writer writer) {
+		this.writer = writer;
+	}
+
+	/**
+	 * Overwrites the output stream in this pipe.
+	 *
+	 * <p>
+	 * Used when wrapping the stream returned by {@link #getOutputStream()} so that the wrapped stream will be flushed
+	 * and closed when {@link #close()} is called.
+	 *
+	 * @param outputStream The wrapped stream.
+	 */
+	public void setOutputStream(OutputStream outputStream) {
+		this.outputStream = outputStream;
 	}
 
 	/**
@@ -152,21 +162,9 @@ public class SerializerOutput {
 	 */
 	public void close() {
 		try {
-			if (! autoClose) {
-				if (outputStream != null)
-					outputStream.flush();
-				if (flushOnlyWriter != null)
-					flushOnlyWriter.flush();
-				if (writer != null)
-					writer.flush();
-			} else {
-				if (outputStream != null)
-					outputStream.close();
-				if (flushOnlyWriter != null)
-					flushOnlyWriter.flush();
-				if (writer != null)
-					writer.close();
-			}
+			IOUtils.flush(writer, outputStream);
+			if (autoClose)
+				IOUtils.close(writer, outputStream);
 		} catch (IOException e) {
 			throw new BeanRuntimeException(e);
 		}

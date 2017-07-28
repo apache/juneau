@@ -198,7 +198,7 @@ public class CommonParserTest {
 		final static List<String> events = new LinkedList<String>();
 
 		@Override /* ParserListener */
-		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
+		public <T> void onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class<T> beanClass, T bean, int line, int col) {
 			events.add(propertyName + "," + line + "," + col);
 		}
 	}

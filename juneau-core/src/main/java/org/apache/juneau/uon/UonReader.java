@@ -33,33 +33,27 @@ public final class UonReader extends ParserReader {
 
 	private final boolean decodeChars;
 	private final char[] buff;
+	
+	// Writable properties.
 	private int iCurrent, iEnd;
 
-	/**
-	 * Constructor for input from a {@link CharSequence}.
-	 *
-	 * @param in The character sequence being read from.
-	 * @param decodeChars If <jk>true</jk>, decode <code>%xx</code> escape sequences.
-	 */
-	public UonReader(CharSequence in, boolean decodeChars) {
-		super(in);
-		this.decodeChars = decodeChars;
-		if (in == null || ! decodeChars)
-			this.buff = new char[0];
-		else
-			this.buff = new char[in.length() < 1024 ? in.length() : 1024];
-	}
 
 	/**
-	 * Constructor for input from a {@link Reader}).
+	 * Constructor.
 	 *
-	 * @param r The Reader being wrapped.
-	 * @param decodeChars If <jk>true</jk>, decode <code>%xx</code> escape sequences.
+	 * @param pipe The parser input.
+	 * @param decodeChars Whether the input is URL-encoded.
+	 * @throws Exception
 	 */
-	public UonReader(Reader r, boolean decodeChars) {
-		super(r);
+	public UonReader(ParserPipe pipe, boolean decodeChars) throws Exception {
+		super(pipe);
 		this.decodeChars = decodeChars;
-		this.buff = new char[1024];
+		if (pipe.isString()) {
+			String in = pipe.getInputAsString();
+			this.buff = new char[in.length() < 1024 ? in.length() : 1024];
+		} else {
+			this.buff = new char[1024];
+		}
 	}
 
 	@Override /* Reader */
@@ -158,7 +152,7 @@ public final class UonReader extends ParserReader {
 		return i;
 	}
 
-	private final int readUTF8(int n, final int numBytes) throws IOException {
+	private int readUTF8(int n, final int numBytes) throws IOException {
 		if (iCurrent + numBytes*3 > iEnd)
 			return -1;
 		for (int i = 0; i < numBytes; i++) {
@@ -168,14 +162,14 @@ public final class UonReader extends ParserReader {
 		return n;
 	}
 
-	private final int readHex() throws IOException {
+	private int readHex() throws IOException {
 		int c = buff[iCurrent++];
 		if (c != '%')
 			throw new IOException("Did not find expected '%' character in UTF-8 sequence.");
 		return readEncodedByte();
 	}
 
-	private final int readEncodedByte() throws IOException {
+	private int readEncodedByte() throws IOException {
 		if (iEnd <= iCurrent + 1)
 			throw new IOException("Incomplete trailing escape pattern");
 		int h = buff[iCurrent++];
@@ -185,7 +179,7 @@ public final class UonReader extends ParserReader {
 		return (h << 4) + l;
 	}
 
-	private static final int fromHexChar(int c) throws IOException {
+	private static int fromHexChar(int c) throws IOException {
 		if (c >= '0' && c <= '9')
 			return c - '0';
 		if (c >= 'a' && c <= 'f')
@@ -193,5 +187,11 @@ public final class UonReader extends ParserReader {
 		if (c >= 'A' && c <= 'F')
 			return 10 + c - 'A';
 		throw new IOException("Invalid hex character '"+c+"' found in escape pattern.");
+	}
+
+	@Override /* ParserReader */
+	public final UonReader unread() throws IOException {
+		super.unread();
+		return this;
 	}
 }

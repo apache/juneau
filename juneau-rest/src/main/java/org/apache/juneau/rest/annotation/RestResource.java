@@ -635,7 +635,7 @@ public @interface RestResource {
 	 * <br>The value (class or instance) can also be set via the servlet context attribute 
 	 * * {@link RestContext#REST_resourceResolver}.
 	 */
-	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolver.Default.class;
+	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
 
 	/**
 	 * Specifies the logger class to use for logging.

@@ -12,28 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
- *
- * <h5 class='section'>Description:</h5>
- *
- * This class is typically the parent class of all character-based serializers.
- * It has 2 abstract methods to implement...
- * <ul class='spaced-list'>
- * 	<li>
- * 		{@link #createSession(ObjectMap, Method, Locale, TimeZone, MediaType, UriContext)}
- * 	<li>
- * 		{@link #doSerialize(SerializerSession, SerializerOutput, Object)}
- * </ul>
  *
  * <h6 class='topic'>@Produces annotation</h6>
  *
@@ -54,15 +38,23 @@ public abstract class WriterSerializer extends Serializer {
 		super(propertyStore);
 	}
 
-	@Override /* Serializer */
-	public boolean isWriterSerializer() {
-		return true;
-	}
+
+	//--------------------------------------------------------------------------------
+	// Abstract methods
+	//--------------------------------------------------------------------------------
+
+	@Override /* SerializerSession */
+	public abstract WriterSerializerSession createSession(SerializerSessionArgs args);
 
 
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
+
+	@Override /* Serializer */
+	public final boolean isWriterSerializer() {
+		return true;
+	}
 
 	/**
 	 * Convenience method for serializing an object to a <code>String</code>.
@@ -71,12 +63,9 @@ public abstract class WriterSerializer extends Serializer {
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@Override
+	@Override /* Serializer */
 	public final String serialize(Object o) throws SerializeException {
-		StringWriter w = new StringWriter();
-		SerializerOutput out = new SerializerOutput(w);
-		serialize(createSession(), out, o);
-		return w.toString();
+		return createSession(null).serialize(o);
 	}
 
 	/**
@@ -90,10 +79,7 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	public final String toString(Object o) {
 		try {
-			StringWriter w = new StringWriter();
-			SerializerOutput out = new SerializerOutput(w);
-			serialize(createSession(), out, o);
-			return w.toString();
+			return serialize(o);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

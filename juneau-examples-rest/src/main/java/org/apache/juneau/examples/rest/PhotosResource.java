@@ -142,11 +142,17 @@ public class PhotosResource extends Resource {
 			super(propertyStore);
 		}
 
-		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			RenderedImage image = (RenderedImage)o;
-			String mediaType = session.getProperty("mediaType");
-			ImageIO.write(image, mediaType.substring(mediaType.indexOf('/')+1), out.getOutputStream());
+		@Override /* Serializer */ 
+		public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+			return new OutputStreamSerializerSession(args) {
+				
+				@Override /* SerializerSession */ 
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					RenderedImage image = (RenderedImage)o;
+					String mediaType = getProperty("mediaType");
+					ImageIO.write(image, mediaType.substring(mediaType.indexOf('/')+1), out.getOutputStream());
+				}
+			};
 		}
 	}
 
@@ -163,9 +169,15 @@ public class PhotosResource extends Resource {
 		}
 
 		@Override /* Parser */
-		@SuppressWarnings("unchecked")
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)ImageIO.read(session.getInputStream());
+		public InputStreamParserSession createSession(final ParserSessionArgs args) {
+			return new InputStreamParserSession(args) {
+				
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)ImageIO.read(pipe.getInputStream());
+				}
+			};
 		}
 	}
 }

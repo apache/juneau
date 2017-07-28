@@ -112,10 +112,16 @@ public class DefaultContentTypesResource extends RestServlet {
 			this.name = name;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)name;
+		public ReaderParserSession createSession(ParserSessionArgs args) {
+			return new ReaderParserSession(args) {
+
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)name;
+				}
+			};
 		}
 	}
 
@@ -129,8 +135,14 @@ public class DefaultContentTypesResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object output) throws Exception {
-			out.getWriter().write(name + "/" + output);
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write(name + "/" + o);
+				}
+			};
 		}
 	}
 }

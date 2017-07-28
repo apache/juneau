@@ -14,7 +14,10 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.xml.NamespaceFactory.*;
+import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
+import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
@@ -22,30 +25,32 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transform.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlSerializer}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-@SuppressWarnings("hiding")
-public class XmlSerializerSession extends SerializerSession {
+@SuppressWarnings({"hiding","unchecked","rawtypes"})
+public class XmlSerializerSession extends WriterSerializerSession {
 
-	private final boolean
+	final boolean
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
 		addBeanTypeProperties;
 
-	private Namespace
+	Namespace
 		defaultNamespace;
-	private final Namespace
+	final Namespace
 		xsNamespace;
 
-	private Namespace[] namespaces = new Namespace[0];
+	Namespace[] namespaces = new Namespace[0];
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -53,25 +58,17 @@ public class XmlSerializerSession extends SerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext
-	 * 	The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param args
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
+	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
-	public XmlSerializerSession(XmlSerializerContext ctx, ObjectMap op, Method javaMethod, Locale locale,
-			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
-		if (op == null || op.isEmpty()) {
+	protected XmlSerializerSession(XmlSerializerContext ctx, SerializerSessionArgs args) {
+		super(ctx, args);
+		ObjectMap p = getProperties();
+		if (p.isEmpty()) {
 			enableNamespaces = ctx.enableNamespaces;
 			autoDetectNamespaces = ctx.autoDetectNamespaces;
 			addNamespaceUrlsToRoot = ctx.addNamespaceUrlsToRoot;
@@ -80,13 +77,13 @@ public class XmlSerializerSession extends SerializerSession {
 			xsNamespace = ctx.xsNamespace;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
-			enableNamespaces = op.getBoolean(XML_enableNamespaces, ctx.enableNamespaces);
-			autoDetectNamespaces = op.getBoolean(XML_autoDetectNamespaces, ctx.autoDetectNamespaces);
-			addNamespaceUrlsToRoot = op.getBoolean(XML_addNamespaceUrisToRoot, ctx.addNamespaceUrlsToRoot);
-			namespaces = (op.containsKey(XML_namespaces) ? parseNamespaces(op.get(XML_namespaces)) : ctx.namespaces);
-			defaultNamespace = findDefaultNamespace(op.containsKey(XML_defaultNamespace) ? op.getString(XML_defaultNamespace) : ctx.defaultNamespace);
-			xsNamespace = (op.containsKey(XML_xsNamespace) ? parseNamespace(op.get(XML_xsNamespace)) : ctx.xsNamespace);
-			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
+			enableNamespaces = p.getBoolean(XML_enableNamespaces, ctx.enableNamespaces);
+			autoDetectNamespaces = p.getBoolean(XML_autoDetectNamespaces, ctx.autoDetectNamespaces);
+			addNamespaceUrlsToRoot = p.getBoolean(XML_addNamespaceUrisToRoot, ctx.addNamespaceUrlsToRoot);
+			namespaces = (p.containsKey(XML_namespaces) ? parseNamespaces(p.get(XML_namespaces)) : ctx.namespaces);
+			defaultNamespace = findDefaultNamespace(p.containsKey(XML_defaultNamespace) ? p.getString(XML_defaultNamespace) : ctx.defaultNamespace);
+			xsNamespace = (p.containsKey(XML_xsNamespace) ? parseNamespace(p.get(XML_xsNamespace)) : ctx.xsNamespace);
+			addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 	}
 
@@ -105,12 +102,12 @@ public class XmlSerializerSession extends SerializerSession {
 			addNamespace(ns);
 	}
 
-	/**
+	/*
 	 * Add a namespace to this session.
 	 *
 	 * @param ns The namespace being added.
 	 */
-	public void addNamespace(Namespace ns) {
+	private void addNamespace(Namespace ns) {
 		if (ns == defaultNamespace)
 			return;
 
@@ -125,67 +122,13 @@ public class XmlSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Returns the list of namespaces being used in the current XML serialization.
-	 *
-	 * @return The list of namespaces being used in the current XML serialization.
-	 */
-	public Namespace[] getNamespaces() {
-		return namespaces;
-	}
-
-	/**
-	 * Returns the {@link XmlSerializerContext#XML_autoDetectNamespaces} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_autoDetectNamespaces} setting value in this context.
-	 */
-	public final boolean isAutoDetectNamespaces() {
-		return enableNamespaces && autoDetectNamespaces;
-	}
-
-	/**
-	 * Returns the {@link XmlSerializerContext#XML_enableNamespaces} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_enableNamespaces} setting value in this context.
-	 */
-	public final boolean isEnableNamespaces() {
-		return enableNamespaces;
-	}
-
-	/**
-	 * Returns the {@link XmlSerializerContext#XML_addNamespaceUrisToRoot} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_addNamespaceUrisToRoot} setting value in this context.
-	 */
-	public final boolean isAddNamespaceUrlsToRoot() {
-		return addNamespaceUrlsToRoot;
-	}
-
-	/**
 	 * Returns the {@link XmlSerializerContext#XML_addBeanTypeProperties} setting value for this session.
 	 *
 	 * @return The {@link XmlSerializerContext#XML_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
-	public boolean isAddBeanTypeProperties() {
+	protected boolean isAddBeanTypeProperties() {
 		return addBeanTypeProperties;
-	}
-
-	/**
-	 * Returns the {@link XmlSerializerContext#XML_defaultNamespace} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_defaultNamespace} setting value in this context.
-	 */
-	public final Namespace getDefaultNamespace() {
-		return defaultNamespace;
-	}
-
-	/**
-	 * Returns the {@link XmlSerializerContext#XML_xsNamespace} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_xsNamespace} setting value in this context.
-	 */
-	public final Namespace getXsNamespace() {
-		return xsNamespace;
 	}
 
 	/**
@@ -197,7 +140,7 @@ public class XmlSerializerSession extends SerializerSession {
 	 *
 	 * @return <jk>true</jk> if we're generating HTML.
 	 */
-	public boolean isHtmlMode() {
+	protected boolean isHtmlMode() {
 		return false;
 	}
 
@@ -208,10 +151,578 @@ public class XmlSerializerSession extends SerializerSession {
 	 * @return The output target object wrapped in an {@link XmlWriter}.
 	 * @throws Exception
 	 */
-	public XmlWriter getXmlWriter(SerializerOutput out) throws Exception {
+	public final XmlWriter getXmlWriter(SerializerPipe out) throws Exception {
 		Object output = out.getRawOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
-		return new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), getDefaultNamespace());
+		XmlWriter w = new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), enableNamespaces, defaultNamespace);
+		out.setWriter(w);
+		return w;
+	}
+
+	@Override /* Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+		if (enableNamespaces && autoDetectNamespaces)
+			findNsfMappings(o);
+		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, enableNamespaces && addNamespaceUrlsToRoot, XmlFormat.DEFAULT, false, false, null);
+	}
+
+	/**
+	 * Recursively searches for the XML namespaces on the specified POJO and adds them to the serializer context object.
+	 *
+	 * @param o The POJO to check.
+	 * @throws SerializeException
+	 */
+	protected final void findNsfMappings(Object o) throws SerializeException {
+		ClassMeta<?> aType = null;						// The actual type
+		aType = push(null, o, null);
+
+		if (aType != null) {
+			Namespace ns = aType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+			if (ns != null) {
+				if (ns.uri != null)
+					addNamespace(ns);
+				else
+					ns = null;
+			}
+		}
+
+		// Handle recursion
+		if (aType != null && ! aType.isPrimitive()) {
+
+			BeanMap<?> bm = null;
+			if (aType.isBeanMap()) {
+				bm = (BeanMap<?>)o;
+			} else if (aType.isBean()) {
+				bm = toBeanMap(o);
+			} else if (aType.isDelegate()) {
+				ClassMeta<?> innerType = ((Delegate<?>)o).getClassMeta();
+				Namespace ns = innerType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+				if (ns != null) {
+					if (ns.uri != null)
+						addNamespace(ns);
+					else
+						ns = null;
+				}
+
+				if (innerType.isBean()) {
+					for (BeanPropertyMeta bpm : innerType.getBeanMeta().getPropertyMetas()) {
+						ns = bpm.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
+						if (ns != null && ns.uri != null)
+							addNamespace(ns);
+					}
+
+				} else if (innerType.isMap()) {
+					for (Object o2 : ((Map<?,?>)o).values())
+						findNsfMappings(o2);
+				} else if (innerType.isCollection()) {
+					for (Object o2 : ((Collection<?>)o))
+						findNsfMappings(o2);
+				}
+
+			} else if (aType.isMap()) {
+				for (Object o2 : ((Map<?,?>)o).values())
+					findNsfMappings(o2);
+			} else if (aType.isCollection()) {
+				for (Object o2 : ((Collection<?>)o))
+					findNsfMappings(o2);
+			} else if (aType.isArray() && ! aType.getElementType().isPrimitive()) {
+				for (Object o2 : ((Object[])o))
+					findNsfMappings(o2);
+			}
+			if (bm != null) {
+				for (BeanPropertyValue p : bm.getValues(isTrimNulls())) {
+
+					Namespace ns = p.getMeta().getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
+					if (ns != null && ns.uri != null)
+						addNamespace(ns);
+
+					try {
+						findNsfMappings(p.getValue());
+					} catch (Throwable x) {
+						// Ignore
+					}
+				}
+			}
+		}
+
+		pop();
+	}
+
+	/**
+	 * Workhorse method.
+	 *
+	 * @param out The writer to send the output to.
+	 * @param o The object to serialize.
+	 * @param eType The expected type if this is a bean property value being serialized.
+	 * @param elementName The root element name.
+	 * @param elementNamespace The namespace of the element.
+	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
+	 * @param format The format to serialize the output to.
+	 * @param isMixed We're serializing mixed content, so don't use whitespace.
+	 * @param preserveWhitespace
+	 * 	<jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
+	 * @param pMeta The bean property metadata if this is a bean property being serialized.
+	 * @return The same writer passed in so that calls to the writer can be chained.
+	 * @throws Exception If a problem occurred trying to convert the output.
+	 */
+	protected XmlWriter serializeAnything(
+			XmlWriter out,
+			Object o,
+			ClassMeta<?> eType,
+			String elementName,
+			Namespace elementNamespace,
+			boolean addNamespaceUris,
+			XmlFormat format,
+			boolean isMixed,
+			boolean preserveWhitespace,
+			BeanPropertyMeta pMeta) throws Exception {
+
+		JsonType type = null;              // The type string (e.g. <type> or <x x='type'>
+		int i = isMixed ? 0 : indent;       // Current indentation
+		ClassMeta<?> aType = null;     // The actual type
+		ClassMeta<?> wType = null;     // The wrapped type (delegate)
+		ClassMeta<?> sType = object(); // The serialized type
+
+		aType = push(elementName, o, eType);
+
+		if (eType == null)
+			eType = object();
+
+		// Handle recursion
+		if (aType == null) {
+			o = null;
+			aType = object();
+		}
+
+		if (o != null) {
+
+			if (aType.isDelegate()) {
+				wType = aType;
+				eType = aType = ((Delegate<?>)o).getClassMeta();
+			}
+
+			sType = aType.getSerializedClassMeta();
+
+			// Swap if necessary
+			PojoSwap swap = aType.getPojoSwap();
+			if (swap != null) {
+				o = swap.swap(this, o);
+
+				// If the getSwapClass() method returns Object, we need to figure out
+				// the actual type now.
+				if (sType.isObject())
+					sType = getClassMetaForObject(o);
+			}
+		} else {
+			sType = eType.getSerializedClassMeta();
+		}
+
+		// Does the actual type match the expected type?
+		boolean isExpectedType = true;
+		if (o == null || ! eType.same(aType)) {
+			if (eType.isNumber())
+				isExpectedType = aType.isNumber();
+			else if (eType.isMap())
+				isExpectedType = aType.isMap();
+			else if (eType.isCollectionOrArray())
+				isExpectedType = aType.isCollectionOrArray();
+			else
+				isExpectedType = false;
+		}
+
+		String resolvedDictionaryName = isExpectedType ? null : aType.getDictionaryName();
+
+		// Note that the dictionary name may be specified on the actual type or the serialized type.
+		// HTML templates will have them defined on the serialized type.
+		String dictionaryName = aType.getDictionaryName();
+		if (dictionaryName == null)
+			dictionaryName = sType.getDictionaryName();
+
+		// char '\0' is interpreted as null.
+		if (o != null && sType.isChar() && ((Character)o).charValue() == 0)
+			o = null;
+
+		boolean isCollapsed = false;		// If 'true', this is a collection and we're not rendering the outer element.
+
+		// Get the JSON type string.
+		if (o == null) {
+			type = NULL;
+		} else if (sType.isCharSequence() || sType.isChar()) {
+			type = STRING;
+		} else if (sType.isNumber()) {
+			type = NUMBER;
+		} else if (sType.isBoolean()) {
+			type = BOOLEAN;
+		} else if (sType.isMapOrBean()) {
+			isCollapsed = sType.getExtendedMeta(XmlClassMeta.class).getFormat() == COLLAPSED;
+			type = OBJECT;
+		} else if (sType.isCollectionOrArray()) {
+			isCollapsed = (format == COLLAPSED && ! addNamespaceUris);
+			type = ARRAY;
+		} else {
+			type = STRING;
+		}
+
+		if (format.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT) && type.isOneOf(NULL,STRING,NUMBER,BOOLEAN))
+			isCollapsed = true;
+
+		// Is there a name associated with this bean?
+		if (elementName == null && dictionaryName != null) {
+			elementName = dictionaryName;
+			isExpectedType = true;
+		}
+
+		if (enableNamespaces) {
+			if (elementNamespace == null)
+				elementNamespace = sType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+			if (elementNamespace == null)
+				elementNamespace = aType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+			if (elementNamespace != null && elementNamespace.uri == null)
+				elementNamespace = null;
+			if (elementNamespace == null)
+				elementNamespace = defaultNamespace;
+		} else {
+			elementNamespace = null;
+		}
+
+		// Do we need a carriage return after the start tag?
+		boolean cr = o != null && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixed;
+
+		String en = elementName;
+		if (en == null) {
+			en = type.toString();
+			type = null;
+		}
+		boolean encodeEn = elementName != null;
+		String ns = (elementNamespace == null ? null : elementNamespace.name);
+		String dns = null, elementNs = null;
+		if (enableNamespaces) {
+			dns = elementName == null && defaultNamespace != null ? defaultNamespace.name : null;
+			elementNs = elementName == null ? dns : ns;
+			if (elementName == null)
+				elementNamespace = null;
+		}
+
+		// Render the start tag.
+		if (! isCollapsed) {
+			out.oTag(i, elementNs, en, encodeEn);
+			if (addNamespaceUris) {
+				out.attr((String)null, "xmlns", defaultNamespace.getUri());
+
+				for (Namespace n : namespaces)
+					out.attr("xmlns", n.getName(), n.getUri());
+			}
+			if (! isExpectedType) {
+				if (resolvedDictionaryName != null)
+					out.attr(dns, getBeanTypePropertyName(eType), resolvedDictionaryName);
+				else if (type != null && type != STRING)
+					out.attr(dns, getBeanTypePropertyName(eType), type);
+			}
+			if (o == null) {
+				if ((sType.isBoolean() || sType.isNumber()) && ! sType.isNullable())
+					o = sType.getPrimitiveDefault();
+			}
+
+			if (o != null && ! (sType.isMapOrBean()))
+				out.append('>');
+
+			if (cr && ! (sType.isMapOrBean()))
+				out.nl(i+1);
+		}
+
+		ContentResult rc = CR_ELEMENTS;
+
+		// Render the tag contents.
+		if (o != null) {
+			if (sType.isUri() || (pMeta != null && pMeta.isUri())) {
+				out.textUri(o);
+			} else if (sType.isCharSequence() || sType.isChar()) {
+				if (format == XMLTEXT)
+					out.append(o);
+				else
+					out.text(o, preserveWhitespace);
+			} else if (sType.isNumber() || sType.isBoolean()) {
+				out.append(o);
+			} else if (sType.isMap() || (wType != null && wType.isMap())) {
+				if (o instanceof BeanMap)
+					rc = serializeBeanMap(out, (BeanMap)o, elementNamespace, isCollapsed, isMixed);
+				else
+					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixed);
+			} else if (sType.isBean()) {
+				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixed);
+			} else if (sType.isCollection() || (wType != null && wType.isCollection())) {
+				if (isCollapsed)
+					this.indent--;
+				serializeCollection(out, o, sType, eType, pMeta, isMixed);
+				if (isCollapsed)
+					this.indent++;
+			} else if (sType.isArray()) {
+				if (isCollapsed)
+					this.indent--;
+				serializeCollection(out, o, sType, eType, pMeta, isMixed);
+				if (isCollapsed)
+					this.indent++;
+			} else {
+				if (format == XMLTEXT)
+					out.append(toString(o));
+				else
+					out.text(toString(o));
+			}
+		}
+
+		pop();
+
+		// Render the end tag.
+		if (! isCollapsed) {
+			if (rc == CR_EMPTY) {
+				if (isHtmlMode())
+					out.append('>').eTag(elementNs, en, encodeEn);
+				else
+					out.append('/').append('>');
+			} else if (rc == CR_VOID || o == null) {
+				out.append('/').append('>');
+			}
+			else
+				out.ie(cr && rc != CR_MIXED ? i : 0).eTag(elementNs, en, encodeEn);
+			if (! isMixed)
+				out.nl(i);
+		}
+
+		return out;
+	}
+
+	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
+			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws Exception {
+
+		m = sort(m);
+
+		ClassMeta<?> keyType = eKeyType == null ? sType.getKeyType() : eKeyType;
+		ClassMeta<?> valueType = eValueType == null ? sType.getValueType() : eValueType;
+
+		boolean hasChildren = false;
+		for (Iterator i = m.entrySet().iterator(); i.hasNext();) {
+			Map.Entry e = (Map.Entry)i.next();
+
+			Object k = e.getKey();
+			if (k == null) {
+				k = "\u0000";
+			} else {
+				k = generalize(k, keyType);
+				if (isTrimStrings() && k instanceof String)
+					k = k.toString().trim();
+			}
+
+			Object value = e.getValue();
+
+			if (! hasChildren) {
+				hasChildren = true;
+				out.append('>').nlIf(! isMixed, indent);
+			}
+			serializeAnything(out, value, valueType, toString(k), null, false, XmlFormat.DEFAULT, isMixed, false, null);
+		}
+		return hasChildren ? CR_ELEMENTS : CR_EMPTY;
+	}
+
+	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m,
+			Namespace elementNs, boolean isCollapsed, boolean isMixed) throws Exception {
+		boolean hasChildren = false;
+		BeanMeta<?> bm = m.getMeta();
+
+		List<BeanPropertyValue> lp = m.getValues(isTrimNulls());
+
+		XmlBeanMeta xbm = bm.getExtendedMeta(XmlBeanMeta.class);
+
+		Set<String>
+			attrs = xbm.getAttrPropertyNames(),
+			elements = xbm.getElementPropertyNames(),
+			collapsedElements = xbm.getCollapsedPropertyNames();
+		String
+			attrsProperty = xbm.getAttrsPropertyName(),
+			contentProperty = xbm.getContentPropertyName();
+
+		XmlFormat cf = null;
+
+		Object content = null;
+		ClassMeta<?> contentType = null;
+		for (BeanPropertyValue p : lp) {
+			String n = p.getName();
+			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
+				BeanPropertyMeta pMeta = p.getMeta();
+				ClassMeta<?> cMeta = p.getClassMeta();
+
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					onBeanGetterException(pMeta, t);
+
+				if (canIgnoreValue(cMeta, key, value))
+					continue;
+
+				Namespace ns = (enableNamespaces && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() != elementNs ? pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() : null);
+
+				if (pMeta.isUri()  ) {
+					out.attrUri(ns, key, value);
+				} else if (n.equals(attrsProperty)) {
+					if (value instanceof BeanMap) {
+						BeanMap<?> bm2 = (BeanMap)value;
+						for (BeanPropertyValue p2 : bm2.getValues(true)) {
+							String key2 = p2.getName();
+							Object value2 = p2.getValue();
+							Throwable t2 = p2.getThrown();
+							if (t2 != null)
+								onBeanGetterException(pMeta, t);
+							out.attr(ns, key2, value2);
+						}
+					} else /* Map */ {
+						Map m2 = (Map)value;
+						for (Map.Entry e : (Set<Map.Entry>)(m2.entrySet())) {
+							out.attr(ns, toString(e.getKey()), e.getValue());
+						}
+					}
+				} else {
+					out.attr(ns, key, value);
+				}
+			}
+		}
+
+		boolean
+			hasContent = false,
+			preserveWhitespace = false,
+			isVoidElement = xbm.getContentFormat() == VOID;
+
+		for (BeanPropertyValue p : lp) {
+			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
+
+			String n = p.getName();
+			if (n.equals(contentProperty)) {
+				content = p.getValue();
+				contentType = p.getClassMeta();
+				hasContent = true;
+				cf = xbm.getContentFormat();
+				if (cf.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT))
+					isMixed = true;
+				if (cf.isOneOf(MIXED_PWS, TEXT_PWS))
+					preserveWhitespace = true;
+				if (contentType.isCollection() && ((Collection)content).isEmpty())
+					hasContent = false;
+				else if (contentType.isArray() && Array.getLength(content) == 0)
+					hasContent = false;
+			} else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*") ) {
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					onBeanGetterException(pMeta, t);
+
+				if (canIgnoreValue(cMeta, key, value))
+					continue;
+
+				if (! hasChildren) {
+					hasChildren = true;
+					out.appendIf(! isCollapsed, '>').nlIf(! isMixed, indent);
+				}
+
+				XmlBeanPropertyMeta xbpm = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+				serializeAnything(out, value, cMeta, key, xbpm.getNamespace(), false, xbpm.getXmlFormat(), isMixed, false, pMeta);
+			}
+		}
+		if (! hasContent)
+			return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);
+		out.append('>').nlIf(! isMixed, indent);
+
+		// Serialize XML content.
+		if (content != null) {
+			if (contentType == null) {
+			} else if (contentType.isCollection()) {
+				Collection c = (Collection)content;
+				for (Iterator i = c.iterator(); i.hasNext();) {
+					Object value = i.next();
+					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixed, preserveWhitespace, null);
+				}
+			} else if (contentType.isArray()) {
+				Collection c = toList(Object[].class, content);
+				for (Iterator i = c.iterator(); i.hasNext();) {
+					Object value = i.next();
+					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixed, preserveWhitespace, null);
+				}
+			} else {
+				serializeAnything(out, content, contentType, null, null, false, cf, isMixed, preserveWhitespace, null);
+			}
+		} else {
+			if (! isTrimNulls()) {
+				if (! isMixed)
+					out.i(indent);
+				out.text(content);
+				if (! isMixed)
+					out.nl(indent);
+			}
+		}
+		return isMixed ? CR_MIXED : CR_ELEMENTS;
+	}
+
+	private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,
+			ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws Exception {
+
+		ClassMeta<?> seType = sType.getElementType();
+		if (seType == null)
+			seType = object();
+		ClassMeta<?> eeType = eType.getElementType();
+
+		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
+
+		c = sort(c);
+
+		String type2 = null;
+		if (sType != eType)
+			type2 = sType.getDictionaryName();
+
+		String eName = type2;
+		Namespace eNs = null;
+
+		if (ppMeta != null) {
+			XmlBeanPropertyMeta xbpm = ppMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+			eName = xbpm.getChildName();
+			eNs = xbpm.getNamespace();
+		}
+
+		for (Iterator i = c.iterator(); i.hasNext();) {
+			Object value = i.next();
+			serializeAnything(out, value, eeType, eName, eNs, false, XmlFormat.DEFAULT, isMixed, false, null);
+		}
+		return out;
+	}
+
+	static enum JsonType {
+		STRING("string"),BOOLEAN("boolean"),NUMBER("number"),ARRAY("array"),OBJECT("object"),NULL("null");
+
+		private final String value;
+		private JsonType(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return value;
+		}
+
+		boolean isOneOf(JsonType...types) {
+			for (JsonType type : types)
+				if (type == this)
+					return true;
+			return false;
+		}
+	}
+
+	/**
+	 * Identifies what the contents were of a serialized bean.
+	 */
+	static enum ContentResult {
+		CR_VOID,      // No content...append "/>" to the start tag.
+		CR_EMPTY,     // No content...append "/>" to the start tag if XML, "/></end>" if HTML.
+		CR_MIXED,     // Mixed content...don't add whitespace.
+		CR_ELEMENTS   // Elements...use normal whitespace rules.
 	}
 }

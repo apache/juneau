@@ -12,10 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
-import java.lang.reflect.*;
-
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -34,50 +30,10 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  *
  * <p>
- * The default implementation simply instantiates the class using one of the following constructors:
- * <ul>
- * 	<li><code><jk>public</jk> T(RestConfig)</code>
- * 	<li><code><jk>public</jk> T()</code>
- * </ul>
- *
- * <p>
- * The former constructor can be used to get access to the {@link RestConfig} object to get access to the
- * config file and initialization information or make programmatic modifications to the resource before
- * full initialization.
- *
- * <p>
- * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
- * {@link RestConfig} and {@link RestContext} objects:
- * <ul>
- * 	<li><code><jk>public void</jk> init(RestConfig);</code>
- * 	<li><code><jk>public void</jk> init(RestContext);</code>
- * </ul>
- * 
- * <p>
  * An instance of this class can also be passed in through the servlet context as the context attribute
  * {@link RestContext#REST_resourceResolver}.
  */
 public interface RestResourceResolver {
-
-	/**
-	 * Denotes the default resolver.
-	 */
-	public static class Default implements RestResourceResolver {
-		@Override
-		public Object resolve(Class<?> c, RestConfig config) throws RestServletException {
-			try {
-				Constructor<?> c1 = findPublicConstructor(c, RestConfig.class);
-				if (c1 != null)
-					return c1.newInstance(config);
-				c1 = findPublicConstructor(c);
-				if (c1 != null)
-					return c1.newInstance();
-			} catch (Exception e) {
-				throw new RestServletException("Could not instantiate resource class ''{0}''", c.getName()).initCause(e);
-			}
-			throw new RestServletException("Could not find public constructor for class ''{0}''.", c);
-		}
-	}
 
 	/**
 	 * Resolves the specified class to a resource object.

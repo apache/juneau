@@ -261,7 +261,7 @@ public final class IOUtils {
 	 * 	reader.
 	 */
 	public static Reader getBufferedReader(Reader r) {
-		if (r instanceof BufferedReader || r instanceof StringReader)
+		if (r == null || r instanceof BufferedReader || r instanceof StringReader)
 			return r;
 		return new BufferedReader(r);
 	}
@@ -408,6 +408,59 @@ public final class IOUtils {
 				closeQuietly((Writer)o2);
 		}
 	}
+
+	/**
+	 * Flushes multiple output streams and writers in a single call.
+	 *
+	 * @param o
+	 * 	The objects to flush.
+	 * 	<jk>null</jk> entries are ignored.
+	 * @throws IOException
+	 */
+	public static void flush(Object...o) throws IOException {
+		IOException ex = null;
+		for (Object o2 : o) {
+			try {
+				if (o2 instanceof OutputStream)
+					((OutputStream)o2).flush();
+				if (o2 instanceof Writer)
+					((Writer)o2).flush();
+			} catch (IOException e) {
+				ex = e;
+			}
+		}
+		if (ex != null)
+			throw ex;
+	}
+
+	/**
+	 * Close all specified input streams, output streams, readers, and writers.
+	 *
+	 * @param o
+	 * 	The list of all objects to close.
+	 * 	<jk>null</jk> entries are ignored.
+	 * @throws IOException
+	 */
+	public static void close(Object...o) throws IOException {
+		IOException ex = null;
+		for (Object o2 : o) {
+			try {
+				if (o2 instanceof InputStream)
+					((InputStream)o2).close();
+				if (o2 instanceof OutputStream)
+					((OutputStream)o2).close();
+				if (o2 instanceof Reader)
+					((Reader)o2).close();
+				if (o2 instanceof Writer)
+					((Writer)o2).close();
+			} catch (IOException e) {
+				ex = e;
+			}
+		}
+		if (ex != null)
+			throw ex;
+	}
+
 
 	/**
 	 * Converts an object to an <code>InputStream</code>.

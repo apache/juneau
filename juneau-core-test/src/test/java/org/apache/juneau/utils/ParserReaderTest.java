@@ -25,7 +25,7 @@ public class ParserReaderTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		ParserReader r = new ParserReader("abc123");
+		ParserReader r = new ParserReader(new ParserPipe("abc123"));
 		try {
 			assertEquals('a', r.read());
 			r.unread();

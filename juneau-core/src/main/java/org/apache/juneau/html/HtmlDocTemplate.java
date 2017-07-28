@@ -60,99 +60,90 @@ public interface HtmlDocTemplate {
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void head(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void style(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void script(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void body(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void body(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void header(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void nav(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;article&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void article(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void aside(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
-	 * @param s The serializer calling this method.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void footer(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception;
+	public void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 
 	/**
 	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.

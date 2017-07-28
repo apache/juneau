@@ -41,17 +41,28 @@ public abstract class Session {
 	private boolean closed;
 	private List<String> warnings;                 // Any warnings encountered.
 
+
 	/**
 	 * Default constructor.
 	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for the session.
-	 * @param op Properties associated with this session.
+	 * @param args
+	 * 	Runtime arguments.
 	 */
-	protected Session(final Context ctx, ObjectMap op) {
+	protected Session(final Context ctx, SessionArgs args) {
 		this.ctx = ctx;
-		this.properties = op != null ? op : ObjectMap.EMPTY_MAP;
+		this.properties = args.properties != null ? args.properties : ObjectMap.EMPTY_MAP;
+	}
+
+	/**
+	 * Returns the session-level properties.
+	 *
+	 * @return The session-level properties.
+	 */
+	protected final ObjectMap getProperties() {
+		return properties;
 	}
 
 	/**
@@ -68,7 +79,7 @@ public abstract class Session {
 	 * @param key The property key.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
-	public String getProperty(String key) {
+	public final String getProperty(String key) {
 		return getProperty(key, null);
 	}
 
@@ -79,7 +90,7 @@ public abstract class Session {
 	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
 	 * @return The property value.
 	 */
-	public String getProperty(String key, String def) {
+	public final String getProperty(String key, String def) {
 		Object v = properties.get(key);
 		if (v == null)
 			v = ctx.getPropertyStore().getProperty(key, String.class, null);
@@ -95,7 +106,7 @@ public abstract class Session {
 	 * @param key The property key.
 	 * @return The property value.
 	 */
-	public <T> T getProperty(Class<T> type, String key) {
+	public final <T> T getProperty(Class<T> type, String key) {
 		return getProperty(type, key, null);
 	}
 
@@ -107,7 +118,7 @@ public abstract class Session {
 	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
 	 * @return The property value.
 	 */
-	public <T> T getProperty(Class<T> type, String key, T def) {
+	public final <T> T getProperty(Class<T> type, String key, T def) {
 		T t = properties.get(type, key);
 		if (t == null)
 			t = ctx.getPropertyStore().getProperty(key, type, def);
@@ -123,7 +134,7 @@ public abstract class Session {
 	 * @param key The key.  Can be any string.
 	 * @param val The cached object.
 	 */
-	public void addToCache(String key, Object val) {
+	public final void addToCache(String key, Object val) {
 		if (cache == null)
 			cache = new TreeMap<String,Object>();
 		cache.put(key, val);
@@ -139,7 +150,7 @@ public abstract class Session {
 	 * 	The objects to add to this session's cache.
 	 * 	No-op if <jk>null</jk>.
 	 */
-	public void addToCache(Map<String,Object> cacheObjects) {
+	public final void addToCache(Map<String,Object> cacheObjects) {
 		if (cacheObjects != null) {
 			if (cache == null)
 				cache = new TreeMap<String,Object>();
@@ -155,7 +166,7 @@ public abstract class Session {
 	 * @return The cached object, or <jk>null</jk> if it doesn't exist.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getFromCache(Class<T> c, String key) {
+	public final <T> T getFromCache(Class<T> c, String key) {
 		return cache == null ? null : (T)cache.get(key);
 	}
 
@@ -177,7 +188,7 @@ public abstract class Session {
 	 *
 	 * @return <jk>true</jk> if warnings occurred in this session.
 	 */
-	public boolean hasWarnings() {
+	public final boolean hasWarnings() {
 		return warnings != null && warnings.size() > 0;
 	}
 
@@ -186,7 +197,7 @@ public abstract class Session {
 	 *
 	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
 	 */
-	public List<String> getWarnings() {
+	public final List<String> getWarnings() {
 		return warnings;
 	}
 
@@ -198,7 +209,7 @@ public abstract class Session {
 	 *
 	 * @return The logger associated with this session.
 	 */
-	protected JuneauLogger getLogger() {
+	protected final JuneauLogger getLogger() {
 		if (logger == null)
 			logger = JuneauLogger.getLogger(getClass());
 		return logger;

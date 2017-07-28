@@ -60,8 +60,14 @@ public class NlsPropertyResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write(session.getProperty("TestProperty"));
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write(getProperty("TestProperty"));
+				}
+			};
 		}
 	}
 }

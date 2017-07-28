@@ -67,10 +67,16 @@ public class PropertiesResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object output) throws Exception {
-			out.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
-				session.getProperty("A1"), session.getProperty("A2"), session.getProperty("B1"), session.getProperty("B2"), session.getProperty("C"),
-				session.getProperty("R1a"), session.getProperty("R1b"), session.getProperty("R2"), session.getProperty("R3"), session.getProperty("R4"), session.getProperty("R5"), session.getProperty("R6")));
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
+						getProperty("A1"), getProperty("A2"), getProperty("B1"), getProperty("B2"), getProperty("C"),
+						getProperty("R1a"), getProperty("R1b"), getProperty("R2"), getProperty("R3"), getProperty("R4"), getProperty("R5"), getProperty("R6")));
+				}
+			};
 		}
 	}
 
@@ -90,8 +96,14 @@ public class PropertiesResource extends RestServletDefault {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object output) throws Exception {
-			out.getWriter().write(format("A=%s,P=%s,H=%s", session.getProperty("A"), session.getProperty("P"), session.getProperty("h")));
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write(format("A=%s,P=%s,H=%s", getProperty("A"), getProperty("P"), getProperty("h")));
+				}
+			};
 		}
 	}
 }

@@ -44,7 +44,7 @@ public abstract class Context {
 	 * @param propertyStore The factory that created this config.
 	 */
 	public Context(PropertyStore propertyStore) {
-		this.propertyStore = PropertyStore.create(propertyStore);
+		this.propertyStore = propertyStore == null ? PropertyStore.create() : propertyStore.copy();
 	}
 
 	/**

@@ -16,16 +16,18 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.soap.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Context object that lives for the duration of a single use of {@link Serializer}.
+ * Serializer session that lives for the duration of a single use of {@link Serializer}.
  *
  * <p>
  * Used by serializers for the following purposes:
@@ -41,9 +43,10 @@ import org.apache.juneau.transform.*;
  * </ul>
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class SerializerSession extends BeanSession {
+public abstract class SerializerSession extends BeanSession {
 
 	private final int maxDepth, initialDepth, maxIndent;
 	private final boolean
@@ -61,16 +64,18 @@ public class SerializerSession extends BeanSession {
 	private final char quoteChar;
 	private final UriResolver uriResolver;
 
-	/** The current indentation depth into the model. */
-	public int indent;
-
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
 	private final LinkedList<StackElement> stack = new LinkedList<StackElement>();  // Contains the current objects in the current branch of the model.
-	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
+
+	// Writable properties
+	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private final SerializerListener listener;
+
+	/** The current indentation depth into the model. */
+	public int indent;
 
 
 	/**
@@ -79,29 +84,26 @@ public class SerializerSession extends BeanSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext
-	 * 	The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerContext#DEFAULT}.
+	 * @param args
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
+	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
-	public SerializerSession(SerializerContext ctx, ObjectMap op, Method javaMethod, Locale locale,
-			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, locale, timeZone, mediaType);
-		this.javaMethod = javaMethod;
+	protected SerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
+		super(ctx != null ? ctx : SerializerContext.DEFAULT, args != null ? args : SerializerSessionArgs.DEFAULT);
+		if (ctx == null)
+			ctx = SerializerContext.DEFAULT;
+		if (args == null)
+			args = SerializerSessionArgs.DEFAULT;
+		this.javaMethod = args.javaMethod;
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
-		if (op == null || op.isEmpty()) {
+		ObjectMap p = getProperties();
+		if (p.isEmpty()) {
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
 			detectRecursions = ctx.detectRecursions;
@@ -121,27 +123,27 @@ public class SerializerSession extends BeanSession {
 			uriRelativity = ctx.uriRelativity;
 			listenerClass = ctx.listener;
 		} else {
-			maxDepth = op.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
-			initialDepth = op.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
-			detectRecursions = op.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
-			ignoreRecursions = op.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
-			useWhitespace = op.getBoolean(SERIALIZER_useWhitespace, ctx.useWhitespace);
-			maxIndent = op.getInt(SERIALIZER_maxIndent, ctx.maxIndent);
-			addBeanTypeProperties = op.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
-			trimNulls = op.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
-			trimEmptyCollections = op.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
-			trimEmptyMaps = op.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
-			trimStrings = op.getBoolean(SERIALIZER_trimStrings, ctx.trimStrings);
-			quoteChar = op.getString(SERIALIZER_quoteChar, ""+ctx.quoteChar).charAt(0);
-			sortCollections = op.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
-			sortMaps = op.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
-			abridged = op.getBoolean(SERIALIZER_abridged, ctx.abridged);
-			uriResolution = op.get(UriResolution.class, SERIALIZER_uriResolution, UriResolution.ROOT_RELATIVE);
-			uriRelativity = op.get(UriRelativity.class, SERIALIZER_uriRelativity, UriRelativity.RESOURCE);
-			listenerClass = op.get(Class.class, SERIALIZER_listener, ctx.listener);
+			maxDepth = p.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
+			initialDepth = p.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
+			detectRecursions = p.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
+			ignoreRecursions = p.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
+			useWhitespace = p.getBoolean(SERIALIZER_useWhitespace, ctx.useWhitespace);
+			maxIndent = p.getInt(SERIALIZER_maxIndent, ctx.maxIndent);
+			addBeanTypeProperties = p.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
+			trimNulls = p.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
+			trimEmptyCollections = p.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
+			trimEmptyMaps = p.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
+			trimStrings = p.getBoolean(SERIALIZER_trimStrings, ctx.trimStrings);
+			quoteChar = p.getString(SERIALIZER_quoteChar, ""+ctx.quoteChar).charAt(0);
+			sortCollections = p.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
+			sortMaps = p.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
+			abridged = p.getBoolean(SERIALIZER_abridged, ctx.abridged);
+			uriResolution = p.get(UriResolution.class, SERIALIZER_uriResolution, UriResolution.ROOT_RELATIVE);
+			uriRelativity = p.get(UriRelativity.class, SERIALIZER_uriRelativity, UriRelativity.RESOURCE);
+			listenerClass = p.get(Class.class, SERIALIZER_listener, ctx.listener);
 		}
 
-		uriResolver = new UriResolver(uriResolution, uriRelativity, uriContext == null ? ctx.uriContext : uriContext);
+		uriResolver = new UriResolver(uriResolution, uriRelativity, args.uriContext == null ? ctx.uriContext : args.uriContext);
 
 		listener = newInstance(SerializerListener.class, listenerClass);
 
@@ -154,11 +156,102 @@ public class SerializerSession extends BeanSession {
 	}
 
 	/**
+	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
+	 * a stream or reader.
+	 *
+	 * @param output
+	 * 	The output location.
+	 * 	<br>For character-based serializers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 		<li>{@link StringBuilder}
+	 * 	</ul>
+	 * 	<br>For byte-based serializers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @return
+	 * 	A new {@link ParserPipe} wrapper around the specified input object.
+	 */
+	protected SerializerPipe createPipe(Object output) {
+		return new SerializerPipe(output);
+	}
+
+
+	//--------------------------------------------------------------------------------
+	// Abstract methods
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Serializes a POJO to the specified output stream or writer.
+	 *
+	 * <p>
+	 * This method should NOT close the context object.
+	 *
+	 * @param pipe Where to send the output from the serializer.
+	 * @param o The object to serialize.
+	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
+	 */
+	protected abstract void doSerialize(SerializerPipe pipe, Object o) throws Exception;
+
+	/**
+	 * Shortcut method for serializing objects directly to either a <code>String</code> or <code><jk>byte</jk>[]</code>
+	 * depending on the serializer type.
+	 *
+	 * @param o The object to serialize.
+	 * @return
+	 * 	The serialized object.
+	 * 	<br>Character-based serializers will return a <code>String</code>
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public abstract Object serialize(Object o) throws SerializeException;
+
+	/**
+	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
+	 *
+	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
+	 */
+	public abstract boolean isWriterSerializer();
+
+
+	//--------------------------------------------------------------------------------
+	// Other methods
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Serialize the specified object using the specified session.
+	 *
+	 * @param out Where to send the output from the serializer.
+	 * @param o The object to serialize.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public final void serialize(Object out, Object o) throws SerializeException {
+		SerializerPipe pipe = createPipe(out);
+		try {
+			doSerialize(pipe, o);
+		} catch (SerializeException e) {
+			throw e;
+		} catch (StackOverflowError e) {
+			throw new SerializeException(this,
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the SerializerContext.SERIALIZER_detectRecursions setting to help locate the loop.").initCause(e);
+		} catch (Exception e) {
+			throw new SerializeException(this, e);
+		} finally {
+			pipe.close();
+			close();
+		}
+	}
+
+	/**
 	 * Sets the current bean property being serialized for proper error messages.
 	 *
 	 * @param currentProperty The current property being serialized.
 	 */
-	public void setCurrentProperty(BeanPropertyMeta currentProperty) {
+	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
 		this.currentProperty = currentProperty;
 	}
 
@@ -167,7 +260,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @param currentClass The current class being serialized.
 	 */
-	public void setCurrentClass(ClassMeta<?> currentClass) {
+	protected final void setCurrentClass(ClassMeta<?> currentClass) {
 		this.currentClass = currentClass;
 	}
 
@@ -180,7 +273,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The Java method that invoked this serializer.
 	*/
-	public final Method getJavaMethod() {
+	protected final Method getJavaMethod() {
 		return javaMethod;
 	}
 
@@ -189,7 +282,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The URI resolver.
 	 */
-	public final UriResolver getUriResolver() {
+	protected final UriResolver getUriResolver() {
 		return uriResolver;
 	}
 
@@ -198,7 +291,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_maxDepth} setting value for this session.
 	 */
-	public final int getMaxDepth() {
+	protected final int getMaxDepth() {
 		return maxDepth;
 	}
 
@@ -207,7 +300,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_initialDepth} setting value for this session.
 	 */
-	public final int getInitialDepth() {
+	protected final int getInitialDepth() {
 		return initialDepth;
 	}
 
@@ -216,7 +309,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_detectRecursions} setting value for this session.
 	 */
-	public final boolean isDetectRecursions() {
+	protected final boolean isDetectRecursions() {
 		return detectRecursions;
 	}
 
@@ -225,7 +318,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_ignoreRecursions} setting value for this session.
 	 */
-	public final boolean isIgnoreRecursions() {
+	protected final boolean isIgnoreRecursions() {
 		return ignoreRecursions;
 	}
 
@@ -234,7 +327,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_useWhitespace} setting value for this session.
 	 */
-	public final boolean isUseWhitespace() {
+	protected final boolean isUseWhitespace() {
 		return useWhitespace;
 	}
 
@@ -243,7 +336,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_maxIndent} setting value for this session.
 	 */
-	public final int getMaxIndent() {
+	protected final int getMaxIndent() {
 		return maxIndent;
 	}
 
@@ -252,7 +345,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 */
-	public boolean isAddBeanTypeProperties() {
+	protected boolean isAddBeanTypeProperties() {
 		return addBeanTypeProperties;
 	}
 
@@ -261,7 +354,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_quoteChar} setting value for this session.
 	 */
-	public final char getQuoteChar() {
+	protected final char getQuoteChar() {
 		return quoteChar;
 	}
 
@@ -270,7 +363,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_trimNullProperties} setting value for this session.
 	 */
-	public final boolean isTrimNulls() {
+	protected final boolean isTrimNulls() {
 		return trimNulls;
 	}
 
@@ -279,7 +372,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_trimEmptyCollections} setting value for this session.
 	 */
-	public final boolean isTrimEmptyCollections() {
+	protected final boolean isTrimEmptyCollections() {
 		return trimEmptyCollections;
 	}
 
@@ -288,7 +381,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_trimEmptyMaps} setting value for this session.
 	 */
-	public final boolean isTrimEmptyMaps() {
+	protected final boolean isTrimEmptyMaps() {
 		return trimEmptyMaps;
 	}
 
@@ -297,7 +390,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_trimStrings} setting value for this session.
 	 */
-	public final boolean isTrimStrings() {
+	protected final boolean isTrimStrings() {
 		return trimStrings;
 	}
 
@@ -306,7 +399,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_sortCollections} setting value for this session.
 	 */
-	public final boolean isSortCollections() {
+	protected final boolean isSortCollections() {
 		return sortCollections;
 	}
 
@@ -315,7 +408,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_sortMaps} setting value for this session.
 	 */
-	public final boolean isSortMaps() {
+	protected final boolean isSortMaps() {
 		return sortMaps;
 	}
 
@@ -330,7 +423,7 @@ public class SerializerSession extends BeanSession {
 	 * 	once (since they can be expensive).
 	 * @throws SerializeException If recursion occurred.
 	 */
-	public ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
+	protected final ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
 		indent++;
 		isBottom = true;
 		if (o == null)
@@ -363,7 +456,7 @@ public class SerializerSession extends BeanSession {
 	 * @return <jk>true</jk> if recursion detected.
 	 * @throws SerializeException If recursion occurred.
 	 */
-	public boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws SerializeException {
+	protected final boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws SerializeException {
 		if (! (detectRecursions || isDebug()))
 			return false;
 		if (! set.containsKey(o))
@@ -378,7 +471,7 @@ public class SerializerSession extends BeanSession {
 	/**
 	 * Pop an object off the stack.
 	 */
-	public void pop() {
+	protected final void pop() {
 		indent--;
 		if ((detectRecursions || isDebug()) && ! isBottom)  {
 			Object o = stack.removeLast().o;
@@ -391,21 +484,12 @@ public class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * The current indentation depth.
-	 *
-	 * @return The current indentation depth.
-	 */
-	public int getIndent() {
-		return indent;
-	}
-
-	/**
 	 * Specialized warning when an exception is thrown while executing a bean getter.
 	 *
 	 * @param p The bean map entry representing the bean property.
 	 * @param t The throwable that the bean getter threw.
 	 */
-	public void onBeanGetterException(BeanPropertyMeta p, Throwable t) {
+	protected final void onBeanGetterException(BeanPropertyMeta p, Throwable t) {
 		if (listener != null)
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
@@ -420,7 +504,7 @@ public class SerializerSession extends BeanSession {
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public final void onError(Throwable t, String msg, Object... args) {
+	protected final void onError(Throwable t, String msg, Object... args) {
 		if (listener != null)
 			listener.onError(this, t, format(msg, args));
 		super.addWarning(msg, args);
@@ -432,7 +516,7 @@ public class SerializerSession extends BeanSession {
 	 * @param o The input string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	public final String trim(Object o) {
+	protected final String trim(Object o) {
 		if (o == null)
 			return null;
 		String s = o.toString();
@@ -450,7 +534,7 @@ public class SerializerSession extends BeanSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
+	protected final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
 		if (o == null)
 			return null;
 		PojoSwap f = (type == null || type.isObject() ? getClassMeta(o.getClass()).getPojoSwap() : type.getPojoSwap());
@@ -468,7 +552,7 @@ public class SerializerSession extends BeanSession {
 	 * @return <jk>true</jk> if the specified value should not be serialized.
 	 * @throws SerializeException If recursion occurred.
 	 */
-	public final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
+	protected final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
 
 		if (trimNulls && value == null)
 			return true;
@@ -509,7 +593,7 @@ public class SerializerSession extends BeanSession {
 	 * @param m The map being sorted.
 	 * @return A new sorted {@link TreeMap}.
 	 */
-	public final <K,V> Map<K,V> sort(Map<K,V> m) {
+	protected final <K,V> Map<K,V> sort(Map<K,V> m) {
 		if (sortMaps && m != null && (! m.isEmpty()) && m.keySet().iterator().next() instanceof Comparable<?>)
 			return new TreeMap<K,V>(m);
 		return m;
@@ -521,10 +605,37 @@ public class SerializerSession extends BeanSession {
 	 * @param c The collection being sorted.
 	 * @return A new sorted {@link TreeSet}.
 	 */
-	public final <E> Collection<E> sort(Collection<E> c) {
+	protected final <E> Collection<E> sort(Collection<E> c) {
 		if (sortCollections && c != null && (! c.isEmpty()) && c.iterator().next() instanceof Comparable<?>)
 			return new TreeSet<E>(c);
 		return c;
+	}
+
+	/**
+	 * Converts the contents of the specified object array to a list.
+	 *
+	 * <p>
+	 * Works on both object and primitive arrays.
+	 *
+	 * <p>
+	 * In the case of multi-dimensional arrays, the outgoing list will contain elements of type n-1 dimension.
+	 * i.e. if {@code type} is <code><jk>int</jk>[][]</code> then {@code list} will have entries of type
+	 * <code><jk>int</jk>[]</code>.
+	 *
+	 * @param type The type of array.
+	 * @param array The array being converted.
+	 * @return The array as a list.
+	 */
+	protected static final List<Object> toList(Class<?> type, Object array) {
+		Class<?> componentType = type.getComponentType();
+		if (componentType.isPrimitive()) {
+			int l = Array.getLength(array);
+			List<Object> list = new ArrayList<Object>(l);
+			for (int i = 0; i < l; i++)
+				list.add(Array.get(array, i));
+			return list;
+		}
+		return Arrays.asList((Object[])array);
 	}
 
 	/**
@@ -554,7 +665,7 @@ public class SerializerSession extends BeanSession {
 	 * 	</ul>
 	 * @return The resolved URI.
 	 */
-	public String resolveUri(Object uri) {
+	public final String resolveUri(Object uri) {
 		return uriResolver.resolve(uri);
 	}
 
@@ -592,7 +703,7 @@ public class SerializerSession extends BeanSession {
 	 * @param uri The URI to relativize.
 	 * @return The relativized URI.
 	 */
-	public String relativizeUri(Object relativeTo, Object uri) {
+	protected final String relativizeUri(Object relativeTo, Object uri) {
 		return uriResolver.relativize(relativeTo, uri);
 	}
 
@@ -602,7 +713,7 @@ public class SerializerSession extends BeanSession {
 	 * @param o The object to convert to a <code>String</code>.
 	 * @return The
 	 */
-	public String toString(Object o) {
+	public final String toString(Object o) {
 		if (o == null)
 			return null;
 		if (o.getClass() == Class.class)
@@ -611,11 +722,6 @@ public class SerializerSession extends BeanSession {
 		if (trimStrings)
 			s = s.trim();
 		return s;
-	}
-
-	@Override
-	public boolean close() {
-		return super.close();
 	}
 
 	private static class StackElement {
@@ -663,7 +769,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
 	 */
-	public Map<String,Object> getLastLocation() {
+	protected final Map<String,Object> getLastLocation() {
 		Map<String,Object> m = new LinkedHashMap<String,Object>();
 		if (currentClass != null)
 			m.put("currentClass", currentClass);
@@ -681,7 +787,7 @@ public class SerializerSession extends BeanSession {
 	 * @param typeName The type name of the bean.
 	 * @return A new bean property value.
 	 */
-	public BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
+	protected final static BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
 		BeanMeta<?> bm = m.getMeta();
 		return new BeanPropertyValue(bm.getTypeProperty(), bm.getTypeProperty().getName(), typeName, null);
 	}
@@ -694,7 +800,7 @@ public class SerializerSession extends BeanSession {
 	 * @param pMeta The current bean property being serialized.
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
-	public String getBeanTypeName(ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
+	protected final String getBeanTypeName(ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
 		if (eType == aType)
 			return null;
 
@@ -748,7 +854,25 @@ public class SerializerSession extends BeanSession {
 	 * @param o The object to get the expected type on.
 	 * @return The expected type.
 	 */
-	public ClassMeta<?> getExpectedRootType(Object o) {
+	protected final ClassMeta<?> getExpectedRootType(Object o) {
 		return abridged ? getClassMetaForObject(o) : object();
+	}
+
+	/**
+	 * Optional method that specifies HTTP request headers for this serializer.
+	 *
+	 * <p>
+	 * For example, {@link SoapXmlSerializer} needs to set a <code>SOAPAction</code> header.
+	 *
+	 * <p>
+	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
+	 * or client).
+	 *
+	 * @return
+	 * 	The HTTP headers to set on HTTP requests.
+	 * 	Never <jk>null</jk>.
+	 */
+	public Map<String,String> getResponseHeaders() {
+		return Collections.emptyMap();
 	}
 }

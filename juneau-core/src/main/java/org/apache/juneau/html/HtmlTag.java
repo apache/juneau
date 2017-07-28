@@ -129,8 +129,6 @@ enum HtmlTag {
 			t = (end ? xP : P);
 		else if (c == 'h')
 			t = (end ? xHTML : HTML);
-		if (t == null)
-			throw new XmlParseException(null, "Unknown tag ''{0}'' encountered", tag);
 		return t;
 	}
 

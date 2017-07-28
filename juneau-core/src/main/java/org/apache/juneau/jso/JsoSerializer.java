@@ -34,6 +34,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 	/** Default serializer, all default settings.*/
 	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore.create());
 
+	private final SerializerContext ctx;
 
 	/**
 	 * Constructor.
@@ -42,6 +43,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 	 */
 	public JsoSerializer(PropertyStore propertyStore) {
 		super(propertyStore);
+		this.ctx = createContext(SerializerContext.class);
 	}
 
 	@Override /* CoreObject */
@@ -49,15 +51,8 @@ public class JsoSerializer extends OutputStreamSerializer {
 		return new JsoSerializerBuilder(propertyStore);
 	}
 
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* OutputStreamSerializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		ObjectOutputStream oos = new ObjectOutputStream(out.getOutputStream());
-		oos.writeObject(o);
-		oos.flush();
-		oos.close();
+	@Override /* Serializer */
+	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+		return new JsoSerializerSession(ctx, args);
 	}
 }

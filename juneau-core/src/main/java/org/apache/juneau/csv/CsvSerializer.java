@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
-import java.io.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -23,12 +20,12 @@ import org.apache.juneau.serializer.*;
  * TODO - Work in progress.  CSV serializer.
  */
 @Produces("text/csv")
-@SuppressWarnings({"rawtypes"})
 public final class CsvSerializer extends WriterSerializer {
 
 	/** Default serializer, all default settings.*/
 	public static final CsvSerializer DEFAULT = new CsvSerializer(PropertyStore.create());
 
+	private final CsvSerializerContext ctx;
 
 	/**
 	 * Constructor.
@@ -37,6 +34,7 @@ public final class CsvSerializer extends WriterSerializer {
 	 */
 	public CsvSerializer(PropertyStore propertyStore) {
 		super(propertyStore);
+		this.ctx = createContext(CsvSerializerContext.class);
 	}
 
 	@Override /* CoreObject */
@@ -44,61 +42,8 @@ public final class CsvSerializer extends WriterSerializer {
 		return new CsvSerializerBuilder(propertyStore);
 	}
 
-	//--------------------------------------------------------------------------------
-	// Entry point methods
-	//--------------------------------------------------------------------------------
-
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		Writer w = out.getWriter();
-		ClassMeta cm = session.getClassMetaForObject(o);
-		Collection l = null;
-		if (cm.isArray()) {
-			l = Arrays.asList((Object[])o);
-		} else {
-			l = (Collection)o;
-		}
-		// TODO - Doesn't support DynaBeans.
-		if (l.size() > 0) {
-			ClassMeta entryType = session.getClassMetaForObject(l.iterator().next());
-			if (entryType.isBean()) {
-				BeanMeta<?> bm = entryType.getBeanMeta();
-				int i = 0;
-				for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
-					if (i++ > 0)
-						w.append(',');
-					append(w, pm.getName());
-				}
-				w.append('\n');
-				for (Object o2 : l) {
-					i = 0;
-					BeanMap bean = session.toBeanMap(o2);
-					for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
-						if (i++ > 0)
-							w.append(',');
-						append(w, pm.get(bean, pm.getName()));
-					}
-					w.append('\n');
-				}
-			}
-		}
-	}
-
-	private static void append(Writer w, Object o) throws IOException {
-		if (o == null)
-			w.append("null");
-		else {
-			String s = o.toString();
-			boolean mustQuote = false;
-			for (int i = 0; i < s.length() && ! mustQuote; i++) {
-				char c = s.charAt(i);
-				if (Character.isWhitespace(c) || c == ',')
-					mustQuote = true;
-			}
-			if (mustQuote)
-				w.append('"').append(s).append('"');
-			else
-				w.append(s);
-		}
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new CsvSerializerSession(ctx, args);
 	}
 }

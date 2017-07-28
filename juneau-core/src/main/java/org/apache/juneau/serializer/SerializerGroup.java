@@ -88,7 +88,7 @@ public final class SerializerGroup {
 	 * 	to match against media types.
 	 */
 	public SerializerGroup(PropertyStore propertyStore, Serializer[] serializers) {
-		this.propertyStore = PropertyStore.create(propertyStore);
+		this.propertyStore = propertyStore.copy();
 		this.beanContext = propertyStore.getBeanContext();
 		this.serializers = Collections.unmodifiableList(new ArrayList<Serializer>(Arrays.asList(serializers)));
 
@@ -198,7 +198,7 @@ public final class SerializerGroup {
 	 * @return A new copy of the property store passed in to the constructor.
 	 */
 	public PropertyStore createPropertyStore() {
-		return PropertyStore.create(propertyStore);
+		return propertyStore.copy();
 	}
 
 	/**

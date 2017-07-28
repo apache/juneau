@@ -12,20 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
-import java.lang.reflect.*;
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link CsvSerializer}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public final class CsvSerializerSession extends SerializerSession {
+public final class CsvSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -33,22 +33,68 @@ public final class CsvSerializerSession extends SerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext The URI context.
-	 * Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param args
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
+	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
-	protected CsvSerializerSession(CsvSerializerContext ctx, ObjectMap op, Method javaMethod,
-			Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
+	protected CsvSerializerSession(CsvSerializerContext ctx, SerializerSessionArgs args) {
+		super(ctx, args);
+	}
+
+	@Override /* SerializerSession */
+	protected final void doSerialize(SerializerPipe out, Object o) throws Exception {
+		Writer w = out.getWriter();
+		ClassMeta<?> cm = getClassMetaForObject(o);
+		Collection<?> l = null;
+		if (cm.isArray()) {
+			l = Arrays.asList((Object[])o);
+		} else {
+			l = (Collection<?>)o;
+		}
+		// TODO - Doesn't support DynaBeans.
+		if (l.size() > 0) {
+			ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
+			if (entryType.isBean()) {
+				BeanMeta<?> bm = entryType.getBeanMeta();
+				int i = 0;
+				for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
+					if (i++ > 0)
+						w.append(',');
+					append(w, pm.getName());
+				}
+				w.append('\n');
+				for (Object o2 : l) {
+					i = 0;
+					BeanMap<?> bean = toBeanMap(o2);
+					for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
+						if (i++ > 0)
+							w.append(',');
+						append(w, pm.get(bean, pm.getName()));
+					}
+					w.append('\n');
+				}
+			}
+		}
+	}
+
+	private static void append(Writer w, Object o) throws IOException {
+		if (o == null)
+			w.append("null");
+		else {
+			String s = o.toString();
+			boolean mustQuote = false;
+			for (int i = 0; i < s.length() && ! mustQuote; i++) {
+				char c = s.charAt(i);
+				if (Character.isWhitespace(c) || c == ',')
+					mustQuote = true;
+			}
+			if (mustQuote)
+				w.append('"').append(s).append('"');
+			else
+				w.append(s);
+		}
 	}
 }

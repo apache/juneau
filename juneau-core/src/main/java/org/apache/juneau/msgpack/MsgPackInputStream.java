@@ -17,6 +17,8 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
+import org.apache.juneau.parser.*;
+
 /**
  * Specialized input stream for parsing MessagePack streams.
  *
@@ -27,6 +29,7 @@ import java.io.*;
  */
 public final class MsgPackInputStream extends InputStream {
 
+	private final ParserPipe pipe;
 	private final InputStream is;
 	private DataType currentDataType;
 	private long length;
@@ -57,10 +60,12 @@ public final class MsgPackInputStream extends InputStream {
 	/**
 	 * Constructor.
 	 *
-	 * @param is The input stream being wrapped.
+	 * @param pipe The parser input.
+	 * @throws Exception
 	 */
-	protected MsgPackInputStream(InputStream is) {
-		this.is = is;
+	protected MsgPackInputStream(ParserPipe pipe) throws Exception {
+		this.pipe = pipe;
+		this.is = pipe.getInputStream();
 	}
 
 	@Override /* InputStream */
@@ -484,5 +489,14 @@ public final class MsgPackInputStream extends InputStream {
 	 */
 	int getPosition() {
 		return pos;
+	}
+
+	/**
+	 * Returns the pipe that was passed into the constructor.
+	 *
+	 * @return The pipe that was passed into the constructor.
+	 */
+	public ParserPipe getPipe() {
+		return pipe;
 	}
 }

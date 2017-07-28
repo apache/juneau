@@ -175,7 +175,7 @@ public class StringUtilsTest {
 		Number n;
 
 		for (Class c : new Class[]{ Integer.class, Double.class, Float.class, Long.class, Short.class, Byte.class, BigInteger.class, BigDecimal.class, Number.class, AtomicInteger.class, AtomicLong.class}) {
-			in = new ParserReader("123'");
+			in = new ParserReader(new ParserPipe("123'"));
 			n = parseNumber(in, c);
 			assertTrue(c.isInstance(n));
 			assertEquals(123, n.intValue());

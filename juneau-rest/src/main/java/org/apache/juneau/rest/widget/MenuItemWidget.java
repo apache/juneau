@@ -17,6 +17,7 @@ import java.io.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * A subclass of widgets for rendering menu items with drop-down windows.
@@ -78,15 +79,23 @@ public abstract class MenuItemWidget extends Widget {
 		sb.append(""
 			+ "<div class='menu-item'>"
 			+ "\n\t<a class='link' onclick='menuClick(this)'>"+getLabel(req)+"</a>"
-			+ "\n\t<div class='popup-content'>"
+			+ "\n\t<div class='popup-content'>\n"
 		);
 		Object o = getContent(req);
 		if (o instanceof Reader)
 			IOUtils.pipe((Reader)o, new StringBuilderWriter(sb));
 		else if (o instanceof CharSequence)
 			sb.append((CharSequence)o);
-		else
-			HtmlSerializer.DEFAULT.serialize(getContent(req), sb);
+		else {
+			SerializerSessionArgs args = new SerializerSessionArgs(req.getProperties(), null, req.getLocale(), null, null, req.getUriContext());
+			WriterSerializerSession session = HtmlSerializer.DEFAULT.createSession(args);
+			try {
+				session.indent = 2;
+				session.serialize(sb, o);
+			} finally {
+				session.close();
+			}
+		}
 		sb.append(""
 			+ "\n\t</div>"
 			+ "\n</div>"
@@ -114,8 +123,8 @@ public abstract class MenuItemWidget extends Widget {
 	 * 		<li>{@link Reader} - Serialized directly to the output.
 	 * 		<li>{@link CharSequence} - Serialized directly to the output.
 	 * 		<li>Other - Serialized as HTML using {@link HtmlSerializer#DEFAULT}.
+	 * 			<br>Note that this includes any of the {@link org.apache.juneau.dto.html5} beans.
 	 * 	</ul>
-	 * 	Note that this includes any of the {@link org.apache.juneau.dto.html5} beans.
 	 * @throws Exception
 	 */
 	public abstract Object getContent(RestRequest req) throws Exception;

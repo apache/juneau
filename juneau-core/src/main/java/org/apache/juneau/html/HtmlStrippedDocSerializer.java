@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -47,19 +44,8 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		super(propertyStore);
 	}
 
-	//---------------------------------------------------------------------------
-	// Overridden methods
-	//---------------------------------------------------------------------------
-
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		HtmlSerializerSession s = (HtmlSerializerSession)session;
-		HtmlWriter w = s.getHtmlWriter(out);
-		if (o == null
-			|| (o instanceof Collection && ((Collection<?>)o).size() == 0)
-			|| (o.getClass().isArray() && Array.getLength(o) == 0))
-			w.sTag(1, "p").append("No Results").eTag("p").nl(1);
-		else
-			super.doSerialize(s, out, o);
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new HtmlStrippedDocSerializerSession(ctx, args);
 	}
 }

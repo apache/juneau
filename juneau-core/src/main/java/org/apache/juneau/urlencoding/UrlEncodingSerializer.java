@@ -14,19 +14,15 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.uon.UonSerializerContext.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.urlencoding.UrlEncodingContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -158,12 +154,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Expanded(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(UrlEncodingContext.URLENC_expandedParams, true);
+			super(propertyStore.copy().append(URLENC_expandedParams, true));
 		}
 	}
 
@@ -178,12 +169,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(SERIALIZER_useWhitespace, true);
+			super(propertyStore.copy().append(SERIALIZER_useWhitespace, true));
 		}
 	}
 
@@ -198,12 +184,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public PlainText(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(UonSerializerContext.UON_paramFormat, "PLAINTEXT");
+			super(propertyStore.copy().append(UON_paramFormat, "PLAINTEXT"));
 		}
 	}
 
@@ -215,190 +196,13 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public UrlEncodingSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore.copy().append(UON_encodeChars, true));
 		this.ctx = createContext(UrlEncodingSerializerContext.class);
 	}
 
 	@Override /* CoreObject */
 	public UrlEncodingSerializerBuilder builder() {
 		return new UrlEncodingSerializerBuilder(propertyStore);
-	}
-
-	@Override /* CoreObject */
-	protected ObjectMap getOverrideProperties() {
-		return super.getOverrideProperties().append(UON_encodeChars, true);
-	}
-
-	/**
-	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeAnything(UrlEncodingSerializerSession session, UonWriter out, Object o) throws Exception {
-
-		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> sType;			// The serialized type
-
-		aType = session.push("root", o, object());
-		session.indent--;
-		if (aType == null)
-			aType = object();
-
-		sType = aType.getSerializedClassMeta();
-		String typeName = session.getBeanTypeName(session.object(), aType, null);
-
-		// Swap if necessary
-		PojoSwap swap = aType.getPojoSwap();
-		if (swap != null) {
-			o = swap.swap(session, o);
-
-			// If the getSwapClass() method returns Object, we need to figure out
-			// the actual type now.
-			if (sType.isObject())
-				sType = session.getClassMetaForObject(o);
-		}
-
-		if (sType.isMap()) {
-			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, typeName);
-			else
-				serializeMap(session, out, (Map)o, sType);
-		} else if (sType.isBean()) {
-			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
-		} else if (sType.isCollection() || sType.isArray()) {
-			Map m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
-			serializeCollectionMap(session, out, m, session.getClassMeta(Map.class, Integer.class, Object.class));
-		} else {
-			// All other types can't be serialized as key/value pairs, so we create a
-			// mock key/value pair with a "_value" key.
-			out.append("_value=");
-			super.serializeAnything(session, out, o, null, null, null);
-		}
-
-		session.pop();
-		return out;
-	}
-
-	/**
-	 * Converts a Collection into an integer-indexed map.
-	 */
-	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
-		Map<Integer,Object> m = new TreeMap<Integer,Object>();
-		int i = 0;
-		for (Object o : c)
-			m.put(i++, o);
-		return m;
-	}
-
-	/**
-	 * Converts an array into an integer-indexed map.
-	 */
-	private static Map<Integer,Object> getCollectionMap(Object array) {
-		Map<Integer,Object> m = new TreeMap<Integer,Object>();
-		for (int i = 0; i < Array.getLength(array); i++)
-			m.put(i, Array.get(array, i));
-		return m;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(UrlEncodingSerializerSession session, UonWriter out, Map m, ClassMeta<?> type) throws Exception {
-
-		m = session.sort(m);
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		int depth = session.getIndent();
-		boolean addAmp = false;
-
-		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
-			Object key = session.generalize(e.getKey(), keyType);
-			Object value = e.getValue();
-
-			if (session.shouldUseExpandedParams(value)) {
-				Iterator i = value instanceof Collection ? ((Collection)value).iterator() : iterator(value);
-				while (i.hasNext()) {
-					if (addAmp)
-						out.cr(depth).append('&');
-					out.appendObject(key, true).append('=');
-					super.serializeAnything(session, out, i.next(), null, (key == null ? null : key.toString()), null);
-					addAmp = true;
-				}
-			} else {
-				if (addAmp)
-					out.cr(depth).append('&');
-				out.appendObject(key, true).append('=');
-				super.serializeAnything(session, out, value, valueType, (key == null ? null : key.toString()), null);
-				addAmp = true;
-			}
-		}
-
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeCollectionMap(UrlEncodingSerializerSession session, UonWriter out, Map m, ClassMeta<?> type) throws Exception {
-
-		ClassMeta<?> valueType = type.getValueType();
-
-		int depth = session.getIndent();
-		boolean addAmp = false;
-
-		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
-			if (addAmp)
-				out.cr(depth).append('&');
-			out.append(e.getKey()).append('=');
-			super.serializeAnything(session, out, e.getValue(), valueType, null, null);
-			addAmp = true;
-		}
-
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes" })
-	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap<?> m, String typeName) throws Exception {
-		int depth = session.getIndent();
-
-		boolean addAmp = false;
-
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null)) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
-
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				session.onBeanGetterException(pMeta, t);
-
-			if (session.canIgnoreValue(cMeta, key, value))
-				continue;
-
-			if (value != null && session.shouldUseExpandedParams(pMeta)) {
-				// Transformed object array bean properties may be transformed resulting in ArrayLists,
-				// so we need to check type if we think it's an array.
-				Iterator i = (cMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
-				while (i.hasNext()) {
-					if (addAmp)
-						out.cr(depth).append('&');
-
-					out.appendObject(key, true).append('=');
-
-					super.serializeAnything(session, out, i.next(), cMeta.getElementType(), key, pMeta);
-
-					addAmp = true;
-				}
-			} else {
-				if (addAmp)
-					out.cr(depth).append('&');
-
-				out.appendObject(key, true).append('=');
-
-				super.serializeAnything(session, out, value, cMeta, key, pMeta);
-
-				addAmp = true;
-			}
-
-		}
-		return out;
 	}
 
 
@@ -438,9 +242,8 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			}
 
 			StringWriter w = new StringWriter();
-			SerializerOutput out = new SerializerOutput(w);
-			UonSerializerSession s = new UrlEncodingSerializerSession(ctx, urlEncode, null, null, null, null, MediaType.UON, null);
-			super.doSerialize(s, out, o);
+			UonSerializerSession s = new UonSerializerSession(ctx, urlEncode, SerializerSessionArgs.DEFAULT);
+			s.serialize(w, o);
 			return w.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -453,15 +256,8 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UrlEncodingSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
-			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new UrlEncodingSerializerSession(ctx, null, op, javaMethod, locale, timeZone, mediaType, uriContext);
-	}
-
-	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		UrlEncodingSerializerSession s = (UrlEncodingSerializerSession)session;
-		serializeAnything(s, s.getUonWriter(out), o);
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new UrlEncodingSerializerSession(ctx, null, args);
 	}
 
 	@Override /* PartSerializer */

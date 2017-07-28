@@ -13,7 +13,6 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * A basic template for the HTML doc serializer.
@@ -24,21 +23,21 @@ import org.apache.juneau.serializer.*;
 public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
-	public void head(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		if (hasStyle(session)) {
 			w.sTag(2, "style").nl(2);
-			style(session, w, s, o);
+			style(session, w, o);
 			w.ie(2).eTag("style").nl(2);
 		}
 		if (hasScript(session)) {
 			w.sTag(2, "script").nl(2);
-			script(session, w, s, o);
+			script(session, w, o);
 			w.ie(2).eTag("script").nl(2);
 		}
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void style(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
 		String[] stylesheet = session.getStylesheet();
 		if (! ArrayUtils.contains("NONE", stylesheet))
@@ -54,7 +53,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void script(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
 		if (session.getScript() != null)
 			for (String script : session.getScript())
@@ -62,29 +61,29 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void body(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void body(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
 		if (hasHeader(session)) {
 			w.sTag(2, "header").nl(2);
-			header(session, w, s, o);
+			header(session, w, o);
 			w.ie(2).eTag("header").nl(2);
 		}
 
 		if (hasNav(session)) {
 			w.sTag(2, "nav").nl(2);
-			nav(session, w, s, o);
+			nav(session, w, o);
 			w.ie(2).eTag("nav").nl(2);
 		}
 
 		w.sTag(2, "section").nl(2);
 
 		w.sTag(3, "article").nl(3);
-		article(session, w, s, o);
+		article(session, w, o);
 		w.ie(3).eTag("article").nl(3);
 
 		if (hasAside(session)) {
 			w.sTag(3, "aside").nl(3);
-			aside(session, w, s, o);
+			aside(session, w, o);
 			w.ie(3).eTag("aside").nl(3);
 		}
 
@@ -92,13 +91,13 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 		if (hasFooter(session)) {
 			w.sTag(2, "footer").nl(2);
-			footer(session, w, s, o);
+			footer(session, w, o);
 			w.ie(2).eTag("footer").nl(2);
 		}
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void header(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		// Write the title of the page.
 		String header = session.getHeader();
 		if (exists(header))
@@ -107,7 +106,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 
 	@Override /* HtmlDocTemplate */
-	public void nav(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String nav = session.getNav();
 		if (nav != null) {
 			if (exists(nav))
@@ -138,14 +137,14 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void aside(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String aside = session.getAside();
 		if (exists(aside))
 			w.append(4, aside);
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void article(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
 		// <div class='outerdata'><div class='data' id='data'>...</div></div>
 		w.oTag(4, "div").attr("class","outerdata").append('>').nl(4);
@@ -160,7 +159,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 		} else {
 			session.indent = 6;
 			w.flush();
-			s.parentSerialize(session, new SerializerOutput(w), o);
+			session.parentSerialize(w, o);
 		}
 
 		w.ie(5).eTag("div").nl(5);
@@ -168,7 +167,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	}
 
 	@Override /* HtmlDocTemplate */
-	public void footer(HtmlDocSerializerSession session, HtmlWriter w, HtmlDocSerializer s, Object o) throws Exception {
+	public void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String footer = session.getFooter();
 		if (exists(footer))
 			w.append(3, footer).nl(3);

@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
 
@@ -170,7 +171,7 @@ public class UonParserReaderTest {
 		// Reader that only returns 1 character at a time;
 		s = "x¢€𤭢x¢€𤭢";
 		in = "x" + escape("¢€𤭢") + "x" + escape("¢€𤭢");
-		r = new UonReader(new SlowStringReader(in), true);
+		r = new UonReader(new ParserPipe(new SlowStringReader(in)), true);
 		assertEquals(s.codePointAt(0), r.readCodePoint());
 		assertEquals(s.codePointAt(1), r.readCodePoint());
 		assertEquals(s.codePointAt(2), r.readCodePoint());
@@ -190,8 +191,8 @@ public class UonParserReaderTest {
 		return sb.toString();
 	}
 
-	private UonReader r(String in, boolean decodeChars) {
-		return new UonReader(in, decodeChars);
+	private UonReader r(String in, boolean decodeChars) throws Exception {
+		return new UonReader(new ParserPipe(in), decodeChars);
 	}
 
 	private static class SlowStringReader extends Reader {

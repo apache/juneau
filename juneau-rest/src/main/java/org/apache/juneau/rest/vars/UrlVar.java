@@ -42,10 +42,7 @@ import org.apache.juneau.svl.*;
  */
 public class UrlVar extends SimpleVar {
 
-	/**
-	 * The name of the session or context object that identifies the {@link RestRequest} object.
-	 */
-	public static final String SESSION_req = "req";
+	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "U";

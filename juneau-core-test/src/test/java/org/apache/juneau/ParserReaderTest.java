@@ -30,25 +30,25 @@ public class ParserReaderTest {
 		String t = "01234567890123456789012345678901234567890123456789";
 
 		// Min buff size is 20.
-		ParserReader pr = new ParserReader(new StringReader(t));
+		ParserReader pr = createParserReader(t);
 		String r = read(pr);
 		assertEquals(t, r);
 		pr.close();
 
-		pr = new ParserReader(new StringReader(t));
+		pr = createParserReader(t);
 		pr.read();
 		pr.unread();
 		r = read(pr);
 		assertEquals(t, r);
 		pr.close();
 
-		pr = new ParserReader(new StringReader(t));
+		pr = createParserReader(t);
 		assertEquals('0', (char)pr.peek());
 		assertEquals('0', (char)pr.peek());
 		r = read(pr);
 		assertEquals(t, r);
 
-		pr = new ParserReader(new StringReader(t));
+		pr = createParserReader(t);
 		pr.read();
 		pr.unread();
 		try {
@@ -68,7 +68,7 @@ public class ParserReaderTest {
 		String r = null;
 
 		// Min buff size is 20.
-		ParserReader pr = new ParserReader(t);
+		ParserReader pr = createParserReader(t);
 		read(pr, 5);
 		pr.mark();
 		read(pr, 10);
@@ -78,7 +78,7 @@ public class ParserReaderTest {
 		assertEquals("56789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789", r);
 
 		// Force doubling of buffer size
-		pr = new ParserReader(t);
+		pr =createParserReader(t);
 		read(pr, 5);
 		pr.mark();
 		read(pr, 20);
@@ -96,7 +96,7 @@ public class ParserReaderTest {
 		String t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
 
 		// Min buff size is 20.
-		ParserReader pr = new ParserReader(t);
+		ParserReader pr = createParserReader(t);
 		assertEquals("a123456789", pr.read(10));
 		pr.mark();
 		assertEquals("b123456789c123456789", pr.read(20));
@@ -115,7 +115,7 @@ public class ParserReaderTest {
 		String t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
 
 		// Min buff size is 20.
-		ParserReader pr = new ParserReader(t);
+		ParserReader pr = createParserReader(t);
 		assertEquals("a123456789", pr.read(10));
 		pr.mark();
 		assertEquals("b123456789", pr.read(10));
@@ -124,7 +124,7 @@ public class ParserReaderTest {
 		assertEquals("b12345678xc123456789", pr.getMarked());
 		pr.close();
 
-		pr = new ParserReader(t);
+		pr = createParserReader(t);
 		assertEquals("a123456789", pr.read(10));
 		pr.mark();
 		assertEquals("b123456789", pr.read(10));
@@ -142,7 +142,7 @@ public class ParserReaderTest {
 		String t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
 
 		// Min buff size is 20.
-		ParserReader pr = new ParserReader(t);
+		ParserReader pr = createParserReader(t);
 		assertEquals("a123456789", pr.read(10));
 		pr.mark();
 		assertEquals("b123456789", pr.read(10));
@@ -151,7 +151,7 @@ public class ParserReaderTest {
 		assertEquals("b12345678c123456789", pr.getMarked());
 		pr.close();
 
-		pr = new ParserReader(t);
+		pr = createParserReader(t);
 		assertEquals("a123456789", pr.read(10));
 		pr.mark();
 		assertEquals("b123456789", pr.read(10));
@@ -178,5 +178,9 @@ public class ParserReaderTest {
 			sb.append((char)c);
 		}
 		return sb.toString();
+	}
+
+	private ParserReader createParserReader(Object in) throws Exception {
+		return new ParserReader(new ParserPipe(in, false, false, null, null));
 	}
 }

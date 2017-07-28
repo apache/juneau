@@ -12,23 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import java.io.*;
-import java.lang.reflect.*;
+import static org.apache.juneau.msgpack.DataType.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackParser}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused against multiple inputs.
  */
-public final class MsgPackParserSession extends ParserSession {
-
-	private MsgPackInputStream inputStream;
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public final class MsgPackParserSession extends InputStreamParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -36,46 +36,166 @@ public final class MsgPackParserSession extends ParserSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param input
-	 * 	The input.
-	 * 	Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text.
-	 * 		<li>{@link File} containing system encoded text.
-	 * 	</ul>
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
-	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @param args
+	 * 	Runtime session arguments.
 	 */
-	public MsgPackParserSession(MsgPackParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer,
-			Locale locale, TimeZone timeZone, MediaType mediaType) {
-		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
+	protected MsgPackParserSession(MsgPackParserContext ctx, ParserSessionArgs args) {
+		super(ctx, args);
 	}
 
 	@Override /* ParserSession */
-	public MsgPackInputStream getInputStream() throws ParseException {
-		if (inputStream == null)
-			inputStream = new MsgPackInputStream(super.getInputStream());
-		return inputStream;
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+		MsgPackInputStream is = new MsgPackInputStream(pipe);
+		T o = parseAnything(type, is, getOuter(), null);
+		return o;
 	}
 
-	@Override /* ParserSession */
-	public Map<String,Object> getLastLocation() {
-		Map<String,Object> m = super.getLastLocation();
-		if (inputStream != null)
-			m.put("position", inputStream.getPosition());
-		return m;
+	/*
+	 * Workhorse method.
+	 */
+	private <T> T parseAnything(ClassMeta<T> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws Exception {
+
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		setCurrentClass(sType);
+
+		Object o = null;
+		DataType dt = is.readDataType();
+		int length = (int)is.readLength();
+
+		if (dt != DataType.NULL) {
+			if (dt == BOOLEAN)
+				o = is.readBoolean();
+			else if (dt == INT)
+				o = is.readInt();
+			else if (dt == LONG)
+				o = is.readLong();
+			else if (dt == FLOAT)
+				o = is.readFloat();
+			else if (dt == DOUBLE)
+				o = is.readDouble();
+			else if (dt == STRING)
+				o = trim(is.readString());
+			else if (dt == BIN)
+				o = is.readBinary();
+			else if (dt == ARRAY && sType.isObject()) {
+				ObjectList ol = new ObjectList(this);
+				for (int i = 0; i < length; i++)
+					ol.add(parseAnything(object(), is, outer, pMeta));
+				o = ol;
+			} else if (dt == MAP && sType.isObject()) {
+				ObjectMap om = new ObjectMap(this);
+				for (int i = 0; i < length; i++)
+					om.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, om, pMeta));
+				o = cast(om, pMeta, eType);
+			}
+
+			if (sType.isObject()) {
+				// Do nothing.
+			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber()) {
+				o = convertToType(o, sType);
+			} else if (sType.isMap()) {
+				if (dt == MAP) {
+					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(this));
+					for (int i = 0; i < length; i++) {
+						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
+						ClassMeta<?> vt = sType.getValueType();
+						Object value = parseAnything(vt, is, m, pMeta);
+						setName(vt, value, key);
+						m.put(key, value);
+					}
+					o = m;
+				} else {
+					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				}
+			} else if (sType.canCreateNewBean(outer)) {
+				if (dt == MAP) {
+					BeanMap m = newBeanMap(outer, sType.getInnerClass());
+					for (int i = 0; i < length; i++) {
+						String pName = parseAnything(string(), is, m.getBean(false), null);
+						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
+						if (bpm == null) {
+							if (pName.equals(getBeanTypePropertyName(eType)))
+								parseAnything(string(), is, null, null);
+							else
+								onUnknownProperty(is.getPipe(), pName, m, 0, is.getPosition());
+						} else {
+							ClassMeta<?> cm = bpm.getClassMeta();
+							Object value = parseAnything(cm, is, m.getBean(false), bpm);
+							setName(cm, value, pName);
+							bpm.set(m, pName, value);
+						}
+					}
+					o = m.getBean();
+				} else {
+					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				}
+			} else if (sType.canCreateNewInstanceFromString(outer) && dt == STRING) {
+				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
+			} else if (sType.canCreateNewInstanceFromNumber(outer) && dt.isOneOf(INT, LONG, FLOAT, DOUBLE)) {
+				o = sType.newInstanceFromNumber(this, outer, (Number)o);
+			} else if (sType.isCollection()) {
+				if (dt == MAP) {
+					ObjectMap m = new ObjectMap(this);
+					for (int i = 0; i < length; i++)
+						m.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+					o = cast(m, pMeta, eType);
+				} else if (dt == ARRAY) {
+					Collection l = (
+						sType.canCreateNewInstance(outer)
+						? (Collection)sType.newInstance()
+						: new ObjectList(this)
+					);
+					for (int i = 0; i < length; i++)
+						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
+					o = l;
+				} else {
+					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				}
+			} else if (sType.isArray() || sType.isArgs()) {
+				if (dt == MAP) {
+					ObjectMap m = new ObjectMap(this);
+					for (int i = 0; i < length; i++)
+						m.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+					o = cast(m, pMeta, eType);
+				} else if (dt == ARRAY) {
+					Collection l = (
+						sType.isCollection() && sType.canCreateNewInstance(outer)
+						? (Collection)sType.newInstance()
+						: new ObjectList(this)
+					);
+					for (int i = 0; i < length; i++)
+						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
+					o = toArray(sType, l);
+				} else {
+					throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				}
+			} else if (dt == MAP) {
+				ObjectMap m = new ObjectMap(this);
+				for (int i = 0; i < length; i++)
+					m.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+				if (m.containsKey(getBeanTypePropertyName(eType)))
+					o = cast(m, pMeta, eType);
+				else
+					throw new ParseException(loc(is), "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
+						sType.getInnerClass().getName(), sType.getNotABeanReason());
+			} else {
+				throw new ParseException(loc(is), "Invalid data type {0} encountered for parse type {1}", dt, sType);
+			}
+		}
+
+		if (transform != null && o != null)
+			o = transform.unswap(this, o, eType);
+
+		if (outer != null)
+			setParent(eType, o, outer);
+
+		return (T)o;
+	}
+
+	private ObjectMap loc(MsgPackInputStream is) {
+		return getLastLocation().append("position", is.getPosition());
 	}
 }

@@ -200,6 +200,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				+ "\n=== END ========================================================================";
 			context.getLogger().log(Level.WARNING, msg);
 		}
+
+		if (isPlainText())
+			this.properties.put(SerializerContext.SERIALIZER_useWhitespace, true);
 	}
 
 	/**

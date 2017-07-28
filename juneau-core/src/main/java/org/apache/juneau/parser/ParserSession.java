@@ -14,28 +14,32 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.ParserContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused against multiple inputs.
  */
-public class ParserSession extends BeanSession {
+public abstract class ParserSession extends BeanSession {
 
 	private final boolean trimStrings, strict;
 	private final String inputStreamCharset, fileCharset;
-
 	private final Method javaMethod;
 	private final Object outer;
-	private final ParserInput input;
+
+	// Writable properties.
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private final ParserListener listener;
@@ -46,6 +50,71 @@ public class ParserSession extends BeanSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
+	 * @param args
+	 * 	Runtime session arguments.
+	 */
+	protected ParserSession(ParserContext ctx, ParserSessionArgs args) {
+		super(ctx != null ? ctx : ParserContext.DEFAULT, args != null ? args : ParserSessionArgs.DEFAULT);
+		if (ctx == null)
+			ctx = ParserContext.DEFAULT;
+		if (args == null)
+			args = ParserSessionArgs.DEFAULT;
+		Class<?> listenerClass;
+		ObjectMap p = getProperties();
+		if (p.isEmpty()) {
+			trimStrings = ctx.trimStrings;
+			strict = ctx.strict;
+			inputStreamCharset = ctx.inputStreamCharset;
+			fileCharset = ctx.fileCharset;
+			listenerClass = ctx.listener;
+		} else {
+			trimStrings = p.getBoolean(PARSER_trimStrings, ctx.trimStrings);
+			strict = p.getBoolean(PARSER_strict, ctx.strict);
+			inputStreamCharset = p.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
+			fileCharset = p.getString(PARSER_fileCharset, ctx.fileCharset);
+			listenerClass = p.get(Class.class, PARSER_listener, ctx.listener);
+		}
+		this.javaMethod = args.javaMethod;
+		this.outer = args.outer;
+		this.listener = newInstance(ParserListener.class, listenerClass);
+	}
+
+
+	//--------------------------------------------------------------------------------
+	// Abstract methods
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Workhorse method.  Subclasses are expected to implement this method.
+	 *
+	 * @param pipe Where to get the input from.
+	 * @param type
+	 * 	The class type of the object to create.
+	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
+	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>,
+	 * 	<code>ObjectMap</code>, etc...
+	 * @param <T> The class type of the object to create.
+	 * @return The parsed object.
+	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
+	 */
+	protected abstract <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception;
+
+	/**
+	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
+	 *
+	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
+	 */
+	public abstract boolean isReaderParser();
+
+
+	//--------------------------------------------------------------------------------
+	// Other methods
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
+	 * a stream or reader.
+	 *
 	 * @param input
 	 * 	The input.
 	 * 	<br>For character-based parsers, this can be any of the following types:
@@ -67,67 +136,11 @@ public class ParserSession extends BeanSession {
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
 	 * 	</ul>
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
-	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @return
+	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
-	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale,
-			TimeZone timeZone, MediaType mediaType) {
-		super(ctx, op, locale, timeZone, mediaType);
-		Class<?> listenerClass;
-		if (op == null || op.isEmpty()) {
-			trimStrings = ctx.trimStrings;
-			strict = ctx.strict;
-			inputStreamCharset = ctx.inputStreamCharset;
-			fileCharset = ctx.fileCharset;
-			listenerClass = ctx.listener;
-		} else {
-			trimStrings = op.getBoolean(PARSER_trimStrings, ctx.trimStrings);
-			strict = op.getBoolean(PARSER_strict, ctx.strict);
-			inputStreamCharset = op.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
-			fileCharset = op.getString(PARSER_fileCharset, ctx.fileCharset);
-			listenerClass = op.get(Class.class, PARSER_listener, ctx.listener);
-		}
-		this.input = new ParserInput(input, isDebug(), strict, fileCharset, inputStreamCharset);
-		this.javaMethod = javaMethod;
-		this.outer = outer;
-		this.listener = newInstance(ParserListener.class, listenerClass);
-	}
-
-	/**
-	 * Wraps the specified input object inside an input stream.
-	 *
-	 * <p>
-	 * Subclasses can override this method to implement their own input streams.
-	 *
-	 * @return The input object wrapped in an input stream, or <jk>null</jk> if the object is null.
-	 * @throws ParseException If object could not be converted to an input stream.
-	 */
-	public InputStream getInputStream() throws ParseException {
-		return input.getInputStream();
-	}
-
-
-	/**
-	 * Wraps the specified input object inside a reader.
-	 *
-	 * <p>
-	 * Subclasses can override this method to implement their own readers.
-	 *
-	 * @return The input object wrapped in a Reader, or <jk>null</jk> if the object is null.
-	 * @throws Exception If object could not be converted to a reader.
-	 */
-	public Reader getReader() throws Exception {
-		return input.getReader();
+	public final ParserPipe createPipe(Object input) {
+		return new ParserPipe(input, isDebug(), strict, fileCharset, inputStreamCharset);
 	}
 
 	/**
@@ -135,22 +148,13 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
 	 */
-	public Map<String,Object> getLastLocation() {
-		Map<String,Object> m = new LinkedHashMap<String,Object>();
+	public final ObjectMap getLastLocation() {
+		ObjectMap m = new ObjectMap();
 		if (currentClass != null)
 			m.put("currentClass", currentClass.toString(true));
 		if (currentProperty != null)
 			m.put("currentProperty", currentProperty);
 		return m;
-	}
-
-	/**
-	 * Returns the raw input object passed into this session.
-	 *
-	 * @return The raw input object passed into this session.
-	 */
-	protected Object getInput() {
-		return input.getRawInput();
 	}
 
 	/**
@@ -162,7 +166,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The Java method that invoked this parser.
 	*/
-	public final Method getJavaMethod() {
+	protected final Method getJavaMethod() {
 		return javaMethod;
 	}
 
@@ -174,7 +178,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The outer object.
 	*/
-	public final Object getOuter() {
+	protected final Object getOuter() {
 		return outer;
 	}
 
@@ -183,7 +187,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @param currentProperty The current property being parsed.
 	 */
-	public void setCurrentProperty(BeanPropertyMeta currentProperty) {
+	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
 		this.currentProperty = currentProperty;
 	}
 
@@ -192,7 +196,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @param currentClass The current class being parsed.
 	 */
-	public void setCurrentClass(ClassMeta<?> currentClass) {
+	protected final void setCurrentClass(ClassMeta<?> currentClass) {
 		this.currentClass = currentClass;
 	}
 
@@ -201,7 +205,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The {@link ParserContext#PARSER_trimStrings} setting value for this session.
 	 */
-	public final boolean isTrimStrings() {
+	protected final boolean isTrimStrings() {
 		return trimStrings;
 	}
 
@@ -210,7 +214,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The {@link ParserContext#PARSER_strict} setting value for this session.
 	 */
-	public final boolean isStrict() {
+	protected final boolean isStrict() {
 		return strict;
 	}
 
@@ -221,7 +225,7 @@ public class ParserSession extends BeanSession {
 	 * @return The trimmed string if it's a string.
 	 */
 	@SuppressWarnings("unchecked")
-	public final <K> K trim(K o) {
+	protected final <K> K trim(K o) {
 		if (trimStrings && o instanceof String)
 			return (K)o.toString().trim();
 		return o;
@@ -234,7 +238,7 @@ public class ParserSession extends BeanSession {
 	 * @param s The input string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	public final String trim(String s) {
+	protected final String trim(String s) {
 		if (trimStrings && s != null)
 			return s.trim();
 		return s;
@@ -249,7 +253,7 @@ public class ParserSession extends BeanSession {
 	 * @return
 	 * 	The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a bean.
 	 */
-	public final Object cast(ObjectMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
+	protected final Object cast(ObjectMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 
 		String btpn = getBeanTypePropertyName(eType);
 
@@ -288,7 +292,7 @@ public class ParserSession extends BeanSession {
 	 * @param eType The expected type we're currently parsing.
 	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
 	 */
-	public final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
+	protected final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 		BeanRegistry br = null;
 
 		// Resolve via @BeanProperty(beanDictionary={})
@@ -313,6 +317,7 @@ public class ParserSession extends BeanSession {
 	/**
 	 * Method that gets called when an unknown bean property name is encountered.
 	 *
+	 * @param pipe The parser input.
 	 * @param propertyName The unknown bean property name.
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param line The line number where the property was found.  <code>-1</code> if line numbers are not available.
@@ -322,39 +327,427 @@ public class ParserSession extends BeanSession {
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
-	public <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
+	protected final <T> void onUnknownProperty(ParserPipe pipe, String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
 		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
 		if (! isIgnoreUnknownBeanProperties())
-			throw new ParseException(this,
+			throw new ParseException(getLastLocation(),
 				"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName,
 				beanMap.getClassMeta());
 		if (listener != null)
-			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean(),
+			listener.onUnknownBeanProperty(this, pipe, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean(),
 				line, col);
 	}
 
 	/**
-	 * Returns the input to this parser as a plain string.
+	 * Parses input into the specified object type.
 	 *
 	 * <p>
-	 * This method only returns a value if {@link BeanContext#BEAN_debug} is enabled.
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
-	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a linked-list of strings.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of beans.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of string keys/values.</jc>
+	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 *
+	 * <p>
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 *
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
+	 * </ul>
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Character-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 			{@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 			{@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by
+	 * 			{@link ParserContext#PARSER_fileCharset} property value).
+	 * 	</ul>
+	 * 	<br>Stream-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public String getInputAsString() {
-		return input.getInputAsString();
+	@SuppressWarnings("unchecked")
+	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
+		ParserPipe pipe = createPipe(input);
+		try {
+			return (T)parseInner(pipe, getClassMeta(type, args));
+		} finally {
+			pipe.close();
+		}
 	}
 
 	/**
-	 * Perform cleanup on this context object if necessary.
+	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 *
+	 * <p>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	String s = p.parse(json, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
-	@Override
-	public boolean close() {
-		if (super.close()) {
-			input.close();
-			return true;
+	public final <T> T parse(Object input, Class<T> type) throws ParseException {
+		ParserPipe pipe = createPipe(input);
+		try {
+			return parseInner(pipe, getClassMeta(type));
+		} finally {
+			pipe.close();
 		}
-		return false;
+	}
+
+	/**
+	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
+	 * object.
+	 *
+	 * <p>
+	 * This is mostly an internal method used by the framework.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 */
+	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
+		ParserPipe pipe = createPipe(input);
+		try {
+			return parseInner(pipe, type);
+		} finally {
+			pipe.close();
+		}
+	}
+
+	/**
+	 * Entry point for all parsing calls.
+	 *
+	 * <p>
+	 * Calls the {@link #doParse(ParserPipe, ClassMeta)} implementation class and catches/re-wraps any exceptions
+	 * thrown.
+	 *
+	 * @param pipe The parser input.
+	 * @param type The class type of the object to create.
+	 * @param <T> The class type of the object to create.
+	 * @return The parsed object.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 */
+	private <T> T parseInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException {
+		try {
+			if (type.isVoid())
+				return null;
+			return doParse(pipe, type);
+		} catch (ParseException e) {
+			throw e;
+		} catch (StackOverflowError e) {
+			throw new ParseException(getLastLocation(), "Depth too deep.  Stack overflow occurred.");
+		} catch (IOException e) {
+			throw new ParseException(getLastLocation(), "I/O exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+		} catch (Exception e) {
+			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+		}
+	}
+
+	/**
+	 * Parses the contents of the specified reader and loads the results into the specified map.
+	 *
+	 * <p>
+	 * Reader must contain something that serializes to a map (such as text containing a JSON object).
+	 *
+	 * <p>
+	 * Used in the following locations:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The various character-based constructors in {@link ObjectMap} (e.g.
+	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
+	 * </ul>
+	 *
+	 * @param <K> The key class type.
+	 * @param <V> The value class type.
+	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
+	 * @param m The map being loaded.
+	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
+	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
+	 * @return The same map that was passed in to allow this method to be chained.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws UnsupportedOperationException If not implemented.
+	 */
+	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
+		ParserPipe pipe = createPipe(input);
+		try {
+			return doParseIntoMap(pipe, m, keyType, valueType);
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(getLastLocation(), e);
+		} finally {
+			pipe.close();
+		}
+	}
+
+	/**
+	 * Implementation method.
+	 *
+	 * <p>
+	 * Default implementation throws an {@link UnsupportedOperationException}.
+	 *
+	 * @param pipe The parser input.
+	 * @param m The map being loaded.
+	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
+	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
+	 * @return The same map that was passed in to allow this method to be chained.
+	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
+	 */
+	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
+	}
+
+	/**
+	 * Parses the contents of the specified reader and loads the results into the specified collection.
+	 *
+	 * <p>
+	 * Used in the following locations:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The various character-based constructors in {@link ObjectList} (e.g.
+	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
+	 * </ul>
+	 *
+	 * @param <E> The element class type.
+	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
+	 * @param c The collection being loaded.
+	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
+	 * @return The same collection that was passed in to allow this method to be chained.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws UnsupportedOperationException If not implemented.
+	 */
+	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
+		ParserPipe pipe = createPipe(input);
+		try {
+			return doParseIntoCollection(pipe, c, elementType);
+		} catch (ParseException e) {
+			throw e;
+		} catch (StackOverflowError e) {
+			throw new ParseException(getLastLocation(), "Depth too deep.  Stack overflow occurred.");
+		} catch (IOException e) {
+			throw new ParseException(getLastLocation(), "I/O exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+		} catch (Exception e) {
+			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+		} finally {
+			pipe.close();
+		}
+	}
+
+	/**
+	 * Implementation method.
+	 *
+	 * <p>
+	 * Default implementation throws an {@link UnsupportedOperationException}.
+	 *
+	 * @param pipe The parser input.
+	 * @param c The collection being loaded.
+	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
+	 * @return The same collection that was passed in to allow this method to be chained.
+	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
+	 */
+	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
+	}
+
+	/**
+	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
+	 * argument.
+	 *
+	 * <p>
+	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
+	 * to the {@code Method.invoke(target, args)} method.
+	 *
+	 * <p>
+	 * Used in the following locations:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
+	 * </ul>
+	 *
+	 * @param input The input.  Subclasses can support different input types.
+	 * @param argTypes Specifies the type of objects to create for each entry in the array.
+	 * @return An array of parsed objects.
+	 * @throws ParseException
+	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 */
+	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
+		ParserPipe pipe = createPipe(input);
+		try {
+			return doParse(pipe, getArgsClassMeta(argTypes));
+		} catch (ParseException e) {
+			throw e;
+		} catch (StackOverflowError e) {
+			throw new ParseException(getLastLocation(), "Depth too deep.  Stack overflow occurred.");
+		} catch (IOException e) {
+			throw new ParseException(getLastLocation(), "I/O exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+		} catch (Exception e) {
+			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
+				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+		} finally {
+			pipe.close();
+		}
+	}
+
+	/**
+	 * Converts the specified string to the specified type.
+	 *
+	 * @param outer
+	 * 	The outer object if we're converting to an inner object that needs to be created within the context
+	 * 	of an outer object.
+	 * @param s The string to convert.
+	 * @param type The class type to convert the string to.
+	 * @return The string converted as an object of the specified type.
+	 * @throws Exception If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @param <T> The class type to convert the string to.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
+	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws Exception {
+		if (s == null)
+			return null;
+
+		if (type == null)
+			type = (ClassMeta<T>)object();
+		PojoSwap transform = type.getPojoSwap();
+		ClassMeta<?> sType = type.getSerializedClassMeta();
+
+		Object o = s;
+		if (sType.isChar())
+			o = s.charAt(0);
+		else if (sType.isNumber())
+			if (type.canCreateNewInstanceFromNumber(outer))
+				o = type.newInstanceFromNumber(this, outer, parseNumber(s, type.getNewInstanceFromNumberClass()));
+			else
+				o = parseNumber(s, (Class<? extends Number>)sType.getInnerClass());
+		else if (sType.isBoolean())
+			o = Boolean.parseBoolean(s);
+		else if (! (sType.isCharSequence() || sType.isObject())) {
+			if (sType.canCreateNewInstanceFromString(outer))
+				o = sType.newInstanceFromString(outer, s);
+			else
+				throw new ParseException(getLastLocation(), "Invalid conversion from string to class ''{0}''", type);
+		}
+
+		if (transform != null)
+			o = transform.unswap(this, o, type);
+
+		return (T)o;
+	}
+
+	/**
+	 * Convenience method for calling the {@link ParentProperty @ParentProperty} method on the specified object if it
+	 * exists.
+	 *
+	 * @param cm The class type of the object.
+	 * @param o The object.
+	 * @param parent The parent to set.
+	 * @throws Exception
+	 */
+	protected final static void setParent(ClassMeta<?> cm, Object o, Object parent) throws Exception {
+		Setter m = cm.getParentProperty();
+		if (m != null)
+			m.set(o, parent);
+	}
+
+	/**
+	 * Convenience method for calling the {@link NameProperty @NameProperty} method on the specified object if it exists.
+	 *
+	 * @param cm The class type of the object.
+	 * @param o The object.
+	 * @param name The name to set.
+	 * @throws Exception
+	 */
+	protected final static void setName(ClassMeta<?> cm, Object o, Object name) throws Exception {
+		if (cm != null) {
+			Setter m = cm.getNameProperty();
+			if (m != null)
+				m.set(o, name);
+		}
 	}
 }

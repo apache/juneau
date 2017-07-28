@@ -14,9 +14,9 @@ package org.apache.juneau.xml;
 
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.xml.XmlParserContext.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -24,17 +24,22 @@ import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlParser}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused against multiple inputs.
  */
-public class XmlParserSession extends ParserSession {
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public class XmlParserSession extends ReaderParserSession {
+
+	private static final int UNKNOWN=0, OBJECT=1, ARRAY=2, STRING=3, NUMBER=4, BOOLEAN=5, NULL=6;
+
 
 	private final boolean
 		validating,
@@ -42,8 +47,7 @@ public class XmlParserSession extends ParserSession {
 	private final XMLReporter reporter;
 	private final XMLResolver resolver;
 	private final XMLEventAllocator eventAllocator;
-	private XMLStreamReader xmlStreamReader;
-	private final StringBuilder sb = new StringBuilder();  // Reusable string builder used in this class.
+	private final StringBuilder rsb = new StringBuilder();  // Reusable string builder used in this class.
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -51,89 +55,36 @@ public class XmlParserSession extends ParserSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param input
-	 * 	The input.
-	 * 	Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text.
-	 * 		<li>{@link File} containing system encoded text.
-	 * 	</ul>
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
-	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @param args
+	 * 	Runtime session arguments.
 	 */
-	public XmlParserSession(XmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer,
-			Locale locale, TimeZone timeZone, MediaType mediaType) {
-		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
-		if (op == null || op.isEmpty()) {
+	protected XmlParserSession(XmlParserContext ctx, ParserSessionArgs args) {
+		super(ctx, args);
+		ObjectMap p = getProperties();
+		if (p.isEmpty()) {
 			validating = ctx.validating;
 			reporter = ctx.reporter;
 			resolver = ctx.resolver;
 			eventAllocator = ctx.eventAllocator;
 			preserveRootElement = ctx.preserveRootElement;
 		} else {
-			validating = op.getBoolean(XML_validating, ctx.validating);
-			reporter = (XMLReporter)op.get(XML_reporter, ctx.reporter);
-			resolver = (XMLResolver)op.get(XML_resolver, ctx.resolver);
-			eventAllocator = (XMLEventAllocator)op.get(XML_eventAllocator, ctx.eventAllocator);
-			preserveRootElement = op.getBoolean(XML_preserveRootElement, ctx.preserveRootElement);
+			validating = p.getBoolean(XML_validating, ctx.validating);
+			reporter = (XMLReporter)p.get(XML_reporter, ctx.reporter);
+			resolver = (XMLResolver)p.get(XML_resolver, ctx.resolver);
+			eventAllocator = (XMLEventAllocator)p.get(XML_eventAllocator, ctx.eventAllocator);
+			preserveRootElement = p.getBoolean(XML_preserveRootElement, ctx.preserveRootElement);
 		}
-	}
-
-	/**
-	 * Returns the {@link XmlParserContext#XML_preserveRootElement} setting value for this session.
-	 *
-	 * @return The {@link XmlParserContext#XML_preserveRootElement} setting value for this session.
-	 */
-	public final boolean isPreserveRootElement() {
-		return preserveRootElement;
 	}
 
 	/**
 	 * Wrap the specified reader in a STAX reader based on settings in this context.
 	 *
+	 * @param pipe The parser input.
 	 * @return The new STAX reader.
 	 * @throws Exception If problem occurred trying to create reader.
 	 */
-	public final XMLStreamReader getXmlStreamReader() throws Exception {
-		if (xmlStreamReader != null)
-			return xmlStreamReader;
-
-		try {
-			Reader r = getBufferedReader(getReader());
-			XMLInputFactory factory = XMLInputFactory.newInstance();
-			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
-			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
-			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, true);  // This usually has no effect anyway.
-			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && reporter != null)
-				factory.setProperty(XMLInputFactory.REPORTER, reporter);
-			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && resolver != null)
-				factory.setProperty(XMLInputFactory.RESOLVER, resolver);
-			if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) && eventAllocator != null)
-				factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);
-			xmlStreamReader = factory.createXMLStreamReader(r);
-			xmlStreamReader.nextTag();
-		} catch (Error e) {
-			close();
-			throw new ParseException(e.getLocalizedMessage());
-		} catch (XMLStreamException e) {
-			close();
-			throw new ParseException(e);
-		}
-
-		return xmlStreamReader;
+	protected final XmlReader getXmlReader(ParserPipe pipe) throws Exception {
+		return new XmlReader(pipe, validating, reporter, resolver, eventAllocator);
 	}
 
 	/**
@@ -145,57 +96,37 @@ public class XmlParserSession extends ParserSession {
 	 * @param s The string to be decoded.
 	 * @return The decoded string.
 	 */
-	public final String decodeString(String s) {
+	protected final String decodeString(String s) {
 		if (s == null)
 			return null;
-		sb.setLength(0);
-		s = XmlUtils.decode(s, sb);
+		rsb.setLength(0);
+		s = XmlUtils.decode(s, rsb);
 		if (isTrimStrings())
 			s = s.trim();
 		return s;
 	}
 
-	/**
+	/*
 	 * Returns the name of the current XML element.
-	 *
-	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
-	 *
-	 * @param r The reader to read from.
-	 * @return The decoded element name.
-	 * @throws XMLStreamException
 	 */
-	public final String getElementName(XMLStreamReader r) throws XMLStreamException {
+	private String getElementName(XmlReader r) {
 		return decodeString(r.getLocalName());
 	}
 
-	/**
+	/*
 	 * Returns the name of the specified attribute on the current XML element.
-	 *
-	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
-	 *
-	 * @param r The reader to read from.
-	 * @param i The attribute index.
-	 * @return The decoded attribute name.
-	 * @throws XMLStreamException
 	 */
-	public final String getAttributeName(XMLStreamReader r, int i) throws XMLStreamException {
+	private String getAttributeName(XmlReader r, int i) {
 		return decodeString(r.getAttributeLocalName(i));
 	}
 
-	/**
+	/*
 	 * Returns the value of the specified attribute on the current XML element.
-	 *
-	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
-	 *
-	 * @param r The reader to read from.
-	 * @param i The attribute index.
-	 * @return The decoded attribute value.
-	 * @throws XMLStreamException
 	 */
-	public final String getAttributeValue(XMLStreamReader r, int i) throws XMLStreamException {
+	private String getAttributeValue(XmlReader r, int i) {
 		return decodeString(r.getAttributeValue(i));
 	}
 
@@ -212,28 +143,16 @@ public class XmlParserSession extends ParserSession {
 	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
 	 * @throws Exception
 	 */
-	public String getElementText(XMLStreamReader r) throws Exception {
-		String s = r.getElementText().trim();
-		return decodeString(s);
+	protected String getElementText(XmlReader r) throws Exception {
+		return decodeString(r.getElementText().trim());
 	}
 
-	/**
+	/*
 	 * Returns the content of the current CHARACTERS node.
-	 *
-	 * <p>
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
-	 *
-	 * <p>
 	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
-	 *
-	 * @param r The reader to read the element text from.
-	 * @param trim
-	 * 	If <jk>true</jk>, trim the contents of the text node BEFORE decoding escape sequences.
-	 * 	Typically <jk>true</jk> for {@link XmlFormat#MIXED_PWS} and {@link XmlFormat#TEXT_PWS}.
-	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
-	 * @throws XMLStreamException
 	 */
-	public String getText(XMLStreamReader r, boolean trim) throws XMLStreamException {
+	private String getText(XmlReader r, boolean trim) {
 		String s = r.getText();
 		if (trim)
 			s = s.trim();
@@ -242,52 +161,41 @@ public class XmlParserSession extends ParserSession {
 		return decodeString(s);
 	}
 
-	/**
+	/*
 	 * Shortcut for calling <code>getText(r, <jk>true</jk>);</code>.
-	 *
-	 * @param r The reader to read the element text from.
-	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
-	 * @throws XMLStreamException
 	 */
-	public String getText(XMLStreamReader r) throws XMLStreamException {
+	private String getText(XmlReader r) {
 		return getText(r, true);
 	}
 
-	/**
+	/*
 	 * Takes the element being read from the XML stream reader and reconstructs it as XML.
-	 *
-	 * <p>
 	 * Used when reconstructing bean properties of type {@link XmlFormat#XMLTEXT}.
-	 *
-	 * @param r The XML stream reader to read the current event from.
-	 * @return The event as XML.
-	 * @throws RuntimeException if the event is not a start or end tag.
 	 */
-	public final String getElementAsString(XMLStreamReader r) {
+	private String getElementAsString(XmlReader r) {
 		int t = r.getEventType();
 		if (t > 2)
 			throw new FormattedRuntimeException("Invalid event type on stream reader for elementToString() method: ''{0}''", XmlUtils.toReadableEvent(r));
-		sb.setLength(0);
-		sb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
+		rsb.setLength(0);
+		rsb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
 		if (t == 1)
 			for (int i = 0; i < r.getAttributeCount(); i++)
-				sb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
-		sb.append('>');
-		return sb.toString();
+				rsb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
+		rsb.append('>');
+		return rsb.toString();
 	}
 
 	/**
 	 * Parses the current element as text.
 	 *
-	 * <p>
-	 * Note that this is different than {@link #getText(XMLStreamReader)} since it assumes that we're pointing to a
-	 * whitespace element.
-	 *
 	 * @param r
 	 * @return The parsed text.
 	 * @throws Exception
 	 */
-	public String parseText(XMLStreamReader r) throws Exception {
+	protected String parseText(XmlReader r) throws Exception {
+		// Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a
+		// whitespace element.
+
 		StringBuilder sb2 = getStringBuilder();
 
 		int depth = 0;
@@ -321,7 +229,7 @@ public class XmlParserSession extends ParserSession {
 	 * @param r The XML stream reader to read the current event from.
 	 * @return <jk>true</jk> if the current element is a whitespace element.
 	 */
-	public boolean isWhitespaceElement(XMLStreamReader r) {
+	protected boolean isWhitespaceElement(XmlReader r) {
 		return false;
 	}
 
@@ -337,24 +245,449 @@ public class XmlParserSession extends ParserSession {
 	 * @throws XMLStreamException
 	 * @throws Exception
 	 */
-	public String parseWhitespaceElement(XMLStreamReader r) throws Exception {
+	protected String parseWhitespaceElement(XmlReader r) throws Exception {
 		return null;
 	}
 
+	@Override /* ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+		return parseAnything(type, null, getXmlReader(pipe), getOuter(), true, null);
+	}
+
+	@Override /* ReaderParserSession */
+	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+		ClassMeta cm = getClassMeta(m.getClass(), keyType, valueType);
+		return parseIntoMap(pipe, m, cm.getKeyType(), cm.getValueType());
+	}
+
+	@Override /* ReaderParserSession */
+	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+		ClassMeta cm = getClassMeta(c.getClass(), elementType);
+		return parseIntoCollection(pipe, c, cm.getElementType());
+	}
+
 	/**
-	 * Silently closes the XML stream.
+	 * Workhorse method.
+	 *
+	 * @param eType The expected type of object.
+	 * @param currAttr The current bean property name.
+	 * @param r The reader.
+	 * @param outer The outer object.
+	 * @param isRoot If <jk>true</jk>, then we're serializing a root element in the document.
+	 * @param pMeta The bean property metadata.
+	 * @return The parsed object.
+	 * @throws Exception
 	 */
-	@Override /* ParserContext */
-	public boolean close() {
-		if (super.close()) {
-			try {
-				if (xmlStreamReader != null)
-					xmlStreamReader.close();
-			} catch (XMLStreamException e) {
-				// Ignore.
+	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r,
+			Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws Exception {
+
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		setCurrentClass(sType);
+
+		String wrapperAttr = (isRoot && preserveRootElement) ? r.getName().getLocalPart() : null;
+		String typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
+		int jsonType = getJsonType(typeAttr);
+		String elementName = getElementName(r);
+		if (jsonType == 0) {
+			if (elementName == null || elementName.equals(currAttr))
+				jsonType = UNKNOWN;
+			else {
+				typeAttr = elementName;
+				jsonType = getJsonType(elementName);
 			}
-			return true;
 		}
-		return false;
+
+		ClassMeta tcm = getClassMeta(typeAttr, pMeta, eType);
+		if (tcm == null && elementName != null && ! elementName.equals(currAttr))
+			tcm = getClassMeta(elementName, pMeta, eType);
+		if (tcm != null)
+			sType = eType = tcm;
+
+		Object o = null;
+
+		if (jsonType == NULL) {
+			r.nextTag();	// Discard end tag
+			return null;
+		}
+
+		if (sType.isObject()) {
+			if (jsonType == OBJECT) {
+				ObjectMap m = new ObjectMap(this);
+				parseIntoMap(r, m, string(), object(), pMeta);
+				if (wrapperAttr != null)
+					m = new ObjectMap(this).append(wrapperAttr, m);
+				o = cast(m, pMeta, eType);
+			} else if (jsonType == ARRAY)
+				o = parseIntoCollection(r, new ObjectList(this), null, pMeta);
+			else if (jsonType == STRING) {
+				o = getElementText(r);
+				if (sType.isChar())
+					o = o.toString().charAt(0);
+			}
+			else if (jsonType == NUMBER)
+				o = parseNumber(getElementText(r), null);
+			else if (jsonType == BOOLEAN)
+				o = Boolean.parseBoolean(getElementText(r));
+			else if (jsonType == UNKNOWN)
+				o = getUnknown(r);
+		} else if (sType.isBoolean()) {
+			o = Boolean.parseBoolean(getElementText(r));
+		} else if (sType.isCharSequence()) {
+			o = getElementText(r);
+		} else if (sType.isChar()) {
+			String s = getElementText(r);
+			o = s.length() == 0 ? 0 : s.charAt(0);
+		} else if (sType.isMap()) {
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(this));
+			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+			if (wrapperAttr != null)
+				o = new ObjectMap(this).append(wrapperAttr, m);
+		} else if (sType.isCollection()) {
+			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(this));
+			o = parseIntoCollection(r, l, sType, pMeta);
+		} else if (sType.isNumber()) {
+			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.getInnerClass());
+		} else if (sType.canCreateNewBean(outer)) {
+			if (sType.getExtendedMeta(XmlClassMeta.class).getFormat() == COLLAPSED) {
+				String fieldName = r.getLocalName();
+				BeanMap<?> m = newBeanMap(outer, sType.getInnerClass());
+				BeanPropertyMeta bpm = m.getMeta().getExtendedMeta(XmlBeanMeta.class).getPropertyMeta(fieldName);
+				ClassMeta<?> cm = m.getMeta().getClassMeta();
+				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
+				setName(cm, value, currAttr);
+				bpm.set(m, currAttr, value);
+				o = m.getBean();
+			} else {
+				BeanMap m = newBeanMap(outer, sType.getInnerClass());
+				o = parseIntoBean(r, m).getBean();
+			}
+		} else if (sType.isArray() || sType.isArgs()) {
+			ArrayList l = (ArrayList)parseIntoCollection(r, new ArrayList(), sType, pMeta);
+			o = toArray(sType, l);
+		} else if (sType.canCreateNewInstanceFromString(outer)) {
+			o = sType.newInstanceFromString(outer, getElementText(r));
+		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
+			o = sType.newInstanceFromNumber(this, outer, parseNumber(getElementText(r), sType.getNewInstanceFromNumberClass()));
+		} else {
+			throw new ParseException(loc(r),
+				"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''",
+				sType.getInnerClass().getName(), sType.getNotABeanReason(), pMeta == null ? null : pMeta.getName());
+		}
+
+		if (transform != null && o != null)
+			o = transform.unswap(this, o, eType);
+
+		if (outer != null)
+			setParent(eType, o, outer);
+
+		return (T)o;
+	}
+
+	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType,
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+		int depth = 0;
+		for (int i = 0; i < r.getAttributeCount(); i++) {
+			String a = r.getAttributeLocalName(i);
+			// TODO - Need better handling of namespaces here.
+			if (! (a.equals(getBeanTypePropertyName(null)))) {
+				K key = trim(convertAttrToType(m, a, keyType));
+				V value = trim(convertAttrToType(m, r.getAttributeValue(i), valueType));
+				setName(valueType, value, key);
+				m.put(key, value);
+			}
+		}
+		do {
+			int event = r.nextTag();
+			String currAttr;
+			if (event == START_ELEMENT) {
+				depth++;
+				currAttr = getElementName(r);
+				K key = convertAttrToType(m, currAttr, keyType);
+				V value = parseAnything(valueType, currAttr, r, m, false, pMeta);
+				setName(valueType, value, currAttr);
+				if (valueType.isObject() && m.containsKey(key)) {
+					Object o = m.get(key);
+					if (o instanceof List)
+						((List)o).add(value);
+					else
+						m.put(key, (V)new ObjectList(o, value).setBeanSession(this));
+				} else {
+					m.put(key, value);
+				}
+			} else if (event == END_ELEMENT) {
+				depth--;
+				return m;
+			}
+		} while (depth > 0);
+		return m;
+	}
+
+	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l,
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+		int depth = 0;
+		int argIndex = 0;
+		do {
+			int event = r.nextTag();
+			if (event == START_ELEMENT) {
+				depth++;
+				ClassMeta<?> elementType = type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+				E value = (E)parseAnything(elementType, null, r, l, false, pMeta);
+				l.add(value);
+			} else if (event == END_ELEMENT) {
+				depth--;
+				return l;
+			}
+		} while (depth > 0);
+		return l;
+	}
+
+	private static int getJsonType(String s) {
+		if (s == null)
+			return UNKNOWN;
+		char c = s.charAt(0);
+		switch(c) {
+			case 'o': return (s.equals("object") ? OBJECT : UNKNOWN);
+			case 'a': return (s.equals("array") ? ARRAY : UNKNOWN);
+			case 's': return (s.equals("string") ? STRING : UNKNOWN);
+			case 'b': return (s.equals("boolean") ? BOOLEAN : UNKNOWN);
+			case 'n': {
+				c = s.charAt(2);
+				switch(c) {
+					case 'm': return (s.equals("number") ? NUMBER : UNKNOWN);
+					case 'l': return (s.equals("null") ? NULL : UNKNOWN);
+				}
+				//return NUMBER;
+			}
+		}
+		return UNKNOWN;
+	}
+
+	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws Exception {
+		BeanMeta<?> bMeta = m.getMeta();
+		XmlBeanMeta xmlMeta = bMeta.getExtendedMeta(XmlBeanMeta.class);
+
+		for (int i = 0; i < r.getAttributeCount(); i++) {
+			String key = getAttributeName(r, i);
+			String val = r.getAttributeValue(i);
+			BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
+			if (bpm == null) {
+				if (xmlMeta.getAttrsProperty() != null) {
+					xmlMeta.getAttrsProperty().add(m, key, key, val);
+				} else {
+					Location l = r.getLocation();
+					onUnknownProperty(r.getPipe(), key, m, l.getLineNumber(), l.getColumnNumber());
+				}
+			} else {
+				bpm.set(m, key, val);
+			}
+		}
+
+		BeanPropertyMeta cp = xmlMeta.getContentProperty();
+		XmlFormat cpf = xmlMeta.getContentFormat();
+		boolean trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
+		ClassMeta<?> cpcm = (cp == null ? object() : cp.getClassMeta());
+		StringBuilder sb = null;
+		BeanRegistry breg = cp == null ? null : cp.getBeanRegistry();
+		LinkedList<Object> l = null;
+
+		int depth = 0;
+		do {
+			int event = r.next();
+			String currAttr;
+			// We only care about text in MIXED mode.
+			// Ignore if in ELEMENTS mode.
+			if (event == CHARACTERS) {
+				if (cp != null && cpf.isOneOf(MIXED, MIXED_PWS)) {
+					if (cpcm.isCollectionOrArray()) {
+						if (l == null)
+							l = new LinkedList<Object>();
+						l.add(getText(r, false));
+					} else {
+						cp.set(m, null, getText(r, trim));
+					}
+				} else if (cpf != ELEMENTS) {
+					String s = getText(r, trim);
+					if (s != null) {
+						if (sb == null)
+							sb = getStringBuilder();
+						sb.append(s);
+					}
+				} else {
+					// Do nothing...we're in ELEMENTS mode.
+				}
+			} else if (event == START_ELEMENT) {
+				if (cp != null && cpf.isOneOf(TEXT, TEXT_PWS)) {
+					String s = parseText(r);
+					if (s != null) {
+						if (sb == null)
+							sb = getStringBuilder();
+						sb.append(s);
+					}
+					depth--;
+				} else if (cpf == XMLTEXT) {
+					if (sb == null)
+						sb = getStringBuilder();
+					sb.append(getElementAsString(r));
+					depth++;
+				} else if (cp != null && cpf.isOneOf(MIXED, MIXED_PWS)) {
+					if (isWhitespaceElement(r) && (breg == null || ! breg.hasName(r.getLocalName()))) {
+						if (cpcm.isCollectionOrArray()) {
+							if (l == null)
+								l = new LinkedList<Object>();
+							l.add(parseWhitespaceElement(r));
+						} else {
+							cp.set(m, null, parseWhitespaceElement(r));
+						}
+					} else {
+						if (cpcm.isCollectionOrArray()) {
+							if (l == null)
+								l = new LinkedList<Object>();
+							l.add(parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+						} else {
+							cp.set(m, null, parseAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));
+						}
+					}
+				} else if (cp != null && cpf == ELEMENTS) {
+					cp.add(m, null, parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+				} else {
+					currAttr = getElementName(r);
+					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
+					if (pMeta == null) {
+						Location loc = r.getLocation();
+						onUnknownProperty(r.getPipe(), currAttr, m, loc.getLineNumber(), loc.getColumnNumber());
+						skipCurrentTag(r);
+					} else {
+						setCurrentProperty(pMeta);
+						XmlFormat xf = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+						if (xf == COLLAPSED) {
+							ClassMeta<?> et = pMeta.getClassMeta().getElementType();
+							Object value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
+							setName(et, value, currAttr);
+							pMeta.add(m, currAttr, value);
+						} else if (xf == ATTR)  {
+							pMeta.set(m, currAttr, getAttributeValue(r, 0));
+							r.nextTag();
+						} else {
+							ClassMeta<?> cm = pMeta.getClassMeta();
+							Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, pMeta);
+							setName(cm, value, currAttr);
+							pMeta.set(m, currAttr, value);
+						}
+						setCurrentProperty(null);
+					}
+				}
+			} else if (event == END_ELEMENT) {
+				if (depth > 0) {
+					if (cpf == XMLTEXT) {
+						if (sb == null)
+							sb = getStringBuilder();
+						sb.append(getElementAsString(r));
+					}
+					else
+						throw new ParseException("End element found where one was not expected.  {0}", XmlUtils.toReadableEvent(r));
+				}
+				depth--;
+			} else {
+				throw new ParseException("Unexpected event type: {0}", XmlUtils.toReadableEvent(r));
+			}
+		} while (depth >= 0);
+
+		if (sb != null && cp != null)
+			cp.set(m, null, sb.toString());
+		else if (l != null && cp != null)
+			cp.set(m, null, XmlUtils.collapseTextNodes(l));
+
+		returnStringBuilder(sb);
+		return m;
+	}
+
+	private static void skipCurrentTag(XmlReader r) throws XMLStreamException {
+		int depth = 1;
+		do {
+			int event = r.next();
+			if (event == START_ELEMENT)
+				depth++;
+			else if (event == END_ELEMENT)
+				depth--;
+		} while (depth > 0);
+	}
+
+	private Object getUnknown(XmlReader r) throws Exception {
+		if (r.getEventType() != START_ELEMENT) {
+			throw new XmlParseException(r.getLocation(), "Parser must be on START_ELEMENT to read next text.");
+		}
+		ObjectMap m = null;
+
+		// If this element has attributes, then it's always an ObjectMap.
+		if (r.getAttributeCount() > 0) {
+			m = new ObjectMap(this);
+			for (int i = 0; i < r.getAttributeCount(); i++) {
+				String key = getAttributeName(r, i);
+				String val = r.getAttributeValue(i);
+				if (! key.equals(getBeanTypePropertyName(null)))
+					m.put(key, val);
+			}
+		}
+		int eventType = r.next();
+		StringBuilder sb = getStringBuilder();
+		while (eventType != END_ELEMENT) {
+			if (eventType == CHARACTERS || eventType == CDATA || eventType == SPACE || eventType == ENTITY_REFERENCE) {
+				sb.append(r.getText());
+			} else if (eventType == PROCESSING_INSTRUCTION || eventType == COMMENT) {
+				// skipping
+			} else if (eventType == END_DOCUMENT) {
+				throw new XmlParseException(r.getLocation(), "Unexpected end of document when reading element text content");
+			} else if (eventType == START_ELEMENT) {
+				// Oops...this has an element in it.
+				// Parse it as a map.
+				if (m == null)
+					m = new ObjectMap(this);
+				int depth = 0;
+				do {
+					int event = (eventType == -1 ? r.nextTag() : eventType);
+					String currAttr;
+					if (event == START_ELEMENT) {
+						depth++;
+						currAttr = getElementName(r);
+						String key = convertAttrToType(null, currAttr, string());
+						Object value = parseAnything(object(), currAttr, r, null, false, null);
+						if (m.containsKey(key)) {
+							Object o = m.get(key);
+							if (o instanceof ObjectList)
+								((ObjectList)o).add(value);
+							else
+								m.put(key, new ObjectList(o, value).setBeanSession(this));
+						} else {
+							m.put(key, value);
+						}
+
+					} else if (event == END_ELEMENT) {
+						depth--;
+						break;
+					}
+					eventType = -1;
+				} while (depth > 0);
+				break;
+			} else {
+				throw new XmlParseException(r.getLocation(), "Unexpected event type ''{0}''", eventType);
+			}
+			eventType = r.next();
+		}
+		String s = sb.toString();
+		returnStringBuilder(sb);
+		s = decodeString(s);
+		if (m != null) {
+			if (! s.isEmpty())
+				m.put("contents", s);
+			return m;
+		}
+		return s;
+	}
+
+	private ObjectMap loc(XmlReader r) {
+		return getLastLocation().append("line", r.getLocation().getLineNumber()).append("column", r.getLocation().getColumnNumber());
 	}
 }

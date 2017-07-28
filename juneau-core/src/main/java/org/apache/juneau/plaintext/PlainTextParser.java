@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
-import static org.apache.juneau.internal.IOUtils.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -67,13 +65,8 @@ public class PlainTextParser extends ReaderParser {
 		return new PlainTextParserBuilder(propertyStore);
 	}
 
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
 	@Override /* Parser */
-	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-		return session.convertToType(read(session.getReader()), type);
+	public ReaderParserSession createSession(ParserSessionArgs args) {
+		return new PlainTextParserSession(args);
 	}
 }

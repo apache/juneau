@@ -15,10 +15,8 @@ package org.apache.juneau.parser;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
-import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 
 /**
  * Exception that indicates invalid syntax encountered during parsing.
@@ -30,12 +28,12 @@ public class ParseException extends FormattedException {
 	/**
 	 * Constructor.
 	 *
-	 * @param session The parser session to extract information from.
+	 * @param location The location of the parse exception.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ParseException(ParserSession session, String message, Object...args) {
-		super(getMessage(session, message, args));
+	public ParseException(ObjectMap location, String message, Object...args) {
+		super(getMessage(location, message, args));
 	}
 
 	/**
@@ -51,11 +49,11 @@ public class ParseException extends FormattedException {
 	/**
 	 * Constructor.
 	 *
-	 * @param session The parser session to extract information from.
+	 * @param location The location of the parse exception.
 	 * @param causedBy The inner exception.
 	 */
-	public ParseException(ParserSession session, Exception causedBy) {
-		super(causedBy, getMessage(session, causedBy.getMessage()));
+	public ParseException(ObjectMap location, Exception causedBy) {
+		super(causedBy, getMessage(location, causedBy.getMessage()));
 	}
 
 	/**
@@ -67,13 +65,11 @@ public class ParseException extends FormattedException {
 		super(causedBy, getMessage(null, causedBy.getMessage()));
 	}
 
-	private static String getMessage(ParserSession session, String msg, Object... args) {
+	private static String getMessage(ObjectMap location, String msg, Object... args) {
 		if (args.length != 0)
 			msg = format(msg, args);
-		if (session != null) {
-			Map<String,Object> m = session.getLastLocation();
-			if (m != null && ! m.isEmpty())
-				msg = "Parse exception occurred at " + JsonSerializer.DEFAULT_LAX.toString(m) + ".  " + msg;
+		if (location != null && ! location.isEmpty()) {
+			msg = "Parse exception occurred at " + location.toString() + ".  " + msg;
 		}
 		return msg;
 	}

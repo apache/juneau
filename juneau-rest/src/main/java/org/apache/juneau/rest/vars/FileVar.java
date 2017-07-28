@@ -63,10 +63,7 @@ import org.apache.juneau.utils.*;
  */
 public class FileVar extends DefaultingVar {
 
-	/**
-	 * The name of the session or context object that identifies the {@link RestRequest} object.
-	 */
-	public static final String SESSION_req = "req";
+	private static final String SESSION_req = "req";
 
 	/**
 	 * The name of this variable.

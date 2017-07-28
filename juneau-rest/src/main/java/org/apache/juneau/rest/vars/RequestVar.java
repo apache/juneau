@@ -23,7 +23,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * The format for this var is <js>"$R{key[,defaultValue]}"</js>.
- * 
+ *
  * <p>
  * The possible values are:
  * <ul>
@@ -62,6 +62,7 @@ public class RequestVar extends DefaultingVar {
 	 * The name of the session or context object that identifies the {@link RestRequest} object.
 	 */
 	public static final String SESSION_req = "req";
+
 
 	/** The name of this variable. */
 	public static final String NAME = "R";

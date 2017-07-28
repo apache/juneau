@@ -42,18 +42,11 @@ public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public XmlSchemaDocSerializer(PropertyStore propertyStore) {
-		super(propertyStore, null);
+		super(propertyStore);
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		XmlSerializerSession s = (XmlSerializerSession)session;
-		XmlWriter w = s.getXmlWriter(out);
-		w.append("<?xml")
-			.attr("version", "1.0")
-			.attr("encoding", "UTF-8")
-			.appendln("?>");
-		w.flush();
-		super.doSerialize(s, out, o);
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new XmlSchemaSerializerSession(ctx, args);
 	}
 }

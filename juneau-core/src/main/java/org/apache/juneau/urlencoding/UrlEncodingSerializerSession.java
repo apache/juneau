@@ -12,62 +12,56 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.transform.*;
 import org.apache.juneau.uon.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UrlEncodingSerializer}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	private final boolean expandedParams;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param encode Overrides the {@link UonSerializerContext#UON_encodeChars} setting.
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext
-	 * 	The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param encode Override the {@link UonSerializerContext#UON_encodeChars} setting.
+	 * @param args
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
+	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
-	public UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, ObjectMap op,
-			Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, encode, op, javaMethod, locale, timeZone, mediaType, uriContext);
-		if (op == null || op.isEmpty()) {
+	protected UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
+		super(ctx, encode, args);
+		ObjectMap p = getProperties();
+		if (p.isEmpty()) {
 			expandedParams = ctx.expandedParams;
 		} else {
-			expandedParams = op.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
+			expandedParams = p.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
 		}
 	}
 
-	/**
+	/*
 	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
-	 *
-	 * @param pMeta The metadata on the bean property.
-	 * @return <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
-	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
+	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta();
 		if (cm.isCollectionOrArray()) {
 			if (expandedParams)
@@ -78,13 +72,10 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return false;
 	}
 
-	/**
+	/*
 	 * Returns <jk>true</jk> if the specified value should be represented as an expanded parameter list.
-	 *
-	 * @param value The value to check.
-	 * @return <jk>true</jk> if the specified value should be represented as an expanded parameter list.
 	 */
-	public final boolean shouldUseExpandedParams(Object value) {
+	private boolean shouldUseExpandedParams(Object value) {
 		if (value == null || ! expandedParams)
 			return false;
 		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta();
@@ -93,5 +84,174 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 				return true;
 		}
 		return false;
+	}
+
+	@Override /* SerializerSession */
+	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+		serializeAnything(getUonWriter(out), o);
+	}
+
+	/*
+	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
+	 */
+	private SerializerWriter serializeAnything(UonWriter out, Object o) throws Exception {
+
+		ClassMeta<?> aType;			// The actual type
+		ClassMeta<?> sType;			// The serialized type
+
+		aType = push("root", o, object());
+		indent--;
+		if (aType == null)
+			aType = object();
+
+		sType = aType.getSerializedClassMeta();
+		String typeName = getBeanTypeName(object(), aType, null);
+
+		// Swap if necessary
+		PojoSwap swap = aType.getPojoSwap();
+		if (swap != null) {
+			o = swap.swap(this, o);
+
+			// If the getSwapClass() method returns Object, we need to figure out
+			// the actual type now.
+			if (sType.isObject())
+				sType = getClassMetaForObject(o);
+		}
+
+		if (sType.isMap()) {
+			if (o instanceof BeanMap)
+				serializeBeanMap(out, (BeanMap)o, typeName);
+			else
+				serializeMap(out, (Map)o, sType);
+		} else if (sType.isBean()) {
+			serializeBeanMap(out, toBeanMap(o), typeName);
+		} else if (sType.isCollection() || sType.isArray()) {
+			Map m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
+			serializeCollectionMap(out, m, getClassMeta(Map.class, Integer.class, Object.class));
+		} else {
+			// All other types can't be serialized as key/value pairs, so we create a
+			// mock key/value pair with a "_value" key.
+			out.append("_value=");
+			super.serializeAnything(out, o, null, null, null);
+		}
+
+		pop();
+		return out;
+	}
+
+	/*
+	 * Converts a Collection into an integer-indexed map.
+	 */
+	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
+		Map<Integer,Object> m = new TreeMap<Integer,Object>();
+		int i = 0;
+		for (Object o : c)
+			m.put(i++, o);
+		return m;
+	}
+
+	/*
+	 * Converts an array into an integer-indexed map.
+	 */
+	private static Map<Integer,Object> getCollectionMap(Object array) {
+		Map<Integer,Object> m = new TreeMap<Integer,Object>();
+		for (int i = 0; i < Array.getLength(array); i++)
+			m.put(i, Array.get(array, i));
+		return m;
+	}
+
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws Exception {
+
+		m = sort(m);
+
+		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+
+		boolean addAmp = false;
+
+		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
+			Object key = generalize(e.getKey(), keyType);
+			Object value = e.getValue();
+
+			if (shouldUseExpandedParams(value)) {
+				Iterator i = value instanceof Collection ? ((Collection)value).iterator() : iterator(value);
+				while (i.hasNext()) {
+					if (addAmp)
+						out.cr(indent).append('&');
+					out.appendObject(key, true).append('=');
+					super.serializeAnything(out, i.next(), null, (key == null ? null : key.toString()), null);
+					addAmp = true;
+				}
+			} else {
+				if (addAmp)
+					out.cr(indent).append('&');
+				out.appendObject(key, true).append('=');
+				super.serializeAnything(out, value, valueType, (key == null ? null : key.toString()), null);
+				addAmp = true;
+			}
+		}
+
+		return out;
+	}
+
+	private SerializerWriter serializeCollectionMap(UonWriter out, Map m, ClassMeta<?> type) throws Exception {
+
+		ClassMeta<?> valueType = type.getValueType();
+
+		boolean addAmp = false;
+
+		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
+			if (addAmp)
+				out.cr(indent).append('&');
+			out.append(e.getKey()).append('=');
+			super.serializeAnything(out, e.getValue(), valueType, null, null);
+			addAmp = true;
+		}
+
+		return out;
+	}
+
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws Exception {
+		boolean addAmp = false;
+
+		for (BeanPropertyValue p : m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
+			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
+
+			String key = p.getName();
+			Object value = p.getValue();
+			Throwable t = p.getThrown();
+			if (t != null)
+				onBeanGetterException(pMeta, t);
+
+			if (canIgnoreValue(cMeta, key, value))
+				continue;
+
+			if (value != null && shouldUseExpandedParams(pMeta)) {
+				// Transformed object array bean properties may be transformed resulting in ArrayLists,
+				// so we need to check type if we think it's an array.
+				Iterator i = (cMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
+				while (i.hasNext()) {
+					if (addAmp)
+						out.cr(indent).append('&');
+
+					out.appendObject(key, true).append('=');
+
+					super.serializeAnything(out, i.next(), cMeta.getElementType(), key, pMeta);
+
+					addAmp = true;
+				}
+			} else {
+				if (addAmp)
+					out.cr(indent).append('&');
+
+				out.appendObject(key, true).append('=');
+
+				super.serializeAnything(out, value, cMeta, key, pMeta);
+
+				addAmp = true;
+			}
+
+		}
+		return out;
 	}
 }

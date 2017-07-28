@@ -61,10 +61,16 @@ public class AcceptCharsetResource extends RestServlet {
 			super(propertyStore);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)session.getProperty("characterEncoding");
+		public InputStreamParserSession createSession(ParserSessionArgs args) {
+			return new InputStreamParserSession(args) {
+
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)getProperty("characterEncoding");
+				}
+			};
 		}
 	}
 
@@ -76,11 +82,16 @@ public class AcceptCharsetResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			Writer w = new OutputStreamWriter(out.getOutputStream());
-			w.append(o.toString()).append('/').append(session.getProperty("characterEncoding"));
-			w.flush();
-			w.close();
+		public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+			return new OutputStreamSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					Writer w = new OutputStreamWriter(out.getOutputStream());
+					w.append(o.toString()).append('/').append(getProperty("characterEncoding"));
+					w.flush();
+				}
+			};
 		}
 	}
 }

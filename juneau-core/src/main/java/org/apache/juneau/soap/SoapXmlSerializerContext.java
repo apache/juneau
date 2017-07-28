@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
+import org.apache.juneau.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Properties associated with the {@link SoapXmlSerializer} class.
@@ -40,7 +42,19 @@ package org.apache.juneau.soap;
  * 	</li>
  * </ul>
  */
-public final class SoapXmlSerializerContext {
+public final class SoapXmlSerializerContext extends XmlSerializerContext {
+
+	/**
+	 * Constructor
+	 *
+	 * <p>
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
+	 *
+	 * @param ps The property store that created this context.
+	 */
+	public SoapXmlSerializerContext(PropertyStore ps) {
+		super(ps);
+	}
 
 	/**
 	 * <b>Configuration property:</b>  The <code>SOAPAction</code> HTTP header value to set on responses.

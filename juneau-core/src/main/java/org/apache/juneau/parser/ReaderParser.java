@@ -45,7 +45,7 @@ public abstract class ReaderParser extends Parser {
 	}
 
 	@Override /* Parser */
-	public boolean isReaderParser() {
+	public final boolean isReaderParser() {
 		return true;
 	}
 }

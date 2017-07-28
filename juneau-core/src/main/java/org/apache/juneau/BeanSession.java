@@ -47,34 +47,27 @@ public class BeanSession extends Session {
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @param args
+	 * 	Runtime session arguments.
 	 */
-	protected BeanSession(BeanContext ctx, ObjectMap op, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		super(ctx, op);
+	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
+		super(ctx, args);
 		this.ctx = ctx;
 		Locale _locale = null;
-		if (op == null || op.isEmpty()) {
-			_locale = (locale != null ? locale : ctx.locale);
-			this.timeZone = (timeZone != null ? timeZone : ctx.timeZone);
+		ObjectMap p = getProperties();
+		if (p == null || p.isEmpty()) {
+			_locale = (args.locale != null ? args.locale : ctx.locale);
+			this.timeZone = (args.timeZone != null ? args.timeZone : ctx.timeZone);
 			this.debug = ctx.debug;
-			this.mediaType = mediaType != null ? mediaType : ctx.mediaType;
+			this.mediaType = args.mediaType != null ? args.mediaType : ctx.mediaType;
 		} else {
-			_locale = (locale == null ? op.get(Locale.class, BEAN_locale, ctx.locale) : locale);
-			this.timeZone = (timeZone == null ? op.get(TimeZone.class, BEAN_timeZone, ctx.timeZone) : timeZone);
-			this.debug = op.getBoolean(BEAN_debug, false);
-			this.mediaType = (mediaType == null ? op.get(MediaType.class, BEAN_mediaType, ctx.mediaType) : mediaType);
+			_locale = (args.locale != null ? args.locale : getProperty(Locale.class, BEAN_locale, ctx.locale));
+			this.timeZone = (args.timeZone != null ? args.timeZone : getProperty(TimeZone.class, BEAN_timeZone, ctx.timeZone));
+			this.debug = getProperty(boolean.class, BEAN_debug, false);
+			this.mediaType = (args.mediaType != null ? args.mediaType : getProperty(MediaType.class, BEAN_mediaType, ctx.mediaType));
 		}
 		this.locale = _locale == null ? Locale.getDefault() : _locale;
 	}

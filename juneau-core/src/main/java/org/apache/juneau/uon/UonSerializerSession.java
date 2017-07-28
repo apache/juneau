@@ -15,20 +15,20 @@ package org.apache.juneau.uon;
 import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.uon.UonSerializerContext.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transform.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonSerializer}.
  *
  * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class UonSerializerSession extends SerializerSession {
+public class UonSerializerSession extends WriterSerializerSession {
 
 	private final boolean
 		encodeChars,
@@ -36,48 +36,29 @@ public class UonSerializerSession extends SerializerSession {
 		plainTextParams;
 
 	/**
-	 * Create a new session using properties specified in the context.
-	 *
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
 	 * @param encode Override the {@link UonSerializerContext#UON_encodeChars} setting.
-	 * @param op
-	 * 	The override properties.
-	 * 	These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
-	 * @param locale
-	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
-	 * @param uriContext
-	 * 	The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param args
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
+	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
-	protected UonSerializerSession(UonSerializerContext ctx, Boolean encode, ObjectMap op,
-			Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
-		if (op == null || op.isEmpty()) {
+	public UonSerializerSession(UonSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
+		super(ctx, args);
+		ObjectMap p = getProperties();
+		if (p.isEmpty()) {
 			encodeChars = encode == null ? ctx.encodeChars : encode;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 			plainTextParams = ctx.plainTextParams;
 		} else {
-			encodeChars = encode == null ? op.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
-			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
-			plainTextParams = op.getString(UonSerializerContext.UON_paramFormat, "UON").equals("PLAINTEXT");
+			encodeChars = encode == null ? p.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
+			addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
+			plainTextParams = p.getString(UonSerializerContext.UON_paramFormat, "UON").equals("PLAINTEXT");
 		}
-	}
-
-	/**
-	 * Returns the {@link UonSerializerContext#UON_encodeChars} setting value for this session.
-	 *
-	 * @return The {@link UonSerializerContext#UON_encodeChars} setting value for this session.
-	 */
-	public final boolean isEncodeChars() {
-		return encodeChars;
 	}
 
 	/**
@@ -91,25 +72,200 @@ public class UonSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the {@link UonSerializerContext#UON_paramFormat} is <js>"PLAINTEXT"</js>.
-	 *
-	 * @return <jk>true</jk> if the {@link UonSerializerContext#UON_paramFormat} is <js>"PLAINTEXT"</js>.
-	 */
-	public boolean isPlainTextParams() {
-		return plainTextParams;
-	}
-
-	/**
 	 * Converts the specified output target object to an {@link UonWriter}.
 	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link UonWriter}.
 	 * @throws Exception
 	 */
-	public final UonWriter getUonWriter(SerializerOutput out) throws Exception {
+	protected final UonWriter getUonWriter(SerializerPipe out) throws Exception {
 		Object output = out.getRawOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		return new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), isPlainTextParams(), getUriResolver());
+		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), encodeChars, isTrimStrings(), plainTextParams, getUriResolver());
+		out.setWriter(w);
+		return w;
+	}
+
+	@Override /* Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+		serializeAnything(getUonWriter(out), o, getExpectedRootType(o), "root", null);
+	}
+
+	/**
+	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization
+	 * method.
+	 *
+	 * @param out The writer to serialize to.
+	 * @param o The object being serialized.
+	 * @param eType The expected type of the object if this is a bean property.
+	 * @param attrName
+	 * 	The bean property name if this is a bean property.
+	 * 	<jk>null</jk> if this isn't a bean property being serialized.
+	 * @param pMeta The bean property metadata.
+	 * @return The same writer passed in.
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
+
+		if (o == null) {
+			out.appendObject(null, false);
+			return out;
+		}
+
+		if (eType == null)
+			eType = object();
+
+		ClassMeta<?> aType;			// The actual type
+		ClassMeta<?> sType;			// The serialized type
+
+		aType = push(attrName, o, eType);
+		boolean isRecursion = aType == null;
+
+		// Handle recursion
+		if (aType == null) {
+			o = null;
+			aType = object();
+		}
+
+		sType = aType.getSerializedClassMeta();
+		String typeName = getBeanTypeName(eType, aType, pMeta);
+
+		// Swap if necessary
+		PojoSwap swap = aType.getPojoSwap();
+		if (swap != null) {
+			o = swap.swap(this, o);
+
+			// If the getSwapClass() method returns Object, we need to figure out
+			// the actual type now.
+			if (sType.isObject())
+				sType = getClassMetaForObject(o);
+		}
+
+		// '\0' characters are considered null.
+		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
+			out.appendObject(null, false);
+		else if (sType.isBoolean())
+			out.appendBoolean(o);
+		else if (sType.isNumber())
+			out.appendNumber(o);
+		else if (sType.isBean())
+			serializeBeanMap(out, toBeanMap(o), typeName);
+		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
+			out.appendUri(o);
+		else if (sType.isMap()) {
+			if (o instanceof BeanMap)
+				serializeBeanMap(out, (BeanMap)o, typeName);
+			else
+				serializeMap(out, (Map)o, eType);
+		}
+		else if (sType.isCollection()) {
+			serializeCollection(out, (Collection) o, eType);
+		}
+		else if (sType.isArray()) {
+			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
+		}
+		else {
+			out.appendObject(o, false);
+		}
+
+		if (! isRecursion)
+			pop();
+		return out;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws Exception {
+
+		m = sort(m);
+
+		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+
+		if (! plainTextParams)
+			out.append('(');
+
+		Iterator mapEntries = m.entrySet().iterator();
+
+		while (mapEntries.hasNext()) {
+			Map.Entry e = (Map.Entry) mapEntries.next();
+			Object value = e.getValue();
+			Object key = generalize(e.getKey(), keyType);
+			out.cr(indent).appendObject(key, false).append('=');
+			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
+			if (mapEntries.hasNext())
+				out.append(',');
+		}
+
+		if (m.size() > 0)
+			out.cre(indent-1);
+
+		if (! plainTextParams)
+			out.append(')');
+
+		return out;
+	}
+
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws Exception {
+
+		if (! plainTextParams)
+			out.append('(');
+
+		boolean addComma = false;
+
+		for (BeanPropertyValue p : m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
+			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
+
+			String key = p.getName();
+			Object value = p.getValue();
+			Throwable t = p.getThrown();
+			if (t != null)
+				onBeanGetterException(pMeta, t);
+
+			if (canIgnoreValue(cMeta, key, value))
+				continue;
+
+			if (addComma)
+				out.append(',');
+
+			out.cr(indent).appendObject(key, false).append('=');
+
+			serializeAnything(out, value, cMeta, key, pMeta);
+
+			addComma = true;
+		}
+
+		if (m.size() > 0)
+			out.cre(indent-1);
+		if (! plainTextParams)
+			out.append(')');
+
+		return out;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws Exception {
+
+		ClassMeta<?> elementType = type.getElementType();
+
+		c = sort(c);
+
+		if (! plainTextParams)
+			out.append('@').append('(');
+
+		for (Iterator i = c.iterator(); i.hasNext();) {
+			out.cr(indent);
+			serializeAnything(out, i.next(), elementType, "<iterator>", null);
+			if (i.hasNext())
+				out.append(',');
+		}
+
+		if (c.size() > 0)
+			out.cre(indent-1);
+		if (! plainTextParams)
+			out.append(')');
+
+		return out;
 	}
 }

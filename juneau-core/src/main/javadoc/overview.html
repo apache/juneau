@@ -6892,14 +6892,32 @@
 		<h6 class='topic'>org.apache.juneau</h6>
 		<ul class='spaced-list'>
 			<li>
-				Serializers can now serialize to {@link StringBuilder StringBuilders}.
+				Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
+			<li>
+				{@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
+				objects are now reusable if used within the same thread.
+				<p class='bcode'>
+	<jc>// Old way (still works)</jc>
+	JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer1, pojo1);
+	JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer2, pojo2);
+	
+	<jc>// Same, but using a session object</jc>
+	SerializerSession session = JsonSerializer.<jsf>DEFAULT</jsf>.createSession();
+	<jk>try</jk> {
+	  session.serialize(writer1, pojo1);
+	  session.serialize(writer2, pojo2);
+	} <jk>finally</jk> {
+	  session.close();
+	}  			
+				</p>
+				This is mostly an internal change and doesn't affect the existing APIs.
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
 		<ul class='spaced-list'>
 			<li>
 				Simplified {@link org.apache.juneau.rest.widget.MenuItemWidget}.
-				<br>Exposes an abstract method {@link org.apache.juneau.rest.widget.MenuItemWidget#getContent()} that
+				<br>Exposes an abstract method {@link org.apache.juneau.rest.widget.MenuItemWidget#getContent(RestRequest)} that
 				can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
 				get converted to HTML using {@link org.apache.juneau.html.HtmlSerializer#DEFAULT}.
 			<li>
@@ -7265,7 +7283,7 @@
 					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#listeners(Class,Class)}
 				</ul>
 			<li>The {@link org.apache.juneau.BeanContext#BEAN_debug} flag will now capture parser input and make it
-				available through the {@link org.apache.juneau.parser.ParserSession#getInputAsString()} method so that it can be used
+				available through the <code><del>ParserSession.getInputAsString()</del></code> method so that it can be used
 				in the listeners.
 			<li>Significant new functionality introduced to the HTML serializer.  
 				<br>Lots of new options for customizing the HTML output.

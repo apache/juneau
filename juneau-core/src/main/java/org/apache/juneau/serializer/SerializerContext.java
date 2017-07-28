@@ -21,6 +21,12 @@ import org.apache.juneau.annotation.*;
 public class SerializerContext extends BeanContext {
 
 	/**
+	 * Default context with all default values.
+	 */
+	@SuppressWarnings("hiding")
+	protected static final SerializerContext DEFAULT = new SerializerContext(PropertyStore.create());
+
+	/**
 	 * <b>Configuration property:</b>  Max serialization depth.
 	 *
 	 * <ul>

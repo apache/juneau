@@ -34,24 +34,30 @@ public class XmlValidatorParser extends XmlParser {
 	}
 
 	@Override /* Parser */
-	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-		return (T)validate(session.getReader());
+	public ReaderParserSession createSession(ParserSessionArgs args) {
+		return new ReaderParserSession(null, args) {
+
+			@Override
+			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				return (T)validate(pipe.getReader());
+			}
+			
+			@Override /* ReaderParser */
+			protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+				return (Map<K,V>)validate(pipe.getReader());
+			}
+
+			@Override /* ReaderParser */
+			protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+				return (Collection<E>)validate(pipe.getReader());
+			}
+		};
 	}
 
 	public <T> T validate(Reader r) throws Exception {
 		XMLStreamReader sr = getStaxReader(r);
 		while(sr.next() != END_DOCUMENT){}
 		return null;
-	}
-
-	@Override /* ReaderParser */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		return (Map<K,V>)validate(session.getReader());
-	}
-
-	@Override /* ReaderParser */
-	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
-		return (Collection<E>)validate(session.getReader());
 	}
 
 	protected XMLStreamReader getStaxReader(Reader in) throws Exception {

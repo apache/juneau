@@ -48,7 +48,7 @@ public abstract class CoreObjectBuilder {
 	 * @param propertyStore The initial configuration settings for this builder.
 	 */
 	public CoreObjectBuilder(PropertyStore propertyStore) {
-		this.propertyStore = PropertyStore.create(propertyStore);
+		this.propertyStore = propertyStore.copy();
 	}
 
 	/**

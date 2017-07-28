@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.soap.SoapXmlSerializerContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -44,6 +42,8 @@ import org.apache.juneau.xml.*;
 @Produces(value="text/xml+soap",contentType="text/xml")
 public final class SoapXmlSerializer extends XmlSerializer {
 
+	private final SoapXmlSerializerContext ctx;
+
 	/**
 	 * Constructor.
 	 *
@@ -51,35 +51,11 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	 */
 	public SoapXmlSerializer(PropertyStore propertyStore) {
 		super(propertyStore);
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		XmlSerializerSession s = (XmlSerializerSession)session;
-		XmlWriter w = s.getXmlWriter(out);
-		w.append("<?xml")
-			.attr("version", "1.0")
-			.attr("encoding", "UTF-8")
-			.appendln("?>");
-		w.oTag("soap", "Envelope")
-			.attr("xmlns", "soap", s.getProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
-			.appendln(">");
-		w.sTag(1, "soap", "Body").nl(1);
-		s.indent += 2;
-		w.flush();
-		super.doSerialize(s, out, o);
-		w.ie(1).eTag("soap", "Body").nl(1);
-		w.eTag("soap", "Envelope").nl(0);
+		this.ctx = createContext(SoapXmlSerializerContext.class);
 	}
 
 	@Override /* Serializer */
-	public ObjectMap getResponseHeaders(ObjectMap properties) {
-		return new ObjectMap(super.getResponseHeaders(properties))
-			.append("SOAPAction", properties.getString(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"));
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new SoapXmlSerializerSession(ctx, args);
 	}
 }

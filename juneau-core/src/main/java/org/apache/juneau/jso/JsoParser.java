@@ -46,15 +46,8 @@ public final class JsoParser extends InputStreamParser {
 		return new JsoParserBuilder(propertyStore);
 	}
 
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@SuppressWarnings("unchecked")
-	@Override /* InputStreamParser */
-	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-		ObjectInputStream ois = new ObjectInputStream(session.getInputStream());
-		return (T)ois.readObject();
+	@Override /* Parser */
+	public InputStreamParserSession createSession(ParserSessionArgs args) {
+		return new JsoParserSession(args);
 	}
 }

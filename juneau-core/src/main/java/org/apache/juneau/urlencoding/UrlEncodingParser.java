@@ -16,14 +16,11 @@ import static org.apache.juneau.uon.UonParserContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.transform.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -51,7 +48,7 @@ import org.apache.juneau.uon.*;
  * 	<li>{@link BeanContext}
  * </ul>
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "hiding" })
+@SuppressWarnings({ "unchecked", "hiding" })
 @Consumes("application/x-www-form-urlencoded")
 public class UrlEncodingParser extends UonParser implements PartParser {
 
@@ -67,270 +64,13 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public UrlEncodingParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore.copy().append(UON_decodeChars, true));
 		this.ctx = createContext(UrlEncodingParserContext.class);
-	}
-
-	@Override /* CoreObject */
-	public ObjectMap getOverrideProperties() {
-		return super.getOverrideProperties().append(UON_decodeChars, true);
 	}
 
 	@Override /* CoreObject */
 	public UrlEncodingParserBuilder builder() {
 		return new UrlEncodingParserBuilder(propertyStore);
-	}
-
-	private <T> T parseAnything(UrlEncodingParserSession session, ClassMeta<T> eType, ParserReader r, Object outer) throws Exception {
-
-		if (eType == null)
-			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
-		ClassMeta<?> sType = eType.getSerializedClassMeta();
-
-		int c = r.peekSkipWs();
-		if (c == '?')
-			r.read();
-
-		Object o;
-
-		if (sType.isObject()) {
-			ObjectMap m = new ObjectMap(session);
-			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class), outer);
-			if (m.containsKey("_value"))
-				o = m.get("_value");
-			else
-				o = session.cast(m, null, eType);
-		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(session));
-			o = parseIntoMap(session, r, m, sType, m);
-		} else if (sType.canCreateNewBean(outer)) {
-			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
-			m = parseIntoBeanMap(session, r, m);
-			o = m == null ? null : m.getBean();
-		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
-			// ?1=foo&2=bar...
-			Collection c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new ObjectList(session) : (Collection)sType.newInstance();
-			Map<Integer,Object> m = new TreeMap<Integer,Object>();
-			parseIntoMap(session, r, m, sType, c2);
-			c2.addAll(m.values());
-			if (sType.isArray())
-				o = toArray(c2, sType.getElementType().getInnerClass());
-			else if (sType.isArgs())
-				o = c2.toArray(new Object[c2.size()]);
-			else
-				o = c2;
-		} else {
-			// It could be a non-bean with _type attribute.
-			ObjectMap m = new ObjectMap(session);
-			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class), outer);
-			if (m.containsKey(session.getBeanTypePropertyName(eType)))
-				o = session.cast(m, null, eType);
-			else if (m.containsKey("_value")) {
-				o = session.convertToType(m.get("_value"), sType);
-			} else {
-				if (sType.getNotABeanReason() != null)
-					throw new ParseException(session, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
-				throw new ParseException(session, "Malformed application/x-www-form-urlencoded input for class ''{0}''.", sType);
-			}
-		}
-
-		if (transform != null && o != null)
-			o = transform.unswap(session, o, eType);
-
-		if (outer != null)
-			setParent(eType, o, outer);
-
-		return (T)o;
-	}
-
-	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws Exception {
-
-		ClassMeta<K> keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? session.getClassMeta(Integer.class) : type.getKeyType());
-
-		int c = r.peekSkipWs();
-		if (c == -1)
-			return m;
-
-		final int S1=1; // Looking for attrName start.
-		final int S2=2; // Found attrName end, looking for =.
-		final int S3=3; // Found =, looking for valStart.
-		final int S4=4; // Looking for & or end.
-		boolean isInEscape = false;
-
-		int state = S1;
-		int argIndex = 0;
-		K currAttr = null;
-		while (c != -1) {
-			c = r.read();
-			if (! isInEscape) {
-				if (state == S1) {
-					if (c == -1)
-						return m;
-					r.unread();
-					Object attr = parseAttr(session, r, true);
-					currAttr = attr == null ? null : convertAttrToType(session, m, session.trim(attr.toString()), keyType);
-					state = S2;
-					c = 0; // Avoid isInEscape if c was '\'
-				} else if (state == S2) {
-					if (c == '\u0002')
-						state = S3;
-					else if (c == -1 || c == '\u0001') {
-						m.put(currAttr, null);
-						if (c == -1)
-							return m;
-						state = S1;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == '\u0001') {
-						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
-						V value = convertAttrToType(session, m, "", valueType);
-						m.put(currAttr, value);
-						if (c == -1)
-							return m;
-						state = S1;
-					} else  {
-						// For performance, we bypass parseAnything for string values.
-						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
-						V value = (V)(valueType.isString() ? super.parseString(session, r.unread(), true) : super.parseAnything(session, valueType, r.unread(), outer, true, null));
-
-						// If we already encountered this parameter, turn it into a list.
-						if (m.containsKey(currAttr) && valueType.isObject()) {
-							Object v2 = m.get(currAttr);
-							if (! (v2 instanceof ObjectList)) {
-								v2 = new ObjectList(v2).setBeanSession(session);
-								m.put(currAttr, (V)v2);
-							}
-							((ObjectList)v2).add(value);
-						} else {
-							m.put(currAttr, value);
-						}
-						state = S4;
-						c = 0; // Avoid isInEscape if c was '\'
-					}
-				} else if (state == S4) {
-					if (c == '\u0001')
-						state = S1;
-					else if (c == -1) {
-						return m;
-					}
-				}
-			}
-			isInEscape = (c == '\\' && ! isInEscape);
-		}
-		if (state == S1)
-			throw new ParseException(session, "Could not find attribute name on object.");
-		if (state == S2)
-			throw new ParseException(session, "Could not find '=' following attribute name on object.");
-		if (state == S3)
-			throw new ParseException(session, "Dangling '=' found in object entry");
-		if (state == S4)
-			throw new ParseException(session, "Could not find end of object.");
-
-		return null; // Unreachable.
-	}
-
-	private <T> BeanMap<T> parseIntoBeanMap(UrlEncodingParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
-
-		int c = r.peekSkipWs();
-		if (c == -1)
-			return m;
-
-		final int S1=1; // Looking for attrName start.
-		final int S2=2; // Found attrName end, looking for =.
-		final int S3=3; // Found =, looking for valStart.
-		final int S4=4; // Looking for , or }
-		boolean isInEscape = false;
-
-		int state = S1;
-		String currAttr = "";
-		int currAttrLine = -1, currAttrCol = -1;
-		while (c != -1) {
-			c = r.read();
-			if (! isInEscape) {
-				if (state == S1) {
-					if (c == -1) {
-						return m;
-					}
-					r.unread();
-					currAttrLine= r.getLine();
-					currAttrCol = r.getColumn();
-					currAttr = parseAttrName(session, r, true);
-					if (currAttr == null)  // Value was '%00'
-						return null;
-					state = S2;
-				} else if (state == S2) {
-					if (c == '\u0002')
-						state = S3;
-					else if (c == -1 || c == '\u0001') {
-						m.put(currAttr, null);
-						if (c == -1)
-							return m;
-						state = S1;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == '\u0001') {
-						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
-							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
-							if (pMeta == null) {
-								session.onUnknownProperty(currAttr, m, currAttrLine, currAttrCol);
-							} else {
-								session.setCurrentProperty(pMeta);
-								// In cases of "&foo=", create an empty instance of the value if createable.
-								// Otherwise, leave it null.
-								ClassMeta<?> cm = pMeta.getClassMeta();
-								if (cm.canCreateNewInstance())
-									pMeta.set(m, currAttr, cm.newInstance());
-								session.setCurrentProperty(null);
-							}
-						}
-						if (c == -1)
-							return m;
-						state = S1;
-					} else {
-						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
-							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
-							if (pMeta == null) {
-								session.onUnknownProperty(currAttr, m, currAttrLine, currAttrCol);
-								parseAnything(session, object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
-							} else {
-								session.setCurrentProperty(pMeta);
-								if (session.shouldUseExpandedParams(pMeta)) {
-									ClassMeta et = pMeta.getClassMeta().getElementType();
-									Object value = parseAnything(session, et, r.unread(), m.getBean(false), true, pMeta);
-									setName(et, value, currAttr);
-									pMeta.add(m, currAttr, value);
-								} else {
-									ClassMeta<?> cm = pMeta.getClassMeta();
-									Object value = parseAnything(session, cm, r.unread(), m.getBean(false), true, pMeta);
-									setName(cm, value, currAttr);
-									pMeta.set(m, currAttr, value);
-								}
-								session.setCurrentProperty(null);
-							}
-						}
-						state = S4;
-					}
-				} else if (state == S4) {
-					if (c == '\u0001')
-						state = S1;
-					else if (c == -1) {
-						return m;
-					}
-				}
-			}
-			isInEscape = (c == '\\' && ! isInEscape);
-		}
-		if (state == S1)
-			throw new ParseException(session, "Could not find attribute name on object.");
-		if (state == S2)
-			throw new ParseException(session, "Could not find '=' following attribute name on object.");
-		if (state == S3)
-			throw new ParseException(session, "Could not find value following '=' on object.");
-		if (state == S4)
-			throw new ParseException(session, "Could not find end of object.");
-
-		return null; // Unreachable.
 	}
 
 	/**
@@ -348,7 +88,9 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 		if (isEmpty(qs))
 			return m;
 
-		UonReader r = new UonReader(qs, true);
+		// We're reading from a string, so we don't need to make sure close() is called on the pipe.
+		ParserPipe p = new ParserPipe(qs, false, false, null, null);
+		UonReader r = new UonReader(p, true);
 
 		final int S1=1; // Looking for attrName start.
 		final int S2=2; // Found attrName start, looking for = or & or end.
@@ -434,15 +176,17 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 			if (x == 'n' && "null".equals(in))
 				return null;
 		}
-		UonParserSession session = createParameterSession(in);
+		UonParserSession session = createParameterSession();
+		ParserPipe pipe = session.createPipe(in);
 		try {
-			UonReader r = session.getReader();
-			return super.parseAnything(session, type, r, null, true, null);
+			UonReader r = session.getUonReader(pipe, false);
+			return session.parseAnything(type, r, null, true, null);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ParseException(session, e);
+			throw new ParseException(session.getLastLocation(), e);
 		} finally {
+			pipe.close();
 			session.close();
 		}
 	}
@@ -453,25 +197,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public UrlEncodingParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new UrlEncodingParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
-	}
-
-	@Override /* Parser */
-	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-		UrlEncodingParserSession s = (UrlEncodingParserSession)session;
-		UonReader r = s.getReader();
-		T o = parseAnything(s, type, r, s.getOuter());
-		return o;
-	}
-
-	@Override /* ReaderParser */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		UrlEncodingParserSession s = (UrlEncodingParserSession)session;
-		UonReader r = s.getReader();
-		if (r.peekSkipWs() == '?')
-			r.read();
-		m = parseIntoMap(s, r, m, session.getClassMeta(Map.class, keyType, valueType), null);
-		return m;
+	public UrlEncodingParserSession createSession(ParserSessionArgs args) {
+		return new UrlEncodingParserSession(ctx, args);
 	}
 }

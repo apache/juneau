@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -32,7 +33,8 @@ import org.apache.juneau.internal.*;
 public class ParserReader extends Reader {
 
 	/** Wrapped reader */
-	protected Reader r;
+	protected final Reader r;
+	private final ParserPipe pipe;
 
 	private char[] buff;       // Internal character buffer
 	private int line = 1;      // Current line number
@@ -42,33 +44,28 @@ public class ParserReader extends Reader {
 	private int iEnd = 0;      // The last good character position in the buffer
 	private boolean endReached, holesExist;
 
-	ParserReader() {}
-
 	/**
-	 * Constructor for input from a {@link CharSequence}.
+	 * Constructor.
 	 *
-	 * @param in The character sequence being read from.
+	 * @param pipe The parser input.
+	 * @throws IOException
 	 */
-	public ParserReader(CharSequence in) {
-		this.r = new CharSequenceReader(in);
-		if (in == null)
-			this.buff = new char[0];
-		else
+	public ParserReader(ParserPipe pipe) throws IOException {
+		this.pipe = pipe;
+		if (pipe.isString()) {
+			String in = pipe.getInputAsString();
+			this.r = new CharSequenceReader(in);
 			this.buff = new char[in.length() < 1024 ? in.length() : 1024];
+		} else {
+			Reader _r = pipe.getReader();
+			if (_r instanceof ParserReader)
+				this.r = ((ParserReader)_r).r;
+			else
+				this.r = _r;
+			this.buff = new char[1024];
+		}
 	}
 
-	/**
-	 * Constructor for input from a {@link Reader}).
-	 *
-	 * @param r The Reader being wrapped.
-	 */
-	public ParserReader(Reader r) {
-		if (r instanceof ParserReader)
-			this.r = ((ParserReader)r).r;
-		else
-			this.r = r;
-		this.buff = new char[1024];
-	}
 
 	/**
 	 * Returns the current line number position in this reader.
@@ -278,7 +275,7 @@ public class ParserReader extends Reader {
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	public final ParserReader unread() throws IOException {
+	public ParserReader unread() throws IOException {
 		if (iCurrent <= 0)
 			throw new IOException("Buffer underflow.");
 		iCurrent--;
@@ -293,7 +290,8 @@ public class ParserReader extends Reader {
 	 */
 	@Override /* Reader */
 	public void close() throws IOException {
-		r.close();
+		if (r != null)
+			r.close();
 	}
 
 	/**
@@ -416,5 +414,24 @@ public class ParserReader extends Reader {
 	@Override /* Reader */
 	public int read(char[] cbuf, int off, int len) throws IOException {
 		return r.read(cbuf, off, len);
+	}
+
+	/**
+	 * Returns the combined location information on both this reader and the session.
+	 *
+	 * @param session The session object to read the last location on.
+	 * @return A new map describing the current parse location.
+	 */
+	public ObjectMap getLocation(ParserSession session) {
+		return session.getLastLocation().append("line", getLine()).append("column", getColumn());
+	}
+
+	/**
+	 * Returns the pipe that was passed into the constructor.
+	 *
+	 * @return The pipe that was passed into the constructor.
+	 */
+	public final ParserPipe getPipe() {
+		return pipe;
 	}
 }

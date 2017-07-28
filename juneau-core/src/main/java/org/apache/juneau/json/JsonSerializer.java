@@ -14,14 +14,11 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.json.JsonSerializerContext.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 
 /**
  * Serializes POJO models to JSON.
@@ -132,12 +129,10 @@ public class JsonSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(SERIALIZER_useWhitespace, true);
+			super(
+				propertyStore.copy()
+				.append(SERIALIZER_useWhitespace, true)
+			);
 		}
 	}
 
@@ -151,12 +146,11 @@ public class JsonSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Simple(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(JSON_simpleMode, true).append(SERIALIZER_quoteChar, '\'');
+			super(
+				propertyStore.copy()
+				.append(JSON_simpleMode, true)
+				.append(SERIALIZER_quoteChar, '\'')
+			);
 		}
 	}
 
@@ -169,13 +163,12 @@ public class JsonSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public SimpleReadable(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(JSON_simpleMode, true).append(SERIALIZER_quoteChar, '\'')
-				.append(SERIALIZER_useWhitespace, true);
+			super(
+				propertyStore.copy()
+				.append(JSON_simpleMode, true)
+				.append(SERIALIZER_quoteChar, '\'')
+				.append(SERIALIZER_useWhitespace, true)
+			);
 		}
 	}
 
@@ -191,18 +184,18 @@ public class JsonSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public SimpleReadableSafe(PropertyStore propertyStore) {
-			super(propertyStore);
-		}
-
-		@Override /* CoreObject */
-		protected ObjectMap getOverrideProperties() {
-			return super.getOverrideProperties().append(JSON_simpleMode, true).append(SERIALIZER_quoteChar, '\'')
-				.append(SERIALIZER_useWhitespace, true).append(SERIALIZER_detectRecursions, true);
+			super(
+				propertyStore.copy()
+				.append(JSON_simpleMode, true)
+				.append(SERIALIZER_quoteChar, '\'')
+				.append(SERIALIZER_useWhitespace, true)
+				.append(SERIALIZER_detectRecursions, true)
+			);
 		}
 	}
 
 
-	private final JsonSerializerContext ctx;
+	final JsonSerializerContext ctx;
 	private volatile JsonSchemaSerializer schemaSerializer;
 
 	/**
@@ -221,186 +214,13 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * Workhorse method.
-	 *
-	 * <p>
-	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	SerializerWriter serializeAnything(JsonSerializerSession session, JsonWriter out, Object o, ClassMeta<?> eType,
-			String attrName, BeanPropertyMeta pMeta) throws Exception {
-
-		if (o == null) {
-			out.append("null");
-			return out;
-		}
-
-		if (eType == null)
-			eType = object();
-
-		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> sType;			// The serialized type
-
-		aType = session.push(attrName, o, eType);
-		boolean isRecursion = aType == null;
-
-		// Handle recursion
-		if (aType == null) {
-			o = null;
-			aType = object();
-		}
-
-		sType = aType.getSerializedClassMeta();
-		String typeName = session.getBeanTypeName(eType, aType, pMeta);
-
-		// Swap if necessary
-		PojoSwap swap = aType.getPojoSwap();
-		if (swap != null) {
-			o = swap.swap(session, o);
-
-			// If the getSwapClass() method returns Object, we need to figure out
-			// the actual type now.
-			if (sType.isObject())
-				sType = session.getClassMetaForObject(o);
-		}
-
-		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
-		if (wrapperAttr != null) {
-			out.append('{').cr(session.indent).attr(wrapperAttr).append(':').s(session.indent);
-			session.indent++;
-		}
-
-		// '\0' characters are considered null.
-		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
-			out.append("null");
-		else if (sType.isNumber() || sType.isBoolean())
-			out.append(o);
-		else if (sType.isBean())
-			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
-		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
-			out.uriValue(o);
-		else if (sType.isMap()) {
-			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, typeName);
-			else
-				serializeMap(session, out, (Map)o, eType);
-		}
-		else if (sType.isCollection()) {
-			serializeCollection(session, out, (Collection) o, eType);
-		}
-		else if (sType.isArray()) {
-			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
-		}
-		else
-			out.stringValue(session.toString(o));
-
-		if (wrapperAttr != null) {
-			session.indent--;
-			out.cre(session.indent-1).append('}');
-		}
-
-		if (! isRecursion)
-			session.pop();
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(JsonSerializerSession session, JsonWriter out, Map m, ClassMeta<?> type)
-			throws Exception {
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		m = session.sort(m);
-
-		int i = session.getIndent();
-		out.append('{');
-
-		Iterator mapEntries = m.entrySet().iterator();
-
-		while (mapEntries.hasNext()) {
-			Map.Entry e = (Map.Entry) mapEntries.next();
-			Object value = e.getValue();
-
-			Object key = session.generalize(e.getKey(), keyType);
-
-			out.cr(i).attr(session.toString(key)).append(':').s(i);
-
-			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null);
-
-			if (mapEntries.hasNext())
-				out.append(',').smi(i);
-		}
-
-		out.cre(i-1).append('}');
-
-		return out;
-	}
-
-	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m,
-			String typeName) throws Exception {
-		int i = session.getIndent();
-		out.append('{');
-
-		boolean addComma = false;
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null)) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				session.onBeanGetterException(pMeta, t);
-
-			if (session.canIgnoreValue(cMeta, key, value))
-				continue;
-
-			if (addComma)
-				out.append(',').smi(i);
-
-			out.cr(i).attr(key).append(':').s(i);
-
-			serializeAnything(session, out, value, cMeta, key, pMeta);
-
-			addComma = true;
-		}
-		out.cre(i-1).append('}');
-		return out;
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private SerializerWriter serializeCollection(JsonSerializerSession session, JsonWriter out, Collection c,
-			ClassMeta<?> type) throws Exception {
-
-		ClassMeta<?> elementType = type.getElementType();
-
-		c = session.sort(c);
-
-		out.append('[');
-		int depth = session.getIndent();
-
-		for (Iterator i = c.iterator(); i.hasNext();) {
-
-			Object value = i.next();
-
-			out.cr(depth);
-
-			serializeAnything(session, out, value, elementType, "<iterator>", null);
-
-			if (i.hasNext())
-				out.append(',').smi(depth);
-		}
-		out.cre(depth-1).append(']');
-		return out;
-	}
-
-	/**
 	 * Returns the schema serializer based on the settings of this serializer.
 	 *
 	 * @return The schema serializer.
 	 */
 	public JsonSchemaSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = new JsonSchemaSerializer(propertyStore, getOverrideProperties());
+			schemaSerializer = new JsonSchemaSerializer(propertyStore);
 		return schemaSerializer;
 	}
 
@@ -409,14 +229,7 @@ public class JsonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public JsonSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
-			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new JsonSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
-	}
-
-	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		JsonSerializerSession s = (JsonSerializerSession)session;
-		serializeAnything(s, s.getJsonWriter(out), o, s.getExpectedRootType(o), "root", null);
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new JsonSerializerSession(ctx, args);
 	}
 }

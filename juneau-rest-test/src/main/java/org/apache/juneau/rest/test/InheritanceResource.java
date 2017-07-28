@@ -229,8 +229,14 @@ public class InheritanceResource extends RestServlet {
 		}
 
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return null;
+		public ReaderParserSession createSession(ParserSessionArgs args) {
+			return new ReaderParserSession(args) {
+
+				@Override /* ParserSession */
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return null;
+				}
+			};
 		}
 	}
 
@@ -241,8 +247,14 @@ public class InheritanceResource extends RestServlet {
 		}
 
 		@Override /* Serializer */
-		protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-			out.getWriter().write(o.toString());
+		public WriterSerializerSession createSession(SerializerSessionArgs args) {
+			return new WriterSerializerSession(args) {
+
+				@Override /* SerializerSession */
+				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					out.getWriter().write(o.toString());
+				}
+			};
 		}
 	}
 

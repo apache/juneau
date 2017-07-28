@@ -12,12 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -62,44 +58,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		this.ctx = createContext(HtmlDocSerializerContext.class);
 	}
 
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
-			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new HtmlDocSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
-	}
-
-	@Override /* Serializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-
-		HtmlDocSerializerSession s = (HtmlDocSerializerSession)session;
-		HtmlWriter w = s.getHtmlWriter(out);
-		HtmlDocTemplate t = s.getTemplate();
-
-		w.sTag("html").nl(0);
-		w.sTag(1, "head").nl(1);
-		t.head(s, w, this, o);
-		w.eTag(1, "head").nl(1);
-		w.sTag(1, "body").nl(1);
-		t.body(s, w, this, o);
-		w.eTag(1, "body").nl(1);
-		w.eTag("html").nl(0);
-	}
-
-	/**
-	 * Calls the parent {@link #doSerialize(SerializerSession, SerializerOutput, Object)} method which invokes just the HTML serializer.
-	 *
-	 * @param session The serializer session.
-	 * @param out
-	 * 	Where to send the output from the serializer.
-	 * @param o The object being serialized.
-	 * @throws Exception
-	 */
-	public void parentSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		super.doSerialize(session, out, o);
+	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
+		return new HtmlDocSerializerSession(ctx, args);
 	}
 }

@@ -12,17 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
-
-import java.lang.reflect.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 
 /**
  * Serializes POJO metamodels to HTML.
@@ -57,108 +51,12 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * @param propertyStore The property store to use for creating the context for this serializer.
 	 */
 	public HtmlSchemaDocSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore.copy().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true));
 		this.ctx = createContext(HtmlDocSerializerContext.class);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param propertyStore The property store to use for creating the context for this serializer.
-	 * @param overrideProperties
-	 */
-	public HtmlSchemaDocSerializer(PropertyStore propertyStore, Map<String,Object> overrideProperties) {
-		super(propertyStore);
-		this.ctx = this.propertyStore.create(overrideProperties).getContext(HtmlDocSerializerContext.class);
-	}
-
-	@Override /* CoreObject */
-	protected ObjectMap getOverrideProperties() {
-		return super.getOverrideProperties().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true);
-	}
-
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new HtmlDocSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
-	}
-
-	@Override /* ISchemaSerializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		HtmlSerializerSession s = (HtmlSerializerSession)session;
-		ObjectMap schema = getSchema(s, session.getClassMetaForObject(o), "root", null);
-		super.doSerialize(s, out, schema);
-	}
-
-	/*
-	 * Creates a schema representation of the specified class type.
-	 *
-	 * @param eType The class type to get the schema of.
-	 * @param ctx Serialize context used to prevent infinite loops.
-	 * @param attrName The name of the current attribute.
-	 * @return A schema representation of the specified class.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private ObjectMap getSchema(HtmlSerializerSession session, ClassMeta<?> eType, String attrName, String[] pNames) throws Exception {
-
-		ObjectMap out = new ObjectMap();
-
-		ClassMeta<?> aType;			// The actual type (will be null if recursion occurs)
-		ClassMeta<?> sType;			// The serialized type
-
-		aType = session.push(attrName, eType, null);
-
-		sType = eType.getSerializedClassMeta();
-		String type = null;
-
-		if (sType.isEnum() || sType.isCharSequence() || sType.isChar())
-			type = "string";
-		else if (sType.isNumber())
-			type = "number";
-		else if (sType.isBoolean())
-			type = "boolean";
-		else if (sType.isMapOrBean())
-			type = "object";
-		else if (sType.isCollectionOrArray())
-			type = "array";
-		else
-			type = "any";
-
-		out.put("type", type);
-		out.put("class", eType.toString());
-		PojoSwap t = eType.getPojoSwap();
-		if (t != null)
-			out.put("transform", t);
-
-		if (aType != null) {
-			if (sType.isEnum())
-				out.put("enum", getEnumStrings((Class<Enum<?>>)sType.getInnerClass()));
-			else if (sType.isCollectionOrArray()) {
-				ClassMeta componentType = sType.getElementType();
-				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
-					out.put("uniqueItems", true);
-				out.put("items", getSchema(session, componentType, "items", pNames));
-			} else if (sType.isBean()) {
-				ObjectMap properties = new ObjectMap();
-				BeanMeta bm = session.getBeanMeta(sType.getInnerClass());
-				if (pNames != null)
-					bm = new BeanMetaFiltered(bm, pNames);
-				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {
-					BeanPropertyMeta p = i.next();
-					properties.put(p.getName(), getSchema(session, p.getClassMeta(), p.getName(), p.getProperties()));
-				}
-				out.put("properties", properties);
-			}
-		}
-		session.pop();
-		return out;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static List<String> getEnumStrings(Class<? extends Enum> c) {
-		List<String> l = new LinkedList<String>();
-		for (Object e : EnumSet.allOf(c))
-			l.add(e.toString());
-		return l;
+	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
+		return new HtmlDocSerializerSession(ctx, args);
 	}
 }

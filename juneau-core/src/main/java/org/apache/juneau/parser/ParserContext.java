@@ -21,6 +21,12 @@ import org.apache.juneau.json.*;
 public class ParserContext extends BeanContext {
 
 	/**
+	 * Default context with all default values.
+	 */
+	@SuppressWarnings("hiding")
+	protected static final ParserContext DEFAULT = new ParserContext(PropertyStore.create());
+
+	/**
 	 * <b>Configuration property:</b>  Trim parsed strings.
 	 *
 	 * <ul>

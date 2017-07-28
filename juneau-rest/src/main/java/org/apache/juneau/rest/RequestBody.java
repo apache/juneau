@@ -358,14 +358,9 @@ public class RequestBody {
 				MediaType mediaType = pm.getMediaType();
 				try {
 					req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
-					if (! p.isReaderParser()) {
-						InputStreamParser p2 = (InputStreamParser)p;
-						ParserSession session = p2.createSession(getInputStream(), req.getProperties(), req.getJavaMethod(), req.getContext().getResource(), locale, timeZone, mediaType);
-						return p2.parseSession(session, cm);
-					}
-					ReaderParser p2 = (ReaderParser)p;
-					ParserSession session = p2.createSession(getUnbufferedReader(), req.getProperties(), req.getJavaMethod(), req.getContext().getResource(), locale, timeZone, mediaType);
-					return p2.parseSession(session, cm);
+					ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.getContext().getResource()));
+					Object in = session.isReaderParser() ? getUnbufferedReader() : getInputStream();
+					return session.parse(in, cm);
 				} catch (ParseException e) {
 					throw new RestException(SC_BAD_REQUEST,
 						"Could not convert request body content to class type ''{0}'' using parser ''{1}''.",

@@ -41,10 +41,16 @@ public class ParsersResource extends RestServletDefault {
 			super(propertyStore);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/a - " + read(session.getReader()).trim());
+		public ReaderParserSession createSession(ParserSessionArgs args) {
+			return new ReaderParserSession(args) {
+
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)("text/a - " + read(pipe.getReader()).trim());
+				}
+			};
 		}
 	}
 
@@ -71,10 +77,16 @@ public class ParsersResource extends RestServletDefault {
 			super(propertyStore);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/b - " + read(session.getReader()).trim());
+		public ReaderParserSession createSession(ParserSessionArgs args) {
+			return new ReaderParserSession(args) {
+
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)("text/b - " + read(pipe.getReader()).trim());
+				}
+			};
 		}
 	}
 
@@ -93,10 +105,16 @@ public class ParsersResource extends RestServletDefault {
 			super(propertyStore);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/c - " + read(session.getReader()).trim());
+		public ReaderParserSession createSession(ParserSessionArgs args) {
+			return new ReaderParserSession(args) {
+
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)("text/c - " + read(pipe.getReader()).trim());
+				}
+			};
 		}
 	}
 
@@ -115,10 +133,16 @@ public class ParsersResource extends RestServletDefault {
 			super(propertyStore);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* Parser */
-		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/d - " + read(session.getReader()).trim());
+		public ReaderParserSession createSession(ParserSessionArgs args) {
+			return new ReaderParserSession(args) {
+
+				@Override /* ParserSession */
+				@SuppressWarnings("unchecked")
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					return (T)("text/d - " + read(pipe.getReader()).trim());
+				}
+			};
 		}
 	}
 

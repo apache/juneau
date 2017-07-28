@@ -12,17 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
-
-import java.lang.reflect.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 
 /**
  * Serializes POJO metadata to HTTP responses as JSON.
@@ -40,125 +34,21 @@ import org.apache.juneau.transform.*;
 @Produces(value="application/json+schema,text/json+schema",contentType="application/json")
 public final class JsonSchemaSerializer extends JsonSerializer {
 
-	private final JsonSerializerContext ctx;
-
 	/**
 	 * Constructor.
 	 *
 	 * @param propertyStore Initialize with the specified config property store.
 	 */
 	public JsonSchemaSerializer(PropertyStore propertyStore) {
-		this(propertyStore, null);
+		super(
+			propertyStore.copy()
+			.append(SERIALIZER_detectRecursions, true)
+			.append(SERIALIZER_ignoreRecursions, true)
+		);
 	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param propertyStore Initialize with the specified config property store.
-	 * @param overrideProperties
-	 */
-	public JsonSchemaSerializer(PropertyStore propertyStore, Map<String,Object> overrideProperties) {
-		super(propertyStore);
-		this.ctx = this.propertyStore.create(overrideProperties).getContext(JsonSerializerContext.class);
-	}
-
-	@Override /* CoreObject */
-	protected ObjectMap getOverrideProperties() {
-		return super.getOverrideProperties().append(SERIALIZER_detectRecursions, true)
-			.append(SERIALIZER_ignoreRecursions, true);
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Entry point methods
-	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public JsonSerializerSession createSession(ObjectMap op, Method javaMethod, Locale locale,
-			TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		return new JsonSerializerSession(ctx, op, javaMethod, locale, timeZone, mediaType, uriContext);
-	}
-
-	@Override /* JsonSerializer */
-	protected void doSerialize(SerializerSession session, SerializerOutput out, Object o) throws Exception {
-		JsonSerializerSession s = (JsonSerializerSession)session;
-		ObjectMap schema = getSchema(s, session.getClassMetaForObject(o), "root", null);
-		serializeAnything(s, s.getJsonWriter(out), schema, s.getExpectedRootType(o), "root", null);
-	}
-
-	/*
-	 * Creates a schema representation of the specified class type.
-	 *
-	 * @param eType The class type to get the schema of.
-	 * @param ctx Serialize context used to prevent infinite loops.
-	 * @param attrName The name of the current attribute.
-	 * @return A schema representation of the specified class.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private ObjectMap getSchema(JsonSerializerSession session, ClassMeta<?> eType, String attrName, String[] pNames)
-			throws Exception {
-		ObjectMap out = new ObjectMap();
-
-		if (eType == null)
-			eType = object();
-
-		ClassMeta<?> aType;			// The actual type (will be null if recursion occurs)
-		ClassMeta<?> sType;			// The serialized type
-
-		aType = session.push(attrName, eType, null);
-
-		sType = eType.getSerializedClassMeta();
-		String type = null;
-
-		if (sType.isEnum() || sType.isCharSequence() || sType.isChar())
-			type = "string";
-		else if (sType.isNumber())
-			type = "number";
-		else if (sType.isBoolean())
-			type = "boolean";
-		else if (sType.isMapOrBean())
-			type = "object";
-		else if (sType.isCollectionOrArray())
-			type = "array";
-		else
-			type = "any";
-
-		out.put("type", type);
-		out.put("description", eType.toString());
-		PojoSwap f = eType.getPojoSwap();
-		if (f != null)
-			out.put("transform", f);
-
-		if (aType != null) {
-			if (sType.isEnum())
-				out.put("enum", getEnumStrings((Class<Enum<?>>)sType.getInnerClass()));
-			else if (sType.isCollectionOrArray()) {
-				ClassMeta componentType = sType.getElementType();
-				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
-					out.put("uniqueItems", true);
-				out.put("items", getSchema(session, componentType, "items", pNames));
-			} else if (sType.isBean()) {
-				ObjectMap properties = new ObjectMap();
-				BeanMeta bm = session.getBeanMeta(sType.getInnerClass());
-				if (pNames != null)
-					bm = new BeanMetaFiltered(bm, pNames);
-				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {
-					BeanPropertyMeta p = i.next();
-					properties.put(p.getName(), getSchema(session, p.getClassMeta(), p.getName(), p.getProperties()));
-				}
-				out.put("properties", properties);
-			}
-		}
-		session.pop();
-		return out;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static List<String> getEnumStrings(Class<? extends Enum> c) {
-		List<String> l = new LinkedList<String>();
-		for (Object e : EnumSet.allOf(c))
-			l.add(e.toString());
-		return l;
+	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+		return new JsonSchemaSerializerSession(ctx, args);
 	}
 }

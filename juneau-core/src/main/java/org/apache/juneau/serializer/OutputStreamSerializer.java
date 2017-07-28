@@ -14,21 +14,11 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.io.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
- *
- * <h5 class='section'>Description:</h5>
- *
- * This class is typically the parent class of all byte-based serializers.
- * It has 1 abstract method to implement...
- * <ul>
- * 	<li>{@link #doSerialize(SerializerSession, SerializerOutput, Object)}
- * </ul>
  *
  * <h6 class='topic'>@Produces annotation</h6>
  *
@@ -49,15 +39,23 @@ public abstract class OutputStreamSerializer extends Serializer {
 		super(propertyStore);
 	}
 
-	@Override /* Serializer */
-	public boolean isWriterSerializer() {
-		return false;
-	}
+
+	//--------------------------------------------------------------------------------
+	// Abstract methods
+	//--------------------------------------------------------------------------------
+
+	@Override /* SerializerSession */
+	public abstract OutputStreamSerializerSession createSession(SerializerSessionArgs args);
 
 
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
+
+	@Override /* Serializer */
+	public final boolean isWriterSerializer() {
+		return false;
+	}
 
 	/**
 	 * Convenience method for serializing an object to a <code><jk>byte</jk></code>.
@@ -68,10 +66,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 */
 	@Override
 	public final byte[] serialize(Object o) throws SerializeException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		SerializerOutput out = new SerializerOutput(baos);
-		serialize(createSession(), out, o);
-		return baos.toByteArray();
+		return createSession(null).serialize(o);
 	}
 
 	/**
@@ -82,9 +77,6 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final String serializeToHex(Object o) throws SerializeException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		SerializerOutput out = new SerializerOutput(baos);
-		serialize(createSession(), out, o);
-		return toHex(baos.toByteArray());
+		return toHex(serialize(o));
 	}
 }

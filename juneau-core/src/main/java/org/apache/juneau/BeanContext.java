@@ -227,7 +227,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * See {@link ClassMeta} for more information.
  */
-@SuppressWarnings({"unchecked","rawtypes","hiding"})
+@SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {
 
 	/**
@@ -1079,24 +1079,12 @@ public class BeanContext extends Context {
 	/**
 	 * Create a new bean session based on the properties defined on this context.
 	 *
-	 * @param op
-	 * 	The override properties.
-	 * 	This map can contain values to override properties defined on this context.
-	 * 	Note that only session-overridable settings can be overridden.
-	 * @param locale
-	 * 	The bean session locale.
-	 * 	Typically used by {@link PojoSwap PojoSwaps} to provide locale-specific output.
-	 * 	If <jk>null</jk>, the system default locale is assumed.
-	 * @param timeZone
-	 * 	The bean session timezone.
-	 * 	Typically used by time-sensitive {@link PojoSwap PojoSwaps} to provide timezone-specific output.
-	 * 	If <jk>null</jk> the system default timezone is assumed on {@link java.util.Date} objects, or the
-	 * 	locale specified on {@link Calendar} objects are used.
-	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @param args
+	 * 	The session arguments.
 	 * @return A new session object.
 	 */
-	public BeanSession createSession(ObjectMap op, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new BeanSession(this, op, locale, timeZone, mediaType);
+	public BeanSession createSession(BeanSessionArgs args) {
+		return new BeanSession(this, args);
 	}
 
 	/**
@@ -1109,7 +1097,7 @@ public class BeanContext extends Context {
 	 * @return A new session object.
 	 */
 	public BeanSession createSession() {
-		return new BeanSession(this, null, this.locale, this.timeZone, this.mediaType);
+		return new BeanSession(this, new BeanSessionArgs(null, this.locale, this.timeZone, this.mediaType));
 	}
 
 	/**
