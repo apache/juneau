@@ -231,6 +231,7 @@ public final class DateUtils {
 			S6 = 6; // Found :
 
 		int state = 1;
+		boolean needsT = false;
 		for (int i = 0; i < in.length(); i++) {
 			char c = in.charAt(i);
 			if (state == S1) {
@@ -242,6 +243,10 @@ public final class DateUtils {
 			} else if (state == S3) {
 				if (c == 'T')
 					state = S4;
+				if (c == ' ') {
+					state = S4;
+					needsT = true;
+				}
 			} else if (state == S4) {
 				if (c == ':')
 					state = S5;
@@ -251,6 +256,8 @@ public final class DateUtils {
 			}
 		}
 
+		if (needsT)
+			in = in.replace(' ', 'T');
 		switch(state) {
 			case S1: return in + "-01-01T00:00:00";
 			case S2: return in + "-01T00:00:00";

@@ -16,7 +16,6 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -58,10 +57,10 @@ public final class Traversable implements RestConverter {
 					o = cm.getPojoSwap().swap(req.getBeanSession(), o);
 				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());
 				o = p.get(req.getPathMatch().getRemainder());
-			} catch (SerializeException e) {
-				throw new RestException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
 			} catch (PojoRestException e) {
 				throw new RestException(e.getStatus(), e);
+			} catch (Exception e) {
+				throw new RestException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
 			}
 		}
 

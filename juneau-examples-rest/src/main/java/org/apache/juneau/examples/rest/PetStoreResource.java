@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+
 import java.util.*;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Body;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -38,14 +41,16 @@ import org.apache.juneau.transforms.*;
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
-			StyleMenuItem.class
+			StyleMenuItem.class,
+			PetStoreResource.AddPet.class
 		},
 		links={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{StyleMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java",
+			"$W{AddPet}"
 		},
 		aside={
 			"<div style='max-width:400px' class='text'>",
@@ -105,6 +110,12 @@ public class PetStoreResource extends ResourceJena {
 		return petDB.get(id);
 	}
 
+	@RestMethod(name="POST", path="/")
+	public Redirect addPet(@Body Pet pet) throws Exception {
+		this.petDB.put(pet.id, pet);
+		return new Redirect("servlet:/");
+	}
+	
 	// Our bean class.
 	public static class Pet {
 
@@ -120,7 +131,7 @@ public class PetStoreResource extends ResourceJena {
 		@BeanProperty(format="$%.2f")  // Renders price in dollars.
 		public float price;
 
-		@BeanProperty(swap=DateSwap.RFC2822D.class)  // Renders dates in RFC2822 format.
+		@BeanProperty(swap=DateSwap.ISO8601D.class)  // Renders dates in ISO8601 format.
 		public Date birthDate;
 
 		public int getAge() {
@@ -144,6 +155,80 @@ public class PetStoreResource extends ResourceJena {
 		public String getStyle(SerializerSession session, Kind value) {
 			return "background-color:#FDF2E9";
 		}
+	}
+	
+	/**
+	 * Renders the "ADD" menu item.
+	 */
+	public class AddPet extends MenuItemWidget {
+
+		@Override
+		public String getLabel(RestRequest req) throws Exception {
+			return "add";
+		}
+
+		@Override
+		public Object getContent(RestRequest req) throws Exception {
+			return div(
+				form().id("form").action("servlet:/").method("POST").children(
+					table(
+						tr(
+							th("ID:"),
+							td(input().name("id").type("number").value(getNextAvailableId())),
+							td(new Tooltip("(?)", "A unique identifer for the pet.", br(), "Must not conflict with existing IDs"))
+						),
+						tr(
+							th("Name:"),
+							td(input().name("name").type("text")),
+							td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'")) 
+						),
+						tr(
+							th("Kind:"),
+							td(
+								select().name("kind").children(
+									option("CAT"), option("DOG"), option("BIRD"), option("FISH"), option("MOUSE"), option("RABBIT"), option("SNAKE")
+								)
+							),
+							td(new Tooltip("(?)", "The kind of animal.")) 
+						),
+						tr(
+							th("Breed:"),
+							td(input().name("breed").type("text")),
+							td(new Tooltip("(?)", "The breed of animal.", br(), "Can be any arbitrary text")) 
+						),
+						tr(
+							th("Gets along with:"),
+							td(input().name("getsAlongWith").type("text")),
+							td(new Tooltip("(?)", "A comma-delimited list of other animal types that this animal gets along with.")) 
+						),
+						tr(
+							th("Price:"),
+							td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100)),
+							td(new Tooltip("(?)", "The price to charge for this pet.")) 
+						),
+						tr(
+							th("Birthdate:"),
+							td(input().name("birthDate").type("date")),
+							td(new Tooltip("(?)", "The pets birthday.")) 
+						),
+						tr(
+							td().colspan(2).style("text-align:right").children(
+								button("reset", "Reset"),
+								button("button","Cancel").onclick("window.location.href='/'"),
+								button("submit", "Submit")
+							)
+						)
+					).style("white-space:nowrap")
+				)
+			);
+		}
+	}
+	
+	private int getNextAvailableId() {
+		int i = 100;
+		for (Integer k : petDB.keySet())
+			i = Math.max(i, k);
+		return i+1;
 	}
 }
 

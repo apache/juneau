@@ -701,7 +701,12 @@ public final class RestContext extends Context {
 
 			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
 
-			htmlWidgets = sc.htmlWidgets;
+			this.htmlWidgets = new LinkedHashMap<String,Widget>();
+			for (Class<? extends Widget> wc : sc.htmlWidgets) {
+				Widget w = ClassUtils.newInstanceFromOuter(resource, Widget.class, wc);
+				this.htmlWidgets.put(w.getName(), w);
+			}
+
 			htmlHeader = sc.htmlHeader;
 			htmlLinks = sc.htmlLinks;
 			htmlNav = sc.htmlNav;

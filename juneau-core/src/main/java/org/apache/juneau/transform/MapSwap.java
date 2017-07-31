@@ -13,8 +13,6 @@
 package org.apache.juneau.transform;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Abstract subclass for POJO swaps that swap objects for object maps.
@@ -24,12 +22,12 @@ import org.apache.juneau.serializer.*;
 public abstract class MapSwap<T> extends PojoSwap<T,ObjectMap> {
 
 	@Override /* PojoSwap */
-	public ObjectMap swap(BeanSession session, T o) throws SerializeException {
+	public ObjectMap swap(BeanSession session, T o) throws Exception {
 		return super.swap(session, o);
 	}
 
 	@Override /* PojoSwap */
-	public T unswap(BeanSession session, ObjectMap f, ClassMeta<?> hint) throws ParseException {
+	public T unswap(BeanSession session, ObjectMap f, ClassMeta<?> hint) throws Exception {
 		return super.unswap(session, f, hint);
 	}
 }

@@ -127,7 +127,7 @@ public class RestConfig implements ServletConfig {
 	Object htmlTemplate = HtmlDocTemplateBasic.class;
 
 	Class<?> resourceClass;
-	Map<String,Widget> htmlWidgets = new HashMap<String,Widget>();
+	List<Class<? extends Widget>> htmlWidgets = new ArrayList<Class<? extends Widget>>();
 
 	/**
 	 * Constructor for top-level servlets when using dependency injection.
@@ -1381,8 +1381,7 @@ public class RestConfig implements ServletConfig {
 	 * @return This object (for method chaining).
 	 */
 	public RestConfig addHtmlWidget(Class<? extends Widget> value) {
-		Widget w = ClassUtils.newInstance(Widget.class, value);
-		this.htmlWidgets.put(w.getName(), w);
+		this.htmlWidgets.add(value);
 		return this;
 	}
 

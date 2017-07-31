@@ -969,31 +969,43 @@ public class BeanPropertyMeta {
 	}
 
 	private Object transform(BeanSession session, Object o) throws SerializeException {
-		// First use swap defined via @BeanProperty.
-		if (swap != null)
-			return swap.swap(session, o);
-		if (o == null)
-			return null;
-		// Otherwise, look it up via bean context.
-		if (rawTypeMeta.hasChildPojoSwaps()) {
-			PojoSwap f = rawTypeMeta.getChildPojoSwapForSwap(o.getClass());
-			if (f != null)
-				return f.swap(session, o);
+		try {
+			// First use swap defined via @BeanProperty.
+			if (swap != null)
+				return swap.swap(session, o);
+			if (o == null)
+				return null;
+			// Otherwise, look it up via bean context.
+			if (rawTypeMeta.hasChildPojoSwaps()) {
+				PojoSwap f = rawTypeMeta.getChildPojoSwapForSwap(o.getClass());
+				if (f != null)
+					return f.swap(session, o);
+			}
+			return o;
+		} catch (SerializeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SerializeException(e);
 		}
-		return o;
 	}
 
 	private Object unswap(BeanSession session, Object o) throws ParseException {
-		if (swap != null)
-			return swap.unswap(session, o, rawTypeMeta);
-		if (o == null)
-			return null;
-		if (rawTypeMeta.hasChildPojoSwaps()) {
-			PojoSwap f = rawTypeMeta.getChildPojoSwapForUnswap(o.getClass());
-			if (f != null)
-				return f.unswap(session, o, rawTypeMeta);
+		try {
+			if (swap != null)
+				return swap.unswap(session, o, rawTypeMeta);
+			if (o == null)
+				return null;
+			if (rawTypeMeta.hasChildPojoSwaps()) {
+				PojoSwap f = rawTypeMeta.getChildPojoSwapForUnswap(o.getClass());
+				if (f != null)
+					return f.unswap(session, o, rawTypeMeta);
+			}
+			return o;
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(e);
 		}
-		return o;
 	}
 
 	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {

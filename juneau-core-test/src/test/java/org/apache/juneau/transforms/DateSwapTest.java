@@ -49,7 +49,7 @@ public class DateSwapTest {
 		final DateSwap.ISO8601DT dateSwap = new DateSwap.ISO8601DT();
 		// this works
 		final String sValue = data.getString("birthday");
-		dateSwap.unswap(null, sValue, data.getBeanSession().getClassMeta(Date.class));
+		dateSwap.unswap(BeanContext.DEFAULT.createSession(), sValue, data.getBeanSession().getClassMeta(Date.class));
 		// this does not work
 		data.get(dateSwap, "birthday");
 	}

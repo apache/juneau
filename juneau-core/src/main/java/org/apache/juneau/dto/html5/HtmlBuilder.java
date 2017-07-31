@@ -1306,13 +1306,13 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute.
+	 * Creates an {@link Option} element with the specified {@link Option#text(Object)} attribute.
 	 *
-	 * @param value The {@link Option#value(Object)} attribute.
+	 * @param text The {@link Option#text(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Option option(Object value) {
-		return option().value(value);
+	public static final Option option(Object text) {
+		return option().text(text);
 	}
 
 	/**

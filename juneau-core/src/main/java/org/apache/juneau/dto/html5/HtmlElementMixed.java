@@ -124,16 +124,14 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @param children
 	 * 	The children to add as child elements.
 	 * 	Can be a mixture of strings and {@link HtmlElement} objects.
+	 * 	Can also be containers of strings and elements.
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
 	public HtmlElement children(Object...children) {
-		if (children.length != 0) {
-			if (this.children == null)
-				this.children = new LinkedList<Object>();
+		if (children.length != 0)
 			for (Object c : children)
-				this.children.add(c);
-		}
+				child(c);
 		return this;
 	}
 
@@ -143,12 +141,16 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @param child
 	 * 	The child to add as a child element.
 	 * 	Can be a string or {@link HtmlElement}.
+	 * 	Can also be a container of strings and elements.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement child(Object child) {
 		if (this.children == null)
 			this.children = new LinkedList<Object>();
-		this.children.add(child);
+		if (child instanceof Collection)
+			this.children.addAll((Collection<?>)child);
+		else
+			this.children.add(child);
 		return this;
 	}
 }

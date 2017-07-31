@@ -6911,6 +6911,15 @@
 	}  			
 				</p>
 				This is mostly an internal change and doesn't affect the existing APIs.
+			<li>
+				{@link org.apache.juneau.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
+				of objects.
+			<li>
+				{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)} and {@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
+				can now throw arbitrary exceptions instead of having to wrap them in <code>SerializeException</code>/<code>ParseException</code>.
+			<li>
+				New {@link org.apache.juneau.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@link org.apache.juneau.transforms.CalendarSwap} and 
+				{@link org.apache.juneau.transforms.DateSwap}.
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -6928,6 +6937,10 @@
 				New setting: {@link org.apache.juneau.rest.RestContext#REST_resourceResolver}.  
 				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 				dependency injection frameworks.
+			<li>
+				{@link org.apache.juneau.rest.widget.Widget} classes can now be defined as inner classes of servlets/resources.
+			<li>
+				New tooltip template: {@link org.apache.juneau.rest.widget.Tooltip}.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.microservice</h6>
@@ -6941,6 +6954,14 @@
 					<li>{@link org.apache.juneau.microservice.RestMicroservice#getServletContextHandler() getServletContextHandler()}
 				</ul>
 		</ul>
+
+		<h6 class='topic'>org.apache.juneau.rest.examples</h6>
+		<ul class='spaced-list'>
+			<li>
+				New example of adding a menu-item widget to the Pet Store resource (including tooltips):
+				<br><img src='doc-files/ReleaseNotes_632_PetStoreAdd.png'>
+		</ul>
+	
 	</div>
 	
 	<!-- ======================================================================================================== -->

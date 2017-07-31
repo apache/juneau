@@ -12,17 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.DateUtils.*;
+import static org.apache.juneau.utils.CalendarUtils.Format.*;
 
 import java.text.*;
 import java.util.*;
 
-import javax.xml.bind.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Transforms {@link Calendar Calendars} to {@link String Strings}.
@@ -58,40 +56,6 @@ import org.apache.juneau.transform.*;
  */
 public class CalendarSwap extends StringSwap<Calendar> {
 
-	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
-	private final int dateStyle, timeStyle;
-	private final String pattern;
-	private final TimeZone timeZone;
-
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * Only one of the <code>pattern</code> or <code>style</code> parameters should
-	 *
-	 * @param pattern
-	 * 	The {@link SimpleDateFormat} pattern.
-	 * 	If <jk>null</jk>, <code>style</code> is used instead.
-	 * @param dateStyle
-	 * 	The {@link DateFormat} date style (e.g. {@link DateFormat#SHORT}).
-	 * 	Ignored if <code>pattern</code> is not <jk>null</jk>.
-	 * 	Ignored if <code>-1</code>.
-	 * @param timeStyle
-	 * 	The {@link DateFormat} time style (e.g. {@link DateFormat#SHORT}).
-	 * 	Ignored if <code>pattern</code> is not <jk>null</jk>.
-	 * 	Ignored if <code>-1</code>.
-	 * @param timeZone
-	 * 	The timeZone to use for dates.
-	 * 	If <jk>null</jk> then either the timezone specified on the {@link Calendar} object or the timezone returned by
-	 * 	{@link BeanSession#getTimeZone()} is used.
-	 */
-	protected CalendarSwap(String pattern, int dateStyle, int timeStyle, TimeZone timeZone) {
-		this.pattern = pattern;
-		this.dateStyle = dateStyle;
-		this.timeStyle = timeStyle;
-		this.timeZone = timeZone;
-	}
-
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link String Strings} using the {@code Date.toString()} method.
 	 *
@@ -101,9 +65,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class ToString extends CalendarSwap {
-		/** Constructor */
-		public ToString() {
-			super("EEE MMM dd HH:mm:ss zzz yyyy", -1, -1, null);
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, TO_STRING, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return convert(CalendarUtils.parseDate(o, TO_STRING, session.getLocale(), session.getTimeZone()), hint, session);
 		}
 	}
 
@@ -129,28 +99,45 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 */
 	public static class ISO8601DT extends CalendarSwap {
 
-		/** Constructor */
-		public ISO8601DT() {
-			super(null, -1, -1, null);
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, ISO8601_DT, session.getLocale(), session.getTimeZone());
 		}
 
 		@Override /* PojoSwap */
-		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws ParseException {
-			try {
-				if (isEmpty(o))
-					return null;
-				return convert(DatatypeConverter.parseDateTime(toValidISO8601DT(o)), hint);
-			} catch (Exception e) {
-				throw new ParseException(e);
-			}
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, ISO8601_DT, session.getLocale(), session.getTimeZone());
+		}
+	}
+
+	/**
+	 * Transforms {@link Calendar Calendars} to ISO8601 date-time-local strings.
+	 *
+	 * <h5 class='section'>Example output:</h5>
+	 * <ul>
+	 * 	<li><js>"2001-07-04T15:30:45"</js>
+	 * </ul>
+	 *
+	 * <h6 class='topic'>Example input:</h6>
+	 * <ul>
+	 * 	<li><js>"2001-07-04T15:30:45"</js>
+	 * 	<li><js>"2001-07-04T15:30:45.1"</js>
+	 * 	<li><js>"2001-07-04T15:30"</js>
+	 * 	<li><js>"2001-07-04"</js>
+	 * 	<li><js>"2001-07"</js>
+	 * 	<li><js>"2001"</js>
+	 * </ul>
+	 */
+	public static class ISO8601DTL extends CalendarSwap {
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return convert(CalendarUtils.parseCalendar(o, ISO8601_DTL, session.getLocale(), session.getTimeZone()), hint);
 		}
 
 		@Override /* PojoSwap */
-		public String swap(BeanSession session, Calendar o) {
-			if (o == null)
-				return null;
-			o = setTimeZone(session, o);
-			return DatatypeConverter.printDateTime(o);
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, ISO8601_DTL, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -162,37 +149,19 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 */
 	public static class ISO8601DTZ extends CalendarSwap {
 
-		/** Constructor */
-		public ISO8601DTZ() {
-			super(null, -1, -1, null);
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, ISO8601_DTZ, session.getLocale(), session.getTimeZone());
 		}
 
 		@Override /* PojoSwap */
-		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws ParseException {
-			try {
-				if (isEmpty(o))
-					return null;
-				return convert(DatatypeConverter.parseDateTime(toValidISO8601DT(o)), hint);
-			} catch (Exception e) {
-				throw new ParseException(e);
-			}
-		}
-
-		@Override /* PojoSwap */
-		public String swap(BeanSession session, Calendar o) {
-			if (o == null)
-				return null;
-			if (o.getTimeZone().getRawOffset() != 0) {
-				Calendar c = Calendar.getInstance(GMT);
-				c.setTime(o.getTime());
-				o = c;
-			}
-			return DatatypeConverter.printDateTime(o);
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, ISO8601_DTZ, session.getLocale(), session.getTimeZone());
 		}
 	}
 
 	/**
-	 * Same as {@link CalendarSwap.ISO8601DT} except serializes to millisecond precision.
+	 * Same as {@link ISO8601DT} except serializes to millisecond precision.
 	 *
 	 * <h5 class='section'>Example output:</h5>
 	 * <js>"2001-07-04T15:30:45.123Z"</js>
@@ -200,16 +169,13 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	public static class ISO8601DTP extends ISO8601DT {
 
 		@Override /* PojoSwap */
-		public String swap(BeanSession session, Calendar o) {
-			if (o == null)
-				return null;
-			String s = super.swap(session, o);
-			return String.format("%s.%03d%s", s.substring(0, 19), o.get(Calendar.MILLISECOND), s.substring(19));
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, ISO8601_DTP, session.getLocale(), session.getTimeZone());
 		}
 	}
 
 	/**
-	 * Same as {@link CalendarSwap.ISO8601DTZ} except serializes to millisecond precision.
+	 * Same as {@link ISO8601DTZ} except serializes to millisecond precision.
 	 *
 	 * <h5 class='section'>Example output:</h5>
 	 * <js>"2001-07-04T15:30:45.123"</js>
@@ -217,11 +183,27 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	public static class ISO8601DTPZ extends ISO8601DTZ {
 
 		@Override /* PojoSwap */
-		public String swap(BeanSession session, Calendar o) {
-			if (o == null)
-				return null;
-			String s = super.swap(session, o);
-			return String.format("%s.%03d%s", s.substring(0, 19), o.get(Calendar.MILLISECOND), s.substring(19));
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, ISO8601_DTPZ, session.getLocale(), session.getTimeZone());
+		}
+	}
+
+	/**
+	 * ISO8601 date only.
+	 *
+	 * <h5 class='section'>Example output:</h5>
+	 * <js>"2001-07-04"</js>
+	 */
+	public static class ISO8601D extends CalendarSwap {
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, ISO8601_D, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, ISO8601_D, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -236,9 +218,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class RFC2822DT extends CalendarSwap {
-		/** Constructor */
-		public RFC2822DT() {
-			super("EEE, dd MMM yyyy HH:mm:ss Z", -1, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, RFC2822_DT, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, RFC2822_DT, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -253,9 +241,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class RFC2822DTZ extends CalendarSwap {
-		/** Constructor */
-		public RFC2822DTZ() {
-			super("EEE, dd MMM yyyy HH:mm:ss 'GMT'", -1, -1, GMT);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, RFC2822_DTZ, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, RFC2822_DTZ, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -270,9 +264,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class RFC2822D extends CalendarSwap {
-		/** Constructor */
-		public RFC2822D() {
-			super("dd MMM yyyy", -1, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, RFC2822_D, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, RFC2822_D, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -285,9 +285,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateTimeSimple extends CalendarSwap {
-		/** Constructor */
-		public DateTimeSimple() {
-			super("yyyy/MM/dd HH:mm:ss", -1, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, SIMPLE_DT, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, SIMPLE_DT, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -300,9 +306,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateSimple extends CalendarSwap {
-		/** Constructor */
-		public DateSimple() {
-			super("yyyy/MM/dd", -1, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, SIMPLE_D, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, SIMPLE_D, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -315,9 +327,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class TimeSimple extends CalendarSwap {
-		/** Constructor */
-		public TimeSimple() {
-			super("HH:mm:ss", -1, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, SIMPLE_T, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, SIMPLE_T, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -332,9 +350,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateFull extends CalendarSwap {
-		/** Constructor */
-		public DateFull() {
-			super(null, DateFormat.FULL, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, FULL_D, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, FULL_D, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -349,9 +373,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateLong extends CalendarSwap {
-		/** Constructor */
-		public DateLong() {
-			super(null, DateFormat.LONG, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, LONG_D, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, LONG_D, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -366,9 +396,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateMedium extends CalendarSwap {
-		/** Constructor */
-		public DateMedium() {
-			super(null, DateFormat.MEDIUM, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, MEDIUM_D, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, MEDIUM_D, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -383,9 +419,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateShort extends CalendarSwap {
-		/** Constructor */
-		public DateShort() {
-			super(null, DateFormat.SHORT, -1, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, SHORT_D, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, SHORT_D, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -400,9 +442,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class TimeFull extends CalendarSwap {
-		/** Constructor */
-		public TimeFull() {
-			super(null, -1, DateFormat.FULL, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, FULL_T, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, FULL_T, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -417,9 +465,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class TimeLong extends CalendarSwap {
-		/** Constructor */
-		public TimeLong() {
-			super(null, -1, DateFormat.LONG, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, LONG_T, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, LONG_T, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -434,9 +488,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class TimeMedium extends CalendarSwap {
-		/** Constructor */
-		public TimeMedium() {
-			super(null, -1, DateFormat.MEDIUM, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, MEDIUM_T, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, MEDIUM_T, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -451,9 +511,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class TimeShort extends CalendarSwap {
-		/** Constructor */
-		public TimeShort() {
-			super(null, -1, DateFormat.SHORT, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, SHORT_T, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, SHORT_T, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -468,9 +534,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateTimeFull extends CalendarSwap {
-		/** Constructor */
-		public DateTimeFull() {
-			super(null, DateFormat.FULL, DateFormat.FULL, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, FULL_DT, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, FULL_DT, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -485,9 +557,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateTimeLong extends CalendarSwap {
-		/** Constructor */
-		public DateTimeLong() {
-			super(null, DateFormat.LONG, DateFormat.LONG, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, LONG_DT, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, LONG_DT, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -502,9 +580,15 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateTimeMedium extends CalendarSwap {
-		/** Constructor */
-		public DateTimeMedium() {
-			super(null, DateFormat.MEDIUM, DateFormat.MEDIUM, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, MEDIUM_DT, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, MEDIUM_DT, session.getLocale(), session.getTimeZone());
 		}
 	}
 
@@ -519,97 +603,40 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * </ul>
 	 */
 	public static class DateTimeShort extends CalendarSwap {
-		/** Constructor */
-		public DateTimeShort() {
-			super(null, DateFormat.SHORT, DateFormat.SHORT, null);
+
+		@Override /* PojoSwap */
+		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+			return CalendarUtils.parseCalendar(o, SHORT_DT, session.getLocale(), session.getTimeZone());
+		}
+
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Calendar o) throws Exception {
+			return CalendarUtils.serialize(o, SHORT_DT, session.getLocale(), session.getTimeZone());
 		}
 	}
 
-	/**
-	 * Returns the {@link DateFormat} object for this session for formatting dates.
-	 *
-	 * @param session The current bean session.
-	 * @param c
-	 * 	Optional <code>Calendar</code> object to copy <code>TimeZone</code> from if not specified in session or
-	 * 	<code>timeZone</code> setting.
-	 * @return
-	 * 	The {@link DateFormat} object.
-	 * 	Multiple calls to this method on the same session will return a cached copy of date format object.
-	 */
-	protected DateFormat getDateFormat(BeanSession session, Calendar c) {
-		DateFormat df = session.getFromCache(DateFormat.class, this.getClass().getName());
-		if (df == null) {
-			if (pattern != null)
-				df = new SimpleDateFormat(pattern, session.getLocale());
-			else {
-				if (dateStyle == -1 && timeStyle != -1)
-					df = DateFormat.getTimeInstance(timeStyle, session.getLocale());
-				else if (dateStyle != -1 && timeStyle == -1)
-					df = DateFormat.getDateInstance(dateStyle, session.getLocale());
-				else
-					df = DateFormat.getDateTimeInstance(dateStyle, timeStyle, session.getLocale());
-			}
-			if (timeZone != null)
-				df.setTimeZone(timeZone);
-			else if (session.getTimeZone() != null)
-				df.setTimeZone(session.getTimeZone());
-			else if (c != null && ! c.getTimeZone().equals(df.getTimeZone())) {
-				// Don't cache it if we're using the Calendar timezone.
-				df.setTimeZone(c.getTimeZone());
-				return df;
-			}
-			session.addToCache(this.getClass().getName(), df);
-		}
-		return df;
-	}
-
-	/**
-	 * Converts the specified {@link Calendar} to a {@link String}.
-	 */
-	@Override /* PojoSwap */
-	public String swap(BeanSession session, Calendar o) {
-		if (o == null)
-			return null;
-		return getDateFormat(session, o).format(o.getTime());
-	}
-
-	/**
-	 * Converts the specified {@link String} to a {@link Calendar}.
-	 */
-	@Override /* PojoSwap */
-	public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws ParseException {
+	private static Calendar convert(Calendar in, ClassMeta<?> hint) throws ParseException {
 		try {
-			if (isEmpty(o))
-				return null;
-			return convert(getDateFormat(session, null).parse(o), hint, session);
+			if (hint.isInstance(in) || ! hint.canCreateNewInstance())
+				return in;
+			Calendar c = (Calendar)hint.newInstance();
+			c.setTime(in.getTime());
+			c.setTimeZone(in.getTimeZone());
+			return c;
 		} catch (Exception e) {
 			throw new ParseException(e);
 		}
 	}
 
-	private static Calendar convert(Calendar in, ClassMeta<?> hint) throws Exception {
-		if (hint.isInstance(in) || ! hint.canCreateNewInstance())
-			return in;
-		Calendar c = (Calendar)hint.newInstance();
-		c.setTime(in.getTime());
-		c.setTimeZone(in.getTimeZone());
-		return c;
-	}
-
-	private static Calendar convert(Date in, ClassMeta<?> hint, BeanSession session) throws Exception {
-		if (hint == null || ! hint.canCreateNewInstance())
-			hint = session.getClassMeta(GregorianCalendar.class);
-		Calendar c = (Calendar)hint.newInstance();
-		c.setTime(in);
-		return c;
-	}
-
-	private static Calendar setTimeZone(BeanSession session, Calendar c) {
-		TimeZone tz = session.getTimeZone();
-		if (tz != null && ! tz.equals(c.getTimeZone())) {
-			c = (Calendar)c.clone();
-			c.setTimeZone(tz);
+	private static Calendar convert(Date in, ClassMeta<?> hint, BeanSession session) throws ParseException {
+		try {
+			if (hint == null || ! hint.canCreateNewInstance())
+				hint = session.getClassMeta(GregorianCalendar.class);
+			Calendar c = (Calendar)hint.newInstance();
+			c.setTime(in);
+			return c;
+		} catch (Exception e) {
+			throw new ParseException(e);
 		}
-		return c;
 	}
 }

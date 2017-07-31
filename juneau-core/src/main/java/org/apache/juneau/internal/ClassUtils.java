@@ -783,8 +783,26 @@ public final class ClassUtils {
 	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
 	 * @throws RuntimeException if constructor could not be found or called.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(Class<T> c, Object c2, Object...args) {
+		return newInstanceFromOuter(null, c, c2, args);
+	}
+
+	/**
+	 * Creates an instance of the specified class from within the context of another object.
+	 *
+	 * @param outer
+	 * 	The outer object.
+	 * 	Can be <jk>null</jk>.
+	 * @param c The class to cast to.
+	 * @param c2
+	 * 	The class to instantiate.
+	 * 	Can also be an instance of the class.
+	 * @param args The arguments to pass to the constructor.
+	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws RuntimeException if constructor could not be found or called.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, Object...args) {
 		if (c2 == null)
 			return null;
 		if (c2 instanceof Class) {
@@ -792,8 +810,15 @@ public final class ClassUtils {
 				Class<?> c3 = (Class<?>)c2;
 				if (c3.isInterface() || isAbstract(c3))
 					return null;
-				if (args.length == 0)
-					return (T)c3.newInstance();
+				Constructor<?> con = findPublicConstructor(c3, args);
+				if (con != null)
+					return (T)con.newInstance(args);
+				if (outer != null) {
+					Object[] args2 = new AList<Object>().append(outer).appendAll(args).toArray();
+					con = findPublicConstructor(c3, args2);
+					if (con != null)
+						return (T)con.newInstance(args2);
+				}
 				return (T)c3.getConstructor(getClasses(args)).newInstance(args);
 			} catch (Exception e) {
 				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());

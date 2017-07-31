@@ -813,7 +813,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <p>
-	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.ß
+	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
 	public static final String BEAN_locale = "BeanContext.locale";
 
@@ -828,7 +828,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <p>
-	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.ß
+	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
 	public static final String BEAN_timeZone = "BeanContext.timeZone";
 

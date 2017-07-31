@@ -32,6 +32,20 @@ public class LocalizedDatesTest {
 		testDate.setTimeInMillis(0);
 		testDate.set(2001, 2, 3, 10, 11, 12);
 	}
+	
+	private static TimeZone prevTimeZone;
+	
+	@BeforeClass
+	public static void before() {
+		prevTimeZone = TimeZone.getDefault();
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+	}
+	
+	@AfterClass
+	public static void after() {
+		TimeZone.setDefault(prevTimeZone);
+	}
+	
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
@@ -128,10 +142,11 @@ public class LocalizedDatesTest {
 			{ "073", testDate, CalendarSwap.RFC2822D.class, null, Locale.JAPAN, null, null, "03 3 2001" },
 			{ "074", testDate, CalendarSwap.RFC2822D.class, "en_UK", Locale.JAPAN, null, null, "03 3 2001" },
 			{ "075", testDate, CalendarSwap.RFC2822D.class, "ja_JP", Locale.KOREA, null, null, "03 3월 2001" },
-			{ "076", testDate, CalendarSwap.RFC2822D.class, "en_US", null, "PST", null, "03 Mar 2001" },
-			{ "077", testDate, CalendarSwap.RFC2822D.class, "en_US", null, TimeZone.getTimeZone("PST"), null, "03 Mar 2001" },
-			{ "078", testDate, CalendarSwap.RFC2822D.class, "en_US", null, null, TimeZone.getTimeZone("EST"), "03 Mar 2001" },
-			{ "079", testDate, CalendarSwap.RFC2822D.class, "en_US", null, "PST", TimeZone.getTimeZone("EST"), "03 Mar 2001" },
+			// Must use timezones to the east of GMT so that date doesn't roll back in test.
+			{ "076", testDate, CalendarSwap.RFC2822D.class, "en_US", null, "WET", null, "03 Mar 2001" },
+			{ "077", testDate, CalendarSwap.RFC2822D.class, "en_US", null, TimeZone.getTimeZone("WET"), null, "03 Mar 2001" },
+			{ "078", testDate, CalendarSwap.RFC2822D.class, "en_US", null, null, TimeZone.getTimeZone("WET"), "03 Mar 2001" },
+			{ "079", testDate, CalendarSwap.RFC2822D.class, "en_US", null, "PST", TimeZone.getTimeZone("WET"), "03 Mar 2001" },
 
 			// CalendarSwap.DateSimple
 			{ "080", testDate, CalendarSwap.DateSimple.class, null, null, null, null, "2001/03/03" },

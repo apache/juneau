@@ -535,12 +535,18 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
-		if (o == null)
-			return null;
-		PojoSwap f = (type == null || type.isObject() ? getClassMeta(o.getClass()).getPojoSwap() : type.getPojoSwap());
-		if (f == null)
-			return o;
-		return f.swap(this, o);
+		try {
+			if (o == null)
+				return null;
+			PojoSwap f = (type == null || type.isObject() ? getClassMeta(o.getClass()).getPojoSwap() : type.getPojoSwap());
+			if (f == null)
+				return o;
+			return f.swap(this, o);
+		} catch (SerializeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SerializeException(e);
+		}
 	}
 
 	/**

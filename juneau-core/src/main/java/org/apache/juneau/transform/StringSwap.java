@@ -13,8 +13,6 @@
 package org.apache.juneau.transform;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Abstract subclass for POJO swaps that swap objects for strings.
@@ -24,12 +22,12 @@ import org.apache.juneau.serializer.*;
 public abstract class StringSwap<T> extends PojoSwap<T,String> {
 
 	@Override /* PojoSwap */
-	public String swap(BeanSession session, T o) throws SerializeException {
+	public String swap(BeanSession session, T o) throws Exception {
 		return super.swap(session, o);
 	}
 
 	@Override /* PojoSwap */
-	public T unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
+	public T unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		return super.unswap(session, f, hint);
 	}
 }

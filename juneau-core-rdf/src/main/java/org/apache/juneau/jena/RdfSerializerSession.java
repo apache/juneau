@@ -182,7 +182,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, 
-			String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
+			String attrName, BeanPropertyMeta bpm, Resource parentResource) throws Exception {
 		Model m = model;
 
 		ClassMeta<?> aType = null;       // The actual type
@@ -313,7 +313,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		return getUriResolver().resolve(s);
 	}
 
-	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws SerializeException {
+	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws Exception {
 
 		m = sort(m);
 
@@ -334,7 +334,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		}
 	}
 
-	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws SerializeException {
+	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws Exception {
 		List<BeanPropertyValue> l = m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
 		Collections.reverse(l);
 		for (BeanPropertyValue bpv : l) {
@@ -370,7 +370,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 
-	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws SerializeException {
+	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws Exception {
 
 		ClassMeta<?> elementType = type.getElementType();
 		for (Object e : c) {
@@ -380,7 +380,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		return list;
 	}
 
-	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws SerializeException {
+	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws Exception {
 		ClassMeta<?> elementType = type.getElementType();
 		List<RDFNode> l = new ArrayList<RDFNode>(c.size());
 		for (Object e : c) {
@@ -390,7 +390,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType, 
-			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
+			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws Exception {
 		ClassMeta<?> elementType = sType.getElementType();
 		for (Object e : c) {
 			Namespace ns = null;

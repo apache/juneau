@@ -375,11 +375,17 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> T get(PojoSwap<T,?> pojoSwap, String key) throws ParseException {
-		Object o = super.get(key);
-		if (o == null)
-			return null;
-		PojoSwap swap = pojoSwap;
-		return (T)swap.unswap(session, o, null);
+		try {
+			Object o = super.get(key);
+			if (o == null)
+				return null;
+			PojoSwap swap = pojoSwap;
+			return (T)swap.unswap(session, o, null);
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
 	}
 
 	/**

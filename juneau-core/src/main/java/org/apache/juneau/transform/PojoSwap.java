@@ -173,9 +173,9 @@ public abstract class PojoSwap<T,S> {
 	 * 	This is always going to be the same bean context that created this swap.
 	 * @param o The object to be transformed.
 	 * @return The transformed object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
-	public S swap(BeanSession session, T o) throws SerializeException {
+	public S swap(BeanSession session, T o) throws Exception {
 		throw new SerializeException("Swap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 
@@ -192,9 +192,9 @@ public abstract class PojoSwap<T,S> {
 	 * 	{@code GregorianCalendar}.
 	 * 	<br>This may be <jk>null</jk> if the parser cannot make this determination.
 	 * @return The narrowed object.
-	 * @throws ParseException If this method is not implemented.
+	 * @throws Exception If this method is not implemented.
 	 */
-	public T unswap(BeanSession session, S f, ClassMeta<?> hint) throws ParseException {
+	public T unswap(BeanSession session, S f, ClassMeta<?> hint) throws Exception {
 		throw new ParseException("Unswap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 

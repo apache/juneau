@@ -69,13 +69,13 @@ nav {
 	margin: 0px 25px;	
 }
 
-nav ol {
+nav>ol {
 	list-style-type: none;
 	margin: 0px 10px;
 	padding: 0px;
 }
 
-nav li {
+nav>ol>li {
 	display: inline;
 }
 
@@ -171,6 +171,43 @@ footer {
 
 .popup-show {
 	display: block;
+}
+
+/**********************************************************************************************************************/
+/**  Tooltips                                                                                                        **/
+/**********************************************************************************************************************/
+
+.tooltip {
+	position: relative;
+	display: inline-block;	    
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	background-color: #FEF9E7;
+	color: black;
+	padding: 5px;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	margin-left: 30px;
+	box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	transition: opacity 0.5s;
+	font-weight: normal;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}	
+
+.tooltiptext {
+	white-space: nowrap;
+	float: left;
+	border: 1px solid black;
 }
 
 /**********************************************************************************************************************/
