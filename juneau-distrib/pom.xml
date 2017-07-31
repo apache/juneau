@@ -47,6 +47,14 @@
 									<artifactId>juneau-all</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-all</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
 								
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
@@ -138,14 +146,6 @@
 									<version>${project.version}</version>
 								</artifactItem>
 								
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-examples-rest</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>

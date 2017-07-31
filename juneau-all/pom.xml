@@ -85,6 +85,15 @@
 							<goal>shade</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>source-jar</id>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createSourcesJar>true</createSourcesJar>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
