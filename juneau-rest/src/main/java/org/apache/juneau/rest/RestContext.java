@@ -475,7 +475,7 @@ public final class RestContext extends Context {
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = resolve(RestResourceResolver.class, b.resourceResolver);
+			resourceResolver = resolve(resource, RestResourceResolver.class, b.resourceResolver);
 			for (Object o : config.childResources) {
 				String path = null;
 				Object r = null;
@@ -530,8 +530,8 @@ public final class RestContext extends Context {
 				}
 			}
 
-			callHandler = config.callHandler == null ? new RestCallHandler(this) : resolve(RestCallHandler.class, config.callHandler, this);
-			infoProvider = config.infoProvider == null ? new RestInfoProvider(this) : resolve(RestInfoProvider.class, config.infoProvider, this);
+			callHandler = config.callHandler == null ? new RestCallHandler(this) : resolve(resource, RestCallHandler.class, config.callHandler, this);
+			infoProvider = config.infoProvider == null ? new RestInfoProvider(this) : resolve(resource, RestInfoProvider.class, config.infoProvider, this);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -623,7 +623,7 @@ public final class RestContext extends Context {
 			pojoSwaps = toObjectArray(sc.pojoSwaps, Class.class);
 
 			for (Class<?> c : sc.paramResolvers) {
-				RestParam rp = newInstance(RestParam.class, c);
+				RestParam rp = newInstanceFromOuter(resource, RestParam.class, c);
 				paramResolvers.put(rp.forClass(), rp);
 			}
 
@@ -658,13 +658,13 @@ public final class RestContext extends Context {
 			beanContext = ps.getBeanContext();
 
 			for (Object o : sc.converters)
-				converters.add(resolve(RestConverter.class, o));
+				converters.add(resolve(resource, RestConverter.class, o));
 
 			for (Object o : sc.guards)
-				guards.add(resolve(RestGuard.class, o));
+				guards.add(resolve(resource, RestGuard.class, o));
 
 			for (Object o : sc.responseHandlers)
-				responseHandlers.add(resolve(ResponseHandler.class, o));
+				responseHandlers.add(resolve(resource, ResponseHandler.class, o));
 
 			mimetypesFileTypeMap = sc.mimeTypes;
 
@@ -697,13 +697,13 @@ public final class RestContext extends Context {
 			}
 			staticFilesPrefixes = staticFilesMap.keySet().toArray(new String[0]);
 
-			logger = sc.logger == null ? new RestLogger.NoOp() : resolve(RestLogger.class, sc.logger);
+			logger = sc.logger == null ? new RestLogger.NoOp() : resolve(resource, RestLogger.class, sc.logger);
 
 			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
 
 			this.htmlWidgets = new LinkedHashMap<String,Widget>();
 			for (Class<? extends Widget> wc : sc.htmlWidgets) {
-				Widget w = ClassUtils.newInstanceFromOuter(resource, Widget.class, wc);
+				Widget w = resolve(resource, Widget.class, wc);
 				this.htmlWidgets.put(w.getName(), w);
 			}
 
@@ -717,7 +717,7 @@ public final class RestContext extends Context {
 			htmlFooter = sc.htmlFooter;
 			htmlNoWrap = sc.htmlNoWrap;
 			htmlNoResultsMessage = sc.htmlNoResultsMessage;
-			htmlTemplate = ClassUtils.newInstance(HtmlDocTemplate.class, sc.htmlTemplate);
+			htmlTemplate = resolve(resource, HtmlDocTemplate.class, sc.htmlTemplate);
 		}
 	}
 
@@ -1787,17 +1787,9 @@ public final class RestContext extends Context {
 	/**
 	 * Takes in an object of type T or a Class<T> and either casts or constructs a T.
 	 */
-	@SuppressWarnings("unchecked")
-	private static <T> T resolve(Class<T> c, Object o, Object...cArgs) throws RestServletException {
-		if (c.isInstance(o))
-			return (T)o;
-		if (! (o instanceof Class))
-			throw new RestServletException("Invalid object type passed to resolve:  ''{0}''.  Must be an object of type T or a Class<? extend T>.", o.getClass());
-		Constructor<T> n = findPublicConstructor((Class<T>)o, cArgs);
-		if (n == null)
-			throw new RestServletException("Could not find public constructor for class ''{0}'' that takes in args {1}", c, JsonSerializer.DEFAULT_LAX.toString(getClasses(cArgs)));
+	private static <T> T resolve(Object outer, Class<T> c, Object o, Object...cArgs) throws RestServletException {
 		try {
-			return n.newInstance(cArgs);
+			return ClassUtils.newInstanceFromOuter(outer, c, o, cArgs);
 		} catch (Exception e) {
 			throw new RestServletException("Exception occurred while constructing class ''{0}''", c).initCause(e);
 		}

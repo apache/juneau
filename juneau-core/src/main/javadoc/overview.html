@@ -6814,7 +6814,7 @@
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
 		<li><p><a class='doclink' href='#6.3.2'>6.3.2 (TBD)</a></p>
-		<li><p><a class='doclink' href='#6.3.1'>6.3.1 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.3.1'>6.3.1 (Aug 1, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.3.0'>6.3.0 (Jun 30, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.2.0'>6.2.0 (Apr 28, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.1.0'>6.1.0 (Feb 25, 2017)</a></p>
@@ -6938,9 +6938,20 @@
 				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 				dependency injection frameworks.
 			<li>
-				{@link org.apache.juneau.rest.widget.Widget} classes can now be defined as inner classes of servlets/resources.
+				The following implementation classes can now be defined as non-static inner classes of servlets/resources:
+				<ul>
+					<li>{@link org.apache.juneau.rest.widget.Widget}
+					<li>{@link org.apache.juneau.rest.RestConverter}
+					<li>{@link org.apache.juneau.rest.RestGuard}
+					<li>{@link org.apache.juneau.rest.ResponseHandler}
+					<li>{@link org.apache.juneau.rest.RestCallHandler}
+					<li>{@link org.apache.juneau.rest.RestInfoProvider}
+					<li>{@link org.apache.juneau.rest.RestResourceResolver}
+					<li>{@link org.apache.juneau.rest.RestLogger}
+					<li>{@link org.apache.juneau.html.HtmlDocTemplate}
+				</ul>
 			<li>
-				New tooltip template: {@link org.apache.juneau.rest.widget.Tooltip}.
+				New tooltip template: {@link org.apache.juneau.rest.widget.Tooltip}
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.microservice</h6>
