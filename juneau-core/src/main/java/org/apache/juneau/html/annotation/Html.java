@@ -98,4 +98,24 @@ public @interface Html {
 	 * </p>
 	 */
 	String link() default "";
+
+	/**
+	 * Use the specified anchor text when serializing a URI.
+	 *
+	 * <p>
+	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
+	 *
+	 * <h6 class='figure'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> FileSpace {
+	 *
+	 * 		<ja>@Html</ja>(anchorText=<js>"drive/{drive}"</js>)
+	 * 		<jk>public</jk> String getDrive() {
+	 * 			...;
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	String anchorText() default "";
+
 }

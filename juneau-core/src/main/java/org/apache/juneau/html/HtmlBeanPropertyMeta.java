@@ -25,7 +25,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	private final boolean asXml, noTables, noTableHeaders, asPlainText;
 	private final HtmlRender render;
-	private final String link;
+	private final String link, anchorText;
 
 	/**
 	 * Constructor.
@@ -49,12 +49,13 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		this.asPlainText = b.asPlainText;
 		this.render = ClassUtils.newInstance(HtmlRender.class, b.render);
 		this.link = b.link;
+		this.anchorText = b.anchorText;
 	}
 
 	private static class Builder {
 		boolean asXml, noTables, noTableHeaders, asPlainText;
 		Class<? extends HtmlRender> render = HtmlRender.class;
-		String link;
+		String link, anchorText;
 
 		void findHtmlInfo(Html html) {
 			if (html == null)
@@ -71,6 +72,8 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 				render = html.render();
 			if (! html.link().isEmpty())
 				link = html.link();
+			if (! html.anchorText().isEmpty())
+				anchorText = html.anchorText();
 		}
 	}
 
@@ -138,5 +141,17 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 */
 	public String getLink() {
 		return link;
+	}
+
+	/**
+	 * Specifies the anchor text for this property.
+	 *
+	 * <p>
+	 * This value is specified via the {@link Html#anchorText()} annotation.
+	 *
+	 * @return The link string, or <jk>null</jk> if not specified.
+	 */
+	public String getAnchorText() {
+		return anchorText;
 	}
 }

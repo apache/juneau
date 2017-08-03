@@ -1010,6 +1010,9 @@ public final class StringUtils {
 	 */
 	public static String replaceVars(String s, Map<String,Object> m) {
 
+		if (s == null)
+			return null;
+
 		if (s.indexOf('{') == -1)
 			return s;
 

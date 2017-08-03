@@ -195,7 +195,7 @@ import org.apache.juneau.xml.*;
 			"<h2>$R{methodSummary,$R{servletDescription}}</h2>",
 			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
 		},
-		stylesheet="servlet:/styles/devops.css"
+		stylesheet="servlet:/styles/light.css"
 	),
 
 	// The location on the classpath or file system of the fav-icon.

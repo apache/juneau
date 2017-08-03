@@ -115,7 +115,12 @@ public class RestMicroservice extends Microservice {
 	@Override /* Microservice */
 	public RestMicroservice start() throws Exception {
 		super.start();
-		initLogging();
+		try {
+			initLogging();
+		} catch (Exception e) {
+			// If logging fails, just log a stack trace.
+			e.printStackTrace();
+		}
 		createServer();
 		startServer();
 		return this;

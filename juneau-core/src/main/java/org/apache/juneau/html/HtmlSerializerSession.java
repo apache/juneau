@@ -438,6 +438,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
+	@SuppressWarnings("hiding")
 	private void serializeBeanMap(HtmlWriter out, BeanMap<?> m, ClassMeta<?> eType,
 			BeanPropertyMeta ppMeta) throws Exception {
 		int i = indent;
@@ -470,7 +471,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (canIgnoreValue(cMeta, key, value))
 				continue;
 
-			String link = cMeta.isCollectionOrArray() ? null : getLink(pMeta);
+			String link = null, anchorText = null;
+			if (! cMeta.isCollectionOrArray()) {
+				link = m.resolveVars(getLink(pMeta));
+				anchorText = m.resolveVars(getAnchorText(pMeta));
+			}
+
+			if (anchorText != null)
+				value = anchorText;
 
 			out.sTag(i+1, "tr").nl(i+1);
 			out.sTag(i+2, "td").text(key).eTag("td").nl(i+2);
@@ -482,7 +490,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			try {
 				if (link != null)
-					out.oTag(i+3, "a").attrUri("href", m.resolveVars(link)).cTag();
+					out.oTag(i+3, "a").attrUri("href", link).cTag();
 				ContentResult cr = serializeAnything(out, value, cMeta, key, 2, pMeta, false);
 				if (cr == CR_NORMAL)
 					out.i(i+2);
@@ -502,7 +510,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "hiding" })
 	private void serializeCollection(HtmlWriter out, Object in, ClassMeta<?> sType,
 			ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
 
@@ -586,15 +594,24 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					for (Object k : th) {
 						BeanMapEntry p = m2.getProperty(toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
-						String link = pMeta.getClassMeta().isCollectionOrArray() ? null : getLink(pMeta);
 						Object value = p.getValue();
+
+						String link = null, anchorText = null;
+						if (! pMeta.getClassMeta().isCollectionOrArray()) {
+							link = m2.resolveVars(getLink(pMeta));
+							anchorText = m2.resolveVars(getAnchorText(pMeta));
+						}
+
+						if (anchorText != null)
+							value = anchorText;
+
 						String style = getStyle(this, pMeta, value);
 						out.oTag(i+2, "td");
 						if (style != null)
 							out.attr("style", style);
 						out.cTag();
 						if (link != null)
-							out.oTag("a").attrUri("href", m2.resolveVars(link)).cTag();
+							out.oTag("a").attrUri("href", link).cTag();
 						ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
@@ -652,6 +669,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	private static String getLink(BeanPropertyMeta pMeta) {
 		return pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getLink();
+	}
+
+	private static String getAnchorText(BeanPropertyMeta pMeta) {
+		return pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getAnchorText();
 	}
 
 	/*

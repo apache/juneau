@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  */
 public class StyleMenuItem extends MenuItemWidget {
 
-	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original"};
+	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original", "dark"};
 
 	@Override /* MenuItemWidget */
 	public String getLabel(RestRequest req) {
