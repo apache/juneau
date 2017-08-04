@@ -119,6 +119,14 @@ article * {
 	color: #EEE;
 }
 
+article textarea, article input, article button {
+	color: #111;
+}
+
+article textarea, article input {
+	background-color: #EEE;
+}
+
 article div.data {
 	padding: 10px;
 	background-color: #373a3c;
@@ -196,7 +204,7 @@ footer {
 .popup-content {
 	display: none;
 	position: absolute;
-	background-color: #f4f6f9;
+	background-color: #DDD;
 	white-space: nowrap;
 	padding: 5px;
 	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
@@ -242,6 +250,10 @@ footer {
 	opacity: 0;
 	transition: opacity 0.5s;
 	font-weight: normal;
+}
+
+.tooltip .tooltiptext * {
+	color: black;
 }
 
 .tooltip:hover .tooltiptext {
