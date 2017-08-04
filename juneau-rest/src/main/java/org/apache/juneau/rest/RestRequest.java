@@ -125,7 +125,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			method = _method;
 
-			stylesheet = getQuery().getString("stylesheet");
+			String _stylesheet = getQuery().getString("stylesheet");
+			if (_stylesheet != null)
+				req.getSession().setAttribute("stylesheet", _stylesheet);
+			stylesheet = (String)req.getSession().getAttribute("stylesheet");
 
 			headers = new RequestHeaders();
 			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
