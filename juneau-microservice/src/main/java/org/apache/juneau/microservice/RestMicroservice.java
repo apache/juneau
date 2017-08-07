@@ -78,7 +78,8 @@ public class RestMicroservice extends Microservice {
 	int port;
 	String contextPath;
 	Logger logger;
-
+	Object jettyXml;
+	
 	/**
 	 * Main method.
 	 * 
@@ -325,16 +326,26 @@ public class RestMicroservice extends Microservice {
 
 		ConfigFile cf = getConfig();
 		ObjectMap mf = getManifest();
-
-		String jettyXml = cf.getString("REST/jettyXml", mf.getString("Rest-JettyXml", null));
+		if (jettyXml == null)
+			jettyXml = cf.getString("REST/jettyXml", mf.getString("Rest-JettyXml", null));
 		if (jettyXml != null) {
-			File f = new File(jettyXml);
-			if (f.exists()) {
-				XmlConfiguration config = new XmlConfiguration(new FileInputStream(f));
-				server = (Server)config.configure();
-			} else {
-				throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", jettyXml);
+			InputStream is = null;
+			if (jettyXml instanceof String) {
+				jettyXml = new File(jettyXml.toString());
 			}
+			if (jettyXml instanceof File) {
+				File f = (File)jettyXml;
+				if (f.exists())
+					is = new FileInputStream((File)jettyXml);
+				else 
+					throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", jettyXml);
+			} else if (jettyXml instanceof InputStream) {
+				is = (InputStream)jettyXml;
+			}
+			
+			XmlConfiguration config = new XmlConfiguration(is);
+			server = (Server)config.configure();
+		
 		} else {
 			int[] ports = cf.getObjectWithDefault("REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}), int[].class);
 
@@ -547,7 +558,30 @@ public class RestMicroservice extends Microservice {
 		}
 	}
 
+	/**
+	 * Sets the <code>jetty.xml</code> used to configure the Jetty server.
+	 * 
+	 * <p>
+	 * 
+	 * @param jettyXml 
+	 * 	The <code>jetty.xml</code>.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li>A {@link File} representing the location on the file system.
+	 * 		<li>An {@link InputStream} containing the contents of the file.
+	 * 		<li>A {@link String} representing the file system path.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestMicroservice setJettyXml(Object jettyXml) {
+		if (jettyXml instanceof String || jettyXml instanceof File || jettyXml instanceof InputStream)
+			this.jettyXml = jettyXml;
+		else
+			throw new FormattedRuntimeException("Invalid object type passed to setJettyXml()", jettyXml == null ? null : jettyXml.getClass().getName());
+		return this;
+	}
 
+	
 	//--------------------------------------------------------------------------------
 	// Lifecycle listener methods.
 	//--------------------------------------------------------------------------------
