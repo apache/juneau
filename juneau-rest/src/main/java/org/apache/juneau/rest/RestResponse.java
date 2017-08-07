@@ -312,6 +312,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 					public final void close() throws IOException {
 						os2.close();
 					}
+					@Override /* ServletOutputStream */
+					public boolean isReady() {
+						return true;
+					}
+					@Override /* ServletOutputStream */
+					public void setWriteListener(WriteListener arg0) {
+						throw new NoSuchMethodError();
+					}
 				};
 			}
 		}

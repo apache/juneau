@@ -438,5 +438,20 @@ public class RequestBody {
 		public final void close() throws IOException {
 			is.close();
 		}
+
+		@Override /* ServletInputStream */
+		public boolean isFinished() {
+			return false;
+		}
+
+		@Override /* ServletInputStream */
+		public boolean isReady() {
+			return true;
+		}
+
+		@Override /* ServletInputStream */
+		public void setReadListener(ReadListener arg0) {
+			throw new NoSuchMethodError();
+		}
 	}
 }

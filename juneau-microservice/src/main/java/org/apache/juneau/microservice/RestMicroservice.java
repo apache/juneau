@@ -14,7 +14,6 @@ package org.apache.juneau.microservice;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
@@ -31,13 +30,9 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.eclipse.jetty.security.*;
-import org.eclipse.jetty.security.authentication.*;
 import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.ssl.*;
 import org.eclipse.jetty.servlet.*;
-import org.eclipse.jetty.util.security.*;
-import org.eclipse.jetty.util.ssl.*;
+import org.eclipse.jetty.xml.*;
 
 /**
  * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.
@@ -118,7 +113,7 @@ public class RestMicroservice extends Microservice {
 		try {
 			initLogging();
 		} catch (Exception e) {
-			// If logging fails, just log a stack trace.
+			// If logging can be initialized, just print a stack trace and continue.
 			e.printStackTrace();
 		}
 		createServer();
@@ -301,7 +296,8 @@ public class RestMicroservice extends Microservice {
 	 * Subclasses can override this method to customize the Jetty server before it is started.
 	 * 
 	 * <p>
-	 * The default implementation is configured by the following values in the config file:
+	 * The default implementation is configured by the following values in the config file 
+	 * if a jetty.xml is not specified via a <code>REST/jettyXml</code> setting:
 	 * <p class='bcode'>
 	 * 	<cc>#================================================================================
 	 * 	# REST settings
@@ -318,37 +314,8 @@ public class RestMicroservice extends Microservice {
 	 * 	# Default is Rest-ContextPath in manifest file, or "/".</cc>
 	 * 	<ck>contextPath</ck> =
 	 *
-	 * 	<cc># Authentication:  NONE, BASIC.
-	 * 	# Default is Rest-AuthType in manifest file, or NONE.</cc>
-	 * 	<ck>authType</ck> = NONE
-	 *
-	 * 	<cc># The BASIC auth username.
-	 * 	# Default is Rest-LoginUser in manifest file.</cc>
-	 * 	<ck>loginUser</ck> =
-	 *
-	 * 	<cc># The BASIC auth password.
-	 * 	# Default is Rest-LoginPassword in manifest file.</cc>
-	 * 	<ck>loginPassword</ck> =
-	 *
-	 * 	<cc># The BASIC auth realm.
-	 * 	# Default is Rest-AuthRealm in manifest file.</cc>
-	 * 	<ck>authRealm</ck> =
-	 *
 	 * 	<cc># Enable SSL support.</cc>
 	 * 	<ck>useSsl</ck> = false
-	 *
-	 * 	<cc>#================================================================================
-	 * 	# Bean properties on the org.eclipse.jetty.util.ssl.SslSocketFactory class
-	 * 	#--------------------------------------------------------------------------------
-	 * 	# Ignored if REST/useSsl is false.
-	 * 	#================================================================================</cc>
-	 * 	<cs>[REST-SslContextFactory]</cs>
-	 * 	<ck>keyStorePath</ck> = client_keystore.jks
-	 * 	<ck>keyStorePassword*</ck> = {HRAaRQoT}
-	 * 	<ck>excludeCipherSuites</ck> = TLS_DHE.*, TLS_EDH.*
-	 * 	<ck>excludeProtocols</ck> = SSLv3
-	 * 	<ck>allowRenegotiate</ck> = false
-	 * </p>
 	 *
 	 * @return The newly-created server.
 	 * @throws Exception
@@ -359,57 +326,35 @@ public class RestMicroservice extends Microservice {
 		ConfigFile cf = getConfig();
 		ObjectMap mf = getManifest();
 
-		int[] ports = cf.getObjectWithDefault("REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}), int[].class);
-
-		port = findOpenPort(ports);
-		if (port == 0) {
-			System.err.println("Open port not found.  Tried " + JsonSerializer.DEFAULT_LAX.toString(ports));
-			System.exit(1);
-		}
-
-		contextPath = cf.getString("REST/contextPath", mf.getString("Rest-ContextPath", "/"));
-
-		if (cf.getBoolean("REST/useSsl")) {
-
-			SslContextFactory sslContextFactory = new SslContextFactory();
-
-			// Write the properties in REST-SslContextFactory to the bean setters on sslContextFactory.
-			// Throws an exception if section contains unknown properties.
-			// Only look for bean properties of type String/String/boolean/int since class has multiple
-			// 	setters with the same name (e.g. setKeyStore(KeyStore) and setKeyStore(String)).
-			ObjectMap m = cf.writeProperties("REST-SslContextFactory", sslContextFactory, false, String.class, String[].class, boolean.class, int.class);
-
-			// We're using Jetty 8 that doesn't allow regular expression matching in SslContextFactory.setExcludeCipherSuites(),
-			// so to prevent having the config file list all old cipher suites, exclude the known bad ones.
-			String[] excludeCipherSuites = combine(
-				split("SSL_RSA_WITH_DES_CBC_SHA,SSL_DHE_RSA_WITH_DES_CBC_SHA,SSL_DHE_DSS_WITH_DES_CBC_SHA,SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_DSS_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_DSS_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_DSS_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_DSS_WITH_AES_128_CBC_SHA"),
-				sslContextFactory.getExcludeCipherSuites()
-			);
-			sslContextFactory.setExcludeCipherSuites(excludeCipherSuites);
-
-			logger.log(Level.WARNING, "SSL properties set: {0}", JsonSerializer.DEFAULT_LAX.toString(m));
-
-			SslSocketConnector connector = new SslSocketConnector(sslContextFactory);
-			connector.setPort(port);
-
-			server = new Server();
-			server.setConnectors(new Connector[] { connector });
-
+		String jettyXml = cf.getString("REST/jettyXml", mf.getString("Rest-JettyXml", null));
+		if (jettyXml != null) {
+			File f = new File(jettyXml);
+			if (f.exists()) {
+				XmlConfiguration config = new XmlConfiguration(new FileInputStream(f));
+				server = (Server)config.configure();
+			} else {
+				throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", jettyXml);
+			}
 		} else {
+			int[] ports = cf.getObjectWithDefault("REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}), int[].class);
+
+			port = findOpenPort(ports);
+			if (port == 0) {
+				System.err.println("Open port not found.  Tried " + JsonSerializer.DEFAULT_LAX.toString(ports));
+				System.exit(1);
+			}
+
+			contextPath = cf.getString("REST/contextPath", mf.getString("Rest-ContextPath", "/"));
 			server = new Server(port);
+			
+			servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+
+			servletContextHandler.setContextPath(contextPath);
+			server.setHandler(servletContextHandler);
+
+			for (Map.Entry<String,Class<? extends Servlet>> e : getResourceMap().entrySet())
+				servletContextHandler.addServlet(e.getValue(), e.getKey()).setInitOrder(0);
 		}
-
-		servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-
-		String authType = cf.getString("REST/authType", mf.getString("Rest-AuthType", "NONE"));
-		if (authType.equals("BASIC"))
-			servletContextHandler.setSecurityHandler(basicAuth(cf, mf));
-
-		servletContextHandler.setContextPath(contextPath);
-		server.setHandler(servletContextHandler);
-
-		for (Map.Entry<String,Class<? extends Servlet>> e : getResourceMap().entrySet())
-			servletContextHandler.addServlet(e.getValue(), e.getKey()).setInitOrder(0);
 		
 		return server;
 	}
@@ -454,15 +399,6 @@ public class RestMicroservice extends Microservice {
 		return server;
 	}
 	
-	/**
-	 * Returns the underlying servlet context handler.
-	 * 
-	 * @return The underlying servlet context handler, or <jk>null</jk> if {@link #createServer()} has not yet been called.
-	 */
-	public ServletContextHandler getServletContextHandler() {
-		return servletContextHandler;
-	}
-
 	private static int findOpenPort(int[] ports) {
 		for (int port : ports) {
 			try {
@@ -489,6 +425,7 @@ public class RestMicroservice extends Microservice {
 	protected int startServer() throws Exception {
 		onStartServer();
 		server.start();
+		this.port = ((ServerConnector)server.getConnectors()[0]).getLocalPort();
 		logger.warning("Server started on port " + port);
 		onPostStartServer();
 		return port;
@@ -694,38 +631,5 @@ public class RestMicroservice extends Microservice {
 	public RestMicroservice setManifest(Class<?> c) throws IOException {
 		super.setManifest(c);
 		return this;
-	}
-
-	//--------------------------------------------------------------------------------
-	// Other methods.
-	//--------------------------------------------------------------------------------
-
-	private static final SecurityHandler basicAuth(ConfigFile cf, ObjectMap mf) {
-
-		HashLoginService l = new HashLoginService();
-		String user = cf.getString("REST/loginUser", mf.getString("Rest-LoginUser"));
-		String pw = cf.getString("REST/loginPassword", mf.getString("Rest-LoginPassword"));
-		String realm = cf.getString("REST/authRealm", mf.getString("Rest-AuthRealm", ""));
-		String ctx = cf.getString("REST/contextPath", mf.getString("Rest-ContextPath", "/"));
-
-		l.putUser(user, Credential.getCredential(pw), new String[] { "user" });
-		l.setName(realm);
-
-		Constraint constraint = new Constraint();
-		constraint.setName(Constraint.__BASIC_AUTH);
-		constraint.setRoles(new String[] { "user" });
-		constraint.setAuthenticate(true);
-
-		ConstraintMapping cm = new ConstraintMapping();
-		cm.setConstraint(constraint);
-		cm.setPathSpec(ctx);
-
-		ConstraintSecurityHandler csh = new ConstraintSecurityHandler();
-		csh.setAuthenticator(new BasicAuthenticator());
-		csh.setRealmName("myrealm");
-		csh.addConstraintMapping(cm);
-		csh.setLoginService(l);
-
-		return csh;
 	}
 }

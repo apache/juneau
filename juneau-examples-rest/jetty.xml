@@ -17,37 +17,45 @@
 
 <Configure id="ExampleServer" class="org.eclipse.jetty.server.Server">
 
-  <Set name="connectors">
-    <Array type="org.eclipse.jetty.server.Connector">
-      <Item>
-        <New class="org.eclipse.jetty.server.ServerConnector">
-          <Arg><Ref refid="ExampleServer"/></Arg>
-          <Set name="port">10000</Set>
-        </New>
-      </Item>
-    </Array>
-  </Set>
+	<Set name="connectors">
+		<Array type="org.eclipse.jetty.server.Connector">
+			<Item>
+				<New class="org.eclipse.jetty.server.ServerConnector">
+					<Arg>
+						<Ref refid="ExampleServer" />
+					</Arg>
+					<Set name="port">10000</Set>
+				</New>
+			</Item>
+		</Array>
+	</Set>
 
-  <New id="context" class="org.eclipse.jetty.servlet.ServletContextHandler">
-    <Set name="contextPath">/</Set>
-    <Call name="addServlet">
-      <Arg>org.apache.juneau.examples.rest.RootResources</Arg>
-      <Arg>/*</Arg>
-    </Call>
-  </New>
+	<New id="context" class="org.eclipse.jetty.servlet.ServletContextHandler">
+		<Set name="contextPath">/</Set>
+		<Call name="addServlet">
+			<Arg>org.apache.juneau.examples.rest.RootResources</Arg>
+			<Arg>/*</Arg>
+		</Call>
+		<Set name="sessionHandler">
+			<New class="org.eclipse.jetty.server.session.SessionHandler" />
+		</Set>
+	</New>
 
-  <Set name="handler">
-    <New class="org.eclipse.jetty.server.handler.HandlerCollection">
-      <Set name="handlers">
-        <Array type="org.eclipse.jetty.server.Handler">
-          <Item>
-            <Ref refid="context" />
-          </Item>
-          <Item>
-            <New class="org.eclipse.jetty.server.handler.DefaultHandler" />
-          </Item>
-        </Array>
-      </Set>
-    </New>
-  </Set>
+	<Set name="handler">
+		<New class="org.eclipse.jetty.server.handler.HandlerCollection">
+			<Set name="handlers">
+				<Array type="org.eclipse.jetty.server.Handler">
+					<Item>
+						<Ref refid="context" />
+					</Item>
+					<Item>
+						<New class="org.eclipse.jetty.server.handler.DefaultHandler" />
+					</Item>
+					<Item>
+						<New class="org.eclipse.jetty.server.session.SessionHandler" />
+					</Item>
+				</Array>
+			</Set>
+		</New>
+	</Set>
 </Configure>

@@ -189,12 +189,12 @@ public class HeadersTest extends RestTestcase {
 		assertEquals("foo", client.doGet(URL + "/te").query("TE", "foo").getResponseAsString());
 	}
 
-	@Test
-	public void upgrade() throws Exception {
-		assertEquals("foo", client.doGet(URL + "/upgrade").upgrade("foo").getResponseAsString());
-		assertEquals("foo", client.doGet(URL + "/upgrade").query("Upgrade", "foo").getResponseAsString());
-	}
-
+//	@Test
+//	public void upgrade() throws Exception {
+//		assertEquals("foo", client.doGet(URL + "/upgrade").upgrade("foo").getResponseAsString());
+//		assertEquals("foo", client.doGet(URL + "/upgrade").query("Upgrade", "foo").getResponseAsString());
+//	}
+//
 	@Test
 	public void userAgent() throws Exception {
 		assertEquals("foo", client.doGet(URL + "/userAgent").userAgent("foo").getResponseAsString());
