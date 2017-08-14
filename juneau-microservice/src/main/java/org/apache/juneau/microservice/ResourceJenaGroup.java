@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.jena.*;
@@ -55,12 +58,19 @@ import org.apache.juneau.svl.vars.*;
 )
 public abstract class ResourceJenaGroup extends RestServletJenaGroupDefault {
 
-	@Override /* RestServlet */
-	public synchronized void init(RestConfig config) throws Exception {
+	/**
+	 * Add <code>$ARGS</code> and <code>$MF</code> variable resolvers.
+	 * 
+	 * @param config The resource config.
+	 * @throws Exception
+	 */
+	@RestHook(INIT) 
+	public void addConfigVars(RestConfig config) throws Exception {
+		if (Microservice.getArgs() == null || Microservice.getConfig() == null)
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, "Attempting to use ResourceJenaGroup class outside of RestMicroservice.");
 		config
 			.addVars(ArgsVar.class, ManifestFileVar.class)
 			.addVarContextObject(ArgsVar.SESSION_args, Microservice.getArgs())
 			.addVarContextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
-		super.init(config);
 	}
 }

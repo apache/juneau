@@ -833,6 +833,9 @@ public final class ClassUtils {
 	/**
 	 * Returns all the fields in the specified class and all parent classes.
 	 *
+	 * <p>
+	 * Fields are ordered in either parent-to-child, or child-to-parent order, then alphabetically.
+	 *
 	 * @param c The class to get all fields on.
 	 * @param parentFirst Order them in parent-class-to-child-class order, otherwise child-class-to-parent-class order.
 	 * @return An iterable of all fields in the specified class.
@@ -844,7 +847,7 @@ public final class ClassUtils {
 			public Iterator<Field> iterator() {
 				return new Iterator<Field>(){
 					final Iterator<Class<?>> classIterator = getParentClasses(c, parentFirst, false);
-					Field[] fields = classIterator.hasNext() ? classIterator.next().getDeclaredFields() : new Field[0];
+					Field[] fields = classIterator.hasNext() ? sort(classIterator.next().getDeclaredFields()) : new Field[0];
 					int fIndex = 0;
 					Field next;
 
@@ -858,7 +861,7 @@ public final class ClassUtils {
 						if (next == null) {
 							while (fIndex >= fields.length) {
 								if (classIterator.hasNext()) {
-									fields = classIterator.next().getDeclaredFields();
+									fields = sort(classIterator.next().getDeclaredFields());
 									fIndex = 0;
 								} else {
 									fIndex = -1;
@@ -888,6 +891,9 @@ public final class ClassUtils {
 	/**
 	 * Returns all the methods in the specified class and all parent classes.
 	 *
+	 * <p>
+	 * Methods are ordered in either parent-to-child, or child-to-parent order, then alphabetically.
+	 *
 	 * @param c The class to get all methods on.
 	 * @param parentFirst Order them in parent-class-to-child-class order, otherwise child-class-to-parent-class order.
 	 * @return An iterable of all methods in the specified class.
@@ -899,7 +905,7 @@ public final class ClassUtils {
 			public Iterator<Method> iterator() {
 				return new Iterator<Method>(){
 					final Iterator<Class<?>> classIterator = getParentClasses(c, parentFirst, true);
-					Method[] methods = classIterator.hasNext() ? classIterator.next().getDeclaredMethods() : new Method[0];
+					Method[] methods = classIterator.hasNext() ? sort(classIterator.next().getDeclaredMethods()) : new Method[0];
 					int mIndex = 0;
 					Method next;
 
@@ -913,7 +919,7 @@ public final class ClassUtils {
 						if (next == null) {
 							while (mIndex >= methods.length) {
 								if (classIterator.hasNext()) {
-									methods = classIterator.next().getDeclaredMethods();
+									methods = sort(classIterator.next().getDeclaredMethods());
 									mIndex = 0;
 								} else {
 									mIndex = -1;
@@ -938,6 +944,53 @@ public final class ClassUtils {
 				};
 			}
 		};
+	}
+
+	private static Comparator<Method> METHOD_COMPARATOR = new Comparator<Method>() {
+
+		@Override
+		public int compare(Method o1, Method o2) {
+			int i = o1.getName().compareTo(o2.getName());
+			if (i == 0) {
+				i = o1.getParameterCount() - o2.getParameterCount();
+				if (i == 0) {
+					for (int j = 0; j < o1.getParameterTypes().length && i == 0; j++) {
+						i = o1.getParameterTypes()[j].getName().compareTo(o2.getParameterTypes()[j].getName());
+					}
+				}
+			}
+			return i;
+		}
+	};
+
+	/**
+	 * Sorts methods in alphabetical order.
+	 *
+	 * @param m The methods to sort.
+	 * @return The same array, but with elements sorted.
+	 */
+	public static Method[] sort(Method[] m) {
+		Arrays.sort(m, METHOD_COMPARATOR);
+		return m;
+	}
+
+	private static Comparator<Field> FIELD_COMPARATOR = new Comparator<Field>() {
+
+		@Override
+		public int compare(Field o1, Field o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+	};
+
+	/**
+	 * Sorts methods in alphabetical order.
+	 *
+	 * @param m The methods to sort.
+	 * @return The same array, but with elements sorted.
+	 */
+	public static Field[] sort(Field[] m) {
+		Arrays.sort(m, FIELD_COMPARATOR);
+		return m;
 	}
 
 	/**
@@ -1001,4 +1054,55 @@ public final class ClassUtils {
 			.append(Double.class, 0d)
 			.append(Byte.class, (byte)0)
 	);
+
+	/**
+	 * Returns a readable representation of the specified method.
+	 *
+	 * <p>
+	 * The format of the string is <js>"full-qualified-class.method-name(parameter-simple-class-names)"</js>.
+	 *
+	 * @param m The method to stringify.
+	 * @return The stringified method.
+	 */
+	public static String toString(Method m) {
+		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
+		for (int i = 0; i < m.getParameterCount(); i++) {
+			if (i > 0)
+				sb.append(",");
+			sb.append(m.getParameterTypes()[i].getSimpleName());
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+
+	/**
+	 * Returns a readable representation of the specified field.
+	 *
+	 * <p>
+	 * The format of the string is <js>"full-qualified-class.field-name"</js>.
+	 *
+	 * @param f The field to stringify.
+	 * @return The stringified field.
+	 */
+	public static String toString(Field f) {
+		return f.getDeclaringClass().getName() + "." + f.getName();
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the parameters on the method are not in the specified list provided.
+	 *
+	 * @param m The method to test.
+	 * @param args The valid class types (exact) for the arguments.
+	 * @throws FormattedIllegalArgumentException If any of the parameters on the method weren't in the list.
+	 */
+	public static void assertArgsOfType(Method m, Class<?>...args) throws FormattedIllegalArgumentException {
+		for (Class<?> c1 : m.getParameterTypes()) {
+			boolean foundMatch = false;
+			for (Class<?> c2 : args)
+				if (c1 == c2)
+					foundMatch = true;
+			if (! foundMatch)
+				throw new FormattedIllegalArgumentException("Invalid argument of type {0} passed in method {1}.  Only arguments of type {2} are allowed.", c1, m, args);
+		}
+	}
 }

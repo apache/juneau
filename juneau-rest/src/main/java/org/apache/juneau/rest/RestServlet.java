@@ -48,12 +48,11 @@ public abstract class RestServlet extends HttpServlet {
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
 			RestConfig rsc = new RestConfig(servletConfig, this.getClass(), null);
-			init(rsc);
-			if (! isInitialized) {
-				// Subclass may not have called super.init(RestServletConfig), so initialize here.
-				createContext(rsc);
-				super.init(servletConfig);
-			}
+			rsc.init(this);
+			RestContext context = createContext(rsc);
+			super.init(servletConfig);
+			context.postInit();
+			context.postInitChildFirst();
 		} catch (RestException e) {
 			// Thrown RestExceptions are simply caught and re-thrown on subsequent calls to service().
 			initException = e;
@@ -75,33 +74,21 @@ public abstract class RestServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * Resource initialization method.
-	 *
-	 * <p>
-	 * Identical to {@link Servlet#init(ServletConfig)} except the config object provides access to the external config
-	 * file, configuration properties, and variable resolver defined for this resource.
-	 *
-	 * <p>
-	 * Classes can also use {@link HttpServlet#init()} and {@link RestServlet#getServletConfig()} as well to perform
-	 * initialization.
-	 *
-	 * <p>
-	 * Note that if you override this method, you must first call <code><jk>super</jk>.init(servletConfig)</code>!
-	 *
-	 * <p>
-	 * Resource classes that don't extend from {@link RestServlet} can add this method to their class to get access to
-	 * the config object.
-	 *
-	 * @param config The servlet configuration.
-	 * @throws Exception Any exception can be thrown to signal an initialization failure.
+	/*
+	 * Bypasses the init(ServletConfig) method and just calls the super.init(ServletConfig) method directly.
+	 * Used when subclasses of RestServlet are attached as child resources.
 	 */
-	public synchronized void init(RestConfig config) throws Exception {
-		if (isInitialized)
-			return;
-		createContext(config);
-		super.init(config);
-		init(context);
+	void innerInit(ServletConfig servletConfig) throws ServletException {
+		super.init(servletConfig);
+	}
+
+	/*
+	 * Sets the context object for this servlet.
+	 * Used when subclasses of RestServlet are attached as child resources.
+	 */
+	void setContext(RestContext context) {
+		this.config = context.config;
+		this.context = context;
 	}
 
 	/**
@@ -120,12 +107,13 @@ public abstract class RestServlet extends HttpServlet {
 	public synchronized void init(RestContext context) throws Exception {}
 
 
-	private synchronized void createContext(RestConfig config) throws Exception {
-		if (isInitialized)
-			return;
-		this.config = config;
-		this.context = new RestContext(this, this.getServletContext(), config);
-		this.isInitialized = true;
+	private synchronized RestContext createContext(RestConfig config) throws Exception {
+		if (! isInitialized) {
+			this.config = config;
+			this.context = new RestContext(this, this.getServletContext(), config);
+			this.isInitialized = true;
+		}
+		return context;
 	}
 
 
@@ -142,7 +130,6 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Servlet */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 		try {
-
 			if (initException != null) {
 				if (initException instanceof RestException)
 					throw (RestException)initException;
@@ -166,7 +153,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Returns the read-only context object that contains all the configuration information about this resource.
 	 *
 	 * <p>
-	 * This object is <jk>null</jk> during the call to {@link #init(RestConfig)} but is populated by the time
+	 * This object is <jk>null</jk> during the call to {@link #init(ServletConfig)} but is populated by the time
 	 * {@link #init()} is called.
 	 *
 	 * <p>
@@ -181,59 +168,6 @@ public abstract class RestServlet extends HttpServlet {
 	protected RestContext getContext() {
 		return context;
 	}
-
-	/**
-	 * Callback method for listening for successful completion of requests.
-	 *
-	 * <p>
-	 * Subclasses can override this method for gathering performance statistics.
-	 *
-	 * <p>
-	 * The default implementation does nothing.
-	 *
-	 * <p>
-	 * Resources that don't extend from {@link RestServlet} can implement an equivalent method by overriding the
-	 * {@link RestCallHandler#onSuccess(RestRequest, RestResponse, long)} method.
-	 *
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
-	 * @param time The time in milliseconds it took to process the request.
-	 */
-	protected void onSuccess(RestRequest req, RestResponse res, long time) {}
-
-	/**
-	 * Callback method that gets invoked right before the REST Java method is invoked.
-	 *
-	 * <p>
-	 * Subclasses can override this method to override request headers or set request-duration properties before the
-	 * Java method is invoked.
-	 *
-	 * <p>
-	 * Resources that don't extend from {@link RestServlet} can implement an equivalent method by overriding the
-	 * {@link RestCallHandler#onPreCall(RestRequest)} method.
-	 *
-	 * @param req The HTTP servlet request object.
-	 * @throws RestException If any error occurs.
-	 */
-	protected void onPreCall(RestRequest req) throws RestException {}
-
-	/**
-	 * Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is
-	 * invoked.
-	 *
-	 * <p>
-	 * Subclasses can override this method to override request and response headers, or set/override properties used by
-	 * the serializer.
-	 *
-	 * <p>
-	 * Resources that don't extend from {@link RestServlet} can implement an equivalent method by overriding the
-	 * {@link RestCallHandler#onPostCall(RestRequest,RestResponse)} method.
-	 *
-	 * @param req The HTTP servlet request object.
-	 * @param res The HTTP servlet response object.
-	 * @throws RestException If any error occurs.
-	 */
-	protected void onPostCall(RestRequest req, RestResponse res) throws RestException {}
 
 	/**
 	 * Convenience method for calling <code>getContext().getLogger().log(level, msg, args);</code>

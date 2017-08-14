@@ -44,7 +44,6 @@ public class RestCallHandler {
 
 	private final RestContext context;
 	private final RestLogger logger;
-	private final RestServlet restServlet;
 	private final Map<String,CallRouter> callRouters;
 
 	/**
@@ -56,7 +55,6 @@ public class RestCallHandler {
 		this.context = context;
 		this.logger = context.getLogger();
 		this.callRouters = context.getCallRouters();
-		this.restServlet = context.getRestServlet();  // Null if this isn't a RestServlet!
 	}
 
 	/**
@@ -133,6 +131,8 @@ public class RestCallHandler {
 				}
 			}
 
+			context.startCall(r1, r2);
+
 			RestRequest req = createRequest(r1);
 			RestResponse res = createResponse(req, r2);
 			String method = req.getMethod();
@@ -178,16 +178,22 @@ public class RestCallHandler {
 				handleResponse(req, res, output);
 			}
 
-			onSuccess(req, res, System.currentTimeMillis() - startTime);
-
 			// Make sure our writer in RestResponse gets written.
 			res.flushBuffer();
 
+			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
+
 		} catch (RestException e) {
 			handleError(r1, r2, e);
+			r1.setAttribute("Exception", e);
 		} catch (Throwable e) {
-			handleError(r1, r2, new RestException(SC_INTERNAL_SERVER_ERROR, e));
+			RestException e2 = new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			handleError(r1, r2, e2);
+			r1.setAttribute("Exception", e);
 		}
+
+		context.finishCall(r1, r2);
+
 		logger.log(FINE, "HTTP: [{0} {1}] finished in {2}ms", r1.getMethod(), r1.getRequestURI(), System.currentTimeMillis()-startTime);
 	}
 
@@ -308,56 +314,6 @@ public class RestCallHandler {
 			w.append(e.getFullStackMessage(true));
 		w.flush();
 		w.close();
-	}
-
-	/**
-	 * Callback method for listening for successful completion of requests.
-	 *
-	 * <p>
-	 * Subclasses can override this method for gathering performance statistics.
-	 *
-	 * <p>
-	 * The default implementation does nothing.
-	 *
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
-	 * @param time The time in milliseconds it took to process the request.
-	 */
-	protected void onSuccess(RestRequest req, RestResponse res, long time) {
-		if (restServlet != null)
-			restServlet.onSuccess(req, res, time);
-	}
-
-	/**
-	 * Callback method that gets invoked right before the REST Java method is invoked.
-	 *
-	 * <p>
-	 * Subclasses can override this method to override request headers or set request-duration properties before the
-	 * Java method is invoked.
-	 *
-	 * @param req The HTTP servlet request object.
-	 * @throws RestException If any error occurs.
-	 */
-	protected void onPreCall(RestRequest req) throws RestException {
-		if (restServlet != null)
-			restServlet.onPreCall(req);
-	}
-
-	/**
-	 * Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is
-	 * invoked.
-	 *
-	 * <p>
-	 * Subclasses can override this method to override request and response headers, or set/override properties used by
-	 * the serializer.
-	 *
-	 * @param req The HTTP servlet request object.
-	 * @param res The HTTP servlet response object.
-	 * @throws RestException If any error occurs.
-	 */
-	protected void onPostCall(RestRequest req, RestResponse res) throws RestException {
-		if (restServlet != null)
-			restServlet.onPostCall(req, res);
 	}
 
 	/**

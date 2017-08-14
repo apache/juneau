@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.*;
 
 import javax.activation.*;
 import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
@@ -249,7 +250,7 @@ public final class RestContext extends Context {
 
 
 	private final Object resource;
-	private final RestConfig config;
+	final RestConfig config;
 	private final boolean
 		allowHeaderParams,
 		allowBodyParam,
@@ -311,6 +312,25 @@ public final class RestContext extends Context {
 	private final RestException initException;
 	private final RestContext parentContext;
 	private final RestResourceResolver resourceResolver;
+
+	// Lifecycle methods
+	private final Method[] 
+		postInitMethods, 
+		postInitChildFirstMethods, 
+		preCallMethods, 
+		postCallMethods, 
+		startCallMethods, 
+		endCallMethods, 
+		destroyMethods;
+	private final RestParam[][] 
+		preCallMethodParams, 
+		postCallMethodParams;
+	private final Class<?>[][] 
+		postInitMethodParams, 
+		postInitChildFirstMethodParams, 
+		startCallMethodParams, 
+		endCallMethodParams, 
+		destroyMethodParams;
 
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
 	private final Map<String,StreamResource> staticFilesCache = new ConcurrentHashMap<String,StreamResource>();
@@ -396,6 +416,24 @@ public final class RestContext extends Context {
 			List<String> methodsFound = new LinkedList<String>();   // Temporary to help debug transient duplicate method issue.
 			Map<String,CallRouter.Builder> routers = new LinkedHashMap<String,CallRouter.Builder>();
 			Map<String,CallMethod> _javaRestMethods = new LinkedHashMap<String,CallMethod>();
+			Map<String,Method>
+				_startCallMethods = new LinkedHashMap<String,Method>(),
+				_preCallMethods = new LinkedHashMap<String,Method>(),
+				_postCallMethods = new LinkedHashMap<String,Method>(),
+				_endCallMethods = new LinkedHashMap<String,Method>(),
+				_postInitMethods = new LinkedHashMap<String,Method>(),
+				_postInitChildFirstMethods = new LinkedHashMap<String,Method>(),
+				_destroyMethods = new LinkedHashMap<String,Method>();
+			List<RestParam[]>
+				_preCallMethodParams = new ArrayList<RestParam[]>(),
+				_postCallMethodParams = new ArrayList<RestParam[]>();
+			List<Class<?>[]>
+				_startCallMethodParams = new ArrayList<Class<?>[]>(),
+				_endCallMethodParams = new ArrayList<Class<?>[]>(),
+				_postInitMethodParams = new ArrayList<Class<?>[]>(),
+				_postInitChildFirstMethodParams = new ArrayList<Class<?>[]>(),
+				_destroyMethodParams = new ArrayList<Class<?>[]>();
+
 			for (java.lang.reflect.Method method : resource.getClass().getMethods()) {
 				if (method.isAnnotationPresent(RestMethod.class)) {
 					RestMethod a = method.getAnnotation(RestMethod.class);
@@ -467,7 +505,86 @@ public final class RestContext extends Context {
 					}
 				}
 			}
+
+			for (Method m : ClassUtils.getAllMethods(resource.getClass(), true)) {
+				if (ClassUtils.isPublic(m) && m.isAnnotationPresent(RestHook.class)) {
+					HookEvent he = m.getAnnotation(RestHook.class).value();
+					String sig = ClassUtils.getMethodSignature(m);
+					switch(he) {
+						case PRE_CALL: {
+							if (! _preCallMethods.containsKey(sig)) {
+								_preCallMethods.put(sig, m);
+								_preCallMethodParams.add(findParams(m, false, null, true));
+							}
+							break;
+						}
+						case POST_CALL: {
+							if (! _postCallMethods.containsKey(sig)) {
+								_postCallMethods.put(sig, m);
+								_postCallMethodParams.add(findParams(m, false, null, true));
+							}
+							break;
+						}
+						case START_CALL: {
+							if (! _startCallMethods.containsKey(sig)) {
+								_startCallMethods.put(sig, m);
+								_startCallMethodParams.add(m.getParameterTypes());
+								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
+							}
+							break;
+						}
+						case END_CALL: {
+							if (! _endCallMethods.containsKey(sig)) {
+								_endCallMethods.put(sig, m);
+								_endCallMethodParams.add(m.getParameterTypes());
+								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
+							}
+							break;
+						}
+						case POST_INIT: {
+							if (! _postInitMethods.containsKey(sig)) {
+								_postInitMethods.put(sig, m);
+								_postInitMethodParams.add(m.getParameterTypes());
+								ClassUtils.assertArgsOfType(m, RestContext.class);
+							}
+							break;
+						}
+						case POST_INIT_CHILD_FIRST: {
+							if (! _postInitChildFirstMethods.containsKey(sig)) {
+								_postInitChildFirstMethods.put(sig, m);
+								_postInitChildFirstMethodParams.add(m.getParameterTypes());
+								ClassUtils.assertArgsOfType(m, RestContext.class);
+							}
+							break;
+						}
+						case DESTROY: {
+							if (! _destroyMethods.containsKey(sig)) {
+								_destroyMethods.put(sig, m);
+								_destroyMethodParams.add(m.getParameterTypes());
+								ClassUtils.assertArgsOfType(m, RestContext.class);
+							}
+							break;
+						}
+						default: // Ignore INIT
+					}
+				}
+			}
+
 			this.callMethods = Collections.unmodifiableMap(_javaRestMethods);
+			this.preCallMethods = _preCallMethods.values().toArray(new Method[_preCallMethods.size()]);
+			this.postCallMethods = _postCallMethods.values().toArray(new Method[_postCallMethods.size()]);
+			this.startCallMethods = _startCallMethods.values().toArray(new Method[_startCallMethods.size()]);
+			this.endCallMethods = _endCallMethods.values().toArray(new Method[_endCallMethods.size()]);
+			this.postInitMethods = _postInitMethods.values().toArray(new Method[_postInitMethods.size()]);
+			this.postInitChildFirstMethods = _postInitChildFirstMethods.values().toArray(new Method[_postInitChildFirstMethods.size()]);
+			this.destroyMethods = _destroyMethods.values().toArray(new Method[_destroyMethods.size()]);
+			this.preCallMethodParams = _preCallMethodParams.toArray(new RestParam[_preCallMethodParams.size()][]);
+			this.postCallMethodParams = _postCallMethodParams.toArray(new RestParam[_postCallMethodParams.size()][]);
+			this.startCallMethodParams = _startCallMethodParams.toArray(new Class[_startCallMethodParams.size()][]);
+			this.endCallMethodParams = _endCallMethodParams.toArray(new Class[_endCallMethodParams.size()][]);
+			this.postInitMethodParams = _postInitMethodParams.toArray(new Class[_postInitMethodParams.size()][]);
+			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
+			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
 			Map<String,CallRouter> _callRouters = new LinkedHashMap<String,CallRouter>();
 			for (CallRouter.Builder crb : routers.values())
@@ -504,30 +621,14 @@ public final class RestContext extends Context {
 					childConfig = new RestConfig(config.inner, o.getClass(), this);
 				}
 
-				if (r instanceof RestServlet) {
-					RestServlet rs = (RestServlet)r;
-					rs.init(childConfig);
-					if (rs.getContext() == null)
-						throw new RestException(SC_INTERNAL_SERVER_ERROR, "Servlet {0} not initialized.  init(RestConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", rs.getClass().getName());
-					path = childConfig.path;
-					childResources.put(path, rs.getContext());
-				} else {
-
-					// Call the init(RestConfig) method.
-					java.lang.reflect.Method m2 = findPublicMethod(r.getClass(), "init", Void.class, RestConfig.class);
-					if (m2 != null)
-						m2.invoke(r, childConfig);
-
-					RestContext rc2 = new RestContext(r, servletContext, childConfig);
-
-					// Call the init(RestContext) method.
-					m2 = findPublicMethod(r.getClass(), "init", Void.class, RestContext.class);
-					if (m2 != null)
-						m2.invoke(r, rc2);
-
-					path = childConfig.path;
-					childResources.put(path, rc2);
-				}
+				childConfig.init(r);
+				if (r instanceof RestServlet)
+					((RestServlet)r).innerInit(childConfig);
+				RestContext rc2 = new RestContext(r, servletContext, childConfig);
+				if (r instanceof RestServlet)
+					((RestServlet)r).setContext(rc2);
+				path = childConfig.path;
+				childResources.put(path, rc2);
 			}
 
 			callHandler = config.callHandler == null ? new RestCallHandler(this) : resolve(resource, RestCallHandler.class, config.callHandler, this);
@@ -1446,10 +1547,11 @@ public final class RestContext extends Context {
 	 * @param method The Java method being called.
 	 * @param methodPlainParams Whether plain-params setting is specified.
 	 * @param pathPattern The parsed URL path pattern.
+	 * @param isPreOrPost Whether this is a <ja>@RestMethodPre</ja> or <ja>@RestMethodPost</ja>.
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	protected RestParam[] findParams(Method method, boolean methodPlainParams, UrlPathPattern pathPattern) throws ServletException {
+	protected RestParam[] findParams(Method method, boolean methodPlainParams, UrlPathPattern pathPattern, boolean isPreOrPost) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
 		Annotation[][] pa = method.getParameterAnnotations();
@@ -1492,6 +1594,10 @@ public final class RestContext extends Context {
 			}
 
 			if (rp[i] == null) {
+
+				if (isPreOrPost)
+					throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", method, i);
+
 				Path p = null;
 				for (Annotation a : pa[i])
 					if (a instanceof Path)
@@ -1503,7 +1609,7 @@ public final class RestContext extends Context {
 					int idx = attrIndex++;
 					String[] vars = pathPattern.getVars();
 					if (vars.length <= idx)
-						throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
+						throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method);
 
 					// Check for {#} variables.
 					String idxs = String.valueOf(idx);
@@ -1520,6 +1626,124 @@ public final class RestContext extends Context {
 
 		return rp;
 	}
+
+	/*
+	 * Calls all @RestHook(PRE) methods.
+	 */
+	void preCall(RestRequest req, RestResponse res) throws RestException {
+		for (int i = 0; i < preCallMethods.length; i++)
+			preOrPost(resource, preCallMethods[i], preCallMethodParams[i], req, res);
+	}
+
+	/*
+	 * Calls all @RestHook(POST) methods.
+	 */
+	void postCall(RestRequest req, RestResponse res) throws RestException {
+		for (int i = 0; i < postCallMethods.length; i++)
+			preOrPost(resource, postCallMethods[i], postCallMethodParams[i], req, res);
+	}
+
+	private static void preOrPost(Object resource, Method m, RestParam[] mp, RestRequest req, RestResponse res) throws RestException {
+		if (m != null) {
+			Object[] args = new Object[mp.length];
+			for (int i = 0; i < mp.length; i++) {
+				try {
+					args[i] = mp[i].resolve(req, res);
+				} catch (RestException e) {
+					throw e;
+				} catch (Exception e) {
+					throw new RestException(SC_BAD_REQUEST,
+						"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
+						mp[i].getParamType().name(), mp[i].getName(), mp[i].getType(), m.getDeclaringClass().getName(), m.getName()
+					).initCause(e);
+				}
+			}
+			try {
+				m.invoke(resource, args);
+			} catch (RestException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new RestException(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage()).initCause(e);
+			}
+		}
+	}
+
+	/*
+	 * Calls all @RestHook(START) methods.
+	 */
+	void startCall(HttpServletRequest req, HttpServletResponse res) {
+		for (int i = 0; i < startCallMethods.length; i++)
+			startOrFinish(resource, startCallMethods[i], startCallMethodParams[i], req, res);
+	}
+
+	/*
+	 * Calls all @RestHook(FINISH) methods.
+	 */
+	void finishCall(HttpServletRequest req, HttpServletResponse res) {
+		for (int i = 0; i < endCallMethods.length; i++)
+			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], req, res);
+	}
+
+	private static void startOrFinish(Object resource, Method m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) {
+		if (m != null) {
+			Object[] args = new Object[p.length];
+			for (int i = 0; i < p.length; i++) {
+				if (p[i] == HttpServletRequest.class)
+					args[i] = req;
+				else if (p[i] == HttpServletResponse.class)
+					args[i] = res;
+			}
+			try {
+				m.invoke(resource, args);
+			} catch (RestException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new RestException(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage()).initCause(e);
+			}
+		}
+	}
+
+	/*
+	 * Calls all @RestHook(POST_INIT) methods.
+	 */
+	void postInit() throws ServletException {
+		for (int i = 0; i < postInitMethods.length; i++)
+			postInitOrDestroy(resource, postInitMethods[i], postInitMethodParams[i]);
+		for (RestContext childContext : this.childResources.values())
+			childContext.postInit();
+	}
+
+	/*
+	 * Calls all @RestHook(POST_INIT_CHILD_FIRST) methods.
+	 */
+	void postInitChildFirst() throws ServletException {
+		for (RestContext childContext : this.childResources.values())
+			childContext.postInitChildFirst();
+		for (int i = 0; i < postInitChildFirstMethods.length; i++)
+			postInitOrDestroy(resource, postInitChildFirstMethods[i], postInitChildFirstMethodParams[i]);
+	}
+
+	private void postInitOrDestroy(Object r, Method m, Class<?>[] p) {
+		if (m != null) {
+			Object[] args = new Object[p.length];
+			for (int i = 0; i < p.length; i++) {
+				if (p[i] == RestContext.class)
+					args[i] = this;
+				else if (p[i] == RestConfig.class)
+					args[i] = this.config;
+				else if (p[i] == ServletConfig.class)
+					args[i] = this.config.inner;
+			}
+			try {
+				m.invoke(r, args);
+			} catch (RestException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new RestException(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage()).initCause(e);
+			}
+		}
+	}
+
 
 	/**
 	 * Returns the URL-encoding parser associated with this resource.
@@ -1753,6 +1977,14 @@ public final class RestContext extends Context {
 	 * Calls {@link Servlet#destroy()} on any child resources defined on this resource.
 	 */
 	protected void destroy() {
+		for (int i = 0; i < destroyMethods.length; i++) {
+			try {
+				postInitOrDestroy(resource, destroyMethods[i], destroyMethodParams[i]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		for (RestContext r : childResources.values()) {
 			r.destroy();
 			if (r.resource instanceof Servlet)

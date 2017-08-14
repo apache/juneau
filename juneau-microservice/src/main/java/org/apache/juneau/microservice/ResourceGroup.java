@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.vars.*;
@@ -54,12 +57,19 @@ import org.apache.juneau.svl.vars.*;
 )
 public abstract class ResourceGroup extends RestServletGroupDefault {
 
-	@Override /* RestServlet */
-	public synchronized void init(RestConfig config) throws Exception {
+	/**
+	 * Initializes the registry URL and rest clent.
+	 * 
+	 * @param config The resource config.
+	 * @throws Exception
+	 */
+	@RestHook(INIT) 
+	public void addConfigVars(RestConfig config) throws Exception {
+		if (Microservice.getArgs() == null || Microservice.getConfig() == null)
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, "Attempting to use ResourceGroup class outside of RestMicroservice.");
 		config
 			.addVars(ArgsVar.class, ManifestFileVar.class)
 			.addVarContextObject(ArgsVar.SESSION_args, Microservice.getArgs())
 			.addVarContextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
-		super.init(config);
 	}
 }

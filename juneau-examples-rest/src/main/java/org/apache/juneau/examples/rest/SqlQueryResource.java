@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.sql.*;
 import java.util.*;
@@ -60,10 +61,15 @@ public class SqlQueryResource extends Resource {
 	private String driver, connectionUrl;
 	private boolean allowUpdates, allowTempUpdates, includeRowNums;
 
-	@Override /* RestServlet */
-	public synchronized void init(RestConfig servletConfig) throws Exception {
-		super.init(servletConfig);
-		ConfigFile cf = servletConfig.getConfigFile();
+	/**
+	 * Initializes the registry URL and rest client.
+	 * 
+	 * @param servletConfig The resource config.
+	 * @throws Exception
+	 */
+	@RestHook(INIT) 
+	public void initConnection(RestConfig config) throws Exception {
+		ConfigFile cf = config.getConfigFile();
 
 		driver = cf.getString("SqlQueryResource/driver");
 		connectionUrl = cf.getString("SqlQueryResource/connectionUrl");

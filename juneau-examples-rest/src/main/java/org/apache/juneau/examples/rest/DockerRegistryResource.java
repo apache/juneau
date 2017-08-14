@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.rest.annotation.HookEvent.*;
+
 import java.util.*;
 
 import org.apache.juneau.ini.*;
@@ -46,10 +48,15 @@ public class DockerRegistryResource extends Resource {
 
 	RestClient rc;
 
-	@Override /* Servlet */
-	public synchronized void init(RestConfig servletConfig) throws Exception {
-		super.init(servletConfig);
-		ConfigFile cf = servletConfig.getConfigFile();
+	/**
+	 * Initializes the registry URL and rest client.
+	 * 
+	 * @param servletConfig The resource config.
+	 * @throws Exception
+	 */
+	@RestHook(INIT) 
+	public void initRegistry(RestConfig config) throws Exception {
+		ConfigFile cf = config.getConfigFile();
 		registryUrl = cf.getString("DockerRegistry/url");
 		rc = new RestClientBuilder().build();
 	}

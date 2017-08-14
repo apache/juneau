@@ -117,5 +117,4 @@ public @interface Html {
 	 * </p>
 	 */
 	String anchorText() default "";
-
 }

@@ -691,8 +691,8 @@
 	}		
 				</p>
 				<p>
-					Additional user-defined variables can be defined at this level by overriding the 
-					{@link org.apache.juneau.microservice.Resource#init(RestConfig)} method
+					Additional user-defined variables can be defined at this level by adding a  
+					{@link org.apache.juneau.rest.annotation.HookEvent#INIT} hook method
 					and using the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
 				</p>
 			<li class='jm'>

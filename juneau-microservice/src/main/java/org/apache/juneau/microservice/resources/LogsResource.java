@@ -15,6 +15,7 @@ package org.apache.juneau.microservice.resources;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -63,9 +64,14 @@ public class LogsResource extends Resource {
 		}
 	};
 
-	@Override /* RestServlet */
-	public synchronized void init(RestConfig config) throws Exception {
-		super.init(config);
+	/**
+	 * Initializes the log directory and formatter.
+	 * 
+	 * @param config The resource config.
+	 * @throws Exception
+	 */
+	@RestHook(INIT) 
+	public void init(RestConfig config) throws Exception {
 		ConfigFile cf = config.getConfigFile();
 
 		logDir = new File(cf.getString("Logging/logDir", "."));

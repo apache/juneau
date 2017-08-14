@@ -2485,28 +2485,9 @@
 	<h3 class='topic' onclick='toggle(this)'>4.16 - Listener Methods</h3>	
 	<div class='topic'>
 		<p>
-			Various convenience listener methods are provided on the {@link org.apache.juneau.rest.RestCallHandler} 
-			class that subclasses can use to intercept requests:
+			Various convenience listener methods can be implemented by using the {@link org.apache.juneau.rest.annotation.RestHook @RestHook}
+			annotation on methods in your resource class.
 		</p>
-		<ul class='doctree'>
-			<li class='jac'>
-				{@link org.apache.juneau.rest.RestCallHandler}
-				<ul>
-					<li class='jm'>
-						{@link org.apache.juneau.rest.RestCallHandler#onPreCall(RestRequest) onPreCall(RestRequest)}
-						<br>Callback method that gets invoked right before the REST Java method is invoked.
-					<li class='jm'>
-						{@link org.apache.juneau.rest.RestCallHandler#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
-						<br>Callback method that gets invoked right after the REST Java method is invoked, but before the serializer is invoked.
-					<li class='jm'>
-						{@link org.apache.juneau.rest.RestCallHandler#onSuccess(RestRequest,RestResponse,long) onSuccess(RestRequest,RestResponse,long)}
-						<br>Callback method for listening for successful completion of requests.
-					<li class='jm'>
-						{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
-						<br>Callback method for logging errors during HTTP requests.
-				</ul>
-			</li>
-		</ul>
 	</div>
 
 	<!-- ======================================================================================================== -->

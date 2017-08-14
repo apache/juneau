@@ -50,6 +50,8 @@ public class TestUtils {
 	 * Assert that the object equals the specified string after running it through ws.toString().
 	 */
 	public static void assertObjectEquals(String s, Object o, WriterSerializer ws) {
+		if ("xxx".equals(s))
+			System.err.println("Actual=" + ws.toString(o));
 		Assert.assertEquals(s, ws.toString(o));
 	}
 

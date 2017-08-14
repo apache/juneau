@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.rest.annotation.HookEvent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -58,8 +60,8 @@ public class OnPreCallResource extends RestServlet {
 		}
 	}
 
-	@Override /* RestServlet */
-	protected void onPreCall(RestRequest req) {
+	@RestHook(PRE_CALL)
+	public void onPreCall(RestRequest req) {
 		ObjectMap properties = req.getProperties();
 		properties.put("p2", "xp2");
 		properties.put("p4", "xp4");

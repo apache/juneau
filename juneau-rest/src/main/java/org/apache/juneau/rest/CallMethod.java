@@ -397,7 +397,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				pathPattern = new UrlPathPattern(p);
 
-				params = context.findParams(method, plainParams, pathPattern);
+				params = context.findParams(method, plainParams, pathPattern, false);
 
 				if (sgb != null) {
 					serializers = sgb.build();
@@ -809,7 +809,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				return SC_PRECONDITION_FAILED;
 		}
 
-		context.getCallHandler().onPreCall(req);
+		context.preCall(req, res);
 
 		Object[] args = new Object[params.length];
 		for (int i = 0; i < params.length; i++) {
@@ -836,7 +836,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				if (output != null || ! res.getOutputStreamCalled())
 					res.setOutput(output);
 
-			context.getCallHandler().onPostCall(req, res);
+			context.postCall(req, res);
 
 			if (res.hasOutput()) {
 				output = res.getOutput();

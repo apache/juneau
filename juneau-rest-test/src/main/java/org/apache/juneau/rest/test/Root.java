@@ -64,6 +64,8 @@ import org.apache.juneau.rest.labels.*;
 		QueryResource.class,
 		RequestBeanProxyResource.class,
 		RestClient2Resource.class,
+		RestHooksInitResource.class,
+		RestHooksResource.class,
 		SerializersResource.class,
 		StaticFilesResource.class,
 		ThirdPartyProxyResource.class,

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.rest.annotation.HookEvent.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -54,7 +56,7 @@ public class OnPostCallResource extends RestServlet {
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 					out.getWriter().write("p1="+getProperty("p1")+",p2="+getProperty("p2")+",p3="+getProperty("p3")+",p4="+getProperty("p4")+",p5="+getProperty("p5")+",contentType="+getProperty("mediaType"));
 				}
-				
+
 				@Override /* SerializerSession */
 				public Map<String,String> getResponseHeaders() {
 					ObjectMap p = getProperties();
@@ -66,8 +68,8 @@ public class OnPostCallResource extends RestServlet {
 		}
 	}
 
-	@Override /* RestServlet */
-	protected void onPostCall(RestRequest req, RestResponse res) {
+	@RestHook(POST_CALL)
+	public void onPostCall(RestRequest req, RestResponse res) {
 		ObjectMap properties = req.getProperties();
 		properties.put("p2", "xp2");
 		properties.put("p4", "xp4");

@@ -1631,7 +1631,7 @@ public final class StringUtils {
 		if (cm.isClass())
 			return ((Class<?>)o).getName();
 		if (cm.isMethod())
-			return ((Method)o).toGenericString();
+			return ClassUtils.toString((Method)o);
 		return o.toString();
 	}
 }

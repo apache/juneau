@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.rest.annotation.HookEvent.*;
+
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
@@ -69,9 +71,8 @@ public class DirectoryResource extends Resource {
 
 	private static Logger logger = Logger.getLogger(DirectoryResource.class.getName());
 
-	@Override /* RestServlet */
-	public synchronized void init(RestConfig config) throws Exception {
-		super.init(config);
+	@RestHook(INIT)
+	public void init(RestConfig config) throws Exception {
 		ObjectMap p = config.getProperties();
 		rootDir = new File(p.getString("rootDir"));
 		allowViews = p.getBoolean("allowViews", false);

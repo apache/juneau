@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.util.*;
 import java.util.Map;
@@ -68,11 +69,16 @@ public class PetStoreResource extends ResourceJena {
 	// Our database.
 	private Map<Integer,Pet> petDB;
 
-	@Override /* Servlet */
-	public synchronized void init(RestConfig config) throws Exception {
+	/**
+	 * Initializes the pet store database.
+	 * 
+	 * @param RestConfig config The resource config.
+	 * @throws Exception
+	 */
+	@RestHook(INIT) 
+	public void initDatabase(RestConfig config) throws Exception {
 		// Load our database from a local JSON file.
 		petDB = JsonParser.DEFAULT.parse(getClass().getResourceAsStream("PetStore.json"), LinkedHashMap.class, Integer.class, Pet.class);
-		super.init(config);
 	}
 
 	// Exclude the 'breed' and 'getsAlongWith' properties from the beans.

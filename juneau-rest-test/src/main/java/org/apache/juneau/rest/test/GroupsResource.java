@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -30,10 +31,9 @@ import org.apache.juneau.serializer.*;
 public class GroupsResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Override /* RestServlet */
-	public synchronized void init(RestConfig config) throws Exception {
+	@RestHook(INIT)
+	public void init(RestConfig config) throws Exception {
 		config.addSerializers(SSerializer.class).addParsers(PParser.class);
-		super.init(config);
 	}
 
 	@Produces("text/s1,text/s2")

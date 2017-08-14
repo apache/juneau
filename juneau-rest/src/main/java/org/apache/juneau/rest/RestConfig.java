@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestUtils.*;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import javax.activation.*;
@@ -270,6 +271,36 @@ public class RestConfig implements ServletConfig {
 
 		} catch (Exception e) {
 			throw new ServletException(e);
+		}
+	}
+
+	/*
+	 * Calls all @RestHook(INIT) methods on the specified resource object.
+	 */
+	void init(Object resource) throws ServletException {
+		Map<String,Method> map = new LinkedHashMap<String,Method>();
+		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
+			if (m.isAnnotationPresent(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
+				String sig = ClassUtils.getMethodSignature(m);
+				if (! map.containsKey(sig))
+					map.put(sig, m);
+			}
+		}
+		for (Method m : map.values()) {
+			ClassUtils.assertArgsOfType(m, RestConfig.class, ServletConfig.class);
+			Class<?>[] argTypes = m.getParameterTypes();
+			Object[] args = new Object[argTypes.length];
+			for (int i = 0; i < args.length; i++) {
+				if (argTypes[i] == RestConfig.class)
+					args[i] = this;
+				else
+					args[i] = this.inner;
+			}
+			try {
+				m.invoke(resource, args);
+			} catch (Exception e) {
+				throw new RestServletException("Exception thrown from @RestHook(INIT) method {0}.", m).initCause(e);
+			}
 		}
 	}
 
@@ -1539,7 +1570,7 @@ public class RestConfig implements ServletConfig {
 	 *
 	 * <p>
 	 * These properties can be modified during servlet initialization.
-	 * However, any modifications made after {@link RestServlet#init(RestConfig)} has been called will have no effect.
+	 * However, any modifications made after {@link RestServlet#init(ServletConfig)} has been called will have no effect.
 	 *
 	 * @return The configuration properties for this resource.  Never <jk>null</jk>.
 	 */
