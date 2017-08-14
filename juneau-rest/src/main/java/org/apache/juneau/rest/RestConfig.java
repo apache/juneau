@@ -281,6 +281,7 @@ public class RestConfig implements ServletConfig {
 		Map<String,Method> map = new LinkedHashMap<String,Method>();
 		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
 			if (m.isAnnotationPresent(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
+				Visibility.setAccessible(m);
 				String sig = ClassUtils.getMethodSignature(m);
 				if (! map.containsKey(sig))
 					map.put(sig, m);

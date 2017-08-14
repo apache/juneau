@@ -314,22 +314,22 @@ public final class RestContext extends Context {
 	private final RestResourceResolver resourceResolver;
 
 	// Lifecycle methods
-	private final Method[] 
-		postInitMethods, 
-		postInitChildFirstMethods, 
-		preCallMethods, 
-		postCallMethods, 
-		startCallMethods, 
-		endCallMethods, 
+	private final Method[]
+		postInitMethods,
+		postInitChildFirstMethods,
+		preCallMethods,
+		postCallMethods,
+		startCallMethods,
+		endCallMethods,
 		destroyMethods;
-	private final RestParam[][] 
-		preCallMethodParams, 
+	private final RestParam[][]
+		preCallMethodParams,
 		postCallMethodParams;
-	private final Class<?>[][] 
-		postInitMethodParams, 
-		postInitChildFirstMethodParams, 
-		startCallMethodParams, 
-		endCallMethodParams, 
+	private final Class<?>[][]
+		postInitMethodParams,
+		postInitChildFirstMethodParams,
+		startCallMethodParams,
+		endCallMethodParams,
 		destroyMethodParams;
 
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
@@ -513,6 +513,7 @@ public final class RestContext extends Context {
 					switch(he) {
 						case PRE_CALL: {
 							if (! _preCallMethods.containsKey(sig)) {
+								Visibility.setAccessible(m);
 								_preCallMethods.put(sig, m);
 								_preCallMethodParams.add(findParams(m, false, null, true));
 							}
@@ -520,6 +521,7 @@ public final class RestContext extends Context {
 						}
 						case POST_CALL: {
 							if (! _postCallMethods.containsKey(sig)) {
+								Visibility.setAccessible(m);
 								_postCallMethods.put(sig, m);
 								_postCallMethodParams.add(findParams(m, false, null, true));
 							}
@@ -527,6 +529,7 @@ public final class RestContext extends Context {
 						}
 						case START_CALL: {
 							if (! _startCallMethods.containsKey(sig)) {
+								Visibility.setAccessible(m);
 								_startCallMethods.put(sig, m);
 								_startCallMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
@@ -535,6 +538,7 @@ public final class RestContext extends Context {
 						}
 						case END_CALL: {
 							if (! _endCallMethods.containsKey(sig)) {
+								Visibility.setAccessible(m);
 								_endCallMethods.put(sig, m);
 								_endCallMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
@@ -543,6 +547,7 @@ public final class RestContext extends Context {
 						}
 						case POST_INIT: {
 							if (! _postInitMethods.containsKey(sig)) {
+								Visibility.setAccessible(m);
 								_postInitMethods.put(sig, m);
 								_postInitMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, RestContext.class);
@@ -551,6 +556,7 @@ public final class RestContext extends Context {
 						}
 						case POST_INIT_CHILD_FIRST: {
 							if (! _postInitChildFirstMethods.containsKey(sig)) {
+								Visibility.setAccessible(m);
 								_postInitChildFirstMethods.put(sig, m);
 								_postInitChildFirstMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, RestContext.class);
@@ -559,6 +565,7 @@ public final class RestContext extends Context {
 						}
 						case DESTROY: {
 							if (! _destroyMethods.containsKey(sig)) {
+								Visibility.setAccessible(m);
 								_destroyMethods.put(sig, m);
 								_destroyMethodParams.add(m.getParameterTypes());
 								ClassUtils.assertArgsOfType(m, RestContext.class);

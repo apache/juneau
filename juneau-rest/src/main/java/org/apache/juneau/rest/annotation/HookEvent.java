@@ -65,7 +65,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple START_CALL methods can be defined on a class.
 	 * 		<br>START_CALL methods on parent classes are invoked before START_CALL methods on child classes.
 	 * 		<br>The order of START_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
@@ -174,7 +176,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple PRE_CALL methods can be defined on a class.
 	 * 		<br>PRE_CALL methods on parent classes are invoked before PRE_CALL methods on child classes.
 	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
@@ -215,7 +219,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple POST_CALL methods can be defined on a class.
 	 * 		<br>POST_CALL methods on parent classes are invoked before POST_CALL methods on child classes.
 	 * 		<br>The order of POST_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
@@ -270,7 +276,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple END_CALL methods can be defined on a class.
 	 * 		<br>END_CALL methods on parent classes are invoked before END_CALL methods on child classes.
 	 * 		<br>The order of END_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
@@ -315,7 +323,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple INIT methods can be defined on a class.
 	 * 		<br>INIT methods on parent classes are invoked before INIT methods on child classes.
 	 * 		<br>The order of INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
@@ -340,7 +350,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple POST_INIT methods can be defined on a class.
 	 * 		<br>POST_INIT methods on parent classes are invoked before POST_INIT methods on child classes.
 	 * 		<br>The order of POST_INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
@@ -368,7 +380,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple POST_INIT_CHILD_FIRST methods can be defined on a class.
 	 * 		<br>POST_INIT_CHILD_FIRST methods on parent classes are invoked before POST_INIT_CHILD_FIRST methods on child classes.
 	 * 		<br>The order of POST_INIT_CHILD_FIRST method invocations within a class is alphabetical, then by parameter count, then by parameter types.
@@ -404,7 +418,9 @@ public enum HookEvent {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>If the method returns any value, it is ignored.
+	 * 	<li>The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
+	 * 	<li>The method should be <jk>public</jk> although other visibilities are valid if the security manager allows it.
+	 * 	<li>Static methods can be used.
 	 * 	<li>Multiple DESTROY methods can be defined on a class.
 	 * 		<br>DESTROY methods on child classes are invoked before DESTROY methods on parent classes.
 	 * 		<br>The order of DESTROY method invocations within a class is alphabetical, then by parameter count, then by parameter types.
