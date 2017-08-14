@@ -261,6 +261,7 @@ public final class RestContext extends Context {
 		paramFormat,
 		clientVersionHeader,
 		fullPath,
+		contextPath,
 		htmlHeader,
 		htmlNav,
 		htmlAside,
@@ -395,6 +396,7 @@ public final class RestContext extends Context {
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 			this.logger = b.logger;
 			this.fullPath = b.fullPath;
+			this.contextPath = nullIfEmpty(b.contextPath);
 
 			this.htmlWidgets = Collections.unmodifiableMap(b.htmlWidgets);
 			this.htmlHeader = b.htmlHeader;
@@ -695,6 +697,7 @@ public final class RestContext extends Context {
 		String fullPath;
 		Map<String,Widget> htmlWidgets;
 		Object resourceResolver;
+		String contextPath;
 
 		@SuppressWarnings("unchecked")
 		private Builder(Object resource, ServletContext ctx, RestConfig sc) throws Exception {
@@ -764,6 +767,7 @@ public final class RestContext extends Context {
 			defaultRequestHeaders.putAll(sc.defaultRequestHeaders);
 			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<String,Object>(sc.defaultResponseHeaders));
 			beanContext = ps.getBeanContext();
+			contextPath = sc.contextPath;
 
 			for (Object o : sc.converters)
 				converters.add(resolve(resource, RestConverter.class, o));
@@ -2018,6 +2022,19 @@ public final class RestContext extends Context {
 		return childResources.get(path);
 	}
 
+	/**
+	 * Returns the context path of the resource if it's specified via the {@link RestResource#contextPath()} setting
+	 * on this or a parent resource.
+	 *
+	 * @return The {@link RestResource#contextPath()} setting value, or <jk>null</jk> if it's not specified.
+	 */
+	protected String getContextPath() {
+		if (contextPath != null)
+			return contextPath;
+		if (parentContext != null)
+			return parentContext.getContextPath();
+		return null;
+	}
 
 	//----------------------------------------------------------------------------------------------------
 	// Utility methods

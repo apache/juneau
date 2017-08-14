@@ -632,7 +632,7 @@ public @interface RestResource {
 	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/
 	 * {@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
-	 * <br>The value (class or instance) can also be set via the servlet context attribute 
+	 * <br>The value (class or instance) can also be set via the servlet context attribute
 	 * * {@link RestContext#REST_resourceResolver}.
 	 */
 	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
@@ -753,4 +753,15 @@ public @interface RestResource {
 	 * </p>
 	 */
 	HtmlDoc htmldoc() default @HtmlDoc;
+
+	/**
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
+	 * the context path is not actually specified on the servlet container.
+	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
+	 * will return this value instead of the actual context path of the web app.
+	 */
+	String contextPath() default "";
 }

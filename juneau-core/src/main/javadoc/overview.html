@@ -6957,6 +6957,9 @@
 				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 				dependency injection frameworks.
 			<li>
+				New annotation: {@link org.apache.juneau.rest.annotation.RestResource#contextPath()}.
+				<br>Allows you to override the context path value inherited from the servlet container.
+			<li>
 				The following implementation classes can now be defined as non-static inner classes of servlets/resources:
 				<ul>
 					<li>{@link org.apache.juneau.rest.widget.Widget}
@@ -6976,6 +6979,8 @@
 				<br><img src='doc-files/ReleaseNotes_632_DarkStyle.png'>
 			<li>
 				Stylesheet selection now stored in HTTP session when passed in via <code>?stylesheet</code> query parameter.
+			<li>
+				New doc: <a class='doclink' href='/org/apache/juneau/rest/package-summary.html#RestResources.RestHooks'>Lifecycle Hooks</a>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.microservice</h6>

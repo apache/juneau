@@ -724,6 +724,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	// URI-related methods
 	//--------------------------------------------------------------------------------
 
+	@Override /* HttpServletRequest */
+	public String getContextPath() {
+		String cp = context.getContextPath();
+		return cp == null ? super.getContextPath() : cp;
+	}
+
+	@Override /* HttpServletRequest */
+	public String getServletPath() {
+		String cp = context.getContextPath();
+		String sp = super.getServletPath();
+		return cp == null || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());
+	}
+
 	/**
 	 * Returns the URI context of the request.
 	 *
@@ -740,7 +753,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			StringBuilder authority = new StringBuilder(getScheme()).append("://").append(getServerName());
 			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
 				authority.append(':').append(port);
-			uriContext = new UriContext(authority.toString(), super.getContextPath(), super.getServletPath(), super.getPathInfo());
+			uriContext = new UriContext(authority.toString(), getContextPath(), getServletPath(), super.getPathInfo());
 		}
 		return uriContext;
 	}

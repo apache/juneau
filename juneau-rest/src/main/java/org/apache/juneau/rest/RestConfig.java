@@ -118,6 +118,7 @@ public class RestConfig implements ServletConfig {
 	String path, htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
 	String[] htmlLinks;
 	String clientVersionHeader = "X-Client-Version";
+	String contextPath;
 
 	Object resourceResolver = RestResourceResolverSimple.class;
 	Object logger = RestLogger.Normal.class;
@@ -221,6 +222,7 @@ public class RestConfig implements ServletConfig {
 				addParamResolvers(r.paramResolvers());
 				serializerListener(r.serializerListener());
 				parserListener(r.parserListener());
+				contextPath(r.contextPath());
 				if (! r.favicon().isEmpty())
 					setFavIcon(c, r.favicon());
 				if (! r.staticFiles().isEmpty())
@@ -481,6 +483,22 @@ public class RestConfig implements ServletConfig {
 	public RestConfig parserListener(Class<? extends ParserListener> listener) {
 		if (listener != ParserListener.class)
 			this.parserListener = listener;
+		return this;
+	}
+
+	/**
+	 * Specifies the override context path for this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#contextPath() @RestResource.contextPath()} annotation.
+	 *
+	 * @param contextPath The context path for this resource and any child resources.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig contextPath(String contextPath) {
+		if (! contextPath.isEmpty())
+			this.contextPath = contextPath;
 		return this;
 	}
 
