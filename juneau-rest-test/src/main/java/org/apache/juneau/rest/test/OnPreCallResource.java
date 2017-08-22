@@ -53,8 +53,8 @@ public class OnPreCallResource extends RestServlet {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
 				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-					String matchingContentType = getProperty("mediaType");
-					return (T)("p1="+getProperty("p1")+",p2="+getProperty("p2")+",p3="+getProperty("p3")+",p4="+getProperty("p4")+",p5="+getProperty("p5")+",contentType="+matchingContentType);
+					String matchingContentType = getStringProperty("mediaType");
+					return (T)("p1="+getStringProperty("p1")+",p2="+getStringProperty("p2")+",p3="+getStringProperty("p3")+",p4="+getStringProperty("p4")+",p5="+getStringProperty("p5")+",contentType="+matchingContentType);
 				}
 			};
 		}

@@ -287,7 +287,7 @@ public class RestMicroservice extends Microservice {
 		ObjectMap loggerLevels = cf.getObject("Logging/levels", ObjectMap.class);
 		if (loggerLevels != null)
 		for (String l : loggerLevels.keySet())
-			Logger.getLogger(l).setLevel(loggerLevels.get(Level.class, l));
+			Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
 	}
 
 	/**
@@ -347,7 +347,7 @@ public class RestMicroservice extends Microservice {
 			server = (Server)config.configure();
 		
 		} else {
-			int[] ports = cf.getObjectWithDefault("REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}), int[].class);
+			int[] ports = cf.getObjectWithDefault("REST/port", mf.getWithDefault("Rest-Port", new int[]{8000}, int[].class), int[].class);
 
 			port = findOpenPort(ports);
 			if (port == 0) {

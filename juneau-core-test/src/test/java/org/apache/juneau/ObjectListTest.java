@@ -84,15 +84,15 @@ public class ObjectListTest {
 		ObjectList l = new ObjectList("[{foo:'bar'},{baz:123}]");
 		String r;
 
-		r = l.getAt(String.class, "0/foo");
+		r = l.getAt("0/foo", String.class);
 		assertEquals("bar", r);
 
 		l.putAt("0/foo", "bing");
-		r = l.getAt(String.class, "0/foo");
+		r = l.getAt("0/foo", String.class);
 		assertEquals("bing", r);
 
 		l.postAt("", new ObjectMap("{a:'b'}"));
-		r = l.getAt(String.class, "2/a");
+		r = l.getAt("2/a", String.class);
 		assertEquals("b", r);
 
 		l.deleteAt("2");
@@ -105,5 +105,37 @@ public class ObjectListTest {
 	@Test
 	public void testFromReader() throws Exception {
 		assertObjectEquals("[1,2,3]", new ObjectList(new StringReader("[1,2,3]")));
+	}
+	
+	//====================================================================================================
+	// testGetMap
+	//====================================================================================================
+	@Test
+	public void testGetMap() throws Exception {
+		ObjectList l = new ObjectList("[{1:'true',2:'false'}]");
+		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
+		assertObjectEquals("{'1':true,'2':false}", m2);
+		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
+		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
+	
+		m2 = l.get(0, Map.class, Integer.class, Boolean.class);
+		assertObjectEquals("{'1':true,'2':false}", m2);
+		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
+		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
+	}
+
+	//====================================================================================================
+	// testGetList
+	//====================================================================================================
+	@Test
+	public void testGetList() throws Exception {
+		ObjectList l = new ObjectList("[['123','456']]");
+		List<Integer> l2 = l.getList(0, Integer.class);
+		assertObjectEquals("[123,456]", l2);
+		assertEquals(Integer.class, l2.iterator().next().getClass());
+	
+		l2 = l.get(0, List.class, Integer.class);
+		assertObjectEquals("[123,456]", l2);
+		assertEquals(Integer.class, l2.iterator().next().getClass());
 	}
 }

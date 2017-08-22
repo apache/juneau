@@ -72,7 +72,7 @@ public abstract class ParserSession extends BeanSession {
 			strict = p.getBoolean(PARSER_strict, ctx.strict);
 			inputStreamCharset = p.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
 			fileCharset = p.getString(PARSER_fileCharset, ctx.fileCharset);
-			listenerClass = p.get(Class.class, PARSER_listener, ctx.listener);
+			listenerClass = p.getWithDefault(PARSER_listener, ctx.listener, Class.class);
 		}
 		this.javaMethod = args.javaMethod;
 		this.outer = args.outer;

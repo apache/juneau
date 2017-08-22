@@ -51,7 +51,7 @@ public class DateSwapTest {
 		final String sValue = data.getString("birthday");
 		dateSwap.unswap(BeanContext.DEFAULT.createSession(), sValue, data.getBeanSession().getClassMeta(Date.class));
 		// this does not work
-		data.get(dateSwap, "birthday");
+		data.getSwapped("birthday", dateSwap);
 	}
 
 	public static class A {

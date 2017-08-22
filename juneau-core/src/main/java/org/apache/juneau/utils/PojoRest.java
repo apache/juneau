@@ -190,12 +190,13 @@ public final class PojoRest {
 	/**
 	 * Retrieves the element addressed by the URL.
 	 *
-	 * @param url The URL of the element to retrieve.
-	 * If null or blank, returns the root.
-	 * @return The addressed element, or null if that element does not exist in the tree.
+	 * @param url
+	 * 	The URL of the element to retrieve.
+	 * 	<br>If <jk>null</jk> or blank, returns the root.
+	 * @return The addressed element, or <jk>null</jk> if that element does not exist in the tree.
 	 */
 	public Object get(String url) {
-		return get(url, null);
+		return getWithDefault(url, null);
 	}
 
 	/**
@@ -203,11 +204,11 @@ public final class PojoRest {
 	 *
 	 * @param url
 	 * 	The URL of the element to retrieve.
-	 * 	If null or blank, returns the root.
+	 * 	<br>If <jk>null</jk> or blank, returns the root.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
-	public Object get(String url, Object defVal) {
+	public Object getWithDefault(String url, Object defVal) {
 		Object o = service(GET, url, null);
 		return o == null ? defVal : o;
 	}
@@ -216,38 +217,133 @@ public final class PojoRest {
 	 * Retrieves the element addressed by the URL as the specified object type.
 	 *
 	 * <p>
-	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, ClassMeta)}.
+	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
 	 *
-	 * @param type The specified object type.
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	PojoRest r = <jk>new</jk> PojoRest(object);
+	 *
+	 * 	<jc>// Value converted to a string.</jc>
+	 * 	String s = r.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a bean.</jc>
+	 * 	MyBean b = r.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a bean array.</jc>
+	 * 	MyBean[] ba = r.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of objects.</jc>
+	 * 	List l = r.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map of object keys/values.</jc>
+	 * 	Map m2 = r.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
 	 * @param url
 	 * 	The URL of the element to retrieve.
-	 * 	If null or blank, returns the root.
+	 * 	If <jk>null</jk> or blank, returns the root.
+	 * @param type The specified object type.
+	 *
 	 * @param <T> The specified object type.
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
-	public <T> T get(Class<T> type, String url) {
-		return get(type, url, null);
+	public <T> T get(String url, Class<T> type) {
+		return getWithDefault(url, null, type);
 	}
 
 	/**
 	 * Retrieves the element addressed by the URL as the specified object type.
 	 *
 	 * <p>
-	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, ClassMeta)}.
+	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
 	 *
-	 * @param type The specified object type.
+	 * <p>
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	PojoMap r = <jk>new</jk> PojoMap(object);
+	 *
+	 * 	<jc>// Value converted to a linked-list of strings.</jc>
+	 * 	List&lt;String&gt; l1 = r.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of beans.</jc>
+	 * 	List&lt;MyBean&gt; l2 = r.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
+	 * 	List&lt;List&lt;String&gt;&gt; l3 = r.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map of string keys/values.</jc>
+	 * 	Map&lt;String,String&gt; m1 = r.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m2 = r.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 *
+	 * <p>
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 *
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
+	 * </ul>
+	 *
 	 * @param url
 	 * 	The URL of the element to retrieve.
-	 * 	If null or blank, returns the root.
-	 * @param def The default value if addressed item does not exist.
+	 * 	If <jk>null</jk> or blank, returns the root.
+	 * @param type The specified object type.
+	 * @param args The specified object parameter types.
+	 *
 	 * @param <T> The specified object type.
 	 * @return The addressed element, or null if that element does not exist in the tree.
 	 */
-	public <T> T get(Class<T> type, String url, T def) {
+	public <T> T get(String url, Type type, Type...args) {
+		return getWithDefault(url, null, type, args);
+	}
+
+	/**
+	 * Same as {@link #get(String, Class)} but returns a default value if the addressed element is null or non-existent.
+	 *
+	 * @param url
+	 * 	The URL of the element to retrieve.
+	 * 	If <jk>null</jk> or blank, returns the root.
+	 * @param def The default value if addressed item does not exist.
+	 * @param type The specified object type.
+	 *
+	 * @param <T> The specified object type.
+	 * @return The addressed element, or null if that element does not exist in the tree.
+	 */
+	public <T> T getWithDefault(String url, T def, Class<T> type) {
 		Object o = service(GET, url, null);
 		if (o == null)
 			return def;
 		return session.convertToType(o, type);
+	}
+
+	/**
+	 * Same as {@link #get(String,Type,Type[])} but returns a default value if the addressed element is null or non-existent.
+	 *
+	 * @param url
+	 * 	The URL of the element to retrieve.
+	 * 	If <jk>null</jk? or blank, returns the root.
+	 * @param def The default value if addressed item does not exist.
+	 * @param type The specified object type.
+	 * @param args The specified object parameter types.
+	 *
+	 * @param <T> The specified object type.
+	 * @return The addressed element, or null if that element does not exist in the tree.
+	 */
+	public <T> T getWithDefault(String url, T def, Type type, Type...args) {
+		Object o = service(GET, url, null);
+		if (o == null)
+			return def;
+		return session.convertToType(o, type, args);
 	}
 
 	/**
@@ -260,7 +356,7 @@ public final class PojoRest {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 */
 	public String getString(String url) {
-		return get(String.class, url);
+		return get(url, String.class);
 	}
 
 	/**
@@ -274,7 +370,7 @@ public final class PojoRest {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 */
 	public String getString(String url, String defVal) {
-		return get(String.class, url, defVal);
+		return getWithDefault(url, defVal, String.class);
 	}
 
 	/**
@@ -288,7 +384,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Integer getInt(String url) {
-		return get(Integer.class, url);
+		return get(url, Integer.class);
 	}
 
 	/**
@@ -303,7 +399,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Integer getInt(String url, Integer defVal) {
-		return get(Integer.class, url, defVal);
+		return getWithDefault(url, defVal, Integer.class);
 	}
 
 	/**
@@ -317,7 +413,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Long getLong(String url) {
-		return get(Long.class, url);
+		return get(url, Long.class);
 	}
 
 	/**
@@ -332,7 +428,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Long getLong(String url, Long defVal) {
-		return get(Long.class, url, defVal);
+		return getWithDefault(url, defVal, Long.class);
 	}
 
 	/**
@@ -346,7 +442,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Boolean getBoolean(String url) {
-		return get(Boolean.class, url);
+		return get(url, Boolean.class);
 	}
 
 	/**
@@ -361,7 +457,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Boolean getBoolean(String url, Boolean defVal) {
-		return get(Boolean.class, url, defVal);
+		return getWithDefault(url, defVal, Boolean.class);
 	}
 
 	/**
@@ -375,7 +471,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Map<?,?> getMap(String url) {
-		return get(Map.class, url);
+		return get(url, Map.class);
 	}
 
 	/**
@@ -390,7 +486,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Map<?,?> getMap(String url, Map<?,?> defVal) {
-		return get(Map.class, url, defVal);
+		return getWithDefault(url, defVal, Map.class);
 	}
 
 	/**
@@ -404,7 +500,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public List<?> getList(String url) {
-		return get(List.class, url);
+		return get(url, List.class);
 	}
 
 	/**
@@ -419,7 +515,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public List<?> getList(String url, List<?> defVal) {
-		return get(List.class, url, defVal);
+		return getWithDefault(url, defVal, List.class);
 	}
 
 	/**
@@ -433,7 +529,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectMap getObjectMap(String url) {
-		return get(ObjectMap.class, url);
+		return get(url, ObjectMap.class);
 	}
 
 	/**
@@ -448,7 +544,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectMap getObjectMap(String url, ObjectMap defVal) {
-		return get(ObjectMap.class, url, defVal);
+		return getWithDefault(url, defVal, ObjectMap.class);
 	}
 
 	/**
@@ -462,7 +558,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectList getObjectList(String url) {
-		return get(ObjectList.class, url);
+		return get(url, ObjectList.class);
 	}
 
 	/**
@@ -477,7 +573,7 @@ public final class PojoRest {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectList getObjectList(String url, ObjectList defVal) {
-		return get(ObjectList.class, url, defVal);
+		return getWithDefault(url, defVal, ObjectList.class);
 	}
 
 	/**

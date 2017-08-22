@@ -149,7 +149,7 @@ public class PhotosResource extends Resource {
 				@Override /* SerializerSession */ 
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 					RenderedImage image = (RenderedImage)o;
-					String mediaType = getProperty("mediaType");
+					String mediaType = getStringProperty("mediaType");
 					ImageIO.write(image, mediaType.substring(mediaType.indexOf('/')+1), out.getOutputStream());
 				}
 			};

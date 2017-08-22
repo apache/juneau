@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.json.*;
@@ -261,109 +262,205 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Get the entry at the specified index, converted to the specified type (if possible).
+	 * Get the entry at the specified index, converted to the specified type.
+	 *
+	 * <p>
+	 * This is the preferred get method for simple types.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ObjectList l = <jk>new</jk> ObjectList(<js>"..."</js>);
+	 *
+	 * 	<jc>// Value converted to a string.</jc>
+	 * 	String s = l.get(1, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a bean.</jc>
+	 * 	MyBean b = l.get(2, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a bean array.</jc>
+	 * 	MyBean[] ba = l.get(3, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of objects.</jc>
+	 * 	List l1 = l.get(4, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map of object keys/values.</jc>
+	 * 	Map m1 = l.get(5, TreeMap.<jk>class</jk>);
+	 * </p>
 	 *
 	 * <p>
 	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
-	 * @param type The type of object to convert the entry to.
 	 * @param index The index into this list.
+	 * @param type The type of object to convert the entry to.
 	 * @param <T> The type of object to convert the entry to.
 	 * @return The converted entry.
 	 */
-	public <T> T get(Class<T> type, int index) {
+	public <T> T get(int index, Class<T> type) {
 		return session.convertToType(get(index), type);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(String.<jk>class</jk>, index)</code>.
+	 * Get the entry at the specified index, converted to the specified type.
+	 *
+	 * <p>
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ObjectList l = <jk>new</jk> ObjectList(<js>"..."</js>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of strings.</jc>
+	 * 	List&lt;String&gt; l1 = l.get(1, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of beans.</jc>
+	 * 	List&lt;MyBean&gt; l2 = l.get(2, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
+	 * 	List&lt;List&lt;String&gt;&gt; l3 = l.get(3, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map of string keys/values.</jc>
+	 * 	Map&lt;String,String&gt; m1 = l.get(4, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m2 = l.get(5, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 *
+	 * <p>
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 *
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 *
+	 * <p>
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 *
+	 * @param index The index into this list.
+	 * @param type The type of object to convert the entry to.
+	 * @param args The type arguments of the type to convert the entry to.
+	 * @param <T> The type of object to convert the entry to.
+	 * @return The converted entry.
+	 */
+	public <T> T get(int index, Type type, Type...args) {
+		return session.convertToType(get(index), type, args);
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, String.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 */
 	public String getString(int index) {
-		return get(String.class, index);
+		return get(index, String.class);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(Integer.<jk>class</jk>, index)</code>.
+	 * Shortcut for calling <code>get(index, Integer.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Integer getInt(int index) {
-		return get(Integer.class, index);
+		return get(index, Integer.class);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(Boolean.<jk>class</jk>, index)</code>.
+	 * Shortcut for calling <code>get(index, Boolean.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Boolean getBoolean(int index) {
-		return get(Boolean.class, index);
+		return get(index, Boolean.class);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(Long.<jk>class</jk>, index)</code>.
+	 * Shortcut for calling <code>get(index, Long.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Long getLong(int index) {
-		return get(Long.class, index);
+		return get(index, Long.class);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(Map.<jk>class</jk>, index)</code>.
+	 * Shortcut for calling <code>get(index, Map.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Map<?,?> getMap(int index) {
-		return get(Map.class, index);
+		return get(index, Map.class);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(List.<jk>class</jk>, index)</code>.
+	 * Same as {@link #getMap(int)} except converts the keys and values to the specified types.
+	 *
+	 * @param index The index.
+	 * @param keyType The key type class.
+	 * @param valType The value type class.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <K,V> Map<K,V> getMap(int index, Class<K> keyType, Class<V> valType) {
+		return session.convertToType(get(index), Map.class, keyType, valType);
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, List.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public List<?> getList(int index) {
-		return get(List.class, index);
+		return get(index, List.class);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(ObjectMap.<jk>class</jk>, index)</code>.
+	 * Same as {@link #getList(int)} except converts the elements to the specified types.
+	 *
+	 * @param index The index.
+	 * @param elementType The element type class.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <E> List<E> getList(int index, Class<E> elementType) {
+		return session.convertToType(get(index), List.class, elementType);
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, ObjectMap.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectMap getObjectMap(int index) {
-		return get(ObjectMap.class, index);
+		return get(index, ObjectMap.class);
 	}
 
 	/**
-	 * Shortcut for calling <code>get(ObjectList.<jk>class</jk>, index)</code>.
+	 * Shortcut for calling <code>get(index, ObjectList.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectList getObjectList(int index) {
-		return get(ObjectList.class, index);
+		return get(index, ObjectList.class);
 	}
 
 	/**
-	 * Same as {@link #get(Class,int) get(Class,int)}, but the key is a slash-delimited path used to traverse entries in
+	 * Same as {@link #get(int,Class) get(int,Class)}, but the key is a slash-delimited path used to traverse entries in
 	 * this POJO.
 	 *
 	 * <p>
@@ -376,20 +473,35 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	<jk>long</jk> l = m.getObjectMap(<js>"foo"</js>).getObjectList(<js>"bar"</js>).getObjectMap(<js>"0"</js>).getLong(<js>"baz"</js>);
 	 *
 	 * 	<jc>// Using this method</jc>
-	 * 	<jk>long</jk> l = m.getAt(<jk>long</jk>.<jk>class</jk>, <js>"foo/bar/0/baz"</js>);
+	 * 	<jk>long</jk> l = m.getAt(<js>"foo/bar/0/baz"</js>, <jk>long</jk>.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
 	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
-	 * @param <T> The class type.
-	 * @param type The class type.
 	 * @param path The path to the entry.
+	 * @param type The class type.
+	 *
+	 * @param <T> The class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
-	public <T> T getAt(Class<T> type, String path) {
-		return getPojoRest().get(type, path);
+	public <T> T getAt(String path, Class<T> type) {
+		return getPojoRest().get(path, type);
+	}
+
+	/**
+	 * Same as {@link #getAt(String,Class)}, but allows for conversion to complex maps and collections.
+	 *
+	 * @param path The path to the entry.
+	 * @param type The class type.
+	 * @param args The class parameter types.
+	 *
+	 * @param <T> The class type.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public <T> T getAt(String path, Type type, Type...args) {
+		return getPojoRest().get(path, type, args);
 	}
 
 	/**

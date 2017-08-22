@@ -221,7 +221,7 @@ public final class Args extends ObjectMap {
 		ObjectList l = (ObjectList)get(name);
 		if (l == null || l.size() == 0)
 			return null;
-		return l.get(c, 0);
+		return l.get(0, c);
 	}
 
 	/**

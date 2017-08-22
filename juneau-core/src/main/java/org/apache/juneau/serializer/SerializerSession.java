@@ -138,9 +138,9 @@ public abstract class SerializerSession extends BeanSession {
 			sortCollections = p.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
 			sortMaps = p.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
 			abridged = p.getBoolean(SERIALIZER_abridged, ctx.abridged);
-			uriResolution = p.get(UriResolution.class, SERIALIZER_uriResolution, UriResolution.ROOT_RELATIVE);
-			uriRelativity = p.get(UriRelativity.class, SERIALIZER_uriRelativity, UriRelativity.RESOURCE);
-			listenerClass = p.get(Class.class, SERIALIZER_listener, ctx.listener);
+			uriResolution = p.getWithDefault(SERIALIZER_uriResolution, UriResolution.ROOT_RELATIVE, UriResolution.class);
+			uriRelativity = p.getWithDefault(SERIALIZER_uriRelativity, UriRelativity.RESOURCE, UriRelativity.class);
+			listenerClass = p.getWithDefault(SERIALIZER_listener, ctx.listener, Class.class);
 		}
 
 		uriResolver = new UriResolver(uriResolution, uriRelativity, args.uriContext == null ? ctx.uriContext : args.uriContext);

@@ -69,9 +69,9 @@ public class XmlParserSession extends ReaderParserSession {
 			preserveRootElement = ctx.preserveRootElement;
 		} else {
 			validating = p.getBoolean(XML_validating, ctx.validating);
-			reporter = (XMLReporter)p.get(XML_reporter, ctx.reporter);
-			resolver = (XMLResolver)p.get(XML_resolver, ctx.resolver);
-			eventAllocator = (XMLEventAllocator)p.get(XML_eventAllocator, ctx.eventAllocator);
+			reporter = (XMLReporter)p.getWithDefault(XML_reporter, ctx.reporter);
+			resolver = (XMLResolver)p.getWithDefault(XML_resolver, ctx.resolver);
+			eventAllocator = (XMLEventAllocator)p.getWithDefault(XML_eventAllocator, ctx.eventAllocator);
 			preserveRootElement = p.getBoolean(XML_preserveRootElement, ctx.preserveRootElement);
 		}
 	}

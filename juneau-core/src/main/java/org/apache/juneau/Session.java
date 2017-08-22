@@ -79,18 +79,18 @@ public abstract class Session {
 	 * @param key The property key.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final String getProperty(String key) {
-		return getProperty(key, null);
+	public final String getStringProperty(String key) {
+		return getStringProperty(key, null);
 	}
 
 	/**
-	 * Same as {@link #getProperty(String)} but with a default value.
+	 * Same as {@link #getStringProperty(String)} but with a default value.
 	 *
 	 * @param key The property key.
 	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
 	 * @return The property value.
 	 */
-	public final String getProperty(String key, String def) {
+	public final String getStringProperty(String key, String def) {
 		Object v = properties.get(key);
 		if (v == null)
 			v = ctx.getPropertyStore().getProperty(key, String.class, null);
@@ -100,26 +100,28 @@ public abstract class Session {
 	}
 
 	/**
-	 * Same as {@link #getProperty(String)} but transforms the value to the specified type.
+	 * Same as {@link #getStringProperty(String)} but transforms the value to the specified type.
 	 *
-	 * @param type The class type of the value.
 	 * @param key The property key.
+	 * @param type The class type of the value.
+	 *
 	 * @return The property value.
 	 */
-	public final <T> T getProperty(Class<T> type, String key) {
-		return getProperty(type, key, null);
+	public final <T> T getProperty(String key, Class<T> type) {
+		return getPropertyWithDefault(key, null, type);
 	}
 
 	/**
-	 * Same as {@link #getProperty(Class,String)} but with a default value.
+	 * Same as {@link #getProperty(String,Class)} but with a default value.
 	 *
-	 * @param type The class type of the value.
 	 * @param key The property key.
 	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
+	 * @param type The class type of the value.
+	 *
 	 * @return The property value.
 	 */
-	public final <T> T getProperty(Class<T> type, String key, T def) {
-		T t = properties.get(type, key);
+	public final <T> T getPropertyWithDefault(String key, T def, Class<T> type) {
+		T t = properties.get(key, type);
 		if (t == null)
 			t = ctx.getPropertyStore().getProperty(key, type, def);
 		return t;

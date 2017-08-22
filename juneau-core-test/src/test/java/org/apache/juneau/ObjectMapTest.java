@@ -16,6 +16,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -299,15 +300,15 @@ public class ObjectMapTest {
 		ObjectMap m = new ObjectMap("{a:[{b:'c'}]}");
 		String r;
 
-		r = m.getAt(String.class, "a/0/b");
+		r = m.getAt("a/0/b", String.class);
 		assertEquals("c", r);
 
 		m.putAt("a/0/b", "d");
-		r = m.getAt(String.class, "a/0/b");
+		r = m.getAt("a/0/b", String.class);
 		assertEquals("d", r);
 
 		m.postAt("a", "e");
-		r = m.getAt(String.class, "a/1");
+		r = m.getAt("a/1", String.class);
 		assertEquals("e", r);
 
 		m.deleteAt("a/1");
@@ -320,5 +321,49 @@ public class ObjectMapTest {
 	@Test
 	public void testFromReader() throws Exception {
 		assertObjectEquals("{foo:'bar'}", new ObjectMap(new StringReader("{foo:'bar'}")));
+	}
+	
+	//====================================================================================================
+	// testGetMap
+	//====================================================================================================
+	@Test
+	public void testGetMap() throws Exception {
+		ObjectMap m = new ObjectMap("{a:{1:'true',2:'false'}}");
+		Map<Integer,Boolean> m2 = m.getMap("a", Integer.class, Boolean.class, null);
+		assertObjectEquals("{'1':true,'2':false}", m2);
+		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
+		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
+	
+		m2 = m.getMap("b", Integer.class, Boolean.class, null);
+		assertNull(m2);
+		
+		m2 = m.get("a", Map.class, Integer.class, Boolean.class);
+		assertObjectEquals("{'1':true,'2':false}", m2);
+		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
+		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
+		
+		m2 = m.get("b", Map.class, Integer.class, Boolean.class);
+		assertNull(m2);
+	}
+
+	//====================================================================================================
+	// testGetList
+	//====================================================================================================
+	@Test
+	public void testGetList() throws Exception {
+		ObjectMap m = new ObjectMap("{a:['123','456']}");
+		List<Integer> l2 = m.getList("a", Integer.class, null);
+		assertObjectEquals("[123,456]", l2);
+		assertEquals(Integer.class, l2.iterator().next().getClass());
+	
+		l2 = m.getList("b", Integer.class, null);
+		assertNull(l2);
+		
+		l2 = m.get("a", List.class, Integer.class);
+		assertObjectEquals("[123,456]", l2);
+		assertEquals(Integer.class, l2.iterator().next().getClass());
+		
+		l2 = m.get("b", List.class, Integer.class);
+		assertNull(l2);
 	}
 }

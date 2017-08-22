@@ -6919,6 +6919,37 @@
 				{@link org.apache.juneau.transforms.DateSwap}.
 			<li>
 				New annotation {@link org.apache.juneau.html.annotation.Html#anchorText}.
+			<li>
+				New methods on {@link org.apache.juneau.ObjectList}:
+				<ul>
+					<li>{@link org.apache.juneau.ObjectList#get(int,Class) get(int,Class)}
+					<li>{@link org.apache.juneau.ObjectList#get(int,Type,Type...) get(int,Type,Type...)}
+					<li>{@link org.apache.juneau.ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)}
+					<li>{@link org.apache.juneau.ObjectList#getList(int,Class) getList(int,Class)}
+				</ul>
+			<li>
+				New methods on {@link org.apache.juneau.ObjectMap}:
+				<ul>
+					<li>{@link org.apache.juneau.ObjectMap#get(String,Class) get(String,Class)}
+					<li>{@link org.apache.juneau.ObjectMap#get(String,Type,Type...) get(String,Type,Type...)}
+					<li>{@link org.apache.juneau.ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)}
+					<li>{@link org.apache.juneau.ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+					<li>{@link org.apache.juneau.ObjectMap#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
+					<li>{@link org.apache.juneau.ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)}
+					<li>{@link org.apache.juneau.ObjectMap#getAt(String,Class) getAt(String,Class)}
+					<li>{@link org.apache.juneau.ObjectMap#getAt(String,Type,Type...) getAt(String,Type,Type...)}
+					<li>{@link org.apache.juneau.ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)}
+					<li>{@link org.apache.juneau.ObjectMap#getList(String,Class,List) getList(String,Class,List)}
+				</ul>
+			<li>
+				New methods on {@link org.apache.juneau.utils.PojoRest}:
+				<ul>
+					<li>{@link org.apache.juneau.utils.PojoRest#get(String,Class) get(String,Class)}
+					<li>{@link org.apache.juneau.utils.PojoRest#get(String,Type,Type...) get(String,Type,Type...)}
+					<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)}
+					<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+					<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
+				</ul>
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -7266,10 +7297,10 @@
 			<li>New methods on {@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
 				for retrieving context and runtime-override properties:
 				<ul>
-					<li>{@link org.apache.juneau.Session#getProperty(String)}
-					<li>{@link org.apache.juneau.Session#getProperty(String,String)}
-					<li>{@link org.apache.juneau.Session#getProperty(Class,String)}
-					<li>{@link org.apache.juneau.Session#getProperty(Class,String,Object)}
+					<li><code><del>Session.getProperty(String)</del></code>
+					<li><code><del>Session.getProperty(String,String)</del></code>
+					<li><code><del>Session.getProperty(Class,String)</del></code>
+					<li><code><del>Session.getProperty(Class,String,Object)</del></code>
 				</ul>	
 			<li>New {@link org.apache.juneau.serializer.PartSerializer} interface particularly tailored to HTTP
 				headers, query parameters, form-data parameters, and path variables.  
@@ -8367,14 +8398,14 @@
 			<li>Fixed issue in {@link org.apache.juneau.xml.XmlSerializer} where <js>'\r'</js> and <js>'\n'</js> characters were not being handled per XML specs.
 			<li>New methods on {@link org.apache.juneau.ObjectList}:  
 				<ul>
-					<li>{@link org.apache.juneau.ObjectList#getAt(Class,String)}
+					<li><code><del>ObjectList.getAt(Class,String)</del></code>
 					<li>{@link org.apache.juneau.ObjectList#putAt(String,Object)}
 					<li>{@link org.apache.juneau.ObjectList#postAt(String,Object)}
 					<li>{@link org.apache.juneau.ObjectList#deleteAt(String)}
 				</ul>
 			<li>New methods on {@link org.apache.juneau.ObjectMap}:  
 				<ul>
-					<li>{@link org.apache.juneau.ObjectMap#getAt(Class,String)}
+					<li><code><del>ObjectMap.getAt(Class,String)</del></code>
 					<li>{@link org.apache.juneau.ObjectMap#putAt(String,Object)}
 					<li>{@link org.apache.juneau.ObjectMap#postAt(String,Object)}
 					<li>{@link org.apache.juneau.ObjectMap#deleteAt(String)}
@@ -8524,7 +8555,7 @@
 				</ul>
 			<li>New methods on {@link org.apache.juneau.utils.PojoRest}:
 				<ul>
-					<li>{@link org.apache.juneau.utils.PojoRest#get(Class,String,Object)}
+					<li><code><del>PojoRest.get(Class,String,Object)</del></code>
 					<li>{@link org.apache.juneau.utils.PojoRest#getString(String)}
 					<li>{@link org.apache.juneau.utils.PojoRest#getString(String,String)}
 					<li>{@link org.apache.juneau.utils.PojoRest#getInt(String)}
@@ -8858,7 +8889,7 @@
 			<li>New {@link org.apache.juneau.html.SimpleHtmlWriter} class.  
 				Can be used for simple HTML DOM construction.
 			<li>New {@link org.apache.juneau.utils.ProcBuilder} class for calling external processes.
-			<li>New {@link org.apache.juneau.ObjectMap#remove(Class,String,Object)} method.
+			<li>New <code><del>ObjectMap.remove(Class,String,Object)</del></code> method.
 			<li><js>"class='link'"</js> added to links generated by {@link org.apache.juneau.html.HtmlDocSerializer}.
 			<li>New <code><del>EncoderGroup#append(EncoderGroup)</del></code> method.
 			<li>New <code>HtmlDocSerializerContext.HTMLDOC_addLinks</code> configuration property.

@@ -58,7 +58,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 			.attr("encoding", "UTF-8")
 			.appendln("?>");
 		w.oTag("soap", "Envelope")
-			.attr("xmlns", "soap", getProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
+			.attr("xmlns", "soap", getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
 			.appendln(">");
 		w.sTag(1, "soap", "Body").nl(1);
 		indent += 2;
@@ -70,6 +70,6 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	@Override /* Serializer */
 	public Map<String,String> getResponseHeaders() {
-		return new AMap<String,String>().append("SOAPAction", getProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"));
+		return new AMap<String,String>().append("SOAPAction", getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"));
 	}
 }

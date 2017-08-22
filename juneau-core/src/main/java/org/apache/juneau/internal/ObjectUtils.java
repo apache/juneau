@@ -178,8 +178,8 @@ public class ObjectUtils {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public static <T> T convertToType(Object outer, Object value, Class<T> type) {
-		return session.convertToType(outer, value, type);
+	public static <T> T convertToMemberType(Object outer, Object value, Class<T> type) {
+		return session.convertToMemberType(outer, value, type);
 	}
 
 	/**

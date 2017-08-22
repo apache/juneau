@@ -68,7 +68,7 @@ public class AcceptCharsetResource extends RestServlet {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
 				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-					return (T)getProperty("characterEncoding");
+					return (T)getStringProperty("characterEncoding");
 				}
 			};
 		}
@@ -88,7 +88,7 @@ public class AcceptCharsetResource extends RestServlet {
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 					Writer w = new OutputStreamWriter(out.getOutputStream());
-					w.append(o.toString()).append('/').append(getProperty("characterEncoding"));
+					w.append(o.toString()).append('/').append(getStringProperty("characterEncoding"));
 					w.flush();
 				}
 			};

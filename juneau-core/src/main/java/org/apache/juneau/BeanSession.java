@@ -64,10 +64,10 @@ public class BeanSession extends Session {
 			this.debug = ctx.debug;
 			this.mediaType = args.mediaType != null ? args.mediaType : ctx.mediaType;
 		} else {
-			_locale = (args.locale != null ? args.locale : getProperty(Locale.class, BEAN_locale, ctx.locale));
-			this.timeZone = (args.timeZone != null ? args.timeZone : getProperty(TimeZone.class, BEAN_timeZone, ctx.timeZone));
-			this.debug = getProperty(boolean.class, BEAN_debug, false);
-			this.mediaType = (args.mediaType != null ? args.mediaType : getProperty(MediaType.class, BEAN_mediaType, ctx.mediaType));
+			_locale = (args.locale != null ? args.locale : getPropertyWithDefault(BEAN_locale, ctx.locale, Locale.class));
+			this.timeZone = (args.timeZone != null ? args.timeZone : getPropertyWithDefault(BEAN_timeZone, ctx.timeZone, TimeZone.class));
+			this.debug = getPropertyWithDefault(BEAN_debug, false, boolean.class);
+			this.mediaType = (args.mediaType != null ? args.mediaType : getPropertyWithDefault(BEAN_mediaType, ctx.mediaType, MediaType.class));
 		}
 		this.locale = _locale == null ? Locale.getDefault() : _locale;
 	}
@@ -144,7 +144,7 @@ public class BeanSession extends Session {
 		// Shortcut for most common case.
 		if (value != null && value.getClass() == type)
 			return (T)value;
-		return convertToType(null, value, ctx.getClassMeta(type));
+		return convertToMemberType(null, value, ctx.getClassMeta(type));
 	}
 
 	/**
@@ -160,8 +160,8 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public final <T> T convertToType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
-		return convertToType(outer, value, ctx.getClassMeta(type));
+	public final <T> T convertToMemberType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
+		return convertToMemberType(outer, value, ctx.getClassMeta(type));
 	}
 
 	/**
@@ -300,7 +300,21 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 */
 	public final <T> T convertToType(Object value, ClassMeta<T> type) throws InvalidDataConversionException {
-		return convertToType(null, value, type);
+		return convertToMemberType(null, value, type);
+	}
+
+	/**
+	 * Same as {@link #convertToType(Object, Class)}, but allows for complex data types consisting of collections or maps.
+	 *
+	 * @param <T> The class type to convert the value to.
+	 * @param value The value to be converted.
+	 * @param type The target object type.
+	 * @param args The target object parameter types.
+	 * @return The converted type.
+	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
+	 */
+	public final <T> T convertToType(Object value, Type type, Type...args) throws InvalidDataConversionException {
+		return (T)convertToMemberType(null, value, getClassMeta(type, args));
 	}
 
 	/**
@@ -316,7 +330,7 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public final <T> T convertToType(Object outer, Object value, ClassMeta<T> type) throws InvalidDataConversionException {
+	public final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> type) throws InvalidDataConversionException {
 		if (type == null)
 			type = (ClassMeta<T>)ctx.object();
 
@@ -511,17 +525,17 @@ public class BeanSession extends Session {
 								if (keyType.isString() && k.getClass() != Class.class)
 									k = k.toString();
 								else
-									k = convertToType(m, k, keyType);
+									k = convertToMemberType(m, k, keyType);
 							}
 							Object v = e.getValue();
 							if (valueType.isNotObject())
-								v = convertToType(m, v, valueType);
+								v = convertToMemberType(m, v, valueType);
 							m.put(k, v);
 						}
 						return (T)m;
 					} else if (!type.canCreateNewInstanceFromString(outer)) {
 						ObjectMap m = new ObjectMap(value.toString(), ctx.defaultParser);
-						return convertToType(outer, m, type);
+						return convertToMemberType(outer, m, type);
 					}
 				} catch (Exception e) {
 					throw new InvalidDataConversionException(value.getClass(), type, e);
@@ -536,12 +550,12 @@ public class BeanSession extends Session {
 
 					if (value.getClass().isArray())
 						for (Object o : (Object[])value)
-							l.add(elementType.isObject() ? o : convertToType(l, o, elementType));
+							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 					else if (value instanceof Collection)
 						for (Object o : (Collection)value)
-							l.add(elementType.isObject() ? o : convertToType(l, o, elementType));
+							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 					else if (value instanceof Map)
-						l.add(elementType.isObject() ? value : convertToType(l, value, elementType));
+						l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
 					else if (! value.toString().isEmpty())
 						throw new InvalidDataConversionException(value.getClass(), type, null);
 					return (T)l;
@@ -658,7 +672,7 @@ public class BeanSession extends Session {
 				else if (o == null && componentType.isPrimitive())
 					o = componentType.getPrimitiveDefault();
 				else
-					o = convertToType(null, o, componentType);
+					o = convertToType(o, componentType);
 			}
 			try {
 				Array.set(array, i++, o);

@@ -357,17 +357,17 @@ public class PojoRestTest {
 		assertNull(model.get("f7"));
 		assertNull(model.get("f8"));
 
-		assertEquals("foo", model.get("f1", "foo"));
-		assertEquals(0, model.get("f2", "foo"));
-		assertEquals(0l, model.get("f3", "foo"));
-		assertEquals(false, model.get("f4", "foo"));
-		assertEquals("foo", model.get("f2a", "foo"));
-		assertEquals("foo", model.get("f3a", "foo"));
-		assertEquals("foo", model.get("f4a", "foo"));
-		assertEquals("foo", model.get("f5", "foo"));
-		assertEquals("foo", model.get("f6", "foo"));
-		assertEquals("foo", model.get("f7", "foo"));
-		assertEquals("foo", model.get("f8", "foo"));
+		assertEquals("foo", model.getWithDefault("f1", "foo"));
+		assertEquals(0, model.getWithDefault("f2", "foo"));
+		assertEquals(0l, model.getWithDefault("f3", "foo"));
+		assertEquals(false, model.getWithDefault("f4", "foo"));
+		assertEquals("foo", model.getWithDefault("f2a", "foo"));
+		assertEquals("foo", model.getWithDefault("f3a", "foo"));
+		assertEquals("foo", model.getWithDefault("f4a", "foo"));
+		assertEquals("foo", model.getWithDefault("f5", "foo"));
+		assertEquals("foo", model.getWithDefault("f6", "foo"));
+		assertEquals("foo", model.getWithDefault("f7", "foo"));
+		assertEquals("foo", model.getWithDefault("f8", "foo"));
 
 		assertNull(model.getString("f1"));
 		assertEquals("0", model.getString("f2"));
@@ -575,17 +575,17 @@ public class PojoRestTest {
 		assertEquals("{f5a:'a'}", model.get("f7").toString());
 		assertEquals("[{f6a:'a'}]", model.get("f8").toString());
 
-		assertEquals("1", model.get("f1", "foo"));
-		assertEquals("2", model.get("f2", "foo").toString());
-		assertEquals("3", model.get("f3", "foo").toString());
-		assertEquals("true", model.get("f4", "foo").toString());
-		assertEquals("2", model.get("f2a", "foo").toString());
-		assertEquals("3", model.get("f3a", "foo").toString());
-		assertEquals("true", model.get("f4a", "foo").toString());
-		assertEquals("{f5a:'a'}", model.get("f5", "foo").toString());
-		assertEquals("[{f6a:'a'}]", model.get("f6", "foo").toString());
-		assertEquals("{f5a:'a'}", model.get("f7", "foo").toString());
-		assertEquals("[{f6a:'a'}]", model.get("f8", "foo").toString());
+		assertEquals("1", model.getWithDefault("f1", "foo"));
+		assertEquals("2", model.getWithDefault("f2", "foo").toString());
+		assertEquals("3", model.getWithDefault("f3", "foo").toString());
+		assertEquals("true", model.getWithDefault("f4", "foo").toString());
+		assertEquals("2", model.getWithDefault("f2a", "foo").toString());
+		assertEquals("3", model.getWithDefault("f3a", "foo").toString());
+		assertEquals("true", model.getWithDefault("f4a", "foo").toString());
+		assertEquals("{f5a:'a'}", model.getWithDefault("f5", "foo").toString());
+		assertEquals("[{f6a:'a'}]", model.getWithDefault("f6", "foo").toString());
+		assertEquals("{f5a:'a'}", model.getWithDefault("f7", "foo").toString());
+		assertEquals("[{f6a:'a'}]", model.getWithDefault("f8", "foo").toString());
 
 		assertEquals("1", model.getString("f1"));
 		assertEquals("2", model.getString("f2"));

@@ -69,7 +69,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			script = p.getStringArray(HTMLDOC_script, ctx.script);
 			nowrap = p.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
 			noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
-			template = ClassUtils.newInstance(HtmlDocTemplate.class, p.get(HTMLDOC_template, ctx.template));
+			template = ClassUtils.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
 		}
 	}
 

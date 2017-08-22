@@ -99,7 +99,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
 			this.useXmlNamespaces = p.getBoolean(RDF_useXmlNamespaces, ctx.useXmlNamespaces);
 			this.autoDetectNamespaces = p.getBoolean(RDF_autoDetectNamespaces, ctx.autoDetectNamespaces);
-			this.namespaces = p.get(Namespace[].class, RDF_namespaces, ctx.namespaces);
+			this.namespaces = p.getWithDefault(RDF_namespaces, ctx.namespaces, Namespace[].class);
 			addBeanTypeProperties = p.getBoolean(RDF_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 		this.model = ModelFactory.createDefaultModel();

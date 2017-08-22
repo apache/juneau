@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -337,44 +338,149 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
+	 *
+	 * <p>
+	 * This is the preferred get method for simple types.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>"..."</js>);
+	 *
+	 * 	<jc>// Value converted to a string.</jc>
+	 * 	String s = m.get(<js>"key1"</js>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a bean.</jc>
+	 * 	MyBean b = m.get(<js>"key2"</js>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a bean array.</jc>
+	 * 	MyBean[] ba = m.get(<js>"key3"</js>, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of objects.</jc>
+	 * 	List l = m.get(<js>"key4"</js>, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map of object keys/values.</jc>
+	 * 	Map m2 = m.get(<js>"key5"</js>, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 *
+	 * @param key The key.
+	 * @param <T> The class type returned.
+	 * @param type The class type returned.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public <T> T get(String key, Class<T> type) {
+		return getWithDefault(key, (T)null, type);
+	}
+
+	/**
+	 * Same as {@link #get(String,Class)}, but allows for complex data types consisting of collections or maps.
+	 *
+	 * <p>
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>"..."</js>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of strings.</jc>
+	 * 	List&lt;String&gt; l1 = m.get(<js>"key1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of beans.</jc>
+	 * 	List&lt;MyBean&gt; l2 = m.get(<js>"key2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
+	 * 	List&lt;List&lt;String&gt;&gt; l3 = m.get(<js>"key3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map of string keys/values.</jc>
+	 * 	Map&lt;String,String&gt; m1 = m.get(<js>"key4"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m2 = m.get(<js>"key5"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 *
+	 * <p>
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 *
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 *
+	 * <p>
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
+	 * </ul>
+	 *
+	 * @param key The key.
+	 * @param <T> The class type returned.
+	 * @param type The class type returned.
+	 * @param args The class type parameters.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public <T> T get(String key, Type type, Type...args) {
+		return getWithDefault(key, null, type, args);
+	}
+
+	/**
 	 * Same as {@link Map#get(Object) get()}, but returns the default value if the key could not be found.
 	 *
 	 * @param key The key.
 	 * @param def The default value if the entry doesn't exist.
 	 * @return The value, or the default value if the entry doesn't exist.
 	 */
-	public Object get(String key, Object def) {
+	public Object getWithDefault(String key, Object def) {
 		Object o = get(key);
 		return (o == null ? def : o);
 	}
 
 	/**
-	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
+	 * Same as {@link #get(String,Class)} but returns a default value if the value does not exist.
 	 *
-	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
-	 *
-	 * @param <T> The class type.
-	 * @param type The class type.
 	 * @param key The key.
+	 * @param def The default value.  Can be <jk>null</jk>.
+	 * @param <T> The class type returned.
+	 * @param type The class type returned.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
-	public <T> T get(Class<T> type, String key) {
-		return get(type, key, null);
+	public <T> T getWithDefault(String key, T def, Class<T> type) {
+		return getWithDefault(key, def, type, new Type[0]);
 	}
 
 	/**
-	 * Same as {@link Map#get(Object) get()}, but converts the raw value to the specified class type using the specified
-	 * beanFilter.
+	 * Same as {@link #get(String,Type,Type...)} but returns a default value if the value does not exist.
 	 *
-	 * @param <T> The transformed class type.
-	 * @param pojoSwap The swap class used to convert the raw type to a transformed type.
 	 * @param key The key.
+	 * @param def The default value.  Can be <jk>null</jk>.
+	 * @param <T> The class type returned.
+	 * @param type The class type returned.
+	 * @param args The class type parameters.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public <T> T getWithDefault(String key, T def, Type type, Type...args) {
+		T t = session.convertToType(get(key), type, args);
+		return t == null ? def : t;
+	}
+
+
+	/**
+	 * Same as {@link Map#get(Object) get()}, but converts the raw value to the specified class type using the specified
+	 * POJO swap.
+	 *
+	 * @param key The key.
+	 * @param pojoSwap The swap class used to convert the raw type to a transformed type.
+	 * @param <T> The transformed class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 * @throws ParseException Thrown by the POJO swap if a problem occurred trying to parse the value.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T> T get(PojoSwap<T,?> pojoSwap, String key) throws ParseException {
+	public <T> T getSwapped(String key, PojoSwap<T,?> pojoSwap) throws ParseException {
 		try {
 			Object o = super.get(key);
 			if (o == null)
@@ -386,67 +492,6 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		} catch (Exception e) {
 			throw new ParseException(e);
 		}
-	}
-
-	/**
-	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
-	 *
-	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
-	 *
-	 * @param <T> The class type.
-	 * @param type The class type.
-	 * @param key The key.
-	 * @param def The default value if the entry doesn't exist.
-	 * @return The value, or the default value if the entry doesn't exist.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T get(Class<T> type, String key, T def) {
-		Object o = get(key);
-		if (o == null)
-			return def;
-		T t = null;
-		if (session != null)
-			t = session.convertToType(o, type);
-		else if (ClassUtils.isParentClass(type, o.getClass()))
-			t = (T)o;
-		if (t == null)
-			return def;
-		return t;
-	}
-
-	/**
-	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
-	 *
-	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
-	 *
-	 * @param <T> The class type.
-	 * @param type The class type.
-	 * @param key The key.
-	 * @return The value, or the default value if the entry doesn't exist.
-	 */
-	public <T> T get(ClassMeta<T> type, String key) {
-		return get(type, key, null);
-	}
-
-	/**
-	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
-	 *
-	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
-	 *
-	 * @param <T> The class type.
-	 * @param type The class type.
-	 * @param key The key.
-	 * @param def The default value if the entry doesn't exist.
-	 * @return The value, or the default value if the entry doesn't exist.
-	 */
-	public <T> T get(ClassMeta<T> type, String key, T def) {
-		Object o = get(key);
-		if (o == null)
-			return def;
-		return session.convertToType(o, type);
 	}
 
 	/**
@@ -479,12 +524,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	public <T> T find(Class<T> type, String...keys) {
 		for (String key : keys)
 			if (containsKey(key))
-				return get(type, key);
+				return get(key, type);
 		return null;
 	}
 
 	/**
-	 * Same as {@link #get(Class,String) get(Class,String)}, but the key is a slash-delimited path used to traverse
+	 * Same as {@link #get(String,Class) get(String,Class)}, but the key is a slash-delimited path used to traverse
 	 * entries in this POJO.
 	 *
 	 * <p>
@@ -498,20 +543,39 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		.getLong(<js>"baz"</js>);
 	 *
 	 * 	<jc>// Using this method</jc>
-	 * 	<jk>long</jk> l = m.getAt(<jk>long</jk>.<jk>class</jk>, <js>"foo/bar/0/baz"</js>);
+	 * 	<jk>long</jk> l = m.getAt(<js>"foo/bar/0/baz"</js>, <jk>long</jk>.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
 	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
 	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
-	 * @param <T> The class type.
-	 * @param type The class type.
 	 * @param path The path to the entry.
+	 * @param type The class type.
+	 *
+	 * @param <T> The class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
-	public <T> T getAt(Class<T> type, String path) {
-		return getPojoRest().get(type, path);
+	public <T> T getAt(String path, Class<T> type) {
+		return getPojoRest().get(path, type);
+	}
+
+	/**
+	 * Same as {@link #getAt(String,Class)}, but allows for conversion to complex maps and collections.
+	 *
+	 * <p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 *
+	 * @param path The path to the entry.
+	 * @param type The class type.
+	 * @param args The class parameter types.
+	 *
+	 * @param <T> The class type.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public <T> T getAt(String path, Type type, Type...args) {
+		return getPojoRest().get(path, type, args);
 	}
 
 	/**
@@ -618,13 +682,13 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Returns the specified entry value converted to a {@link String}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(String.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, String.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 */
 	public String getString(String key) {
-		return get(String.class, key);
+		return get(key, String.class);
 	}
 
 	/**
@@ -640,7 +704,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String[] getStringArray(String key) {
-		Object s = get(Object.class, key);
+		Object s = get(key, Object.class);
 		if (s == null)
 			return new String[0];
 		if (s instanceof Collection)
@@ -657,7 +721,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @return The value converted to a string array.
 	 */
 	public String[] getStringArray(String key, String[] def) {
-		Object s = get(Object.class, key);
+		Object s = get(key, Object.class);
 		if (s == null)
 			return def;
 		String[] r = null;
@@ -676,35 +740,35 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Returns the specified entry value converted to a {@link String}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(String.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, String.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 */
 	public String getString(String key, String defVal) {
-		return get(String.class, key, defVal);
+		return getWithDefault(key, defVal, String.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Integer.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, Integer.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Integer getInt(String key) {
-		return get(Integer.class, key);
+		return get(key, Integer.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Integer.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, Integer.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -712,28 +776,28 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Integer getInt(String key, Integer defVal) {
-		return get(Integer.class, key, defVal);
+		return getWithDefault(key, defVal, Integer.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link Long}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Long.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, Long.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Long getLong(String key) {
-		return get(Long.class, key);
+		return get(key, Long.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link Long}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Long.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, Long.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -741,28 +805,28 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Long getLong(String key, Long defVal) {
-		return get(Long.class, key, defVal);
+		return getWithDefault(key, defVal, Long.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, Boolean.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Boolean getBoolean(String key) {
-		return get(Boolean.class, key);
+		return get(key, Boolean.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, Boolean.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -770,28 +834,28 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Boolean getBoolean(String key, Boolean defVal) {
-		return get(Boolean.class, key, defVal);
+		return getWithDefault(key, defVal, Boolean.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Map.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, Map.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Map<?,?> getMap(String key) {
-		return get(Map.class, key);
+		return get(key, Map.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(Map.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, Map.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -799,28 +863,45 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public Map<?,?> getMap(String key, Map<?,?> defVal) {
-		return get(Map.class, key, defVal);
+		return getWithDefault(key, defVal, Map.class);
+	}
+
+	/**
+	 * Same as {@link #getMap(String, Map)} except converts the keys and values to the specified types.
+	 *
+	 * @param key The key.
+	 * @param keyType The key type class.
+	 * @param valType The value type class.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <K,V> Map<K,V> getMap(String key, Class<K> keyType, Class<V> valType, Map<K,V> def) {
+		Object o = get(key);
+		if (o == null)
+			return def;
+		return session.convertToType(o, Map.class, keyType, valType);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link List}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(List.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, List.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public List<?> getList(String key) {
-		return get(List.class, key);
+		return get(key, List.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link List}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(List.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, List.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -828,28 +909,44 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public List<?> getList(String key, List<?> defVal) {
-		return get(List.class, key, defVal);
+		return getWithDefault(key, defVal, List.class);
+	}
+
+	/**
+	 * Same as {@link #getList(String, List)} except converts the elements to the specified types.
+	 *
+	 * @param key The key.
+	 * @param elementType The element type class.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <E> List<E> getList(String key, Class<E> elementType, List<E> def) {
+		Object o = get(key);
+		if (o == null)
+			return def;
+		return session.convertToType(o, List.class, elementType);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(ObjectMap.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, ObjectMap.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectMap getObjectMap(String key) {
-		return get(ObjectMap.class, key);
+		return get(key, ObjectMap.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectMap}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(ObjectMap.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, ObjectMap.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -857,28 +954,28 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectMap getObjectMap(String key, ObjectMap defVal) {
-		return get(ObjectMap.class, key, defVal);
+		return getWithDefault(key, defVal, ObjectMap.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectList}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(ObjectList.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(key, ObjectList.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectList getObjectList(String key) {
-		return get(ObjectList.class, key);
+		return get(key, ObjectList.class);
 	}
 
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectList}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(ObjectList.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, ObjectList.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -886,7 +983,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public ObjectList getObjectList(String key, ObjectList defVal) {
-		return get(ObjectList.class, key, defVal);
+		return getWithDefault(key, defVal, ObjectList.class);
 	}
 
 	/**
@@ -1038,16 +1135,16 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Equivalent to calling <code>get(class,key,def)</code> followed by <code>remove(key);</code>
-	 *
-	 * @param <T> The class type.
-	 * @param type The class type.
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @param type The class type.
+	 *
+	 * @param <T> The class type.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public <T> T remove(Class<T> type, String key, T defVal) {
-		T t = get(type, key, defVal);
+	public <T> T removeWithDefault(String key, T defVal, Class<T> type) {
+		T t = getWithDefault(key, defVal, type);
 		remove(key);
 		return t;
 	}
