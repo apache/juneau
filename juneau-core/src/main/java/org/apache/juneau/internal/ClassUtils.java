@@ -952,7 +952,7 @@ public final class ClassUtils {
 		public int compare(Method o1, Method o2) {
 			int i = o1.getName().compareTo(o2.getName());
 			if (i == 0) {
-				i = o1.getParameterCount() - o2.getParameterCount();
+				i = o1.getParameterTypes().length - o2.getParameterTypes().length;
 				if (i == 0) {
 					for (int j = 0; j < o1.getParameterTypes().length && i == 0; j++) {
 						i = o1.getParameterTypes()[j].getName().compareTo(o2.getParameterTypes()[j].getName());
@@ -1066,7 +1066,7 @@ public final class ClassUtils {
 	 */
 	public static String toString(Method m) {
 		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
-		for (int i = 0; i < m.getParameterCount(); i++) {
+		for (int i = 0; i < m.getParameterTypes().length; i++) {
 			if (i > 0)
 				sb.append(",");
 			sb.append(m.getParameterTypes()[i].getSimpleName());
