@@ -15,7 +15,6 @@ package org.apache.juneau.uon;
 import static org.apache.juneau.uon.UonParserContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -38,7 +37,6 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link BeanContext}
  * </ul>
  */
-@Consumes("text/uon")
 public class UonParser extends ReaderParser {
 
 	/** Reusable instance of {@link UonParser}, all default settings. */
@@ -67,10 +65,23 @@ public class UonParser extends ReaderParser {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
 	 */
 	public UonParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		this(propertyStore, "text/uon");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param consumes
+	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
+	 */
+	public UonParser(PropertyStore propertyStore, String...consumes) {
+		super(propertyStore, consumes);
 		this.ctx = createContext(UonParserContext.class);
 	}
 
@@ -85,7 +96,7 @@ public class UonParser extends ReaderParser {
 	 * @return A new parser session.
 	 */
 	protected final UonParserSession createParameterSession() {
-		return new UonParserSession(ctx);
+		return new UonParserSession(ctx, createDefaultSessionArgs(), false);
 	}
 
 	@Override /* Parser */

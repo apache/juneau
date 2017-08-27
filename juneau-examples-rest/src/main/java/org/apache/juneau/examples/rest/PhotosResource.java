@@ -24,7 +24,6 @@ import java.util.*;
 import javax.imageio.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -131,7 +130,6 @@ public class PhotosResource extends Resource {
 	}
 
 	/** Serializer for converting images to byte streams */
-	@Produces("image/png,image/jpeg")
 	public static class ImageSerializer extends OutputStreamSerializer {
 
 		/**
@@ -139,7 +137,7 @@ public class PhotosResource extends Resource {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public ImageSerializer(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, null, "image/png", "image/jpeg");
 		}
 
 		@Override /* Serializer */ 
@@ -157,7 +155,6 @@ public class PhotosResource extends Resource {
 	}
 
 	/** Parser for converting byte streams to images */
-	@Consumes("image/png,image/jpeg")
 	public static class ImageParser extends InputStreamParser {
 
 		/**
@@ -165,7 +162,7 @@ public class PhotosResource extends Resource {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public ImageParser(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "image/png", "image/jpeg");
 		}
 
 		@Override /* Parser */

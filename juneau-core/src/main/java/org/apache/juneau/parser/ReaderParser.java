@@ -13,7 +13,6 @@
 package org.apache.juneau.parser;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.
@@ -25,13 +24,6 @@ import org.apache.juneau.annotation.*;
  * <ul>
  * 	<li><code>parse(ParserSession, ClassMeta)</code>
  * </ul>
- *
- * <h6 class='topic'>@Consumes annotation</h6>
- *
- * The media types that this parser can handle is specified through the {@link Consumes @Consumes} annotation.
- *
- * <p>
- * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
  */
 public abstract class ReaderParser extends Parser {
 
@@ -39,9 +31,10 @@ public abstract class ReaderParser extends Parser {
 	 * Constructor.
 	 *
 	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	protected ReaderParser(PropertyStore propertyStore) {
-		super(propertyStore);
+	protected ReaderParser(PropertyStore propertyStore, String...consumes) {
+		super(propertyStore, consumes);
 	}
 
 	@Override /* Parser */

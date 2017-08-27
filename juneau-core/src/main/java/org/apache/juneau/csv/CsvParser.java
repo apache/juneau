@@ -13,13 +13,11 @@
 package org.apache.juneau.csv;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
  * TODO - Work in progress.  CSV parser.
  */
-@Consumes("text/csv")
 public class CsvParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/
@@ -33,7 +31,7 @@ public class CsvParser extends ReaderParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public CsvParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore, "text/csv");
 		this.ctx = createContext(CsvParserContext.class);
 	}
 

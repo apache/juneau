@@ -47,7 +47,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	@Override /* CoreObjectBuilder */
 	public RdfSerializer build() {
-		return new RdfSerializer(propertyStore);
+		return new RdfSerializer(propertyStore, "text/xml+rdf");
 	}
 
 

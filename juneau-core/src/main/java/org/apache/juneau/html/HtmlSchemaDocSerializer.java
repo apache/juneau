@@ -15,7 +15,6 @@ package org.apache.juneau.html;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -39,7 +38,6 @@ import org.apache.juneau.serializer.*;
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
  */
-@Produces(value="text/html+schema", contentType="text/html")
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	@SuppressWarnings("hiding")
@@ -48,10 +46,36 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store to use for creating the context for this serializer.
+	 * @param propertyStore
+	 * 	The property store to use for creating the context for this serializer.
 	 */
 	public HtmlSchemaDocSerializer(PropertyStore propertyStore) {
-		super(propertyStore.copy().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true));
+		this(propertyStore, "text/html", "text/html+schema");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);</code>
+	 * 	<br>...or...
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
+	 */
+	public HtmlSchemaDocSerializer(PropertyStore propertyStore, String produces, String...accept) {
+		super(propertyStore.copy().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true), produces, accept);
 		this.ctx = createContext(HtmlDocSerializerContext.class);
 	}
 

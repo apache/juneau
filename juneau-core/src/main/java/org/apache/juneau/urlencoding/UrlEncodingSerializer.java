@@ -21,7 +21,6 @@ import java.io.*;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
@@ -126,7 +125,6 @@ import org.apache.juneau.uon.*;
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
-@Produces("application/x-www-form-urlencoded")
 @SuppressWarnings("hiding")
 public class UrlEncodingSerializer extends UonSerializer implements PartSerializer {
 
@@ -145,7 +143,6 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	/**
 	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();</code>.
 	 */
-	@Produces(value="application/x-www-form-urlencoded",contentType="application/x-www-form-urlencoded")
 	public static class Expanded extends UrlEncodingSerializer {
 
 		/**
@@ -193,12 +190,39 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
 	 */
 	public UrlEncodingSerializer(PropertyStore propertyStore) {
-		super(propertyStore.copy().append(UON_encodeChars, true));
+		this(propertyStore, "application/x-www-form-urlencoded");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);</code>
+	 * 	<br>...or...
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
+	 */
+	public UrlEncodingSerializer(PropertyStore propertyStore, String produces, String...accept) {
+		super(propertyStore.copy().append(UON_encodeChars, true), produces, accept);
 		this.ctx = createContext(UrlEncodingSerializerContext.class);
 	}
+
 
 	@Override /* CoreObject */
 	public UrlEncodingSerializerBuilder builder() {
@@ -242,7 +266,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			}
 
 			StringWriter w = new StringWriter();
-			UonSerializerSession s = new UonSerializerSession(ctx, urlEncode, SerializerSessionArgs.DEFAULT);
+			UonSerializerSession s = new UonSerializerSession(ctx, urlEncode, createDefaultSessionArgs());
 			s.serialize(w, o);
 			return w.toString();
 		} catch (Exception e) {

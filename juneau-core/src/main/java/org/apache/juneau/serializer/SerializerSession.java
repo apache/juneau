@@ -90,14 +90,11 @@ public abstract class SerializerSession extends BeanSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected SerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
-		super(ctx != null ? ctx : SerializerContext.DEFAULT, args != null ? args : SerializerSessionArgs.DEFAULT);
+		super(ctx != null ? ctx : SerializerContext.DEFAULT, args);
 		if (ctx == null)
 			ctx = SerializerContext.DEFAULT;
-		if (args == null)
-			args = SerializerSessionArgs.DEFAULT;
 		this.javaMethod = args.javaMethod;
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;

@@ -34,7 +34,6 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected PlainTextSerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);

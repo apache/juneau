@@ -15,7 +15,6 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
@@ -51,24 +50,21 @@ public class SerializerGroupTest {
 	}
 
 
-	@Produces("text/foo,text/foo_a")
 	public static class SA1 extends JsonSerializer {
 		public SA1(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/foo", "text/foo_a");
 		}
 	}
 
-	@Produces("text/foo+bar,text/foo+bar_a")
 	public static class SA2 extends JsonSerializer {
 		public SA2(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/foo+bar", "text/foo+bar_a");
 		}
 	}
 
-	@Produces("text/baz,text/baz_a")
 	public static class SA3 extends JsonSerializer {
 		public SA3(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/baz", "text/baz_a");
 		}
 	}
 
@@ -93,38 +89,33 @@ public class SerializerGroupTest {
 		assertObjectEquals("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 	}
 
-	@Produces("text/1")
 	public static class SB1 extends JsonSerializer {
 		public SB1(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/1");
 		}
 	}
 
-	@Produces("text/2,text/2a")
 	public static class SB2 extends JsonSerializer {
 		public SB2(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/2", "text/2a");
 		}
 	}
 
-	@Produces("text/3")
 	public static class SB3 extends JsonSerializer {
 		public SB3(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/3");
 		}
 	}
 
-	@Produces("text/4,text/4a")
 	public static class SB4 extends JsonSerializer {
 		public SB4(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/4", "text/4a");
 		}
 	}
 
-	@Produces("text/5")
 	public static class SB5 extends JsonSerializer {
 		public SB5(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/5");
 		}
 	}
 
@@ -143,24 +134,21 @@ public class SerializerGroupTest {
 		assertType(SC3.class, g.getSerializer("foo/foo"));
 	}
 
-	@Produces("text/*")
 	public static class SC1 extends JsonSerializer {
 		public SC1(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "text/*");
 		}
 	}
 
-	@Produces("*/json")
 	public static class SC2 extends JsonSerializer {
 		public SC2(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "*/json");
 		}
 	}
 
-	@Produces("*/*")
 	public static class SC3 extends JsonSerializer {
 		public SC3(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "*/*");
 		}
 	}
 }

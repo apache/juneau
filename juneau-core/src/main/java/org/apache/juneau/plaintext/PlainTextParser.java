@@ -13,7 +13,6 @@
 package org.apache.juneau.plaintext;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
@@ -44,7 +43,6 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link ParserContext}
  * </ul>
  */
-@Consumes("text/plain")
 public class PlainTextParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/
@@ -57,7 +55,20 @@ public class PlainTextParser extends ReaderParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public PlainTextParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		this(propertyStore, "text/plain");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param consumes The media types that this parser consumes.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 */
+	public PlainTextParser(PropertyStore propertyStore, String...consumes) {
+		super(propertyStore, consumes);
 	}
 
 	@Override /* CoreObject */

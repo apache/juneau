@@ -26,7 +26,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
-public class Html5ComboTest extends ComboTest {
+public class Html5ComboTest extends ComboRoundTripTest {
 
 	private static final B btag = b("bbb");
 

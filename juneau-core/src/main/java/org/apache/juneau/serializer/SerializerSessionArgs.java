@@ -26,11 +26,6 @@ import org.apache.juneau.http.*;
  */
 public final class SerializerSessionArgs extends BeanSessionArgs {
 
-	/**
-	 * Default session arguments.
-	 */
-	public static final SerializerSessionArgs DEFAULT = new SerializerSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, null, null);
-
 	final Method javaMethod;
 	final UriContext uriContext;
 

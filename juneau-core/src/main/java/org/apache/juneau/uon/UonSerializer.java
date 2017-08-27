@@ -16,7 +16,6 @@ import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.uon.UonSerializerContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -125,7 +124,6 @@ import org.apache.juneau.serializer.*;
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
-@Produces("text/uon")
 public class UonSerializer extends WriterSerializer {
 
 	/** Reusable instance of {@link UonSerializer}, all default settings. */
@@ -173,10 +171,36 @@ public class UonSerializer extends WriterSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
 	 */
 	public UonSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+		this(propertyStore, "text/uon");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);</code>
+	 * 	<br>...or...
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
+	 */
+	public UonSerializer(PropertyStore propertyStore, String produces, String...accept) {
+		super(propertyStore, produces, accept);
 		this.ctx = createContext(UonSerializerContext.class);
 	}
 

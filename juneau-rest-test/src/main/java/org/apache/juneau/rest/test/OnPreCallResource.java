@@ -15,7 +15,6 @@ package org.apache.juneau.rest.test;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
@@ -39,11 +38,10 @@ import org.apache.juneau.rest.annotation.*;
 public class OnPreCallResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Consumes("text/a1,text/a2,text/a3")
 	public static class TestParserA extends ReaderParser {
 
 		public TestParserA(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/a1", "text/a2", "text/a3");
 		}
 
 		@Override /* Parser */

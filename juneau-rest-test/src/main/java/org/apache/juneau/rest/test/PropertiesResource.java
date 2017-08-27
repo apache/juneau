@@ -15,7 +15,6 @@ package org.apache.juneau.rest.test;
 import static java.lang.String.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -59,11 +58,10 @@ public class PropertiesResource extends RestServletDefault {
 		res.setOutput(null);
 	}
 
-	@Produces("application/json,text/json")
 	public static class PropertySerializer1 extends WriterSerializer {
 
 		public PropertySerializer1(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "*/json");
 		}
 
 		@Override /* Serializer */
@@ -88,11 +86,10 @@ public class PropertiesResource extends RestServletDefault {
 		res.setOutput(null);
 	}
 
-	@Produces("application/json,text/json")
 	public static class PropertySerializer2 extends WriterSerializer {
 
 		public PropertySerializer2(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "application/json", "*/json");
 		}
 
 		@Override /* Serializer */

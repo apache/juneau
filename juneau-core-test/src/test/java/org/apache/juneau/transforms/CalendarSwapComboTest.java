@@ -29,7 +29,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
-public class CalendarSwapComboTest extends ComboTest {
+public class CalendarSwapComboTest extends ComboRoundTripTest {
 
 	private static Calendar singleDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));
 	static {

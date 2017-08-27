@@ -47,7 +47,7 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	@Override /* CoreObjectBuilder */
 	public RdfParser build() {
-		return new RdfParser(propertyStore);
+		return new RdfParser(propertyStore, "text/xml+rdf");
 	}
 
 

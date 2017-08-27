@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.test;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -52,11 +51,10 @@ public class NlsPropertyResource extends RestServlet {
 		return null;
 	}
 
-	@Produces("text/plain")
 	public static class TestSerializer extends WriterSerializer {
 
 		public TestSerializer(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/plain");
 		}
 
 		@Override /* Serializer */

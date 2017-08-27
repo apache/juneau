@@ -17,7 +17,6 @@ import static org.apache.juneau.json.JsonSerializerContext.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -98,7 +97,6 @@ import org.apache.juneau.serializer.*;
  * 	String json = serializer.serialize(someObject);
  * </p>
  */
-@Produces("application/json,text/json")
 public class JsonSerializer extends WriterSerializer {
 
 	/** Default serializer, all default settings.*/
@@ -137,7 +135,6 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	/** Default serializer, single quotes, simple mode. */
-	@Produces(value="application/json+simple,text/json+simple",contentType="application/json")
 	public static class Simple extends JsonSerializer {
 
 		/**
@@ -148,8 +145,10 @@ public class JsonSerializer extends WriterSerializer {
 		public Simple(PropertyStore propertyStore) {
 			super(
 				propertyStore.copy()
-				.append(JSON_simpleMode, true)
-				.append(SERIALIZER_quoteChar, '\'')
+					.append(JSON_simpleMode, true)
+					.append(SERIALIZER_quoteChar, '\''),
+				"application/json",
+				"application/json+simple", "text/json+simple"
 			);
 		}
 	}
@@ -201,10 +200,36 @@ public class JsonSerializer extends WriterSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
 	 */
 	public JsonSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+		this(propertyStore, "application/json", "application/json", "text/json");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);</code>
+	 * 	<br>...or...
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
+	 */
+	public JsonSerializer(PropertyStore propertyStore, String produces, String...accept) {
+		super(propertyStore, produces, accept);
 		this.ctx = createContext(JsonSerializerContext.class);
 	}
 

@@ -13,7 +13,6 @@
 package org.apache.juneau.msgpack;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -34,7 +33,6 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link BeanContext}
  * </ul>
  */
-@Produces("octal/msgpack")
 public class MsgPackSerializer extends OutputStreamSerializer {
 
 	/** Default serializer, all default settings.*/
@@ -49,7 +47,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public MsgPackSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore, "octal/msgpack");
 		this.ctx = createContext(MsgPackSerializerContext.class);
 	}
 

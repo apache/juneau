@@ -157,7 +157,7 @@ public class MediaType implements Comparable<MediaType> {
 	 *
 	 * @return The media type.
 	 */
-	public String getType() {
+	public final String getType() {
 		return type;
 	}
 
@@ -166,8 +166,24 @@ public class MediaType implements Comparable<MediaType> {
 	 *
 	 * @return The media subtype.
 	 */
-	public String getSubType() {
+	public final String getSubType() {
 		return subType;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.
+	 *
+	 * @param st 
+	 * 	The subtype string.
+	 * 	Case is ignored. 
+	 * @return <jk>true</jk> if the subtype contains the specified subtype string.
+	 */
+	public final boolean hasSubType(String st) {
+		if (st != null)
+			for (String s : subTypes)
+				if (st.equalsIgnoreCase(s))
+					return true;
+		return false;
 	}
 
 	/**
@@ -179,7 +195,7 @@ public class MediaType implements Comparable<MediaType> {
 	 *
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
-	public List<String> getSubTypes() {
+	public final List<String> getSubTypes() {
 		return subTypesList;
 	}
 
@@ -267,12 +283,12 @@ public class MediaType implements Comparable<MediaType> {
 	 *
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
-	public Map<String,Set<String>> getParameters() {
+	public final Map<String,Set<String>> getParameters() {
 		return parameters;
 	}
 
 	@Override /* Object */
-	public String toString() {
+	public final String toString() {
 		if (parameters.isEmpty())
 			return mediaType;
 		StringBuilder sb = new StringBuilder(mediaType);
@@ -283,17 +299,17 @@ public class MediaType implements Comparable<MediaType> {
 	}
 
 	@Override /* Object */
-	public int hashCode() {
+	public final int hashCode() {
 		return mediaType.hashCode();
 	}
 
 	@Override /* Object */
-	public boolean equals(Object o) {
+	public final boolean equals(Object o) {
 		return this == o;
 	}
 
 	@Override
-	public int compareTo(MediaType o) {
+	public final int compareTo(MediaType o) {
 		return mediaType.compareTo(o.mediaType);
 	}
 }

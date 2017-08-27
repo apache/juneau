@@ -15,7 +15,6 @@ package org.apache.juneau.jso;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -25,7 +24,6 @@ import org.apache.juneau.parser.*;
  *
  * Consumes <code>Content-Type</code> types: <code>application/x-java-serialized-object</code>
  */
-@Consumes("application/x-java-serialized-object")
 public final class JsoParser extends InputStreamParser {
 
 	/** Default parser, all default settings.*/
@@ -38,7 +36,7 @@ public final class JsoParser extends InputStreamParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public JsoParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore, "application/x-java-serialized-object");
 	}
 
 	@Override /* CoreObject */

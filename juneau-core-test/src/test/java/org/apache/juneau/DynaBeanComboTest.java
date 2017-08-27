@@ -29,7 +29,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
-public class DynaBeanComboTest extends ComboTest {
+public class DynaBeanComboTest extends ComboRoundTripTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {

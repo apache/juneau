@@ -15,7 +15,6 @@ package org.apache.juneau.rest.test;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -32,11 +31,10 @@ import org.apache.juneau.serializer.*;
 public class CharsetEncodingsResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Consumes("text/p")
 	public static class CtParser extends ReaderParser {
 
 		public CtParser(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/p");
 		}
 
 		@Override /* Parser */
@@ -52,11 +50,10 @@ public class CharsetEncodingsResource extends RestServlet {
 		}
 	}
 
-	@Produces("text/s")
 	public static class ASerializer extends WriterSerializer {
 
 		public ASerializer(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/s");
 		}
 
 		@Override /* Serializer */

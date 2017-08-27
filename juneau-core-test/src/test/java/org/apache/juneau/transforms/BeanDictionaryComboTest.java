@@ -29,7 +29,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
-public class BeanDictionaryComboTest extends ComboTest {
+public class BeanDictionaryComboTest extends ComboRoundTripTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {

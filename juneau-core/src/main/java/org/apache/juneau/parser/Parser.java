@@ -12,15 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
@@ -28,13 +24,6 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all Juneau parsers.
- *
- * <h6 class='topic'>@Consumes annotation</h6>
- *
- * The media types that this parser can handle is specified through the {@link Consumes @Consumes} annotation.
- *
- * <p>
- * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
  *
  * <h6 class='topic'>Valid data conversions</h6>
  *
@@ -144,20 +133,15 @@ import org.apache.juneau.utils.*;
 public abstract class Parser extends CoreObject {
 
 	/** General parser properties currently set on this parser. */
-	private final MediaType[] mediaTypes;
+	private final MediaType[] consumes;
 
 	// Hidden constructor to force subclass from InputStreamParser or ReaderParser.
-	Parser(PropertyStore propertyStore) {
+	Parser(PropertyStore propertyStore, String...consumes) {
 		super(propertyStore);
 
-		Consumes c = getAnnotation(Consumes.class, getClass());
-		if (c == null)
-			throw new FormattedRuntimeException("Class ''{0}'' is missing the @Consumes annotation", c);
-
-		String[] mt = split(c.value());
-		this.mediaTypes = new MediaType[mt.length];
-		for (int i = 0; i < mt.length; i++) {
-			mediaTypes[i] = MediaType.forString(mt[i]);
+		this.consumes = new MediaType[consumes.length];
+		for (int i = 0; i < consumes.length; i++) {
+			this.consumes[i] = MediaType.forString(consumes[i]);
 		}
 	}
 
@@ -359,9 +343,19 @@ public abstract class Parser extends CoreObject {
 	 * @return The new context.
 	 */
 	public final ParserSession createSession() {
-		return createSession(null);
+		return createSession(createDefaultSessionArgs());
 	}
 
+	/**
+	 * Creates the session arguments object that gets passed to the {@link #createSession(ParserSessionArgs)} method.
+	 *
+	 * @return
+	 * 	A new default session arguments object.
+	 * 	<p>The arguments can be modified before passing to the {@link #createSession(ParserSessionArgs)}.
+	 */
+	protected final ParserSessionArgs createDefaultSessionArgs() {
+		return new ParserSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, getPrimaryMediaType(), null);
+	}
 
 	//--------------------------------------------------------------------------------
 	// Optional methods
@@ -467,23 +461,20 @@ public abstract class Parser extends CoreObject {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Returns the media types handled based on the value of the {@link Consumes} annotation on the parser class.
-	 *
-	 * <p>
-	 * This method can be overridden by subclasses to determine the media types programmatically.
+	 * Returns the media types handled based on the values passed to the <code>consumes</code> constructor parameter.
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public MediaType[] getMediaTypes() {
-		return mediaTypes;
+	public final MediaType[] getMediaTypes() {
+		return consumes;
 	}
 
 	/**
-	 * Returns the first media type specified on this parser via the {@link Consumes} annotation.
+	 * Returns the first media type handled based on the values passed to the <code>consumes</code> constructor parameter.
 	 *
 	 * @return The media type.
 	 */
-	public MediaType getPrimaryMediaType() {
-		return mediaTypes == null || mediaTypes.length == 0 ? null : mediaTypes[0];
+	public final MediaType getPrimaryMediaType() {
+		return consumes == null || consumes.length == 0 ? null : consumes[0];
 	}
 }

@@ -17,7 +17,6 @@ import static org.apache.juneau.rest.RestContext.*;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
@@ -54,11 +53,10 @@ public class AcceptCharsetResource extends RestServlet {
 		return in;
 	}
 
-	@Consumes("text/plain")
 	public static class TestParser extends InputStreamParser {
 
 		public TestParser(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/plain");
 		}
 
 		@Override /* Parser */
@@ -74,11 +72,10 @@ public class AcceptCharsetResource extends RestServlet {
 		}
 	}
 
-	@Produces("text/plain")
 	public static class TestSerializer extends OutputStreamSerializer {
 
 		public TestSerializer(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/plain");
 		}
 
 		@Override /* Serializer */

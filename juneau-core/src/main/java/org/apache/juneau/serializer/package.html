@@ -114,8 +114,7 @@
 	<p>
 		Defining a new serializer is quite simple if you subclass directly from 
 		{@link org.apache.juneau.serializer.WriterSerializer}  or {@link org.apache.juneau.serializer.OutputStreamSerializer}.
-		<br>In each case, you simply need to implement a single method and specify a 
-		{@link org.apache.juneau.annotation.Produces} annotation.
+		<br>In each case, you simply need to implement a single method .
 	</p>
 	<p>
 		The following example shows a simple serializer that converts images to output streams using standard JRE 
@@ -123,7 +122,6 @@
 	</p>
 	<p class='bcode'>
 	<jd>/** Serializer for converting images to byte streams */</jd>
-	<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 	<jk>public class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
 
 		<jd>/**
@@ -131,7 +129,7 @@
 		 * <ja>@param</ja> propertyStore The property store containing all the settings for this object.
 		 */</jd>
 		<jk>public</jk> ImageSerializer(PropertyStore propertyStore) {
-			<jk>super</jk>(propertyStore);
+			<jk>super</jk>(propertyStore, <jk>null</jk>, <js>"image/png"</js>, <js>"image/jpeg"</js>);
 		}
 
 		<ja>@Override</ja> <jc>/* Serializer */</jc>

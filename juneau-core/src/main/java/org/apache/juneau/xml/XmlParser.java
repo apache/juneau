@@ -13,7 +13,6 @@
 package org.apache.juneau.xml;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -35,7 +34,6 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link BeanContext}
  * </ul>
  */
-@Consumes("text/xml,application/xml")
 public class XmlParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/
@@ -47,10 +45,23 @@ public class XmlParser extends ReaderParser {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
 	 */
 	public XmlParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		this(propertyStore, "text/xml", "application/xml");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param consumes
+	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
+	 */
+	public XmlParser(PropertyStore propertyStore, String...consumes) {
+		super(propertyStore, consumes);
 		this.ctx = createContext(XmlParserContext.class);
 	}
 

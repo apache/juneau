@@ -34,7 +34,7 @@ import org.junit.runners.*;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings({"unchecked","rawtypes"})
-public abstract class ComboTest {
+public abstract class ComboRoundTripTest {
 
 	/* Parameter template */
 //	{
@@ -121,7 +121,7 @@ public abstract class ComboTest {
 	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<Serializer,Serializer>();
 	private Map<Parser,Parser> parserMap = new IdentityHashMap<Parser,Parser>();
 
-	public ComboTest(ComboInput<?> comboInput) {
+	public ComboRoundTripTest(ComboInput<?> comboInput) {
 		this.comboInput = comboInput;
 	}
 
@@ -154,7 +154,7 @@ public abstract class ComboTest {
 				return;
 			}
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.in) : ((OutputStreamSerializer)s).serializeToHex(comboInput.in);
+			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.getInput()) : ((OutputStreamSerializer)s).serializeToHex(comboInput.getInput());
 
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.
@@ -194,7 +194,7 @@ public abstract class ComboTest {
 				return;
 			}
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.in) : ((OutputStreamSerializer)s).serializeToHex(comboInput.in);
+			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.getInput()) : ((OutputStreamSerializer)s).serializeToHex(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);
 			r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(o) : ((OutputStreamSerializer)s).serializeToHex(o);
 
@@ -218,7 +218,7 @@ public abstract class ComboTest {
 			s = getSerializer(s);
 			p = getParser(p);
 
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.in) : ((OutputStreamSerializer)s).serializeToHex(comboInput.in);
+			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.getInput()) : ((OutputStreamSerializer)s).serializeToHex(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);
 
 			comboInput.verify(o);
@@ -236,7 +236,7 @@ public abstract class ComboTest {
 			p = (InputStreamParser)getParser(p);
 			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
 
-			String r = s.serializeToHex(comboInput.in);
+			String r = s.serializeToHex(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);
 			r = sJson.serialize(o);
 			assertEquals(comboInput.label + "/" + testName + " parse-normal failed on JSON equivalency", expected, r);

@@ -112,15 +112,13 @@
 	<p>
 		Defining a new parser is quite simple if you subclass directly from {@link org.apache.juneau.parser.ReaderParser} 
 		or {@link org.apache.juneau.parser.InputStreamParser}.  
-		In each case, you simply need to implement a single method and specify a 
-		{@link org.apache.juneau.annotation.Consumes} annotation.
+		In each case, you simply need to implement a single method .
 	</p>
 	<p>
 		The following example shows a simple parser that converts input streams to images using standard JRE classes.
 	</p>
 	<p class='bcode'>
 	<jd>/** Parser for converting byte streams to images */</jd>
-	<ja>@Consumes</ja>(<js>"image/png,image/jpeg"</js>)
 	<jk>public class</jk> ImageParser <jk>extends</jk> InputStreamParser {
 
 		<jd>/**
@@ -128,7 +126,7 @@
 		 * <ja>@param</ja> propertyStore The property store containing all the settings for this object.
 		 */</jd>
 		<jk>public</jk> ImageParser(PropertyStore propertyStore) {
-			<jk>super</jk>(propertyStore);
+			<jk>super</jk>(propertyStore, <js>"image/png"</js>, <js>"image/jpeg"</js>);
 		}
 
 		<ja>@Override</ja> <jc>/* Parser */</jc>

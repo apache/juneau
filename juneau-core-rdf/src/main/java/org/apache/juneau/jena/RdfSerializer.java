@@ -16,7 +16,6 @@ import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -42,7 +41,6 @@ import org.apache.juneau.serializer.*;
  * 
  * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
-@Produces(value="text/xml+rdf+abbrev", contentType="text/xml+rdf")
 public class RdfSerializer extends WriterSerializer {
 
 	/** Default RDF/XML serializer, all default settings.*/
@@ -62,7 +60,6 @@ public class RdfSerializer extends WriterSerializer {
 
 
 	/** Produces RDF/XML output */
-	@Produces("text/xml+rdf")
 	public static class Xml extends RdfSerializer {
 
 		/**
@@ -71,12 +68,11 @@ public class RdfSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Xml(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML));
+			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML), "text/xml+rdf");
 		}
 	}
 
 	/** Produces Abbreviated RDF/XML output */
-	@Produces(value="text/xml+rdf+abbrev", contentType="text/xml+rdf")
 	public static class XmlAbbrev extends RdfSerializer {
 
 		/**
@@ -85,12 +81,11 @@ public class RdfSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public XmlAbbrev(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML_ABBREV));
+			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML_ABBREV), "text/xml+rdf", "text/xml+rdf+abbrev");
 		}
 	}
 
 	/** Produces N-Triple output */
-	@Produces("text/n-triple")
 	public static class NTriple extends RdfSerializer {
 
 		/**
@@ -99,12 +94,11 @@ public class RdfSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public NTriple(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_NTRIPLE));
+			super(propertyStore.copy().append(RDF_language, LANG_NTRIPLE), "text/n-triple");
 		}
 	}
 
 	/** Produces Turtle output */
-	@Produces("text/turtle")
 	public static class Turtle extends RdfSerializer {
 
 		/**
@@ -113,12 +107,11 @@ public class RdfSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Turtle(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_TURTLE));
+			super(propertyStore.copy().append(RDF_language, LANG_TURTLE), "text/turtle");
 		}
 	}
 
 	/** Produces N3 output */
-	@Produces("text/n3")
 	public static class N3 extends RdfSerializer {
 
 		/**
@@ -127,7 +120,7 @@ public class RdfSerializer extends WriterSerializer {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public N3(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_N3));
+			super(propertyStore.copy().append(RDF_language, LANG_N3), "text/n3");
 		}
 	}
 
@@ -136,11 +129,27 @@ public class RdfSerializer extends WriterSerializer {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param propertyStore The property store containing all the settings for this object.
+	 *
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);</code>
+	 * 	<br>...or...
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public RdfSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+	public RdfSerializer(PropertyStore propertyStore, String produces, String...accept) {
+		super(propertyStore, produces, accept);
 		this.ctx = createContext(RdfSerializerContext.class);
 	}
 

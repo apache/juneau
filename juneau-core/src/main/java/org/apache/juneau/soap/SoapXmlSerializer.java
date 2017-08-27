@@ -13,7 +13,6 @@
 package org.apache.juneau.soap;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -39,7 +38,6 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link BeanContext}
  * </ul>
  */
-@Produces(value="text/xml+soap",contentType="text/xml")
 public final class SoapXmlSerializer extends XmlSerializer {
 
 	private final SoapXmlSerializerContext ctx;
@@ -50,7 +48,7 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public SoapXmlSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore, "text/xml", "text/xml+soap");
 		this.ctx = createContext(SoapXmlSerializerContext.class);
 	}
 

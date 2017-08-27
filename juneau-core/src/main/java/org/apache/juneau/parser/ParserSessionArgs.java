@@ -23,11 +23,6 @@ import org.apache.juneau.http.*;
  */
 public final class ParserSessionArgs extends BeanSessionArgs {
 
-	/**
-	 * Default session arguments.
-	 */
-	protected static final ParserSessionArgs DEFAULT = new ParserSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, null, null);
-
 	final Method javaMethod;
 	final Object outer;
 

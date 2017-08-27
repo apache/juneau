@@ -40,7 +40,6 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected JsonSchemaSerializerSession(JsonSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);

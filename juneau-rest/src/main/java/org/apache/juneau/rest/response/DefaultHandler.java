@@ -18,7 +18,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
@@ -35,7 +34,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * The <code>Content-Type</code> header is set to the mime-type defined on the selected serializer based on the
- * {@link Produces#contentType() @Produces.contentType} annotation.
+ * <code>produces</code> value passed in through the constructor.
  */
 public class DefaultHandler implements ResponseHandler {
 

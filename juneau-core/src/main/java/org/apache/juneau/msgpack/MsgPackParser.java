@@ -13,7 +13,6 @@
 package org.apache.juneau.msgpack;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -30,13 +29,12 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link MsgPackParserContext}
  * </ul>
  */
-@Consumes("octal/msgpack")
 public class MsgPackParser extends InputStreamParser {
 
 	/** Default parser, all default settings.*/
 	public static final MsgPackParser DEFAULT = new MsgPackParser(PropertyStore.create());
 
-	
+
 	private final MsgPackParserContext ctx;
 
 	/**
@@ -45,7 +43,7 @@ public class MsgPackParser extends InputStreamParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public MsgPackParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore, "octal/msgpack");
 		this.ctx = createContext(MsgPackParserContext.class);
 	}
 

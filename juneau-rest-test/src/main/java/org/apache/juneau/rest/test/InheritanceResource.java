@@ -18,7 +18,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -224,8 +223,8 @@ public class InheritanceResource extends RestServlet {
 
 	public static class DummyParser extends ReaderParser {
 
-		public DummyParser() {
-			super(PropertyStore.create());
+		public DummyParser(String...consumes) {
+			super(PropertyStore.create(), consumes);
 		}
 
 		@Override /* Parser */
@@ -242,8 +241,8 @@ public class InheritanceResource extends RestServlet {
 
 	public static class DummySerializer extends WriterSerializer {
 
-		public DummySerializer() {
-			super(PropertyStore.create());
+		public DummySerializer(String produces) {
+			super(PropertyStore.create(), produces);
 		}
 
 		@Override /* Serializer */
@@ -258,35 +257,25 @@ public class InheritanceResource extends RestServlet {
 		}
 	}
 
-	@Consumes("text/p1")
-	public static class P1 extends DummyParser{ public P1(PropertyStore ps) {super();} }
+	public static class P1 extends DummyParser{ public P1(PropertyStore ps) {super("text/p1");} }
 
-	@Consumes("text/p2")
-	public static class P2 extends DummyParser{ public P2(PropertyStore ps) {super();} }
+	public static class P2 extends DummyParser{ public P2(PropertyStore ps) {super("text/p2");} }
 
-	@Consumes("text/p3")
-	public static class P3 extends DummyParser{ public P3(PropertyStore ps) {super();} }
+	public static class P3 extends DummyParser{ public P3(PropertyStore ps) {super("text/p3");} }
 
-	@Consumes("text/p4")
-	public static class P4 extends DummyParser{ public P4(PropertyStore ps) {super();} }
+	public static class P4 extends DummyParser{ public P4(PropertyStore ps) {super("text/p4");} }
 
-	@Consumes("text/p5")
-	public static class P5 extends DummyParser{ public P5(PropertyStore ps) {super();} }
+	public static class P5 extends DummyParser{ public P5(PropertyStore ps) {super("text/p5");} }
 
-	@Produces("text/s1")
-	public static class S1 extends DummySerializer{ public S1(PropertyStore ps) {super();} }
+	public static class S1 extends DummySerializer{ public S1(PropertyStore ps) {super("text/s1");} }
 
-	@Produces("text/s2")
-	public static class S2 extends DummySerializer{ public S2(PropertyStore ps) {super();} }
+	public static class S2 extends DummySerializer{ public S2(PropertyStore ps) {super("text/s2");} }
 
-	@Produces("text/s3")
-	public static class S3 extends DummySerializer{ public S3(PropertyStore ps) {super();} }
+	public static class S3 extends DummySerializer{ public S3(PropertyStore ps) {super("text/s3");} }
 
-	@Produces("text/s4")
-	public static class S4 extends DummySerializer{ public S4(PropertyStore ps) {super();} }
+	public static class S4 extends DummySerializer{ public S4(PropertyStore ps) {super("text/s4");} }
 
-	@Produces("text/s5")
-	public static class S5 extends DummySerializer{ public S5(PropertyStore ps) {super();} }
+	public static class S5 extends DummySerializer{ public S5(PropertyStore ps) {super("text/s5");} }
 
 	public static class E1 extends IdentityEncoder {
 		@Override public String[] getCodings() {

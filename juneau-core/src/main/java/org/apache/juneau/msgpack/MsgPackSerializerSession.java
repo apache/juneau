@@ -17,6 +17,7 @@ import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -43,7 +44,6 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
@@ -143,7 +143,11 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		}
 		else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
-		} else
+		}
+		else if (sType.isReader() || sType.isInputStream()) {
+			IOUtils.pipe(o, out);
+		}
+		else
 			out.appendString(toString(o));
 
 		if (! isRecursion)

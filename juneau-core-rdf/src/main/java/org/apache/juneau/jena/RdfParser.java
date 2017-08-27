@@ -16,7 +16,6 @@ import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -45,11 +44,10 @@ import org.apache.juneau.parser.*;
  * 
  * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
-@Consumes(value="text/xml+rdf")
 public class RdfParser extends ReaderParser {
 
 	/** Default XML parser, all default settings.*/
-	public static final RdfParser DEFAULT_XML = new RdfParser(PropertyStore.create());
+	public static final RdfParser DEFAULT_XML = new Xml(PropertyStore.create());
 
 	/** Default Turtle parser, all default settings.*/
 	public static final RdfParser DEFAULT_TURTLE = new Turtle(PropertyStore.create());
@@ -62,7 +60,6 @@ public class RdfParser extends ReaderParser {
 
 
 	/** Consumes RDF/XML input */
-	@Consumes("text/xml+rdf")
 	public static class Xml extends RdfParser {
 
 		/**
@@ -71,12 +68,11 @@ public class RdfParser extends ReaderParser {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Xml(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML));
+			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML), "text/xml+rdf");
 		}
 	}
 
 	/** Consumes N-Triple input */
-	@Consumes(value="text/n-triple")
 	public static class NTriple extends RdfParser {
 
 		/**
@@ -85,12 +81,11 @@ public class RdfParser extends ReaderParser {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public NTriple(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_NTRIPLE));
+			super(propertyStore.copy().append(RDF_language, LANG_NTRIPLE), "text/n-triple");
 		}
 	}
 
 	/** Consumes Turtle input */
-	@Consumes(value="text/turtle")
 	public static class Turtle extends RdfParser {
 
 		/**
@@ -99,12 +94,11 @@ public class RdfParser extends ReaderParser {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public Turtle(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_TURTLE));
+			super(propertyStore.copy().append(RDF_language, LANG_TURTLE), "text/turtle");
 		}
 	}
 
 	/** Consumes N3 input */
-	@Consumes(value="text/n3")
 	public static class N3 extends RdfParser {
 
 		/**
@@ -113,7 +107,7 @@ public class RdfParser extends ReaderParser {
 		 * @param propertyStore The property store containing all the settings for this object.
 		 */
 		public N3(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_N3));
+			super(propertyStore.copy().append(RDF_language, LANG_N3), "text/n3");
 		}
 	}
 
@@ -124,12 +118,13 @@ public class RdfParser extends ReaderParser {
 	 * Constructor.
 	 * 
 	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public RdfParser(PropertyStore propertyStore) {
-		super(propertyStore);
+	public RdfParser(PropertyStore propertyStore, String...consumes) {
+		super(propertyStore, consumes);
 		this.ctx = createContext(RdfParserContext.class);
 	}
-
+	
 	@Override /* CoreObject */
 	public RdfParserBuilder builder() {
 		return new RdfParserBuilder(propertyStore);

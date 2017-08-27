@@ -54,11 +54,9 @@ public abstract class ParserSession extends BeanSession {
 	 * 	Runtime session arguments.
 	 */
 	protected ParserSession(ParserContext ctx, ParserSessionArgs args) {
-		super(ctx != null ? ctx : ParserContext.DEFAULT, args != null ? args : ParserSessionArgs.DEFAULT);
+		super(ctx != null ? ctx : ParserContext.DEFAULT, args);
 		if (ctx == null)
 			ctx = ParserContext.DEFAULT;
-		if (args == null)
-			args = ParserSessionArgs.DEFAULT;
 		Class<?> listenerClass;
 		ObjectMap p = getProperties();
 		if (p.isEmpty()) {

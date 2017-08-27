@@ -15,7 +15,6 @@ package org.apache.juneau.json;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -31,7 +30,6 @@ import org.apache.juneau.serializer.*;
  *
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  */
-@Produces(value="application/json+schema,text/json+schema",contentType="application/json")
 public final class JsonSchemaSerializer extends JsonSerializer {
 
 	/**
@@ -42,8 +40,10 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	public JsonSchemaSerializer(PropertyStore propertyStore) {
 		super(
 			propertyStore.copy()
-			.append(SERIALIZER_detectRecursions, true)
-			.append(SERIALIZER_ignoreRecursions, true)
+				.append(SERIALIZER_detectRecursions, true)
+				.append(SERIALIZER_ignoreRecursions, true),
+			"application/json",
+			"application/json+schema", "text/json+schema"
 		);
 	}
 

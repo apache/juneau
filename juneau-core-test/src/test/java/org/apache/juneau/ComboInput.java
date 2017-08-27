@@ -21,7 +21,7 @@ import java.lang.reflect.*;
 public class ComboInput<T> {
 
 	final String label;
-	final Object in;
+	private final T in;
 	final Type type;
 	final String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
@@ -78,6 +78,15 @@ public class ComboInput<T> {
 		this.rdfXmlR = rdfXmlR;
 	}
 
+	/**
+	 * Returns the input object.
+	 * Override this method if you want it dynamically created each time.
+	 * @throws Exception 
+	 */
+	public T getInput() throws Exception {
+		return in;
+	}
+	
 	/**
 	 * Override this method if you want to do a post-parse verification on the object.
 	 * <p>

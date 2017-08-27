@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
@@ -49,7 +48,6 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "hiding" })
-@Consumes("application/x-www-form-urlencoded")
 public class UrlEncodingParser extends UonParser implements PartParser {
 
 	/** Reusable instance of {@link UrlEncodingParser}. */
@@ -64,7 +62,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public UrlEncodingParser(PropertyStore propertyStore) {
-		super(propertyStore.copy().append(UON_decodeChars, true));
+		super(propertyStore.copy().append(UON_decodeChars, true), "application/x-www-form-urlencoded");
 		this.ctx = createContext(UrlEncodingParserContext.class);
 	}
 

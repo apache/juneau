@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.test;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.plaintext.*;
@@ -171,17 +170,15 @@ public class HeadersResource extends RestServlet {
 		}
 	}
 
-	@Produces("*/*")
 	public static class PlainTextAnythingSerializer extends PlainTextSerializer {
 		public PlainTextAnythingSerializer(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/plain", "*/*");
 		}
 	}
 
-	@Consumes("*/*")
 	public static class PlainTextAnythingParser extends PlainTextParser {
 		public PlainTextAnythingParser(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "*/*");
 		}
 	}
 

@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -36,11 +35,10 @@ public class GroupsResource extends RestServlet {
 		config.addSerializers(SSerializer.class).addParsers(PParser.class);
 	}
 
-	@Produces("text/s1,text/s2")
 	public static class SSerializer extends WriterSerializer {
 
 		public SSerializer(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/s1", "text/s1", "text/s2");
 		}
 
 		@Override /* Serializer */
@@ -55,11 +53,10 @@ public class GroupsResource extends RestServlet {
 		}
 	}
 
-	@Consumes("text/p1,text/p2")
 	public static class PParser extends ReaderParser {
 
 		public PParser(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/p1", "text/p2");
 		}
 
 		@Override /* Parser */

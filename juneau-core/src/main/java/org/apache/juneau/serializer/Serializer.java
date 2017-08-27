@@ -12,13 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 
 /**
@@ -39,35 +35,25 @@ import org.apache.juneau.http.*;
  * <p>
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
- *
- * <h6 class='topic'>@Produces annotation</h6>
- *
- * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
- * <br>
- * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
- * and {@link #getResponseContentType()} methods.
  */
 public abstract class Serializer extends CoreObject {
 
-	private final MediaType[] mediaTypes;
-	private final MediaType contentType;
+	private final MediaType[] accept;
+	private final MediaType produces;
 
 	// Hidden constructors to force subclass from OuputStreamSerializer or WriterSerializer.
-	Serializer(PropertyStore propertyStore) {
+	Serializer(PropertyStore propertyStore, String produces, String...accept) {
 		super(propertyStore);
 
-		Produces p = getAnnotation(Produces.class, getClass());
-		if (p == null)
-			throw new FormattedRuntimeException("Class ''{0}'' is missing the @Produces annotation", getClass());
-
-		String[] mt = split(p.value());
-		this.mediaTypes = new MediaType[mt.length];
-		for (int i = 0; i < mt.length; i++) {
-			mediaTypes[i] = MediaType.forString(mt[i]);
+		this.produces = MediaType.forString(produces);
+		if (accept.length == 0) {
+			this.accept = new MediaType[]{this.produces};
+		} else {
+			this.accept = new MediaType[accept.length];
+			for (int i = 0; i < accept.length; i++) {
+				this.accept[i] = MediaType.forString(accept[i]);
+			}
 		}
-
-		String ct = p.contentType().isEmpty() ? this.mediaTypes[0].toString() : p.contentType();
-		contentType = ct.isEmpty() ? null : MediaType.forString(ct);
 	}
 
 	@Override /* CoreObject */
@@ -94,7 +80,6 @@ public abstract class Serializer extends CoreObject {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and serializer
 	 * 	contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 * @return
 	 * 	The new session object.
 	 * 	<br>Note that you must call {@link SerializerSession#close()} on this object to perform any necessary
@@ -116,7 +101,18 @@ public abstract class Serializer extends CoreObject {
 	 * 	cleanup.
 	 */
 	public final SerializerSession createSession() {
-		return createSession(null);
+		return createSession(createDefaultSessionArgs());
+	}
+
+	/**
+	 * Creates the session arguments object that gets passed to the {@link #createSession(SerializerSessionArgs)} method.
+	 *
+	 * @return
+	 * 	A new default session arguments object.
+	 * 	<p>The arguments can be modified before passing to the {@link #createSession(SerializerSessionArgs)}.
+	 */
+	public final SerializerSessionArgs createDefaultSessionArgs() {
+		return new SerializerSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, getResponseContentType(), null);
 	}
 
 	/**
@@ -176,24 +172,12 @@ public abstract class Serializer extends CoreObject {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Returns the media types handled based on the value of the {@link Produces} annotation on the serializer class.
-	 *
-	 * <p>
-	 * This method can be overridden by subclasses to determine the media types programmatically.
+	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final MediaType[] getMediaTypes() {
-		return mediaTypes;
-	}
-
-	/**
-	 * Returns the first media type specified on this serializer via the {@link Produces} annotation.
-	 *
-	 * @return The media type.
-	 */
-	public final MediaType getPrimaryMediaType() {
-		return mediaTypes == null || mediaTypes.length == 0 ? null : mediaTypes[0];
+		return accept;
 	}
 
 	/**
@@ -212,7 +196,7 @@ public abstract class Serializer extends CoreObject {
 	 *
 	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
 	 */
-	public MediaType getResponseContentType() {
-		return contentType;
+	public final MediaType getResponseContentType() {
+		return produces;
 	}
 }

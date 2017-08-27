@@ -15,28 +15,35 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
- *
- * <h6 class='topic'>@Produces annotation</h6>
- *
- * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
- *
- * <p>
- * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
- * and {@link #getResponseContentType()} methods.
  */
 public abstract class OutputStreamSerializer extends Serializer {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param propertyStore
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"application/json"</js>, <js>"text/json"</js>);</code>
+	 * 	<br>...or...
+	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	protected OutputStreamSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+	protected OutputStreamSerializer(PropertyStore propertyStore, String produces, String...accept) {
+		super(propertyStore, produces, accept);
 	}
 
 
@@ -66,7 +73,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 */
 	@Override
 	public final byte[] serialize(Object o) throws SerializeException {
-		return createSession(null).serialize(o);
+		return createSession(createDefaultSessionArgs()).serialize(o);
 	}
 
 	/**

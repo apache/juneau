@@ -68,11 +68,17 @@ public class UonParserSession extends ReaderParserSession {
 	 * The main difference is that characters are never decoded, and the {@link UonParserContext#UON_decodeChars}
 	 * property is always ignored.
 	 *
-	 * @param ctx The context to copy setting from.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
+	 * @param args
+	 * 	Runtime session arguments.
+	 * @param decodeChars
+	 * 	Whether to decode characters.
 	 */
-	protected UonParserSession(UonParserContext ctx) {
-		super(ctx, null);
-		decodeChars = false;
+	protected UonParserSession(UonParserContext ctx, ParserSessionArgs args, boolean decodeChars) {
+		super(ctx, args);
+		this.decodeChars = decodeChars;
 	}
 
 	@Override /* ParserSession */

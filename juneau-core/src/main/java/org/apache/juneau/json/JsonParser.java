@@ -15,7 +15,6 @@ package org.apache.juneau.json;
 import static org.apache.juneau.parser.ParserContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -108,7 +107,6 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link JsonParserContext}
  * </ul>
  */
-@Consumes("application/json,text/json")
 public class JsonParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/
@@ -139,7 +137,17 @@ public class JsonParser extends ReaderParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public JsonParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		this(propertyStore, "application/json", "text/json");
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
+	 */
+	public JsonParser(PropertyStore propertyStore, String...consumes) {
+		super(propertyStore, consumes);
 		this.ctx = createContext(JsonParserContext.class);
 	}
 

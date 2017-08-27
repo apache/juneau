@@ -63,7 +63,6 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected RdfSerializerSession(RdfSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
@@ -293,6 +292,10 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				case MULTI_VALUED: serializeToMultiProperties(c, eType, bpm, attrName, parentResource); break;
 				default: n = serializeToContainer(c, eType, m.createSeq());
 			}
+		
+		} else if (sType.isReader() || sType.isInputStream()) {
+			n = m.createLiteral(encodeTextInvalidChars(IOUtils.read(o)));
+		
 		} else {
 			n = m.createLiteral(encodeTextInvalidChars(toString(o)));
 		}

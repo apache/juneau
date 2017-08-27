@@ -15,7 +15,6 @@ package org.apache.juneau.rest.test;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -30,11 +29,10 @@ import org.apache.juneau.serializer.*;
 public class SerializersResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
-	@Produces("text/a")
 	public static class TestSerializerA extends WriterSerializer {
 
 		public TestSerializerA(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/a");
 		}
 
 		@Override /* Serializer */
@@ -49,11 +47,10 @@ public class SerializersResource extends RestServletDefault {
 		}
 	}
 
-	@Produces("text/b")
 	public static class TestSerializerB extends WriterSerializer {
 
 		public TestSerializerB(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/b");
 		}
 
 		@Override /* Serializer */
@@ -92,11 +89,10 @@ public class SerializersResource extends RestServletDefault {
 		return "test3";
 	}
 
-	@Produces("text/a")
 	public static class TestSerializerC extends WriterSerializer {
 
 		public TestSerializerC(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/a");
 		}
 
 		@Override /* Serializer */
@@ -119,11 +115,10 @@ public class SerializersResource extends RestServletDefault {
 		return "test4";
 	}
 
-	@Produces(value="text/a,text/d",contentType="text/d")
 	public static class TestSerializerD extends WriterSerializer {
 
 		public TestSerializerD(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/d", "text/a", "text/d");
 		}
 
 		@Override /* Serializer */

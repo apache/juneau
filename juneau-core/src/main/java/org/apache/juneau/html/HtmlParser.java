@@ -13,7 +13,6 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 
@@ -38,7 +37,6 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @SuppressWarnings({ "hiding" })
-@Consumes("text/html,text/html+stripped")
 public class HtmlParser extends XmlParser {
 
 	/** Default parser, all default settings.*/
@@ -53,7 +51,7 @@ public class HtmlParser extends XmlParser {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public HtmlParser(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore, "text/html", "text/html+stripped");
 		this.ctx = createContext(HtmlParserContext.class);
 	}
 

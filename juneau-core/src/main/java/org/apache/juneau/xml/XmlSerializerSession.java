@@ -25,6 +25,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
@@ -63,7 +64,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected XmlSerializerSession(XmlSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
@@ -344,6 +344,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			o = null;
 
 		boolean isCollapsed = false;		// If 'true', this is a collection and we're not rendering the outer element.
+		boolean isRaw = (sType.isReader() || sType.isInputStream()) && o != null;
 
 		// Get the JSON type string.
 		if (o == null) {
@@ -390,7 +391,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		boolean cr = o != null && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixed;
 
 		String en = elementName;
-		if (en == null) {
+		if (en == null && ! isRaw) {
 			en = type.toString();
 			type = null;
 		}
@@ -406,25 +407,29 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		// Render the start tag.
 		if (! isCollapsed) {
-			out.oTag(i, elementNs, en, encodeEn);
-			if (addNamespaceUris) {
-				out.attr((String)null, "xmlns", defaultNamespace.getUri());
+			if (en != null) {
+				out.oTag(i, elementNs, en, encodeEn);
+				if (addNamespaceUris) {
+					out.attr((String)null, "xmlns", defaultNamespace.getUri());
 
-				for (Namespace n : namespaces)
-					out.attr("xmlns", n.getName(), n.getUri());
-			}
-			if (! isExpectedType) {
-				if (resolvedDictionaryName != null)
-					out.attr(dns, getBeanTypePropertyName(eType), resolvedDictionaryName);
-				else if (type != null && type != STRING)
-					out.attr(dns, getBeanTypePropertyName(eType), type);
+					for (Namespace n : namespaces)
+						out.attr("xmlns", n.getName(), n.getUri());
+				}
+				if (! isExpectedType) {
+					if (resolvedDictionaryName != null)
+						out.attr(dns, getBeanTypePropertyName(eType), resolvedDictionaryName);
+					else if (type != null && type != STRING)
+						out.attr(dns, getBeanTypePropertyName(eType), type);
+				}
+			} else {
+				out.i(i);
 			}
 			if (o == null) {
 				if ((sType.isBoolean() || sType.isNumber()) && ! sType.isNullable())
 					o = sType.getPrimitiveDefault();
 			}
 
-			if (o != null && ! (sType.isMapOrBean()))
+			if (o != null && ! (sType.isMapOrBean() || en == null))
 				out.append('>');
 
 			if (cr && ! (sType.isMapOrBean()))
@@ -463,6 +468,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				serializeCollection(out, o, sType, eType, pMeta, isMixed);
 				if (isCollapsed)
 					this.indent++;
+			} else if (sType.isReader() || sType.isInputStream()) {
+				IOUtils.pipe(o, out);
 			} else {
 				if (format == XMLTEXT)
 					out.append(toString(o));
@@ -475,16 +482,18 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		// Render the end tag.
 		if (! isCollapsed) {
-			if (rc == CR_EMPTY) {
-				if (isHtmlMode())
-					out.append('>').eTag(elementNs, en, encodeEn);
-				else
+			if (en != null) {
+				if (rc == CR_EMPTY) {
+					if (isHtmlMode())
+						out.append('>').eTag(elementNs, en, encodeEn);
+					else
+						out.append('/').append('>');
+				} else if (rc == CR_VOID || o == null) {
 					out.append('/').append('>');
-			} else if (rc == CR_VOID || o == null) {
-				out.append('/').append('>');
+				}
+				else
+					out.ie(cr && rc != CR_MIXED ? i : 0).eTag(elementNs, en, encodeEn);
 			}
-			else
-				out.ie(cr && rc != CR_MIXED ? i : 0).eTag(elementNs, en, encodeEn);
 			if (! isMixed)
 				out.nl(i);
 		}

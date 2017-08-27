@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
  * Session object that lives for the duration of a single use of {@link JsoSerializer}.
  *
  * <p>
- * This class is NOT thread safe.  
+ * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
 public class JsoSerializerSession extends OutputStreamSerializerSession {
@@ -36,7 +36,6 @@ public class JsoSerializerSession extends OutputStreamSerializerSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected JsoSerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);

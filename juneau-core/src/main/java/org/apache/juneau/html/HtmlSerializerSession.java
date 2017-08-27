@@ -63,7 +63,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	protected HtmlSerializerSession(HtmlSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
@@ -278,6 +277,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				// the actual type now.
 				if (sType.isObject())
 					sType = getClassMetaForObject(o);
+			}
+
+			// Handle the case where we're serializing a raw stream.
+			if (sType.isReader() || sType.isInputStream()) {
+				pop();
+				indent -= xIndent;
+				IOUtils.pipe(o, out);
+				return ContentResult.CR_SIMPLE;
 			}
 
 			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
@@ -572,7 +579,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				out.cTag().nl(i+2);
 
 				if (cm == null) {
+					out.i(i+2);
 					serializeAnything(out, o, null, null, 1, null, false);
+					out.nl(0);
 
 				} else if (cm.isMap() && ! (cm.isBeanMap())) {
 					Map m2 = sort((Map)o);

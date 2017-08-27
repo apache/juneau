@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
@@ -34,11 +33,10 @@ import org.apache.juneau.rest.annotation.*;
 public class ParsersResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
-	@Consumes("text/a")
 	public static class TestParserA extends ReaderParser {
 
 		public TestParserA(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/a");
 		}
 
 		@Override /* Parser */
@@ -70,11 +68,10 @@ public class ParsersResource extends RestServletDefault {
 		return in;
 	}
 
-	@Consumes("text/b")
 	public static class TestParserB extends ReaderParser {
 
 		public TestParserB(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/b");
 		}
 
 		@Override /* Parser */
@@ -98,11 +95,10 @@ public class ParsersResource extends RestServletDefault {
 		return in;
 	}
 
-	@Consumes("text/c")
 	public static class TestParserC extends ReaderParser {
 
 		public TestParserC(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/c");
 		}
 
 		@Override /* Parser */
@@ -126,11 +122,10 @@ public class ParsersResource extends RestServletDefault {
 		return in;
 	}
 
-	@Consumes("text/a,text/d")
 	public static class TestParserD extends ReaderParser {
 
 		public TestParserD(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "text/a", "text/d");
 		}
 
 		@Override /* Parser */

@@ -84,8 +84,10 @@
 		<li><p><a class='doclink' href='#Core.Transforms'>Transforms</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#Core.PojoSwaps'>PojoSwaps</a></p>
+			<li><p><a class='doclink' href='#Core.PojoAnnotation'>@Pojo annotation</a></p>
 			<li><p><a class='doclink' href='#Core.SwapMethods'>Swap methods</a></p>
 			<li><p><a class='doclink' href='#Core.BeanFilters'>BeanFilters and @Bean annotations</a></p>
+			<li><p><a class='doclink' href='#Core.SerializingReadersAndInputStreams'>Serializing Readers and InputStreams</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#Core.BeanDictionaries'>Bean Name and Dictionaries</a></p>
 		<ol>
@@ -915,8 +917,35 @@
 		</div>
 	
 		<!-- ======================================================================================================== -->
+		<a id="Core.PojoAnnotation"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.6.2 - @Pojo annotation</h4>
+		<div class='topic'>
+			<p>
+				{@link org.apache.juneau.annotation.Pojo @Pojo} can be used to associate a swap class using an 
+				annotation.
+				This is often cleaner than using the builder <code>pojoSwaps()</code> method since you can keep
+				your swap class near your POJO class. 
+			</p>
+			<p class='bcode'>
+	<ja>@Pojo</ja>(swap=MyPojoSwap.<jk>class</jk>)
+	<jk>public class</jk> MyPojo {
+		...
+	}
+	
+	<jc>// Sample swap for converting MyPojo classes to a simple string.</jc>
+	<jk>public class</jk> MyPojoSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+		
+		<ja>@Override</ja>
+		<jk>public</jk> String swap(BeanSession session, MyPojo o) {
+			<jk>return</jk> o.toSomeSerializableForm();
+		}
+	}
+			</p>
+		</div>
+
+		<!-- ======================================================================================================== -->
 		<a id="Core.SwapMethods"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.6.2 - Swap methods</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.6.3 - Swap methods</h4>
 		<div class='topic'>
 			<p>
 				Various methods can be defined on a class directly to affect how it gets serialized.
@@ -1059,7 +1088,7 @@
 
 		<!-- ======================================================================================================== -->
 		<a id="Core.BeanFilters"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.6.3 - BeanFilters and @Bean annotations</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.6.4 - BeanFilters and @Bean annotations</h4>
 		<div class='topic'>
 			<p>
 				{@link org.apache.juneau.transform.BeanFilter BeanFilters} are used to control aspects of how beans are 
@@ -1141,6 +1170,55 @@
 			</ul>
 		</div>
 
+		<!-- ======================================================================================================== -->
+		<a id="Core.SerializingReadersAndInputStreams"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.6.5 - Serializing Readers and InputStreams</h4>
+		<div class='topic'>
+			<p>
+				Juneau serializers treat instances of Readers and InputStreams special by simply serializing their
+				contents directly to the output stream or writer.
+				This allows you to embed fully customized serializer output.
+			</p>
+			<p class='bcode'>
+	<jk>public class</jk> MyBean {
+		<jk>public</jk> Reader f1 = <jk>new</jk> StringReader(<js>"{'foo':'bar'}"</js>);	
+	}	
+	
+	<jc>// Produces "{f1:{'foo':'bar'}}"</jc>
+	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.toString(<jk>new</jk> MyBean());
+			</p>			
+			<p>
+				Note that if you're serializing Readers and InputStreams, it's up to you to make sure you're producing
+				valid output (in this case JSON).
+			</p>
+			<p>
+				A more typical scenario where this is useful is by using swaps to convert POJOs to Readers whose 
+				contents are determined via the {@link org.apache.juneau.BeanSession#getMediaType()} method.
+				<br>In the following example, we're customizing the JSON output for a particular bean type, but leaving
+				all other renditions as-is:
+			</p>			
+			<p class='bcode'>
+	<ja>@Pojo</ja>(swap=MyBeanSwap.<jk>class</jk>)
+	<jk>public class</jk> MyBean {...}
+	
+	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,Object&gt; {
+		<jk>public</jk> Object swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+			MediaType mt = session.getMediaType();
+			<jk>if</jk> (mt.hasSubType(<js>"json"</js>))
+				<jk>return new</jk> StringReader(<js>"{myPojo:'foobar'}"</js>);  <jc>// Custom JSON output</jc>
+			<jk>return</jk> o;  <jc>// Otherwise serialize it as a normal bean</jc>
+		}
+	}
+			</p>	
+			<ul class='doctree'>
+				<li class='info'>
+					Due to the nature of the RDF serializers, Readers and InputStreams are serialized as literals,
+					not as RDF text.
+					This is due to the fact that the RDF serializers use a DOM for serialization, so we don't have
+					access to the underlying stream.
+			</ul>
+		</div>
+		
 	</div>
 	
 	<!-- ======================================================================================================== -->
@@ -1388,8 +1466,8 @@
 				<td style='text-align:center'>2a</td>
 				<td>
 					<b>With standard keys/values</b>
-					<br>Map keys are group [1, 4a, 5a] objects.
-					<br>Map, Collection, and array values are group [1, 2, 3ac, 4a, 5a] objects.	
+					<br>Map keys are group [1, 4a, 6a] objects.
+					<br>Map, Collection, and array values are group [1, 2, 3ac, 4a, 6a] objects.	
 				</td>
 				<td>
 					<ul class='normal'>
@@ -1406,8 +1484,8 @@
 				<td style='text-align:center'>2b</td>
 				<td>
 					<b>With non-standard keys/values</b>
-					<br>Map keys are group [2, 3, 4b, 5b, 6] objects.
-					<br>Map, Collection, and array values are group [3b, 4b, 5b, 6] objects.	
+					<br>Map keys are group [2, 3, 4b, 5, 6b, 7] objects.
+					<br>Map, Collection, and array values are group [3b, 4b, 5, 6b, 7] objects.	
 				</td>
 				<td>
 					<ul class='normal'>
@@ -1431,7 +1509,7 @@
 					<b>With standard properties</b>
 					<br>These are beans that have no-arg constructors and one or more properties defined by public getter 
 					and setter methods or public fields.
-					<br>Property values are group [1, 2, 3ac, 4a, 5a] objects.
+					<br>Property values are group [1, 2, 3ac, 4a, 6a] objects.
 				</td>
 				<td>&nbsp;</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -1442,7 +1520,7 @@
 				<td>
 					<b>With non-standard properties or not true beans</b>
 					<br>These include true beans that have no-arg constructors and one or more properties defined by getter 
-					and setter methods or properties, but property types include group [3b, 4b, 5b, 6] objects.
+					and setter methods or properties, but property types include group [3b, 4b, 5, 6b, 7] objects.
 					<br>This also includes classes that look like beans but aren't true beans.  
 					For example, classes that have getters but not setters, or classes without no-arg constructors.	
 				</td>
@@ -1454,7 +1532,7 @@
 				<td style='text-align:center'>3c</td>
 				<td>
 					<b>Virtual beans</b>
-					<br>These are unimplemented bean interfaces with properties of type [1, 2, 3ac, 4a, 5a] objects.
+					<br>These are unimplemented bean interfaces with properties of type [1, 2, 3ac, 4a, 6a] objects.
 					<br>Parsers will automatically  create interface proxies on top of BeanMap instances.	
 				</td>
 				<td>&nbsp;</td>
@@ -1510,6 +1588,22 @@
 			<tr class='dark bb' style='background-color:lightyellow'>
 				<td style='text-align:center'>5</td>
 				<td>
+					<b>Readers and InputStreams</b>
+					<br>Contents are serialized directly to the output stream or writer.
+				</td>
+				<td>					
+					<ul class='normal'>
+						<li>{@code FileInputStream}
+						<li>{@code StringReader}
+					</ul>
+				</td>
+				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+				<td style='background-color:salmon;text-align:center'><b>no</b></td>
+			</tr>		
+
+			<tr class='dark bb' style='background-color:lightyellow'>
+				<td style='text-align:center'>6</td>
+				<td>
 					<b>Non-serializable objects with standard methods for converting to a serializable form</b><br>
 				</td>
 				<td>&nbsp;</td>
@@ -1517,7 +1611,7 @@
 				<td>&nbsp;</td>
 			</tr>		
 			<tr class='light bb' style='background-color:lightyellow'>
-				<td style='text-align:center'>5a</td>
+				<td style='text-align:center'>6a</td>
 				<td>
 					Classes with a method that converts it to a serializable form:
 					<ul>
@@ -1555,7 +1649,7 @@
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 			</tr>		
 			<tr class='light bb' style='background-color:lightyellow'>
-				<td style='text-align:center'>5b</td>
+				<td style='text-align:center'>6b</td>
 				<td>
 					Classes that only have a method to convert to a serializable form:
 					<ul>
@@ -1569,7 +1663,7 @@
 				<td style='background-color:salmon;text-align:center'><b>no</b></td>
 			</tr>			
 			<tr class='dark' style='background-color:lightyellow'>
-				<td style='text-align:center'>6</td>
+				<td style='text-align:center'>7</td>
 				<td>
 					<b>All other objects</b>
 					<br>Anything that doesn't fall into one of the groups above are simply converted to {@code Strings} 
@@ -6891,6 +6985,29 @@
 			<li>
 				Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
 			<li>
+				Serializers now serialize the contents of {@link java.io.Reader Readers} and {@link java.io.InputStream InputStreams}
+				directly to the output stream or writer.
+				<br>When used with conjunction with <code>PojoSwaps</code>, this can be used to provide customized
+				output for specific content types.
+				<p class='bcode'>
+	<ja>@Pojo</ja>(swap=MyBeanSwap.<jk>class</jk>)
+	<jk>public class</jk> MyBean {...}
+	
+	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,Object&gt; {
+		<jk>public</jk> Object swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+			MediaType mt = session.getMediaType();
+			<jk>if</jk> (mt.hasSubType(<js>"json"</js>))
+				<jk>return new</jk> StringReader(<js>"{foo:'bar'}"</js>);  <jc>// Custom JSON output</jc>
+			<jk>return</jk> o; <jc>// Otherwise treat as normal bean</jc>
+		}
+	}
+	
+	<jc>// Produces "{foo:'bar'}"</jc>
+	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.toString(<jk>new</jk> MyBean());
+				</p>
+				<br>This feature helps with the implementation of language-agnostic template support such as for
+				using FreeMaker to serialize POJOs to HTML.
+			<li>
 				{@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
 				objects are now reusable if used within the same thread.
 				<p class='bcode'>
@@ -6950,6 +7067,18 @@
 					<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
 					<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
 				</ul>
+			<li>
+				Fixed bug where {@link org.apache.juneau.BeanSession#getMediaType()} wasn't returning <jk>.
+			<li>
+				Eliminated the <ja>@Consumes</ja> and <ja>@Produces</ja> annotations.
+				<br>The supported media types are now passed in through the constructors.
+				<br>This was changed to eliminate a performance issue where a field could not be set as final because
+				the call to <code>getClass()</code> to retrieve the annotation value could not be called before calling
+				the <code><jk>super</jk>()</code> method.
+			<li>
+				New doc: <a class='doclink' href='#Core.PojoAnnotation'>2.6.2 - @Pojo annotation</a>
+			<li>
+				New doc: <a class='doclink' href='#Core.SerializingReadersAndInputStreams'>2.6.5 - Serializing Readers and InputStreams</a>
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -10522,11 +10651,11 @@
 				Refer to <a class='doclink' href='org/apache/juneau/rest/jaxrs/package-summary.html#TOC'>org.apache.juneau.rest.jaxrs</a> for information.
 			</li>
 			<li>
-				New {@link org.apache.juneau.annotation.Produces @Produces} annotation in place of <code>ISerializer.getMediaTypes()</code> for specifying what media types a serializer produces.<br>
+				New <code><del>@Produces</del></code> annotation in place of <code>ISerializer.getMediaTypes()</code> for specifying what media types a serializer produces.<br>
 				Available when subclassing from {@link org.apache.juneau.serializer.Serializer}.
 			</li>
 			<li>
-				New {@link org.apache.juneau.annotation.Consumes @Consumes} annotation in place of <code>IParser.getMediaTypes()</code> for specifying what media types a parser consumes.<br>
+				New <code><del>@Consumes</del></code> annotation in place of <code>IParser.getMediaTypes()</code> for specifying what media types a parser consumes.<br>
 				Available when subclassing from {@link org.apache.juneau.parser.Parser}.
 			</li>
 		</ul>

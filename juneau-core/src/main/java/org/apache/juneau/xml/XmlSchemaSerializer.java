@@ -13,7 +13,6 @@
 package org.apache.juneau.xml;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -38,7 +37,6 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link BeanContext}
  * </ul>
  */
-@Produces(value="text/xml+schema",contentType="text/xml")
 public class XmlSchemaSerializer extends XmlSerializer {
 
 	/**
@@ -47,7 +45,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	 * @param propertyStore Initialize with the specified config property store.
 	 */
 	public XmlSchemaSerializer(PropertyStore propertyStore) {
-		super(propertyStore.copy().append(XmlSerializerContext.XML_enableNamespaces, true));
+		super(propertyStore.copy().append(XmlSerializerContext.XML_enableNamespaces, true), "text/xml", "text/xml+schema");
 	}
 
 	@Override /* Serializer */

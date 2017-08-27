@@ -13,13 +13,11 @@
 package org.apache.juneau.csv;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
  * TODO - Work in progress.  CSV serializer.
  */
-@Produces("text/csv")
 public final class CsvSerializer extends WriterSerializer {
 
 	/** Default serializer, all default settings.*/
@@ -33,7 +31,7 @@ public final class CsvSerializer extends WriterSerializer {
 	 * @param propertyStore The property store containing all the settings for this object.
 	 */
 	public CsvSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+		super(propertyStore, "text/csv");
 		this.ctx = createContext(CsvSerializerContext.class);
 	}
 

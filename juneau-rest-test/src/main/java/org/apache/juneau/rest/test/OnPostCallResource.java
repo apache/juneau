@@ -17,7 +17,6 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Properties;
@@ -41,11 +40,10 @@ import org.apache.juneau.utils.*;
 public class OnPostCallResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Produces("text/s1,text/s2,text/s3")
 	public static class TestSerializer extends WriterSerializer {
 
 		public TestSerializer(PropertyStore propertyStore) {
-			super(propertyStore);
+			super(propertyStore, "test/s1", "text/s1", "text/s2", "text/s3");
 		}
 
 		@Override /* Serializer */

@@ -29,7 +29,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
-public class DateSwapComboTest extends ComboTest {
+public class DateSwapComboTest extends ComboRoundTripTest {
 
 	private static Date singleDate = CalendarSwapTest.testDate.getTime();
 

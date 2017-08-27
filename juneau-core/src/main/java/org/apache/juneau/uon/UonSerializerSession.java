@@ -18,6 +18,7 @@ import static org.apache.juneau.uon.UonSerializerContext.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -45,7 +46,6 @@ public class UonSerializerSession extends WriterSerializerSession {
 	 * 	These specify session-level information such as locale and URI context.
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerSessionArgs#DEFAULT}.
 	 */
 	public UonSerializerSession(UonSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
@@ -165,6 +165,9 @@ public class UonSerializerSession extends WriterSerializerSession {
 		}
 		else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
+		}
+		else if (sType.isReader() || sType.isInputStream()) {
+			IOUtils.pipe(o, out);
 		}
 		else {
 			out.appendObject(o, false);

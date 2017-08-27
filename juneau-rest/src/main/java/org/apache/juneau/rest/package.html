@@ -1517,8 +1517,7 @@
 		</p>
 		<p>
 			The servlet will pick which serializer to use by matching the request <l>Accept</l> header with the
-			media types defined through the {@link org.apache.juneau.serializer.Serializer#getMediaTypes()} method 
-			(which itself usually comes from the {@link org.apache.juneau.annotation.Produces @Produces} annotation).
+			media types defined through the {@link org.apache.juneau.serializer.Serializer#getMediaTypes()} method.
 		</p>
 		<p>
 			Serializers can be associated with REST servlets in the following ways:
@@ -1587,8 +1586,7 @@
 		</p>
 		<p>
 			The servlet will pick which parser to use by matching the request <l>Content-Type</l> header with the
-			media types defined through the {@link org.apache.juneau.parser.Parser#getMediaTypes()} method (which itself
-			usually comes from the {@link org.apache.juneau.annotation.Consumes @Consumes} annotation).
+			media types defined through the {@link org.apache.juneau.parser.Parser#getMediaTypes()} method.
 		</p>
 		<p>
 			Parsers can be associated with REST servlets in the following ways:

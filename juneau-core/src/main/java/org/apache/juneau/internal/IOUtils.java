@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -242,14 +243,68 @@ public final class IOUtils {
 	 * <p>
 	 * The reader is closed, the writer is not.
 	 *
-	 * @param in The reader to pipe from.
-	 * @param out The writer to pipe to.
+	 * @param in
+	 * 	The reader to pipe from.
+	 * @param out
+	 * 	The writer to pipe to.
 	 * @throws IOException
 	 */
 	public static void pipe(Reader in, Writer out) throws IOException {
 		assertFieldNotNull(out, "out");
 		assertFieldNotNull(in, "in");
 		IOPipe.create(in, out).run();
+	}
+
+	/**
+	 * Pipes the contents of the specified object into the writer.
+	 *
+	 * <p>
+	 * The reader is closed, the writer is not.
+	 *
+	 * @param in
+	 * 	The input to pipe from.
+	 * 	Can be any of the types defined by {@link #toReader(Object)}.
+	 * @param out
+	 * 	The writer to pipe to.
+	 * @throws IOException
+	 */
+	public static void pipe(Object in, Writer out) throws IOException {
+		pipe(toReader(in), out);
+	}
+
+	/**
+	 * Pipes the contents of the specified streams.
+	 *
+	 * <p>
+	 * The input stream is closed, the output stream is not.
+	 *
+	 * @param in
+	 * 	The reader to pipe from.
+	 * @param out
+	 * 	The writer to pipe to.
+	 * @throws IOException
+	 */
+	public static void pipe(InputStream in, OutputStream out) throws IOException {
+		assertFieldNotNull(out, "out");
+		assertFieldNotNull(in, "in");
+		IOPipe.create(in, out).run();
+	}
+
+	/**
+	 * Pipes the contents of the specified object into the output stream.
+	 *
+	 * <p>
+	 * The input stream is closed, the output stream is not.
+	 *
+	 * @param in
+	 * 	The input to pipe from.
+	 * 	Can be any of the types defined by {@link #toInputStream(Object)}.
+	 * @param out
+	 * 	The writer to pipe to.
+	 * @throws IOException
+	 */
+	public static void pipe(Object in, OutputStream out) throws IOException {
+		pipe(toInputStream(in), out);
 	}
 
 	/**
@@ -461,6 +516,39 @@ public final class IOUtils {
 			throw ex;
 	}
 
+	/**
+	 * Converts an object to a <code>Reader</code>.
+	 *
+	 * @param o
+	 * 	The object to convert to a reader.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li><code><jk>null</jk></code> - Returns <jk>null</jk>.
+	 * 	</ul>
+	 * @return The object converted to a reader.
+	 * @throws IOException If file could not be read.
+	 * @throws IllegalArgumentException If invalid object passed in.
+	 */
+	public static Reader toReader(Object o) throws IOException {
+		if (o == null)
+			return null;
+		if (o instanceof CharSequence)
+			return new StringReader(o.toString());
+		if (o instanceof File)
+			return new FileReader((File)o);
+		if (o instanceof Reader)
+			return (Reader)o;
+		if (o instanceof InputStream)
+			return new InputStreamReader((InputStream)o, "UTF-8");
+		if (o instanceof byte[])
+			return new InputStreamReader(new ByteArrayInputStream((byte[])o), "UTF-8");
+		throw new FormattedIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toReader(Object)", o.getClass());
+	}
 
 	/**
 	 * Converts an object to an <code>InputStream</code>.
@@ -474,10 +562,11 @@ public final class IOUtils {
 	 * 		<li>{@link File}
 	 * 		<li>{@link CharSequence} - Converted to UTF-8 stream.
 	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li><code><jk>null</jk></code> - Returns null.
+	 * 		<li><code><jk>null</jk></code> - Returns <jk>null</jk>.
 	 * 	</ul>
 	 * @return The object converted to an input stream.
-	 * @throws IOException If invalid object passed in or file could not be read.
+	 * @throws IOException If file could not be read.
+	 * @throws IllegalArgumentException If invalid object passed in.
 	 */
 	public static InputStream toInputStream(Object o) throws IOException {
 		if (o == null)
@@ -492,6 +581,6 @@ public final class IOUtils {
 			return new ByteArrayInputStream(((CharSequence)o).toString().getBytes(UTF8));
 		if (o instanceof Reader)
 			return new ByteArrayInputStream(IOUtils.read((Reader)o).getBytes(UTF8));
-		throw new IOException("Invalid object type passed to IOUtils.toInputStream(Object): " + o.getClass().getName());
+		throw new FormattedIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toInputStream(Object)", o.getClass());
 	}
 }

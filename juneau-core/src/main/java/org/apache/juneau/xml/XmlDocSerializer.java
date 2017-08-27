@@ -15,7 +15,6 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -37,7 +36,6 @@ import org.apache.juneau.serializer.*;
 public class XmlDocSerializer extends XmlSerializer {
 
 	/** Default serializer without namespaces. */
-	@Produces(value="text/xml",contentType="text/xml")
 	public static class Ns extends XmlDocSerializer {
 
 		/**
