@@ -1,0 +1,136 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+code, 
+tt, 
+pre,
+dt code {
+	font-size: 9pt;
+}
+
+/*--- Bordered code ---*/
+p.bcode {
+	font-size: 9pt;
+	white-space: pre;
+	border: 1px solid black;
+	margin: 10px 20px;
+	padding: 10px;
+	border-radius: 10px;
+	overflow: hidden;
+	font-family: monospace;
+	background-color: #f8f8f8;
+	border-color: #cccccc;
+	-moz-tab-size: 3;
+	tab-size: 3;
+	-o-tab-size: 3;
+}
+
+.fixedWidth {
+	max-width: 800px;
+}
+
+/* Override padding bottom in javadoc comments. */
+.blockList p.bcode {
+	padding-bottom: 0px !important;
+}
+
+/*--- Unbordered code ---*/
+p.code {
+	font-size: 9pt;
+	white-space: pre;
+	font-family: monospace;
+	padding-bottom: 15px;
+	margin: -15px;
+}
+
+td.code {
+	font-size: 9pt;
+	white-space: pre;
+	font-family: monospace;
+}
+
+table.code {
+	font-size: 9pt;
+	white-space: pre;
+	font-family: monospace;
+}
+
+/*--- Java code effects ---*/
+jc,jd,jt,jk,js,jf,jsf,jsm,ja {
+	font-size: 9pt;
+	white-space: pre;
+	font-family: monospace;
+}
+/* Comment */
+jc {
+	color: green;
+}
+/* Javadoc comment */
+jd {
+	color: #3f5fbf;
+}
+/* Javadoc tag */
+jt {
+	color: #7f9fbf;
+	font-weight: bold;
+}
+/* Primitive */
+jk {
+	color: #7f0055;
+	font-weight: bold;
+}
+/* String */
+js {
+	color: blue;
+}
+/* Field */
+jf {
+	color: blue;
+}
+/* Static field */
+jsf {
+	color: blue;
+	font-style: italic;
+}
+/* Static method */
+jsm {
+	font-style: italic;
+}
+/* Annotation */
+ja {
+	color: grey;
+}
+
+/*--- XML code effects ---*/
+xt,xa,xc,xs {
+	font-size: 9pt;
+	white-space: pre;
+	font-family: monospace;
+}
+
+xt {
+	color: DarkCyan;
+}
+
+xa {
+	color: purple;
+}
+
+xc {
+	color: mediumblue;
+}
+
+xs {
+	color: blue;
+	font-style: italic;
+}
+

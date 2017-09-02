@@ -1,0 +1,65 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+# * with the License.  You may obtain a copy of the License at                                                              * 
+# *                                                                                                                         *
+# *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+# *                                                                                                                         *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+# * specific language governing permissions and limitations under the License.                                              *
+# ***************************************************************************************************************************
+<ol>
+	<li>Packaging as WAR files
+	<li>Customizing OPTIONS pages
+	<li>Rendering form entry pages
+	<li>Using the ZipFileList response handler
+	<li>Implementing console-output pages in HTML
+	<li>Using configuration files
+	<li>Making a bean traversable
+	<li>Using the Queryable converter
+	<li>Sending raw output
+	<li>Retrieving raw input
+	<li>Accessing request query parameters
+	<li>Accessing request path variables
+	<li>Accessing request content
+	<li>Accessing request header values
+	<li>Accessing the path pattern remainder
+	<li>Creating ResourceGroup pages
+	<li>Using matchers to define multiple Java methods to the same path pattern
+	<li>Using the Remoteable API
+	<li>Sending a redirect request
+	<li>Changing the stylesheet used by the HTML serializer
+	<li>Using the Introspector API to invoke methods on Java objects through REST calls
+	<li>Customizing serializers and parsers at the method level
+	<li>Accessing config file values
+	<li>Accessing request query parameters on URL-Encoded FORM posts without triggering HTML body to be read
+	<li>Accessing localized messages
+	<li>Defining your own response handlers
+	<li>Guarding access to a servlet or method
+	<li>Handling servlet initialization errors
+	<li>Handling exceptions that occur during response processing
+	<li>Customizing logging
+	<li>Creating an ATOM feed
+	<li>Creating a REST API against a file system
+	<li>Creating a Docker REST API
+	<li>Creating a REST API for storing and retrieving images
+	<li>Creating a REST API for echoing requests
+	<li>Creating a Tumblr REST API
+	<li>Creating a Cloudant REST API
+	<li>Using onPreCall() to intercept requests before processing
+	<li>Using onPostCall() to intercept requests after processing
+	<li>Creating child resources programmatically
+	<li>Defining default request headers
+	<li>Defining default response headers
+	<li>Defining your own var-resolver variables
+	<li>Serving up static files inside the /htdocs embedded package
+	<li>Defining MIME types of files in the /htdocs folder using the createMimitypesFileTypeMap() method
+	<li>Defining the title and description of a servlet programmatically using getDescription() and getTitle().
+	<li>Setting properties programmatically using RestServlet.setProperty()
+	<li>Setting and saving config file properties
+	<li>Defining your own abstract subclass of RestServlet or RestServletDefault
+	<li>Adding GZip support
+	<li>Accessing environment variables in config files
+</ol>
