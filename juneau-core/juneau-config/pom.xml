@@ -47,7 +47,10 @@
 	<properties>
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-	</properties>
+		
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
+  	</properties>
 
 	<build>
 		<plugins>
