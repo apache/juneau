@@ -28,7 +28,12 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>juneau-microservice-template</groupId>
+	<parent>
+		<groupId>org.apache.juneau</groupId>
+		<artifactId>juneau-rest</artifactId>
+		<version>6.3.2-incubating-SNAPSHOT</version>
+	</parent>
+
 	<artifactId>juneau-microservice-template</artifactId>
 	<version>6.3.2</version>
 	<name>Apache Juneau Microservice Template</name>
