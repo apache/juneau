@@ -35,7 +35,6 @@
 	</parent>
 
 	<artifactId>juneau-microservice-template</artifactId>
-	<version>6.3.2</version>
 	<name>Apache Juneau Microservice Template</name>
 	<description>A template project developers use to start with to create a microservice.</description>
 	
