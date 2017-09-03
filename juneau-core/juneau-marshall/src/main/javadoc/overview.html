@@ -5036,7 +5036,7 @@
 		* [OPTIONS /*] 
 		* View resource options 
 		*/</jd> 
-		<ja>@Override</ja> /* RestServletJenaDefault */ 
+		<ja>@Override</ja> /* RestServletDefault */ 
 		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>) 
 		<jk>public</jk> Swagger getOptions(RestRequest req) { 
 			<jk>return</jk> req.getSwagger(); 
@@ -6814,9 +6814,187 @@
 	<h3 class='topic' onclick='toggle(this)'>6.3.2 (TBD)</h3>
 	<div class='topic'>
 		<p>
+			The major change in this release is the project structure
 		</p>
+		<p>
+			The library now consists of the following artifacts found in the Maven group <code>"org.apache.juneau"</code>:
+		</p>
+		<table class='styled' style='min-width:800px;'>
+			<tr>
+				<th>Category</th><th>Maven Artifacts</th><th>Description</th><th>Prereqs</th>
+			</tr>
+			<tr class='dark bb'>
+				<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;'><a class='doclink' href='#JuneauCore'>Juneau Core</a></td>
+				<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
+				<td>Serializers and parsers for:
+					<ul style='margin:0px 10px;'>
+						<li>JSON
+						<li>XML
+						<li>HTML
+						<li>UON
+						<li>URL-Encoding
+						<li>MessagePack
+						<li>SOAP/XML
+						<li>CSV
+						<li>BSON (coming soon)
+						<li>YAML (coming soon)
+						<li>Protobuf (coming soon)
+					</ul>
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 6
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
+				<td>
+					Serializers and parsers for:
+					<ul style='margin:0px 10px;'>
+						<li>RDF/XML
+						<li>RDF/XML-Abbrev 
+						<li>N-Triple
+						<li>Turtle
+						<li>N3
+					</ul>				
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 6
+						<li>Apache Jena 2.7.1
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
+				<td>
+					Data Transfer Objects for:
+					<ul style='margin:0px 10px;'>
+						<li>HTML5
+						<li>Atom
+						<li>Cognos
+						<li>JSON-Schema
+						<li>Swagger 2.0
+					</ul>				
+				</td>
+				<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
+			</tr>
+			<tr class='dark bb'>
+				<td class='code'><a class='doclink' href='#juneau-svl'>juneau-svl</a></td>
+				<td>
+					Simple Variable Language API
+				</td>
+				<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
+			</tr>
+			<tr class='dark bb'>
+				<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
+				<td>
+					Configuration file API
+				</td>
+				<td><ul style='margin:0px 10px;'><li>Java 6</li></ul></td>
+			</tr>
+			<tr class='light bb'>
+				<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;'><a class='doclink' href='#JuneauRest'>Juneau REST</a></td>
+				<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
+				<td>
+					REST Servlet API
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 6
+						<li>Servlet 3.1
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
+				<td>
+					Optional JAX-RS support
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 6
+						<li>JAX-RS 2.0
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
+				<td>
+					REST Client API
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 6
+						<li>Apache HttpClient 4.5
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td class='code'><a class='doclink' href='#juneau-microservice'>juneau-microservice</a></td>
+				<td>
+					REST Microservice API
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 8
+						<li>Eclipse Jetty 9.4.3
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td class='code'><a class='doclink' href='#juneau-microservice-template'>juneau-microservice-template</a></td>
+				<td>
+					Developer template project
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 8
+						<li>Eclipse Jetty 9.4.3
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;'><a class='doclink' href='#Examples'>Examples</a></td>
+				<td class='code'><code>juneau-examples-core</code></td>
+				<td>
+					Core code examples
+				</td>
+				<td></td>
+			</tr>
+			<tr class='dark bb'>
+				<td class='code'><code>juneau-examples-rest</code></td>
+				<td>
+					REST code examples
+				</td>
+				<td></td>
+			</tr>
+			<tr class='light bb'>
+				<td rowspan="1" style='text-align:center;font-weight:bold;padding:20px;'><a class='doclink' href='#JuneauAll'>Juneau All</a></td>
+				<td class='code'><code>juneau-all</code></td>
+				<td>
+					Combination of the following:
+					<ul style='margin:0px 10px;'>
+						<li>juneau-marshall
+						<li>juneau-dto
+						<li>juneau-svl
+						<li>juneau-config
+						<li>juneau-rest-server
+						<li>juneau-rest-client
+					</ul>
+				</td>
+				<td>
+					<ul style='margin:0px 10px;'>
+						<li>Java 6
+						<li>Servlet 3.1
+						<li>Apache HttpClient 4.5
+					</ul>
+				</td>
+			</tr>
+		</table>
 
-		<h6 class='topic'>org.apache.juneau</h6>
+		<h6 class='topic'>juneau-marshall</h6>
 		<ul class='spaced-list'>
 			<li>
 				Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
@@ -6861,9 +7039,6 @@
 	}  			
 				</p>
 				This is mostly an internal change and doesn't affect the existing APIs.
-			<li>
-				{@link org.apache.juneau.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
-				of objects.
 			<li>
 				{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)} and {@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
 				can now throw arbitrary exceptions instead of having to wrap them in <code>SerializeException</code>/<code>ParseException</code>.
@@ -6912,12 +7087,22 @@
 				the call to <code>getClass()</code> to retrieve the annotation value could not be called before calling
 				the <code><jk>super</jk>()</code> method.
 			<li>
+				New class: {@link org.apache.juneau.utils.PojoMerge}
+			<li>
 				New doc: <a class='doclink' href='#Core.PojoAnnotation'>2.6.2 - @Pojo annotation</a>
 			<li>
 				New doc: <a class='doclink' href='#Core.SerializingReadersAndInputStreams'>2.6.5 - Serializing Readers and InputStreams</a>
 		</ul>
 		
-		<h6 class='topic'>org.apache.juneau.rest</h6>
+		<h6 class='topic'>juneau-dto</h6>
+		<ul class='spaced-list'>
+			<li>
+				{@link org.apache.juneau.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
+				of objects.
+		</ul>
+
+
+		<h6 class='topic'>juneau-rest-server</h6>
 		<ul class='spaced-list'>
 			<li>
 				Revamped and simplified servlet and REST-call lifecycle handling through new
@@ -6977,9 +7162,14 @@
 				Stylesheet selection now stored in HTTP session when passed in via <code>?stylesheet</code> query parameter.
 			<li>
 				New doc: <a class='doclink' href='/org/apache/juneau/rest/package-summary.html#RestResources.RestHooks'>Lifecycle Hooks</a>
+			<li>
+				Eliminated the <code>RestServletJenaDefault</code> class to remove the Jena dependency class on 
+				the <code>juneau-rest-server</code> artifact. 
+				<br>It's simple enough to simply extend <code>RestServletDefault</code> and add the RDF serializers and
+				parsers.
 		</ul>
 
-		<h6 class='topic'>org.apache.juneau.rest.microservice</h6>
+		<h6 class='topic'>juneau-microservice</h6>
 		<ul class='spaced-list'>
 			<li>
 				New methods on {@link org.apache.juneau.microservice.RestMicroservice}:
@@ -8748,7 +8938,7 @@
 					<li><code><del>RestServlet.getConfigMgr()</del></code>
 				</ul>
 			<li>Removed {@link org.apache.juneau.jso.JsoParser}
-				from {@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault}.  
+				from {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code>.  
 				These may represent a security risk if not handled correctly, so removed
 				them as a precaution.
 			<li>Removed <code>RestServletProperties.REST_htDocsFolder</code>.  Replaced with {@link org.apache.juneau.rest.annotation.RestResource#staticFiles()}.
@@ -9073,13 +9263,13 @@
 					<li><code>$E{var}</code> - Environment variables.
 				</ul>
 			<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <del><code>RestServlet.getLabel(RestRequest)</code></del>.
-			<li>{@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault} now provide default HTML titles
+			<li>{@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code> now provide default HTML titles
 				and descriptions:
 				<p class='bcode'>
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{servletTitle}"</js>),
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{servletDescription}"</js>)
 				</p>
-			<li>Options pages on {@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault} now provide default descriptions and back links:
+			<li>Options pages on {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code> now provide default descriptions and back links:
 				and descriptions:
 				<p class='bcode'>
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
@@ -9248,7 +9438,7 @@
 
 		<h6 class='topic'>Server</h6>		
 		<ul class='spaced-list'>
-			<li>Added a default OPTIONS page to {@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault}.
+			<li>Added a default OPTIONS page to {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code>.
 			<li><code>RestServletProperties.REST_allowMethodParam</code> has been enhanced to allow you to
 				explicitely specify which HTTP methods can be used in the <code>&amp;method</code> parameter.
 			<li>New methods added to {@link org.apache.juneau.rest.RestRequest}:
@@ -9386,7 +9576,7 @@
 			<li><code>&amp;noTrace=true</code> now prevents any errors from being logged in log file.
 			<li>Workaround for Jetty issue where <code>ServletContext.getContextPath()</code> always ends with <js>"null"</js>.
 			<li><code>RestServletProperties.REST_allowMethodParam</code> is now <jk>true</jk> by default on all subclasses 
-				of {@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault}.
+				of {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code>.
 		</ul>
 				
 		<h6 class='topic'>Client</h6>		
@@ -9445,7 +9635,7 @@
 			<li>Removed properties parameters from <code><del>RestServlet.onPreCall(RestRequest)</del></code> and <code><del>RestServlet#onPostCall(RestRequest,RestResponse)</del></code> methods
 				since the properties are already accessible through <code>RestRequest.getProperties()</code>.
 			<li>Added {@link org.apache.juneau.uon.UonSerializer} and {@link org.apache.juneau.uon.UonParser} to serializer and parser lists on 
-				{@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault}.
+				{@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code>.
 		</ul>
 		
 		<h6 class='topic'>Client</h6>		
@@ -10369,10 +10559,10 @@
 				</ul>
 			</li>
 			<li>
-				New {@link org.apache.juneau.rest.jena.RestServletJenaDefault} servlet that includes serialization/parsing support for all Jena-based serializers and parsers.
+				New <code><del>RestServletJenaDefault</del></code> servlet that includes serialization/parsing support for all Jena-based serializers and parsers.
 			</li>
 			<li>
-				New {@link org.apache.juneau.rest.jaxrs.rdf.DefaultJenaProvider} JAX-RS provider that includes serialization/parsing support for all Jena-based serializers and parsers.
+				New <code><del>DefaultJenaProvider</del></code> JAX-RS provider that includes serialization/parsing support for all Jena-based serializers and parsers.
 			</li>
 			<li>
 				Eliminated <code>RestServletChild</code> class.<br>  
