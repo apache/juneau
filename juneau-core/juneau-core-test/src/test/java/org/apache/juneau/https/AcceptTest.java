@@ -47,17 +47,17 @@ public class AcceptTest {
 			{ "MetaMatch-1", "text/*", "['text/a','text/b+c','text/b+d+e']", 2 },
 			{ "MetaMatch-2", "text/b+*", "['text/a','text/b+c','text/b+d+e']", 2 },
 			{ "MetaMatch-3", "text/c+*", "['text/a','text/b+c','text/b+d+e']", 1 },
-			{ "MetaMatch-4", "text/b+d+e", "['text/a','text/b+c','text/b+d']", 2 },
-			{ "MetaMatch-5", "text/b+*", "['text/a','text/b+c','text/b+d']", 1 },
+			{ "MetaMatch-4", "text/b+d+e", "['text/a','text/b+c','text/b+d']", -1 },
+			{ "MetaMatch-5", "text/b+*", "['text/a','text/b+c','text/b+d+e']", 2 },
 			{ "MetaMatch-6", "text/d+e+*", "['text/a','text/b+c','text/b+d+e']", 2 },
 
-			{ "MetaMatch-7", "*/a", "['text/a','application/a']", 0 },
+			{ "MetaMatch-7", "*/a", "['text/a','application/b']", 0 },
 			{ "MetaMatch-8", "*/*", "['text/a','text/b+c']", 1 },
 			{ "MetaMatch-9", "*/*", "['text/b+c','text/a']", 0 },
 
 			// Reverse meta-character matches
 			{ "RevMetaMatch-1", "text/a", "['text/*']", 0 },
-			{ "RevMetaMatch-3", "text/a", "['*/a']", 0 },
+			{ "RevMetaMatch-2", "text/a", "['*/a']", 0 },
 			{ "RevMetaMatch-3", "text/a", "['*/*']", 0 },
 
 			// Meta-character mixture matches
@@ -72,28 +72,32 @@ public class AcceptTest {
 			{ "Fuzzy-1", "text/1+2", "['text/1+2']", 0 },
 			// Order of subtype parts shouldn't matter.
 			{ "Fuzzy-2", "text/2+1", "['text/1+2']", 0 },
+			
 			// Should match if Accept has 'extra' subtypes.
 			// For example, "Accept: text/json+activity" should match against the "text/json" serializer.
-			{ "Fuzzy-3", "text/1+2", "['text/1']", 0 },
+			{ "Fuzzy-3", "text/json+foo", "['text/json+*']", 0 },
+			
 			// Shouldn't match because the accept media type must be at least a subset of the real media type
 			// For example, "Accept: text/json" should not match against the "text/json+lax" serializer.
-			{ "Fuzzy-4", "text/1", "['text/1+2']", -1 },
-			{ "Fuzzy-5", "text/1+2", "['text/1','text/1+3']", 0 },
+			{ "Fuzzy-4", "text/json", "['text/json+lax']", -1 },
+			
+			{ "Fuzzy-5", "text/1+2", "['text/1','text/1+3']", -1 },
+			
 			// "text/1+2" should be a better match than just "text/1"
 			{ "Fuzzy-6", "text/1+2", "['text/1','text/1+2','text/1+2+3']", 1 },
 			// Same as last, but mix up the order a bit.
 			{ "Fuzzy-7", "text/1+2", "['text/1+2+3','text/1','text/1+2']", 2 },
 			// Same as last, but mix up the order of the subtypes as well.
 			{ "Fuzzy-8", "text/1+2", "['text/3+2+1','text/1','text/2+1']", 2 },
-			{ "Fuzzy-9", "text/1+2+3+4", "['text/1+2','text/1+2+3']", 1 },
-			{ "Fuzzy-10", "text/1+2+3+4", "['text/1+2+3','text/1+2']", 0 },
-			{ "Fuzzy-11", "text/4+2+3+1", "['text/1+2+3','text/1+2']", 0 },
-			{ "Fuzzy-12", "text/4+2+3+1", "['text/1+2','text/1+2+3']", 1 },
+			{ "Fuzzy-9", "text/1+2+3+4", "['text/1+2','text/1+2+3']", -1 },
+			{ "Fuzzy-10", "text/1+2+3+4", "['text/1+2+3','text/1+2']", -1 },
+			{ "Fuzzy-11", "text/4+2+3+1", "['text/1+2+3','text/1+2']", -1 },
+			{ "Fuzzy-12", "text/4+2+3+1", "['text/1+2','text/1+2+3']", -1 },
 
 			// Q metrics
 			{ "Q-1", "text/A;q=0.9,text/B;q=0.1", "['text/A','text/B']", 0 },
 			{ "Q-2", "text/A;q=0.9,text/B;q=0.1", "['text/B','text/A']", 1 },
-			{ "Q-3", "text/A+1;q=0.9,text/B;q=0.1", "['text/A','text/B']", 0 },
+			{ "Q-3", "text/A+1;q=0.9,text/B;q=0.1", "['text/A','text/B']", 1 },
 			{ "Q-4", "text/A;q=0.9,text/B+1;q=0.1", "['text/A','text/B+1']", 0 },
 			{ "Q-5", "text/A;q=0.9,text/A+1;q=0.1", "['text/A+1','text/A']", 1 },
 
@@ -104,6 +108,42 @@ public class AcceptTest {
 			// Test media types with parameters
 			{ "Parms-1", "text/A", "['text/A;foo=bar','text/B']", 0 },
 			{ "Parms-2", "text/A;foo=bar", "['text/A','text/B']", 0 },
+			
+			// Real-world JSON
+			{ "Json-1a", "text/json", "['text/json','text/json+*','text/*','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-1b", "text/json", "['text/json+*','text/*','text/json+lax','text/json+lax+*','text/foo','text/json']", 5 },
+			{ "Json-1c", "text/json", "['text/json+*','text/*','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-1d", "text/json", "['text/*','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-1e", "text/json", "['text/json+lax','text/json+lax+*','text/foo']", -1 },
+			
+			{ "Json-2a", "text/json+lax", "['text/json+lax','text/json+lax+*','text/json+*','text/lax+*','text/*','text/json','text/lax']", 0 },
+			{ "Json-2b", "text/json+lax", "['text/json+lax+*','text/json+*','text/lax+*','text/*','text/json','text/lax']", 0 },
+			{ "Json-2c", "text/json+lax", "['text/json+*','text/lax+foo+*','text/*','text/json','text/lax']", 0 },
+			{ "Json-2d", "text/json+lax", "['text/lax+*','text/*','text/json','text/lax']", 0 },
+			{ "Json-2e", "text/json+lax", "['text/*','text/json','text/lax']", 0 },
+			{ "Json-2f", "text/json+lax", "['text/json','text/lax']", -1 },
+			
+			{ "Json-3a", "text/json+activity", "['text/json+activity','text/activity+json','text/json+activity+*','text/json+*','text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-3b", "text/json+activity", "['text/activity+json','text/json+activity+*','text/json+*','text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-3c", "text/json+activity", "['text/json+activity+*','text/json+*','text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-3d", "text/json+activity", "['text/json+*','text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-3e", "text/json+activity", "['text/*','text/json','text/json+lax','text/json+lax+*','text/foo']", 0 },
+			{ "Json-3f", "text/json+activity", "['text/json','text/json+lax','text/json+lax+*','text/foo']", -1 },
+
+			// Real-world XML
+			{ "Xml-1a", "text/xml", "['text/xml','text/xml+*','text/xml+rdf','text/foo']", 0 },
+			{ "Xml-1b", "text/xml", "['text/xml+*','text/xml+rdf','text/foo']", 0 },
+			{ "Xml-1c", "text/xml", "['text/xml+rdf','text/foo']", -1 },
+			{ "Xml-1d", "text/xml", "['text/foo']", -1 },
+
+			{ "Xml-2a", "text/xml+id", "['text/xml+*','text/xml','text/xml+rdf']", 0 },
+			{ "Xml-2b", "text/xml+id", "['text/xml','text/xml+rdf']", -1 },
+			{ "Xml-2c", "text/xml+id", "['text/xml+rdf']", -1 },
+
+			// Real-world RDF
+			{ "Rdf-1a", "text/xml+rdf", "['text/xml+rdf','text/xml+*','text/xml']", 0 },
+			{ "Rdf-1b", "text/xml+rdf", "['text/xml+*','text/xml']", 0 },
+			{ "Rdf-1c", "text/xml+rdf", "['text/xml']", -1 },
 		});
 	}
 
@@ -123,5 +163,15 @@ public class AcceptTest {
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		int r = accept.findMatch(mt);
 		TestUtils.assertEquals(expected, r, "{0} failed", label);
+	}
+
+	@Test
+	public void testReversed() throws Exception {
+		Accept accept = Accept.forString(this.accept);
+		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
+		Collections.reverse(Arrays.asList(mt));
+		int r = accept.findMatch(mt);
+		int expected2 = expected == -1 ? -1 : mt.length-expected-1;
+		TestUtils.assertEquals(expected2, r, "{0} failed", label);
 	}
 }

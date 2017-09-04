@@ -68,7 +68,7 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 
 		aType = push(attrName, eType, null);
 
-		sType = eType.getSerializedClassMeta();
+		sType = eType.getSerializedClassMeta(this);
 		String type = null;
 
 		if (sType.isEnum() || sType.isCharSequence() || sType.isChar())
@@ -86,7 +86,7 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 
 		out.put("type", type);
 		out.put("class", eType.toString());
-		PojoSwap t = eType.getPojoSwap();
+		PojoSwap t = eType.getPojoSwap(this);
 		if (t != null)
 			out.put("transform", t);
 

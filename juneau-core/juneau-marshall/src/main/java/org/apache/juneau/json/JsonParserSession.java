@@ -109,8 +109,8 @@ public final class JsonParserSession extends ReaderParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
-		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 		setCurrentClass(sType);
 		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 
@@ -205,8 +205,8 @@ public final class JsonParserSession extends ReaderParserSession {
 		if (wrapperAttr != null)
 			skipWrapperAttrEnd(r);
 
-		if (transform != null && o != null)
-			o = transform.unswap(this, o, eType);
+		if (swap != null && o != null)
+			o = swap.unswap(this, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);

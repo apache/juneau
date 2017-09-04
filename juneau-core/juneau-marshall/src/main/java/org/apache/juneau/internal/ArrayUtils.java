@@ -416,4 +416,20 @@ public final class ArrayUtils {
 			r[i++] = StringUtils.toString(o);
 		return r;
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the following sorted arrays are equals.
+	 *
+	 * @param a1 Array #1.
+	 * @param a2 Array #2.
+	 * @return <jk>true</jk> if the following sorted arrays are equals.
+	 */
+	public static boolean equals(String[] a1, String[] a2) {
+		if (a1.length != a2.length)
+			return false;
+		for (int i = 0; i < a1.length; i++)
+			if (! StringUtils.isEquals(a1[i], a2[i]))
+				return false;
+		return true;
+	}
 }

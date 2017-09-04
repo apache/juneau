@@ -210,7 +210,7 @@ public class BeanPropertyMeta {
 				return false;
 
 			if (typeMeta == null)
-				typeMeta = (swap != null ? swap.getSwapClassMeta(beanContext) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta.getSerializedClassMeta());
+				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
 

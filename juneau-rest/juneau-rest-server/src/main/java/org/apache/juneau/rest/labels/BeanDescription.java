@@ -67,7 +67,7 @@ public final class BeanDescription {
 		 */
 		public BeanPropertyDescription(String name, ClassMeta<?> type) {
 			this.name = name;
-			this.type = type.getSerializedClassMeta().toString();
+			this.type = type.getSerializedClassMeta(null).toString();
 		}
 	}
 }

@@ -62,7 +62,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		Namespace xs = xsNamespace;
 		Namespace[] allNs = append(new Namespace[]{defaultNamespace}, namespaces);
 
-		Schemas schemas = new Schemas(xs, defaultNamespace, allNs);
+		Schemas schemas = new Schemas(this, xs, defaultNamespace, allNs);
 		schemas.process(o);
 		schemas.serializeTo(out.getWriter());
 	}
@@ -144,12 +144,14 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		private static final long serialVersionUID = 1L;
 
 		private Namespace defaultNs;
+		private BeanSession session;
 		private LinkedList<QueueEntry>
 			elementQueue = new LinkedList<QueueEntry>(),
 			attributeQueue = new LinkedList<QueueEntry>(),
 			typeQueue = new LinkedList<QueueEntry>();
 
-		private Schemas(Namespace xs, Namespace defaultNs, Namespace[] allNs) throws IOException {
+		private Schemas(BeanSession session, Namespace xs, Namespace defaultNs, Namespace[] allNs) throws IOException {
+			this.session = session;
 			this.defaultNs = defaultNs;
 			for (Namespace ns : allNs)
 				put(ns, new Schema(this, xs, ns, defaultNs, allNs));
@@ -264,7 +266,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 				return false;
 			processedElements.add(name);
 
-			ClassMeta<?> ft = cm.getSerializedClassMeta();
+			ClassMeta<?> ft = cm.getSerializedClassMeta(schemas.session);
 			if (name == null)
 				name = getElementName(ft);
 			Namespace ns = first(ft.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
@@ -302,7 +304,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 			int i = indent + 1;
 
-			cm = cm.getSerializedClassMeta();
+			cm = cm.getSerializedClassMeta(schemas.session);
 			XmlBeanMeta xbm = cm.isBean() ? cm.getBeanMeta().getExtendedMeta(XmlBeanMeta.class) : null;
 
 			w.oTag(i, "complexType")
@@ -477,7 +479,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		}
 
 		private String getElementName(ClassMeta<?> cm) {
-			cm = cm.getSerializedClassMeta();
+			cm = cm.getSerializedClassMeta(schemas.session);
 			String name = cm.getDictionaryName();
 
 			if (name == null) {
@@ -507,7 +509,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 		private String getXmlType(Namespace currentNs, ClassMeta<?> cm) {
 			String name = null;
-			cm = cm.getSerializedClassMeta();
+			cm = cm.getSerializedClassMeta(schemas.session);
 			if (currentNs == targetNs) {
 				if (cm.isPrimitive()) {
 					if (cm.isBoolean())

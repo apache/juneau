@@ -357,19 +357,19 @@ public class BeanSession extends Session {
 			if (tc == Class.class)
 				return (T)(ctx.classLoader.loadClass(value.toString()));
 
-			if (type.getPojoSwap() != null) {
-				PojoSwap f = type.getPojoSwap();
-				Class<?> nc = f.getNormalClass(), fc = f.getSwapClass();
+			PojoSwap swap = type.getPojoSwap(this);
+			if (swap != null) {
+				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (isParentClass(nc, tc) && isParentClass(fc, value.getClass()))
-					return (T)f.unswap(this, value, type);
+					return (T)swap.unswap(this, value, type);
 			}
 
 			ClassMeta<?> vt = ctx.getClassMetaForObject(value);
-			if (vt.getPojoSwap() != null) {
-				PojoSwap f = vt.getPojoSwap();
-				Class<?> nc = f.getNormalClass(), fc = f.getSwapClass();
+			swap = vt.getPojoSwap(this);
+			if (swap != null) {
+				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (isParentClass(nc, vt.getInnerClass()) && isParentClass(fc, tc))
-					return (T)f.swap(this, value);
+					return (T)swap.swap(this, value);
 			}
 
 			if (type.isPrimitive()) {

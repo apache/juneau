@@ -278,17 +278,4 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 		int i = o.mediaType.toString().compareTo(mediaType.toString());
 		return i;
 	}
-
-	/**
-	 * Matches the specified media type against this range and returns a q-value between 0 and 1 indicating the
-	 * quality of the match.
-	 *
-	 * @param o The media type to match against.
-	 * @return A float between 0 and 1.  1 is a perfect match.  0 is no match at all.
-	 */
-	public float matches(MediaType o) {
-		if (this.mediaType == o || mediaType.matches(o))
-			return qValue;
-		return 0;
-	}
 }

@@ -263,15 +263,17 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				aType = ((Delegate)o).getClassMeta();
 			}
 
-			sType = aType.getSerializedClassMeta();
+			sType = aType;
+
 			String typeName = null;
 			if (isAddBeanTypeProperties() && ! eType.equals(aType))
 				typeName = aType.getDictionaryName();
 
 			// Swap if necessary
-			PojoSwap swap = aType.getPojoSwap();
+			PojoSwap swap = aType.getPojoSwap(this);
 			if (swap != null) {
 				o = swap.swap(this, o);
+				sType = swap.getSwapClassMeta(this);
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
@@ -564,10 +566,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			for (Object o : c) {
 				ClassMeta<?> cm = getClassMetaForObject(o);
 
-				if (cm != null && cm.getPojoSwap() != null) {
-					PojoSwap f = cm.getPojoSwap();
-					o = f.swap(this, o);
-					cm = cm.getSerializedClassMeta();
+				if (cm != null && cm.getPojoSwap(this) != null) {
+					PojoSwap swap = cm.getPojoSwap(this);
+					o = swap.swap(this, o);
+					cm = swap.getSwapClassMeta(this);
 				}
 
 				out.oTag(i+1, "tr");
@@ -705,11 +707,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (o1 == null)
 			return null;
 		ClassMeta<?> cm = getClassMetaForObject(o1);
-		if (cm.getPojoSwap() != null) {
-			PojoSwap f = cm.getPojoSwap();
-			o1 = f.swap(this, o1);
-			cm = cm.getSerializedClassMeta();
+
+		PojoSwap swap = cm.getPojoSwap(this);
+		if (swap != null) {
+			o1 = swap.swap(this, o1);
+			cm = swap.getSwapClassMeta(this);
 		}
+
 		if (cm == null || ! cm.isMapOrBean())
 			return null;
 		if (cm.getInnerClass().isAnnotationPresent(HtmlLink.class))
@@ -767,10 +771,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (o == null)
 				continue;
 			cm = getClassMetaForObject(o);
-			if (cm != null && cm.getPojoSwap() != null) {
-				PojoSwap f = cm.getPojoSwap();
-				o = f.swap(this, o);
-				cm = cm.getSerializedClassMeta();
+
+			PojoSwap ps = cm == null ? null : cm.getPojoSwap(this);
+			if (ps != null) {
+				o = ps.swap(this, o);
+				cm = ps.getSwapClassMeta(this);
 			}
 			if (prevC.contains(cm))
 				continue;

@@ -17,6 +17,8 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 
@@ -114,25 +116,31 @@ import org.apache.juneau.serializer.*;
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */
+@SuppressWarnings({"unchecked","rawtypes","hiding"})
 public abstract class PojoSwap<T,S> {
 
 	/**
 	 * Represents a non-existent pojo swap.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public final static PojoSwap NULL = new PojoSwap(null, null) {};
+	public final static PojoSwap NULL = new PojoSwap((Class)null, (Class)null) {};
 
 	private final Class<T> normalClass;
 	private final Class<?> swapClass;
 	private ClassMeta<?> swapClassMeta;
 
+	// Unfortunately these cannot be made final because we want to allow for PojoSwaps with no-arg constructors
+	// which simplifies
+	private MediaType[] forMediaTypes;
+	private String template;
+
 	/**
 	 * Constructor.
 	 */
-	@SuppressWarnings("unchecked")
 	protected PojoSwap() {
 		normalClass = (Class<T>)resolveParameterType(PojoSwap.class, 0, this.getClass());
 		swapClass = resolveParameterType(PojoSwap.class, 1, this.getClass());
+		forMediaTypes = forMediaTypes();
+		template = withTemplate();
 	}
 
 	/**
@@ -144,6 +152,49 @@ public abstract class PojoSwap<T,S> {
 	protected PojoSwap(Class<T> normalClass, Class<?> swapClass) {
 		this.normalClass = normalClass;
 		this.swapClass = swapClass;
+		this.forMediaTypes = forMediaTypes();
+		this.template = withTemplate();
+	}
+
+	protected MediaType[] forMediaTypes() {
+		return null;
+	}
+
+	protected String withTemplate() {
+		return null;
+	}
+
+	public PojoSwap<T,?> forMediaTypes(MediaType[] mediaTypes) {
+		if (mediaTypes != null && mediaTypes.length > 0)
+			this.forMediaTypes = mediaTypes;
+		return this;
+	}
+
+	public PojoSwap<T,?> withTemplate(String template) {
+		if (! StringUtils.isEmpty(template))
+			this.template = template;
+		return this;
+	}
+
+//	/**
+//	 * Returns <jk>true</jk> if this swap is valid for the specified session.
+//	 *
+//	 * <p>
+//	 * If the swap has a media type associated with it, this method ensures that the media type matches the media
+//	 * type defined on the session.
+//	 *
+//	 * @param session The bean session.
+//	 * @return <jk>true</jk> if this swap is valid for the specified session.
+//	 */
+	public int match(BeanSession session) {
+		if (forMediaTypes == null)
+			return 1;
+		int i = 0;
+		MediaType mt = session.getMediaType();
+		if (forMediaTypes != null)
+			for (MediaType mt2 : forMediaTypes)
+				i = Math.max(i, mt2.match(mt, false)*2);
+		return i;
 	}
 
 	/**
@@ -176,6 +227,22 @@ public abstract class PojoSwap<T,S> {
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	public S swap(BeanSession session, T o) throws Exception {
+		return swap(session, o, template);
+	}
+
+	/**
+	 * Same as {@link #swap(BeanSession, Object)}, but can be used if your swap has a template associated with it.
+	 *
+	 * @param session
+	 * 	The bean session to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
+	 * @param o The object to be transformed.
+	 * @param template
+	 * 	The template string associated with this swap.
+	 * @return The transformed object.
+	 * @throws Exception If a problem occurred trying to convert the output.
+	 */
+	public S swap(BeanSession session, T o, String template) throws Exception {
 		throw new SerializeException("Swap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 
@@ -195,6 +262,27 @@ public abstract class PojoSwap<T,S> {
 	 * @throws Exception If this method is not implemented.
 	 */
 	public T unswap(BeanSession session, S f, ClassMeta<?> hint) throws Exception {
+		return unswap(session, f, hint, template);
+	}
+
+	/**
+	 * Same as {@link #unswap(BeanSession, Object, ClassMeta)}, but can be used if your swap has a template associated with it.
+	 *
+	 * @param session
+	 * 	The bean session to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
+	 * @param f The transformed object.
+	 * @param hint
+	 * 	If possible, the parser will try to tell you the object type being created.
+	 * 	For example, on a serialized date, this may tell you that the object being created must be of type
+	 * 	{@code GregorianCalendar}.
+	 * 	<br>This may be <jk>null</jk> if the parser cannot make this determination.
+	 * @param template
+	 * 	The template string associated with this swap.
+	 * @return The transformed object.
+	 * @throws Exception If a problem occurred trying to convert the output.
+	 */
+	public T unswap(BeanSession session, S f, ClassMeta<?> hint, String template) throws Exception {
 		throw new ParseException("Unswap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 
@@ -226,14 +314,14 @@ public abstract class PojoSwap<T,S> {
 	 * <p>
 	 * This value is cached for quick lookup.
 	 *
-	 * @param beanContext
+	 * @param session
 	 * 	The bean context to use to get the class meta.
 	 * 	This is always going to be the same bean context that created this swap.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
-	public ClassMeta<?> getSwapClassMeta(BeanContext beanContext) {
+	public ClassMeta<?> getSwapClassMeta(BeanSession session) {
 		if (swapClassMeta == null)
-			swapClassMeta = beanContext.getClassMeta(swapClass);
+			swapClassMeta = session.getClassMeta(swapClass);
 		return swapClassMeta;
 	}
 

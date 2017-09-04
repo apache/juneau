@@ -535,7 +535,7 @@ public abstract class SerializerSession extends BeanSession {
 		try {
 			if (o == null)
 				return null;
-			PojoSwap f = (type == null || type.isObject() ? getClassMeta(o.getClass()).getPojoSwap() : type.getPojoSwap());
+			PojoSwap f = (type == null || type.isObject() ? getClassMeta(o.getClass()).getPojoSwap(this) : type.getPojoSwap(this));
 			if (f == null)
 				return o;
 			return f.swap(this, o);
@@ -744,8 +744,8 @@ public abstract class SerializerSession extends BeanSession {
 			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']');
 			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
-			if (aType != aType.getSerializedClassMeta())
-				sb.append('/').append(aType.getSerializedClassMeta().toString(simple));
+			if (aType != aType.getSerializedClassMeta(null))
+				sb.append('/').append(aType.getSerializedClassMeta(null).toString(simple));
 			return sb.toString();
 		}
 	}

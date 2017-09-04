@@ -456,7 +456,13 @@ public final class ClassUtils {
 			oc = oc.getSuperclass();
 		}
 
-		ParameterizedType opt = (ParameterizedType)oc.getGenericSuperclass();
+		Type gsc = oc.getGenericSuperclass();
+		
+		// Not actually a parameterized type.
+		if (! (gsc instanceof ParameterizedType))
+			return Object.class;
+
+		ParameterizedType opt = (ParameterizedType)gsc;
 		Type actualType = opt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))

@@ -219,7 +219,8 @@ public final class Accept {
 
 			for (int i = 0; i < mediaTypes.length; i++) {
 				MediaType mt = mediaTypes[i];
-				int matchQuant2 = mt.match(mr.getMediaType());
+				int matchQuant2 = mr.getMediaType().match(mt, false);
+
 				if (matchQuant2 > matchQuant) {
 					matchIndex = i;
 					matchQuant = matchQuant2;

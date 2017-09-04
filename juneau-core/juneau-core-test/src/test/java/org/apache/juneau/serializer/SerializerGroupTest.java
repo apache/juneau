@@ -52,19 +52,19 @@ public class SerializerGroupTest {
 
 	public static class SA1 extends JsonSerializer {
 		public SA1(PropertyStore propertyStore) {
-			super(propertyStore, "application/json", "text/foo", "text/foo_a");
+			super(propertyStore, "application/json", "text/foo+*", "text/foo_a+*");
 		}
 	}
 
 	public static class SA2 extends JsonSerializer {
 		public SA2(PropertyStore propertyStore) {
-			super(propertyStore, "application/json", "text/foo+bar", "text/foo+bar_a");
+			super(propertyStore, "application/json", "text/foo+bar+*", "text/foo+bar_a+*");
 		}
 	}
 
 	public static class SA3 extends JsonSerializer {
 		public SA3(PropertyStore propertyStore) {
-			super(propertyStore, "application/json", "text/baz", "text/baz_a");
+			super(propertyStore, "application/json", "text/baz+*", "text/baz_a+*");
 		}
 	}
 

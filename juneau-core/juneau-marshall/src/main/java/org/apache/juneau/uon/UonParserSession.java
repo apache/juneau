@@ -122,8 +122,8 @@ public class UonParserSession extends ReaderParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
-		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 
 		Object o = null;
 
@@ -248,8 +248,8 @@ public class UonParserSession extends ReaderParserSession {
 
 		if (o == null && sType.isPrimitive())
 			o = sType.getPrimitiveDefault();
-		if (transform != null && o != null)
-			o = transform.unswap(this, o, eType);
+		if (swap != null && o != null)
+			o = swap.unswap(this, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);

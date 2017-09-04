@@ -224,7 +224,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("bar", t.f1);
 	}
 
-	@Pojo(swap=BSwap.class)
+	@Swap(BSwap.class)
 	public static class B {
 		public String f1;
 	}

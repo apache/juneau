@@ -95,7 +95,7 @@ public class ContentType extends MediaType {
 
 		for (int i = 0; i < mediaTypes.length; i++) {
 			MediaType mt = mediaTypes[i];
-			int matchQuant2 = mt.match(this);
+			int matchQuant2 = mt.match(this, true);
 			if (matchQuant2 > matchQuant) {
 				matchQuant = matchQuant2;
 				matchIndex = i;

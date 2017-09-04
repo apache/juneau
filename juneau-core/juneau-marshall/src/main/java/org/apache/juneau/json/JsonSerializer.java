@@ -148,7 +148,7 @@ public class JsonSerializer extends WriterSerializer {
 					.append(JSON_simpleMode, true)
 					.append(SERIALIZER_quoteChar, '\''),
 				"application/json",
-				"application/json+simple", "text/json+simple"
+				"application/json+simple", "application/json+simple+*", "text/json+simple", "text/json+simple+*"
 			);
 		}
 	}
@@ -204,7 +204,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	The property store containing all the settings for this object.
 	 */
 	public JsonSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "application/json", "application/json", "text/json");
+		this(propertyStore, "application/json", "application/json", "application/json+*", "text/json", "text/json+*");
 	}
 
 	/**

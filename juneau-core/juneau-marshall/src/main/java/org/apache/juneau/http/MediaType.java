@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -64,9 +66,10 @@ public class MediaType implements Comparable<MediaType> {
 	private final String type;								     // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
 	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
 	private final String[] subTypes;                     // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
+	private final String[] subTypesSorted;               // Same as subTypes, but sorted so that it can be used for comparison.
 	private final List<String> subTypesList;             // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
 	private final Map<String,Set<String>> parameters;    // The media type parameters (e.g. "text/html;level=1").  Does not include q!
-
+	private final boolean hasSubtypeMeta;                // The media subtype contains meta-character '*'.
 
 	/**
 	 * Returns the media type for the specified string.
@@ -87,11 +90,11 @@ public class MediaType implements Comparable<MediaType> {
 	 * @param s
 	 * 	The media type string.
 	 * 	Will be lowercased.
-	 * 	Returns <jk>null</jk> if input is null.
+	 * 	Returns <jk>null</jk> if input is null or empty.
 	 * @return A cached media type object.
 	 */
 	public static MediaType forString(String s) {
-		if (s == null)
+		if (isEmpty(s))
 			return null;
 		MediaType mt = cache.get(s);
 		if (mt == null) {
@@ -103,20 +106,40 @@ public class MediaType implements Comparable<MediaType> {
 		return cache.get(s);
 	}
 
+	/**
+	 * Same as {@link #forString(String)} but allows you to construct an array of <code>MediaTypes</code> from an
+	 * array of strings.
+	 *
+	 * @param s
+	 * 	The media type strings.
+	 * @return
+	 * 	An array of <code>MediaType</code> objects.
+	 * 	<br>Always the same length as the input string array.
+	 */
+	public static MediaType[] forStrings(String...s) {
+		MediaType[] mt = new MediaType[s.length];
+		for (int i = 0; i < s.length; i++)
+			mt[i] = forString(s[i]);
+		return mt;
+	}
+
 	MediaType(String mt) {
 		Builder b = new Builder(mt);
 		this.mediaType = b.mediaType;
 		this.type = b.type;
 		this.subType = b.subType;
 		this.subTypes = b.subTypes;
+		this.subTypesSorted = b.subTypesSorted;
 		this.subTypesList = Collections.unmodifiableList(Arrays.asList(subTypes));
 		this.parameters = (b.parameters == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(b.parameters));
+		this.hasSubtypeMeta = b.hasSubtypeMeta;
 	}
 
 	private static class Builder {
 		private String mediaType, type, subType;
-		private String[] subTypes;
+		private String[] subTypes, subTypesSorted;
 		private Map<String,Set<String>> parameters;
+		private boolean hasSubtypeMeta;
 
 		private Builder(String mt) {
 			mt = mt.trim();
@@ -149,6 +172,9 @@ public class MediaType implements Comparable<MediaType> {
 				subType = (i == -1 ? "*" : mt.substring(i+1));
 			}
 			this.subTypes = StringUtils.split(subType, '+');
+			this.subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
+			Arrays.sort(this.subTypesSorted);
+			hasSubtypeMeta = ArrayUtils.contains("*", this.subTypes);
 		}
 	}
 
@@ -200,33 +226,28 @@ public class MediaType implements Comparable<MediaType> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this media type is a match for the specified media type.
+	 * Returns <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
 	 *
-	 * <p>
-	 * Matches if any of the following is true:
-	 * <ul>
-	 * 	<li>Both type and subtype are the same.
-	 * 	<li>One or both types are <js>'*'</js> and the subtypes are the same.
-	 * 	<li>One or both subtypes are <js>'*'</js> and the types are the same.
-	 * 	<li>Either is <js>'*\/*'</js>.
-	 * </ul>
-	 *
-	 * @param o The media type to compare with.
-	 * @return <jk>true</jk> if the media types match.
+	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
 	 */
-	public final boolean matches(MediaType o) {
-		return match(o) > 0;
+	public final boolean isMeta() {
+		return hasSubtypeMeta;
 	}
 
 	/**
 	 * Returns a match metric against the specified media type where a larger number represents a better match.
 	 *
+	 * <p>
+	 * This media type can contain <js>'*'</js> metacharacters.
+	 * <br>The comparison media type must not.
+	 *
 	 * <ul>
 	 * 	<li>Exact matches (e.g. <js>"text/json"<js>/</js>"text/json"</js>) should match
 	 * 		better than meta-character matches (e.g. <js>"text/*"<js>/</js>"text/json"</js>)
 	 * 	<li>The comparison media type can have additional subtype tokens (e.g. <js>"text/json+foo"</js>)
-	 * 		that will not prevent a match.  The reverse is not true, e.g. the comparison media type
-	 * 		must contain all subtype tokens found in the comparing media type.
+	 * 		that will not prevent a match if the <code>allowExtraSubTypes</code> flag is set.
+	 * 		The reverse is not true, e.g. the comparison media type must contain all subtype tokens found in the
+	 * 		comparing media type.
 	 * 		<ul>
 	 * 			<li>We want the {@link JsonSerializer} (<js>"text/json"</js>) class to be able to handle requests for <js>"text/json+foo"</js>.
 	 * 			<li>We want to make sure {@link org.apache.juneau.json.JsonSerializer.Simple} (<js>"text/json+simple"</js>) does not handle
@@ -235,43 +256,70 @@ public class MediaType implements Comparable<MediaType> {
 	 * 		More token matches should result in a higher match number.
 	 * </ul>
 	 *
+	 * The formula is as follows for <code>type/subTypes</code>:
+	 * <ul>
+	 * 	<li>An exact match is <code>100,000</code>.
+	 * 	<li>Add the following for type (assuming subtype match is &lt;0):
+	 * 	<ul>
+	 * 		<li><code>10,000</code> for an exact match (e.g. <js>"text"</js>==<js>"text"</js>).
+	 * 		<li><code>5,000</code> for a meta match (e.g. <js>"*"</js>==<js>"text"</js>).
+	 * 	<ul>
+	 * 	<li>Add the following for subtype (assuming type match is &lt;0):
+	 * 	<ul>
+	 * 		<li><code>7,500</code> for an exact match (e.g. <js>"json+foo"</js>==<js>"json+foo"</js> or <js>"json+foo"</js>==<js>"foo+json"</js>)
+	 * 		<li><code>100</code> for every subtype entry match (e.g. <js>"json"</js>/<js>"json+foo"</js>)
+	 * 		<li><code>10</code> for a subtype entry meta match (e.g. <js>"*"</js>/<js>"json"</js> or <js>"json+*"</js>/<js>"json+foo"</js>)
+	 * 	</ul>
+	 * </ul>
+	 *
 	 * @param o The media type to compare with.
+	 * @param allowExtraSubTypes If <jk>true</jk>,
 	 * @return <jk>true</jk> if the media types match.
 	 */
-	public final int match(MediaType o) {
+	public final int match(MediaType o, boolean allowExtraSubTypes) {
 
 		// Perfect match
 		if (this == o || (type.equals(o.type) && subType.equals(o.subType)))
-			return Integer.MAX_VALUE;
+			return 100000;
 
-		int c1 = 0, c2 = 0;
+		int c = 0;
 
 		if (type.equals(o.type))
-			c1 += 10000;
+			c += 10000;
 		else if ("*".equals(type) || "*".equals(o.type))
-			c1 += 5000;
+			c += 5000;
 
-		if (c1 == 0)
+		if (c == 0)
 			return 0;
 
-		// Give type slightly higher comparison value than subtype simply for deterministic results.
-		if (subType.equals(o.subType))
-			return c1 + 9999;
-
-		int c3 = 0;
+		// Subtypes match but are ordered different
+		if (ArrayUtils.equals(subTypesSorted, o.subTypesSorted))
+			return c + 7500;
 
 		for (String st1 : subTypes) {
 			if ("*".equals(st1))
-				c1++;
+				c += 0;
 			else if (ArrayUtils.contains(st1, o.subTypes))
-				c1 += 100;
-			else if (ArrayUtils.contains("*", o.subTypes))
-				c1 += 10;
+				c += 100;
+			else if (o.hasSubtypeMeta)
+				c += 10;
 			else
 				return 0;
 		}
+		for (String st2 : o.subTypes) {
+			if ("*".equals(st2))
+				c += 0;
+			else if (ArrayUtils.contains(st2, subTypes))
+				c += 100;
+			else if (hasSubtypeMeta)
+				c += 10;
+			else if (! allowExtraSubTypes)
+				return 0;
+			else
+				c += 10;
+		}
 
-		return c1 + c2 + c3;
+		return c;
 	}
 
 	/**

@@ -692,8 +692,8 @@ public abstract class ParserSession extends BeanSession {
 
 		if (type == null)
 			type = (ClassMeta<T>)object();
-		PojoSwap transform = type.getPojoSwap();
-		ClassMeta<?> sType = type.getSerializedClassMeta();
+		PojoSwap swap = type.getPojoSwap(this);
+		ClassMeta<?> sType = swap == null ? type : swap.getSwapClassMeta(this);
 
 		Object o = s;
 		if (sType.isChar())
@@ -712,8 +712,8 @@ public abstract class ParserSession extends BeanSession {
 				throw new ParseException(getLastLocation(), "Invalid conversion from string to class ''{0}''", type);
 		}
 
-		if (transform != null)
-			o = transform.unswap(this, o, type);
+		if (swap != null)
+			o = swap.unswap(this, o, type);
 
 		return (T)o;
 	}

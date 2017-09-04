@@ -72,7 +72,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 		aType = push(attrName, eType, null);
 
-		sType = eType.getSerializedClassMeta();
+		sType = eType.getSerializedClassMeta(this);
 		String type = null;
 
 		if (sType.isEnum() || sType.isCharSequence() || sType.isChar())
@@ -90,7 +90,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 		out.put("type", type);
 		out.put("description", eType.toString());
-		PojoSwap f = eType.getPojoSwap();
+		PojoSwap f = eType.getPojoSwap(this);
 		if (f != null)
 			out.put("transform", f);
 

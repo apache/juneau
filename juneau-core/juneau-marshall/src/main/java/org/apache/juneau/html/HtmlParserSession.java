@@ -83,8 +83,8 @@ public final class HtmlParserSession extends XmlParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
-		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		ClassMeta<?> sType = transform == null ? eType : transform.getSwapClassMeta(this);
 		setCurrentClass(sType);
 
 		int event = r.getEventType();

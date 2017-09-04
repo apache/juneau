@@ -59,7 +59,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 * @return <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
-		ClassMeta<?> cm = pMeta.getClassMeta();
+		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
 			if (expandedParams)
 				return true;
@@ -89,8 +89,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
-		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 
 		int c = r.peekSkipWs();
 		if (c == '?')
@@ -139,8 +139,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 			}
 		}
 
-		if (transform != null && o != null)
-			o = transform.unswap(this, o, eType);
+		if (swap != null && o != null)
+			o = swap.unswap(this, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);

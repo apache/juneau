@@ -349,7 +349,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		super(comboInput);
 	}
 
-	@Pojo(swap=PojoToSimpleReaderSwap.class)
+	@Swap(PojoToSimpleReaderSwap.class)
 	public static class PojoToSimpleReader {}
 	
 	public static class PojoToSimpleReaderSwap extends PojoSwap<PojoToSimpleReader,Reader> {
@@ -358,7 +358,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		}
 	}
 	
-	@Pojo(swap=PojoToDynamicReaderSwap.class)
+	@Swap(PojoToDynamicReaderSwap.class)
 	public static class PojoToDynamicReader {
 		private String f;
 		public PojoToDynamicReader(String f) {
@@ -372,7 +372,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		}
 	}
 	
-	@Pojo(swap=SometimesSwappedBeanSwap1.class)
+	@Swap(SometimesSwappedBeanSwap1.class)
 	public static class SometimesSwappedBean1 {
 		public String f;
 		public SometimesSwappedBean1(String f) {
@@ -389,7 +389,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		}
 	}
 	
-	@Pojo(swap=SometimesSwappedBeanSwap2.class)
+	@Swap(SometimesSwappedBeanSwap2.class)
 	public static class SometimesSwappedBean2 {
 		public String f;
 		public SometimesSwappedBean2(String f) {

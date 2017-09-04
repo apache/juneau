@@ -302,12 +302,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				eType = aType = ((Delegate<?>)o).getClassMeta();
 			}
 
-			sType = aType.getSerializedClassMeta();
+			sType = aType;
 
 			// Swap if necessary
-			PojoSwap swap = aType.getPojoSwap();
+			PojoSwap swap = aType.getPojoSwap(this);
 			if (swap != null) {
 				o = swap.swap(this, o);
+				sType = swap.getSwapClassMeta(this);
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
@@ -315,7 +316,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					sType = getClassMetaForObject(o);
 			}
 		} else {
-			sType = eType.getSerializedClassMeta();
+			sType = eType.getSerializedClassMeta(this);
 		}
 
 		// Does the actual type match the expected type?

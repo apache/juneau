@@ -94,13 +94,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			aType = object();
 		}
 
-		sType = aType.getSerializedClassMeta();
+		sType = aType;
 		String typeName = getBeanTypeName(eType, aType, pMeta);
 
 		// Swap if necessary
-		PojoSwap swap = aType.getPojoSwap();
+		PojoSwap swap = aType.getPojoSwap(this);
 		if (swap != null) {
 			o = swap.swap(this, o);
+			sType = swap.getSwapClassMeta(this);
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.

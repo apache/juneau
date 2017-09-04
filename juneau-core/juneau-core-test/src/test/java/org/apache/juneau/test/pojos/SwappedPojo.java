@@ -14,7 +14,7 @@ package org.apache.juneau.test.pojos;
 
 import org.apache.juneau.annotation.*;
 
-@Pojo(swap=SwappedPojoSwap.class)
+@Swap(SwappedPojoSwap.class)
 public class SwappedPojo {
 	public boolean wasUnswapped;
 }

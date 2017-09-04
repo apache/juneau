@@ -62,7 +62,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
 	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
-		ClassMeta<?> cm = pMeta.getClassMeta();
+		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
 			if (expandedParams)
 				return true;
@@ -78,7 +78,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	private boolean shouldUseExpandedParams(Object value) {
 		if (value == null || ! expandedParams)
 			return false;
-		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta();
+		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
 			if (expandedParams)
 				return true;
@@ -104,13 +104,14 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (aType == null)
 			aType = object();
 
-		sType = aType.getSerializedClassMeta();
+		sType = aType;
 		String typeName = getBeanTypeName(object(), aType, null);
 
 		// Swap if necessary
-		PojoSwap swap = aType.getPojoSwap();
+		PojoSwap swap = aType.getPojoSwap(this);
 		if (swap != null) {
 			o = swap.swap(this, o);
+			sType = swap.getSwapClassMeta(this);
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
@@ -218,6 +219,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		for (BeanPropertyValue p : m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
+			ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
 
 			String key = p.getName();
 			Object value = p.getValue();
@@ -225,13 +227,13 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			if (t != null)
 				onBeanGetterException(pMeta, t);
 
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(sMeta, key, value))
 				continue;
 
 			if (value != null && shouldUseExpandedParams(pMeta)) {
 				// Transformed object array bean properties may be transformed resulting in ArrayLists,
 				// so we need to check type if we think it's an array.
-				Iterator i = (cMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
+				Iterator i = (sMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
 				while (i.hasNext()) {
 					if (addAmp)
 						out.cr(indent).append('&');

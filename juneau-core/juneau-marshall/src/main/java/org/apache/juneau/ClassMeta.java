@@ -22,10 +22,12 @@ import java.lang.reflect.Proxy;
 import java.net.*;
 import java.net.URI;
 import java.util.*;
+import java.util.Date;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
@@ -93,12 +95,11 @@ public final class ClassMeta<T> implements Type {
 	private final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
 		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
 		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
-	private final PojoSwap<T,?> pojoSwap;                   // The object POJO swap associated with this bean (if it has one).
+	private final PojoSwap<T,?>[] pojoSwaps;                // The object POJO swaps associated with this bean (if it has any).
 	private final BeanFilter beanFilter;                    // The bean filter associated with this bean (if it has one).
 	private final MetadataMap extMeta;                      // Extended metadata
 	private final BeanContext beanContext;                  // The bean context that created this object.
 	private final ClassMeta<?>
-		serializedClassMeta,                                 // The transformed class type (if class has swap associated with it).
 		elementType,                                         // If ARRAY or COLLECTION, the element class type.
 		keyType,                                             // If MAP, the key class type.
 		valueType;                                           // If MAP, the value class type.
@@ -167,7 +168,7 @@ public final class ClassMeta<T> implements Type {
 			this.publicMethods = builder.publicMethods;
 			this.remoteableMethods = builder.remoteableMethods;
 			this.beanFilter = beanFilter;
-			this.pojoSwap = builder.pojoSwap;
+			this.pojoSwaps = builder.pojoSwaps.isEmpty() ? null : builder.pojoSwaps.toArray(new PojoSwap[builder.pojoSwaps.size()]);
 			this.extMeta = new MetadataMap();
 			this.keyType = builder.keyType;
 			this.valueType = builder.valueType;
@@ -177,7 +178,6 @@ public final class ClassMeta<T> implements Type {
 			this.initException = builder.initException;
 			this.typePropertyName = builder.typePropertyName;
 			this.dictionaryName = builder.dictionaryName;
-			this.serializedClassMeta = builder.serializedClassMeta;
 			this.invocationHandler = builder.invocationHandler;
 			this.beanRegistry = builder.beanRegistry;
 			this.isMemberClass = builder.isMemberClass;
@@ -231,7 +231,6 @@ public final class ClassMeta<T> implements Type {
 		this.remoteableMethods = mainType.remoteableMethods;
 		this.publicMethods = mainType.publicMethods;
 		this.beanContext = mainType.beanContext;
-		this.serializedClassMeta = this;
 		this.elementType = elementType;
 		this.keyType = keyType;
 		this.valueType = valueType;
@@ -240,7 +239,7 @@ public final class ClassMeta<T> implements Type {
 		this.typePropertyName = mainType.typePropertyName;
 		this.dictionaryName = mainType.dictionaryName;
 		this.notABeanReason = mainType.notABeanReason;
-		this.pojoSwap = mainType.pojoSwap;
+		this.pojoSwaps = mainType.pojoSwaps;
 		this.beanFilter = mainType.beanFilter;
 		this.extMeta = mainType.extMeta;
 		this.initException = mainType.initException;
@@ -278,7 +277,6 @@ public final class ClassMeta<T> implements Type {
 		this.remoteableMethods = null;
 		this.publicMethods = null;
 		this.beanContext = null;
-		this.serializedClassMeta = this;
 		this.elementType = null;
 		this.keyType = null;
 		this.valueType = null;
@@ -287,7 +285,7 @@ public final class ClassMeta<T> implements Type {
 		this.typePropertyName = null;
 		this.dictionaryName = null;
 		this.notABeanReason = null;
-		this.pojoSwap = null;
+		this.pojoSwaps = null;
 		this.beanFilter = null;
 		this.extMeta = new MetadataMap();
 		this.initException = null;
@@ -334,7 +332,7 @@ public final class ClassMeta<T> implements Type {
 			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
-		PojoSwap pojoSwap = null;
+		List<PojoSwap> pojoSwaps = new ArrayList<PojoSwap>();
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
 		PojoSwap<?,?>[] childPojoSwaps;
@@ -557,33 +555,36 @@ public final class ClassMeta<T> implements Type {
 				final Method fSwapMethod = swapMethod;
 				final Method fUnswapMethod = unswapMethod;
 				final Constructor<T> fSwapConstructor = swapConstructor;
-				this.pojoSwap = new PojoSwap<T,Object>(c, swapMethod.getReturnType()) {
-					@Override
-					public Object swap(BeanSession session, Object o) throws SerializeException {
-						try {
-							return fSwapMethod.invoke(o, session);
-						} catch (Exception e) {
-							throw new SerializeException(e);
+				this.pojoSwaps.add(
+					new PojoSwap<T,Object>(c, swapMethod.getReturnType()) {
+						@Override
+						public Object swap(BeanSession session, Object o) throws SerializeException {
+							try {
+								return fSwapMethod.invoke(o, session);
+							} catch (Exception e) {
+								throw new SerializeException(e);
+							}
+						}
+						@Override
+						public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
+							try {
+								if (fUnswapMethod != null)
+									return (T)fUnswapMethod.invoke(null, session, f);
+								if (fSwapConstructor != null)
+									return fSwapConstructor.newInstance(f);
+								return super.unswap(session, f, hint);
+							} catch (Exception e) {
+								throw new ParseException(e);
+							}
 						}
 					}
-					@Override
-					public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
-						try {
-							if (fUnswapMethod != null)
-								return (T)fUnswapMethod.invoke(null, session, f);
-							if (fSwapConstructor != null)
-								return fSwapConstructor.newInstance(f);
-							return super.unswap(session, f, hint);
-						} catch (Exception e) {
-							throw new ParseException(e);
-						}
-					}
-				};
+				);
 			}
-			if (this.pojoSwap == null)
-				this.pojoSwap = findPojoSwap();
-			if (this.pojoSwap == null)
-				this.pojoSwap = pojoSwap;
+
+			if (pojoSwap != null)
+				this.pojoSwaps.add(pojoSwap);
+
+			findPojoSwaps(this.pojoSwaps);
 
 			try {
 
@@ -644,7 +645,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanMeta != null)
 				dictionaryName = beanMeta.getDictionaryName();
 
-			serializedClassMeta = (this.pojoSwap == null ? ClassMeta.this : findClassMeta(this.pojoSwap.getSwapClass()));
+			serializedClassMeta = (this.pojoSwaps.isEmpty() ? ClassMeta.this : findClassMeta(this.pojoSwaps.get(0).getSwapClass()));
 			if (serializedClassMeta == null)
 				serializedClassMeta = ClassMeta.this;
 
@@ -667,17 +668,23 @@ public final class ClassMeta<T> implements Type {
 			return null;
 		}
 
-		private PojoSwap<T,?> findPojoSwap() {
-			Pojo p = innerClass.getAnnotation(Pojo.class);
-			if (p != null) {
-				Class<?> c = p.swap();
-				if (c != Null.class) {
-					if (isParentClass(PojoSwap.class, c))
-						return ClassUtils.newInstance(PojoSwap.class, c);
-					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
-				}
-			}
-			return null;
+		private void findPojoSwaps(List<PojoSwap> l) {
+			Swap swap = innerClass.getAnnotation(Swap.class);
+			if (swap != null)
+				l.add(createPojoSwap(swap));
+			Swaps swaps = innerClass.getAnnotation(Swaps.class);
+			if (swaps != null)
+				for (Swap s : swaps.value())
+					l.add(createPojoSwap(s));
+		}
+
+		private PojoSwap<T,?> createPojoSwap(Swap s) {
+			Class<?> c = s.value();
+
+			if (! isParentClass(PojoSwap.class, c))
+				throw new FormattedRuntimeException("Invalid swap class ''{0}'' specified.  Must extend from PojoSwap.", c);
+
+			return ClassUtils.newInstance(PojoSwap.class, c).forMediaTypes(MediaType.forStrings(s.mediaTypes())).withTemplate(s.template());
 		}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {
@@ -866,11 +873,15 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the serialized (swapped) form of this class if there is an {@link PojoSwap} associated with it.
 	 *
+	 * @param session
+	 * 	The bean session.
+	 * 	<br>Required because the swap used may depend on the media type being serialized or parsed.
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
 	@BeanIgnore
-	public ClassMeta<?> getSerializedClassMeta() {
-		return serializedClassMeta;
+	public ClassMeta<?> getSerializedClassMeta(BeanSession session) {
+		PojoSwap<T,?> ps = getPojoSwap(session);
+		return (ps == null ? this : ps.getSwapClassMeta(session));
 	}
 
 	/**
@@ -1226,14 +1237,32 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the {@link PojoSwap} associated with this class.
+	 * Returns the {@link PojoSwap} associated with this class that's the best match for the specified session.
 	 *
+	 * @param session
+	 * 	The current bean session.
+	 * 	<br>If multiple swaps are associated with a class, only the first one with a matching media type will
+	 * 	be returned.
 	 * @return
-	 * 	The {@link PojoSwap} associated with this class, or <jk>null</jk> if there is no POJO swap associated with
+	 * 	The {@link PojoSwap} associated with this class, or <jk>null</jk> if there are no POJO swaps associated with
 	 * 	this class.
 	 */
-	public PojoSwap<T,?> getPojoSwap() {
-		return pojoSwap;
+	public PojoSwap<T,?> getPojoSwap(BeanSession session) {
+		if (pojoSwaps != null) {
+			int matchQuant = 0, matchIndex = -1;
+
+			for (int i = 0; i < pojoSwaps.length; i++) {
+				int q = pojoSwaps[i].match(session);
+				if (q > matchQuant) {
+					matchQuant = q;
+					matchIndex = i;
+				}
+			}
+
+			if (matchIndex > -1)
+				return pojoSwaps[matchIndex];
+		}
+		return null;
 	}
 
 	/**

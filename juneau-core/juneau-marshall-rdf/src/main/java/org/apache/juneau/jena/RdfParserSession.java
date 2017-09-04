@@ -228,8 +228,8 @@ public class RdfParserSession extends ReaderParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
-		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 		setCurrentClass(sType);
 
 		if (! sType.canCreateNewInstance(outer)) {
@@ -341,8 +341,8 @@ public class RdfParserSession extends ReaderParserSession {
 			throw new ParseException("Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
-		if (transform != null && o != null)
-			o = transform.unswap(this, o, eType);
+		if (swap != null && o != null)
+			o = swap.unswap(this, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
