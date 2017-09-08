@@ -24,14 +24,12 @@
 		<version>6.3.2-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-microservice</artifactId>
-	<name>Apache Juneau Microservice</name>
-	<description>API for creating standalone executable jars that can be used to start lightweight configurable REST interfaces.</description>
+	<artifactId>juneau-microservice-test</artifactId>
+	<name>Apache Juneau Microservice Tests</name>
+	<description>Tests for Juneau Client/Server/Microservice.</description>
 
 	<properties>
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<jetty.version>9.4.6.v20170531</jetty.version>
 		
 		<!-- Java 8 required because Jetty requires it. -->
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -41,12 +39,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server</artifactId>
+			<artifactId>juneau-examples-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-client</artifactId>
+			<artifactId>juneau-rest-server-jaxrs</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -55,54 +53,33 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-			<version>${jetty.version}</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-security</artifactId>
-			<version>${jetty.version}</version>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-			<version>${jetty.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-xml</artifactId>
-			<version>${jetty.version}</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.apache.juneau.microservice.RestMicroservice</mainClass>
-						</manifest>
-					</archive>
+					<includes>
+						<include>
+							**/_TestSuite.java
+						</include>
+					</includes>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

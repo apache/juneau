@@ -20,26 +20,25 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-releng</artifactId>
+		<artifactId>juneau-rest</artifactId>
 		<version>6.3.2-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-all</artifactId>
-	<name>Apache Juneau UberJar</name>
-	<description>Combined contents of Core/Server/Client/Microservice jars</description>
-	<packaging>jar</packaging>
+	<artifactId>juneau-microservice-server</artifactId>
+	<name>Apache Juneau Microservice Server</name>
+	<description>API for creating standalone executable jars that can be used to start lightweight configurable REST interfaces.</description>
+
+	<properties>
+		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<jetty.version>9.4.6.v20170531</jetty.version>
+		
+		<!-- Java 8 required because Jetty requires it. -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall-rdf</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server</artifactId>
@@ -52,50 +51,58 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-server</artifactId>
+			<artifactId>juneau-marshall-rdf</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-security</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-xml</artifactId>
+			<version>${jetty.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-
-			<!-- Creates our juneau-all jar file that's a combo of our 4 modules. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
-				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-					<artifactSet>
-						<includes>
-							<include>org.apache.juneau:juneau-core</include>
-							<include>org.apache.juneau:juneau-core-rdf</include>
-							<include>org.apache.juneau:juneau-rest</include>
-							<include>org.apache.juneau:juneau-rest-jaxrs</include>
-							<include>org.apache.juneau:juneau-rest-client</include>
-							<include>org.apache.juneau:juneau-microservice</include>
-						</includes>
-					</artifactSet>
-				</configuration>
+				<artifactId>maven-source-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<id>attach-sources</id>
+						<phase>verify</phase>
 						<goals>
-							<goal>shade</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
-					</execution>
-					<execution>
-						<id>source-jar</id>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<createSourcesJar>true</createSourcesJar>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.apache.juneau.microservice.RestMicroservice</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
 </project>

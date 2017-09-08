@@ -50,7 +50,7 @@ public class TestMicroservice {
 		try {
 			Locale.setDefault(Locale.US);
 			microservice = new RestMicroservice()
-				.setConfig("juneau-rest-test.cfg", false)
+				.setConfig("juneau-microservice-test.cfg", false)
 				.setManifestContents(
 					"Test-Entry: test-value"
 				);

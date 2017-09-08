@@ -46,7 +46,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice</artifactId>
+			<artifactId>juneau-microservice-server</artifactId>
 			<version>${juneau.version}</version>
 		</dependency>
 	</dependencies>

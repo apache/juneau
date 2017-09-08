@@ -3,7 +3,7 @@
  ***************************************************************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
  * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
- * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            * 
  * with the License.  You may obtain a copy of the License at                                                              *
  *                                                                                                                         *
  *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
@@ -13,28 +13,19 @@
  * specific language governing permissions and limitations under the License.                                              *
  ***************************************************************************************************************************
 -->
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-	<modelVersion>4.0.0</modelVersion>
-
-	<parent>
-		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau</artifactId>
-		<version>6.3.2-incubating-SNAPSHOT</version>
-	</parent>
-
-	<artifactId>juneau-rest</artifactId>
-	<packaging>pom</packaging>
-	<name>Apache Juneau - REST APIs</name>
-	<description>Apache Juneau REST APIs</description>
-
-	<modules>
-		<module>juneau-rest-server</module>
-		<module>juneau-rest-server-jaxrs</module>
-		<module>juneau-rest-client</module>
-	</modules>
-
-</project>
+<projectDescription>
+	<name>juneau-rest</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+	</natures>
+</projectDescription>

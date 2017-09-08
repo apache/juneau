@@ -13,73 +13,28 @@
  * specific language governing permissions and limitations under the License.                                              *
  ***************************************************************************************************************************
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-rest</artifactId>
+		<artifactId>juneau</artifactId>
 		<version>6.3.2-incubating-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-rest-test</artifactId>
-	<name>Apache Juneau REST Tests</name>
-	<description>Tests for Juneau Client and Server.</description>
+	<artifactId>juneau-microservice</artifactId>
+	<packaging>pom</packaging>
+	<name>Apache Juneau - Microservice APIs</name>
+	<description>Apache Juneau Microservice APIs</description>
 
-	<properties>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-		
-		<!-- Java 8 required because Jetty requires it. -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
+	<modules>
+		<module>juneau-microservice-server</module>
+		<module>juneau-microservice-template</module>
+		<module>juneau-microservice-test</module>
+	</modules>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-examples-rest</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-jaxrs</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall-rdf</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>jsr311-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
-	</dependencies>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>
-							**/_TestSuite.java
-						</include>
-					</includes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

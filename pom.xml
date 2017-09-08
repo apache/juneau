@@ -82,6 +82,7 @@
 	<modules>
 		<module>juneau-core</module>
 		<module>juneau-rest</module>
+        <module>juneau-microservice</module>
         <module>juneau-examples</module>
 		<module>juneau-releng</module>
     </modules>
