@@ -11,7 +11,17 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 6.4.0
 
+** Improvement
+    * [JUNEAU-46] - Remove references to wink
+    * [JUNEAU-64] - Support advanced annotated variables on methods implementing onPreCall and onPostCall
+
+** New Feature
+    * [JUNEAU-62] - Support complete customization of jetty runtime
+    * [JUNEAU-65] - utility for merging two like POJOs
+    
+    
 Release Notes - Juneau - Version 6.3.1
 
 ** Bug
