@@ -644,6 +644,11 @@ public class BeanContext extends Context {
 	 * 	<li>Subclasses of {@link PojoSwap}.
 	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
 	 * </ul>
+	 *
+	 * <p>
+	 * Multiple POJO swaps can be associated with a single class.
+	 * When multiple swaps are applicable to the same class, the media type pattern defined by
+	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes()} are used to come up with the best match.
 	 */
 	public static final String BEAN_pojoSwaps = "BeanContext.pojoSwaps.list";
 
@@ -1039,8 +1044,10 @@ public class BeanContext extends Context {
 		for (Class<?> c : pm.get(BEAN_pojoSwaps, Class[].class, new Class[0])) {
 			if (isParentClass(PojoSwap.class, c))
 				lpf.add(newInstance(PojoSwap.class, c));
-			else
+			else if (isParentClass(Surrogate.class, c))
 				lpf.addAll(SurrogateSwap.findPojoSwaps(c));
+			else
+				throw new FormattedRuntimeException("Invalid class {0} specified in Bean.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", c);
 		}
 		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
@@ -1063,8 +1070,8 @@ public class BeanContext extends Context {
 
 		if (! cmCacheCache.containsKey(hashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<Class,ClassMeta>();
-			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwap(String.class), findChildPojoSwaps(String.class)));
-			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwap(Object.class), findChildPojoSwaps(Object.class)));
+			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
+			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
 			cmCacheCache.putIfAbsent(hashCode, cm);
 		}
 		this.cmCache = cmCacheCache.get(hashCode);
@@ -1208,8 +1215,8 @@ public class BeanContext extends Context {
 		// If this is an array, then we want it wrapped in an uncached ClassMeta object.
 		// Note that if it has a pojo swap, we still want to cache it so that
 		// we can cache something like byte[] with ByteArrayBase64Swap.
-		if (type.isArray() && findPojoSwap(type) == null)
-			return new ClassMeta(type, this, findImplClass(type), findBeanFilter(type), findPojoSwap(type), findChildPojoSwaps(type));
+		if (type.isArray() && findPojoSwaps(type) == null)
+			return new ClassMeta(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type));
 
 		// This can happen if we have transforms defined against String or Object.
 		if (cmCache == null)
@@ -1222,7 +1229,7 @@ public class BeanContext extends Context {
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<T>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwap(type), findChildPojoSwaps(type));
+					cm = new ClassMeta<T>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type));
 			}
 		}
 		if (waitForInit)
@@ -1527,12 +1534,15 @@ public class BeanContext extends Context {
 	 * @param c The class associated with the swap.
 	 * @return The swap associated with the class, or null if there is no association.
 	 */
-	private final <T> PojoSwap findPojoSwap(Class<T> c) {
+	private final <T> PojoSwap[] findPojoSwaps(Class<T> c) {
 		// Note:  On first
-		if (c != null)
+		if (c != null) {
+			List<PojoSwap> l = new ArrayList<PojoSwap>();
 			for (PojoSwap f : pojoSwaps)
 				if (isParentClass(f.getNormalClass(), c))
-					return f;
+					l.add(f);
+			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
+		}
 		return null;
 	}
 

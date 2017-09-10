@@ -271,7 +271,7 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The update timestamp of this object.
 	 */
-	@BeanProperty(swap=CalendarSwap.ISO8601DT.class)
+	@Swap(CalendarSwap.ISO8601DT.class)
 	public Calendar getUpdated() {
 		return updated;
 	}

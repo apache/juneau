@@ -317,7 +317,8 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 
 	@Bean(sort=true)
 	public static class BeanWithDynaFieldSwapped {
-		@BeanProperty(name="*", swap=CalendarSwap.ISO8601DTZ.class)
+		@BeanProperty(name="*")
+		@Swap(CalendarSwap.ISO8601DTZ.class)
 		public Map<String,Calendar> f1 = new LinkedHashMap<String,Calendar>();
 
 		public BeanWithDynaFieldSwapped init() {

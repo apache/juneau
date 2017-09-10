@@ -20,7 +20,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 
@@ -96,16 +95,9 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 	 * Converts the specified {@link Reader} to an {@link Object} whose type is determined by the contents of the reader.
 	 */
 	@Override /* PojoSwap */
-	public Object swap(BeanSession session, Reader o) throws SerializeException {
-		try {
-			if (parser == null)
-				return read(o);
-			return parser.parse(o, Object.class);
-		} catch (IOException e) {
-			return e.getLocalizedMessage();
-		} catch (Exception e) {
-			throw new SerializeException("ReaderSwap could not transform object of type ''{0}''",
-				o == null ? null : o.getClass().getName()).initCause(e);
-		}
+	public Object swap(BeanSession session, Reader o) throws Exception {
+		if (parser == null)
+			return read(o);
+		return parser.parse(o, Object.class);
 	}
 }

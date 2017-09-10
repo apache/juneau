@@ -30,8 +30,6 @@ import org.apache.juneau.http.*;
  * 	<li>
  * 		Sets common properties on all serializers in a single method call.
  * 	<li>
- * 		Locks all serializers in a single method call.
- * 	<li>
  * 		Clones existing groups and all serializers within the group in a single method call.
  * </ul>
  *
@@ -56,8 +54,7 @@ import org.apache.juneau.http.*;
  * 		.build();
  *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>
- * 	String mediaTypeMatch = g.findMatch(<js>"text/foo, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>);
- * 	WriterSerializer s = g.getWriterSerializer(mediaTypeMatch);
+ * 	WriterSerializer s = g.getWriterSerializer(<js>"text/foo, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>);
  *
  * 	<jc>// Serialize a bean to JSON text </jc>
  * 	AddressBook addressBook = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
@@ -175,6 +172,46 @@ public final class SerializerGroup {
 		if (mediaType == null)
 			return null;
 		return getSerializer(mediaType.toString());
+	}
+
+	/**
+	 * Same as {@link #getSerializer(String)}, but casts it to a {@link WriterSerializer}.
+	 *
+	 * @param acceptHeader The HTTP <l>Accept</l> header string.
+	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 */
+	public WriterSerializer getWriterSerializer(String acceptHeader) {
+		return (WriterSerializer)getSerializer(acceptHeader);
+	}
+
+	/**
+	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link WriterSerializer}.
+	 *
+	 * @param mediaType The HTTP media type.
+	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 */
+	public WriterSerializer getWriterSerializer(MediaType mediaType) {
+		return (WriterSerializer)getSerializer(mediaType);
+	}
+
+	/**
+	 * Same as {@link #getSerializer(String)}, but casts it to an {@link OutputStreamSerializer}.
+	 *
+	 * @param acceptHeader The HTTP <l>Accept</l> header string.
+	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 */
+	public OutputStreamSerializer getStreamSerializer(String acceptHeader) {
+		return (OutputStreamSerializer)getSerializer(acceptHeader);
+	}
+
+	/**
+	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link OutputStreamSerializer}.
+	 *
+	 * @param mediaType The HTTP media type.
+	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 */
+	public OutputStreamSerializer getStreamSerializer(MediaType mediaType) {
+		return (OutputStreamSerializer)getSerializer(mediaType);
 	}
 
 	/**

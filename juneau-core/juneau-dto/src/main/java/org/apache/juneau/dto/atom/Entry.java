@@ -123,7 +123,7 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The publish timestamp of this entry.
 	 */
-	@BeanProperty(swap=CalendarSwap.ISO8601DT.class)
+	@Swap(CalendarSwap.ISO8601DT.class)
 	public Calendar getPublished() {
 		return published;
 	}

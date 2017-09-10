@@ -106,7 +106,7 @@ public class UrlEncodedFormResource extends Resource {
 	public static class FormInputBean {
 		public String aString;
 		public int aNumber;
-		@BeanProperty(swap=CalendarSwap.ISO8601DT.class)
+		@Swap(CalendarSwap.ISO8601DT.class)
 		public Calendar aDate;
 	}
 }

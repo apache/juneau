@@ -483,3 +483,4 @@ hyperlinked
 bpx
 bpi
 tooltip
+templated

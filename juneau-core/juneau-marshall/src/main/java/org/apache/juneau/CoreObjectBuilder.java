@@ -1054,7 +1054,7 @@ public abstract class CoreObjectBuilder {
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul>
 	 * 	<li>Subclasses of {@link PojoSwap}.
-	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 	<li>Implementations of {@link Surrogate}.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>

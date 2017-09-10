@@ -17,11 +17,28 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+/**
+ * Used to associate multiple swaps with the same POJO class.
+ *
+ * <p class='bcode'>
+ * 	<ja>@Swaps</ja>(
+ * 		{
+ * 			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
+ * 			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
+ * 			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
+ * 		}
+ * 	)
+ * 	<jk>public class</jk> MyPojo {}
+ * </p>
+ */
 @Documented
-@Target({TYPE,ANNOTATION_TYPE})
+@Target({TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Swaps {
 
+	/**
+	 * The swaps to apply to this POJO class.
+	 */
 	Swap[] value() default {};
 }

@@ -226,7 +226,7 @@ public class Schema {
 	 * 	The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * 	Can be either a {@link JsonType} or {@link JsonTypeArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(swap=JsonTypeOrJsonTypeArraySwap.class)
+	@Swap(JsonTypeOrJsonTypeArraySwap.class)
 	public Object getType() {
 		if (typeJsonType != null)
 			return typeJsonType;
@@ -550,7 +550,7 @@ public class Schema {
 	 * 	The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * 	Can be either a {@link Schema} or {@link SchemaArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(swap=SchemaOrSchemaArraySwap.class)
+	@Swap(SchemaOrSchemaArraySwap.class)
 	public Object getItems() {
 		if (itemsSchema != null)
 			return itemsSchema;
@@ -827,7 +827,7 @@ public class Schema {
 	 * 	not set.
 	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(swap=BooleanOrSchemaArraySwap.class)
+	@Swap(BooleanOrSchemaArraySwap.class)
 	public Object getAdditionalItems() {
 		if (additionalItemsBoolean != null)
 			return additionalItemsBoolean;
@@ -1107,7 +1107,7 @@ public class Schema {
 	 * 	is not set.
 	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(swap=BooleanOrSchemaSwap.class)
+	@Swap(BooleanOrSchemaSwap.class)
 	public Object getAdditionalProperties() {
 		if (additionalPropertiesBoolean != null)
 			return additionalItemsBoolean;

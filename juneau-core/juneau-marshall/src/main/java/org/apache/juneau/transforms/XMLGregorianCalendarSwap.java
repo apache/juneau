@@ -17,8 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -49,7 +47,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	 * Converts the specified <code>XMLGregorianCalendar</code> to a {@link String}.
 	 */
 	@Override /* PojoSwap */
-	public String swap(BeanSession session, XMLGregorianCalendar b) throws SerializeException {
+	public String swap(BeanSession session, XMLGregorianCalendar b) throws Exception {
 		return b.toXMLFormat();
 	}
 
@@ -57,7 +55,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	 * Converts the specified {@link String} to an <code>XMLGregorianCalendar</code>.
 	 */
 	@Override /* PojoSwap */
-	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws ParseException {
+	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
 		if (isEmpty(s))
 			return null;
 		return dtf.newXMLGregorianCalendar(s);

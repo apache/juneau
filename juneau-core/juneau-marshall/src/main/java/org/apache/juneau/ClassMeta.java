@@ -139,7 +139,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps) {
 		this.innerClass = innerClass;
 		this.beanContext = beanContext;
 
@@ -149,7 +149,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanContext != null && beanContext.cmCache != null)
 				beanContext.cmCache.put(innerClass, this);
 
-			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, beanFilter, pojoSwap, childPojoSwaps);
+			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, beanFilter, pojoSwaps, childPojoSwaps);
 
 			this.cc = builder.cc;
 			this.isDelegate = builder.isDelegate;
@@ -340,7 +340,7 @@ public final class ClassMeta<T> implements Type {
 			childSwapMap,
 			childUnswapMap;
 
-		private ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps) {
+		private ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
 
@@ -581,8 +581,8 @@ public final class ClassMeta<T> implements Type {
 				);
 			}
 
-			if (pojoSwap != null)
-				this.pojoSwaps.add(pojoSwap);
+			if (pojoSwaps != null)
+				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 
 			findPojoSwaps(this.pojoSwaps);
 
@@ -680,11 +680,22 @@ public final class ClassMeta<T> implements Type {
 
 		private PojoSwap<T,?> createPojoSwap(Swap s) {
 			Class<?> c = s.value();
+			if (c == Null.class)
+				c = s.impl();
 
-			if (! isParentClass(PojoSwap.class, c))
-				throw new FormattedRuntimeException("Invalid swap class ''{0}'' specified.  Must extend from PojoSwap.", c);
+			if (isParentClass(PojoSwap.class, c)) {
+				PojoSwap ps = ClassUtils.newInstance(PojoSwap.class, c);
+				if (s.mediaTypes().length > 0)
+					ps.forMediaTypes(MediaType.forStrings(s.mediaTypes()));
+				if (! s.template().isEmpty())
+					ps.withTemplate(s.template());
+				return ps;
+			}
 
-			return ClassUtils.newInstance(PojoSwap.class, c).forMediaTypes(MediaType.forStrings(s.mediaTypes())).withTemplate(s.template());
+			if (isParentClass(SurrogateSwap.class, c))
+				throw new FormattedRuntimeException("TODO - Surrogate classes currently not supported in @Swap annotation", c);
+
+			throw new FormattedRuntimeException("Invalid swap class ''{0}'' specified.  Must extend from PojoSwap or Surrogate.", c);
 		}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {

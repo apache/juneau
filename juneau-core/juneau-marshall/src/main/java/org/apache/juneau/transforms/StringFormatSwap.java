@@ -14,8 +14,6 @@ package org.apache.juneau.transforms;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -35,12 +33,12 @@ public class StringFormatSwap extends StringSwap<Object> {
 	}
 
 	@Override /* PojoSwap */
-	public String swap(BeanSession session, Object o) throws SerializeException {
+	public String swap(BeanSession session, Object o) throws Exception {
 		return String.format(format, o);
 	}
 
 	@Override /* PojoSwap */
-	public Object unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
+	public Object unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		return session.convertToType(f, hint);
 	}
 }

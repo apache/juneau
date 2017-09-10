@@ -129,10 +129,13 @@ public class BeanPropertyMeta {
 				rawTypeMeta = f.resolveClassMeta(p, field.getGenericType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 				if (p != null) {
-					swap = getPropertyPojoSwap(p);
 					if (! p.properties().isEmpty())
 						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+				}
+				Swap s = field.getAnnotation(Swap.class);
+				if (s != null) {
+					swap = getPropertyPojoSwap(s);
 				}
 			}
 
@@ -142,11 +145,13 @@ public class BeanPropertyMeta {
 					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 				if (p != null) {
-					if (swap == null)
-						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+				}
+				Swap s = getter.getAnnotation(Swap.class);
+				if (s != null && swap == null) {
+					swap = getPropertyPojoSwap(s);
 				}
 			}
 
@@ -161,6 +166,10 @@ public class BeanPropertyMeta {
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+				}
+				Swap s = setter.getAnnotation(Swap.class);
+				if (s != null && swap == null) {
+					swap = getPropertyPojoSwap(s);
 				}
 			}
 
@@ -227,12 +236,26 @@ public class BeanPropertyMeta {
 		private static PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
 			if (! p.format().isEmpty())
 				return newInstance(PojoSwap.class, StringFormatSwap.class, p.format());
-			Class<?> c = p.swap();
+			return null;
+		}
+
+		private static PojoSwap getPropertyPojoSwap(Swap s) throws Exception {
+			Class<?> c = s.value();
+			if (c == Null.class)
+				c = s.impl();
 			if (c == Null.class)
 				return null;
-			if (isParentClass(PojoSwap.class, c))
-				return newInstance(PojoSwap.class, c);
-			throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
+			if (isParentClass(PojoSwap.class, c)) {
+				PojoSwap ps = newInstance(PojoSwap.class, c);
+				if (ps.forMediaTypes() != null)
+					throw new RuntimeException("TODO - Media types on swaps not yet supported on bean properties.");
+				if (ps.withTemplate() != null)
+					throw new RuntimeException("TODO - Templates on swaps not yet supported on bean properties.");
+				return ps;
+			}
+			if (isParentClass(Surrogate.class, c))
+				throw new RuntimeException("TODO - Surrogate swaps not yet supported on bean properties.");
+			throw new FormattedRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate.", c);
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {

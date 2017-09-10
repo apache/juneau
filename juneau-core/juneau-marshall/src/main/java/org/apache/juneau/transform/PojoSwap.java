@@ -17,19 +17,22 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during parsing.
+ * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during
+ * parsing.
  *
- * <h5 class='section'>Description:</h5>
  *
+ * <h6 class='section'>Description:</h6>
+ *
+ * <p>
  * <code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle
- * POJOs that aren't automatically handled by the serializers or parsers.  For example, JSON does not have a standard
- * representation for rendering dates.
+ * POJOs that aren't automatically handled by the serializers or parsers.
+ * <br>For example, JSON does not have a standard representation for rendering dates.
  * By defining a special {@code Date} swap and associating it with a serializer and parser, you can convert a
  * {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into a
  * {@code Date} object during parsing.
@@ -39,7 +42,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * <code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap
- * class to the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
+ * class to the {@link SerializerBuilder#pojoSwaps(Class...)} and {@link ParserBuilder#pojoSwaps(Class...)} methods.
  * <br>When associated with a bean context, fields of the specified type will automatically be converted when the
  * {@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.
  *
@@ -54,6 +57,7 @@ import org.apache.juneau.serializer.*;
  * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
  * {@link BeanMap#put(String,Object)}.
  *
+ *
  * <h6 class='topic'>Subtypes</h6>
  *
  * The following abstract subclasses are provided for common swap types:
@@ -62,13 +66,6 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link MapSwap} - Objects swapped with {@link ObjectMap ObjectMaps}.
  * </ol>
  *
- * <h6 class='topic'>Localization</h6>
- *
- * Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and
- * {@link BeanSession#getTimeZone()} methods.
- * This allows you to specify localized swap values when needed.
- * If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and
- * <code>Time-Zone</code> headers on the request.
  *
  * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
  *
@@ -92,9 +89,59 @@ import org.apache.juneau.serializer.*;
  * 		An array of anything on this list.
  * </ul>
  *
+ *
  * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
  *
  * The normal object representation of an object.
+ *
+ *
+ * <h6 class='topic'>Overview</h6>
+ *
+ * The following is an example of a swap that replaces byte arrays with BASE-64 encoded strings:
+ *
+ * <p class='bcode'>
+ * 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> PojoSwap<<jk>byte</jk>[],String> {
+ *
+ * 		<jk>public</jk> String swap(BeanSession session, <jk>byte</jk>[] b) <jk>throws</jk> SerializeException {
+ * 			<jk>return</jk> StringUtils.<jsm>base64Encode</jsm>(b);
+ * 		}
+ *
+ * 		<jk>public byte</jk>[] unswap(BeanSession session, String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+ * 			<jk>return</jk> StringUtils.<jsm>base64Decode</jsm>(s);
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <p class='bcode'>
+ * 	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.builder().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+ * 	String json = s.serialize(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
+ * </p>
+ *
+ *
+ * <h6 class='topic'>Swap annotation</h6>
+ *
+ * <p>
+ * Swap classes are often associated directly with POJOs using the {@link Swap @Swap} annotation.
+ *
+ * <p class='bcode'>
+ * 	<jk>public class</jk> MyPojoSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; { ... }
+ *
+ * 	<ja>@Swap</ja>(MyPojoSwap.<jk>class</jk>)
+ * 	<jk>public class</jk> MyPojo { ... }
+ * </p>
+ *
+ * <p>
+ * The <ja>@Swap</ja> annotation is often simpler since you do not need to tell your serializers and parsers about them
+ * leading to less code.
+ *
+ * <p>
+ * Swaps can also be associated with getters and setters as well:
+ *
+ * <p class='bcode'>
+ * 	<ja>@BeanProperty</ja>(swap=MyPojo.<jk>class</jk>)
+ * 	<jk>public</jk> MyPojo getMyPojo();
+ * </p>
+ *
  *
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
  *
@@ -109,7 +156,162 @@ import org.apache.juneau.serializer.*;
  * possible to re-parse it back into a {@code Date}, since there is no way for the {@code Parser} to know it's a
  * {@code Date} from just the JSON or XML text.
  *
- * <h5 class='section'>Additional information:</h5>
+ *
+ * <h6 class='topic'>Per media-type swaps</h6>
+ * <p>
+ * The {@link #forMediaTypes()} method can be overridden to provide a set of media types that the swap is invoked on.
+ * It's also possible to define multiple swaps against the same POJO as long as they're differentiated by media type.
+ * When multiple swaps are defined, the best-match media type is used.
+ *
+ * <p>
+ * In the following example, we define 3 swaps against the same POJO.  One for JSON, one for XML, and one for all
+ * other types.
+ *
+ * <p class='bcode'>
+ * 	<jk>public class</jk> PojoSwapTest {
+ *
+ * 		<jk>public static class</jk> MyPojo {}
+ *
+ * 		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+ *
+ * 			<jk>public</jk> MediaType[] forMediaTypes() {
+ * 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
+ * 			}
+ *
+ * 			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+ * 				<jk>return</jk> <js>"It's JSON!"</js>;
+ * 			}
+ * 		}
+ *
+ * 		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+ *
+ * 			<jk>public</jk> MediaType[] forMediaTypes() {
+ * 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/xml"</js>);
+ * 			}
+ *
+ * 			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+ * 				<jk>return</jk> <js>"It's XML!"</js>;
+ * 			}
+ * 		}
+ *
+ * 		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+ *
+ * 			<jk>public</jk> MediaType[] forMediaTypes() {
+ * 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/*"</js>);
+ * 			}
+ *
+ * 			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+ * 				<jk>return</jk> <js>"It's something else!"</js>;
+ * 			}
+ * 		}
+ *
+ * 		<ja>@Test</ja>
+ * 		<jk>public void</jk> doTest() <jk>throws</jk> Exception {
+ *
+ * 			SerializerGroup g = <jk>new</jk> SerializerGroupBuilder()
+ * 				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
+ * 				.sq()
+ * 				.pojoSwaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
+ * 				.build();
+ *
+ * 			MyPojo myPojo = <jk>new</jk> MyPojo();
+ *
+ * 			String json = g.getWriterSerializer(<js>"text/json"</js>).serialize(myPojo);
+ * 			<jsm>assertEquals</jsm>(<js>"'It\\'s JSON!'"</js>, json);
+ *
+ * 			String xml = g.getWriterSerializer(<js>"text/xml"</js>).serialize(myPojo);
+ * 			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's XML!&lt;/string&gt;"</js>, xml);
+ *
+ * 			String html = g.getWriterSerializer(<js>"text/html"</js>).serialize(myPojo);
+ * 			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's something else!&lt;/string&gt;"</js>, html);
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <p>
+ * Multiple swaps can be associated with a POJO by using the {@link Swaps @Swaps} annotation:
+ *
+ * <p class='bcode'>
+ * 	<ja>@Swaps</ja>(
+ * 		{
+ * 			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
+ * 			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
+ * 			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
+ * 		}
+ * 	)
+ * 	<jk>public class</jk> MyPojo {}
+ * </p>
+ *
+ * <p>
+ * Note that since <code>Readers</code> get serialized directly to the output of a serializer, it's possible to
+ * implement a swap that provides fully-customized output.
+ *
+ * <p class='bcode'>
+ * 	<jk>public class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,Reader&gt; {
+ *
+ * 		<jk>public</jk> MediaType[] forMediaTypes() {
+ * 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
+ * 		}
+ *
+ * 		<jk>public</jk> Reader swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+ * 			<jk>return new</jk> StringReader(<js>"{message:'Custom JSON!'}"</js>);
+ * 		}
+ * 	}
+ * </p>
+ *
+ *
+ * <h6 class='topic'>Templates</h6>
+ *
+ * <p>
+ * Template strings are arbitrary strings associated with swaps that help provide additional context information
+ * for the swap class.
+ * They're called 'templates' because their primary purpose is for providing template names, such as Apache FreeMarker
+ * template names.
+ *
+ * <p>
+ * The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
+ *
+ * <p class='bcode'>
+ * 	<jc>// Our abstracted templated swap class.</jc>
+ * 	<jk>public abstract class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
+ *
+ * 		<jk>public</jk> MediaType[] forMediaTypes() {
+ * 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
+ * 		}
+ *
+ * 		<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> getFreeMarkerReader(template, o);  <jc>// Some method that creates raw HTML.</jc>
+ * 		}
+ * 	}
+ *
+ * 	<jc>// An implementation of our templated swap class.</jc>
+ * 	<jk>public class</jk> MyPojoSwap <jk>extends</jk> FreeMarkerSwap {
+ * 		<jk>public</jk> String withTemplate() {
+ * 			<jk>return</jk> <js>"MyPojo.div.ftl"</js>;
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <p>
+ * In practice however, the template is usually going to be defined on a <ja>@Swap</ja> annotation like the following
+ * example:
+ *
+ * <p class='bcode'>
+ * 	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
+ * 	<jk>public class</jk> MyPojo {}
+ * </p>
+ *
+ *
+ * <h6 class='topic'>Localization</h6>
+ *
+ * Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and
+ * {@link BeanSession#getTimeZone()} methods.
+ * This allows you to specify localized swap values when needed.
+ * If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and
+ * <code>Time-Zone</code> headers on the request.
+ *
+ *
+ * <h6 class='section'>Additional information:</h6>
  *
  * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
  *
@@ -129,7 +331,7 @@ public abstract class PojoSwap<T,S> {
 	private ClassMeta<?> swapClassMeta;
 
 	// Unfortunately these cannot be made final because we want to allow for PojoSwaps with no-arg constructors
-	// which simplifies
+	// which simplifies declarations.
 	private MediaType[] forMediaTypes;
 	private String template;
 
@@ -156,36 +358,83 @@ public abstract class PojoSwap<T,S> {
 		this.template = withTemplate();
 	}
 
-	protected MediaType[] forMediaTypes() {
+	/**
+	 * Returns the media types that this swap is applicable to.
+	 *
+	 * <p>
+	 * This method can be overridden to programmatically specify what media types it applies to.
+	 *
+	 * <p>
+	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes()} annotation.
+	 *
+	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
+	 */
+	public MediaType[] forMediaTypes() {
 		return null;
 	}
 
-	protected String withTemplate() {
+	/**
+	 * Returns additional context information for this swap.
+	 *
+	 * <p>
+	 * Typically this is going to be used to specify a template name, such as a FreeMarker template file name.
+	 *
+	 * <p>
+	 * This method can be overridden to programmatically specify a template value.
+	 *
+	 * <p>
+	 * This method is the programmatic equivalent to the {@link Swap#template()} annotation.
+	 *
+	 * @return Additional context information, or <jk>null</jk> if not specified.
+	 */
+	public String withTemplate() {
 		return null;
 	}
 
+	/**
+	 * Sets the media types that this swap is associated with.
+	 *
+	 * @param mediaTypes The media types that this swap is associated with.
+	 * @return This object (for method chaining).
+	 */
 	public PojoSwap<T,?> forMediaTypes(MediaType[] mediaTypes) {
-		if (mediaTypes != null && mediaTypes.length > 0)
-			this.forMediaTypes = mediaTypes;
+		this.forMediaTypes = mediaTypes;
 		return this;
 	}
 
+	/**
+	 * Sets the template string on this swap.
+	 *
+	 * @param template The template string on this swap.
+	 * @return This object (for method chaining).
+	 */
 	public PojoSwap<T,?> withTemplate(String template) {
-		if (! StringUtils.isEmpty(template))
-			this.template = template;
+		this.template = template;
 		return this;
 	}
 
-//	/**
-//	 * Returns <jk>true</jk> if this swap is valid for the specified session.
-//	 *
-//	 * <p>
-//	 * If the swap has a media type associated with it, this method ensures that the media type matches the media
-//	 * type defined on the session.
-//	 *
-//	 * @param session The bean session.
-//	 * @return <jk>true</jk> if this swap is valid for the specified session.
-//	 */
+	/**
+	 * Returns a number indicating how well this swap matches the specified session.
+	 *
+	 * <p>
+	 * Uses the {@link MediaType#match(MediaType, boolean)} method algorithm to produce a number whereby a
+	 * larger value indicates a "better match".
+	 * The idea being that if multiple swaps are associated with a given POJO, we want to pick the best one.
+	 *
+	 * <p>
+	 * For example, if the session media type is <js>"text/json"</js>, then the match values are shown below:
+	 *
+	 * <ul>
+	 * 	<li><js>"text/json"</js> = <code>100,000</code>
+	 * 	<li><js>"&#42;/json"</js> = <code>5,100</code>
+	 * 	<li><js>"&#42;/&#42;"</js> = <code>5,000</code>
+	 * 	<li>No media types specified on swap = <code>1</code>
+	 * 	<li><js>"text/xml"</js> = <code>0</code>
+	 * </ul>
+	 *
+	 * @param session The bean session.
+	 * @return Zero if swap doesn't match the session, or a positive number if it does.
+	 */
 	public int match(BeanSession session) {
 		if (forMediaTypes == null)
 			return 1;
@@ -193,7 +442,7 @@ public abstract class PojoSwap<T,S> {
 		MediaType mt = session.getMediaType();
 		if (forMediaTypes != null)
 			for (MediaType mt2 : forMediaTypes)
-				i = Math.max(i, mt2.match(mt, false)*2);
+				i = Math.max(i, mt2.match(mt, false));
 		return i;
 	}
 

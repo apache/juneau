@@ -16,10 +16,8 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.transform.*;
 
 /**
  * Used tailor how bean properties get interpreted by the framework.
@@ -202,28 +200,6 @@ public @interface BeanProperty {
 	 * </p>
 	 */
 	Class<?>[] params() default {};
-
-	/**
-	 * Associates a {@link PojoSwap} or {@link SurrogateSwap} with this bean property that will swap the value object
-	 * with another object during serialization and parsing.
-	 *
-	 * <p>
-	 * This annotation supersedes any swaps associated with the bean property type class itself.
-	 *
-	 * <p>
-	 * Typically used for rendering {@link Date Dates} and {@link Calendar Calendars} as a particular string format.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> MyClass {
-	 *
-	 * 		<jc>// During serialization, convert to ISO8601 date-time string.</jc>
-	 * 		<ja>@BeanProperty</ja>(pojoSwap=CalendarSwap.ISO8601DT.<jk>class</jk>)
-	 * 		<jk>public</jk> Calendar getTime();
-	 * 	}
-	 * </p>
-	 */
-	Class<?> swap() default Null.class;
 
 	/**
 	 * Used to limit which child properties are rendered by the serializers.

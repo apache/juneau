@@ -12,17 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
 /**
- * Exhaustive serialization tests for the CalendarSwap class.
+ * Exhaustive serialization tests Swap annotation.
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
@@ -288,34 +290,202 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>XML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 			},
-//			{ 	/* 0 */
-//				new ComboInput<byte[]>(
-//					"ByteArray1d",
-//					byte[].class,
-//					new byte[] {1,2,3},
-//					/* Json */		"xxx",
-//					/* JsonT */		"xxx",
-//					/* JsonR */		"xxx",
-//					/* Xml */		"xxx",
-//					/* XmlT */		"xxx",
-//					/* XmlR */		"xxx",
-//					/* XmlNs */		"xxx",
-//					/* Html */		"xxx",
-//					/* HtmlT */		"xxx",
-//					/* HtmlR */		"xxx",
-//					/* Uon */		"xxx",
-//					/* UonT */		"xxx",
-//					/* UonR */		"xxx",
-//					/* UrlEnc */	"xxx",
-//					/* UrlEncT */	"xxx",
-//					/* UrlEncR */	"xxx",
-//					/* MsgPack */	"xxx",
-//					/* MsgPackT */	"xxx",
-//					/* RdfXml */	"xxx",
-//					/* RdfXmlT */	"xxx",
-//					/* RdfXmlR */	"xxx"
-//				)
-//			},
+			{ 	/* 9 */
+				new ComboInput<TestTemplate>(
+					"TestTemplate",
+					TestTemplate.class,
+					new TestTemplate(),
+					/* Json */		"foo",
+					/* JsonT */		"foo",
+					/* JsonR */		"foo",
+					/* Xml */		"foo",
+					/* XmlT */		"foo",
+					/* XmlR */		"foo\n",
+					/* XmlNs */		"foo",
+					/* Html */		"foo",
+					/* HtmlT */		"foo",
+					/* HtmlR */		"foo",
+					/* Uon */		"foo",
+					/* UonT */		"foo",
+					/* UonR */		"foo",
+					/* UrlEnc */	"foo",
+					/* UrlEncT */	"foo",
+					/* UrlEncR */	"foo",
+					/* MsgPack */	"666F6F",
+					/* MsgPackT */	"666F6F",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+			},
+			{ 	/* 10 */
+				new ComboInput<TestTemplates>(
+					"TestTemplates",
+					TestTemplates.class,
+					new TestTemplates(),
+					/* Json */		"JSON",
+					/* JsonT */		"JSON",
+					/* JsonR */		"JSON",
+					/* Xml */		"XML",
+					/* XmlT */		"XML",
+					/* XmlR */		"XML\n",
+					/* XmlNs */		"XML",
+					/* Html */		"HTML",
+					/* HtmlT */		"HTML",
+					/* HtmlR */		"HTML",
+					/* Uon */		"UON",
+					/* UonT */		"UON",
+					/* UonR */		"UON",
+					/* UrlEnc */	"URLENCODING",
+					/* UrlEncT */	"URLENCODING",
+					/* UrlEncR */	"URLENCODING",
+					/* MsgPack */	"4D53475041434B",
+					/* MsgPackT */	"4D53475041434B",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+			},
+			{ 	/* 11 */
+				new ComboInput<TestProgrammaticTemplates>(
+					"TestProgrammaticTemplates",
+					TestProgrammaticTemplates.class,
+					new TestProgrammaticTemplates(),
+					/* Json */		"JSON",
+					/* JsonT */		"JSON",
+					/* JsonR */		"JSON",
+					/* Xml */		"XML",
+					/* XmlT */		"XML",
+					/* XmlR */		"XML\n",
+					/* XmlNs */		"XML",
+					/* Html */		"HTML",
+					/* HtmlT */		"HTML",
+					/* HtmlR */		"HTML",
+					/* Uon */		"UON",
+					/* UonT */		"UON",
+					/* UonR */		"UON",
+					/* UrlEnc */	"URLENCODING",
+					/* UrlEncT */	"URLENCODING",
+					/* UrlEncR */	"URLENCODING",
+					/* MsgPack */	"4D53475041434B",
+					/* MsgPackT */	"4D53475041434B",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+			},
+			{ 	/* 12 */
+				new ComboInput<TestContextSwap>(
+					"TestContextSwap",
+					TestContextSwap.class,
+					new TestContextSwap(),
+					/* Json */		"TEMPLATE",
+					/* JsonT */		"TEMPLATE",
+					/* JsonR */		"TEMPLATE",
+					/* Xml */		"TEMPLATE",
+					/* XmlT */		"TEMPLATE",
+					/* XmlR */		"TEMPLATE\n",
+					/* XmlNs */		"TEMPLATE",
+					/* Html */		"TEMPLATE",
+					/* HtmlT */		"TEMPLATE",
+					/* HtmlR */		"TEMPLATE",
+					/* Uon */		"TEMPLATE",
+					/* UonT */		"TEMPLATE",
+					/* UonR */		"TEMPLATE",
+					/* UrlEnc */	"TEMPLATE",
+					/* UrlEncT */	"TEMPLATE",
+					/* UrlEncR */	"TEMPLATE",
+					/* MsgPack */	"54454D504C415445",
+					/* MsgPackT */	"54454D504C415445",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>TEMPLATE</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>TEMPLATE</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>TEMPLATE</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+			},
+			{ 	/* 13 */
+				new ComboInput<TestContextSwaps>(
+					"TestContextSwaps",
+					TestContextSwaps.class,
+					new TestContextSwaps(),
+					/* Json */		"JSON",
+					/* JsonT */		"JSON",
+					/* JsonR */		"JSON",
+					/* Xml */		"XML",
+					/* XmlT */		"XML",
+					/* XmlR */		"XML\n",
+					/* XmlNs */		"XML",
+					/* Html */		"HTML",
+					/* HtmlT */		"HTML",
+					/* HtmlR */		"HTML",
+					/* Uon */		"UON",
+					/* UonT */		"UON",
+					/* UonR */		"UON",
+					/* UrlEnc */	"URLENCODING",
+					/* UrlEncT */	"URLENCODING",
+					/* UrlEncR */	"URLENCODING",
+					/* MsgPack */	"4D53475041434B",
+					/* MsgPackT */	"4D53475041434B",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+			},
+			{ 	/* 14 */
+				new ComboInput<BeanA>(
+					"BeanA",
+					BeanA.class,
+					new BeanA(),
+					/* Json */		"SWAPPED",
+					/* JsonT */		"SWAPPED",
+					/* JsonR */		"SWAPPED",
+					/* Xml */		"SWAPPED",
+					/* XmlT */		"SWAPPED",
+					/* XmlR */		"SWAPPED\n",
+					/* XmlNs */		"SWAPPED",
+					/* Html */		"SWAPPED",
+					/* HtmlT */		"SWAPPED",
+					/* HtmlR */		"SWAPPED",
+					/* Uon */		"(f=1)",
+					/* UonT */		"(f=1)",
+					/* UonR */		"(\n\tf=1\n)",
+					/* UrlEnc */	"f=1",
+					/* UrlEncT */	"f=1",
+					/* UrlEncR */	"f=1",
+					/* MsgPack */	"81A16601",
+					/* MsgPackT */	"81A16601",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+			},
+			{ 	/* 15 */
+				new ComboInput<BeanB>(
+					"BeanB",
+					BeanB.class,
+					new BeanB(),
+					/* Json */		"{f:1}",
+					/* JsonT */		"{f:1}",
+					/* JsonR */		"{\n\tf: 1\n}",
+					/* Xml */		"<object><f>1</f></object>",
+					/* XmlT */		"<object><f>1</f></object>",
+					/* XmlR */		"<object>\n\t<f>1</f>\n</object>\n",
+					/* XmlNs */		"<object><f>1</f></object>",
+					/* Html */		"<table><tr><td>f</td><td>1</td></tr></table>",
+					/* HtmlT */		"<table><tr><td>f</td><td>1</td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>f</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"SWAPPED",
+					/* UonT */		"SWAPPED",
+					/* UonR */		"SWAPPED",
+					/* UrlEnc */	"SWAPPED",
+					/* UrlEncT */	"SWAPPED",
+					/* UrlEncR */	"SWAPPED",
+					/* MsgPack */	"53574150504544",
+					/* MsgPackT */	"53574150504544",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>SWAPPED</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>SWAPPED</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>SWAPPED</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+			},
 		});
 	}
 
@@ -325,7 +495,16 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
-		return s.builder().pojoSwaps(ByteArrayBase64Swap.class).trimNullProperties(false).build();
+		return s.builder().pojoSwaps(
+				ContextSwap.class, 
+				ContextSwapJson.class, 
+				ContextSwapXml.class, 
+				ContextSwapHtml.class, 
+				ContextSwapUon.class, 
+				ContextSwapUrlEncoding.class, 
+				ContextSwapMsgPack.class, 
+				ContextSwapRdfXml.class 
+			).build();
 	}
 
 	@Swaps(
@@ -440,39 +619,253 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	public static class SwapJson extends PojoSwap {
+	public static class SwapJson extends PojoSwap<Object,Object> {
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "JSON";
 		}
 	}
-	public static class SwapXml extends PojoSwap {
+	public static class SwapXml extends PojoSwap<Object,Object> {
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "XML";
 		}
 	}
-	public static class SwapHtml extends PojoSwap {
+	public static class SwapHtml extends PojoSwap<Object,Object> {
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "HTML";
 		}
 	}
-	public static class SwapUon extends PojoSwap {
+	public static class SwapUon extends PojoSwap<Object,Object> {
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "UON";
 		}
 	}
-	public static class SwapUrlEncoding extends PojoSwap {
+	public static class SwapUrlEncoding extends PojoSwap<Object,Object> {
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "URLENCODING";
 		}
 	}
-	public static class SwapMsgPack extends PojoSwap {
+	public static class SwapMsgPack extends PojoSwap<Object,Object> {
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "MSGPACK";
 		}
 	}
-	public static class SwapRdfXml extends PojoSwap {
+	public static class SwapRdfXml extends PojoSwap<Object,Object> {
 		public Object swap(BeanSession session, Object o) throws Exception {
 			return "RDFXML";
+		}
+	}
+	
+	@Swap(impl=TemplateSwap.class,template="foo")
+	public static class TestTemplate {}
+
+	@Swaps(
+		{
+			@Swap(value=TemplateSwap.class, mediaTypes={"*/json"}, template="JSON"),
+			@Swap(value=TemplateSwap.class, mediaTypes={"*/xml"}, template="XML"),
+			@Swap(value=TemplateSwap.class, mediaTypes={"*/html"}, template="HTML"),
+			@Swap(value=TemplateSwap.class, mediaTypes={"*/uon"}, template="UON"),
+			@Swap(value=TemplateSwap.class, mediaTypes={"*/x-www-form-urlencoded"}, template="URLENCODING"),
+			@Swap(value=TemplateSwap.class, mediaTypes={"*/msgpack"}, template="MSGPACK"),
+			@Swap(value=TemplateSwap.class, mediaTypes={"*/xml+rdf"}, template="RDFXML"),
+		}
+	)
+	public static class TestTemplates {}
+	
+	
+	public static class TemplateSwap extends PojoSwap<Object,Object> {
+		public Object swap(BeanSession session, Object o, String template) throws Exception {
+			return new StringReader(template);
+		}
+	}
+
+	@Swaps(
+		{
+			@Swap(TemplateSwapJson.class),
+			@Swap(TemplateSwapXml.class),
+			@Swap(TemplateSwapHtml.class),
+			@Swap(TemplateSwapUon.class),
+			@Swap(TemplateSwapUrlEncoding.class),
+			@Swap(TemplateSwapMsgPack.class),
+			@Swap(TemplateSwapRdfXml.class),
+		}
+	)
+	public static class TestProgrammaticTemplates {}
+	
+	public static class TemplateSwapJson extends TemplateSwap {
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/json");
+		}
+		public String withTemplate() {
+			return "JSON";
+		}
+	}
+	public static class TemplateSwapXml extends TemplateSwap {
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/xml");
+		}
+		public String withTemplate() {
+			return "XML";
+		}
+	}
+	public static class TemplateSwapHtml extends TemplateSwap {
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/html");
+		}
+		public String withTemplate() {
+			return "HTML";
+		}
+	}
+	public static class TemplateSwapUon extends TemplateSwap {
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/uon");
+		}
+		public String withTemplate() {
+			return "UON";
+		}
+	}
+	public static class TemplateSwapUrlEncoding extends TemplateSwap {
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/x-www-form-urlencoded");
+		}
+		public String withTemplate() {
+			return "URLENCODING";
+		}
+	}
+	public static class TemplateSwapMsgPack extends TemplateSwap {
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/msgpack");
+		}
+		public String withTemplate() {
+			return "MSGPACK";
+		}
+	}
+	public static class TemplateSwapRdfXml extends TemplateSwap {
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/xml+rdf");
+		}
+		public String withTemplate() {
+			return "RDFXML";
+		}
+	}
+	
+	
+	public static class TestContextSwap {}
+	
+	public static class ContextSwap extends PojoSwap<TestContextSwap,Object> {
+		public Object swap(BeanSession session, TestContextSwap o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public String withTemplate() {
+			return "TEMPLATE";
+		}
+	}
+	
+	public static class TestContextSwaps {}
+	
+	public static class ContextSwapJson extends PojoSwap<TestContextSwaps,Object> {
+		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/json");
+		}
+		public String withTemplate() {
+			return "JSON";
+		}
+	}
+	public static class ContextSwapXml extends PojoSwap<TestContextSwaps,Object> {
+		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/xml");
+		}
+		public String withTemplate() {
+			return "XML";
+		}
+	}
+	public static class ContextSwapHtml extends PojoSwap<TestContextSwaps,Object> {
+		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/html");
+		}
+		public String withTemplate() {
+			return "HTML";
+		}
+	}
+	public static class ContextSwapUon extends PojoSwap<TestContextSwaps,Object> {
+		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/uon");
+		}
+		public String withTemplate() {
+			return "UON";
+		}
+	}
+	public static class ContextSwapUrlEncoding extends PojoSwap<TestContextSwaps,Object> {
+		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/x-www-form-urlencoded");
+		}
+		public String withTemplate() {
+			return "URLENCODING";
+		}
+	}
+	public static class ContextSwapMsgPack extends PojoSwap<TestContextSwaps,Object> {
+		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/msgpack");
+		}
+		public String withTemplate() {
+			return "MSGPACK";
+		}
+	}
+	public static class ContextSwapRdfXml extends PojoSwap<TestContextSwaps,Object> {
+		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+			return new StringReader(template);
+		}
+		public MediaType[] forMediaTypes() {
+			return MediaType.forStrings("*/xml+rdf");
+		}
+		public String withTemplate() {
+			return "RDFXML";
+		}
+	}
+	
+	@Swaps(
+		{
+			@Swap(value=BeanSwap.class, mediaTypes={"*/json"}),
+			@Swap(value=BeanSwap.class, mediaTypes={"*/xml"}),
+			@Swap(value=BeanSwap.class, mediaTypes={"*/html"}),
+		}
+	)
+	public static class BeanA {
+		public int f = 1;
+	}
+	
+	@Swaps(
+		{
+			@Swap(value=BeanSwap.class, mediaTypes={"*/uon"}),
+			@Swap(value=BeanSwap.class, mediaTypes={"*/x-www-form-urlencoded"}),
+			@Swap(value=BeanSwap.class, mediaTypes={"*/msgpack"}),
+			@Swap(value=BeanSwap.class, mediaTypes={"*/xml+rdf"}),
+		}
+	)
+	public static class BeanB {
+		public int f = 1;
+	}
+
+	public static class BeanSwap extends PojoSwap<Object,Object> {
+		public Object swap(BeanSession session, Object o, String template) throws Exception {
+			return new StringReader("SWAPPED");
 		}
 	}
 }

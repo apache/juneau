@@ -358,7 +358,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		}
 	}
 
-	public static class D2 {
+	public static class D2 implements Surrogate {
 		public String f2;
 		public D2(D1 d1) {
 			f2 = d1.f1;

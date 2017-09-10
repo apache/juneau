@@ -217,9 +217,17 @@ public class SystemPropertiesResource extends Resource {
 	)
 	public Form getFormPage() {
 		return form().method("POST").action("servlet:/formPagePost").children(
-			h4("Set system property"),
-			"Name: ", input("text").name("name"), br(),
-			"Value: ", input("text").name("value"), br(), br(),
+			table(
+				tr(
+					th("Set system property").colspan(2)
+				),
+				tr(
+					td("Name: "), td(input("text").name("name"))
+				),
+				tr(
+					td("Value: "), td(input("text").name("value"))
+				)
+			),
 			button("submit","Click me!").style("float:right")
 		);
 	}

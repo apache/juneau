@@ -137,7 +137,7 @@ public class PetStoreResource extends ResourceJena {
 		@BeanProperty(format="$%.2f")  // Renders price in dollars.
 		public float price;
 
-		@BeanProperty(swap=DateSwap.ISO8601D.class)  // Renders dates in ISO8601 format.
+		@Swap(DateSwap.ISO8601D.class)  // Renders dates in ISO8601 format.
 		public Date birthDate;
 
 		public int getAge() {

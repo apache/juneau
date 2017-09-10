@@ -15,7 +15,6 @@ package org.apache.juneau.transforms;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -36,17 +35,13 @@ public class CalendarLongSwap extends PojoSwap<Calendar,Long> {
 	 */
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public Calendar unswap(BeanSession session, Long o, ClassMeta<?> hint) throws ParseException {
+	public Calendar unswap(BeanSession session, Long o, ClassMeta<?> hint) throws Exception {
 		ClassMeta<? extends Calendar> tt;
-		try {
-			if (hint == null || ! hint.canCreateNewInstance())
-				hint = session.getClassMeta(GregorianCalendar.class);
-			tt = (ClassMeta<? extends Calendar>)hint;
-			Calendar c = tt.newInstance();
-			c.setTimeInMillis(o);
-			return c;
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
+		if (hint == null || ! hint.canCreateNewInstance())
+			hint = session.getClassMeta(GregorianCalendar.class);
+		tt = (ClassMeta<? extends Calendar>)hint;
+		Calendar c = tt.newInstance();
+		c.setTimeInMillis(o);
+		return c;
 	}
 }

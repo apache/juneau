@@ -15,7 +15,6 @@ package org.apache.juneau.transforms;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -40,21 +39,17 @@ public class CalendarMapSwap extends PojoSwap<Calendar,Map> {
 	 */
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public Calendar unswap(BeanSession session, Map o, ClassMeta<?> hint) throws ParseException {
+	public Calendar unswap(BeanSession session, Map o, ClassMeta<?> hint) throws Exception {
 		ClassMeta<? extends Calendar> tt;
-		try {
-			if (hint == null || ! hint.canCreateNewInstance())
-				hint = session.getClassMeta(GregorianCalendar.class);
-			tt = (ClassMeta<? extends Calendar>)hint;
-			long time = Long.parseLong(o.get("time").toString());
-			String timeZone = o.get("timeZone").toString();
-			Date d = new Date(time);
-			Calendar c = tt.newInstance();
-			c.setTime(d);
-			c.setTimeZone(TimeZone.getTimeZone(timeZone));
-			return c;
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
+		if (hint == null || ! hint.canCreateNewInstance())
+			hint = session.getClassMeta(GregorianCalendar.class);
+		tt = (ClassMeta<? extends Calendar>)hint;
+		long time = Long.parseLong(o.get("time").toString());
+		String timeZone = o.get("timeZone").toString();
+		Date d = new Date(time);
+		Calendar c = tt.newInstance();
+		c.setTime(d);
+		c.setTimeZone(TimeZone.getTimeZone(timeZone));
+		return c;
 	}
 }

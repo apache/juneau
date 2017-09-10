@@ -15,8 +15,6 @@ package org.apache.juneau.transforms;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -28,23 +26,15 @@ public class ByteArrayBase64Swap extends StringSwap<byte[]> {
 	 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
 	 */
 	@Override /* PojoSwap */
-	public String swap(BeanSession session, byte[] b) throws SerializeException {
-		try {
-			return base64Encode(b);
-		} catch (Exception e) {
-			throw new SerializeException(e);
-		}
+	public String swap(BeanSession session, byte[] b) throws Exception {
+		return base64Encode(b);
 	}
 
 	/**
 	 * Converts the specified {@link String} to a <code><jk>byte</jk>[]</code>.
 	 */
 	@Override /* PojoSwap */
-	public byte[] unswap(BeanSession session, String s, ClassMeta<?> hint) throws ParseException {
-		try {
-			return base64Decode(s);
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
+	public byte[] unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
+		return base64Decode(s);
 	}
 }

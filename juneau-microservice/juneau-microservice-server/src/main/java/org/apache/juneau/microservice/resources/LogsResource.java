@@ -308,7 +308,7 @@ public class LogsResource extends Resource {
 		public String type;
 		public Object name;
 		public Long size;
-		@BeanProperty(swap=DateSwap.DateTimeMedium.class) public Date lastModified;
+		@Swap(DateSwap.DateTimeMedium.class) public Date lastModified;
 		public URI view, highlighted, parsed, download, delete;
 
 		public FileResource(File f, URI uri) throws Exception {
