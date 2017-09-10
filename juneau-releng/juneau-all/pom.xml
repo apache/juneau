@@ -68,12 +68,12 @@
 					<createDependencyReducedPom>false</createDependencyReducedPom>
 					<artifactSet>
 						<includes>
-							<include>org.apache.juneau:juneau-core</include>
-							<include>org.apache.juneau:juneau-core-rdf</include>
-							<include>org.apache.juneau:juneau-rest</include>
-							<include>org.apache.juneau:juneau-rest-jaxrs</include>
+							<include>org.apache.juneau:juneau-marshall</include>
+							<include>org.apache.juneau:juneau-svl</include>
+							<include>org.apache.juneau:juneau-config</include>
+							<include>org.apache.juneau:juneau-dto</include>
+							<include>org.apache.juneau:juneau-rest-server</include>
 							<include>org.apache.juneau:juneau-rest-client</include>
-							<include>org.apache.juneau:juneau-microservice</include>
 						</includes>
 					</artifactSet>
 				</configuration>
