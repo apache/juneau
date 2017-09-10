@@ -21,17 +21,14 @@
 	with java -jar juneau-microservice-template-1.0.0.jar microservice.cfg
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
 -->
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice</artifactId>
-		<version>6.3.2-incubating-SNAPSHOT</version>
+		<version>6.4.0-incubating</version>
 	</parent>
 
 	<artifactId>juneau-microservice-template</artifactId>
@@ -39,7 +36,7 @@
 	<description>A template project developers use to start with to create a microservice.</description>
 	
 	<properties>
-		<juneau.version>6.3.2-incubating-SNAPSHOT</juneau.version>
+		<juneau.version>6.4.0-incubating</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
