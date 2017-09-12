@@ -48,6 +48,11 @@ a:active {
 	color: #4c6b87;
 }
 
+a[href*="/src-html/"] {
+	font-weight: bold;
+    border-bottom: 1px dotted #4c6b87;
+}
+
 a[name] {
 	color: #353833;
 }
