@@ -153,6 +153,100 @@ public class JsonSchemaTest {
 		assertEquals(expected, r);
 	}
 
+	@Test
+	public void testToString() throws Exception {
+		JsonSerializer s = new JsonSerializerBuilder().simple().ws().addBeanTypeProperties(false).build();
+		JsonParser p = JsonParser.DEFAULT;
+		String r;
+		Schema t, t2;
+
+		String expected =
+			"{\n"
+			+"	id: 'http://id',\n"
+			+"	'$schema': 'http://schemaVersionUri',\n"
+			+"	title: 'title',\n"
+			+"	description: 'description',\n"
+			+"	type: 'number',\n"
+			+"	definitions: {\n"
+			+"		definition: {\n"
+			+"			'$ref': 'http://definition'\n"
+			+"		}\n"
+			+"	},\n"
+			+"	properties: {\n"
+			+"		property: {\n"
+			+"			type: 'number'\n"
+			+"		}\n"
+			+"	},\n"
+			+"	patternProperties: {\n"
+			+"		'/pattern/': {\n"
+			+"			type: 'number'\n"
+			+"		}\n"
+			+"	},\n"
+			+"	dependencies: {\n"
+			+"		dependency: {\n"
+			+"			'$ref': 'http://dependency'\n"
+			+"		}\n"
+			+"	},\n"
+			+"	items: [\n"
+			+"		{\n"
+			+"			type: 'number'\n"
+			+"		}\n"
+			+"	],\n"
+			+"	multipleOf: 1,\n"
+			+"	maximum: 2,\n"
+			+"	exclusiveMaximum: true,\n"
+			+"	minimum: 3,\n"
+			+"	exclusiveMinimum: true,\n"
+			+"	maxLength: 4,\n"
+			+"	minLength: 5,\n"
+			+"	pattern: '/pattern/',\n"
+			+"	additionalItems: [\n"
+			+"		{\n"
+			+"			type: 'number'\n"
+			+"		}\n"
+			+"	],\n"
+			+"	maxItems: 6,\n"
+			+"	minItems: 7,\n"
+			+"	uniqueItems: true,\n"
+			+"	maxProperties: 8,\n"
+			+"	minProperties: 9,\n"
+			+"	required: [\n"
+			+"		'required'\n"
+			+"	],\n"
+			+"	additionalProperties: {\n"
+			+"		'$ref': 'http://additionalProperty'\n"
+			+"	},\n"
+			+"	'enum': [\n"
+			+"		'enum'\n"
+			+"	],\n"
+			+"	allOf: [\n"
+			+"		{\n"
+			+"			'$ref': 'http://allOf'\n"
+			+"		}\n"
+			+"	],\n"
+			+"	anyOf: [\n"
+			+"		{\n"
+			+"			'$ref': 'http://anyOf'\n"
+			+"		}\n"
+			+"	],\n"
+			+"	oneOf: [\n"
+			+"		{\n"
+			+"			'$ref': 'http://oneOf'\n"
+			+"		}\n"
+			+"	],\n"
+			+"	not: {\n"
+			+"		'$ref': 'http://not'\n"
+			+"	}\n"
+			+"}";
+
+		t = getTest1();
+		r = t.toString();
+		t2 = p.parse(r, Schema.class);
+		r = s.serialize(t2);
+		assertEquals(expected, r);
+	}
+
+	
 	/** Bean with simple values for each property */
 	public static Schema getTest1() {
 		return new Schema()

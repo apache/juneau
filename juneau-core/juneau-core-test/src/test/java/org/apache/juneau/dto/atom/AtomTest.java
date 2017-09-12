@@ -192,4 +192,14 @@ public class AtomTest {
 		f2 = p.parse(r, Feed.class);
 		assertEqualObjects(f, f2);
 	}
+
+	@Test
+	public void testToString() throws Exception {
+		XmlParser p = XmlParser.DEFAULT;
+		String r;
+		Feed f = createFeed(), f2;
+		r = f.toString();
+		f2 = p.parse(r, Feed.class);
+		assertEqualObjects(f, f2);
+	}
 }

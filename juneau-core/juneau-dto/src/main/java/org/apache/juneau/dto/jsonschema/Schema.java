@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -1486,5 +1487,10 @@ public class Schema {
 	public Schema setSchemaMap(SchemaMap schemaMap) {
 		this.schemaMap = schemaMap;
 		return this;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return JsonSerializer.DEFAULT_SQ.toString(this);
 	}
 }

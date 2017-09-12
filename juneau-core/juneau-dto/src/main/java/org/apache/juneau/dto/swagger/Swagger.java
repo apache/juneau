@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -1033,5 +1034,10 @@ public class Swagger extends SwaggerElement {
 				i2 = 0;
 			return i2.compareTo(i1);
 		}
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return JsonSerializer.DEFAULT_SQ.toString(this);
 	}
 }

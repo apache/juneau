@@ -846,4 +846,9 @@ public abstract class HtmlElement {
 		attr("translate", translate);
 		return this;
 	}
+
+	@Override /* Object */
+	public String toString() {
+		return HtmlSerializer.DEFAULT_SQ.toString(this);
+	}
 }

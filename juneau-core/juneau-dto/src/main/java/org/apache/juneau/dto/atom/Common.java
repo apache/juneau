@@ -20,6 +20,7 @@ import java.net.URI;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -108,5 +109,10 @@ public abstract class Common {
 	public Common lang(String lang) {
 		this.lang = lang;
 		return this;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return XmlSerializer.DEFAULT_SQ.toString(this);
 	}
 }
