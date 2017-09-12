@@ -1038,6 +1038,6 @@ public class Swagger extends SwaggerElement {
 
 	@Override /* Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT_SQ.toString(this);
+		return JsonSerializer.DEFAULT.toString(this);
 	}
 }
