@@ -589,14 +589,14 @@ public class CalendarUtils {
 			case SHORT_T:
 			case MEDIUM_DT:
 			case SHORT_DT:
-				d = getFormat(format, locale, TimeZone.getDefault()).parse(in);
+				d = getFormat(format, locale, GMT).parse(in);
 				d.setTime(d.getTime() - timeZone.getRawOffset());
 				break;
 
 			// This is always in GMT.
 			case RFC2822_DTZ:
-				d = getFormat(format, locale, TimeZone.getDefault()).parse(in);
-				d.setTime(d.getTime() + TimeZone.getDefault().getRawOffset());
+				DateFormat f  = getFormat(format, locale, GMT);
+				d = f.parse(in);
 				break;
 
 			// These specify timezones in the strings, so we don't use the specified timezone.
