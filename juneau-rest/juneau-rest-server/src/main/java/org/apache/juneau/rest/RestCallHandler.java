@@ -184,12 +184,14 @@ public class RestCallHandler {
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 
 		} catch (RestException e) {
-			handleError(r1, r2, e);
 			r1.setAttribute("Exception", e);
+			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
+			handleError(r1, r2, e);
 		} catch (Throwable e) {
 			RestException e2 = new RestException(SC_INTERNAL_SERVER_ERROR, e);
-			handleError(r1, r2, e2);
 			r1.setAttribute("Exception", e);
+			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
+			handleError(r1, r2, e2);
 		}
 
 		context.finishCall(r1, r2);
