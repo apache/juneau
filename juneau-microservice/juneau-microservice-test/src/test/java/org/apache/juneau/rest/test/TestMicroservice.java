@@ -12,14 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import java.io.*;
 import java.net.*;
 import java.security.*;
 import java.util.*;
 
 import javax.net.ssl.*;
 
+import org.apache.http.client.*;
 import org.apache.http.conn.ssl.*;
 import org.apache.http.impl.client.*;
+import org.apache.http.protocol.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
@@ -97,6 +100,15 @@ public class TestMicroservice {
 		try {
 			return new RestClientBuilder()
 				.rootUrl(microserviceURI)
+				.setRetryHandler(
+					new HttpRequestRetryHandler() {
+						@Override
+						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+							System.err.println("*** RETRY ***");
+							return (executionCount < 10);
+						}
+					}
+			   )
 				.noTrace()
 			;
 		} catch (Exception e) {
