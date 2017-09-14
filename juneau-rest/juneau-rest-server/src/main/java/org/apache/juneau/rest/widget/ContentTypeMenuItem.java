@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -66,8 +67,9 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 	@Override /* MenuItemWidget */
 	public Div getContent(RestRequest req) {
 		Div div = div();
-		List<MediaType> l = new ArrayList<MediaType>(req.getSerializerGroup().getSupportedMediaTypes());
-		Collections.sort(l);
+		Set<MediaType> l = new TreeSet<MediaType>();
+		for (Serializer s : req.getSerializerGroup().getSerializers())
+			l.add(s.getMediaTypes()[0]);
 		for (MediaType mt : l) {
 			URI uri = req.getUri(true, new AMap<String,String>().append("plainText","true").append("Accept",mt.toString()));
 			div.children(a(uri, mt), br());
