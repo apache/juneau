@@ -263,7 +263,7 @@ public enum HookEvent {
 	 *
 	 * 		<jc>// Log the time it took to execute the request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>END_CALL</jsf>)
-	 * 		<jk>public void</jk> onEndCall(RestRequest req, Logger logger) {
+	 * 		<jk>public void</jk> onEndCall(HttpServletRequest req, Logger logger) {
 	 * 			Exception e = (Exception)req.getAttribute(<js>"Exception"</js>);
 	 * 			Long execTime = (Long)req.getAttribute(<js>"ExecTime"</js>);
 	 * 			<jk>if</jk> (e != <jk>null</jk>)
