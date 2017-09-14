@@ -69,36 +69,40 @@ public class FormDataTest extends RestTestcase {
 	@Test
 	public void testPlainTextParams() throws Exception {
 		RestClient c = TestMicroservice.client(UrlEncodingSerializer.class, UrlEncodingParser.class).plainTextParts().build();
-		String r;
+		try {
+			String r;
 
-		Map<String,Object> m = new AMap<String,Object>()
-			.append("foo", "foo")
-			.append("'foo'", "'foo'")
-			.append("(foo)", "(foo)")
-			.append("@(foo)", "@(foo)");
+			Map<String,Object> m = new AMap<String,Object>()
+				.append("foo", "foo")
+				.append("'foo'", "'foo'")
+				.append("(foo)", "(foo)")
+				.append("@(foo)", "@(foo)");
 
-		r = c.doPost(URL, m).getResponseAsString();
-		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)]", r);
+			r = c.doPost(URL, m).getResponseAsString();
+			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)]", r);
 
-		List<String> l = new AList<String>().appendAll("foo", "'foo'", "(foo)", "@(foo)");
-		r = c.doPost(URL, l).getResponseAsString();
-		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[0=foo&1='foo'&2=(foo)&3=@(foo)]", r);
+			List<String> l = new AList<String>().appendAll("foo", "'foo'", "(foo)", "@(foo)");
+			r = c.doPost(URL, l).getResponseAsString();
+			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[0=foo&1='foo'&2=(foo)&3=@(foo)]", r);
 
-		NameValuePairs nvp = new NameValuePairs()
-			.append("foo", "foo")
-			.append("'foo'", "'foo'")
-			.append("(foo)", "(foo)")
-			.append("@(foo)", "@(foo)");
-		r = c.doPost(URL, nvp).getResponseAsString();
-		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
+			NameValuePairs nvp = new NameValuePairs()
+				.append("foo", "foo")
+				.append("'foo'", "'foo'")
+				.append("(foo)", "(foo)")
+				.append("@(foo)", "@(foo)");
+			r = c.doPost(URL, nvp).getResponseAsString();
+			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
 
-		r = c.doPost(URL)
-			.formData("foo", "foo")
-			.formData("'foo'", "'foo'")
-			.formData("(foo)", "(foo)")
-			.formData("@(foo)", "@(foo)")
-			.getResponseAsString();
-		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
+			r = c.doPost(URL)
+				.formData("foo", "foo")
+				.formData("'foo'", "'foo'")
+				.formData("(foo)", "(foo)")
+				.formData("@(foo)", "@(foo)")
+				.getResponseAsString();
+			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
+		} finally {
+			c.close();
+		}
 	}
 
 	//====================================================================================================
