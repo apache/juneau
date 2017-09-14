@@ -36,7 +36,6 @@ import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.internal.ObjectUtils;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
