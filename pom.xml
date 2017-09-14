@@ -36,7 +36,7 @@
 		<junit.version>4.11</junit.version>
 		<jaxrs.version>1.1.1</jaxrs.version>
 		<servlet.version>3.1.0</servlet.version>
-		<httpclient.version>4.5</httpclient.version>
+		<httpclient.version>4.5.3</httpclient.version>
 	</properties>
 
 	<dependencyManagement>
