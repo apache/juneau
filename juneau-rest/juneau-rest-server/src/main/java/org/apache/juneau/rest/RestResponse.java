@@ -163,7 +163,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<li> {@link InputStream}
 	 * 	<li> {@link Reader}
 	 * 	<li> Any serializable type defined in <a class="doclink"
-	 * 		href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>
+	 * 		href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a>
 	 * </ul>
 	 *
 	 * <p>

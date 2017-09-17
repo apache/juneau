@@ -193,6 +193,31 @@
 									<version>${project.version}</version>
 								</artifactItem>
 
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-examples-core</artifactId>
+									<classifier>bin</classifier>
+									<type>zip</type>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-examples-rest</artifactId>
+									<classifier>bin</classifier>
+									<type>zip</type>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-microservice-template</artifactId>
+									<classifier>bin</classifier>
+									<type>zip</type>
+									<version>${project.version}</version>
+								</artifactItem>
+
 							</artifactItems>
 						</configuration>
 					</execution>

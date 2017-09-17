@@ -484,3 +484,10 @@ bpx
 bpi
 tooltip
 templated
+marshall
+dto
+svl
+mantra
+strived
+protobuf
+maven

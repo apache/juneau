@@ -81,6 +81,7 @@
 		<module>juneau-rest</module>
         <module>juneau-microservice</module>
         <module>juneau-examples</module>
+        <module>juneau-doc</module>
 		<module>juneau-releng</module>
     </modules>
 
@@ -169,8 +170,8 @@
 						<linksource>true</linksource>
 						<source>1.6</source>
 						<bootclasspath>${sun.boot.class.path}</bootclasspath>
-						<overview>${basedir}/juneau-core/juneau-marshall/src/main/javadoc/overview.html</overview>
-						<stylesheetfile>${basedir}/juneau-core/juneau-marshall/src/main/javadoc/javadoc.css</stylesheetfile>
+						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
+						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
 						<use>false</use>
 						<additionalparam>-sourcetab 3 -notimestamp -Xdoclint:none</additionalparam>
 						<verbose>false</verbose>
@@ -181,7 +182,7 @@
 							<link>http://docs.oracle.com/javaee/5/api/</link>
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
-						<javadocDirectory>${basedir}/juneau-core/juneau-marshall/src/main/javadoc</javadocDirectory>
+						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
 					</configuration>
 					<executions>
 						<execution>

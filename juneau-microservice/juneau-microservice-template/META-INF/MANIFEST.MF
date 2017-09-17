@@ -15,7 +15,7 @@ Manifest-Version: 1.0
 Main-Class: org.apache.juneau.microservice.RestMicroservice
 Rest-Resources: 
  org.apache.juneau.microservice.sample.RootResources
-Main-ConfigFile: microservice.cfg
+Main-ConfigFile: my-microservice.cfg
 Class-Path: 
  lib/commons-codec-1.9.jar 
  lib/commons-io-1.2.jar 

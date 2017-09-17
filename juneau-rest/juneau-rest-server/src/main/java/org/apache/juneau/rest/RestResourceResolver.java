@@ -47,7 +47,7 @@ public interface RestResourceResolver {
 	 * @param c The class to resolve.
 	 * @param config The initialization configuration for the resource.
 	 * @return The instance of that class.
-	 * @throws RestServletException If class could not be resolved.
+	 * @throws Exception If class could not be resolved.
 	 */
-	Object resolve(Class<?> c, RestConfig config) throws RestServletException;
+	Object resolve(Class<?> c, RestConfig config) throws Exception;
 }

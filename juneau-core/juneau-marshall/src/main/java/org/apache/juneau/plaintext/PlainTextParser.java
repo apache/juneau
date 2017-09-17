@@ -17,7 +17,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Parsers HTTP plain text request bodies into <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">Group 5</a>
+ * Parsers HTTP plain text request bodies into <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">Group 5</a>
  * POJOs.
  *
  * <h5 class='section'>Media types:</h5>

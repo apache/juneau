@@ -18,7 +18,7 @@ import java.lang.reflect.*;
 
 /**
  * Denotes the default resolver.
- * 
+ *
  * <p>
  * The default implementation simply instantiates the class using one of the following constructors:
  * <ul>
@@ -43,7 +43,7 @@ import java.lang.reflect.*;
 public class RestResourceResolverSimple implements RestResourceResolver {
 
 	@Override /* RestResourceResolver */
-	public Object resolve(Class<?> c, RestConfig config) throws RestServletException {
+	public Object resolve(Class<?> c, RestConfig config) throws Exception {
 		try {
 			Constructor<?> c1 = findPublicConstructor(c, RestConfig.class);
 			if (c1 != null)

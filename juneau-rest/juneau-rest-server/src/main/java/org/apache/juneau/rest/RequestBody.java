@@ -135,7 +135,7 @@ public class RequestBody {
 	 * </table>
 	 *
 	 * <p>
-	 * Refer to <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a> for
+	 * Refer to <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a> for
 	 * a complete definition of supported POJOs.
 	 *
 	 * <h5 class='section'>Examples:</h5>

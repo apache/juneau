@@ -65,7 +65,7 @@ public @interface Bean {
 	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 	 * 	<jk>public class</jk> Foo {
 	 * 		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
-	 * 		<ja>@BeanProperty</ja>(typeDictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
+	 * 		<ja>@BeanProperty</ja>(beanDictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
 	 * 		<jk>public</jk> Object[] x = <jk>new</jk> Object[]{<jk>new</jk> Bar(), <jk>new</jk> Baz()};
 	 * 	}
 	 *
@@ -81,7 +81,7 @@ public @interface Bean {
 	 * <p class='bcode'>
 	 * 	<xt>&lt;foo&gt;</xt>
 	 * 		<xt>&lt;x&gt;</xt>
-	 * 			<xt>&lt;bar/&gt;v
+	 * 			<xt>&lt;bar/&gt;</xt>
 	 * 			<xt>&lt;baz/&gt;</xt>
 	 * 		<xt>&lt;/x&gt;</xt>
 	 * 	<xt>&lt;/foo&gt;</xt>
@@ -245,7 +245,7 @@ public @interface Bean {
 	 * 	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>;
 	 * 	A1 a1 = <jk>new</jk> A1();
 	 * 	String r = s.serialize(a1);
-	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  // Note f1 is not serialized.
+	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized.</jc>
 	 * </p>
 	 *
 	 * <p>

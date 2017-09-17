@@ -582,7 +582,7 @@
 		<h6 class='topic'>Method Return Type</h6>
 		<p>
 			The return type can be any serializable POJO as defined in <a class='doclink' 
-			href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>.
+			href='../../../../overview-summary.html#juneau-marshall.PojoCategories'>POJO Categories</a>.
 			It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
 			setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
 			Calling the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method is functionally equivalent 
@@ -938,7 +938,7 @@
 	<div class='topic'>
 		<p>
 			Annotations are provided for easy access to HTTP body content as any parsable POJO type
-			(See <a class='doclink' href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>).
+			(See <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.PojoCategories'>POJO Categories</a>).
 			In the example below, we're POSTing beans.
 		</p>
 		<p class='bcode'>
@@ -1631,7 +1631,7 @@
 	<div class='topic'>
 		<p>
 			The Juneau serializers and parsers are highly-configurable through properties.
-			(See <a class='doclink' href='../../../../overview-summary.html#Core.ConfigurableProperties'>Configurable Properties</a>)
+			(See <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.ConfigurableProperties'>Configurable Properties</a>)
 		</p>
 		<p>
 			There are several ways of defining properties in the REST API.
@@ -1736,7 +1736,7 @@
 	<div class='topic'>
 		<p>
 			The Juneau serializers and parsers can be configured on how to handle POJOs through the use of Transforms.
-			(See <a class='doclink' href='../../../../overview-summary.html#Core.Transforms'>Transforms</a>)
+			(See <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.Transforms'>Transforms</a>)
 		</p>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#beanFilters() @RestResource.beanFilters()} 

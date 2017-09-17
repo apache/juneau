@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
  * <h6 class='topic'>Valid data conversions</h6>
  *
  * Parsers can parse any parsable POJO types, as specified in the <a class="doclink"
- * href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>.
+ * href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a>.
  *
  * <p>
  * Some examples of conversions are shown below...

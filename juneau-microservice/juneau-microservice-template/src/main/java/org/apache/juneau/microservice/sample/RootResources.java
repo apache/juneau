@@ -12,24 +12,30 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.sample;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.HTMLDOC_links;
-
 import org.apache.juneau.microservice.ResourceGroup;
 import org.apache.juneau.microservice.resources.ConfigResource;
 import org.apache.juneau.microservice.resources.LogsResource;
-import org.apache.juneau.rest.annotation.Property;
+import org.apache.juneau.rest.annotation.HtmlDoc;
 import org.apache.juneau.rest.annotation.RestResource;
+import org.apache.juneau.rest.widget.ContentTypeMenuItem;
+import org.apache.juneau.rest.widget.StyleMenuItem;
 
 /**
  * Root microservice page.
  */
 @RestResource(
 	path="/",
-	title="Juneau Microservice Template",
-	description="Template for creating REST microservices",
-	properties={
-		@Property(name=HTMLDOC_links, value="{options:'?method=OPTIONS'}")
-	},
+	title="My Microservice",
+	description="Top-level resources page",
+	htmldoc=@HtmlDoc(
+		widgets={
+			ContentTypeMenuItem.class,
+			StyleMenuItem.class
+		},
+		links={
+			"options: servlet:/?method=OPTIONS"
+		}
+	),
 	children={
 		HelloWorldResource.class,
 		ConfigResource.class,

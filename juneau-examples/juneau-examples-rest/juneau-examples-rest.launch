@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-<stringAttribute key="bad_container_name" value="/juneau-examples"/>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/juneau-microservice/src/main/java/org/apache/juneau/microservice/RestMicroservice.java"/>
-</listAttribute>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
-</listAttribute>
 <booleanAttribute key="org.eclipse.jdt.debug.ui.CONSIDER_INHERITED_MAIN" value="true"/>
 <booleanAttribute key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS" value="true"/>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
