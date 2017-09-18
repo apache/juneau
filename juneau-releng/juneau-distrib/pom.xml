@@ -44,12 +44,6 @@
 							<artifactItems>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-all</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
 									<outputDirectory>${project.build.directory}/src</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-all</artifactId>
@@ -57,9 +51,15 @@
 									<type>jar</type>
 									<classifier>sources</classifier>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-all</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-marshall</artifactId>
 									<version>${project.version}</version>
@@ -67,14 +67,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-marshall</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-marshall</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.marshall_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-marshall-rdf</artifactId>
 									<version>${project.version}</version>
@@ -82,14 +89,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-marshall-rdf</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-marshall-rdf</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.marshall.rdf_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-svl</artifactId>
 									<version>${project.version}</version>
@@ -97,14 +111,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-svl</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-svl</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.svl_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-config</artifactId>
 									<version>${project.version}</version>
@@ -112,14 +133,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-config</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-config</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.config_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-dto</artifactId>
 									<version>${project.version}</version>
@@ -127,14 +155,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-dto</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-dto</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.dto_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-server</artifactId>
 									<version>${project.version}</version>
@@ -142,14 +177,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-server</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-server-jaxrs</artifactId>
 									<version>${project.version}</version>
@@ -157,14 +199,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-server-jaxrs</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-jaxrs</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server.jaxrs_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-client</artifactId>
 									<version>${project.version}</version>
@@ -172,14 +221,21 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest-client</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-client</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.client_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-microservice-server</artifactId>
 									<version>${project.version}</version>
@@ -187,10 +243,17 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-microservice-server</artifactId>
 									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-microservice-server</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.microservice-server_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<artifactItem>
