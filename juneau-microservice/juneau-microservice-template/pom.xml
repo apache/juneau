@@ -60,7 +60,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>apache-juneau-my-microservice-${project.version}</finalName>
+							<finalName>my-microservice-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/bin.xml</descriptor>
 							</descriptors>

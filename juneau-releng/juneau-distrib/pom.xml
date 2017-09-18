@@ -200,6 +200,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
+									<destFileName>juneau-examples-core-${project.version}.zip</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
@@ -208,6 +209,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
+									<destFileName>juneau-examples-rest-${project.version}.zip</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
@@ -216,6 +218,7 @@
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
+									<destFileName>my-microservice-${project.version}.zip</destFileName>
 								</artifactItem>
 
 							</artifactItems>

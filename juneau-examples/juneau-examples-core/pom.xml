@@ -79,7 +79,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>apache-juneau-examples-core-${project.version}</finalName>
+							<finalName>juneau-examples-core-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/bin.xml</descriptor>
 							</descriptors>

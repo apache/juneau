@@ -166,7 +166,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>apache-juneau-examples-rest-${project.version}</finalName>
+							<finalName>juneau-examples-rest-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/bin.xml</descriptor>
 							</descriptors>
