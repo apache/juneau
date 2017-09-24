@@ -642,9 +642,13 @@ public class LocalizedDatesTest {
 	public void test() {
 		BeanSession session = ps.getBeanContext().createSession(new BeanSessionArgs(null, sessionLocale, sessionTimeZone, null));
 		String actual = session.convertToType(calendar, String.class);
+		if (expected.indexOf('(') == -1)
+			actual = actual.replaceAll("\\([^\\)]+\\) ", "").replaceAll(" \\([^\\)]+\\)", "");  // Fix Windows-specific formatting difference
 		assertEquals(expected, actual);
 		Object c2 = session.convertToType(actual, calendar.getClass());
 		String actual2 = session.convertToType(c2, String.class);
+		if (expected.indexOf('(') == -1)
+			actual2 = actual2.replaceAll("\\([^\\)]+\\) ", "").replaceAll(" \\([^\\)]+\\)", "");  // Fix Windows-specific formatting difference
 		assertEquals(expected, actual2);
 	}
 }
