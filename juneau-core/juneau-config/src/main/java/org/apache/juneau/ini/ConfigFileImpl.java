@@ -245,7 +245,9 @@ public final class ConfigFileImpl extends ConfigFile {
 			return (T)pBeanSession.convertToType(s, (Class<?>)type);
 
 		char s1 = firstNonWhitespaceChar(s);
-		if (s1 != '[' && s1 != '{' && ! "null".equals(s))
+		if (isArray(type) && s1 != '[')
+			s = '[' + s + ']';
+		else if (s1 != '[' && s1 != '{' && ! "null".equals(s))
 			s = '\'' + s + '\'';
 
 		if (parser == null)
@@ -259,6 +261,13 @@ public final class ConfigFileImpl extends ConfigFile {
 			return false;
 		Class<?> c = (Class<?>)t;
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
+	}
+
+	private static boolean isArray(Type t) {
+		if (! (t instanceof Class))
+			return false;
+		Class<?> c = (Class<?>)t;
+		return (c.isArray());
 	}
 
 
