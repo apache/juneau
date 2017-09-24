@@ -481,7 +481,8 @@ public class TestUtils {
 	}
 
 	public static void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
-		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
+		// Must work for windows too.
+		String[] e = expected.trim().split("[\r\n]+"), a = actual.trim().split("[\r\n]+");
 
 		if (e.length != a.length)
 			throw new ComparisonFailure(format(msg, args), expected, actual);
