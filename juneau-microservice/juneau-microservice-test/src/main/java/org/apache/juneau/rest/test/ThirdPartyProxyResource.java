@@ -17,7 +17,10 @@ import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.apache.juneau.rest.test.pojos.Constants.*;
 import static org.junit.Assert.*;
 
+import java.io.*;
 import java.util.*;
+
+import javax.servlet.http.*;
 
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
@@ -33,6 +36,61 @@ import org.apache.juneau.utils.*;
 )
 @SuppressWarnings("serial")
 public class ThirdPartyProxyResource extends ResourceJena {
+
+	public static FileWriter logFile;
+	static {
+		try {
+			logFile = new FileWriter("./target/logs/third-party-proxy-resource.txt", false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@RestHook(HookEvent.START_CALL)
+	public static void startCall(HttpServletRequest req) {
+		try {
+			logFile.append("START["+new Date()+"]-").append(req.getQueryString()).append("\n");
+			logFile.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@RestHook(HookEvent.PRE_CALL)
+	public static void preCall(HttpServletRequest req) {
+		try {
+			logFile.append("PRE["+new Date()+"]-").append(req.getQueryString()).append("\n");
+			logFile.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@RestHook(HookEvent.POST_CALL)
+	public static void postCall(HttpServletRequest req) {
+		try {
+			logFile.append("POST["+new Date()+"]-").append(req.getQueryString()).append("\n");
+			logFile.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@RestHook(HookEvent.END_CALL)
+	public static void endCall(HttpServletRequest req) {
+		try {
+			Exception e = (Exception)req.getAttribute("Exception");
+			Long execTime = (Long)req.getAttribute("ExecTime");
+			logFile.append("END["+new Date()+"]-").append(req.getQueryString()).append(", time=").append(""+execTime).append(", exception=").append(e == null ? null : e.toString()).append("\n");
+			logFile.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	//--------------------------------------------------------------------------------
 	// Header tests
@@ -1439,8 +1497,8 @@ public class ThirdPartyProxyResource extends ResourceJena {
 	}
 
 	@RestMethod(name="POST", path="/setInt3dArray")
-	public void setInt3dArray(@Body int[][][] x) {
-		assertObjectEquals("[[[1,2],null],null]", x);
+	public String setInt3dArray(@Body int[][][] x) {
+		return ""+x[0][0][0];
 	}
 
 	@RestMethod(name="POST", path="/setInteger3dArray")

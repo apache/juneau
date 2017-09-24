@@ -14,7 +14,6 @@ package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -44,7 +43,7 @@ import org.apache.juneau.transforms.*;
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
 	},
-	flags={REST_allowMethodParam},
+	allowMethodParam="*",
 	pojoSwaps={
 		IteratorSwap.class,       // Allows Iterators and Iterables to be serialized.
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.

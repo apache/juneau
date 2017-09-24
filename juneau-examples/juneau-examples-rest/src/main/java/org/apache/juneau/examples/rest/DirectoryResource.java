@@ -17,7 +17,6 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.rest.RestContext.*;
 
 import java.io.*;
 import java.net.*;
@@ -51,9 +50,9 @@ import org.apache.juneau.utils.*;
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		}
 	),
+	allowMethodParam="*",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
-		@Property(name=REST_allowMethodParam, value="*"),
 		@Property(name="rootDir", value="$S{java.io.tmpdir}"),
 		@Property(name="allowViews", value="false"),
 		@Property(name="allowDeletes", value="false"),

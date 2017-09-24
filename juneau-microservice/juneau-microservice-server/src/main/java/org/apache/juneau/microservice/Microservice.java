@@ -12,16 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.jar.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;
@@ -101,12 +105,30 @@ import org.apache.juneau.utils.*;
  */
 public abstract class Microservice {
 
-	private static Args args;
-	private static ConfigFile cf;
-	private static ManifestFile mf;
+	private static volatile Microservice INSTANCE;
+
+	private Logger logger;
+	private Args args;
+	private ConfigFile cf;
+	private ManifestFile mf;
+	private VarResolver vr;
 
 	private String cfPath;
 
+	/**
+	 * Returns the Microservice instance.  
+	 * <p>
+	 * This method only works if there's only one Microservice instance in a JVM.  
+	 * Otherwise, it's just overwritten by the last call to {@link #Microservice(String...)}.
+	 * 
+	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
+	 */
+	public static Microservice getInstance() {
+		synchronized(Microservice.class) {
+			return INSTANCE;
+		}
+	}
+	
 	/**
 	 * Constructor.
 	 *
@@ -114,8 +136,16 @@ public abstract class Microservice {
 	 * @throws Exception
 	 */
 	protected Microservice(String...args) throws Exception {
-		Microservice.args = new Args(args);
+		setInstance(this);
+		this.args = new Args(args);
 	}
+	
+	private static void setInstance(Microservice m) {
+		synchronized(Microservice.class) {
+			INSTANCE = m;
+		}
+	}
+
 
 	/**
 	 * Specifies the path of the config file for this microservice.
@@ -158,8 +188,8 @@ public abstract class Microservice {
 	 *
 	 * @param cf The config file for this application, or <jk>null</jk> if no config file is needed.
 	 */
-	public static void setConfig(ConfigFile cf) {
-		Microservice.cf = cf;
+	public void setConfig(ConfigFile cf) {
+		this.cf = cf;
 	}
 
 	/**
@@ -176,8 +206,8 @@ public abstract class Microservice {
 	 *
 	 * @param mf The manifest file of this microservice.
 	 */
-	public static void setManifest(Manifest mf) {
-		Microservice.mf = new ManifestFile(mf);
+	public void setManifest(Manifest mf) {
+		this.mf = new ManifestFile(mf);
 	}
 
 	/**
@@ -189,7 +219,7 @@ public abstract class Microservice {
 	 */
 	public Microservice setManifestContents(String...contents) throws IOException {
 		String s = StringUtils.join(contents, "\n") + "\n";
-		Microservice.mf = new ManifestFile(new Manifest(new ByteArrayInputStream(s.getBytes("UTF-8"))));
+		this.mf = new ManifestFile(new Manifest(new ByteArrayInputStream(s.getBytes("UTF-8"))));
 		return this;
 	}
 
@@ -199,8 +229,8 @@ public abstract class Microservice {
 	 * @param f The manifest file of this microservice.
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
-	public static void setManifest(File f) throws IOException {
-		Microservice.mf = new ManifestFile(f);
+	public void setManifest(File f) throws IOException {
+		this.mf = new ManifestFile(f);
 	}
 
 	/**
@@ -210,8 +240,8 @@ public abstract class Microservice {
 	 * @param c The class whose jar file contains the manifest to use for this microservice.
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
-	public static void setManifest(Class<?> c) throws IOException {
-		Microservice.mf = new ManifestFile(c);
+	public void setManifest(Class<?> c) throws IOException {
+		this.mf = new ManifestFile(c);
 	}
 
 	/**
@@ -285,7 +315,7 @@ public abstract class Microservice {
 	 *
 	 * @return The command-line arguments passed into the application.
 	 */
-	protected static Args getArgs() {
+	public Args getArgs() {
 		return args;
 	}
 
@@ -382,7 +412,7 @@ public abstract class Microservice {
 	 *
 	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
 	 */
-	protected static ConfigFile getConfig() {
+	public ConfigFile getConfig() {
 		return cf;
 	}
 
@@ -406,11 +436,30 @@ public abstract class Microservice {
 	 *
 	 * @return The manifest file from the main jar, or <jk>null</jk> if the manifest file could not be retrieved.
 	 */
-	protected static ManifestFile getManifest() {
+	public ManifestFile getManifest() {
 		return mf;
 	}
 
+	/**
+	 * Returns the variable resolver for resolving variables in strings and files.
+	 * <p>
+	 * See the {@link #createVarResolver()} method for the list of available resolution variables.
+	 * 
+	 * @return The VarResolver used by this Microservice, or <jk>null</jk> if it was never created.
+	 */
+	public VarResolver getVarResolver() {
+		return vr;
+	}
 
+	/**
+	 * Returns the logger for this microservice.
+	 * 
+	 * @return The logger for this microservice.
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
+	
 	//--------------------------------------------------------------------------------
 	// Abstract lifecycle methods.
 	//--------------------------------------------------------------------------------
@@ -492,9 +541,11 @@ public abstract class Microservice {
 			}
 		}
 
+		vr = createVarResolver().build();
+		
 		if (cfPath != null)
 			System.setProperty("juneau.configFile", cfPath);
-
+		
 		// --------------------------------------------------------------------------------
 		// Set system properties.
 		// --------------------------------------------------------------------------------
@@ -502,6 +553,16 @@ public abstract class Microservice {
 		if (spKeys != null)
 			for (String key : spKeys)
 				System.setProperty(key, cf.get("SystemProperties", key));
+
+		// --------------------------------------------------------------------------------
+		// Initialize logging.
+		// --------------------------------------------------------------------------------
+		try {
+			initLogging();
+		} catch (Exception e) {
+			// If logging can be initialized, just print a stack trace and continue.
+			e.printStackTrace();
+		}
 
 		// --------------------------------------------------------------------------------
 		// Add a config file change listener.
@@ -547,6 +608,110 @@ public abstract class Microservice {
 		);
 		onStart();
 		return this;
+	}
+
+	/**
+	 * Initialize the logging for this microservice.
+	 * 
+	 * <p>
+	 * Subclasses can override this method to provide customized logging.
+	 * 
+	 * <p>
+	 * The default implementation uses the <cs>Logging</cs> section in the config file to set up logging:
+	 * <p class='bcode'>
+	 * 	<cc>#================================================================================
+	 * 	# Logger settings
+	 * 	# See FileHandler Java class for details.
+	 * 	#================================================================================</cc>
+	 * 	<cs>[Logging]</cs>
+	 *
+	 * 	<cc># The directory where to create the log file.
+	 * 	# Default is ".".</cc>
+	 * 	<ck>logDir</ck> = logs
+	 *
+	 * 	<cc># The name of the log file to create for the main logger.
+	 * 	# The logDir and logFile make up the pattern that's passed to the FileHandler
+	 * 	# constructor.
+	 * 	# If value is not specified, then logging to a file will not be set up.</cc>
+	 * 	<ck>logFile</ck> = microservice.%g.log
+	 *
+	 * 	<cc># Whether to append to the existing log file or create a new one.
+	 * 	# Default is false.</cc>
+	 * 	<ck>append</ck> =
+	 *
+	 * 	<cc># The SimpleDateFormat format to use for dates.
+	 * 	# Default is "yyyy.MM.dd hh:mm:ss".</cc>
+	 * 	<ck>dateFormat</ck> =
+	 *
+	 * 	<cc># The log message format.
+	 * 	# The value can contain any of the following variables:
+	 * 	# 	{date} - The date, formatted per dateFormat.
+	 * 	#	{class} - The class name.
+	 * 	#	{method} - The method name.
+	 * 	#	{logger} - The logger name.
+	 * 	#	{level} - The log level name.
+	 * 	#	{msg} - The log message.
+	 * 	#	{threadid} - The thread ID.
+	 * 	#	{exception} - The localized exception message.
+	 * 	# Default is "[{date} {level}] {msg}%n".</cc>
+	 * 	<ck>format</ck> =
+	 *
+	 * 	<cc># The maximum log file size.
+	 * 	# Suffixes available for numbers.
+	 * 	# See ConfigFile.getInt(String,int) for details.
+	 * 	# Default is 1M.</cc>
+	 * 	<ck>limit</ck> = 10M
+	 *
+	 * 	<cc># Max number of log files.
+	 * 	# Default is 1.</cc>
+	 * 	<ck>count</ck> = 5
+	 *
+	 * 	<cc># Default log levels.
+	 * 	# Keys are logger names.
+	 * 	# Values are serialized Level POJOs.</cc>
+	 * 	<ck>levels</ck> = { org.apache.juneau:'INFO' }
+	 *
+	 * 	<cc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
+	 * 	# Useful for preventing log files from filling up with duplicate stack traces.
+	 * 	# Default is false.</cc>
+	 * 	<ck>useStackTraceHashes</ck> = true
+	 *
+	 * 	<cc># The default level for the console logger.
+	 * 	# Default is WARNING.</cc>
+	 * 	<ck>consoleLevel</ck> = WARNING
+	 * </p>
+	 *
+	 * @throws Exception
+	 */
+	protected void initLogging() throws Exception {
+		ConfigFile cf = getConfig();
+		logger = Logger.getLogger("");
+		String logFile = cf.getString("Logging/logFile");
+		if (! isEmpty(logFile)) {
+			LogManager.getLogManager().reset();
+			String logDir = cf.getString("Logging/logDir", ".");
+			mkdirs(new File(logDir), false);
+			boolean append = cf.getBoolean("Logging/append");
+			int limit = cf.getInt("Logging/limit", 1024*1024);
+			int count = cf.getInt("Logging/count", 1);
+			FileHandler fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
+
+			boolean useStackTraceHashes = cf.getBoolean("Logging/useStackTraceHashes");
+			String format = cf.getString("Logging/format", "[{date} {level}] {msg}%n");
+			String dateFormat = cf.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss");
+			fh.setFormatter(new LogEntryFormatter(format, dateFormat, useStackTraceHashes));
+			fh.setLevel(cf.getObjectWithDefault("Logging/fileLevel", Level.INFO, Level.class));
+			logger.addHandler(fh);
+
+			ConsoleHandler ch = new ConsoleHandler();
+			ch.setLevel(cf.getObjectWithDefault("Logging/consoleLevel", Level.WARNING, Level.class));
+			ch.setFormatter(new LogEntryFormatter(format, dateFormat, false));
+			logger.addHandler(ch);
+		}
+		ObjectMap loggerLevels = cf.getObject("Logging/levels", ObjectMap.class);
+		if (loggerLevels != null)
+			for (String l : loggerLevels.keySet())
+				Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
 	}
 
 	/**

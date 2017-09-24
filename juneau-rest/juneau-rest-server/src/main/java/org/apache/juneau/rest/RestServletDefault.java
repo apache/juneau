@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.RestContext.*;
-
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jso.*;
@@ -185,10 +183,7 @@ import org.apache.juneau.xml.*;
 		MsgPackParser.class,
 		PlainTextParser.class
 	},
-	properties={
-		// Allow &method parameter on safe HTTP methods.
-		@Property(name=REST_allowMethodParam, value="OPTIONS"),
-	},
+	allowMethodParam="OPTIONS",
 	htmldoc=@HtmlDoc(
 		header={
 			"<h1>$R{servletTitle}</h1>",

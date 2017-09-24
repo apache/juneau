@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.rest.RestContext.*;
 
 import java.io.*;
 import java.util.*;
@@ -43,9 +42,7 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	path="/testParams",
 	serializers=PlainTextSerializer.class,
-	properties={
-		@Property(name=REST_allowMethodParam, value="*")
-	},
+	allowMethodParam="*",
 	pojoSwaps={CalendarSwap.DateMedium.class},
 	messages="ParamsResource"
 )

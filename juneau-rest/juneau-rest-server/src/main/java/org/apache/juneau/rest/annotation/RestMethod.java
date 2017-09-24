@@ -630,4 +630,51 @@ public @interface RestMethod {
 	 * Information provided here overrides information provided in the servlet-level annotation.
 	 */
 	HtmlDoc htmldoc() default @HtmlDoc;
+
+	/**
+	 * Default character encoding.
+	 *
+	 * <p>
+	 * The default character encoding for the request and response if not specified on the request.
+	 *
+	 * <ul>
+	 * 	<li>String value.
+	 * 	<li>Defaults to system property <js>"juneau.defaultCharset"</js>, or <js>"utf-8"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * 	<li>Overrides the value at the class level via {@link RestResource#defaultCharset() @RestResource.defaultCharset()}.
+	 * </ul>
+	 */
+	String defaultCharset() default "";
+
+	/**
+	 * Expected format of request parameters.
+	 *
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
+	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 	<li>
+	 * 		<js>"PLAIN"</js> - Plain text.
+	 * 		<br>This treats request parameters as plain text.
+	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
+	 * 		mode.
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
+	 * <js>"foo"</js> when using UON mode.
+	 *
+	 * <p>
+	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and
+	 * {@link Query#format() @Query.format()} annotations.
+	 *
+	 * <ul>
+	 * 	<li>String value.
+	 * 	<li>Defaults to system property <js>"juneau.paramFormat"</js>, or <js>"UON"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * 	<li>Overrides the value at the class level via {@link RestResource#paramFormat() @RestResource.paramFormat()}.
+	 * </ul>
+	 */
+	String paramFormat() default "";
 }

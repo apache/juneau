@@ -12,10 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.FileUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -25,11 +21,11 @@ import javax.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.xml.*;
 
@@ -43,8 +39,7 @@ import org.eclipse.jetty.xml.*;
  *
  * <h6 class='topic'>Defining REST Resources</h6>
  * 
- * Top-level REST resources are defined by the {@link #getResourceMap()} method.
- * This method can be overridden to provide a customized list of REST resources.
+ * Top-level REST resources are defined in the <code>jetty.xml</code> file as normal servlets.
  *
  * <h6 class='topic'>Logging</h6>
  * 
@@ -72,12 +67,24 @@ import org.eclipse.jetty.xml.*;
  */
 public class RestMicroservice extends Microservice {
 	
-	ServletContextHandler servletContextHandler; 
-	Server server;
-	int port;
-	String contextPath;
-	Logger logger;
-	Object jettyXml;
+	private Server server;
+	private Object jettyXml;
+	
+	private static volatile RestMicroservice INSTANCE;
+	
+	/**
+	 * Returns the Microservice instance.  
+	 * <p>
+	 * This method only works if there's only one Microservice instance in a JVM.  
+	 * Otherwise, it's just overwritten by the last call to {@link #RestMicroservice(String...)}.
+	 * 
+	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
+	 */
+	public static RestMicroservice getInstance() {
+		synchronized(RestMicroservice.class) {
+			return INSTANCE;
+		}
+	}
 	
 	/**
 	 * Main method.
@@ -100,8 +107,14 @@ public class RestMicroservice extends Microservice {
 	 */
 	public RestMicroservice(String...args) throws Exception {
 		super(args);
+		setInstance(this);
 	}
-
+	
+	private static void setInstance(RestMicroservice rm) {
+		synchronized(RestMicroservice.class) {
+			INSTANCE = rm;
+		}
+	}
 
 	//--------------------------------------------------------------------------------
 	// Methods implemented on Microservice API
@@ -110,12 +123,6 @@ public class RestMicroservice extends Microservice {
 	@Override /* Microservice */
 	public RestMicroservice start() throws Exception {
 		super.start();
-		try {
-			initLogging();
-		} catch (Exception e) {
-			// If logging can be initialized, just print a stack trace and continue.
-			e.printStackTrace();
-		}
 		createServer();
 		startServer();
 		return this;
@@ -132,6 +139,7 @@ public class RestMicroservice extends Microservice {
 		Thread t = new Thread() {
 			@Override /* Thread */
 			public void run() {
+				Logger logger = getLogger();
 				try {
 					if (server.isStopping() || server.isStopped())
 						return;
@@ -162,131 +170,85 @@ public class RestMicroservice extends Microservice {
 
 	/**
 	 * Returns the port that this microservice started up on.
+	 * <p>
+	 * The value is determined by looking at the <code>Server/Connectors[ServerConnector]/port</code> value in the 
+	 * Jetty configuration.
+	 * 
 	 * @return The port that this microservice started up on.
 	 */
 	public int getPort() {
-		return port;
+		for (Connector c : getServer().getConnectors()) 
+			if (c instanceof ServerConnector)
+				return ((ServerConnector)c).getPort();
+		throw new RuntimeException("Could not locate ServerConnector in Jetty server.");
+	}
+	
+	/**
+	 * Returns the context path that this microservice is using.
+	 * <p>
+	 * The value is determined by looking at the <code>Server/Handlers[ServletContextHandler]/contextPath</code> value 
+	 * in the Jetty configuration.
+	 * 
+	 * @return The context path that this microservice is using.
+	 */
+	public String getContextPath() {
+		for (Handler h : getServer().getHandlers()) {
+			if (h instanceof HandlerCollection) {
+				for (Handler h2 : ((HandlerCollection)h).getChildHandlers())
+					if (h2 instanceof ServletContextHandler) 
+						return ((ServletContextHandler)h2).getContextPath();
+			}
+			if (h instanceof ServletContextHandler) 
+				return ((ServletContextHandler)h).getContextPath();
+		}
+		throw new RuntimeException("Could not locate ServletContextHandler in Jetty server.");
+	}
+	
+	/**
+	 * Returns whether this microservice is using <js>"http"</js> or <js>"https"</js>.
+	 * <p>
+	 * The value is determined by looking for the existence of an SSL Connection Factorie by looking for the
+	 * <code>Server/Connectors[ServerConnector]/ConnectionFactories[SslConnectionFactory]</code> value in the Jetty
+	 * configuration.
+	 * 
+	 * @return Whether this microservice is using <js>"http"</js> or <js>"https"</js>.
+	 */
+	public String getProtocol() {
+		for (Connector c : getServer().getConnectors())
+			if (c instanceof ServerConnector) 
+				for (ConnectionFactory cf : ((ServerConnector)c).getConnectionFactories())
+					if (cf instanceof SslConnectionFactory)
+						return "https";
+		return "http";
 	}
 
 	/**
-	 * Returns the URI where this microservice is listening on.
-	 * @return The URI where this microservice is listening on.
+	 * Returns the hostname of this microservice.
+	 * <p>
+	 * Simply uses <code>InetAddress.getLocalHost().getHostName()</code>.
+	 * 
+	 * @return The hostname of this microservice.
 	 */
-	public URI getURI() {
-		String scheme = getConfig().getBoolean("REST/useSsl") ? "https" : "http";
+	public String getHostName() {
 		String hostname = "localhost";
-		String ctx = "/".equals(contextPath) ? null : contextPath;
 		try {
 			hostname = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {}
+		return hostname;
+	}
+	
+	/**
+	 * Returns the URI where this microservice is listening on.
+	 * 
+	 * @return The URI where this microservice is listening on.
+	 */
+	public URI getURI() {
+		String cp = getContextPath(); 
 		try {
-			return new URI(scheme, null, hostname, port, ctx, null, null);
+			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Initialize the logging for this microservice.
-	 * 
-	 * <p>
-	 * Subclasses can override this method to provide customized logging.
-	 * 
-	 * <p>
-	 * The default implementation uses the <cs>Logging</cs> section in the config file to set up logging:
-	 * <p class='bcode'>
-	 * 	<cc>#================================================================================
-	 * 	# Logger settings
-	 * 	# See FileHandler Java class for details.
-	 * 	#================================================================================</cc>
-	 * 	<cs>[Logging]</cs>
-	 *
-	 * 	<cc># The directory where to create the log file.
-	 * 	# Default is ".".</cc>
-	 * 	<ck>logDir</ck> = logs
-	 *
-	 * 	<cc># The name of the log file to create for the main logger.
-	 * 	# The logDir and logFile make up the pattern that's passed to the FileHandler
-	 * 	# constructor.
-	 * 	# If value is not specified, then logging to a file will not be set up.</cc>
-	 * 	<ck>logFile</ck> = microservice.%g.log
-	 *
-	 * 	<cc># Whether to append to the existing log file or create a new one.
-	 * 	# Default is false.</cc>
-	 * 	<ck>append</ck> =
-	 *
-	 * 	<cc># The SimpleDateFormat format to use for dates.
-	 * 	# Default is "yyyy.MM.dd hh:mm:ss".</cc>
-	 * 	<ck>dateFormat</ck> =
-	 *
-	 * 	<cc># The log message format.
-	 * 	# The value can contain any of the following variables:
-	 * 	# 	{date} - The date, formatted per dateFormat.
-	 * 	#	{class} - The class name.
-	 * 	#	{method} - The method name.
-	 * 	#	{logger} - The logger name.
-	 * 	#	{level} - The log level name.
-	 * 	#	{msg} - The log message.
-	 * 	#	{threadid} - The thread ID.
-	 * 	#	{exception} - The localized exception message.
-	 * 	# Default is "[{date} {level}] {msg}%n".</cc>
-	 * 	<ck>format</ck> =
-	 *
-	 * 	<cc># The maximum log file size.
-	 * 	# Suffixes available for numbers.
-	 * 	# See ConfigFile.getInt(String,int) for details.
-	 * 	# Default is 1M.</cc>
-	 * 	<ck>limit</ck> = 10M
-	 *
-	 * 	<cc># Max number of log files.
-	 * 	# Default is 1.</cc>
-	 * 	<ck>count</ck> = 5
-	 *
-	 * 	<cc># Default log levels.
-	 * 	# Keys are logger names.
-	 * 	# Values are serialized Level POJOs.</cc>
-	 * 	<ck>levels</ck> = { org.apache.juneau:'INFO' }
-	 *
-	 * 	<cc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
-	 * 	# Useful for preventing log files from filling up with duplicate stack traces.
-	 * 	# Default is false.</cc>
-	 * 	<ck>useStackTraceHashes</ck> = true
-	 *
-	 * 	<cc># The default level for the console logger.
-	 * 	# Default is WARNING.</cc>
-	 * 	<ck>consoleLevel</ck> = WARNING
-	 * </p>
-	 *
-	 * @throws Exception
-	 */
-	protected void initLogging() throws Exception {
-		ConfigFile cf = getConfig();
-		logger = Logger.getLogger("");
-		String logFile = cf.getString("Logging/logFile");
-		if (! isEmpty(logFile)) {
-			LogManager.getLogManager().reset();
-			String logDir = cf.getString("Logging/logDir", ".");
-			mkdirs(new File(logDir), false);
-			boolean append = cf.getBoolean("Logging/append");
-			int limit = cf.getInt("Logging/limit", 1024*1024);
-			int count = cf.getInt("Logging/count", 1);
-			FileHandler fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
-
-			boolean useStackTraceHashes = cf.getBoolean("Logging/useStackTraceHashes");
-			String format = cf.getString("Logging/format", "[{date} {level}] {msg}%n");
-			String dateFormat = cf.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss");
-			fh.setFormatter(new LogEntryFormatter(format, dateFormat, useStackTraceHashes));
-			logger.addHandler(fh);
-
-			ConsoleHandler ch = new ConsoleHandler();
-			ch.setLevel(Level.parse(cf.getString("Logging/consoleLevel", "WARNING")));
-			ch.setFormatter(new LogEntryFormatter(format, dateFormat, false));
-			logger.addHandler(ch);
-		}
-		ObjectMap loggerLevels = cf.getObject("Logging/levels", ObjectMap.class);
-		if (loggerLevels != null)
-		for (String l : loggerLevels.keySet())
-			Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
 	}
 
 	/**
@@ -300,22 +262,22 @@ public class RestMicroservice extends Microservice {
 	 * if a jetty.xml is not specified via a <code>REST/jettyXml</code> setting:
 	 * <p class='bcode'>
 	 * 	<cc>#================================================================================
-	 * 	# REST settings
+	 * 	# Jetty settings
 	 * 	#================================================================================</cc>
-	 * 	<cs>[REST]</cs>
-	 *
-	 * 	<cc># The HTTP port number to use.
-	 * 	# Default is Rest-Port setting in manifest file, or 8000.
-	 * 	# Can also specify a comma-delimited lists of ports to try, including 0 meaning
-	 * 	# try a random port.</cc>
-	 * 	<ck>port</ck> = 10000
-	 *
-	 * 	<cc># The context root of the Jetty server.
-	 * 	# Default is Rest-ContextPath in manifest file, or "/".</cc>
-	 * 	<ck>contextPath</ck> =
-	 *
-	 * 	<cc># Enable SSL support.</cc>
-	 * 	<ck>useSsl</ck> = false
+	 * 	<cs>[Jetty]</cs>
+	 * 	
+	 * 	<cc># Path of the jetty.xml file used to configure the Jetty server.</cc>
+	 * 	<ck>config</ck> = jetty.xml
+	 * 	
+	 * 	<cc># Resolve Juneau variables in the jetty.xml file.</cc>
+	 * 	<ck>resolveVars</ck> = true
+	 * 	
+	 * 	<cc># Port to use for the jetty server.
+	 * 	# You can specify multiple ports.  The first available will be used.  '0' indicates to try a random port.
+	 * 	# The resulting available port gets set as the system property "availablePort" which can be referenced in the 
+	 * 	# jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).</cc>
+	 * 	<ck>port</ck> = 10000,0,0,0
+	 * </p>
 	 *
 	 * @return The newly-created server.
 	 * @throws Exception
@@ -325,46 +287,40 @@ public class RestMicroservice extends Microservice {
 
 		ConfigFile cf = getConfig();
 		ObjectMap mf = getManifest();
-		if (jettyXml == null)
-			jettyXml = cf.getString("REST/jettyXml", mf.getString("Rest-JettyXml", null));
-		if (jettyXml != null) {
-			InputStream is = null;
-			if (jettyXml instanceof String) {
-				jettyXml = new File(jettyXml.toString());
-			}
-			if (jettyXml instanceof File) {
-				File f = (File)jettyXml;
-				if (f.exists())
-					is = new FileInputStream((File)jettyXml);
-				else 
-					throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", jettyXml);
-			} else if (jettyXml instanceof InputStream) {
-				is = (InputStream)jettyXml;
-			}
-			
-			XmlConfiguration config = new XmlConfiguration(is);
-			server = (Server)config.configure();
+		VarResolver vr = getVarResolver();
 		
+		int[] ports = cf.getObjectWithDefault("Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class), int[].class);
+		int availablePort = findOpenPort(ports);
+		System.setProperty("availablePort", String.valueOf(availablePort));
+		
+		if (jettyXml == null)
+			jettyXml = cf.getString("Jetty/config", mf.getString("Jetty-Config", null));
+		
+		if (jettyXml == null)
+			throw new FormattedRuntimeException("Jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config).");
+		
+		String xmlConfig = null;
+		
+		if (jettyXml instanceof String) 
+			jettyXml = new File(jettyXml.toString());
+		
+		if (jettyXml instanceof File) {
+			File f = (File)jettyXml;
+			if (f.exists())
+				xmlConfig = IOUtils.read((File)jettyXml);
+			else 
+				throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", jettyXml);
 		} else {
-			int[] ports = cf.getObjectWithDefault("REST/port", mf.getWithDefault("Rest-Port", new int[]{8000}, int[].class), int[].class);
-
-			port = findOpenPort(ports);
-			if (port == 0) {
-				System.err.println("Open port not found.  Tried " + JsonSerializer.DEFAULT_LAX.toString(ports));
-				System.exit(1);
-			}
-
-			contextPath = cf.getString("REST/contextPath", mf.getString("Rest-ContextPath", "/"));
-			server = new Server(port);
-			
-			servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-
-			servletContextHandler.setContextPath(contextPath);
-			server.setHandler(servletContextHandler);
-
-			for (Map.Entry<String,Class<? extends Servlet>> e : getResourceMap().entrySet())
-				servletContextHandler.addServlet(e.getValue(), e.getKey()).setInitOrder(0);
+			xmlConfig = IOUtils.read(jettyXml);
 		}
+		
+		if (cf.getBoolean("Jetty/resolveVars", false))
+			xmlConfig = vr.resolve(xmlConfig);
+		
+		getLogger().info(xmlConfig);
+		
+		XmlConfiguration config = new XmlConfiguration(new ByteArrayInputStream(xmlConfig.getBytes()));
+		server = (Server)config.configure();
 		
 		return server;
 	}
@@ -378,11 +334,14 @@ public class RestMicroservice extends Microservice {
 	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
 	 */
 	public RestMicroservice addServlet(Servlet servlet, String pathSpec) {
-		if (servletContextHandler == null)
-			throw new RuntimeException("Servlet context handler not found.  createServer() must be called first.");
-		ServletHolder sh = new ServletHolder(servlet);
-		servletContextHandler.addServlet(sh, pathSpec);
-		return this;
+		for (Handler h : getServer().getHandlers()) {
+			if (h instanceof ServletContextHandler) {
+				ServletHolder sh = new ServletHolder(servlet);
+				((ServletContextHandler)h).addServlet(sh, pathSpec);
+				return this;
+			}
+		}
+		throw new RuntimeException("Servlet context handler not found in jetty server.");
 	}
 	
 	/**
@@ -394,9 +353,7 @@ public class RestMicroservice extends Microservice {
 	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
 	 */
 	public RestMicroservice addServletAttribute(String name, Object value) {
-		if (server == null)
-			throw new RuntimeException("Server not found.  createServer() must be called first.");
-		server.setAttribute(name, value);
+		getServer().setAttribute(name, value);
 		return this;
 	}
 	
@@ -406,6 +363,8 @@ public class RestMicroservice extends Microservice {
 	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
 	 */
 	public Server getServer() {
+		if (server == null)
+			throw new RuntimeException("Server not found.  createServer() must be called first.");
 		return server;
 	}
 	
@@ -435,85 +394,9 @@ public class RestMicroservice extends Microservice {
 	protected int startServer() throws Exception {
 		onStartServer();
 		server.start();
-		this.port = ((ServerConnector)server.getConnectors()[0]).getLocalPort();
-		logger.warning("Server started on port " + port);
+		getLogger().warning("Server started on port " + getPort());
 		onPostStartServer();
-		return port;
-	}
-
-	/**
-	 * Returns the resource map to use for this microservice.
-	 * 
-	 * <p>
-	 * Subclasses can override this method to programmatically specify their resources.
-	 * 
-	 * <p>
-	 * The default implementation is configured by the following values in the config file:
-	 * <p class='bcode'>
-	 *
-	 * 	<cc>#================================================================================
-	 * 	# REST settings
-	 * 	#================================================================================</cc>
-	 * 	<cs>[REST]</cs>
-	 *
-	 * 	<cc># A JSON map of servlet paths to servlet classes.
-	 * 	# Example:
-	 * 	# 	resourceMap = {'/*':'com.foo.MyServlet'}
-	 * 	# Either resourceMap or resources must be specified if it's not defined in
-	 * 	# the manifest file.</cc>
-	 * 	<ck>resourceMap</ck> =
-	 *
-	 * 	<cc># A comma-delimited list of names of classes that extend from Servlet.
-	 * 	# Resource paths are pulled from @RestResource.path() annotation, or
-	 * 	# 	"/*" if annotation not specified.
-	 * 	# Example:
-	 * 	# 	resources = com.foo.MyServlet
-	 * 	 * 	# Default is Rest-Resources in manifest file.
-	 * 	# Either resourceMap or resources must be specified if it's not defined in
-	 * 	# the manifest file.</cc>
-	 * 	<ck>resources</ck> =
-	 * </p>
-	 * 
-	 * <p>
-	 * In most cases, the rest resources will be specified in the manifest file since it's not likely to be a 
-	 * configurable property:
-	 * <p class='bcode'>
-	 * 	<mk>Rest-Resources:</mk> org.apache.juneau.microservice.sample.RootResources
-	 * </p>
-	 *
-	 * @return The map of REST resources.
-	 * @throws ClassNotFoundException
-	 * @throws ParseException
-	 */
-	@SuppressWarnings("unchecked")
-	protected Map<String,Class<? extends Servlet>> getResourceMap() throws ClassNotFoundException, ParseException {
-		ConfigFile cf = getConfig();
-		ObjectMap mf = getManifest();
-		Map<String,Class<? extends Servlet>> rm = new LinkedHashMap<String,Class<? extends Servlet>>();
-
-		ObjectMap resourceMap = cf.getObject("REST/resourceMap", ObjectMap.class);
-		String[] resources = cf.getStringArray("REST/resources", mf.getStringArray("Rest-Resources"));
-
-		if (resourceMap != null && ! resourceMap.isEmpty()) {
-			for (Map.Entry<String,Object> e : resourceMap.entrySet()) {
-				Class<?> c = Class.forName(e.getValue().toString());
-				if (! isParentClass(Servlet.class, c))
-					throw new ClassNotFoundException("Invalid class specified as resource.  Must be a Servlet.  Class='"+c.getName()+"'");
-				rm.put(e.getKey(), (Class<? extends Servlet>)c);
-			}
-		} else if (resources.length > 0) {
-			for (String resource : resources) {
-				Class<?> c = Class.forName(resource);
-				if (! isParentClass(Servlet.class, c))
-					throw new ClassNotFoundException("Invalid class specified as resource.  Must be a Servlet.  Class='"+c.getName()+"'");
-				RestResource rr = c.getAnnotation(RestResource.class);
-				String path = rr == null ? "/*" : rr.path();
-				if (! path.endsWith("*"))
-					path += (path.endsWith("/") ? "*" : "/*");
-				rm.put(path, (Class<? extends Servlet>)c);
-			}
-		}
-		return rm;
+		return getPort();
 	}
 
 	/**
@@ -522,8 +405,6 @@ public class RestMicroservice extends Microservice {
 	 * <p>
 	 * The default behavior is configured by the following value in the config file:
 	 * <p class='bcode'>
-	 * 	<cs>[REST]</cs>
-	 *
 	 * 	<cc># What to do when the config file is saved.
 	 * 	# Possible values:
 	 * 	# 	NOTHING - Don't do anything. (default)
@@ -535,7 +416,7 @@ public class RestMicroservice extends Microservice {
 	@Override /* Microservice */
 	protected void onConfigSave(ConfigFile cf) {
 		try {
-			String saveConfigAction = cf.getString("REST/saveConfigAction", "NOTHING");
+			String saveConfigAction = cf.getString("saveConfigAction", "NOTHING");
 			if (saveConfigAction.equals("RESTART_SERVER")) {
 				new Thread() {
 					@Override /* Thread */
@@ -544,7 +425,7 @@ public class RestMicroservice extends Microservice {
 							RestMicroservice.this.stop();
 							RestMicroservice.this.start();
 						} catch (Exception e) {
-							logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
+							getLogger().log(Level.SEVERE, e.getLocalizedMessage(), e);
 						}
 					}
 				}.start();
@@ -573,7 +454,7 @@ public class RestMicroservice extends Microservice {
 	 * @return This object (for method chaining).
 	 */
 	public RestMicroservice setJettyXml(Object jettyXml) {
-		if (jettyXml instanceof String || jettyXml instanceof File || jettyXml instanceof InputStream)
+		if (jettyXml instanceof String || jettyXml instanceof File || jettyXml instanceof InputStream || jettyXml instanceof Reader)
 			this.jettyXml = jettyXml;
 		else
 			throw new FormattedRuntimeException("Invalid object type passed to setJettyXml()", jettyXml == null ? null : jettyXml.getClass().getName());

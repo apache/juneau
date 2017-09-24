@@ -628,8 +628,6 @@ public @interface RestResource {
 	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/
 	 * {@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
-	 * <br>The value (class or instance) can also be set via the servlet context attribute
-	 * * {@link RestContext#REST_resourceResolver}.
 	 */
 	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
 
@@ -760,4 +758,144 @@ public @interface RestResource {
 	 * will return this value instead of the actual context path of the web app.
 	 */
 	String contextPath() default "";
+
+	/**
+	 * Enable header URL parameters.
+	 *
+	 * <p>
+	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 *
+	 * <ul>
+	 * 	<li>Boolean value.
+	 * 	<li>Defaults to system property <js>"juneau.allowHeaderParams"</js>, or <js>"true"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 *		<li>Parameter names are case-insensitive.
+	 * 	<li>Useful for debugging REST interface using only a browser.
+	 * </ul>
+	 */
+	String allowHeaderParams() default "";
+
+	/**
+	 * Enable <js>"method"</js> URL parameter for specific HTTP methods.
+	 *
+	 * <p>
+	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
+	 * GET request.
+	 * For example:  <js>"?method=OPTIONS"</js>
+	 *
+	 * <p>
+	 * Example: <js>"HEAD,OPTIONS"</js>
+	 *
+	 * <ul>
+	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
+	 * 	<li>Defaults to system property <js>"juneau.allowMethodParam"</js>, or <js>"HEAD,OPTIONS"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Use "*" to represent all methods.
+	 * 	<li>For backwards compatibility, "true" also means "*".
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that per the <a class="doclink"
+	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
+	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
+	 */
+	String allowMethodParam() default "";
+
+	/**
+	 * Enable <js>"body"</js> URL parameter.
+	 *
+	 * <p>
+	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * URL parameter.
+	 * For example:  <js>"?body={name:'John%20Smith',age:45}"</js>
+	 *
+	 * <ul>
+	 * 	<li>Boolean value.
+	 * 	<li>Defaults to system property <js>"juneau.allowBodyParam"</js>, or <js>"true"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Useful for debugging PUT and POST methods using only a browser.
+	 * </ul>
+	 */
+	String allowBodyParam() default "";
+
+	/**
+	 * Render stack traces.
+	 *
+	 * <p>
+	 * Render stack traces in HTTP response bodies when errors occur.
+	 *
+	 * <ul>
+	 * 	<li>Boolean value.
+	 * 	<li>Defaults to system property <js>"juneau.renderResponseStackTraces"</js>, or <js>"false"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns.
+	 * </ul>
+	 */
+	String renderResponseStackTraces() default "";
+
+	/**
+	 * Use stack trace hashes.
+	 *
+	 * <p>
+	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
+	 * made available through the {@link RestException#getOccurrence()} method.
+	 *
+	 * <ul>
+	 * 	<li>Boolean value.
+	 * 	<li>Defaults to system property <js>"juneau.useStackTraceHashes"</js>, or <js>"true"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * </ul>
+	 */
+	String useStackTraceHashes() default "";
+
+	/**
+	 * Default character encoding.
+	 *
+	 * <p>
+	 * The default character encoding for the request and response if not specified on the request.
+	 *
+	 * <ul>
+	 * 	<li>String value.
+	 * 	<li>Defaults to system property <js>"juneau.defaultCharset"</js>, or <js>"utf-8"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * 	<li>Can be overridden at the method level using {@link RestMethod#defaultCharset() @RestMethod.defaultCharset()}.
+	 * </ul>
+	 */
+	String defaultCharset() default "";
+
+	/**
+	 * Expected format of request parameters.
+	 *
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
+	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 	<li>
+	 * 		<js>"PLAIN"</js> - Plain text.
+	 * 		<br>This treats request parameters as plain text.
+	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
+	 * 		mode.
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
+	 * <js>"foo"</js> when using UON mode.
+	 *
+	 * <p>
+	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and
+	 * {@link Query#format() @Query.format()} annotations.
+	 *
+	 * <ul>
+	 * 	<li>String value.
+	 * 	<li>Defaults to system property <js>"juneau.paramFormat"</js>, or <js>"UON"</js> if not specified.
+	 * 	<li>Can contain variables.
+	 * 	<li>Can be overridden at the method level using {@link RestMethod#paramFormat() @RestMethod.paramFormat()}.
+	 * </ul>
+	 */
+	String paramFormat() default "";
 }

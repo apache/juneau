@@ -13,7 +13,6 @@
 package org.apache.juneau.microservice;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
-import static javax.servlet.http.HttpServletResponse.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -64,11 +63,12 @@ public abstract class Resource extends RestServletDefault {
 	 */
 	@RestHook(INIT) 
 	public void addConfigVars(RestConfig config) throws Exception {
-		if (Microservice.getArgs() == null || Microservice.getConfig() == null)
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, "Attempting to use Resource class outside of RestMicroservice.");
-		config
+		Microservice m = Microservice.getInstance();
+		if (m != null) {
+			config
 			.addVars(ArgsVar.class, ManifestFileVar.class)
-			.addVarContextObject(ArgsVar.SESSION_args, Microservice.getArgs())
-			.addVarContextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
+			.addVarContextObject(ArgsVar.SESSION_args, m.getArgs())
+			.addVarContextObject(ManifestFileVar.SESSION_manifest, m.getManifest());
+		}
 	}
 }

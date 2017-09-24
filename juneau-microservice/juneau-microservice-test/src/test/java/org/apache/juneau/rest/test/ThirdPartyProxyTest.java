@@ -17,6 +17,7 @@ import static org.apache.juneau.rest.test.pojos.Constants.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -65,6 +66,44 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			cache(label, proxy);
 		}
 	}
+
+	//--------------------------------------------------------------------------------
+	// Temporary exhaustive test.
+	//--------------------------------------------------------------------------------
+
+	@Test
+	@Ignore
+	public void a00_lotsOfSetInt3dArray() {
+		final AtomicLong time = new AtomicLong(System.currentTimeMillis());
+		final AtomicInteger iteration = new AtomicInteger(0);
+      TimerTask timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				if (System.currentTimeMillis() - time.get() > 10000) {
+					try {
+						System.err.println("Failed at iteration " + iteration.get());
+						TestMicroservice.jettyDump();
+						System.exit(2);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+      };
+      // running timer task as daemon thread
+      Timer timer = new Timer(true);
+      timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);
+		for (int i = 0; i < 1000000; i++) {
+			iteration.set(i);
+			String s = proxy.setInt3dArray(new int[][][]{{{i},null},null}, i);
+			if (i % 1000 == 0)
+				System.err.println("response="+s);
+			time.set(System.currentTimeMillis());
+		}
+      timer.cancel();
+	}
+
+
 
 	//--------------------------------------------------------------------------------
 	// Header tests
@@ -1031,7 +1070,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ea10_setInt3dArray() {
-		proxy.setInt3dArray(new int[][][]{{{1,2},null},null});
+		proxy.setInt3dArray(new int[][][]{{{1},null},null}, 1);
 	}
 
 	@Test
@@ -3637,7 +3676,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		void setNullString(@Body String x);
 
 		@RemoteMethod(httpMethod="POST", path="/setInt3dArray")
-		void setInt3dArray(@Body int[][][] x);
+		String setInt3dArray(@Body int[][][] x, @org.apache.juneau.remoteable.Query("I") int i);
 
 		@RemoteMethod(httpMethod="POST", path="/setInteger3dArray")
 		void setInteger3dArray(@Body Integer[][][] x);

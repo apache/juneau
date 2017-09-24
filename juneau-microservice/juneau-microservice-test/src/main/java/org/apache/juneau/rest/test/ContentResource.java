@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.RestContext.*;
-
 import java.util.*;
 
 import org.apache.juneau.rest.*;
@@ -24,9 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 @RestResource(
 	path="/testContent",
-	properties={
-		@Property(name=REST_allowMethodParam, value="*")
-	}
+	allowMethodParam="*"
 )
 public class ContentResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;

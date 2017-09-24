@@ -23,6 +23,7 @@ import org.apache.http.client.*;
 import org.apache.http.conn.ssl.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
@@ -104,11 +105,14 @@ public class TestMicroservice {
 					new HttpRequestRetryHandler() {
 						@Override
 						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
-							System.err.println("*** RETRY ***");
+							System.err.println("*** ERROR ***");
+							TestMicroservice.jettyDump();
+							microservice.stop();
+							System.exit(2);
 							return (executionCount < 10);
 						}
 					}
-			   )
+				)
 				.noTrace()
 			;
 		} catch (Exception e) {
@@ -143,6 +147,15 @@ public class TestMicroservice {
 			return HttpClients.custom().setSSLSocketFactory(getSSLSocketFactory()).setRedirectStrategy(new LaxRedirectStrategy()).build();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	public static void jettyDump() {
+		try {
+			String dump = microservice.getServer().dump();
+			IOUtils.pipe(dump, new FileWriter(microservice.getConfig().getString("Logging/logDir") + "/jetty-thread-dump.log"));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

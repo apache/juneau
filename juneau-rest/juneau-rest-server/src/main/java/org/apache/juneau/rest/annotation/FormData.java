@@ -101,7 +101,7 @@ public @interface FormData {
 	 * 		<br>This treats request parameters as plain text.
 	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this mode.
 	 * 	<li>
-	 * 		<js>"INHERIT"</js> (default) - Inherit from the {@link RestContext#REST_paramFormat} property on the
+	 * 		<js>"INHERIT"</js> (default) - Inherit from the {@link RestResource#paramFormat()} property on the
 	 * 		servlet method or class.
 	 * </ul>
 	 *

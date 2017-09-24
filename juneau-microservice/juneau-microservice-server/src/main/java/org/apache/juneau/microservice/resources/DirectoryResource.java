@@ -15,7 +15,6 @@ package org.apache.juneau.microservice.resources;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.rest.RestContext.*;
 
 import java.io.*;
 import java.net.*;
@@ -69,9 +68,9 @@ import org.apache.juneau.utils.*;
 			"options: servlet:/?method=OPTIONS"
 		}
 	),
+	allowMethodParam="*",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
-		@Property(name=REST_allowMethodParam, value="*"),
 		@Property(name="DirectoryResource.rootDir", value="")
 	}
 )

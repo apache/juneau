@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import org.apache.juneau.rest.*;
@@ -65,11 +64,12 @@ public abstract class ResourceGroup extends RestServletGroupDefault {
 	 */
 	@RestHook(INIT) 
 	public void addConfigVars(RestConfig config) throws Exception {
-		if (Microservice.getArgs() == null || Microservice.getConfig() == null)
-			throw new RestException(SC_INTERNAL_SERVER_ERROR, "Attempting to use ResourceGroup class outside of RestMicroservice.");
-		config
+		Microservice m = Microservice.getInstance();
+		if (m != null) {
+			config
 			.addVars(ArgsVar.class, ManifestFileVar.class)
-			.addVarContextObject(ArgsVar.SESSION_args, Microservice.getArgs())
-			.addVarContextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
+			.addVarContextObject(ArgsVar.SESSION_args, m.getArgs())
+			.addVarContextObject(ManifestFileVar.SESSION_manifest, m.getManifest());
+		}
 	}
 }

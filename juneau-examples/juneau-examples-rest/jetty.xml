@@ -24,7 +24,7 @@
 					<Arg>
 						<Ref refid="ExampleServer" />
 					</Arg>
-					<Set name="port">10000</Set>
+					<Set name="port">$S{availablePort,8080}</Set>
 				</New>
 			</Item>
 		</Array>
@@ -58,7 +58,18 @@
 			</Set>
 		</New>
 	</Set>
-	
+
+	<Set name="requestLog">
+		<New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
+			<Set name="filename"><Property name="jetty.logs" default="$C{Logging/logDir,logs}"/>/jetty-requests.log</Set>
+			<Set name="filenameDateFormat">yyyy_MM_dd</Set>
+			<Set name="LogTimeZone">GMT</Set>
+			<Set name="retainDays">90</Set>
+			<Set name="append">false</Set>
+			<Set name="LogLatency">true</Set>
+		</New>
+	</Set>
+
     <Get name="ThreadPool">
         <Set name="minThreads" type="int">10</Set>
         <Set name="maxThreads" type="int">100</Set>

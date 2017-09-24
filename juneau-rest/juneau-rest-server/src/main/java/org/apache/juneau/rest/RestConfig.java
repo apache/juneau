@@ -124,6 +124,7 @@ public class RestConfig implements ServletConfig {
 	Object logger = RestLogger.Normal.class;
 	Object callHandler = RestCallHandler.class;
 	Object infoProvider = RestInfoProvider.class;
+	Object allowHeaderParams, allowMethodParam, allowBodyParam, renderResponseStackTraces, useStackTraceHashes, defaultCharset, paramFormat;
 
 	boolean htmlNoWrap;
 	Object htmlTemplate = HtmlDocTemplateBasic.class;
@@ -240,6 +241,20 @@ public class RestConfig implements ServletConfig {
 					setCallHandler(r.callHandler());
 				if (r.infoProvider() != RestInfoProvider.class)
 					setInfoProvider(r.infoProvider());
+				if (! r.allowHeaderParams().isEmpty())
+					setAllowHeaderParams(Boolean.valueOf(vr.resolve(r.allowHeaderParams())));
+				if (! r.allowMethodParam().isEmpty())
+					setAllowMethodParam(vr.resolve(r.allowMethodParam()));
+				if (! r.allowBodyParam().isEmpty())
+					setAllowBodyParam(Boolean.valueOf(vr.resolve(r.allowBodyParam())));
+				if (! r.renderResponseStackTraces().isEmpty())
+					setRenderResponseStackTraces(Boolean.valueOf(vr.resolve(r.renderResponseStackTraces())));
+				if (! r.useStackTraceHashes().isEmpty())
+					setUseStackTraceHashes(Boolean.valueOf(vr.resolve(r.useStackTraceHashes())));
+				if (! r.defaultCharset().isEmpty())
+					setDefaultCharset(vr.resolve(r.defaultCharset()));
+				if (! r.paramFormat().isEmpty())
+					setParamFormat(vr.resolve(r.paramFormat()));
 
 				HtmlDoc hd = r.htmldoc();
 				for (Class<? extends Widget> cw : hd.widgets())
@@ -1099,6 +1114,104 @@ public class RestConfig implements ServletConfig {
 	 */
 	public RestConfig setResourceResolver(RestResourceResolver resourceResolver) {
 		this.resourceResolver = resourceResolver;
+		return this;
+	}
+
+	/**
+	 * Sets the <code>allowHeaderParams</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#allowHeaderParams() RestResource.allowHeaderParams()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setAllowHeaderParams(boolean value) {
+		this.allowHeaderParams = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <code>allowMethodParam</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#allowMethodParam() RestResource.allowMethodParam()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setAllowMethodParam(String...value) {
+		this.allowMethodParam = StringUtils.join(value, ',');
+		return this;
+	}
+
+	/**
+	 * Sets the <code>allowBodyParam</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#allowBodyParam() RestResource.allowBodyParam()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setAllowBodyParam(boolean value) {
+		this.allowBodyParam = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <code>renderResponseStackTraces</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#renderResponseStackTraces() RestResource.renderResponseStackTraces()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setRenderResponseStackTraces(boolean value) {
+		this.renderResponseStackTraces = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <code>useStackTraceHashes</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#useStackTraceHashes() RestResource.useStackTraceHashes()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setUseStackTraceHashes(boolean value) {
+		this.useStackTraceHashes = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <code>defaultCharset</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#defaultCharset() RestResource.defaultCharset()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setDefaultCharset(String value) {
+		this.defaultCharset = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <code>paramFormat</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#paramFormat() RestResource.paramFormat()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setParamFormat(String value) {
+		this.paramFormat = value;
 		return this;
 	}
 

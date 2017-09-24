@@ -31,7 +31,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * An instance of this class can also be passed in through the servlet context as the context attribute
- * {@link RestContext#REST_resourceResolver}.
+ * {@link RestResource#resourceResolver()}.
  */
 public interface RestResourceResolver {
 

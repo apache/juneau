@@ -20,6 +20,8 @@ import org.apache.juneau.rest.labels.*;
 @RestResource(
 	path="/",
 	children={
+		DebugResource.class,
+		LogsResource.class,
 		AcceptCharsetResource.class,
 		BeanContextPropertiesResource.class,
 		BpiResource.class,
@@ -71,7 +73,7 @@ import org.apache.juneau.rest.labels.*;
 		ThirdPartyProxyResource.class,
 		UrisResource.class,
 		UrlContentResource.class,
-		ShutdownResource.class
+		ShutdownResource.class,
 	}
 )
 public class Root extends RestServletDefault {

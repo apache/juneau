@@ -17,7 +17,6 @@ import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
-import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestUtils.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
@@ -171,6 +170,13 @@ class CallMethod implements Comparable<CallMethod>  {
 				beanContext = context.getBeanContext();
 				encoders = context.getEncoders();
 				properties = context.getProperties();
+				defaultCharset = context.getDefaultCharset();
+				String paramFormat = context.getParamFormat();
+
+				if (! m.defaultCharset().isEmpty())
+					defaultCharset = context.getVarResolver().resolve(m.defaultCharset());
+				if (! m.paramFormat().isEmpty())
+					paramFormat = context.getVarResolver().resolve(m.paramFormat());
 
 				HtmlDoc hd = m.htmldoc();
 				htmlWidgets = new HashMap<String,Widget>(context.getHtmlWidgets());
@@ -391,8 +397,6 @@ class CallMethod implements Comparable<CallMethod>  {
 					}
 				}
 
-				defaultCharset = properties.getString(REST_defaultCharset, context.getDefaultCharset());
-				String paramFormat = properties.getString(REST_paramFormat, context.getParamFormat());
 				plainParams = paramFormat.equals("PLAIN");
 
 				pathPattern = new UrlPathPattern(p);

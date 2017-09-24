@@ -57,198 +57,6 @@ import org.apache.juneau.utils.*;
  */
 public final class RestContext extends Context {
 
-	/**
-	 * <b>Configuration property:</b>  Enable header URL parameters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.allowHeaderParams"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
-	 *
-	 * <p>
-	 * Parameter names are case-insensitive.
-	 *
-	 * <p>
-	 * Useful for debugging REST interface using only a browser.
-	 *
-	 * <p>
-	 * Applicable to servlet class only.
-	 */
-	public static final String REST_allowHeaderParams = "RestServlet.allowHeaderParams";
-
-	/**
-	 * <b>Configuration property:</b>  Enable <js>"method"</js> URL parameter for specific HTTP methods.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.allowMethodParam"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>""</js>
-	 * </ul>
-	 *
-	 * <p>
-	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
-	 * GET request.
-	 * For example:  <js>"?method=OPTIONS"</js>
-	 *
-	 * <p>
-	 * Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-	 * Parameter name is case-insensitive.
-	 * Use "*" to represent all methods.
-	 * For backwards compatibility, "true" also means "*".
-	 *
-	 * <p>
-	 * Note that per the <a class="doclink"
-	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
-	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
-	 *
-	 * <p>
-	 * Applicable to servlet class only.
-	 *
-	 * <p>
-	 * Example: <js>"HEAD,OPTIONS"</js>
-	 */
-	public static final String REST_allowMethodParam = "RestServlet.allowMethodParam";
-
-	/**
-	 * <b>Configuration property:</b>  Enable <js>"body"</js> URL parameter.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.allowBodyParam"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
-	 * URL parameter.
-	 * For example:  <js>"?body={name:'John%20Smith',age:45}"</js>
-	 *
-	 * <p>
-	 * Parameter name is case-insensitive.
-	 *
-	 * <p>
-	 * Useful for debugging PUT and POST methods using only a browser.
-	 *
-	 * <p>
-	 * Applicable to servlet class only.
-	 */
-	public static final String REST_allowBodyParam = "RestServlet.allowBodyParam";
-
-	/**
-	 * <b>Configuration property:</b>  Render stack traces.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.renderResponseStackTraces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Render stack traces in HTTP response bodies when errors occur.
-	 *
-	 * <p>
-	 * When enabled, Java stack traces will be rendered in the output response.
-	 * Useful for debugging, although allowing stack traces to be rendered may cause security concerns.
-	 *
-	 * <p>
-	 * Applicable to servlet class only.
-	 */
-	public static final String REST_renderResponseStackTraces = "RestServlet.renderResponseStackTraces";
-
-	/**
-	 * <b>Configuration property:</b>  Use stack trace hashes.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.useStackTraceHashes"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
-	 * made available through the {@link RestException#getOccurrence()} method.
-	 *
-	 * <p>
-	 * Applicable to servlet class only.
-	 */
-	public static final String REST_useStackTraceHashes = "RestServlet.useStackTraceHashes";
-
-	/**
-	 * <b>Configuration property:</b>  Default character encoding.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.defaultCharset"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"utf-8"</js>
-	 * </ul>
-	 *
-	 * <p>
-	 * The default character encoding for the request and response if not specified on the request.
-	 *
-	 * <p>
-	 * Applicable to servlet class and methods.
-	 */
-	public static final String REST_defaultCharset = "RestServlet.defaultCharset";
-
-	/**
-	 * <b>Configuration property:</b>  Expected format of request parameters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.paramFormat"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"UON"</js>
-	 * </ul>
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
-	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
-	 * 	<li>
-	 * 		<js>"PLAIN"</js> - Plain text.
-	 * 		<br>This treats request parameters as plain text.
-	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
-	 * 		mode.
-	 * </ul>
-	 *
-	 * <p>
-	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
-	 * <js>"foo"</js> when using UON mode.
-	 *
-	 * <p>
-	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and
-	 * {@link Query#format() @Query.format()} annotations.
-	 *
-	 * <p>
-	 * Applicable to servlet class and methods.
-	 */
-	public static final String REST_paramFormat = "RestServlet.paramFormat";
-
-	/**
-	 * <b>Configuration property:</b>  REST resource resolver.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestServlet.resourceResolver"</js>
-	 * 	<li><b>Data type:</b> <code>Class</code> or {@link RestResourceResolver}
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * The resource resolver used to instantiate REST resource classes.
-	 *
-	 * <p>
-	 * Applicable to servlet class.
-	 * <br>Can be passed in through servlet context.
-	 */
-	public static final String REST_resourceResolver = "RestServlet.resourceResolver";
-
-
 	private final Object resource;
 	final RestConfig config;
 	private final boolean
@@ -360,7 +168,7 @@ public final class RestContext extends Context {
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 			this.parentContext = config.parentContext;
 
-			Builder b = new Builder(resource, servletContext, config);
+			Builder b = new Builder(resource, config);
 			this.allowHeaderParams = b.allowHeaderParams;
 			this.allowBodyParam = b.allowBodyParam;
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
@@ -700,27 +508,26 @@ public final class RestContext extends Context {
 		String contextPath;
 
 		@SuppressWarnings("unchecked")
-		private Builder(Object resource, ServletContext ctx, RestConfig sc) throws Exception {
+		private Builder(Object resource, RestConfig sc) throws Exception {
 
 			PropertyStore ps = sc.createPropertyStore();
 
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
 
-			allowHeaderParams = ps.getProperty(REST_allowHeaderParams, boolean.class, true);
-			allowBodyParam = ps.getProperty(REST_allowBodyParam, boolean.class, true);
-			renderResponseStackTraces = ps.getProperty(REST_renderResponseStackTraces, boolean.class, false);
-			useStackTraceHashes = ps.getProperty(REST_useStackTraceHashes, boolean.class, true);
-			defaultCharset = ps.getProperty(REST_defaultCharset, String.class, "utf-8");
-			paramFormat = ps.getProperty(REST_paramFormat, String.class, "");
-			resourceResolver = ps.getProperty(REST_resourceResolver, Object.class, ctx == null ? null : ctx.getAttribute(REST_resourceResolver));
-			if (resourceResolver == null)
-				resourceResolver = sc.resourceResolver;
+			allowHeaderParams = getBoolean(sc.allowHeaderParams, "juneau.allowHeaderParams", true);
+			allowBodyParam = getBoolean(sc.allowBodyParam, "juneau.allowBodyParam", true);
+			renderResponseStackTraces = getBoolean(sc.renderResponseStackTraces, "juneau.renderResponseStackTraces", false);
+			useStackTraceHashes = getBoolean(sc.useStackTraceHashes, "juneau.useStackTraceHashes", true);
+			defaultCharset = getString(sc.defaultCharset, "juneau.defaultCharset", "utf-8");
+			paramFormat = getString(sc.paramFormat, "juneau.paramFormat", "UON");
+			resourceResolver = sc.resourceResolver;
 
-			for (String m : split(ps.getProperty(REST_allowMethodParam, String.class, "")))
-				if (m.equals("true"))  // For backwards compatibility when this was a boolean field.
-					allowMethodParams.add("*");
-				else
-					allowMethodParams.add(m.toUpperCase());
+			String amp = getString(sc.allowMethodParam, "juneau.allowMethodParam", "HEAD,OPTIONS");
+			if ("true".equals(amp))
+				amp = "*";// For backwards compatibility when this was a boolean field.
+			else
+				amp = amp.toUpperCase();
+			allowMethodParams.addAll(Arrays.asList(StringUtils.split(amp)));
 
 			varResolver = sc.varResolverBuilder
 				.vars(FileVar.class, LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
@@ -831,6 +638,18 @@ public final class RestContext extends Context {
 			htmlNoResultsMessage = sc.htmlNoResultsMessage;
 			htmlTemplate = resolve(resource, HtmlDocTemplate.class, sc.htmlTemplate);
 		}
+	}
+
+	private static boolean getBoolean(Object o, String systemProperty, boolean def) {
+		if (o == null)
+			o = SystemUtils.getFirstBoolean(def, systemProperty);
+		return "true".equalsIgnoreCase(o.toString());
+	}
+
+	private static String getString(Object o, String systemProperty, String def) {
+		if (o == null)
+			o = SystemUtils.getFirstString(def, systemProperty);
+		return o.toString();
 	}
 
 	/**
@@ -1447,45 +1266,45 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * Returns the value of the {@link #REST_renderResponseStackTraces} setting.
+	 * Returns the value of the {@link RestResource#renderResponseStackTraces()} setting.
 	 *
-	 * @return The value of the {@link #REST_renderResponseStackTraces} setting.
+	 * @return The value of the {@link RestResource#renderResponseStackTraces()} setting.
 	 */
 	protected boolean isRenderResponseStackTraces() {
 		return renderResponseStackTraces;
 	}
 
 	/**
-	 * Returns the value of the {@link #REST_allowHeaderParams} setting.
+	 * Returns the value of the {@link RestResource#allowHeaderParams()} setting.
 	 *
-	 * @return The value of the {@link #REST_allowHeaderParams} setting.
+	 * @return The value of the {@link RestResource#allowHeaderParams()} setting.
 	 */
 	protected boolean isAllowHeaderParams() {
 		return allowHeaderParams;
 	}
 
 	/**
-	 * Returns the value of the {@link #REST_allowBodyParam} setting.
+	 * Returns the value of the {@link RestResource#allowBodyParam()} setting.
 	 *
-	 * @return The value of the {@link #REST_allowBodyParam} setting.
+	 * @return The value of the {@link RestResource#allowBodyParam()} setting.
 	 */
 	protected boolean isAllowBodyParam() {
 		return allowBodyParam;
 	}
 
 	/**
-	 * Returns the value of the {@link #REST_defaultCharset} setting.
+	 * Returns the value of the {@link RestResource#defaultCharset()} setting.
 	 *
-	 * @return The value of the {@link #REST_defaultCharset} setting.
+	 * @return The value of the {@link RestResource#defaultCharset()} setting.
 	 */
 	protected String getDefaultCharset() {
 		return defaultCharset;
 	}
 
 	/**
-	 * Returns the value of the {@link #REST_paramFormat} setting.
+	 * Returns the value of the {@link RestResource#paramFormat()} setting.
 	 *
-	 * @return The value of the {@link #REST_paramFormat} setting.
+	 * @return The value of the {@link RestResource#paramFormat()} setting.
 	 */
 	protected String getParamFormat() {
 		return paramFormat;

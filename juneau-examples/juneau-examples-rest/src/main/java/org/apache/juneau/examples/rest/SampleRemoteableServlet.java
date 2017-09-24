@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.rest.RestContext.*;
-
 import java.util.*;
 
 import org.apache.juneau.examples.addressbook.*;
@@ -44,10 +42,8 @@ import org.apache.juneau.rest.remoteable.*;
 			"</div>"
 		}
 	),
-	properties={
-		// Allow us to use method=POST from a browser.
-		@Property(name=REST_allowMethodParam, value="*")
-	},
+	// Allow us to use method=POST from a browser.
+	allowMethodParam="*",
 	config="$S{juneau.configFile}"  // So we can resolve $C{Source/gitHub} above.
 )
 public class SampleRemoteableServlet extends RemoteableServlet {

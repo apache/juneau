@@ -5439,12 +5439,12 @@
 			}
 		),
 
+		<jc>// Allow INIT as a method parameter.</jc>
+		allowMethodParam=<js>"*"</js>,
+	
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
 		properties={
 			
-			<jc>// Allow INIT as a method parameter.</jc>
-			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>),
-	
 			<jc>// Use single quotes.</jc>
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
 			
@@ -6122,7 +6122,7 @@
 				</p>
 				<p>
 					The ability to overload methods is enabled through the 
-					{@link org.apache.juneau.rest.RestContext#REST_allowMethodParam} property.
+					{@link org.apache.juneau.rest.annotation.RestResource#allowMethodParam()} setting.
 				</p>
 			</div>
 		</div>	
@@ -6163,10 +6163,8 @@
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
 		),
-		properties={ 
-			<jc>// Allow us to use method=POST from a browser.</jc> 
-			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>) 
-		} 
+		<jc>// Allow us to use method=POST from a browser.</jc> 
+		allowMethodParam=<js>"*"</js> 
 	) 
 	<jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet { 
 	
@@ -7448,6 +7446,7 @@
 		<h6 class='topic'>juneau-dto</h6>
 		<ul class='spaced-list'>
 		</ul>
+		
 	</div>
 
 	<!-- =========================================================================================================== -->
@@ -7845,13 +7844,35 @@
 				{@link org.apache.juneau.rest.RestResourceResolver} instances are now inherited from parent resources to child resources
 				unless explicitly overridden at the child level.
 				<br>It's also been changed to an interface.
-			<li>
-				New setting: {@link org.apache.juneau.rest.RestContext#REST_resourceResolver}.  
-				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
-				dependency injection frameworks.
-			<li>
-				New annotation: {@link org.apache.juneau.rest.annotation.RestResource#contextPath()}.
-				<br>Allows you to override the context path value inherited from the servlet container.
+			<li>New annotations on {@link org.apache.juneau.rest.annotation.RestResource @RestResource}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#resourceResolver() resourceResolver()}
+						<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
+						dependency injection frameworks.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#contextPath() contextPath()} - 
+						<br>Allows you to override the context path value inherited from the servlet container.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#allowHeaderParams() allowHeaderParams()} - 
+						<br>Replaces the <code>RestContext.REST_allowHeaderParams</code> setting.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#allowMethodParam() allowMethodParam()} - 
+						<br>Replaces the <code>RestContext.REST_allowMethodParam</code> setting.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#allowBodyParam() allowBodyParam()} - 
+						<br>Replaces the <code>RestContext.REST_allowBodyParam</code> setting.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#renderResponseStackTraces() renderResponseStackTraces()} - 
+						<br>Replaces the <code>RestContext.REST_xxx</code> setting.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#useStackTraceHashes() useStackTraceHashes()} - 
+						<br>Replaces the <code>RestContext.REST_useStackTraceHashes</code> setting.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#defaultCharset() defaultCharset()} - 
+						<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#paramFormat() paramFormat()} - 
+						<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
+				</ul>
+			<li>New annotations on {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultCharset() defaultCharset()} - 
+						<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#paramFormat() paramFormat()} - 
+						<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
+				</ul>
 			<li>
 				The following implementation classes can now be defined as non-static inner classes of servlets/resources:
 				<ul>
@@ -7884,12 +7905,32 @@
 		<h6 class='topic'>juneau-microservice</h6>
 		<ul class='spaced-list'>
 			<li>
+				The microservice has been significantly modified to be configured via a <code>jetty.xml</code> file
+				for maximum flexibility instead of the hodge-podge of support in the config file.
+				<br>Top-level servlets should now be defined in the provided <code>jetty.xml</code> file.
+			<li>
 				New methods on {@link org.apache.juneau.microservice.RestMicroservice}:
 				<ul>
 					<li>{@link org.apache.juneau.microservice.RestMicroservice#addServlet(Servlet,String) addServlet(Servlet,String)}
 					<li>{@link org.apache.juneau.microservice.RestMicroservice#addServletAttribute(String,Object) addServletAttribute(String,Object)}
 					<li>{@link org.apache.juneau.microservice.RestMicroservice#getServer() getServer()}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#getInstance() getInstance()}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#getPort() getPort()}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#getContextPath() getContextPath()}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#getProtocol() getProtocol()}
+					<li>{@link org.apache.juneau.microservice.RestMicroservice#getHostName() getHostName()}
 				</ul>
+			<li>
+				New methods on {@link org.apache.juneau.microservice.Microservice}:
+				<ul>
+					<li>{@link org.apache.juneau.microservice.Microservice#getInstance() getInstance()}
+				</ul>
+			<li>
+				New class {@link org.apache.juneau.microservice.JettyLogger} for directing Jetty logging to the
+				java.util.logging framework.
+			<li>
+				New class {@link org.apache.juneau.microservice.resources.DebugResource} for viewing and generating
+				Jetty thread dumps through REST calls.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.examples</h6>

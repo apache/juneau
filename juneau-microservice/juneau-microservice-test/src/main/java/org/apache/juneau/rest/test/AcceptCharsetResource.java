@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.RestContext.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -29,10 +27,8 @@ import org.apache.juneau.serializer.*;
 @RestResource(
 	path="/testAcceptCharset",
 	serializers={PlainTextSerializer.class},
-	properties={
-		// Some versions of Jetty default to ISO8601, so specify UTF-8 for test consistency.
-		@Property(name=REST_defaultCharset,value="utf-8")
-	}
+	// Some versions of Jetty default to ISO8601, so specify UTF-8 for test consistency.
+	defaultCharset="utf-8"
 )
 public class AcceptCharsetResource extends RestServlet {
 	private static final long serialVersionUID = 1L;

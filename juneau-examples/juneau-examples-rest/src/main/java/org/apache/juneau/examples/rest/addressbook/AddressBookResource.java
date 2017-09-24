@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
-import static org.apache.juneau.rest.RestContext.*;
 
 import java.util.*;
 
@@ -82,11 +81,11 @@ import org.apache.juneau.utils.*;
 		footer="$W{PoweredByJuneau}"
 	),
 
+	// Allow INIT as a method parameter.
+	allowMethodParam="*",
+	
 	// Properties that get applied to all serializers and parsers.
 	properties={
-
-		// Allow INIT as a method parameter.
-		@Property(name=REST_allowMethodParam, value="*"),
 
 		// Use single quotes.
 		@Property(name=SERIALIZER_quoteChar, value="'"),
