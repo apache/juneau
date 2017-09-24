@@ -10,33 +10,27 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.yaml.proto.annotation;
 
-import static org.junit.Assert.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import org.apache.juneau.internal.*;
-import org.junit.*;
+import java.lang.annotation.*;
 
-@SuppressWarnings("javadoc")
-public class KeywordStoreTest {
-
-	//====================================================================================================
-	// test - Basic tests
-	//====================================================================================================
-	@Test
-	public void test() throws Exception {
-		KeywordSet ks = new KeywordSet("aaa", "zzz");
-		assertTrue(ks.contains("aaa"));
-		assertTrue(ks.contains("zzz"));
-		assertFalse(ks.contains("xxx"));
-		assertFalse(ks.contains("aaaa"));
-		assertFalse(ks.contains("zzzz"));
-		assertFalse(ks.contains("\u0000\u1000"));
-		assertFalse(ks.contains("z"));
-		assertFalse(ks.contains(null));
-		assertFalse(ks.contains("a|"));
-		assertFalse(ks.contains("|a"));
-		assertFalse(ks.contains("Aa"));
-		assertFalse(ks.contains("aA"));
-	}
+/**
+ * Annotation for specifying various YAML options for the YAML serializers and parsers.
+ *
+ * <p>
+ * Can be applied to Java types.
+ *
+ * <p>
+ * Can be used for the following:
+ * <ul class='spaced-list'>
+ * </ul>
+ */
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+@Inherited
+public @interface Yaml {
 }

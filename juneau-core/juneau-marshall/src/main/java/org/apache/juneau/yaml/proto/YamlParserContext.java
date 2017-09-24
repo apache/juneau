@@ -10,33 +10,52 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.yaml.proto;
 
-import static org.junit.Assert.*;
+import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
 
-import org.apache.juneau.internal.*;
-import org.junit.*;
+/**
+ * Configurable properties on the {@link YamlParser} class.
+ *
+ * <p>
+ * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
+ * passed into the constructor.
+ *
+ * <p>
+ * See {@link PropertyStore} for more information about context properties.
+ *
+ * <h6 class='topic'>Inherited configurable properties</h6>
+ * <ul class='doctree'>
+ * 	<li class='jc'>
+ * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
+ * 		- Properties associated with handling beans on serializers and parsers.
+ * 		<ul>
+ * 			<li class='jc'>
+ * 				<a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a>
+ * 				- Configurable properties common to all parsers.
+ * 		</ul>
+ * 	</li>
+ * </ul>
+ */
+public final class YamlParserContext extends ParserContext {
 
-@SuppressWarnings("javadoc")
-public class KeywordStoreTest {
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
+	 *
+	 * @param ps The property store that created this context.
+	 */
+	public YamlParserContext(PropertyStore ps) {
+		super(ps);
+	}
 
-	//====================================================================================================
-	// test - Basic tests
-	//====================================================================================================
-	@Test
-	public void test() throws Exception {
-		KeywordSet ks = new KeywordSet("aaa", "zzz");
-		assertTrue(ks.contains("aaa"));
-		assertTrue(ks.contains("zzz"));
-		assertFalse(ks.contains("xxx"));
-		assertFalse(ks.contains("aaaa"));
-		assertFalse(ks.contains("zzzz"));
-		assertFalse(ks.contains("\u0000\u1000"));
-		assertFalse(ks.contains("z"));
-		assertFalse(ks.contains(null));
-		assertFalse(ks.contains("a|"));
-		assertFalse(ks.contains("|a"));
-		assertFalse(ks.contains("Aa"));
-		assertFalse(ks.contains("aA"));
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonParserContext", new ObjectMap()
+		);
 	}
 }

@@ -10,33 +10,36 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.yaml.proto;
 
-import static org.junit.Assert.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.apache.juneau.json.annotation.*;
 
-@SuppressWarnings("javadoc")
-public class KeywordStoreTest {
+/**
+ * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on
+ * the class.
+ */
+public class YamlClassMeta extends ClassMetaExtended {
 
-	//====================================================================================================
-	// test - Basic tests
-	//====================================================================================================
-	@Test
-	public void test() throws Exception {
-		KeywordSet ks = new KeywordSet("aaa", "zzz");
-		assertTrue(ks.contains("aaa"));
-		assertTrue(ks.contains("zzz"));
-		assertFalse(ks.contains("xxx"));
-		assertFalse(ks.contains("aaaa"));
-		assertFalse(ks.contains("zzzz"));
-		assertFalse(ks.contains("\u0000\u1000"));
-		assertFalse(ks.contains("z"));
-		assertFalse(ks.contains(null));
-		assertFalse(ks.contains("a|"));
-		assertFalse(ks.contains("|a"));
-		assertFalse(ks.contains("Aa"));
-		assertFalse(ks.contains("aA"));
+	private final Json json;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cm The class that this annotation is defined on.
+	 */
+	public YamlClassMeta(ClassMeta<?> cm) {
+		super(cm);
+		this.json = ReflectionUtils.getAnnotation(Json.class, getInnerClass());
+	}
+
+	/**
+	 * Returns the {@link Json} annotation defined on the class.
+	 *
+	 * @return The value of the {@link Json} annotation, or <jk>null</jk> if not specified.
+	 */
+	protected Json getAnnotation() {
+		return json;
 	}
 }
