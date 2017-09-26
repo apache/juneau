@@ -93,7 +93,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
       // running timer task as daemon thread
       Timer timer = new Timer(true);
       timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);
-		for (int i = 0; i < 1000000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			iteration.set(i);
 			String s = proxy.setInt3dArray(new int[][][]{{{i},null},null}, i);
 			if (i % 1000 == 0)
