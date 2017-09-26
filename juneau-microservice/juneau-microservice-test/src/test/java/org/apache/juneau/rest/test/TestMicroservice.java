@@ -19,6 +19,7 @@ import java.util.*;
 
 import javax.net.ssl.*;
 
+import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.conn.ssl.*;
 import org.apache.http.impl.client.*;
@@ -99,6 +100,8 @@ public class TestMicroservice {
 	 */
 	public static RestClientBuilder client() {
 		try {
+			final RequestLine[] currentRequest = new RequestLine[1];
+			final StatusLine[] currentResponse = new StatusLine[1];
 			return new RestClientBuilder()
 				.rootUrl(microserviceURI)
 				.setRetryHandler(
@@ -106,13 +109,23 @@ public class TestMicroservice {
 						@Override
 						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
 							System.err.println("*** ERROR ***");
-							TestMicroservice.jettyDump();
-							microservice.stop();
-							System.exit(2);
-							return (executionCount < 10);
+							TestMicroservice.jettyDump(currentRequest[0], currentResponse[0]);
+							return (executionCount < 3);
 						}
 					}
 				)
+				.addInterceptorFirst(new org.apache.http.HttpRequestInterceptor() {
+					@Override
+					public void process(HttpRequest r, HttpContext c) throws HttpException, IOException {
+						currentRequest[0] = r.getRequestLine();
+					}
+				})
+				.addInterceptorFirst(new org.apache.http.HttpResponseInterceptor() {
+					@Override
+					public void process(HttpResponse r, HttpContext c) throws HttpException, IOException {
+						currentResponse[0] = r.getStatusLine();
+					}
+				})
 				.noTrace()
 			;
 		} catch (Exception e) {
@@ -150,10 +163,17 @@ public class TestMicroservice {
 		}
 	}
 
-	public static void jettyDump() {
+	private static int dumpCount = 0;
+
+	public static void jettyDump(RequestLine rl, StatusLine sl) {
 		try {
 			String dump = microservice.getServer().dump();
-			IOUtils.pipe(dump, new FileWriter(microservice.getConfig().getString("Logging/logDir") + "/jetty-thread-dump.log"));
+			FileWriter fw = new FileWriter(microservice.getConfig().getString("Logging/logDir") + "/jetty-thread-dump-"+(dumpCount++)+".log");
+			fw.append("RequestLine = [" + rl + "]\n");
+			fw.append("StatusLine = [" + sl + "]\n");
+			IOUtils.pipe(dump, fw);
+			fw.flush();
+			fw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
