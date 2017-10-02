@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.sample;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.microservice.Resource;
 import org.apache.juneau.rest.annotation.RestMethod;
 import org.apache.juneau.rest.annotation.RestResource;
@@ -28,7 +30,7 @@ public class HelloWorldResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/*")
+	@RestMethod(name=GET, path="/*")
 	public String sayHello() {
 		return "Hello world!";
 	}

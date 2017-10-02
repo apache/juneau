@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jso.*;
@@ -208,7 +210,7 @@ public abstract class RestServletDefault extends RestServlet {
 	 * @param req The HTTP request.
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
-	@RestMethod(name="OPTIONS", path="/*",
+	@RestMethod(name=OPTIONS, path="/*",
 		htmldoc=@HtmlDoc(
 			links={
 				"back: servlet:/",

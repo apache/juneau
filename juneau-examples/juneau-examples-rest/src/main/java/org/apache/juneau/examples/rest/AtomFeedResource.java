@@ -16,6 +16,7 @@ import static org.apache.juneau.dto.atom.AtomBuilder.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.net.*;
 
@@ -99,7 +100,7 @@ public class AtomFeedResource extends ResourceJena {
 	/**
 	 * GET request handler
 	 */
-	@RestMethod(name="GET", path="/", summary="Get the sample ATOM feed")
+	@RestMethod(name=GET, path="/", summary="Get the sample ATOM feed")
 	public Feed getFeed() throws Exception {
 		return feed;
 	}
@@ -108,7 +109,7 @@ public class AtomFeedResource extends ResourceJena {
 	 * PUT request handler.
 	 * Replaces the feed with the specified content, and then mirrors it as the response.
 	 */
-	@RestMethod(name="PUT", path="/", summary="Overwrite the sample ATOM feed")
+	@RestMethod(name=PUT, path="/", summary="Overwrite the sample ATOM feed")
 	public Feed setFeed(@Body Feed feed) throws Exception {
 		this.feed = feed;
 		return feed;

@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
@@ -54,7 +55,7 @@ public class UrlEncodedFormResource extends Resource {
 
 	/** GET request handler */
 	@RestMethod(
-		name="GET", 
+		name=GET, 
 		path="/",
 		htmldoc=@HtmlDoc(
 			script={
@@ -69,7 +70,7 @@ public class UrlEncodedFormResource extends Resource {
 	)
 	public Div doGet(RestRequest req) {
 		return div(
-			form().id("form").action("servlet:/").method("POST").target("buff").children(
+			form().id("form").action("servlet:/").method(POST).target("buff").children(
 				table(
 					tr(
 						th(req.getMessage("aString")),
@@ -97,7 +98,7 @@ public class UrlEncodedFormResource extends Resource {
 	}
 
 	/** POST request handler */
-	@RestMethod(name="POST", path="/")
+	@RestMethod(name=POST, path="/")
 	public Object doPost(@Body FormInputBean input) throws Exception {
 		// Just mirror back the request
 		return input;

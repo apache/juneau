@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -28,7 +30,7 @@ public class ClientFuturesResource extends RestServletDefault {
 	//====================================================================================================
 	// Test GET
 	//====================================================================================================
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public ObjectMap test1(RestRequest req) throws Exception {
 		return new ObjectMap().append("foo","bar");
 	}

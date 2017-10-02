@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -27,12 +29,12 @@ public class LargePojosResource extends ResourceJena {
 	//====================================================================================================
 	// Test how long it takes to serialize/parse various content types.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public LargePojo testGet() {
 		return LargePojo.create();
 	}
 
-	@RestMethod(name="PUT", path="/")
+	@RestMethod(name=PUT, path="/")
 	public String testPut(@Body LargePojo in) {
 		return "ok";
 	}

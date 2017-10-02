@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -28,7 +30,7 @@ public class StaticFilesResource extends RestServlet {
 	//====================================================================================================
 	// Tests the @RestResource(staticFiles) annotation.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/*")
+	@RestMethod(name=GET, path="/*")
 	public String testXdocs() {
 		return null;
 	}

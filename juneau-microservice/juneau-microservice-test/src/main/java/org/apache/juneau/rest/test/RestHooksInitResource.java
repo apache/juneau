@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
@@ -104,17 +105,17 @@ public class RestHooksInitResource extends RestServletDefault {
 			postInitChildFirst.add("super-2a");
 		}
 
-		@RestMethod(name="GET", path="/init")
+		@RestMethod(name=GET, path="/init")
 		public List<String> getInitEvents() {
 			return init;
 		}
 
-		@RestMethod(name="GET", path="/postInit")
+		@RestMethod(name=GET, path="/postInit")
 		public List<String> getPostInitEvents() {
 			return postInit;
 		}
 
-		@RestMethod(name="GET", path="/postInitChildFirst")
+		@RestMethod(name=GET, path="/postInitChildFirst")
 		public List<String> getPostInitChildFirstEvents() {
 			return postInitChildFirst;
 		}
@@ -211,12 +212,12 @@ public class RestHooksInitResource extends RestServletDefault {
 			postInitChildFirstOrderTest = "PARENT";
 		}
 
-		@RestMethod(name="GET", path="/postInitOrder")
+		@RestMethod(name=GET, path="/postInitOrder")
 		public String postInitOrderTest() {
 			return postInitOrderTest;
 		}
 
-		@RestMethod(name="GET", path="/postInitChildFirstOrder")
+		@RestMethod(name=GET, path="/postInitChildFirstOrder")
 		public String postInitChildFirstOrderTest() {
 			return postInitChildFirstOrderTest;
 		}

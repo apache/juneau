@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.io.*;
 
 import org.apache.juneau.rest.*;
@@ -29,7 +31,7 @@ public class RestClient2Resource extends RestServletDefault {
 	//====================================================================================================
 	// Echo response
 	//====================================================================================================
-	@RestMethod(name="POST", path="/")
+	@RestMethod(name=POST, path="/")
 	public Reader test1(RestRequest req) throws Exception {
 		return new StringReader(req.getBody().asString());
 	}

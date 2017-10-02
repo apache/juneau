@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.annotation.Inherit.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -47,7 +48,7 @@ public class DefaultContentTypesResource extends RestServlet {
 	/**
 	 * Test that default Accept and Content-Type headers on servlet annotation are picked up.
 	 */
-	@RestMethod(name="PUT", path="/testDefaultHeadersOnServletAnnotation")
+	@RestMethod(name=PUT, path="/testDefaultHeadersOnServletAnnotation")
 	public String testDefaultHeadersOnServletAnnotation(@Body String in) {
 		return in;
 	}
@@ -56,7 +57,7 @@ public class DefaultContentTypesResource extends RestServlet {
 	// Test that default Accept and Content-Type headers on servlet annotation are picked up
 	// when @RestMethod.parsers/serializers annotations are used.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testRestMethodParsersSerializers", parsers=P3.class, serializers=S3.class)
+	@RestMethod(name=PUT, path="/testRestMethodParsersSerializers", parsers=P3.class, serializers=S3.class)
 	public String testRestMethodParsersSerializers(@Body String in) {
 		return in;
 	}
@@ -65,7 +66,7 @@ public class DefaultContentTypesResource extends RestServlet {
 	// Test that default Accept and Content-Type headers on servlet annotation are picked up
 	// when @RestMethod.addParsers/addSerializers annotations are used.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testRestMethodAddParsersSerializers", parsers=P3.class, parsersInherit=PARSERS, serializers=S3.class, serializersInherit=SERIALIZERS)
+	@RestMethod(name=PUT, path="/testRestMethodAddParsersSerializers", parsers=P3.class, parsersInherit=PARSERS, serializers=S3.class, serializersInherit=SERIALIZERS)
 	public String testRestMethodAddParsersSerializers(@Body String in) {
 		return in;
 	}
@@ -73,7 +74,7 @@ public class DefaultContentTypesResource extends RestServlet {
 	//====================================================================================================
 	// Various Accept incantations.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testAccept")
+	@RestMethod(name=PUT, path="/testAccept")
 	public String testAccept(@Body String in) {
 		return in;
 	}
@@ -82,7 +83,7 @@ public class DefaultContentTypesResource extends RestServlet {
 	// Test that default Accept and Content-Type headers on method annotation are picked up
 	// when @RestMethod.parsers/serializers annotations are used.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testRestMethodParserSerializerAnnotations", defaultRequestHeaders={"Accept: text/s3","Content-Type: text/p3"}, parsers=P3.class, serializers=S3.class)
+	@RestMethod(name=PUT, path="/testRestMethodParserSerializerAnnotations", defaultRequestHeaders={"Accept: text/s3","Content-Type: text/p3"}, parsers=P3.class, serializers=S3.class)
 	public String testRestMethodParserSerializerAnnotations(@Body String in) {
 		return in;
 	}
@@ -91,7 +92,7 @@ public class DefaultContentTypesResource extends RestServlet {
 	// Test that default Accept and Content-Type headers on method annotation are picked up
 	// 	when @RestMethod.addParsers/addSerializers annotations are used.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testRestMethodAddParsersSerializersAnnotations", defaultRequestHeaders={"Accept: text/s3","Content-Type: text/p3"}, parsers=P3.class, parsersInherit=PARSERS, serializers=S3.class, serializersInherit=SERIALIZERS)
+	@RestMethod(name=PUT, path="/testRestMethodAddParsersSerializersAnnotations", defaultRequestHeaders={"Accept: text/s3","Content-Type: text/p3"}, parsers=P3.class, parsersInherit=PARSERS, serializers=S3.class, serializersInherit=SERIALIZERS)
 	public String testRestMethodAddParsersSerializersAnnotations(@Body String in) {
 		return in;
 	}

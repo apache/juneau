@@ -196,7 +196,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// REST method</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>,path=<js>"/foo/{bar}/*"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/foo/{bar}/*"</js>)
 	 * 	<jk>public</jk> String doGetById(RequestPathParams pathParams, <jk>int</jk> bar) {
 	 * 		<jk>return</jk> pathParams.getRemainder();
 	 * 	}

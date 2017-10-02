@@ -44,7 +44,7 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		res.setPageTitle(<js>"My title"</js>)
  * 			.setOutput(<js>"Simple string response"</js>);

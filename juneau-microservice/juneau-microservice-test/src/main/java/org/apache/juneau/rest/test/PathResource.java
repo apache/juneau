@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -31,7 +33,7 @@ public class PathResource extends RestServletDefault {
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public String doGet() {
 		return getContext().getPath();
 	}
@@ -45,7 +47,7 @@ public class PathResource extends RestServletDefault {
 	public static class TestPath2 extends RestServletDefault {
 		private static final long serialVersionUID = 1L;
 		// Basic tests
-		@RestMethod(name="GET", path="/")
+		@RestMethod(name=GET, path="/")
 		public String doGet() {
 			return getContext().getPath();
 		}
@@ -57,7 +59,7 @@ public class PathResource extends RestServletDefault {
 	public static class TestPath3a extends RestServletDefault {
 		private static final long serialVersionUID = 1L;
 		// Basic tests
-		@RestMethod(name="GET", path="/")
+		@RestMethod(name=GET, path="/")
 		public String doGet() {
 			return getContext().getPath();
 		}

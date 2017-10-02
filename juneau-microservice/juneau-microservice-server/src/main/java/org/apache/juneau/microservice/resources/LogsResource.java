@@ -16,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 import java.net.URI;
@@ -92,7 +93,7 @@ public class LogsResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/*",
 		swagger=@MethodSwagger(
 			responses={@Response(200),@Response(404)}
@@ -265,7 +266,7 @@ public class LogsResource extends Resource {
 	 * @throws Exception
 	 */
 	@RestMethod(
-		name="DELETE",
+		name=DELETE,
 		path="/*",
 		swagger=@MethodSwagger(
 			responses={@Response(200),@Response(404)}

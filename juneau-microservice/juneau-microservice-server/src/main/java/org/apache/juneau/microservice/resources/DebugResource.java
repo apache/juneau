@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.io.*;
 
 import org.apache.juneau.internal.*;
@@ -46,7 +48,7 @@ public class DebugResource extends Resource {
 	 * @return Child utility links.
 	 * @throws Exception 
 	 */
-	@RestMethod(name="GET", path="/", description="Show contents of config file.")
+	@RestMethod(name=GET, path="/", description="Show contents of config file.")
 	public ResourceDescription[] getChildren() throws Exception {
 		return new ResourceDescription[] {
 			new ResourceDescription("jetty/dump", "Jetty thread dump")
@@ -56,7 +58,7 @@ public class DebugResource extends Resource {
 	/**
 	 * [GET /jetty/dump] - Generates and retrieves the jetty thread dump.
 	 */
-	@RestMethod(name="GET", path="/jetty/dump", description="Generates and retrieves the jetty thread dump.")
+	@RestMethod(name=GET, path="/jetty/dump", description="Generates and retrieves the jetty thread dump.")
 	public Reader getJettyDump(RestRequest req, RestResponse res) {
 		res.setContentType("text/plain");
 		return new StringReader(RestMicroservice.getInstance().getServer().dump());
@@ -65,7 +67,7 @@ public class DebugResource extends Resource {
 	/**
 	 * [POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.
 	 */
-	@RestMethod(name="POST", path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
+	@RestMethod(name=POST, path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
 	public String createJettyDump(RestRequest req, RestResponse res) throws Exception {
 		String dump = RestMicroservice.getInstance().getServer().dump();
 		IOUtils.pipe(dump, new FileWriter(req.getConfigFile().getString("Logging/logDir") + "/jetty-thread-dump.log"));

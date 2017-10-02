@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -34,7 +36,7 @@ public class NlsPropertyResource extends RestServlet {
 	//====================================================================================================
 	// Test getting an NLS property defined on a class.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testInheritedFromClass")
+	@RestMethod(name=GET, path="/testInheritedFromClass")
 	public String testInheritedFromClass() {
 		return null;
 	}
@@ -42,7 +44,7 @@ public class NlsPropertyResource extends RestServlet {
 	//====================================================================================================
 	// Test getting an NLS property defined on a method.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testInheritedFromMethod",
+	@RestMethod(name=GET, path="/testInheritedFromMethod",
 		properties={
 			@Property(name="TestProperty",value="$L{key2}")
 		}

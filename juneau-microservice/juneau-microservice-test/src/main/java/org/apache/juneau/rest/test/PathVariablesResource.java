@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
@@ -26,22 +28,22 @@ import org.apache.juneau.utils.*;
 public class PathVariablesResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name="GET", path="/test1/{x}/foo/{y}/bar/{z}/*")
+	@RestMethod(name=GET, path="/test1/{x}/foo/{y}/bar/{z}/*")
 	public StringMessage test1(@Path String x, @Path int y, @Path boolean z) {
 		return new StringMessage("x={0},y={1},z={2}", x, y, z);
 	}
 
-	@RestMethod(name="GET", path="/test2/{z}/foo/{y}/bar/{x}/*")
+	@RestMethod(name=GET, path="/test2/{z}/foo/{y}/bar/{x}/*")
 	public StringMessage test2(@Path("x") String x, @Path("y") int y, @Path("z") boolean z) {
 		return new StringMessage("x={0},y={1},z={2}", x, y, z);
 	}
 
-	@RestMethod(name="GET", path="/test3/{0}/foo/{1}/bar/{2}/*")
+	@RestMethod(name=GET, path="/test3/{0}/foo/{1}/bar/{2}/*")
 	public StringMessage test3(@Path String x, @Path int y, @Path boolean z) {
 		return new StringMessage("x={0},y={1},z={2}", x, y, z);
 	}
 
-	@RestMethod(name="GET", path="/test4/{2}/foo/{1}/bar/{0}/*")
+	@RestMethod(name=GET, path="/test4/{2}/foo/{1}/bar/{0}/*")
 	public StringMessage test4(@Path String x, @Path int y, @Path boolean z) {
 		return new StringMessage("x={0},y={1},z={2}", x, y, z);
 	}

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.util.*;
 
 import org.apache.juneau.rest.*;
@@ -30,47 +32,47 @@ public class ContentResource extends RestServletDefault {
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@RestMethod(name="POST", path="/boolean")
+	@RestMethod(name=POST, path="/boolean")
 	public boolean testBool(@Body boolean b) {
 		return b;
 	}
 
-	@RestMethod(name="POST", path="/Boolean")
+	@RestMethod(name=POST, path="/Boolean")
 	public Boolean testBoolean(@Body Boolean b) {
 		return b;
 	}
 
-	@RestMethod(name="POST", path="/int")
+	@RestMethod(name=POST, path="/int")
 	public int testInt(@Body int i) {
 		return i;
 	}
 
-	@RestMethod(name="POST", path="/Integer")
+	@RestMethod(name=POST, path="/Integer")
 	public Integer testInteger(@Body Integer i) {
 		return i;
 	}
 
-	@RestMethod(name="POST", path="/float")
+	@RestMethod(name=POST, path="/float")
 	public float testFloat(@Body float f) {
 		return f;
 	}
 
-	@RestMethod(name="POST", path="/Float")
+	@RestMethod(name=POST, path="/Float")
 	public Float testFloat2(@Body Float f) {
 		return f;
 	}
 
-	@RestMethod(name="POST", path="/Map")
+	@RestMethod(name=POST, path="/Map")
 	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		return m;
 	}
 
-	@RestMethod(name="POST", path="/B")
+	@RestMethod(name=POST, path="/B")
 	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		return b;
 	}
 
-	@RestMethod(name="POST", path="/C")
+	@RestMethod(name=POST, path="/C")
 	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		return c;
 	}

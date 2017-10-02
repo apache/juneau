@@ -31,7 +31,7 @@ import org.apache.juneau.rest.converters.*;
  * search/view/sort capabilities against the collection of POJOs:
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
- * 		name=<js>"GET"</js>,
+ * 		name=<jsf>GET</jsf>,
  * 		path=<js>"/"</js>,
  * 		widgets={
  * 			QueryMenuItem.<jk>class</jk>,

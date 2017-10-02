@@ -14,6 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class PetStoreResource extends ResourceJena {
 
 	// Exclude the 'breed' and 'getsAlongWith' properties from the beans.
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/",
 		summary="The complete list of pets in the store",
 		bpx="Pet: breed,getsAlongWith",
@@ -111,12 +112,12 @@ public class PetStoreResource extends ResourceJena {
 	}
 
 	// Shows all bean properties.
-	@RestMethod(name="GET", path="/{id}", summary="Pet details")
+	@RestMethod(name=GET, path="/{id}", summary="Pet details")
 	public Pet getPet(@Path("id") Integer id) {
 		return petDB.get(id);
 	}
 
-	@RestMethod(name="POST", path="/")
+	@RestMethod(name=POST, path="/")
 	public Redirect addPet(@Body Pet pet) throws Exception {
 		this.petDB.put(pet.id, pet);
 		return new Redirect("servlet:/");
@@ -176,7 +177,7 @@ public class PetStoreResource extends ResourceJena {
 		@Override
 		public Object getContent(RestRequest req) throws Exception {
 			return div(
-				form().id("form").action("servlet:/").method("POST").children(
+				form().id("form").action("servlet:/").method(POST).children(
 					table(
 						tr(
 							th("ID:"),

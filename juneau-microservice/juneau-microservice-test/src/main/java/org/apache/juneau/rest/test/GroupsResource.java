@@ -14,6 +14,7 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -75,12 +76,12 @@ public class GroupsResource extends RestServlet {
 	//====================================================================================================
 	// Serializer defined on class.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testSerializerDefinedOnClass")
+	@RestMethod(name=GET, path="/testSerializerDefinedOnClass")
 	public String testSerializerDefinedOnClass_get() {
-		return "GET";
+		return GET;
 	}
 
-	@RestMethod(name="PUT", path="/testSerializerDefinedOnClass")
+	@RestMethod(name=PUT, path="/testSerializerDefinedOnClass")
 	public String testSerializerDefinedOnClass_put(@Body String in) {
 		return in;
 	}

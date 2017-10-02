@@ -14,6 +14,7 @@ package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class ConfigResource extends Resource {
 	 * @return The config file.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/", description="Show contents of config file.")
+	@RestMethod(name=GET, path="/", description="Show contents of config file.")
 	public ConfigFile getConfigContents() throws Exception {
 		return getServletConfig().getConfigFile();
 	}
@@ -62,7 +63,7 @@ public class ConfigResource extends Resource {
 	 * @return The config file as a reader resource.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/edit", description="Edit config file.")
+	@RestMethod(name=GET, path="/edit", description="Edit config file.")
 	public Form getConfigEditForm(RestRequest req) throws Exception {
 		return form().id("form").action("servlet:/").method("POST").enctype("application/x-www-form-urlencoded").children(
 			div()._class("data").children(
@@ -85,7 +86,7 @@ public class ConfigResource extends Resource {
 	 * @return The config file section.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/{section}",
+	@RestMethod(name=GET, path="/{section}",
 		description="Show config file section.",
 		swagger=@MethodSwagger(
 			parameters={
@@ -105,7 +106,7 @@ public class ConfigResource extends Resource {
 	 * @return The value of the config file entry.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/{section}/{key}",
+	@RestMethod(name=GET, path="/{section}/{key}",
 		description="Show config file entry.",
 		swagger=@MethodSwagger(
 			parameters={
@@ -125,7 +126,7 @@ public class ConfigResource extends Resource {
 	 * @return The new config file contents.
 	 * @throws Exception
 	 */
-	@RestMethod(name="POST", path="/",
+	@RestMethod(name=POST, path="/",
 		description="Sets contents of config file from a FORM post.",
 		swagger=@MethodSwagger(
 			parameters={
@@ -144,7 +145,7 @@ public class ConfigResource extends Resource {
 	 * @return The new config file contents.
 	 * @throws Exception
 	 */
-	@RestMethod(name="PUT", path="/",
+	@RestMethod(name=PUT, path="/",
 		description="Sets contents of config file.",
 		swagger=@MethodSwagger(
 			parameters={
@@ -165,7 +166,7 @@ public class ConfigResource extends Resource {
 	 * @return The new section.
 	 * @throws Exception
 	 */
-	@RestMethod(name="PUT", path="/{section}",
+	@RestMethod(name=PUT, path="/{section}",
 		description="Add or overwrite a config file section.",
 		swagger=@MethodSwagger(
 			parameters={
@@ -188,7 +189,7 @@ public class ConfigResource extends Resource {
 	 * @return The new value.
 	 * @throws Exception
 	 */
-	@RestMethod(name="PUT", path="/{section}/{key}",
+	@RestMethod(name=PUT, path="/{section}/{key}",
 		description="Add or overwrite a config file entry.",
 		swagger=@MethodSwagger(
 			parameters={

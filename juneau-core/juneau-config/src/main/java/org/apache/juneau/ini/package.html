@@ -588,7 +588,7 @@
 		 * <ja>@return</ja> The config file.  
 		 * <ja>@throws</ja> Exception 
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jfs>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>)
 		<jk>public</jk> ConfigFile getConfigContents() <jk>throws</jk> Exception {
 			<jk>return</jk> getConfig();
 		}
@@ -639,7 +639,7 @@
 	 * <ja>@return</ja> The new config file contents.
 	 * <ja>@throws</ja> Exception 
 	 */</jd>
-	<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>,
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>,
 		description=<js>"Sets contents of config file."</js>,
 		parameters={
 			<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>)

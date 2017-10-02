@@ -252,7 +252,7 @@
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {
 	
 		<jd>/** GET request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 		<jk>public</jk> String sayHello() {
 			<jk>return</jk> <js>"Hello world!"</js>;
 		}
@@ -562,7 +562,7 @@
 		</p>
 		<p class='bcode'>
 	<jd>/** GET request handler */</jd>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 	<jk>public</jk> String sayHello() {
 		<jk>return</jk> <js>"Hello world!"</js>;
 	}
@@ -590,13 +590,13 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(RestResponse res) {
 		res.setOutput(<js>"Hello World!"</js>);
 	}
 
  	<jc>// Equivalent method 2</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public</jk> String doGet() {
 		<jk>return</jk> <js>"Hello World!"</js>;
 	}
@@ -734,7 +734,7 @@
 		</ul>
 		<p class='bcode'>
 	<jc>// Example GET request using annotated attributes</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>)
 	<jk>public</jk> String doGetExample1(
 		RestRequest req,
 		RestResponse res,
@@ -766,7 +766,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Example GET with access to HTTP headers</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public</jk> String doGet(<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, <ja>@Header</ja>(<js>"ETag"</js>) UUID eTag) <jk>throws</jk> Exception {
 		...
 	}
@@ -792,19 +792,19 @@
 			</p>
 			<p class='bcode'>
 	<jc>// Default method</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> doGetDefault() {
 		...
 	}
 
 	<jc>// Method with path pattern</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/xxx"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/xxx"</js>)
 	<jk>public void</jk> doGetNoArgs(...) {
 		...
 	}
 
 	<jc>// Method with path pattern with arguments</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
 	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyEnum baz, <ja>@Path</ja> UUID bing) {
 		...
 	}
@@ -815,25 +815,25 @@
 			</p>
 			<p class='bcode'>
 	<jc>// Try first </jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/bar"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/bar"</js>)
 	<jk>public void</jk> method1() {
 		...
 	}
 
 	<jc>// Try second</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/{bar}"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/{bar}"</js>)
 	<jk>public void</jk> method2(...) {
 		...
 	}
 
 	<jc>// Try third</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
 	<jk>public void</jk> method3(...) {
 		...
 	}
 
 	<jc>// Try last</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> method4(...) {
 		...
 	}
@@ -856,12 +856,12 @@
 				The following example shows the distinction.
 			</p>
 			<p class='bcode'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> doGet(<ja>@PathRemainder</ja> String remainder) {
 		<jc>// URL path pattern can have remainder accessible through req.getRemainder().</jc>
 	}
 
-	<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>)
 	<jk>public void</jk> doPut() {
 		<jc>// URL path pattern must match exactly and will cause a 404 error if a remainder exists.</jc>
 	}
@@ -872,7 +872,7 @@
 			</p>
 			<p class='bcode'>
 	<jc>// Example GET request with access to query parameters</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/urlWithParams"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/urlWithParams"</js>)
 	<jk>public</jk> String doGetWithParams(<ja>@Query</ja>(<js>"foo"</js>) String foo, <ja>@Query</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Query</ja>(<js>"baz"</js>) UUID baz) <jk>throws</jk> Exception {
 		<jk>return</jk> <js>"GET /urlWithParams?foo="</js>+foo+<js>"&amp;bar="</js>+bar+<js>"&amp;baz="</js>+baz);
 	}
@@ -890,13 +890,13 @@
 			</p>
 			<p class='bcode'>
 	<jc>// GET method that gets invoked for administrators</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
 	<jk>public</jk> Object doGetForAdmin() {
 		...
 	}
 
 	<jc>// GET method that gets invoked for everyone else</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public</jk> Object doGetForEveryoneElse() {
 		...
 	}
@@ -943,7 +943,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Example POST of a bean</jc>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
 	<jk>public void</jk> doPost(<ja>@Body</ja> Person person) <jk>throws</jk> Exception {
 		<jc>// Do something with person.</jc>
 	}
@@ -955,13 +955,13 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/example1"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/example1"</js>)
 	<jk>public void</jk> doPost1(<ja>@Body</ja> Person p) {
 		<jc>// Do something with p.</jc>
 	}
 
 	<jc>// Equivalent method 2</jc>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/example2"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/example2"</js>)
 	<jk>public void</jk> doPost2(RestRequest req) {
 		Person p = req.getBody).asType(Person.<jk>class</jk>);
 		<jc>// Do something with p.</jc>
@@ -993,7 +993,7 @@
 	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> Resource {
 
 		<jd>/** POST request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception {
 			<jc>// Just mirror back the request</jc>
 			<jk>return</jk> input;
@@ -1012,7 +1012,7 @@
 			</p>	
 			<p class='bcode'>
 	<jd>/** POST request handler */</jd>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
 	<jk>public</jk> Object doPost(<ja>@FormData</ja>(<js>"aString"</js>) String aString, <ja>@FormData</ja>(<js>"aNumber"</js>) <jk>int</jk> aNumber, <ja>@FormData</ja>(<js>"aDate"</js>) Calendar aDate) <jk>throws</jk> Exception {
 		...
 	}
@@ -1054,7 +1054,7 @@
 		 * [POST /upload] - Upload a file as a multipart form post.
 		 * Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/upload"</js>, matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/upload"</js>, matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>)
 		<jk>public</jk> Redirect uploadFile(RestRequest req) <jk>throws</jk> Exception {
 			ServletFileUpload upload = <jk>new</jk> ServletFileUpload();
 			FileItemIterator iter = upload.getItemIterator(req);
@@ -1100,14 +1100,14 @@
 		</ul>
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1/{personId}"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
 	<jk>public</jk> Person doGet1(<ja>@Path</ja> UUID personId) {
 		Person p = getPersonById(personId);
 		<jk>return</jk> p;
 	}
 
 	<jc>// Equivalent method 2</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example2/{personId}"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
 	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
 		Person p = getPersonById(personId);
 		res.setOutput(p);
@@ -1115,7 +1115,7 @@
 
 	<jc>// (Sorta) Equivalent method 3</jc>
 	<jc>// (Ignores any converters or method-level properties)</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example3/{personId}"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
 	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja> UUID personId) {
 		Person p = getPersonById(personId);
 		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);
@@ -1240,7 +1240,7 @@
 	 * <ja>@param</ja> req The HTTP request.
 	 * <ja>@return</ja> A bean containing the contents for the OPTIONS page.
 	 */</jd>
-	<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>,
+	<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
 		summary=<js>"Resource options"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
 			links={
@@ -1373,7 +1373,7 @@
 		</p>
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(
-		name=<js>"GET"</js>, 
+		name=<jsf>GET</jsf>, 
 		path=<js>"/people/{id}/*"</js>, 
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>}, 
 		description=<js>"Get a person by id in the address book"</js>,
@@ -1394,7 +1394,7 @@
 		</p>		
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(
-		name=<js>"GET"</js>, 
+		name=<jsf>GET</jsf>, 
 		path=<js>"/people/{id}/*"</js>, 
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>}
 		<jc>// Don't specify annotations for labels...they'll be detected in resource bundle.</jc> 
@@ -1532,7 +1532,7 @@
 	}
 
  	<jc>// Example #2 - Serializers defined on method through annotation</jc>
- 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>
+ 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>
  		serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>}
  	)
 	<jk>public</jk> Object doGet() {
@@ -1601,7 +1601,7 @@
 		}
 	
 	 	<jc>// Example #2 - Parsers defined on method through annotation</jc>
-	 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>
+	 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>
 			parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>}
 		)
 		<jk>public void</jk> doPut(<ja>@Body</ja> Foo input) {
@@ -1679,7 +1679,7 @@
 		<p class='bcode'>
 	<jc>// GET method with method-level properties</jc>
 	<ja>@RestMethod</ja>(
-		name=<js>"GET"</js>, path=<js>"/*"</js>,
+		name=<jsf>GET</jsf>, path=<js>"/*"</js>,
 		properties={
 			<jc>// Nulls should not be serialized</jc>
 			<ja>@Property</ja>(name=<jsf>TRIM_NULLS</jsf>, value=<js>"true"</js>),
@@ -1829,7 +1829,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// DELETE method</jc>
-	<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, guards={AdminGuard.<jk>class</jk>})
+	<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, guards={AdminGuard.<jk>class</jk>})
 	<jk>public void</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 		...
 		</p>
@@ -1891,7 +1891,7 @@
 	<jc>// Traversable conversion enabled to allow nodes in returned POJO tree to be addressed.</jc>
 	<jc>// Queryable conversion enabled to allow returned POJO to be searched/viewed/sorted.</jc>
 	<ja>@RestMethod</ja>(
-			name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>,
+			name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>,
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
 	)
 	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) {
@@ -2064,7 +2064,7 @@
 		 * <ja>@param</ja> req The HTTP request.
 		 * <ja>@return</ja> The bean containing links to the child resources.
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>, description=<js>"Child resources"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Child resources"</js>)
 		<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest req) {
 			<jk>return new</jk> ChildResourceDescriptions(<jk>this</jk>, req);
 		}
@@ -2101,7 +2101,7 @@
 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
 
 		<jc>// Returns the localized greeting from the "greeting" key in MyMessages.properties</jc>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> String printLocalizedGreeting(RestRequest req) {
 			<jk>return</jk> req.getMessage(<js>"greeting"</js>);
 		}
@@ -2111,7 +2111,7 @@
 			{@link org.apache.juneau.rest.annotation.Messages @Messages} annotation:
 		</p>
 		<p class='bcode'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public</jk> String printLocalizedGreeting(<ja>@Messages</ja> ResourceBundle messages) {
 		<jk>return</jk> messages.getString(<js>"greeting"</js>);
 	}
@@ -2436,13 +2436,13 @@
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
 			<jk>return</jk> req.getReaderResource(<js>"UrlEncodedForm.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** POST request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception { 
 			<jc>// Just mirror back the request</jc> 
 			<jk>return</jk> input; 
@@ -2793,7 +2793,7 @@
 		 * GET request handler.
 		 * Specify the GET parameter "?person=X" for a specialized message! 
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> String sayHello(RestRequest req) {
 			<jk>return</jk> req.getConfig().getString(<js>"HelloWorldResource/message"</js>);
 		}
@@ -2831,7 +2831,7 @@
 		 * GET request handler.
 		 * Specify the GET parameter "?person=X" for a specialized message! 
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> String sayHello(RestRequest req) {
 			<jk>return</jk> req.getConfig().getString(<js>"HelloWorldResource/message"</js>);
 		}
@@ -3197,7 +3197,7 @@
 		}
 		
 		<jd>/** GET request handler for list of all photos */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 			res.setPageTitle(<js>"Photo REST service"</js>);
 			res.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
@@ -3205,7 +3205,7 @@
 		}
 		
 		<jd>/** GET request handler for single photo */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
 		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja> int id) <jk>throws</jk> Exception {
 			Photo p = photos.get(id);
 			if (p == <jk>null</jk>)
@@ -3214,14 +3214,14 @@
 		}
 		
 		<jd>/** PUT request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
 		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			photos.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
 		
 		<jd>/** POST request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
 		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			<jk>int</jk> id = photos.size();
 			Photo p = <jk>new</jk> Photo(id, image);
@@ -3230,7 +3230,7 @@
 		}
 		
 		<jd>/** DELETE request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/{id}"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>)
 		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
 			Photo p = photos.remove(id);
 			if (p == <jk>null</jk>)
@@ -3239,7 +3239,7 @@
 		}
 	
 		<jd>/** OPTIONS request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
 		<jk>public</jk> Swagger getOptions(RestRequest req) {
 			<jk>return</jk> req.getSwagger();
 		}
@@ -3564,7 +3564,7 @@
 		* [GET /] 
 		* Get root page. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, 
 			converters=Queryable.<jk>class</jk> 
 		) 
 		<jk>public</jk> Link[] getRoot() <jk>throws</jk> Exception { 
@@ -3580,7 +3580,7 @@
 		* Traversable transforming enabled to allow nodes in returned POJO tree to be addressed. 
 		* Introspectable transforming enabled to allow public methods on the returned object to be invoked. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/people/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> List&lt;Person&gt; getAllPeople() <jk>throws</jk> Exception { 
@@ -3593,7 +3593,7 @@
 		* Traversable transforming enabled to allow nodes in returned POJO tree to be addressed. 
 		* Introspectable transforming enabled to allow public methods on the returned object to be invoked. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
@@ -3604,7 +3604,7 @@
 		* [GET /addresses/*] 
 		* Get all addresses in the address book. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/addresses/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/addresses/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> List&lt;Address&gt; getAllAddresses() <jk>throws</jk> Exception { 
@@ -3615,7 +3615,7 @@
 		* [GET /addresses/{id}/*] 
 		* Get a single address by ID. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/addresses/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/addresses/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> Address getAddress(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
@@ -3626,7 +3626,7 @@
 		* [POST /people] 
 		* Create a new Person bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/people"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> Redirect createPerson(<ja>@Body</ja> CreatePerson cp) <jk>throws</jk> Exception { 
@@ -3638,7 +3638,7 @@
 		* [POST /people/{id}/addresses] 
 		* Create a new Address bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people/{id}/addresses"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/people/{id}/addresses"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> Redirect createAddress(<ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> CreateAddress ca) <jk>throws</jk> Exception { 
@@ -3651,7 +3651,7 @@
 		* [DELETE /people/{id}] 
 		* Delete a Person bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/people/{id}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/people/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk>, 
 		) 
 		<jk>public</jk> String deletePerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
@@ -3663,7 +3663,7 @@
 		* [DELETE /addresses/{id}] 
 		* Delete an Address bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/addresses/{id}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/addresses/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> String deleteAddress(<ja>@Path</ja> <jk>int</jk> addressId) <jk>throws</jk> Exception { 
@@ -3679,7 +3679,7 @@
 		* [PUT /people/{id}/*] 
 		* Change property on Person bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/people/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> String pathRemainder) <jk>throws</jk> Exception { 
@@ -3699,7 +3699,7 @@
 		* [PUT /addresses/{id}/*] 
 		* Change property on Address bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/addresses/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/addresses/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> String pathRemainder) <jk>throws</jk> Exception { 
@@ -3731,7 +3731,7 @@
 		* [GET /cognos] 
 		* Get data in Cognos/XML format 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/cognos"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/cognos"</js>) 
 		<jk>public</jk> DataSet getCognosData() <jk>throws</jk> Exception { 
 		
 			<jc>// The Cognos metadata</jc> 
@@ -3757,7 +3757,7 @@
 		* View resource options 
 		*/</jd> 
 		<ja>@Override</ja> /* RestServletDefault */ 
-		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>) 
 		<jk>public</jk> Swagger getOptions(RestRequest req) { 
 			<jk>return</jk> req.getSwagger(); 
 		} 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
@@ -72,7 +74,7 @@ public class JsonSchemaResource extends ResourceJena {
 	}
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/", summary="Get the JSON-Schema document")
+	@RestMethod(name=GET, path="/", summary="Get the JSON-Schema document")
 	public Schema getSchema() throws Exception {
 		return schema;
 	}
@@ -81,7 +83,7 @@ public class JsonSchemaResource extends ResourceJena {
 	 * PUT request handler.
 	 * Replaces the schema document with the specified content, and then mirrors it as the response.
 	 */
-	@RestMethod(name="PUT", path="/", summary="Overwrite the JSON-Schema document")
+	@RestMethod(name=PUT, path="/", summary="Overwrite the JSON-Schema document")
 	public Schema setSchema(@Body Schema schema) throws Exception {
 		this.schema = schema;
 		return schema;

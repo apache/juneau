@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.annotation.Inherit.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
@@ -68,7 +69,7 @@ public class SerializersResource extends RestServletDefault {
 	//====================================================================================================
 	// Serializer defined on class.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testSerializerOnClass")
+	@RestMethod(name=GET, path="/testSerializerOnClass")
 	public String testSerializerOnClass() {
 		return "test1";
 	}
@@ -76,7 +77,7 @@ public class SerializersResource extends RestServletDefault {
 	//====================================================================================================
 	// Serializer defined on method.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testSerializerOnMethod", serializers=TestSerializerB.class)
+	@RestMethod(name=GET, path="/testSerializerOnMethod", serializers=TestSerializerB.class)
 	public String testSerializerOnMethod() {
 		return "test2";
 	}
@@ -84,7 +85,7 @@ public class SerializersResource extends RestServletDefault {
 	//====================================================================================================
 	// Serializer overridden on method.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testSerializerOverriddenOnMethod", serializers={TestSerializerB.class,TestSerializerC.class}, serializersInherit=SERIALIZERS)
+	@RestMethod(name=GET, path="/testSerializerOverriddenOnMethod", serializers={TestSerializerB.class,TestSerializerC.class}, serializersInherit=SERIALIZERS)
 	public String testSerializerOverriddenOnMethod() {
 		return "test3";
 	}
@@ -110,7 +111,7 @@ public class SerializersResource extends RestServletDefault {
 	//====================================================================================================
 	// Serializer with different Accept than Content-Type.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testSerializerWithDifferentMediaTypes", serializers={TestSerializerD.class}, serializersInherit=SERIALIZERS)
+	@RestMethod(name=GET, path="/testSerializerWithDifferentMediaTypes", serializers={TestSerializerD.class}, serializersInherit=SERIALIZERS)
 	public String testSerializerWithDifferentMediaTypes() {
 		return "test4";
 	}
@@ -136,7 +137,7 @@ public class SerializersResource extends RestServletDefault {
 	//====================================================================================================
 	// Check for valid 406 error response.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/test406")
+	@RestMethod(name=GET, path="/test406")
 	public String test406() {
 		return "test406";
 	}

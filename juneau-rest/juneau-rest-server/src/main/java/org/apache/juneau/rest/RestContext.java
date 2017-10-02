@@ -698,7 +698,7 @@ public final class RestContext extends Context {
 	 * A typical usage pattern involves using variables inside the {@link HtmlDoc} annotation:
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"GET"</js>, path=<js>"/{name}/*"</js>,
+	 * 		name=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>,
 	 * 		htmldoc=@HtmlDoc(
 	 * 			links={
 	 * 				<js>"up: $R{requestParentURI}"</js>,

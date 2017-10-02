@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
@@ -69,7 +70,7 @@ public class DockerRegistryResource extends Resource {
 
 	/** [GET /] - Show child resources. */
 	@SuppressWarnings("nls")
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public ResourceDescription[] getChildren(RestRequest req) {
 		return new ResourceDescription[] {
 			new ResourceDescription("search", "Search Registry")
@@ -80,7 +81,7 @@ public class DockerRegistryResource extends Resource {
 	 * PUT request handler.
 	 * Replaces the feed with the specified content, and then mirrors it as the response.
 	 */
-	@RestMethod(name="GET", path="/search")
+	@RestMethod(name=GET, path="/search")
 	public QueryResults query(@Query("q") String q) throws Exception {
 		String url = registryUrl + "/search" + (q == null ? "" : "?q=" + q);
 		synchronized(rc) {

@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public</jk> String doGet(<ja>@Messages</ja> ResourceBundle messages) {
  * 		<jk>return</jk> messages.getString(<js>"myLocalizedMessage"</js>);
  * 	}
@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public</jk> String doGet(RestRequest req) {
  * 		<jk>return</jk> req.getMessage(<js>"myLocalizedMessage"</js>);
  * 	}

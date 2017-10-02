@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.dto.Link;
 import org.apache.juneau.dto.html5.*;
@@ -43,12 +45,12 @@ public class TumblrParserResource extends Resource {
 
 	private static final int MAX_POSTS = 100;
 
-	@RestMethod(name="GET", path="/", summary="Get the instructions page")
+	@RestMethod(name=GET, path="/", summary="Get the instructions page")
 	public String getInstructions() throws Exception {
 		return "Append the Tumblr blog name to the URL above (e.g. /tumblrParser/mytumblrblog)";
 	}
 
-	@RestMethod(name="GET", path="/{blogName}", summary="Parse the specified blog")
+	@RestMethod(name=GET, path="/{blogName}", summary="Parse the specified blog")
 	public ObjectList parseBlog(@Path String blogName) throws Exception {
 		ObjectList l = new ObjectList();
 		RestClient rc = new RestClientBuilder().build();

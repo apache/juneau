@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -30,7 +32,7 @@ public class CallbackStringsResource extends RestServletDefault {
 	//====================================================================================================
 	// Test GET
 	//====================================================================================================
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public ObjectMap test1(RestRequest req) throws Exception {
 		return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
 	}
@@ -38,7 +40,7 @@ public class CallbackStringsResource extends RestServletDefault {
 	//====================================================================================================
 	// Test PUT
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/")
+	@RestMethod(name=PUT, path="/")
 	public ObjectMap testCharsetOnResponse(RestRequest req) throws Exception {
 		return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
 	}

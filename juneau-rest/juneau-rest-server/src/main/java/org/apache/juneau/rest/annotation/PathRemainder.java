@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/*"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@PathRemainder</ja> String remainder) {
  * 		...
  * 	}
@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/*"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		String remainder = req.getPathRemainder();
  * 		...

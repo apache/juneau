@@ -49,7 +49,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<jk>public</jk> MyResource <jk>extends</jk> RestServlet {
  *
  * 		<jc>// Delete method with guard that only allows Billy to call it.</jc>
- * 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, guards=BillyGuard.<jk>class</jk>)
+ * 		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, guards=BillyGuard.<jk>class</jk>)
  * 		<jk>public</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
  * 	}
  * </p>

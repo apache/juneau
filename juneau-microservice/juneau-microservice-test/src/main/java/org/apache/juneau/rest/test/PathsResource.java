@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -29,12 +31,12 @@ import org.apache.juneau.rest.annotation.*;
 public class PathsResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name="GET", path="/*")
+	@RestMethod(name=GET, path="/*")
 	public ObjectMap doGet1(RestRequest req, @PathRemainder String r) {
 		return getPaths(req).append("pathRemainder2", r).append("method",1);
 	}
 
-	@RestMethod(name="GET", path="/test2/*")
+	@RestMethod(name=GET, path="/test2/*")
 	public ObjectMap doGet2(RestRequest req, @PathRemainder String r) {
 		return getPaths(req).append("pathRemainder2", r).append("method",2);
 	}
@@ -44,11 +46,11 @@ public class PathsResource extends RestServletDefault {
 	)
 	public static class A extends RestServletDefault {
 		private static final long serialVersionUID = 1L;
-		@RestMethod(name="GET", path="/*")
+		@RestMethod(name=GET, path="/*")
 		public ObjectMap doGet1(RestRequest req, @PathRemainder String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
-		@RestMethod(name="GET", path="/test2/*")
+		@RestMethod(name=GET, path="/test2/*")
 		public ObjectMap doGet2(RestRequest req, @PathRemainder String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}

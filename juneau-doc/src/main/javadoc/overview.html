@@ -3109,7 +3109,7 @@
 	<jk>public class</jk> SystemPropertiesResource <jk>extends</jk> RestServletDefault {
 	
 		<ja>@RestMethod</ja>(
-			name=<js>"GET"</js>, path=<js>"/"</js>,
+			name=<jsf>GET</jsf>, path=<js>"/"</js>,
 			summary=<js>"Show all system properties"</js>,
 			description=<js>"Returns all system properties defined in the JVM."</js>,
 			parameters={
@@ -3128,7 +3128,7 @@
 		}
 	
 		<ja>@RestMethod</ja>(
-			name=<js>"GET"</js>, path=<js>"/{propertyName}"</js>,
+			name=<jsf>GET</jsf>, path=<js>"/{propertyName}"</js>,
 			summary=<js>"Get system property"</js>,
 			description=<js>"Returns the value of the specified system property."</js>,
 			parameters={
@@ -3144,7 +3144,7 @@
 		}
 	
 		<ja>@RestMethod</ja>(
-			name=<js>"PUT"</js>, path=<js>"/{propertyName}"</js>, 
+			name=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>, 
 			summary=<js>"Replace system property"</js>,
 			description=<js>"Sets a new value for the specified system property."</js>,
 			guards=AdminGuard.<jk>class</jk>,
@@ -3169,7 +3169,7 @@
 		}
 	
 		<ja>@RestMethod</ja>(
-			name=<js>"POST"</js>, path=<js>"/"</js>, 
+			name=<jsf>POST</jsf>, path=<js>"/"</js>, 
 			summary=<js>"Add an entire set of system properties"</js>,
 			description=<js>"Takes in a map of key/value pairs and creates a set of new system properties."</js>,
 			guards=AdminGuard.<jk>class</jk>,
@@ -3195,7 +3195,7 @@
 		}
 	
 		<ja>@RestMethod</ja>(
-			name=<js>"DELETE"</js>, path=<js>"/{propertyName}"</js>, 
+			name=<jsf>DELETE</jsf>, path=<js>"/{propertyName}"</js>, 
 			summary=<js>"Delete system property"</js>,
 			description=<js>"Deletes the specified system property."</js>,
 			guards=AdminGuard.<jk>class</jk>,
@@ -3219,7 +3219,7 @@
 		}
 	
 		<ja>@RestMethod</ja>(
-			name=<js>"OPTIONS"</js>, path=<js>"/*"</js>,
+			name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
 			summary=<js>"Show resource options"</js>,
 			description=<js>"Show resource options as a Swagger doc"</js>
 		)
@@ -3445,7 +3445,7 @@
 				<li>
 					Extending from <code>RemoteableServlet</code>.
 				<li>
-					Using a <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> annotation on a Java method.
+					Using a <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> annotation on a Java method.
 			</ol>
 			<p>
 				The <code>RemoteableServlet</code> class is a simple specialized servlet with an abstract 
@@ -3474,14 +3474,14 @@
 	}
 			</p>
 			<p>
-				The <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> approach is easier if you only have a single 
+				The <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> approach is easier if you only have a single 
 				interface you want to expose.  
 				You simply define a Java method whose return type is an interface, and return the implementation of that 
 				interface:
 			</p>
 			<p class='bcode'>
 	<jc>// Our exposed proxy object.</jc>
-	<ja>@RestMethod</ja>(name=<js>"PROXY"</js>, path=<js>"/addressbookproxy/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/addressbookproxy/*"</js>)
 	<jk>public</jk> IAddressBook getProxy() {
 		<jk>return</jk> addressBook;
 	}
@@ -3772,7 +3772,7 @@
 	<ja>@Remoteable</ja>
 	<jk>public interface</jk> MyProxyInterface {
 		
-		<ja>@RemoteMethod</ja>(httpMethod=<js>"POST"</js>, path=<js>"/method"</js>)
+		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/method"</js>)
 		String callMyMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
 	}
 	
@@ -4305,7 +4305,7 @@
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>) 
 		<jk>public</jk> String sayHello() { 
 			<jk>return</jk> <js>"Hello world!"</js>; 
 		} 
@@ -4398,7 +4398,7 @@
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
 		<jd>/** Example GET request that redirects to our example method */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Redirect doExample() <jk>throws</jk> Exception { 
 			<jk>return new</jk> Redirect(<js>"example1/xxx/123/{0}/xRemainder?q1=123&amp;q2=yyy"</js>, 
 				UUID.<jsm>randomUUID</jsm>()); 
@@ -4408,7 +4408,7 @@
 		 * Methodology #1 - GET request using annotated attributes.
 		 * This approach uses annotated parameters for retrieving input.
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1/{p1}/{p2}/{p3}/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{p1}/{p2}/{p3}/*"</js>)
 		<jk>public</jk> String example1(
 				<ja>@Method</ja> String method,                  <jc>// HTTP method.</jc>
 				<ja>@Path</ja> String p1,                        <jc>// Path variables.</jc>
@@ -4434,7 +4434,7 @@
 		 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
 		 * This approach uses low-level request/response objects to perform the same as above.
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example2/{p1}/{p2}/{p3}/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{p1}/{p2}/{p3}/*"</js>)
 		<jk>public</jk> String example2(
 				RestRequest req,          <jc>// A direct subclass of HttpServletRequest.</jc>
 				RestResponse res          <jc>// A direct subclass of HttpServletResponse.</jc>
@@ -4475,7 +4475,7 @@
 		 * This approach uses intermediate-level APIs.
 		 * The framework recognizes the parameter types and knows how to resolve them.
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example3/{p1}/{p2}/{p3}/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{p1}/{p2}/{p3}/*"</js>)
 		<jk>public</jk> String example3(
 				HttpMethod method,           <jc>// HTTP method.</jc>
 				RequestPathMatch path,       <jc>// Path variables.</jc>
@@ -4607,7 +4607,7 @@
 			<h6 class='figure'>RestServletDefault.java</h6>
 			<p class='bcode'>
 	<jd>/** OPTIONS request handler */</jd>
-	<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
 	<jk>public</jk> Swagger getOptions(RestRequest req) {
 		<jk>return</jk> req.getSwagger();
 	}			
@@ -4706,13 +4706,13 @@
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
 			<jk>return</jk> req.getReaderResource(<js>"UrlEncodedForm.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** POST request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception { 
 			<jc>// Just mirror back the request</jc> 
 			<jk>return</jk> input; 
@@ -4821,7 +4821,7 @@
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 	<jd>/** GET request handler */</jd>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 	<jk>public</jk> Div doGet(RestRequest req) {
 		<jk>return</jk> div(
 			script(<js>"text/javascript"</js>,
@@ -4832,7 +4832,7 @@
 				+<js>"\n		document.getElementById('results').innerHTML = buffBody.innerHTML;"</js>
 				+<js>"\n	}"</js>
 			),
-			<jsf>form</jsf>().id(<js>"form"</js>).action(req.getServletURI()).method(<js>"POST"</js>).target(<js>"buff"</js>).children(
+			<jsf>form</jsf>().id(<js>"form"</js>).action(req.getServletURI()).method(<jsf>POST</jsf>).target(<js>"buff"</js>).children(
 				<jsf>table</jsf>(
 					<jsf>tr</jsf>(
 						<jsf>th</jsf>(req.getMessage(<js>"aString"</js>)),
@@ -4929,7 +4929,7 @@
 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> Resource {
 	
 		<jd>/** GET request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
 		<jk>public</jk> HttpServletRequest doGet(RestRequest req, RestResponse res, <ja>@Properties</ja> ObjectMap properties) {
 			<jc>// Set the HtmlDocSerializer title programmatically.</jc>
 			res.setPageTitle(req.getPathInfo());
@@ -5520,7 +5520,7 @@
 		* [GET /] 
 		* Get root page. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, 
 			converters=Queryable.<jk>class</jk> 
 		) 
 		<jk>public</jk> Link[] getRoot() <jk>throws</jk> Exception { 
@@ -5536,7 +5536,7 @@
 		* Traversable transforming enabled to allow nodes in returned POJO tree to be addressed. 
 		* Introspectable transforming enabled to allow public methods on the returned object to be invoked. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/people/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> AddressBook getAllPeople() <jk>throws</jk> Exception { 
@@ -5549,7 +5549,7 @@
 		* Traversable transforming enabled to allow nodes in returned POJO tree to be addressed. 
 		* Introspectable transforming enabled to allow public methods on the returned object to be invoked. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
@@ -5560,7 +5560,7 @@
 		* [GET /addresses/*] 
 		* Get all addresses in the address book. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/addresses/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/addresses/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> List&lt;Address&gt; getAllAddresses() <jk>throws</jk> Exception { 
@@ -5571,7 +5571,7 @@
 		* [GET /addresses/{id}/*] 
 		* Get a single address by ID. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/addresses/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/addresses/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
 		) 
 		<jk>public</jk> Address getAddress(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
@@ -5582,7 +5582,7 @@
 		* [POST /people] 
 		* Create a new Person bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/people"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> Redirect createPerson(<ja>@Body</ja> CreatePerson cp) <jk>throws</jk> Exception { 
@@ -5594,7 +5594,7 @@
 		* [POST /people/{id}/addresses] 
 		* Create a new Address bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people/{id}/addresses"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/people/{id}/addresses"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> Redirect createAddress(<ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> CreateAddress ca) <jk>throws</jk> Exception { 
@@ -5607,7 +5607,7 @@
 		* [DELETE /people/{id}] 
 		* Delete a Person bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/people/{id}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/people/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk>, 
 		) 
 		<jk>public</jk> String deletePerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
@@ -5619,7 +5619,7 @@
 		* [DELETE /addresses/{id}] 
 		* Delete an Address bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/addresses/{id}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/addresses/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> String deleteAddress(<ja>@Path</ja> <jk>int</jk> addressId) <jk>throws</jk> Exception { 
@@ -5635,7 +5635,7 @@
 		* [PUT /people/{id}/*] 
 		* Change property on Person bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/people/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> 
@@ -5656,7 +5656,7 @@
 		* [PUT /addresses/{id}/*] 
 		* Change property on Address bean. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/addresses/{id}/*"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/addresses/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, 
@@ -5689,7 +5689,7 @@
 		* [GET /cognos] 
 		* Get data in Cognos/XML format 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/cognos"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/cognos"</js>) 
 		<jk>public</jk> DataSet getCognosData() <jk>throws</jk> Exception { 
 		
 			<jc>// The Cognos metadata</jc> 
@@ -5715,7 +5715,7 @@
 		* View resource options 
 		*/</jd> 
 		<ja>@Override</ja> /* RestServletDefault */ 
-		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>) 
 		<jk>public</jk> Swagger getOptions(RestRequest req) { 
 			<jk>return</jk> req.getSwagger(); 
 		} 
@@ -5769,7 +5769,7 @@
 						to locate and update individual nodes in a POJO tree using the path remainder on the request. 
 					<li>
 						The <l>doInit()</l> method shows an example of an overloaded method using the 
-						<l>@RestMethod(name="INIT")</l> annotation.
+						<l>@RestMethod(name=<jsf>INIT</jsf>)</l> annotation.
 					<li>
 						The <l>getOptions()</l> method shows the default OPTIONS page augmented with some additional 
 						information.
@@ -6299,7 +6299,7 @@
 		<jd>/** 
 		* [GET /upload] - Display the form entry page for uploading a file to the temp directory. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/upload"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/upload"</js>) 
 		<jk>public</jk> ReaderResource getUploadPage(RestRequest req) <jk>throws</jk> IOException { 
 			<jk>return</jk> req.getReaderResource(<js>"TempDirUploadPage.html"</js>, <jk>true</jk>); 
 		} 
@@ -6308,7 +6308,7 @@
 		* [POST /upload] - Upload a file as a multipart form post. 
 		* Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/upload"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/upload"</js>, 
 			matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>) 
 		<jk>public</jk> Redirect uploadFile(RestRequest req) <jk>throws</jk> Exception { 
 			ServletFileUpload upload = <jk>new</jk> ServletFileUpload(); 
@@ -6473,7 +6473,7 @@
 		<jd>/** 
 		* GET request handler 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Feed getFeed() <jk>throws</jk> Exception { 
 			<jk>return</jk> <jf>feed</jf>; 
 		} 
@@ -6482,7 +6482,7 @@
 		* PUT request handler. 
 		* Replaces the feed with the specified content, and then mirrors it as the response. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Feed setFeed(<ja>@org.apache.juneau.rest.annotation.Content</ja> Feed feed) <jk>throws</jk> Exception { 
 			<jk>this</jk>.<jf>feed</jf> = feed; 
 			<jk>return</jk> feed; 
@@ -6548,7 +6548,7 @@
 		
 		<jd>/** [GET /] - Show child resources. */</jd> 
 		<ja>@SuppressWarnings</ja>(<js>"nls"</js>) 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> ResourceDescription[] getChildren(RestRequest req) { 
 			<jk>return new</jk> ResourceDescription[] { 
 				<jk>new</jk> ResourceDescription(req, <js>"search"</js>, <js>"Search Registry"</js>) 
@@ -6559,7 +6559,7 @@
 		* PUT request handler. 
 		* Replaces the feed with the specified content, and then mirrors it as the response. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/search"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/search"</js>) 
 		<jk>public</jk> QueryResults query(<ja>@Query</ja>(<js>"q"</js>) String q) <jk>throws</jk> Exception { 
 			String url = <jf>registryUrl</jf> + <js>"/search"</js> + (q == <jk>null</jk> ? <js>""</js> : <js>"?q="</js> + q); 
 			<jk>return</jk> <jf>rc</jf>.doGet(url).getResponse(QueryResults.<jk>class</jk>); 
@@ -6635,12 +6635,12 @@
 	<jk>public class</jk> TumblrParserResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 	
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> String getInstructions() <jk>throws</jk> Exception { 
 			<jk>return</jk> <js>"Append the Tumblr blog name to the URL above (e.g. /tumblrParser/mytumblrblog)"</js>; 
 		} 
 		
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{blogName}"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{blogName}"</js>) 
 		<jk>public</jk> ObjectList parseBlog(<ja>@Path</ja> String blogName) <jk>throws</jk> Exception { 
 			ObjectList l = <jk>new</jk> ObjectList(); 
 			RestClient rc = <jk>new</jk> RestClientBuilder().build(); 
@@ -6758,7 +6758,7 @@
 		}
 		
 		<jd>/** GET request handler for list of all photos */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 			res.setPageTitle(<js>"Photo REST service"</js>);
 			res.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
@@ -6766,7 +6766,7 @@
 		}
 		
 		<jd>/** GET request handler for single photo */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
 		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja> int id) <jk>throws</jk> Exception {
 			Photo p = photos.get(id);
 			if (p == <jk>null</jk>)
@@ -6775,14 +6775,14 @@
 		}
 		
 		<jd>/** PUT request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
 		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			photos.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
 		
 		<jd>/** POST request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
 		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			<jk>int</jk> id = photos.size();
 			Photo p = <jk>new</jk> Photo(id, image);
@@ -6791,7 +6791,7 @@
 		}
 		
 		<jd>/** DELETE request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/{id}"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/{id}"</js>)
 		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
 			Photo p = photos.remove(id);
 			if (p == <jk>null</jk>)
@@ -6800,7 +6800,7 @@
 		}
 	
 		<jd>/** OPTIONS request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
 		<jk>public</jk> Swagger getOptions(RestRequest req) {
 			<jk>return</jk> req.getSwagger();
 		}
@@ -6895,7 +6895,7 @@
 		} 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Schema getSchema() <jk>throws</jk> Exception { 
 			<jk>return</jk> <jf>schema</jf>; 
 		} 
@@ -6904,7 +6904,7 @@
 		* PUT request handler. 
 		* Replaces the schema document with the specified content, and then mirrors it as the response. 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> Schema setSchema(<ja>@Body</ja> Schema schema) <jk>throws</jk> Exception { 
 			<jk>this</jk>.<jf>schema</jf> = schema; 
 			<jk>return</jk> schema; 
@@ -6980,13 +6980,13 @@
 		} 
 		
 		<jd>/** GET request handler - Display the query entry page. */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
 			<jk>return</jk> req.getReaderResource(<js>"SqlQueryResource.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** POST request handler - Execute the query. */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> List&lt;Object&gt; doPost(<ja>@Body</ja> PostInput in) <jk>throws</jk> Exception { 
 			
 			List&lt;Object&gt; results = <jk>new</jk> LinkedList&lt;Object&gt;(); 
@@ -7163,7 +7163,7 @@
 		* <ja>@return</ja> The config file. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
 		<jk>public</jk> ConfigFile getConfigContents() <jk>throws</jk> Exception { 
 			<jk>return</jk> getConfig(); 
 		} 
@@ -7175,7 +7175,7 @@
 		* <ja>@return</ja> The config file as a reader resource. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/edit"</js>, description=<js>"Show config file edit page."</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/edit"</js>, description=<js>"Show config file edit page."</js>) 
 		<jk>public</jk> ReaderResource getConfigEditPage(RestRequest req) <jk>throws</jk> Exception { 
 			<jc>// Note that you don't want variables in the config file to be resolved,</jc> 
 			<jc>// so you need to escape any $ characters that you see.</jc> 
@@ -7190,7 +7190,7 @@
 		* <ja>@return</ja> The config file section. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{section}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
 			parameters={ 
 				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>) 
@@ -7208,7 +7208,7 @@
 		* <ja>@return</ja> The value of the config file entry. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{section}/{key}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
 			parameters={ 
 				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
@@ -7226,7 +7226,7 @@
 		* <ja>@return</ja> The new config file contents. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
 			parameters={ 
 				<ja>@Parameter</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
@@ -7243,7 +7243,7 @@
 		* <ja>@return</ja> The new config file contents. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
 			parameters={ 
 				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
@@ -7262,7 +7262,7 @@
 		* <ja>@return</ja> The new section. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{section}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
 			parameters={ 
 				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
@@ -7283,7 +7283,7 @@
 		* <ja>@return</ja> The new value. 
 		* <ja>@throws</ja> Exception 
 		*/</jd> 
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{section}/{key}"</js>, 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
 			parameters={ 
 				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
@@ -7443,8 +7443,10 @@
 	<h3 class='topic' onclick='toggle(this)'>6.4.1 (TBD)</h3>
 	<div class='topic'>
 	
-		<h6 class='topic'>juneau-dto</h6>
+		<h6 class='topic'>juneau-marshall</h6>
 		<ul class='spaced-list'>
+			<li>
+				New class {@link org.apache.juneau.http.HttpMethodName} with valid static string HTTP method names.
 		</ul>
 		
 	</div>

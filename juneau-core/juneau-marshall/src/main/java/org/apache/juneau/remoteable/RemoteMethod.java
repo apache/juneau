@@ -65,8 +65,8 @@ public @interface RemoteMethod {
 	 * <p>
 	 * Possible values:
 	 * <ul>
-	 * 	<li><js>"POST"</js> (default) - Parameters are serialized using the serializer registered with the RestClient.
-	 * 	<li><js>"GET"</js> - Parameters are serialized using the UrlEncodingSerializer registered with the RestClient.
+	 * 	<li><jsf>POST</jsf> (default) - Parameters are serialized using the serializer registered with the RestClient.
+	 * 	<li><jsf>GET</jsf> - Parameters are serialized using the UrlEncodingSerializer registered with the RestClient.
 	 * </ul>
 	 *
 	 * <p>

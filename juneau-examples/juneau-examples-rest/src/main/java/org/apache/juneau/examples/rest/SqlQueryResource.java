@@ -16,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.sql.*;
 import java.util.*;
@@ -85,7 +86,7 @@ public class SqlQueryResource extends Resource {
 	}
 
 	/** GET request handler - Display the query entry page. */
-	@RestMethod(name="GET", path="/", summary="Display the query entry page")
+	@RestMethod(name=GET, path="/", summary="Display the query entry page")
 	public Div doGet(RestRequest req, @Query("sql") String sql) {
 		return div(
 			script("text/javascript",
@@ -105,7 +106,7 @@ public class SqlQueryResource extends Resource {
 				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
 				+"\n	}"
 			),
-			form("sqlQuery").method("POST").target("buf").children(
+			form("sqlQuery").method(POST).target("buf").children(
 				table(
 					tr(
 						th("Position (1-10000):"),
@@ -128,7 +129,7 @@ public class SqlQueryResource extends Resource {
 	}
 
 	/** POST request handler - Execute the query. */
-	@RestMethod(name="POST", path="/", summary="Execute one or more queries")
+	@RestMethod(name=POST, path="/", summary="Execute one or more queries")
 	public List<Object> doPost(@Body PostInput in) throws Exception {
 
 		List<Object> results = new LinkedList<Object>();

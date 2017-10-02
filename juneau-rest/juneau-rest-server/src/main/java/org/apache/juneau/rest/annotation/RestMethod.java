@@ -45,6 +45,9 @@ public @interface RestMethod {
 	 * Method names are case-insensitive (always folded to upper-case).
 	 *
 	 * <p>
+	 * Note that you can use {@link org.apache.juneau.http.HttpMethodName} for constant values.
+	 *
+	 * <p>
 	 * Besides the standard HTTP method names, the following can also be specified:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -90,10 +93,10 @@ public @interface RestMethod {
 	 * The path can contain variables that get resolved to {@link Path @Path} parameters:
 	 * <p class='bcode'>
 	 * 	<jc>// Example 1</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	 *
 	 * 	<jc>// Example 2</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
 	 * </p>
 	 *
 	 * <p>
@@ -172,7 +175,7 @@ public @interface RestMethod {
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<js>"GET"</js>,
+	 * 			name=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			serializers=MySpecialSerializer.<jk>class</jk>,
 	 * 			serializersInherit=<jsf>SERIALIZERS</jsf>
@@ -224,7 +227,7 @@ public @interface RestMethod {
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<js>"PUT"</js>,
+	 * 			name=<jsf>PUT</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			parsers=MySpecialParser.<jk>class</jk>,
 	 * 			parsersInherit=<jsf>PARSERS</jsf>
@@ -275,7 +278,7 @@ public @interface RestMethod {
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<js>"PUT"</js>,
+	 * 			name=<jsf>PUT</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			encoders={GzipEncoder.<jk>class</jk>}
 	 * 		)
@@ -346,11 +349,11 @@ public @interface RestMethod {
 	 * 	}
 	 *
 	 *	<jc>// Only render "id" property.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpi=<js>"MyBean: id"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpi=<js>"MyBean: id"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
 	 *
 	 *	<jc>// Only render "a" and "b" properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>, bpi=<js>"MyBean: a,b"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>, bpi=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
 	 * </p>
 	 *
@@ -392,11 +395,11 @@ public @interface RestMethod {
 	 * 	}
 	 *
 	 *	<jc>// Don't show "a" and "b" properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans"</js>, bpx=<js>"MyBean: a,b"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpx=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
 	 *
 	 *	<jc>// Render all properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/mybeans/{id}"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
 	 * </p>
 	 *
@@ -438,7 +441,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet() {
 	 * 		...
 	 * 	}
@@ -461,7 +464,7 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo) {
 	 * 		...
 	 * 	}
@@ -485,7 +488,7 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo) {
 	 * 		...
 	 * 	}
@@ -571,19 +574,19 @@ public @interface RestMethod {
 	 * <p class='bcode'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1() {
 	 * 		...
 	 * 	}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2() {
 	 * 		...
 	 * 	}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3() {
 	 * 		...
 	 * 	}
@@ -594,13 +597,13 @@ public @interface RestMethod {
 	 * backwards compatibility.
 	 * <p class='bcode'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod() {
 	 * 		...
 	 * 	}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod()
 	 * 	}

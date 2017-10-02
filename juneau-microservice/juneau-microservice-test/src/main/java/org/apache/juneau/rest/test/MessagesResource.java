@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -37,7 +39,7 @@ public class MessagesResource extends RestServletDefault {
 	//====================================================================================================
 	// Return contents of resource bundle.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/test")
+	@RestMethod(name=GET, path="/test")
 	public Object test(@Messages ResourceBundle nls) {
 		return nls;
 	}

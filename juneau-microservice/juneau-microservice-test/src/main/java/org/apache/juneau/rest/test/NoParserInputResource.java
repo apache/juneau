@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 
@@ -33,7 +34,7 @@ public class NoParserInputResource extends RestServlet {
 	//====================================================================================================
 	// @Body annotated InputStream.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testInputStream")
+	@RestMethod(name=PUT, path="/testInputStream")
 	public String testInputStream(@Body InputStream in) throws Exception {
 		return read(in);
 	}
@@ -41,7 +42,7 @@ public class NoParserInputResource extends RestServlet {
 	//====================================================================================================
 	// @Body annotated Reader.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testReader")
+	@RestMethod(name=PUT, path="/testReader")
 	public String testReader(@Body Reader in) throws Exception {
 		return read(in);
 	}
@@ -50,7 +51,7 @@ public class NoParserInputResource extends RestServlet {
 	// @Body annotated PushbackReader.
 	// This should always fail since the servlet reader is not a pushback reader.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testPushbackReader")
+	@RestMethod(name=PUT, path="/testPushbackReader")
 	public String testPushbackReader(@Body PushbackReader in) throws Exception {
 		return read(in);
 	}

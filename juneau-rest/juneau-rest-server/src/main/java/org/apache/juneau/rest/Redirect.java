@@ -29,13 +29,13 @@ import org.apache.juneau.urlencoding.*;
  * 	<jc>// Redirect to "/contextPath/servletPath/foobar"</jc>
  *
  * 	<jc>// Using RestRequest and RestResponse</jc>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1"</js>)
  * 	<jk>public void</jk> example1(RestRequest req, RestResponse res) <jk>throws</jk> IOException {
  * 		res.sendRedirect(req.getServletURI() + <js>"/foobar"</js>);
  * 	}
  *
  * 	<jc>// Using Redirect</jc>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example2"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2"</js>)
  * 	<jk>public</jk> Redirect example2() {
  * 		<jk>return new</jk> Redirect(<js>"foobar"</js>);
  * 	}
@@ -44,7 +44,7 @@ import org.apache.juneau.urlencoding.*;
  * <p>
  * The constructor can use a {@link MessageFormat}-style pattern with multiple arguments:
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example3"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3"</js>)
  * 	<jk>public</jk> Redirect example3() {
  * 		<jk>return new</jk> Redirect(<js>"foo/{0}/bar/{1}"</js>, id1, id2);
  * 	}
@@ -60,7 +60,7 @@ import org.apache.juneau.urlencoding.*;
  * <p class='bcode'>
  * 	<jc>// Simply redirect to the servlet root.
  * 	// Equivalent to res.sendRedirect(req.getServletURI()).</jc>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example4"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example4"</js>)
  * 	<jk>public</jk> Redirect exmaple4() {
  * 		<jk>return new</jk> Redirect();
  * 	}

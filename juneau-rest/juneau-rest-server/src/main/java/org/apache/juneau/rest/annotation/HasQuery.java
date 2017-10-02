@@ -31,7 +31,7 @@ import org.apache.juneau.rest.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doPost(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> p1, <ja>@Body</ja> Bean myBean) {
  * 		...
  * 	}
@@ -40,7 +40,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req) {
  * 		<jk>boolean</jk> p1 = req.hasQueryParameter(<js>"p1"</js>);
  * 		...

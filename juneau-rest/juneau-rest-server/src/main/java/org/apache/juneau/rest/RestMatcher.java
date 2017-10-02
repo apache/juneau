@@ -36,12 +36,12 @@ import org.apache.juneau.rest.annotation.*;
  * <p class='bcode'>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
  *
- * 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)
+ * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)
  * 		<jk>public</jk> Object doGetWithDNT() {
  * 			<jc>// Handle request with Do-Not-Track specified</jc>
  * 		}
  *
- * 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo"</js>)
+ * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo"</js>)
  * 		<jk>public</jk> Object doGetWithoutDNT() {
  * 			<jc>// Handle request without Do-Not-Track specified</jc>
  * 		}

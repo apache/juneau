@@ -25,7 +25,7 @@ import org.apache.juneau.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public Person</jk> doGetPerson(<ja>@Properties</ja> ObjectMap properties) {
  * 		properties.put(<jsf>HTMLDOC_title</jsf>, <js>"This is a person"</js>);
  * 		...
@@ -35,7 +35,7 @@ import org.apache.juneau.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public Person</jk> doGetPerson(RestResponse res) {
  * 		ObjectMap properties = res.getProperties();
  * 		properties.put(<jsf>HTMLDOC_title</jsf>, <js>"This is a person"</js>);
@@ -46,7 +46,7 @@ import org.apache.juneau.*;
  * <p>
  * ...or this...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public Person</jk> doGetPerson(RestResponse res) {
  * 		res.setProperty(<jsf>HTMLDOC_title</jsf>, <js>"This is a person"</js>);
  * 		...

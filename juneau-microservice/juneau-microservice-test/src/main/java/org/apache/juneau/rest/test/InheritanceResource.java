@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.annotation.Inherit.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 import java.util.*;
@@ -61,7 +62,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show ['text/s3','text/s4','text/s1','text/s2']
 		@RestMethod(
-			name="GET",
+			name=GET,
 			path="/test1"
 		)
 		public Reader test1(RestResponse res) {
@@ -70,7 +71,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show ['text/s5']
 		@RestMethod(
-			name="GET",
+			name=GET,
 			path="/test2",
 			serializers=S5.class
 		)
@@ -80,7 +81,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
 		@RestMethod(
-			name="GET",
+			name=GET,
 			path="/test3",
 			serializers=S5.class,
 			serializersInherit=SERIALIZERS
@@ -99,7 +100,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show ['text/p3','text/p4','text/p1','text/p2']
 		@RestMethod(
-			name="GET",
+			name=GET,
 			path="/test1"
 		)
 		public Reader test1(RestRequest req) {
@@ -108,7 +109,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show ['text/p5']
 		@RestMethod(
-			name="GET",
+			name=GET,
 			path="/test2",
 			parsers=P5.class
 		)
@@ -118,7 +119,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show ['text/p5','text/p3','text/p4','text/p1','text/p2']
 		@RestMethod(
-			name="GET",
+			name=GET,
 			path="/test3",
 			parsers=P5.class,
 			parsersInherit=PARSERS
@@ -136,7 +137,7 @@ public class InheritanceResource extends RestServlet {
 		private static final long serialVersionUID = 1L;
 
 		// Should show ['e3','e4','e1','e2','identity']
-		@RestMethod(name="GET", path="/test")
+		@RestMethod(name=GET, path="/test")
 		public Reader test(RestResponse res) throws RestServletException {
 			return new StringReader(new ObjectList(res.getSupportedEncodings()).toString());
 		}
@@ -150,34 +151,34 @@ public class InheritanceResource extends RestServlet {
 		private static final long serialVersionUID = 1L;
 
 		// Should show ['F1Swap','F2Swap','Foo3']
-		@RestMethod(name="GET", path="/test1")
+		@RestMethod(name=GET, path="/test1")
 		public Object[] test1() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
 		// Should show ['F1Swap','F2Swap','F3Swap']
 		// Inherited serializer already has parent filters applied.
-		@RestMethod(name="GET", path="/test2", pojoSwaps=F3Swap.class)
+		@RestMethod(name=GET, path="/test2", pojoSwaps=F3Swap.class)
 		public Object[] test2() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
 		// Should show ['F1Swap','F2Swap','F3Swap']
-		@RestMethod(name="GET", path="/test3", pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
+		@RestMethod(name=GET, path="/test3", pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
 		public Object[] test3() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
 		// Should show ['Foo1','Foo2','F3Swap']
 		// Overriding serializer does not have parent filters applied.
-		@RestMethod(name="GET", path="/test4", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class)
+		@RestMethod(name=GET, path="/test4", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class)
 		public Object[] test4() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
 		// Should show ['F1Swap','F2Swap','F3Swap']
 		// Overriding serializer does have parent filters applied.
-		@RestMethod(name="GET", path="/test5", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
+		@RestMethod(name=GET, path="/test5", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
 		public Object[] test5() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
@@ -191,14 +192,14 @@ public class InheritanceResource extends RestServlet {
 		private static final long serialVersionUID = 1L;
 
 		// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
-		@RestMethod(name="GET", path="/test1")
+		@RestMethod(name=GET, path="/test1")
 		public ObjectMap test1(@Properties ObjectMap properties) {
 			return transform(properties);
 		}
 
 		// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 		// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
-		@RestMethod(name="GET", path="/test2",
+		@RestMethod(name=GET, path="/test2",
 			properties={@Property(name="p4",value="v4a"), @Property(name="p5", value="v5")})
 		public ObjectMap test2(@Properties ObjectMap properties, @HasQuery("override") boolean override) {
 			if (override) {

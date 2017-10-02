@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -36,7 +38,7 @@ public class AcceptCharsetResource extends RestServlet {
 	//====================================================================================================
 	// Test that Q-values are being resolved correctly.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testQValues")
+	@RestMethod(name=GET, path="/testQValues")
 	public String testQValues() {
 		return "foo";
 	}
@@ -44,7 +46,7 @@ public class AcceptCharsetResource extends RestServlet {
 	//====================================================================================================
 	// Validate various Accept-Charset variations.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testCharsetOnResponse", parsers=TestParser.class, serializers=TestSerializer.class)
+	@RestMethod(name=PUT, path="/testCharsetOnResponse", parsers=TestParser.class, serializers=TestSerializer.class)
 	public String testCharsetOnResponse(@Body String in) {
 		return in;
 	}

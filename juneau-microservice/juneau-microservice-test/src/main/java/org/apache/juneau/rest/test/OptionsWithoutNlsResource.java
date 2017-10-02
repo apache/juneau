@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -28,7 +30,7 @@ public class OptionsWithoutNlsResource extends RestServletDefault {
 	//====================================================================================================
 	// Should get to the options page without errors
 	//====================================================================================================
-	@RestMethod(name="OPTIONS", path="/testOptions/*")
+	@RestMethod(name=OPTIONS, path="/testOptions/*")
 	public Swagger testOptions(RestRequest req) {
 		return req.getSwagger();
 	}
@@ -36,7 +38,7 @@ public class OptionsWithoutNlsResource extends RestServletDefault {
 	//====================================================================================================
 	// Missing resource bundle should cause {!!x} string.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testMissingResourceBundle")
+	@RestMethod(name=GET, path="/testMissingResourceBundle")
 	public String test(RestRequest req) {
 		return req.getMessage("bad", 1, 2, 3);
 	}

@@ -43,7 +43,7 @@ public class ParamsTest extends RestTestcase {
 		RestCall r;
 
 		//		@Override
-		//		@RestMethod(name="GET",pattern="/")
+		//		@RestMethod(name=GET,pattern="/")
 		//		public void doGet(RestRequest req, RestResponse res) {
 		//			res.setOutput("No args");
 		//		}
@@ -58,7 +58,7 @@ public class ParamsTest extends RestTestcase {
 			checkErrorResponse(debug, e, SC_NOT_FOUND, "Method 'GET' not found on resource with matching pattern on path '/getx'");
 		}
 
-		//	@RestMethod(name="GET",pattern="/get1")
+		//	@RestMethod(name=GET,pattern="/get1")
 		//	public void doGet1(RestRequest req, RestResponse res) {
 		//		res.setOutput("/get1");
 		//	}
@@ -73,7 +73,7 @@ public class ParamsTest extends RestTestcase {
 			checkErrorResponse(debug, e, SC_NOT_FOUND, "Method 'GET' not found on resource with matching pattern on path '/get1a'");
 		}
 
-		//	@RestMethod(name="GET",pattern="/get1/{foo}")
+		//	@RestMethod(name=GET,pattern="/get1/{foo}")
 		//	public void doGet(RestRequest req, RestResponse res, String foo) {
 		//		res.setOutput("/get1/" + foo);
 		//	}
@@ -102,7 +102,7 @@ public class ParamsTest extends RestTestcase {
 			checkErrorResponse(debug, e, SC_NOT_FOUND, "Method 'GET' not found on resource with matching pattern on path '/get1/foo/bar/baz'");
 		}
 
-		//	@RestMethod(name="GET",pattern="/get3/{foo}/{bar}/*")
+		//	@RestMethod(name=GET,pattern="/get3/{foo}/{bar}/*")
 		//	public void doGet3(RestRequest req, RestResponse res, String foo, int bar) {
 		//		res.setOutput("/get3/"+foo+"/"+bar+", remainder="+req.getRemainder());
 		//	}
@@ -135,7 +135,7 @@ public class ParamsTest extends RestTestcase {
 		assertEquals("POST remainder=foo", r.getResponse(String.class));
 
 		//	// Bunch of different argument types
-		//	@RestMethod(name="POST",pattern="/person/{person}")
+		//	@RestMethod(name=POST,pattern="/person/{person}")
 		//	public void doPost(RestRequest req, RestResponse res, Person p) {
 		//		res.setOutput("POST, /person, name="+p.name+", age="+p.age+" remainder="+req.getRemainder());
 		//	}
@@ -147,7 +147,7 @@ public class ParamsTest extends RestTestcase {
 		assertEquals("POST remainder=person/(name:'John Smith',age:123)/foo", r.getResponse(String.class));
 
 		//	// Various primitive types
-		//	@RestMethod(name="PUT",pattern="/primitives/{xInt}.{xShort},{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
+		//	@RestMethod(name=PUT,pattern="/primitives/{xInt}.{xShort},{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
 		//	public void doPut1(RestRequest req, RestResponse res, int xInt, short xShort, long xLong, char xChar, float xFloat, double xDouble, byte xByte, boolean xBoolean) {
 		//		res.setOutput("PUT, /primitives/"+xInt+"."+xShort+","+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
 		//	}
@@ -155,7 +155,7 @@ public class ParamsTest extends RestTestcase {
 		assertEquals("PUT /primitives/1/2/3/x/4.0/5.0/6/true", r.getResponse(String.class));
 
 		//	// Various primitive objects
-		//	@RestMethod(name="PUT",pattern="/primitiveObjects/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
+		//	@RestMethod(name=PUT,pattern="/primitiveObjects/{xInt}/{xShort}/{xLong}/{xChar}/{xFloat}/{xDouble}/{xByte}/{xBoolean}")
 		//	public void doPut1(RestRequest req, RestResponse res, Integer xInt, Short xShort, Long xLong, Character xChar, Float xFloat, Double xDouble, Byte xByte, Boolean xBoolean) {
 		//		res.setOutput("PUT /primitives/"+xInt+"/"+xShort+"/"+xLong+"/"+xChar+"/"+xFloat+"/"+xDouble+"/"+xByte+"/"+xBoolean);
 		//	}
@@ -163,7 +163,7 @@ public class ParamsTest extends RestTestcase {
 		assertEquals("PUT /primitiveObjects/1/2/3/x/4.0/5.0/6/true", r.getResponse(String.class));
 
 		//	// Object with forString(String) method
-		//	@RestMethod(name="PUT",pattern="/uuid/{uuid}")
+		//	@RestMethod(name=PUT,pattern="/uuid/{uuid}")
 		//	public void doPut1(RestRequest req, RestResponse res, UUID uuid) {
 		//		res.setOutput("PUT /uuid/"+uuid);
 		//	}

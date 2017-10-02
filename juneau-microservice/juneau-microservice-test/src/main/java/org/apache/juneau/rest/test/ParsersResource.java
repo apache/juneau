@@ -14,6 +14,7 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -55,7 +56,7 @@ public class ParsersResource extends RestServletDefault {
 	//====================================================================================================
 	// Parser defined on class.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testParserOnClass")
+	@RestMethod(name=PUT, path="/testParserOnClass")
 	public String testParserOnClass(@Body String in) {
 		return in;
 	}
@@ -63,7 +64,7 @@ public class ParsersResource extends RestServletDefault {
 	//====================================================================================================
 	// Parser defined on method.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testParserOnMethod", parsers=TestParserB.class)
+	@RestMethod(name=PUT, path="/testParserOnMethod", parsers=TestParserB.class)
 	public String testParserOnMethod(@Body String in) {
 		return in;
 	}
@@ -90,7 +91,7 @@ public class ParsersResource extends RestServletDefault {
 	//====================================================================================================
 	// Parser overridden on method.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testParserOverriddenOnMethod", parsers={TestParserB.class,TestParserC.class}, parsersInherit=PARSERS)
+	@RestMethod(name=PUT, path="/testParserOverriddenOnMethod", parsers={TestParserB.class,TestParserC.class}, parsersInherit=PARSERS)
 	public String testParserOverriddenOnMethod(@Body String in) {
 		return in;
 	}
@@ -117,7 +118,7 @@ public class ParsersResource extends RestServletDefault {
 	//====================================================================================================
 	// Parser with different Accept than Content-Type.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testParserWithDifferentMediaTypes", parsers={TestParserD.class}, parsersInherit=PARSERS)
+	@RestMethod(name=PUT, path="/testParserWithDifferentMediaTypes", parsers={TestParserD.class}, parsersInherit=PARSERS)
 	public String testParserWithDifferentMediaTypes(@Body String in) {
 		return in;
 	}
@@ -144,7 +145,7 @@ public class ParsersResource extends RestServletDefault {
 	//====================================================================================================
 	// Check for valid error response.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testValidErrorResponse")
+	@RestMethod(name=PUT, path="/testValidErrorResponse")
 	public String testValidErrorResponse(@Body String in) {
 		return in;
 	}

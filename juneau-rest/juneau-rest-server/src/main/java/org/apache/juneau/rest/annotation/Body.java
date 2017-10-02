@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res, <ja>@Body</ja> Person person) {
  * 		...
  * 	}
@@ -33,7 +33,7 @@ import java.lang.annotation.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
  * 		Person person = req.getBody().asType(Person.<jk>class</jk>);
  * 		...
@@ -44,7 +44,7 @@ import java.lang.annotation.*;
  * {@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
  * When specified, any registered parsers are bypassed.
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPostPerson(<ja>@Header</ja>(<js>"Content-Type"</js>) String mediaType, <ja>@Body</ja> InputStream input) {
  * 		...
  * 	}

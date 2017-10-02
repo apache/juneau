@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -29,7 +31,7 @@ public class QueryResource extends RestServletDefault {
 	// Default values.
 	//====================================================================================================
 
-	@RestMethod(name="GET", path="/defaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+	@RestMethod(name=GET, path="/defaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 	public ObjectMap defaultQuery(RequestQuery query) {
 		return new ObjectMap()
 			.append("f1", query.getString("f1"))
@@ -37,7 +39,7 @@ public class QueryResource extends RestServletDefault {
 			.append("f3", query.getString("f3"));
 	}
 
-	@RestMethod(name="GET", path="/annotatedQuery")
+	@RestMethod(name=GET, path="/annotatedQuery")
 	public ObjectMap annotatedQuery(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
@@ -45,7 +47,7 @@ public class QueryResource extends RestServletDefault {
 			.append("f3", f3);
 	}
 
-	@RestMethod(name="GET", path="/annotatedQueryDefault")
+	@RestMethod(name=GET, path="/annotatedQueryDefault")
 	public ObjectMap annotatedQueryDefault(@Query(value="f1",def="1") String f1, @Query(value="f2",def="2") String f2, @Query(value="f3",def="3") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
@@ -53,7 +55,7 @@ public class QueryResource extends RestServletDefault {
 			.append("f3", f3);
 	}
 
-	@RestMethod(name="GET", path="/annotatedAndDefaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+	@RestMethod(name=GET, path="/annotatedAndDefaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 	public ObjectMap annotatedAndDefaultQuery(@Query(value="f1",def="4") String f1, @Query(value="f2",def="5") String f2, @Query(value="f3",def="6") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)

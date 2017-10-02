@@ -747,13 +747,13 @@
 	<jk>public class</jk> MyHelloResource <jk>extends</jk> Resource {
 
 		<jd>/** Standard hello message. */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{person}"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{person}"</js>)
 		<jk>public</jk> String sayHello(RestRequest req) {
 			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/greeting"</js>);
 		}
 
 		<jd>/** Hello message in users language. */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/localized/{person}"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/localized/{person}"</js>)
 		<jk>public</jk> String sayLocalizedHello(RestRequest req) {
 			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/localizedGreeting"</js>);
 		}
@@ -866,7 +866,7 @@
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {
 	
 		<jd>/** GET request handler */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 		<jk>public</jk> String sayHello() {
 			<jk>return</jk> <js>"Hello world!"</js>;
 		}

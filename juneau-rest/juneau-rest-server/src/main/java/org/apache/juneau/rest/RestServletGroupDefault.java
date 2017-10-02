@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.labels.*;
 
@@ -35,7 +37,7 @@ public abstract class RestServletGroupDefault extends RestServletDefault {
 	 * @param req The HTTP request.
 	 * @return The bean containing links to the child resources.
 	 */
-	@RestMethod(name="GET", path="/", description="Child resources")
+	@RestMethod(name=GET, path="/", description="Child resources")
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return new ChildResourceDescriptions(getContext(), req);
 	}

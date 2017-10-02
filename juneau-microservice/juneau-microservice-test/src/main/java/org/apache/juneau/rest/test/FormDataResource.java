@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 
@@ -32,7 +33,7 @@ public class FormDataResource extends RestServletDefault {
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@RestMethod(name="POST", path="/*")
+	@RestMethod(name=POST, path="/*")
 	public Reader test(RestRequest req) throws IOException {
 		return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
 	}
@@ -41,7 +42,7 @@ public class FormDataResource extends RestServletDefault {
 	// Default values.
 	//====================================================================================================
 
-	@RestMethod(name="POST", path="/defaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+	@RestMethod(name=POST, path="/defaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 	public ObjectMap defaultFormData(RequestFormData formData) {
 		return new ObjectMap()
 			.append("f1", formData.getString("f1"))
@@ -49,7 +50,7 @@ public class FormDataResource extends RestServletDefault {
 			.append("f3", formData.getString("f3"));
 	}
 
-	@RestMethod(name="POST", path="/annotatedFormData")
+	@RestMethod(name=POST, path="/annotatedFormData")
 	public ObjectMap annotatedFormData(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
@@ -57,7 +58,7 @@ public class FormDataResource extends RestServletDefault {
 			.append("f3", f3);
 	}
 
-	@RestMethod(name="POST", path="/annotatedFormDataDefault")
+	@RestMethod(name=POST, path="/annotatedFormDataDefault")
 	public ObjectMap annotatedFormDataDefault(@FormData(value="f1",def="1") String f1, @FormData(value="f2",def="2") String f2, @FormData(value="f3",def="3") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
@@ -65,7 +66,7 @@ public class FormDataResource extends RestServletDefault {
 			.append("f3", f3);
 	}
 
-	@RestMethod(name="POST", path="/annotatedAndDefaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
+	@RestMethod(name=POST, path="/annotatedAndDefaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 	public ObjectMap annotatedAndDefaultFormData(@FormData(value="f1",def="4") String f1, @FormData(value="f2",def="5") String f2, @FormData(value="f3",def="6") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)

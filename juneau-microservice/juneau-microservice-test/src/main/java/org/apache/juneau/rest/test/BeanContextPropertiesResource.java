@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -33,7 +35,7 @@ public class BeanContextPropertiesResource extends RestServletDefault {
 	//====================================================================================================
 	// Validate that transforms defined on class transform to underlying bean context.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testClassTransforms/{d1}")
+	@RestMethod(name=GET, path="/testClassTransforms/{d1}")
 	public Reader testClassTransforms(@Path("d1") Date d1, @Query("d2") Date d2, @Header("X-D3") Date d3) throws Exception {
 		DateSwap df = DateSwap.ISO8601DTZ.class.newInstance();
 		BeanSession session = BeanContext.DEFAULT.createSession();

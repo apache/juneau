@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.remoteable;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -66,7 +67,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	 * @return The list of links to the remote interfaces.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public List<Link> getInterfaces(RestRequest req) throws Exception {
 		List<Link> l = new LinkedList<Link>();
 		boolean useAll = ! useOnlyAnnotated();
@@ -84,7 +85,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	 * @return The methods defined on the interface.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/{javaInterface}")
+	@RestMethod(name=GET, path="/{javaInterface}")
 	public Collection<String> listMethods(@Path String javaInterface) throws Exception {
 		return getMethods(javaInterface).keySet();
 	}
@@ -98,7 +99,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	 * @return The results from invoking the specified Java method.
 	 * @throws Exception
 	 */
-	@RestMethod(name="POST", path="/{javaInterface}/{javaMethod}")
+	@RestMethod(name=POST, path="/{javaInterface}/{javaMethod}")
 	public Object invoke(RestRequest req, @Path String javaInterface, @Path String javaMethod) throws Exception {
 
 		// Find the parser.

@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -73,7 +74,7 @@ public class OnPreCallResource extends RestServlet {
 	//====================================================================================================
 	// Properties overridden via properties annotation.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testPropertiesOverriddenByAnnotation",
+	@RestMethod(name=PUT, path="/testPropertiesOverriddenByAnnotation",
 		properties={
 			@Property(name="p3",value="mp3"),
 			@Property(name="p4",value="mp4")
@@ -86,7 +87,7 @@ public class OnPreCallResource extends RestServlet {
 	//====================================================================================================
 	// Properties overridden programmatically.
 	//====================================================================================================
-	@RestMethod(name="PUT", path="/testPropertiesOverriddenProgrammatically")
+	@RestMethod(name=PUT, path="/testPropertiesOverriddenProgrammatically")
 	public String testPropertiesOverriddenProgrammatically(RestRequest req, @Properties ObjectMap properties) throws Exception {
 		properties.put("p3", "pp3");
 		properties.put("p4", "pp4");

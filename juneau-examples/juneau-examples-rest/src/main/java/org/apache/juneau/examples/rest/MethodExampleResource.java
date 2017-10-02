@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.util.*;
 
 import org.apache.juneau.http.*;
@@ -49,7 +51,7 @@ public class MethodExampleResource extends Resource {
 	private static final String SAMPLE_UUID_STRING = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
 
 	/** Example GET request that redirects to our example method */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public ResourceDescription[] doExample() throws Exception {
 		return new ResourceDescription[] {
 			new ResourceDescription("example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar", "Example 1 - Annotated method attributes."),
@@ -62,7 +64,7 @@ public class MethodExampleResource extends Resource {
 	 * Methodology #1 - GET request using annotated attributes.
 	 * This approach uses annotated parameters for retrieving input.
 	 */
-	@RestMethod(name="GET", path="/example1/{p1}/{p2}/{p3}/*")
+	@RestMethod(name=GET, path="/example1/{p1}/{p2}/{p3}/*")
 	public Map<String,Object> example1(
 			@Method String method,                  // HTTP method.
 			@Path String p1,                        // Path variables.
@@ -96,7 +98,7 @@ public class MethodExampleResource extends Resource {
 	 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
 	 * This approach uses low-level request/response objects to perform the same as above.
 	 */
-	@RestMethod(name="GET", path="/example2/{p1}/{p2}/{p3}/*")
+	@RestMethod(name=GET, path="/example2/{p1}/{p2}/{p3}/*")
 	public void example2(
 			RestRequest req,          // A direct subclass of HttpServletRequest.
 			RestResponse res          // A direct subclass of HttpServletResponse.
@@ -146,7 +148,7 @@ public class MethodExampleResource extends Resource {
 	 * This approach uses intermediate-level APIs.
 	 * The framework recognizes the parameter types and knows how to resolve them.
 	 */
-	@RestMethod(name="GET", path="/example3/{p1}/{p2}/{p3}/*")
+	@RestMethod(name=GET, path="/example3/{p1}/{p2}/{p3}/*")
 	public Map<String,Object> example3(
 		HttpMethod method,           // HTTP method.
 		RequestPathMatch path,       // Path variables.

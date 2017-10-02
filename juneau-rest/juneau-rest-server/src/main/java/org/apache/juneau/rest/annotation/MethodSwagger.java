@@ -130,7 +130,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"POST"</js>, path=<js>"/{a}"</js>,
+	 * 		name=<jsf>POST</jsf>, path=<js>"/{a}"</js>,
 	 * 		description=<js>"This is my method."</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			parameters={
@@ -177,7 +177,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"GET"</js>, path=<js>"/"</js>,
+	 * 		name=<jsf>GET</jsf>, path=<js>"/"</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			responses={
 	 * 				<ja>@Response</ja>(200),

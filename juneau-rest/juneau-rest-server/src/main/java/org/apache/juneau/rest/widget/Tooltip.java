@@ -40,7 +40,7 @@ import org.apache.juneau.dto.html5.*;
  * 	<ja>@Override</ja>
  * 	<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
  * 		<jk>return</jk> div(
- * 			<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/form"</js>).method(<js>"POST"</js>).children(
+ * 			<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/form"</js>).method(<jsf>POST</jsf>).children(
  * 				<jsm>table</jsm>(
  * 					<jsm>tr</jsm>(
  * 						<jsm>th</jsm>(<js>"Field 1:"</js>),

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -25,22 +27,22 @@ import org.apache.juneau.rest.annotation.*;
 public class UrisResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name="GET", path="/*")
+	@RestMethod(name=GET, path="/*")
 	public ObjectMap test1(RestRequest req) throws Exception {
 		return getPathInfoObject(req).append("testMethod", "root.test1");
 	}
 
-	@RestMethod(name="GET", path="/test2/*")
+	@RestMethod(name=GET, path="/test2/*")
 	public ObjectMap test2(RestRequest req) throws Exception {
 		return getPathInfoObject(req).append("testMethod", "root.test2");
 	}
 
-	@RestMethod(name="GET", path="/test3%2Ftest3/*")
+	@RestMethod(name=GET, path="/test3%2Ftest3/*")
 	public ObjectMap test3(RestRequest req) throws Exception {
 		return getPathInfoObject(req).append("testMethod", "root.test3");
 	}
 
-	@RestMethod(name="GET", path="/test4/test4/*")
+	@RestMethod(name=GET, path="/test4/test4/*")
 	public ObjectMap test4(RestRequest req) throws Exception {
 		return getPathInfoObject(req).append("testMethod", "root.test4");
 	}
@@ -54,22 +56,22 @@ public class UrisResource extends RestServletDefault {
 	public static class Child extends RestServletDefault {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name="GET", path="/*")
+		@RestMethod(name=GET, path="/*")
 		public ObjectMap test1(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "child.test1");
 		}
 
-		@RestMethod(name="GET", path="/test2/*")
+		@RestMethod(name=GET, path="/test2/*")
 		public ObjectMap test2(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "child.test2");
 		}
 
-		@RestMethod(name="GET", path="/test3%2Ftest3/*")
+		@RestMethod(name=GET, path="/test3%2Ftest3/*")
 		public ObjectMap test3(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "child.test3");
 		}
 
-		@RestMethod(name="GET", path="/test4/test4/*")
+		@RestMethod(name=GET, path="/test4/test4/*")
 		public ObjectMap test4(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "child.test4");
 		}
@@ -81,22 +83,22 @@ public class UrisResource extends RestServletDefault {
 	public static class GrandChild extends RestServletDefault {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name="GET", path="/*")
+		@RestMethod(name=GET, path="/*")
 		public ObjectMap test1(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "grandchild.test1");
 		}
 
-		@RestMethod(name="GET", path="/test2/*")
+		@RestMethod(name=GET, path="/test2/*")
 		public ObjectMap test2(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "grandchild.test2");
 		}
 
-		@RestMethod(name="GET", path="/test3%2Ftest3/*")
+		@RestMethod(name=GET, path="/test3%2Ftest3/*")
 		public ObjectMap test3(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "grandchild.test3");
 		}
 
-		@RestMethod(name="GET", path="/test4/test4/*")
+		@RestMethod(name=GET, path="/test4/test4/*")
 		public ObjectMap test4(RestRequest req) throws Exception {
 			return getPathInfoObject(req).append("testMethod", "grandchild.test4");
 		}

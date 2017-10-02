@@ -16,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
@@ -141,7 +142,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [GET /]
 	 * Get root page.
 	 */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public Link[] getRoot() throws Exception {
 		return new Link[] {
 			new Link("people", "people"),
@@ -155,7 +156,7 @@ public class AddressBookResource extends ResourceJena {
 	 * Traversable filtering enabled to allow nodes in returned POJO tree to be addressed.
 	 * Introspectable filtering enabled to allow public methods on the returned object to be invoked.
 	 */
-	@RestMethod(name="GET", path="/people/*",
+	@RestMethod(name=GET, path="/people/*",
 		converters={Traversable.class,Queryable.class,Introspectable.class},
 		htmldoc=@HtmlDoc(
 			links={
@@ -174,7 +175,7 @@ public class AddressBookResource extends ResourceJena {
 	 * Traversable filtering enabled to allow nodes in returned POJO tree to be addressed.
 	 * Introspectable filtering enabled to allow public methods on the returned object to be invoked.
 	 */
-	@RestMethod(name="GET", path="/people/{id}/*",
+	@RestMethod(name=GET, path="/people/{id}/*",
 		converters={Traversable.class,Introspectable.class}
 	)
 	public Person getPerson(@Path int id) throws Exception {
@@ -185,7 +186,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [GET /addresses/*]
 	 * Get all addresses in the address book.
 	 */
-	@RestMethod(name="GET", path="/addresses/*",
+	@RestMethod(name=GET, path="/addresses/*",
 		converters={Traversable.class,Queryable.class},
 		htmldoc=@HtmlDoc(
 			links={
@@ -202,7 +203,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [GET /addresses/{id}/*]
 	 * Get a single address by ID.
 	 */
-	@RestMethod(name="GET", path="/addresses/{id}/*",
+	@RestMethod(name=GET, path="/addresses/{id}/*",
 		converters={Traversable.class}
 	)
 	public Address getAddress(@Path int id) throws Exception {
@@ -213,7 +214,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [POST /people]
 	 * Create a new Person bean.
 	 */
-	@RestMethod(name="POST", path="/people",
+	@RestMethod(name=POST, path="/people",
 		guards=AdminGuard.class
 	)
 	public Redirect createPerson(@Body CreatePerson cp) throws Exception {
@@ -225,7 +226,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [POST /people/{id}/addresses]
 	 * Create a new Address bean.
 	 */
-	@RestMethod(name="POST", path="/people/{id}/addresses",
+	@RestMethod(name=POST, path="/people/{id}/addresses",
 		guards=AdminGuard.class
 	)
 	public Redirect createAddress(@Path int id, @Body CreateAddress ca) throws Exception {
@@ -238,7 +239,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [DELETE /people/{id}]
 	 * Delete a Person bean.
 	 */
-	@RestMethod(name="DELETE", path="/people/{id}",
+	@RestMethod(name=DELETE, path="/people/{id}",
 		guards=AdminGuard.class
 	)
 	public String deletePerson(@Path int id) throws Exception {
@@ -250,7 +251,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [DELETE /addresses/{id}]
 	 * Delete an Address bean.
 	 */
-	@RestMethod(name="DELETE", path="/addresses/{id}",
+	@RestMethod(name=DELETE, path="/addresses/{id}",
 		guards=AdminGuard.class
 	)
 	public String deleteAddress(@Path int addressId) throws Exception {
@@ -266,7 +267,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [PUT /people/{id}/*]
 	 * Change property on Person bean.
 	 */
-	@RestMethod(name="PUT", path="/people/{id}/*",
+	@RestMethod(name=PUT, path="/people/{id}/*",
 		guards=AdminGuard.class
 	)
 	public String updatePerson(RequestBody body, @Path int id, @PathRemainder String remainder) throws Exception {
@@ -286,7 +287,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [PUT /addresses/{id}/*]
 	 * Change property on Address bean.
 	 */
-	@RestMethod(name="PUT", path="/addresses/{id}/*",
+	@RestMethod(name=PUT, path="/addresses/{id}/*",
 		guards=AdminGuard.class
 	)
 	public String updateAddress(RestRequest req, @Path int id, @PathRemainder String remainder) throws Exception {
@@ -318,7 +319,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [GET /cognos]
 	 * Get data in Cognos/XML format
 	 */
-	@RestMethod(name="GET", path="/cognos")
+	@RestMethod(name=GET, path="/cognos")
 	public DataSet getCognosData() throws Exception {
 
 		// The Cognos metadata
@@ -343,7 +344,7 @@ public class AddressBookResource extends ResourceJena {
 	 * [PROXY /*]
 	 * Return a proxy interface to IAddressBook.
 	 */
-	@RestMethod(name="PROXY", path="/proxy/*")
+	@RestMethod(name=PROXY, path="/proxy/*")
 	public IAddressBook getProxy() {
 		return addressBook;
 	}

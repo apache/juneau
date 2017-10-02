@@ -13,10 +13,10 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
-
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 import java.net.*;
@@ -91,7 +91,7 @@ public class DirectoryResource extends Resource {
 	}
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/*", converters={Queryable.class})
+	@RestMethod(name=GET, path="/*", converters={Queryable.class})
 	public Object doGet(RestRequest req, @Properties ObjectMap properties) throws Exception {
 
 		String pathInfo = req.getPathInfo();
@@ -118,7 +118,7 @@ public class DirectoryResource extends Resource {
 	}
 
 	/** DELETE request handler */
-	@RestMethod(name="DELETE", path="/*", guards=AdminGuard.class)
+	@RestMethod(name=DELETE, path="/*", guards=AdminGuard.class)
 	public Object doDelete(RestRequest req) throws Exception {
 
 		if (! allowDeletes)
@@ -133,7 +133,7 @@ public class DirectoryResource extends Resource {
 	}
 
 	/** PUT request handler */
-	@RestMethod(name="PUT", path="/*", guards=AdminGuard.class)
+	@RestMethod(name=PUT, path="/*", guards=AdminGuard.class)
 	public Object doPut(RestRequest req) throws Exception {
 
 		if (! allowPuts)

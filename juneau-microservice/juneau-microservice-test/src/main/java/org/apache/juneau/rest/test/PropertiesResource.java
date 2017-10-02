@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static java.lang.String.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
@@ -44,7 +45,7 @@ public class PropertiesResource extends RestServletDefault {
 	//====================================================================================================
 	// Properties defined on method.
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testPropertiesDefinedOnMethod",
+	@RestMethod(name=GET, path="/testPropertiesDefinedOnMethod",
 		properties={
 			@Property(name="B1",value="b1"),
 			@Property(name="B2",value="b2")
@@ -81,7 +82,7 @@ public class PropertiesResource extends RestServletDefault {
 	//====================================================================================================
 	// Make sure attributes/parameters/headers are available through ctx.getProperties().
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testProperties/{A}", serializers=PropertySerializer2.class)
+	@RestMethod(name=GET, path="/testProperties/{A}", serializers=PropertySerializer2.class)
 	public void testProperties(RestResponse res) {
 		res.setOutput(null);
 	}

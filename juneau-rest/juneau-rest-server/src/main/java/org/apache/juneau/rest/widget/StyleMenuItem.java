@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
  * a drop-down menu item for rendering all other supported content types in plain text:
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
- * 		name=<js>"GET"</js>,
+ * 		name=<jsf>GET</jsf>,
  * 		path=<js>"/"</js>,
  * 		widgets={
  * 			StyleMenuItem.<jk>class</jk>,

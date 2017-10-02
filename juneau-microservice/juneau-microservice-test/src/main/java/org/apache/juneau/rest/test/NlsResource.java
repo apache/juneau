@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
@@ -46,7 +48,7 @@ public class NlsResource extends RestServletGroupDefault {
 	public static class Test1 extends RestServletDefault {
 
 		@RestMethod(
-			name="POST", path="/{a}",
+			name=POST, path="/{a}",
 			description="Test1.c",
 			swagger=@MethodSwagger(
 				parameters={
@@ -85,7 +87,7 @@ public class NlsResource extends RestServletGroupDefault {
 	public static class Test2 extends RestServletDefault {
 
 		@RestMethod(
-			name="POST", path="/{a}"
+			name=POST, path="/{a}"
 		)
 		public String test2(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
 				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
@@ -103,7 +105,7 @@ public class NlsResource extends RestServletGroupDefault {
 	public static class Test3 extends RestServletDefault {
 
 		@RestMethod(
-			name="POST", path="/{a}"
+			name=POST, path="/{a}"
 		)
 		public String test3(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
 				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
@@ -111,7 +113,7 @@ public class NlsResource extends RestServletGroupDefault {
 		}
 
 		@RestMethod(
-			name="GET", path="/"
+			name=GET, path="/"
 		)
 		public Object test3a(@Messages MessageBundle mb) {
 			return mb;
@@ -128,7 +130,7 @@ public class NlsResource extends RestServletGroupDefault {
 	public static class Test4 extends RestServletDefault {
 
 		@RestMethod(
-			name="POST", path="/{a}"
+			name=POST, path="/{a}"
 		)
 		public String test4(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
 				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
@@ -146,7 +148,7 @@ public class NlsResource extends RestServletGroupDefault {
 	public static class Test5 extends RestServletDefault {
 
 		@RestMethod(
-			name="POST", path="/{a}"
+			name=POST, path="/{a}"
 		)
 		public String test5(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
 				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
@@ -166,7 +168,7 @@ public class NlsResource extends RestServletGroupDefault {
 	public static class Test6 extends RestServletDefault {
 
 		@RestMethod(
-			name="POST", path="/{a}",
+			name=POST, path="/{a}",
 			description="$L{foo}",
 			swagger=@MethodSwagger(
 				parameters={

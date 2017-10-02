@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -68,7 +69,7 @@ public class CharsetEncodingsResource extends RestServlet {
 		}
 	}
 
-	@RestMethod(name="PUT", path="/")
+	@RestMethod(name=PUT, path="/")
 	public String test1(RestRequest req, @Body String in) {
 		return req.getCharacterEncoding() + "/" + in + "/" + req.getCharacterEncoding();
 	}

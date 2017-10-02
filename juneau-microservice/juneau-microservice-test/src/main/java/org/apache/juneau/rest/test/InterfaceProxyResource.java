@@ -15,6 +15,7 @@ package org.apache.juneau.rest.test;
 import static java.util.Arrays.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
@@ -26,7 +27,7 @@ import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
- * Tests inteface proxies exposed through <code>@RestMethod(name="PROXY")</code>
+ * Tests inteface proxies exposed through <code>@RestMethod(name=PROXY)</code>
  */
 @RestResource(
 	path="/testInterfaceProxyResource")
@@ -36,7 +37,7 @@ public class InterfaceProxyResource extends ResourceJena {
 	//====================================================================================================
 	// Test that Q-values are being resolved correctly.
 	//====================================================================================================
-	@RestMethod(name="PROXY", path="/proxy/*")
+	@RestMethod(name=PROXY, path="/proxy/*")
 	public InterfaceProxy getProxy() {
 		return new InterfaceProxy() {
 

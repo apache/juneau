@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
@@ -36,115 +38,115 @@ public class HeadersResource extends RestServlet {
 	// HTTP 1.1 headers
 	//====================================================================================================
 
-	@RestMethod(name="GET", path="/accept")
+	@RestMethod(name=GET, path="/accept")
 	public String accept(Accept accept) {
 		return accept.toString();
 	}
-	@RestMethod(name="GET", path="/acceptCharset")
+	@RestMethod(name=GET, path="/acceptCharset")
 	public String acceptCharset(AcceptCharset acceptCharset) {
 		return acceptCharset.toString();
 	}
-	@RestMethod(name="GET", path="/acceptEncoding")
+	@RestMethod(name=GET, path="/acceptEncoding")
 	public String acceptEncoding(AcceptEncoding acceptEncoding) {
 		return acceptEncoding.toString();
 	}
-	@RestMethod(name="GET", path="/acceptLanguage")
+	@RestMethod(name=GET, path="/acceptLanguage")
 	public String acceptLanguage(AcceptLanguage acceptLanguage) {
 		return acceptLanguage.toString();
 	}
-	@RestMethod(name="GET", path="/authorization")
+	@RestMethod(name=GET, path="/authorization")
 	public String authorization(Authorization authorization) {
 		return authorization.toString();
 	}
-	@RestMethod(name="GET", path="/cacheControl")
+	@RestMethod(name=GET, path="/cacheControl")
 	public String cacheControl(CacheControl cacheControl) {
 		return cacheControl.toString();
 	}
-	@RestMethod(name="GET", path="/connection")
+	@RestMethod(name=GET, path="/connection")
 	public String connection(Connection connection) {
 		return connection.toString();
 	}
-	@RestMethod(name="GET", path="/contentLength")
+	@RestMethod(name=GET, path="/contentLength")
 	public String contentLength(ContentLength contentLength) {
 		return contentLength.toString();
 	}
-	@RestMethod(name="GET", path="/contentType")
+	@RestMethod(name=GET, path="/contentType")
 	public String contentType(ContentType contentType) {
 		return contentType.toString();
 	}
-	@RestMethod(name="GET", path="/date")
+	@RestMethod(name=GET, path="/date")
 	public String date(org.apache.juneau.http.Date date) {
 		return date.toString();
 	}
-	@RestMethod(name="GET", path="/expect")
+	@RestMethod(name=GET, path="/expect")
 	public String expect(Expect expect) {
 		return expect.toString();
 	}
-	@RestMethod(name="GET", path="/from")
+	@RestMethod(name=GET, path="/from")
 	public String from(From from) {
 		return from.toString();
 	}
-	@RestMethod(name="GET", path="/host")
+	@RestMethod(name=GET, path="/host")
 	public String host(Host host) {
 		return host.toString();
 	}
-	@RestMethod(name="GET", path="/ifMatch")
+	@RestMethod(name=GET, path="/ifMatch")
 	public String IfMatch(IfMatch ifMatch) {
 		return ifMatch.toString();
 	}
-	@RestMethod(name="GET", path="/ifModifiedSince")
+	@RestMethod(name=GET, path="/ifModifiedSince")
 	public String ifModifiedSince(IfModifiedSince ifModifiedSince) {
 		return ifModifiedSince.toString();
 	}
-	@RestMethod(name="GET", path="/ifNoneMatch")
+	@RestMethod(name=GET, path="/ifNoneMatch")
 	public String ifNoneMatch(IfNoneMatch ifNoneMatch) {
 		return ifNoneMatch.toString();
 	}
-	@RestMethod(name="GET", path="/ifRange")
+	@RestMethod(name=GET, path="/ifRange")
 	public String ifRange(IfRange ifRange) {
 		return ifRange.toString();
 	}
-	@RestMethod(name="GET", path="/ifUnmodifiedSince")
+	@RestMethod(name=GET, path="/ifUnmodifiedSince")
 	public String ifUnmodifiedSince(IfUnmodifiedSince ifUnmodifiedSince) {
 		return ifUnmodifiedSince.toString();
 	}
-	@RestMethod(name="GET", path="/maxForwards")
+	@RestMethod(name=GET, path="/maxForwards")
 	public String maxForwards(MaxForwards maxForwards) {
 		return maxForwards.toString();
 	}
-	@RestMethod(name="GET", path="/pragma")
+	@RestMethod(name=GET, path="/pragma")
 	public String pragma(Pragma pragma) {
 		return pragma.toString();
 	}
-	@RestMethod(name="GET", path="/proxyAuthorization")
+	@RestMethod(name=GET, path="/proxyAuthorization")
 	public String proxyAuthorization(ProxyAuthorization proxyAuthorization) {
 		return proxyAuthorization.toString();
 	}
-	@RestMethod(name="GET", path="/range")
+	@RestMethod(name=GET, path="/range")
 	public String range(Range range) {
 		return range.toString();
 	}
-	@RestMethod(name="GET", path="/referer")
+	@RestMethod(name=GET, path="/referer")
 	public String referer(Referer referer) {
 		return referer.toString();
 	}
-	@RestMethod(name="GET", path="/te")
+	@RestMethod(name=GET, path="/te")
 	public String te(TE te) {
 		return te.toString();
 	}
-	@RestMethod(name="GET", path="/upgrade")
+	@RestMethod(name=GET, path="/upgrade")
 	public String upgrade(Upgrade upgrade) {
 		return upgrade.toString();
 	}
-	@RestMethod(name="GET", path="/userAgent")
+	@RestMethod(name=GET, path="/userAgent")
 	public String userAgent(UserAgent userAgent) {
 		return userAgent.toString();
 	}
-	@RestMethod(name="GET", path="/warning")
+	@RestMethod(name=GET, path="/warning")
 	public String warning(Warning warning) {
 		return warning.toString();
 	}
-	@RestMethod(name="GET", path="/customHeader")
+	@RestMethod(name=GET, path="/customHeader")
 	public String customHeader(CustomHeader customHeader) {
 		return customHeader.toString();
 	}
@@ -193,7 +195,7 @@ public class HeadersResource extends RestServlet {
 	// Default values.
 	//====================================================================================================
 
-	@RestMethod(name="GET", path="/defaultRequestHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+	@RestMethod(name=GET, path="/defaultRequestHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 	public ObjectMap defaultRequestHeaders(RequestHeaders headers) {
 		return new ObjectMap()
 			.append("h1", headers.getString("H1"))
@@ -201,7 +203,7 @@ public class HeadersResource extends RestServlet {
 			.append("h3", headers.getString("H3"));
 	}
 
-	@RestMethod(name="GET", path="/defaultRequestHeadersCaseInsensitive", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+	@RestMethod(name=GET, path="/defaultRequestHeadersCaseInsensitive", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 	public ObjectMap defaultRequestHeadersCaseInsensitive(RequestHeaders headers) {
 		return new ObjectMap()
 			.append("h1", headers.getString("h1"))
@@ -209,7 +211,7 @@ public class HeadersResource extends RestServlet {
 			.append("h3", headers.getString("h3"));
 	}
 
-	@RestMethod(name="GET", path="/annotatedHeaders")
+	@RestMethod(name=GET, path="/annotatedHeaders")
 	public ObjectMap annotatedHeaders(@Header("H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
 		return new ObjectMap()
 			.append("h1", h1)
@@ -217,7 +219,7 @@ public class HeadersResource extends RestServlet {
 			.append("h3", h3);
 	}
 
-	@RestMethod(name="GET", path="/annotatedHeadersCaseInsensitive")
+	@RestMethod(name=GET, path="/annotatedHeadersCaseInsensitive")
 	public ObjectMap annotatedHeadersCaseInsensitive(@Header("h1") String h1, @Header("h2") String h2, @Header("h3") String h3) {
 		return new ObjectMap()
 			.append("h1", h1)
@@ -225,7 +227,7 @@ public class HeadersResource extends RestServlet {
 			.append("h3", h3);
 	}
 
-	@RestMethod(name="GET", path="/annotatedHeadersDefault")
+	@RestMethod(name=GET, path="/annotatedHeadersDefault")
 	public ObjectMap annotatedHeadersDefault(@Header(value="h1",def="1") String h1, @Header(value="h2",def="2") String h2, @Header(value="h3",def="3") String h3) {
 		return new ObjectMap()
 			.append("h1", h1)
@@ -233,7 +235,7 @@ public class HeadersResource extends RestServlet {
 			.append("h3", h3);
 	}
 
-	@RestMethod(name="GET", path="/annotatedAndDefaultHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+	@RestMethod(name=GET, path="/annotatedAndDefaultHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 	public ObjectMap annotatedAndDefaultHeaders(@Header(value="h1",def="4") String h1, @Header(value="h2",def="5") String h2, @Header(value="h3",def="6") String h3) {
 		return new ObjectMap()
 			.append("h1", h1)

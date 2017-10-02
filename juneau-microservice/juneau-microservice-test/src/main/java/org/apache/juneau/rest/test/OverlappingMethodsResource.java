@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -29,7 +31,7 @@ public class OverlappingMethodsResource extends RestServletDefault {
 	//====================================================================================================
 	// Overlapping guards
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testOverlappingGuards1", guards=Test1Guard.class)
+	@RestMethod(name=GET, path="/testOverlappingGuards1", guards=Test1Guard.class)
 	public String testOverlappingGuards1() {
 		return "test1_doGet";
 	}
@@ -37,7 +39,7 @@ public class OverlappingMethodsResource extends RestServletDefault {
 	//====================================================================================================
 	// Overlapping guards
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testOverlappingGuards2", guards={Test1Guard.class, Test2Guard.class})
+	@RestMethod(name=GET, path="/testOverlappingGuards2", guards={Test1Guard.class, Test2Guard.class})
 	public String testOverlappingGuards2() {
 		return "test2_doGet";
 	}
@@ -59,17 +61,17 @@ public class OverlappingMethodsResource extends RestServletDefault {
 	//====================================================================================================
 	// Overlapping matchers
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testOverlappingMatchers1", matchers=Test3aMatcher.class)
+	@RestMethod(name=GET, path="/testOverlappingMatchers1", matchers=Test3aMatcher.class)
 	public String testOverlappingMatchers1() {
 		return "test3a";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingMatchers1", matchers=Test3bMatcher.class)
+	@RestMethod(name=GET, path="/testOverlappingMatchers1", matchers=Test3bMatcher.class)
 	public String test3b_doGet() {
 		return "test3b";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingMatchers1")
+	@RestMethod(name=GET, path="/testOverlappingMatchers1")
 	public String test3c_doGet() {
 		return "test3c";
 	}
@@ -91,12 +93,12 @@ public class OverlappingMethodsResource extends RestServletDefault {
 	//====================================================================================================
 	// Overlapping matchers
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testOverlappingMatchers2")
+	@RestMethod(name=GET, path="/testOverlappingMatchers2")
 	public String test4a_doGet() {
 		return "test4a";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingMatchers2", matchers={Test3aMatcher.class, Test3bMatcher.class})
+	@RestMethod(name=GET, path="/testOverlappingMatchers2", matchers={Test3aMatcher.class, Test3bMatcher.class})
 	public String test4b_doGet() {
 		return "test4b";
 	}
@@ -104,42 +106,42 @@ public class OverlappingMethodsResource extends RestServletDefault {
 	//====================================================================================================
 	// Overlapping URL patterns
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns")
 	public String testOverlappingUrlPatterns1() {
 		return "test5a";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns/*")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns/*")
 	public String testOverlappingUrlPatterns2() {
 		return "test5b";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns/foo")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns/foo")
 	public String testOverlappingUrlPatterns3() {
 		return "test5c";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns/foo/*")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns/foo/*")
 	public String testOverlappingUrlPatterns4() {
 		return "test5d";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns/{id}")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns/{id}")
 	public String testOverlappingUrlPatterns5() {
 		return "test5e";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns/{id}/*")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns/{id}/*")
 	public String testOverlappingUrlPatterns6() {
 		return "test5f";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns/{id}/foo")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns/{id}/foo")
 	public String testOverlappingUrlPatterns7() {
 		return "test5g";
 	}
 
-	@RestMethod(name="GET", path="/testOverlappingUrlPatterns/{id}/foo/*")
+	@RestMethod(name=GET, path="/testOverlappingUrlPatterns/{id}/foo/*")
 	public String testOverlappingUrlPatterns8() {
 		return "test5h";
 	}

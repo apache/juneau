@@ -14,6 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class SystemPropertiesResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(
-		name="GET", path="/",
+		name=GET, path="/",
 		summary="Show all system properties",
 		description="Returns all system properties defined in the JVM.",
 		swagger=@MethodSwagger(
@@ -111,7 +112,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="GET", path="/{propertyName}",
+		name=GET, path="/{propertyName}",
 		summary="Get system property",
 		description="Returns the value of the specified system property.",
 		swagger=@MethodSwagger(
@@ -128,7 +129,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="PUT", path="/{propertyName}",
+		name=PUT, path="/{propertyName}",
 		summary="Replace system property",
 		description="Sets a new value for the specified system property.",
 		guards=AdminGuard.class,
@@ -153,7 +154,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="POST", path="/",
+		name=POST, path="/",
 		summary="Add an entire set of system properties",
 		description="Takes in a map of key/value pairs and creates a set of new system properties.",
 		guards=AdminGuard.class,
@@ -178,7 +179,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="DELETE", path="/{propertyName}",
+		name=DELETE, path="/{propertyName}",
 		summary="Delete system property",
 		description="Deletes the specified system property.",
 		guards=AdminGuard.class,
@@ -202,7 +203,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="GET", path="/formPage",
+		name=GET, path="/formPage",
 		summary="Form entry page",
 		description="A form post page for setting a single system property value",
 		guards=AdminGuard.class,
@@ -216,7 +217,7 @@ public class SystemPropertiesResource extends Resource {
 		)
 	)
 	public Form getFormPage() {
-		return form().method("POST").action("servlet:/formPagePost").children(
+		return form().method(POST).action("servlet:/formPagePost").children(
 			table(
 				tr(
 					th("Set system property").colspan(2)
@@ -233,7 +234,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="POST", path="/formPagePost",
+		name=POST, path="/formPagePost",
 		description="Accepts a simple form post of a system property name/value pair.",
 		guards=AdminGuard.class
 	)

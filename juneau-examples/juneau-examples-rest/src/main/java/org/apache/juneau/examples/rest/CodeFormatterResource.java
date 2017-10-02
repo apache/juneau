@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.microservice.*;
@@ -47,7 +48,7 @@ import org.apache.juneau.rest.annotation.*;
 public class CodeFormatterResource extends Resource {
 
 	/** [GET /] - Display query entry page. */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public Div getQueryEntryPage(RestRequest req) {
 		return div(
 			script("text/javascript",
@@ -67,7 +68,7 @@ public class CodeFormatterResource extends Resource {
 				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
 				+"\n	}"
 			),
-			form("form").action("codeFormatter").method("POST").target("buff").children(
+			form("form").action("codeFormatter").method(POST).target("buff").children(
 				table(
 					tr(
 						th("Language: "),
@@ -93,7 +94,7 @@ public class CodeFormatterResource extends Resource {
 	}
 
 	/** [POST /] - Add syntax highlighting to input. */
-	@RestMethod(name="POST", path="/")
+	@RestMethod(name=POST, path="/")
 	public String executeQuery(@FormData("code") String code, @FormData("lang") String lang) throws Exception {
 		return highlight(code, lang);
 	}

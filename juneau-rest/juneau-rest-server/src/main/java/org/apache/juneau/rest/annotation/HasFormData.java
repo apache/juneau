@@ -28,7 +28,7 @@ import org.apache.juneau.rest.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {
  * 		...
  * 	}
@@ -37,7 +37,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(RestRequest req) {
  * 		<jk>boolean</jk> p1 = req.hasFormData(<js>"p1"</js>);
  * 		...

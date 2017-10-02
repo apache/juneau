@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(RestRequest req, RestResponse res,
  * 				<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1, <ja>@FormData</ja>(<js>"p2"</js>) String p2, <ja>@FormData</ja>(<js>"p3"</js>) UUID p3) {
  * 		...
@@ -35,7 +35,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(RestRequest req, RestResponse res) {
  * 		<jk>int</jk> p1 = req.getFormData(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
  * 		String p2 = req.getFormData(String.<jk>class</jk>, <js>"p2"</js>);

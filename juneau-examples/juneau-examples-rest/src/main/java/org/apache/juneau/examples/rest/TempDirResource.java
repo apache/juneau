@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 
@@ -64,10 +65,10 @@ public class TempDirResource extends DirectoryResource {
 	/**
 	 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
 	 */
-	@RestMethod(name="GET", path="/upload")
+	@RestMethod(name=GET, path="/upload")
 	public Form getUploadForm() {
 		return
-			form().id("form").action("servlet:/upload").method("POST").enctype("multipart/form-data")
+			form().id("form").action("servlet:/upload").method(POST).enctype("multipart/form-data")
 			.children(
 				input().name("contents").type("file"),
 				button("submit", "Submit")
@@ -79,7 +80,7 @@ public class TempDirResource extends DirectoryResource {
 	 * [POST /upload] - Upload a file as a multipart form post.
 	 * Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.
 	 */
-	@RestMethod(name="POST", path="/upload", matchers=TempDirResource.MultipartFormDataMatcher.class)
+	@RestMethod(name=POST, path="/upload", matchers=TempDirResource.MultipartFormDataMatcher.class)
 	public Redirect uploadFile(RestRequest req) throws Exception {
 		ServletFileUpload upload = new ServletFileUpload();
 		FileItemIterator iter = upload.getItemIterator(req);

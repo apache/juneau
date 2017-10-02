@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.io.*;
 
 import org.apache.juneau.encoders.*;
@@ -44,11 +46,11 @@ public class GzipResource {
 	)
 	public static class TestGzipOff extends RestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestMethod(name="GET", path="/")
+		@RestMethod(name=GET, path="/")
 		public String test1get() {
 			return "foo";
 		}
-		@RestMethod(name="PUT", path="/")
+		@RestMethod(name=PUT, path="/")
 		public String test1put(@Body String in) {
 			return in;
 		}
@@ -65,17 +67,17 @@ public class GzipResource {
 	)
 	public static class TestGzipOn extends RestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestMethod(name="GET", path="/")
+		@RestMethod(name=GET, path="/")
 		public String test1() {
 			return "foo";
 		}
-		@RestMethod(name="PUT", path="/")
+		@RestMethod(name=PUT, path="/")
 		public String test1put(@Body String in) {
 			return in;
 		}
 		// This method bypasses the content type and encoding from
 		// the serializers and encoders when calling getOutputStream() directly.
-		@RestMethod(name="GET", path="/direct")
+		@RestMethod(name=GET, path="/direct")
 		public void direct(RestResponse res) throws Exception {
 			res.setContentType("text/direct");
 			OutputStream os = res.getOutputStream();
@@ -85,7 +87,7 @@ public class GzipResource {
 
 		// This method bypasses the content type and encoding from
 		// the serializers and encoders when calling getWriter() directly.
-		@RestMethod(name="GET", path="/direct2")
+		@RestMethod(name=GET, path="/direct2")
 		public void direct2(RestResponse res) throws Exception {
 			Writer w = res.getWriter();
 			w.append("test");
@@ -93,7 +95,7 @@ public class GzipResource {
 		}
 
 		// This method uses getNegotiatedWriter() which should use GZip encoding.
-		@RestMethod(name="GET", path="/direct3")
+		@RestMethod(name=GET, path="/direct3")
 		public void direct3(RestResponse res) throws Exception {
 			Writer w = res.getNegotiatedWriter();
 			w.append("test");
@@ -101,7 +103,7 @@ public class GzipResource {
 		}
 
 		// This method overrides the set of encoders at the method level and so shouldn't use GZip encoding.
-		@RestMethod(name="GET", path="/direct4", inheritEncoders=false)
+		@RestMethod(name=GET, path="/direct4", inheritEncoders=false)
 		public void direct4(RestResponse res) throws Exception {
 			Writer w = res.getNegotiatedWriter();
 			w.append("test");

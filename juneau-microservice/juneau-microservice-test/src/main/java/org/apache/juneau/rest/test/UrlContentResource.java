@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
@@ -28,12 +30,12 @@ import org.apache.juneau.rest.annotation.*;
 public class UrlContentResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name="GET", path="/testString")
+	@RestMethod(name=GET, path="/testString")
 	public String testString(@Body String content) {
 		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
 	}
 
-	@RestMethod(name="GET", path="/testEnum")
+	@RestMethod(name=GET, path="/testEnum")
 	public String testEnum(@Body TestEnum content) {
 		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
 	}
@@ -42,7 +44,7 @@ public class UrlContentResource extends RestServlet {
 		X1
 	}
 
-	@RestMethod(name="GET", path="/testBean")
+	@RestMethod(name=GET, path="/testBean")
 	public String testBean(@Body TestBean content) throws Exception {
 		return String.format("class=%s, value=%s", content.getClass().getName(), JsonSerializer.DEFAULT_LAX.serialize(content));
 	}
@@ -52,7 +54,7 @@ public class UrlContentResource extends RestServlet {
 		public String f2;
 	}
 
-	@RestMethod(name="GET", path="/testInt")
+	@RestMethod(name=GET, path="/testInt")
 	public String testString(@Body Integer content) {
 		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
 	}

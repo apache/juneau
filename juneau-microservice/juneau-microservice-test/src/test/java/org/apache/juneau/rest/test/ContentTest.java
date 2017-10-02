@@ -33,7 +33,7 @@ public class ContentTest extends RestTestcase {
 		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
 		String r;
 
-		//	@RestMethod(name="POST", path="/boolean")
+		//	@RestMethod(name=POST, path="/boolean")
 		//	public boolean testBool(@Body boolean b) {
 		//		return b;
 		//	}
@@ -51,7 +51,7 @@ public class ContentTest extends RestTestcase {
 		}
 
 
-		//	@RestMethod(name="POST", path="/Boolean")
+		//	@RestMethod(name=POST, path="/Boolean")
 		//	public Boolean testBoolean(@Body Boolean b) {
 		//		return b;
 		//	}
@@ -68,7 +68,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/int")
+		//	@RestMethod(name=POST, path="/int")
 		//	public int testInt(@Body int i) {
 		//		return i;
 		//	}
@@ -83,7 +83,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Integer")
+		//	@RestMethod(name=POST, path="/Integer")
 		//	public Integer testInteger(@Body Integer i) {
 		//		return i;
 		//	}
@@ -98,7 +98,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/float")
+		//	@RestMethod(name=POST, path="/float")
 		//	public float testFloat(@Body float f) {
 		//		return f;
 		//	}
@@ -113,7 +113,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Float")
+		//	@RestMethod(name=POST, path="/Float")
 		//	public Float testFloat2(@Body Float f) {
 		//		return f;
 		//	}
@@ -128,7 +128,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Map")
+		//	@RestMethod(name=POST, path="/Map")
 		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
@@ -143,7 +143,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/B")
+		//	@RestMethod(name=POST, path="/B")
 		//	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		//		return b;
 		//	}
@@ -151,7 +151,7 @@ public class ContentTest extends RestTestcase {
 		r = c.doPost(URL + "/B?body=" + UonSerializer.DEFAULT.serialize(b), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
-		//	@RestMethod(name="POST", path="/C")
+		//	@RestMethod(name=POST, path="/C")
 		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		//		return c;
 		//	}
@@ -170,7 +170,7 @@ public class ContentTest extends RestTestcase {
 		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
 		String r;
 
-		//	@RestMethod(name="POST", path="/boolean")
+		//	@RestMethod(name=POST, path="/boolean")
 		//	public boolean testBool(@Body boolean b) {
 		//		return b;
 		//	}
@@ -192,7 +192,7 @@ public class ContentTest extends RestTestcase {
 		}
 
 
-		//	@RestMethod(name="POST", path="/Boolean")
+		//	@RestMethod(name=POST, path="/Boolean")
 		//	public Boolean testBoolean(@Body Boolean b) {
 		//		return b;
 		//	}
@@ -209,7 +209,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/int")
+		//	@RestMethod(name=POST, path="/int")
 		//	public int testInt(@Body int i) {
 		//		return i;
 		//	}
@@ -228,7 +228,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Integer")
+		//	@RestMethod(name=POST, path="/Integer")
 		//	public Integer testInteger(@Body Integer i) {
 		//		return i;
 		//	}
@@ -243,7 +243,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/float")
+		//	@RestMethod(name=POST, path="/float")
 		//	public float testFloat(@Body float f) {
 		//		return f;
 		//	}
@@ -262,7 +262,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Float")
+		//	@RestMethod(name=POST, path="/Float")
 		//	public Float testFloat2(@Body Float f) {
 		//		return f;
 		//	}
@@ -277,7 +277,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Map")
+		//	@RestMethod(name=POST, path="/Map")
 		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
@@ -292,7 +292,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/B")
+		//	@RestMethod(name=POST, path="/B")
 		//	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		//		return b;
 		//	}
@@ -300,7 +300,7 @@ public class ContentTest extends RestTestcase {
 		r = c.doPost(URL + "/B?body=" + urlEncode(JsonSerializer.DEFAULT_LAX.serialize(b)) + "&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
-		//	@RestMethod(name="POST", path="/C")
+		//	@RestMethod(name=POST, path="/C")
 		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		//		return c;
 		//	}
@@ -319,7 +319,7 @@ public class ContentTest extends RestTestcase {
 		RestClient c = TestMicroservice.client().accept("text/json+simple").contentType("text/uon").serializer(PlainTextSerializer.class).build();
 		String r;
 
-		//	@RestMethod(name="POST", path="/boolean")
+		//	@RestMethod(name=POST, path="/boolean")
 		//	public boolean testBool(@Body boolean b) {
 		//		return b;
 		//	}
@@ -337,7 +337,7 @@ public class ContentTest extends RestTestcase {
 		}
 
 
-		//	@RestMethod(name="POST", path="/Boolean")
+		//	@RestMethod(name=POST, path="/Boolean")
 		//	public Boolean testBoolean(@Body Boolean b) {
 		//		return b;
 		//	}
@@ -354,7 +354,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/int")
+		//	@RestMethod(name=POST, path="/int")
 		//	public int testInt(@Body int i) {
 		//		return i;
 		//	}
@@ -369,7 +369,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Integer")
+		//	@RestMethod(name=POST, path="/Integer")
 		//	public Integer testInteger(@Body Integer i) {
 		//		return i;
 		//	}
@@ -384,7 +384,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/float")
+		//	@RestMethod(name=POST, path="/float")
 		//	public float testFloat(@Body float f) {
 		//		return f;
 		//	}
@@ -399,7 +399,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Float")
+		//	@RestMethod(name=POST, path="/Float")
 		//	public Float testFloat2(@Body Float f) {
 		//		return f;
 		//	}
@@ -414,7 +414,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/Map")
+		//	@RestMethod(name=POST, path="/Map")
 		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
@@ -429,7 +429,7 @@ public class ContentTest extends RestTestcase {
 			assertEquals(400, e.getResponseCode());
 		}
 
-		//	@RestMethod(name="POST", path="/B")
+		//	@RestMethod(name=POST, path="/B")
 		//	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		//		return b;
 		//	}
@@ -437,7 +437,7 @@ public class ContentTest extends RestTestcase {
 		r = c.doPost(URL + "/B", "" + UonSerializer.DEFAULT.serialize(b)).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
-		//	@RestMethod(name="POST", path="/C")
+		//	@RestMethod(name=POST, path="/C")
 		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		//		return c;
 		//	}

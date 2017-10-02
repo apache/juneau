@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -33,27 +35,27 @@ public class ClientVersionResource extends Resource {
 	)
 	public static class DefaultHeader extends Resource {
 
-		@RestMethod(name="GET", path="/")
+		@RestMethod(name=GET, path="/")
 		public String test0() {
 			return "no-version";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="[0.0,1.0)")
+		@RestMethod(name=GET, path="/", clientVersion="[0.0,1.0)")
 		public String test1() {
 			return "[0.0,1.0)";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="[1.0,1.0]")
+		@RestMethod(name=GET, path="/", clientVersion="[1.0,1.0]")
 		public String test2() {
 			return "[1.0,1.0]";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="[1.1,2)")
+		@RestMethod(name=GET, path="/", clientVersion="[1.1,2)")
 		public String test3() {
 			return "[1.1,2)";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="2")
+		@RestMethod(name=GET, path="/", clientVersion="2")
 		public String test4() {
 			return "2";
 		}
@@ -65,27 +67,27 @@ public class ClientVersionResource extends Resource {
 	)
 	public static class CustomHeader extends Resource {
 
-		@RestMethod(name="GET", path="/")
+		@RestMethod(name=GET, path="/")
 		public String test0() {
 			return "no-version";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="[0.0,1.0)")
+		@RestMethod(name=GET, path="/", clientVersion="[0.0,1.0)")
 		public String test1() {
 			return "[0.0,1.0)";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="[1.0,1.0]")
+		@RestMethod(name=GET, path="/", clientVersion="[1.0,1.0]")
 		public String test2() {
 			return "[1.0,1.0]";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="[1.1,2)")
+		@RestMethod(name=GET, path="/", clientVersion="[1.1,2)")
 		public String test3() {
 			return "[1.1,2)";
 		}
 
-		@RestMethod(name="GET", path="/", clientVersion="2")
+		@RestMethod(name=GET, path="/", clientVersion="2")
 		public String test4() {
 			return "2";
 		}

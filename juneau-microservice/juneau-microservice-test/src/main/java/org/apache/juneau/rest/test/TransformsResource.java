@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -32,15 +34,15 @@ public class TransformsResource extends TransformsParentResource {
 	// Test class transform overrides parent class transform
 	// Should return "A2-1".
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testClassTransformOverridesParentClassTransform")
+	@RestMethod(name=GET, path="/testClassTransformOverridesParentClassTransform")
 	public A testClassTransformOverridesParentClassTransform() {
 		return new A();
 	}
-	@RestMethod(name="PUT", path="/testClassTransformOverridesParentClassTransform")
+	@RestMethod(name=PUT, path="/testClassTransformOverridesParentClassTransform")
 	public A test1b(@Body A a) {
 		return a;
 	}
-	@RestMethod(name="PUT", path="/testClassTransformOverridesParentClassTransform/{a}")
+	@RestMethod(name=PUT, path="/testClassTransformOverridesParentClassTransform/{a}")
 	public A test1c(@Path A a) {
 		return a;
 	}
@@ -49,15 +51,15 @@ public class TransformsResource extends TransformsParentResource {
 	// Test method transform overrides class transform
 	// Should return "A3-1".
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
+	@RestMethod(name=GET, path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
 	public A test2a() {
 		return new A();
 	}
-	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
+	@RestMethod(name=PUT, path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
 	public A test2b(@Body A a) {
 		return a;
 	}
-	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
+	@RestMethod(name=PUT, path="/testMethodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
 	public A test2c(@Path A a) {
 		return a;
 	}

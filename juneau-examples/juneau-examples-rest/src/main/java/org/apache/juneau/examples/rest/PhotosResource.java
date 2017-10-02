@@ -14,6 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlSerializerContext.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.awt.image.*;
 import java.io.*;
@@ -91,13 +92,13 @@ public class PhotosResource extends Resource {
 	}
 
 	/** GET request handler for list of all photos */
-	@RestMethod(name="GET", path="/", summary="Show the list of all currently loaded photos")
+	@RestMethod(name=GET, path="/", summary="Show the list of all currently loaded photos")
 	public Collection<Photo> getAllPhotos() throws Exception {
 		return photos.values();
 	}
 
 	/** GET request handler for single photo */
-	@RestMethod(name="GET", path="/{id}", serializers=ImageSerializer.class, summary="Get a photo by ID")
+	@RestMethod(name=GET, path="/{id}", serializers=ImageSerializer.class, summary="Get a photo by ID")
 	public BufferedImage getPhoto(@Path String id) throws Exception {
 		Photo p = photos.get(id);
 		if (p == null)
@@ -106,14 +107,14 @@ public class PhotosResource extends Resource {
 	}
 
 	/** PUT request handler */
-	@RestMethod(name="PUT", path="/{id}", parsers=ImageParser.class, summary="Add or overwrite a photo")
+	@RestMethod(name=PUT, path="/{id}", parsers=ImageParser.class, summary="Add or overwrite a photo")
 	public String addPhoto(@Path String id, @Body BufferedImage image) throws Exception {
 		photos.put(id, new Photo(id, image));
 		return "OK";
 	}
 
 	/** POST request handler */
-	@RestMethod(name="POST", path="/", parsers=ImageParser.class, summary="Add a photo")
+	@RestMethod(name=POST, path="/", parsers=ImageParser.class, summary="Add a photo")
 	public Photo setPhoto(@Body BufferedImage image) throws Exception {
 		Photo p = new Photo(UUID.randomUUID().toString(), image);
 		photos.put(p.id, p);
@@ -121,7 +122,7 @@ public class PhotosResource extends Resource {
 	}
 
 	/** DELETE request handler */
-	@RestMethod(name="DELETE", path="/{id}", summary="Delete a photo by ID")
+	@RestMethod(name=DELETE, path="/{id}", summary="Delete a photo by ID")
 	public String deletePhoto(@Path String id) throws Exception {
 		Photo p = photos.remove(id);
 		if (p == null)

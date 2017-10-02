@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {
  * 		...
  * 	}
@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
  * 		UUID etag = req.getHeader(UUID.<jk>class</jk>, "ETag");
  * 		...

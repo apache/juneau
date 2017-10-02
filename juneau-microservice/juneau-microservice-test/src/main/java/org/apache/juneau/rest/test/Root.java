@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -79,7 +81,7 @@ import org.apache.juneau.rest.labels.*;
 public class Root extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name=GET, path="/")
 	public ChildResourceDescriptions doGet(RestRequest req) {
 		return new ChildResourceDescriptions(getContext(), req);
 	}

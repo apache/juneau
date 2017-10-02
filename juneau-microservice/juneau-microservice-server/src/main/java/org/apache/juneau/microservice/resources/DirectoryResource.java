@@ -15,6 +15,7 @@ package org.apache.juneau.microservice.resources;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 import java.net.*;
@@ -119,7 +120,7 @@ public class DirectoryResource extends Resource {
 	 * 	file or directory.
 	 * @throws Exception If file could not be read or access was not granted.
 	 */
-	@RestMethod(name="GET", path="/*",
+	@RestMethod(name=GET, path="/*",
 		description="On directories, returns a directory listing.\nOn files, returns information about the file.",
 		converters={Queryable.class}
 	)
@@ -156,7 +157,7 @@ public class DirectoryResource extends Resource {
 	 * @return The message <js>"File deleted"</js> if successful.
 	 * @throws Exception If file could not be read or access was not granted.
 	 */
-	@RestMethod(name="DELETE", path="/*",
+	@RestMethod(name=DELETE, path="/*",
 		description="Delete a file on the file system."
 	)
 	public Object doDelete(RestRequest req) throws Exception {
@@ -177,7 +178,7 @@ public class DirectoryResource extends Resource {
 	 * @return The message <js>"File added"</js> if successful.
 	 * @throws Exception If file could not be read or access was not granted.
 	 */
-	@RestMethod(name="PUT", path="/*",
+	@RestMethod(name=PUT, path="/*",
 		description="Add or overwrite a file on the file system."
 	)
 	public Object doPut(RestRequest req) throws Exception {
