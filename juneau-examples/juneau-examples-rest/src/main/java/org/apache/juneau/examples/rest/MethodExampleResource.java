@@ -31,7 +31,7 @@ import org.apache.juneau.utils.*;
 	path="/methodExample",
 	messages="nls/MethodExampleResource",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: servlet:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

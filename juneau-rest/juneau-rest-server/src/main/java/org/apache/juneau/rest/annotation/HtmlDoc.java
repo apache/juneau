@@ -138,7 +138,7 @@ public @interface HtmlDoc {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			links={
+	 * 			navlinks={
 	 * 				<js>"up: request:/.."</js>,
 	 * 				<js>"options: servlet:/?method=OPTIONS"</js>
 	 * 			}
@@ -157,7 +157,7 @@ public @interface HtmlDoc {
 	 * 		This field can also use URIs of any support type in {@link UriResolver}.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlLinks(String[])} and {@link RestResponse#setHtmlLinks(String[])} methods.
+	 * 		{@link RestConfig#setHtmlNavLinks(String[])} and {@link RestResponse#setHtmlNavLinks(String[])} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -169,7 +169,7 @@ public @interface HtmlDoc {
 	 * 		to place a link inside the list of parent links.
 	 * </ul>
 	 */
-	String[] links() default {};
+	String[] navlinks() default {};
 
 	/**
 	 * Sets the HTML nav section contents.
@@ -197,7 +197,7 @@ public @interface HtmlDoc {
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		When a value is specified, the {@link #links()} value will be ignored.
+	 * 		When a value is specified, the {@link #navlinks()} value will be ignored.
 	 * 	<li>
 	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.

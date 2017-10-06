@@ -37,7 +37,7 @@ import org.apache.juneau.utils.*;
 			ContentTypeMenuItem.class,
 			StyleMenuItem.class
 		},
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"upload: servlet:/upload",

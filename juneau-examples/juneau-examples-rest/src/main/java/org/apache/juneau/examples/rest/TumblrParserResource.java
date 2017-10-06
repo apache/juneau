@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 	title="Tumblr parser service",
 	description="Specify a URL to a Tumblr blog and parse the results.",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

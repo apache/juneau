@@ -16,12 +16,12 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Validates inheritance on the @HtmlDoc.links() annotation.
+ * Validates inheritance on the @HtmlDoc.navlinks() annotation.
  */
 @RestResource(
 	path="/testHtmlDocLinks",
 	htmldoc=@HtmlDoc(
-		links={"links1a","links1b"}
+		navlinks={"links1a","links1b"}
 	),
 	children={
 		HtmlDocLinksResource.HtmlDocLinksResource2.class
@@ -38,7 +38,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test2",
 		htmldoc=@HtmlDoc(
-			links={"links2a","links2b"}
+			navlinks={"links2a","links2b"}
 		)
 	)
 	public Object test2() {
@@ -48,7 +48,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test3",
 		htmldoc=@HtmlDoc(
-			links={"INHERIT","links3a","links3b"}
+			navlinks={"INHERIT","links3a","links3b"}
 		)
 	)
 	public Object test3() {
@@ -58,7 +58,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test4",
 		htmldoc=@HtmlDoc(
-			links={"links4a","INHERIT","links4b"}
+			navlinks={"links4a","INHERIT","links4b"}
 		)
 	)
 	public Object test4() {
@@ -68,7 +68,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test5",
 		htmldoc=@HtmlDoc(
-			links={"links5a","links5b","INHERIT"}
+			navlinks={"links5a","links5b","INHERIT"}
 		)
 	)
 	public Object test5() {
@@ -78,7 +78,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test6a",
 		htmldoc=@HtmlDoc(
-			links={"INHERIT","[0]:links6a","[3]:links6b"}
+			navlinks={"INHERIT","[0]:links6a","[3]:links6b"}
 		)
 	)
 	public Object test6a() {
@@ -88,7 +88,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test6b",
 		htmldoc=@HtmlDoc(
-			links={"[1]:links6a","[2]:links6b","INHERIT"}
+			navlinks={"[1]:links6a","[2]:links6b","INHERIT"}
 		)
 	)
 	public Object test6b() {
@@ -98,7 +98,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test6c",
 		htmldoc=@HtmlDoc(
-			links={"[1]:links6a","[0]:links6b"}
+			navlinks={"[1]:links6a","[0]:links6b"}
 		)
 	)
 	public Object test6c() {
@@ -108,7 +108,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test6d",
 		htmldoc=@HtmlDoc(
-			links={"INHERIT","foo[0]:links6a","bar[3]:links6b"}
+			navlinks={"INHERIT","foo[0]:links6a","bar[3]:links6b"}
 		)
 	)
 	public Object test6d() {
@@ -118,7 +118,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test6e",
 		htmldoc=@HtmlDoc(
-			links={"foo[1]:links6a","bar[2]:links6b","INHERIT"}
+			navlinks={"foo[1]:links6a","bar[2]:links6b","INHERIT"}
 		)
 	)
 	public Object test6e() {
@@ -128,7 +128,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestMethod(
 		path="/test6f",
 		htmldoc=@HtmlDoc(
-			links={"foo[1]:links6a","bar[0]:links6b"}
+			navlinks={"foo[1]:links6a","bar[0]:links6b"}
 		)
 	)
 	public Object test6f() {
@@ -138,7 +138,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 	@RestResource(
 		path="/testHtmlDocLinks2",
 		htmldoc=@HtmlDoc(
-			links={"INHERIT","links11a","links11b"}
+			navlinks={"INHERIT","links11a","links11b"}
 		)
 	)
 	public static class HtmlDocLinksResource2 extends HtmlDocLinksResource {
@@ -155,7 +155,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test12",
 			htmldoc=@HtmlDoc(
-				links={"links12a","links12b"}
+				navlinks={"links12a","links12b"}
 			)
 		)
 		public Object test12() {
@@ -165,7 +165,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test13",
 			htmldoc=@HtmlDoc(
-				links={"INHERIT","links13a","links13b"}
+				navlinks={"INHERIT","links13a","links13b"}
 			)
 		)
 		public Object test13() {
@@ -175,7 +175,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test14",
 			htmldoc=@HtmlDoc(
-				links={"links14a","INHERIT","links14b"}
+				navlinks={"links14a","INHERIT","links14b"}
 			)
 		)
 		public Object test14() {
@@ -185,7 +185,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test15",
 			htmldoc=@HtmlDoc(
-				links={"links15a","links15b","INHERIT"}
+				navlinks={"links15a","links15b","INHERIT"}
 			)
 		)
 		public Object test15() {
@@ -195,7 +195,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test16a",
 			htmldoc=@HtmlDoc(
-				links={"INHERIT","[0]:links16a","[3]:links16b"}
+				navlinks={"INHERIT","[0]:links16a","[3]:links16b"}
 			)
 		)
 		public Object test16a() {
@@ -205,7 +205,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test16b",
 			htmldoc=@HtmlDoc(
-				links={"[1]:links16a","[2]:links16b","INHERIT"}
+				navlinks={"[1]:links16a","[2]:links16b","INHERIT"}
 			)
 		)
 		public Object test16b() {
@@ -215,7 +215,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test16c",
 			htmldoc=@HtmlDoc(
-				links={"[1]:links16a","[0]:links16b"}
+				navlinks={"[1]:links16a","[0]:links16b"}
 			)
 		)
 		public Object test16c() {
@@ -225,7 +225,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test16d",
 			htmldoc=@HtmlDoc(
-				links={"INHERIT","foo[0]:links16a","bar[3]:links16b"}
+				navlinks={"INHERIT","foo[0]:links16a","bar[3]:links16b"}
 			)
 		)
 		public Object test16d() {
@@ -235,7 +235,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test16e",
 			htmldoc=@HtmlDoc(
-				links={"foo[1]:links16a","bar[2]:links16b","INHERIT"}
+				navlinks={"foo[1]:links16a","bar[2]:links16b","INHERIT"}
 			)
 		)
 		public Object test16e() {
@@ -245,7 +245,7 @@ public class HtmlDocLinksResource extends RestServletDefault {
 		@RestMethod(
 			path="/test16f",
 			htmldoc=@HtmlDoc(
-				links={"foo[1]:links16a","bar[0]:links16b"}
+				navlinks={"foo[1]:links16a","bar[0]:links16b"}
 			)
 		)
 		public Object test16f() {

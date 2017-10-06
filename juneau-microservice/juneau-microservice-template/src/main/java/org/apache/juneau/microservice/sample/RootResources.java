@@ -32,7 +32,7 @@ import org.apache.juneau.rest.widget.StyleMenuItem;
 			ContentTypeMenuItem.class,
 			StyleMenuItem.class
 		},
-		links={
+		navlinks={
 			"options: servlet:/?method=OPTIONS"
 		}
 	),

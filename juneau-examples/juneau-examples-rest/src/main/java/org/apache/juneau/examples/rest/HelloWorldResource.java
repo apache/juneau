@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
 	description="An example of the simplest-possible resource",
 	path="/helloWorld",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

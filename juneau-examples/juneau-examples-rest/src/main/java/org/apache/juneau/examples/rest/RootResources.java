@@ -31,7 +31,7 @@ import org.apache.juneau.rest.widget.*;
 			ContentTypeMenuItem.class,
 			StyleMenuItem.class
 		},
-		links={
+		navlinks={
 			"options: ?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{StyleMenuItem}",

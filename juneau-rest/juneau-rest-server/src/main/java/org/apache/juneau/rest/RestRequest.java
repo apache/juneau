@@ -266,7 +266,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 				<li><js>"aside"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_aside}
 	 * 				<li><js>"footer"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_footer}
 	 * 				<li><js>"header"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_header}
-	 * 				<li><js>"links.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_links}
+	 * 				<li><js>"navlinks.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_navlinks}
 	 * 				<li><js>"nav"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_nav}
 	 * 				<li><js>"noResultsMessage"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage}
 	 * 				<li><js>"nowrap"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_nowrap}
@@ -325,13 +325,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				} else if (c2 == 'h') {
 					if ("header".equals(name))
 						return cm.htmlHeader == null ? null : resolveVars(cm.htmlHeader);
-				} else if (c2 == 'l') {
-					if ("links.list".equals(name)) {
-						if (cm.htmlLinks == null || cm.htmlLinks.length == 0)
+				} else if (c2 == 'n') {
+					if ("nav".equals(name))
+						return cm.htmlNav == null ? null : resolveVars(cm.htmlNav);
+					if ("navlinks.list".equals(name)) {
+						if (cm.htmlNavLinks == null || cm.htmlNavLinks.length == 0)
 							return null;
 						try {
 							List<String> la = new ArrayList<String>();
-							for (String l : cm.htmlLinks) {
+							for (String l : cm.htmlNavLinks) {
 								// Temporary backwards compatibility with JSON object format.
 								if (l.startsWith("{")) {
 									ObjectMap m = new ObjectMap(l);
@@ -346,9 +348,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							throw new RuntimeException(e);
 						}
 					}
-				} else if (c2 == 'n') {
-					if ("nav".equals(name))
-						return cm.htmlNav == null ? null : resolveVars(cm.htmlNav);
 					if ("noResultsMessage".equals(name))
 						return cm.htmlNoResultsMessage == null ? null : resolveVars(cm.htmlNoResultsMessage);
 					if ("nowrap".equals(name))

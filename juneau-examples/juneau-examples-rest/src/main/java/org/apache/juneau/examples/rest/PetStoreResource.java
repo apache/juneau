@@ -46,7 +46,7 @@ import org.apache.juneau.transforms.*;
 			StyleMenuItem.class,
 			PetStoreResource.AddPet.class
 		},
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
@@ -101,7 +101,7 @@ public class PetStoreResource extends ResourceJena {
 				StyleMenuItem.class
 			},
 
-			links={
+			navlinks={
 				"INHERIT",  // Inherit links from class.
 				"[2]:$W{QueryMenuItem}"  // Insert QUERY link in position 2.
 			}

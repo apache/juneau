@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
 	title="Code Formatter",
 	description="Utility for generating HTML code-formatted source code",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: servlet:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

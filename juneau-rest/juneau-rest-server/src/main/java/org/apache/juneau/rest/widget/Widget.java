@@ -48,7 +48,7 @@ import org.apache.juneau.utils.*;
  * 			MyWidget.<jk>class</jk>
  * 		}
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			links={
+ * 			navlinks={
  * 				<js>"$W{MyWidget}"</js>
  * 			},
  * 			aside={

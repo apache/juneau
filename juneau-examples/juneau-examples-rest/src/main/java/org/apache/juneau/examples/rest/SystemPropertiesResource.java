@@ -47,7 +47,7 @@ import org.apache.juneau.rest.widget.*;
 		// "request:/..." URIs are relative to the request URI.
 		// "servlet:/..." URIs are relative to the servlet URI.
 		// "$C{...}" variables are pulled from the config file.
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"form: servlet:/formPage",

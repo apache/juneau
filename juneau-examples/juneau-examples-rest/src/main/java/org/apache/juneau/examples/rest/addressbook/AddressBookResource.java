@@ -21,7 +21,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.*;
+import org.apache.juneau.dto.Link;
 import org.apache.juneau.dto.cognos.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.examples.addressbook.*;
@@ -57,7 +57,7 @@ import org.apache.juneau.utils.*;
 		// "request:/..." URIs are relative to the request URI.
 		// "servlet:/..." URIs are relative to the servlet URI.
 		// "$C{...}" variables are pulled from the config file.
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
@@ -159,7 +159,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name=GET, path="/people/*",
 		converters={Traversable.class,Queryable.class,Introspectable.class},
 		htmldoc=@HtmlDoc(
-			links={
+			navlinks={
 				"INHERIT",  // Inherit links from class.
 				"[2]:$W{QueryMenuItem}"  // Insert QUERY link in position 2.
 			}
@@ -189,7 +189,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name=GET, path="/addresses/*",
 		converters={Traversable.class,Queryable.class},
 		htmldoc=@HtmlDoc(
-			links={
+			navlinks={
 				"INHERIT",  // Inherit links from class.
 				"[2]:$W{QueryMenuItem}"  // Insert QUERY link in position 2.
 			}

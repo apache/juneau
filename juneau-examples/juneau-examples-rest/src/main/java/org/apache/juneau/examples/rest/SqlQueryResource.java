@@ -42,7 +42,7 @@ import org.apache.juneau.rest.widget.*;
 		widgets={ 
 			StyleMenuItem.class 
 		},
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/..",
 			"$W{StyleMenuItem}",

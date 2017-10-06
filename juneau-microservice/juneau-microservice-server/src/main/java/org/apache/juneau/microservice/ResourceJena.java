@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 @SuppressWarnings("serial")
 @RestResource(
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
 		},

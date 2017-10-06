@@ -28,7 +28,7 @@ import org.apache.juneau.rest.remoteable.*;
 	title="Remoteable Service Proxy API",
 	description="Sample class showing how to use remoteable proxies.",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

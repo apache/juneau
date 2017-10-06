@@ -47,7 +47,7 @@ import org.apache.juneau.svl.vars.*;
 @SuppressWarnings("serial")
 @RestResource(
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
 		},

@@ -30,7 +30,7 @@ import org.apache.juneau.rest.labels.*;
 	title="Debug",
 	description="Debug Utilities.",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"jetty-thread-dump: servlet:/jetty/dump?method=POST",
 			"options: servlet:/?method=OPTIONS"

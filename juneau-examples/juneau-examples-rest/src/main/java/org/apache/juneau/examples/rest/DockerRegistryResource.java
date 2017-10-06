@@ -32,7 +32,7 @@ import org.apache.juneau.rest.labels.*;
 	title="Sample Docker resource",
 	description="Docker registry explorer",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

@@ -499,7 +499,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * This field can also use URIs of any support type in {@link UriResolver}.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#links() @HtmlDoc.links()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#navlinks() @HtmlDoc.navlinks()} annotation.
 	 *
 	 * @param value
 	 * 	The HTML nav section links links.
@@ -511,8 +511,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setHtmlLinks(String[] value) {
-		properties.put(HtmlDocSerializerContext.HTMLDOC_links, value);
+	public RestResponse setHtmlNavLinks(String[] value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_navlinks, value);
 		return this;
 	}
 
@@ -529,7 +529,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * The format of this value is HTML.
 	 *
 	 * <p>
-	 * When a value is specified, the {@link #setHtmlLinks(String[])} value will be ignored.
+	 * When a value is specified, the {@link #setHtmlNavLinks(String[])} value will be ignored.
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).

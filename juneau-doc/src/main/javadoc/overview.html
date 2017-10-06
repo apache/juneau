@@ -16,6 +16,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="icon" type="image/png" href="http://www.apache.org/favicons/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="http://www.apache.org/favicons/favicon-194x194.png" sizes="194x194">
+	<link rel="icon" type="image/png" href="http://www.apache.org/favicons/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="http://www.apache.org/favicons/android-chrome-192x192.png" sizes="192x192">
+	<link rel="icon" type="image/png" href="http://www.apache.org/favicons/favicon-16x16.png" sizes="16x16">
+	<link rel="shortcut icon" href="http://www.apache.org/favicons/favicon.ico">
 	<style type="text/css">
 		/* For viewing in file system and page designer */
 		@IMPORT url("../../../../juneau-core/java/src/main/javadoc/javadoc.css");
@@ -3077,7 +3083,7 @@
 		// "request:/..." URIs are relative to the request URI.
 		// "servlet:/..." URIs are relative to the servlet URI.</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -4187,7 +4193,7 @@
 		path=<js>"/"</js>,
 		messages=<js>"nls/RootResources"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"options: ?method=OPTIONS"</js>
 			}
 		),
@@ -4295,7 +4301,7 @@
 		messages=<js>"nls/HelloWorldResource"</js>, 
 		path=<js>"/helloWorld"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -4388,7 +4394,7 @@
 		path=<js>"/methodExample"</js>, 
 		messages=<js>"nls/MethodExampleResource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -4620,7 +4626,7 @@
 			<p class='bcode'>
 	<ja>@RestResource</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
 		)
@@ -4908,7 +4914,7 @@
 		path=<js>"/echo"</js>,
 		messages=<js>"nls/RequestEchoResource"</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -5432,7 +5438,7 @@
 		// "servlet:/..." URIs are relative to the servlet URI.
 		// "$C{...}" variables are pulled from the config file.</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>,
 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>
@@ -6158,7 +6164,7 @@
 		description=<js>"Sample class showing how to use remoteable proxies. The list below are exposed services that 
 			can be retrieved using RestClient.getProxyInterface(Class)."</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -6279,7 +6285,7 @@
 		path=<js>"/tempDir"</js>, 
 		messages=<js>"nls/TempDirResource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>,
 				<js>"upload: servlet:/upload"</js>
@@ -6411,7 +6417,7 @@
 		path=<js>"/atom"</js>, 
 		messages=<js>"nls/AtomFeedResource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -6533,7 +6539,7 @@
 		path=<js>"/docker"</js>, 
 		title=<js>"Sample Docker resource"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -6626,7 +6632,7 @@
 		title=<js>"Tumblr parser service"</js>, 
 		description=<js>"Specify a URL to a Tumblr blog and parse the results."</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -6715,7 +6721,7 @@
 		title=<js>"Photo REST service"</js>,
 		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
 		)
@@ -6861,7 +6867,7 @@
 		messages=<js>"nls/JsonSchemaResource"</js>, 
 		title=<js>"Sample JSON-Schema document"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -6952,7 +6958,7 @@
 		title=<js>"SQL query service"</js>, 
 		description=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>
 			}
@@ -7147,7 +7153,7 @@
 		title=<js>"Configuration"</js>, 
 		description=<js>"Contents of configuration file."</js>, 
 		htmldoc=<ja>@HtmlDoc</ja>(
-			links={
+			navlinks={
 				<js>"up: request:/.."</js>,
 				<js>"options: servlet:/?method=OPTIONS"</js>,
 				<js>"edit: servlet:/edit"</js>
@@ -7368,8 +7374,8 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
-		<li><p><a class='doclink' href='#6.4.1'>6.4.1 (TBD)</a></p>
-		<li><p><a class='doclink' href='#6.4.0'>6.4.0 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.5.0'>6.5.0 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.4.0'>6.4.0 (Oct 5, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.3.1'>6.3.1 (Aug 1, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.3.0'>6.3.0 (Jun 30, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.2.0'>6.2.0 (Apr 28, 2017)</a></p>
@@ -7439,24 +7445,32 @@
 	</ul>
 
 	<!-- =========================================================================================================== -->
-	<a id="6.4.1"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.4.1 (TBD)</h3>
+	<a id="6.5.0"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.5.0 (TBD)</h3>
 	<div class='topic'>
-	
+		<p>
+			This release ups the Java prerequisite to Java 7.
+		</p>
+		
 		<h6 class='topic'>juneau-marshall</h6>
 		<ul class='spaced-list'>
 			<li>
 				New class {@link org.apache.juneau.http.HttpMethodName} with valid static string HTTP method names.
 		</ul>
 		
+		<h6 class='topic'>juneau-rest-server</h6>
+		<ul class='spaced-list'>
+			<li>
+				Annotation <code><ja>@HtmlDoc</ja>(links)</code> renamed to {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks}.
+		</ul>
 	</div>
 
 	<!-- =========================================================================================================== -->
 	<a id="6.4.0"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.4.0 (TBD)</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.4.0 (Oct 5, 2017)</h3>
 	<div class='topic'>
 		<p>
-			The major change in this release is the project structure
+			The major change in this release is the project structure.
 		</p>
 		<p>
 			The library now consists of the following artifacts found in the Maven group <code>"org.apache.juneau"</code>:
@@ -8013,7 +8027,7 @@
 	
 	<jc>// New syntax</jc>
 	htmldoc=<ja>@HtmlDoc</ja>(
-		links={
+		navlinks={
 			<js>"up: request:/.."</js>,
 			<js>"options: servlet:/?method=OPTIONS"</js>,
 			<js>"$W{ContentTypeMenuItem}"</js>,
@@ -8728,7 +8742,7 @@
 		properties={
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"System properties resource"</js>),
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"REST interface for performing CRUD operations on system properties."</js>),
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>)
+			<ja>@Property</ja>(name=<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>)
 		}
 	)
 		
@@ -10027,7 +10041,7 @@
 			<li>Options pages on {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code> now provide default descriptions and back links:
 				and descriptions:
 				<p class='bcode'>
-	<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
+	<ja>@Property</ja>(name=<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Resource options"</js>)
 				</p>
 			<li>New {@link org.apache.juneau.rest.RestServletGroupDefault} class.
@@ -11247,7 +11261,7 @@
 		<h6 class='topic'>Core API changes</h6>
 		<ul class='spaced-list'>
 			<li>
-				New {@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_links} annotation for addint links to HTML page views.
+				New <code><del>HtmlDocSerializerContext.HTMLDOC_navlinks</del></code> annotation for addint links to HTML page views.
 			</li>
 			<li>
 				Renamed the properties in {@link org.apache.juneau.html.HtmlDocSerializerContext} for clarity.

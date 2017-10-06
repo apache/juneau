@@ -79,7 +79,7 @@ public final class RestContext extends Context {
 		htmlFooter,
 		htmlNoResultsMessage;
 	private final String[]
-		htmlLinks;
+		htmlNavLinks;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> htmlWidgets;
@@ -208,7 +208,7 @@ public final class RestContext extends Context {
 
 			this.htmlWidgets = Collections.unmodifiableMap(b.htmlWidgets);
 			this.htmlHeader = b.htmlHeader;
-			this.htmlLinks = b.htmlLinks;
+			this.htmlNavLinks = b.htmlNavLinks;
 			this.htmlNav = b.htmlNav;
 			this.htmlAside = b.htmlAside;
 			this.htmlStyle = b.htmlStyle;
@@ -484,7 +484,7 @@ public final class RestContext extends Context {
 		EncoderGroup encoders;
 		String clientVersionHeader = "", defaultCharset, paramFormat, htmlHeader, htmlNav, htmlAside, htmlStyle,
 				htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
-		String[] htmlLinks;
+		String[] htmlNavLinks;
 		boolean htmlNoWrap;
 		HtmlDocTemplate htmlTemplate;
 
@@ -627,7 +627,7 @@ public final class RestContext extends Context {
 			}
 
 			htmlHeader = sc.htmlHeader;
-			htmlLinks = sc.htmlLinks;
+			htmlNavLinks = sc.htmlNavLinks;
 			htmlNav = sc.htmlNav;
 			htmlAside = sc.htmlAside;
 			htmlStyle = sc.htmlStyle;
@@ -700,7 +700,7 @@ public final class RestContext extends Context {
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>,
 	 * 		htmldoc=@HtmlDoc(
-	 * 			links={
+	 * 			navlinks={
 	 * 				<js>"up: $R{requestParentURI}"</js>,
 	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
 	 * 				<js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
@@ -917,12 +917,12 @@ public final class RestContext extends Context {
 	 * The HTML page nav section links.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#links()} annotation or {@link RestConfig#setHtmlLinks(String[])} method.
+	 * Defined by the {@link HtmlDoc#navlinks()} annotation or {@link RestConfig#setHtmlNavLinks(String[])} method.
 	 *
 	 * @return The HTML page nav section links.
 	 */
-	public String[] getHtmlLinks() {
-		return htmlLinks;
+	public String[] getHtmlNavLinks() {
+		return htmlNavLinks;
 	}
 
 	/**

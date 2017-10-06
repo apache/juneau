@@ -64,7 +64,7 @@ import org.apache.juneau.utils.*;
 	description="Contents of $R{attribute.path}",
 	messages="nls/DirectoryResource",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
 		}

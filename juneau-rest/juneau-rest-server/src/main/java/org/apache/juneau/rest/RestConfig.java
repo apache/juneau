@@ -116,7 +116,7 @@ public class RestConfig implements ServletConfig {
 	List<Object> staticFiles;
 	RestContext parentContext;
 	String path, htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
-	String[] htmlLinks;
+	String[] htmlNavLinks;
 	String clientVersionHeader = "X-Client-Version";
 	String contextPath;
 
@@ -265,7 +265,7 @@ public class RestConfig implements ServletConfig {
 				setHtmlFooter(resolveNewlineSeparatedAnnotation(hd.footer(), htmlFooter));
 				setHtmlStyle(resolveNewlineSeparatedAnnotation(hd.style(), htmlStyle));
 				setHtmlScript(resolveNewlineSeparatedAnnotation(hd.script(), htmlScript));
-				setHtmlLinks(resolveLinks(hd.links(), htmlLinks));
+				setHtmlNavLinks(resolveLinks(hd.navlinks(), htmlNavLinks));
 
 				if (! hd.stylesheet().isEmpty())
 					setHtmlStylesheet(hd.stylesheet());
@@ -1295,13 +1295,13 @@ public class RestConfig implements ServletConfig {
 	 * This field can also use URIs of any support type in {@link UriResolver}.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#links() @HtmlDoc.links()} annotation.
+	 * This is the programmatic equivalent to the {@link HtmlDoc#navlinks() @HtmlDoc.navlinks()} annotation.
 	 *
 	 * @param value The HTML nav section links links.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setHtmlLinks(String[] value) {
-		this.htmlLinks = value;
+	public RestConfig setHtmlNavLinks(String[] value) {
+		this.htmlNavLinks = value;
 		return this;
 	}
 
@@ -1318,7 +1318,7 @@ public class RestConfig implements ServletConfig {
 	 * The format of this value is HTML.
 	 *
 	 * <p>
-	 * When a value is specified, the {@link #setHtmlLinks(String[])} value will be ignored.
+	 * When a value is specified, the {@link #setHtmlNavLinks(String[])} value will be ignored.
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).

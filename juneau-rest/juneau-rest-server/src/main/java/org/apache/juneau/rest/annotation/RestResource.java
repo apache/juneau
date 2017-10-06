@@ -723,7 +723,7 @@ public @interface RestResource {
 	 * 				PoweredByJuneau.<jk>class</jk>,
 	 * 				ContentTypeLinks.<jk>class</jk>
 	 * 			}
-	 * 			links={
+	 * 			navlinks={
 	 * 				<js>"up: request:/.."</js>,
 	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
 	 * 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>,

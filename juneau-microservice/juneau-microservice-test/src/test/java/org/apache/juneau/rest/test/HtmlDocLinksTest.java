@@ -18,7 +18,7 @@ import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 /**
- * Validates inheritance on the @HtmlDoc.links() annotation.
+ * Validates inheritance on the @HtmlDoc.navlinks() annotation.
  */
 public class HtmlDocLinksTest extends RestTestcase {
 	private RestClient client = TestMicroservice.DEFAULT_CLIENT;
@@ -31,7 +31,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestResource(
 	 * 	path="/testHtmlDocLinks",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"links1a","links1b"}
+	 * 		navlinks={"links1a","links1b"}
 	 * 	)
 	 * )
 	 */
@@ -45,7 +45,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test2",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"links2a","links2b"}
+	 * 		navlinks={"links2a","links2b"}
 	 * 	)
 	 * )
 	 */
@@ -59,7 +59,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test3",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"INHERIT","links3a","links3b"}
+	 * 		navlinks={"INHERIT","links3a","links3b"}
 	 * 	)
 	 * )
 	 */
@@ -73,7 +73,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test4",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"links4a","INHERIT","links4b"}
+	 * 		navlinks={"links4a","INHERIT","links4b"}
 	 * 	)
 	 * )
 	 */
@@ -87,7 +87,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test5",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"links5a","links5b","INHERIT"}
+	 * 		navlinks={"links5a","links5b","INHERIT"}
 	 * 	)
 	 * )
 	 */
@@ -101,7 +101,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test6a",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"INHERIT","[0]:links6a","[3]:links6b"}
+	 * 		navlinks={"INHERIT","[0]:links6a","[3]:links6b"}
 	 * 	)
 	 * )
 	 */
@@ -115,7 +115,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test6b",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"[1]:links6a","[2]:links6b","INHERIT"}
+	 * 		navlinks={"[1]:links6a","[2]:links6b","INHERIT"}
 	 * 	)
 	 * )
 	 */
@@ -129,7 +129,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test6c",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"[1]:links6a","[0]:links6b"}
+	 * 		navlinks={"[1]:links6a","[0]:links6b"}
 	 * 	)
 	 * )
 	 */
@@ -143,7 +143,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test6d",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"INHERIT","foo[0]:links6a","bar[3]:links6b"}
+	 * 		navlinks={"INHERIT","foo[0]:links6a","bar[3]:links6b"}
 	 * 	)
 	 * )
 	 */
@@ -157,7 +157,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test6e",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"foo[1]:links6a","bar[2]:links6b","INHERIT"}
+	 * 		navlinks={"foo[1]:links6a","bar[2]:links6b","INHERIT"}
 	 * 	)
 	 * )
 	 */
@@ -171,7 +171,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test6f",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"foo[1]:links6a","bar[0]:links6b"}
+	 * 		navlinks={"foo[1]:links6a","bar[0]:links6b"}
 	 * 	)
 	 * )
 	 */
@@ -185,7 +185,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestResource(
 	 * 	path="/testHtmlDocLinks2",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"INHERIT","links11a","links11b"}
+	 * 		navlinks={"INHERIT","links11a","links11b"}
 	 * 	)
 	 * )
 	 */
@@ -199,7 +199,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test12",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"links12a","links12b"}
+	 * 		navlinks={"links12a","links12b"}
 	 * 	)
 	 * )
 	 */
@@ -213,7 +213,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test13",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"INHERIT","links13a","links13b"}
+	 * 		navlinks={"INHERIT","links13a","links13b"}
 	 * 	)
 	 * )
 	 */
@@ -227,7 +227,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test14",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"links14a","INHERIT","links14b"}
+	 * 		navlinks={"links14a","INHERIT","links14b"}
 	 * 	)
 	 * )
 	 */
@@ -241,7 +241,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test15",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"links15a","links15b","INHERIT"}
+	 * 		navlinks={"links15a","links15b","INHERIT"}
 	 * 	)
 	 * )
 	 */
@@ -255,7 +255,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test16a",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"INHERIT","[0]:links16a","[3]:links16b"}
+	 * 		navlinks={"INHERIT","[0]:links16a","[3]:links16b"}
 	 * 	)
 	 * )
 	 */
@@ -269,7 +269,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test16b",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"[1]:links16a","[2]:links16b","INHERIT"}
+	 * 		navlinks={"[1]:links16a","[2]:links16b","INHERIT"}
 	 * 	)
 	 * )
 	 */
@@ -283,7 +283,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test16c",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"[1]:links16a","[0]:links16b"}
+	 * 		navlinks={"[1]:links16a","[0]:links16b"}
 	 * 	)
 	 * )
 	 */
@@ -297,7 +297,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test16d",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"INHERIT","foo[0]:links16a","bar[3]:links16b"}
+	 * 		navlinks={"INHERIT","foo[0]:links16a","bar[3]:links16b"}
 	 * 	)
 	 * )
 	 */
@@ -311,7 +311,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test16e",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"foo[1]:links16a","bar[2]:links16b","INHERIT"}
+	 * 		navlinks={"foo[1]:links16a","bar[2]:links16b","INHERIT"}
 	 * 	)
 	 * )
 	 */
@@ -325,7 +325,7 @@ public class HtmlDocLinksTest extends RestTestcase {
 	 * @RestMethod(
 	 * 	path="/test16f",
 	 * 	htmldoc=@HtmlDoc(
-	 * 		links={"foo[1]:links16a","bar[0]:links16b"}
+	 * 		navlinks={"foo[1]:links16a","bar[0]:links16b"}
 	 * 	)
 	 * )
 	 */

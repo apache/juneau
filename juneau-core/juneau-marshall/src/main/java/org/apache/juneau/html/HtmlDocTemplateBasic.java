@@ -112,7 +112,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 			if (exists(nav))
 				w.append(3, nav).nl(3);
 		} else {
-			String[] links = session.getLinks();
+			String[] links = session.getNavLinks();
 			if (links.length > 0) {
 				w.sTag(3, "ol").nl(3);
 				for (String l : links) {
@@ -190,7 +190,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public boolean hasNav(HtmlDocSerializerSession session) {
-		return exists(session.getNav()) || session.getLinks().length > 0;
+		return exists(session.getNav()) || session.getNavLinks().length > 0;
 	}
 
 	@Override /* HtmlDocTemplate */

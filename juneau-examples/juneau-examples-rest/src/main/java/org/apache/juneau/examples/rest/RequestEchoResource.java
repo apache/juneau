@@ -37,7 +37,7 @@ import org.apache.juneau.transforms.*;
 			ContentTypeMenuItem.class,
 			StyleMenuItem.class
 		},
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",

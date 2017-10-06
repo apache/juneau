@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  * 			ContentTypeMenuItem.<jk>class</jk>,
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			links={
+ * 			navlinks={
  * 				<js>"up: ..."</js>,
  * 				<js>"options: ..."</js>,
  * 				<js>"$W{QueryMenuItem}"</js>,

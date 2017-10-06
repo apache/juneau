@@ -40,7 +40,7 @@ import org.apache.juneau.serializer.*;
 	title="Photo REST service",
 	description="Sample resource that allows images to be uploaded and retrieved.",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

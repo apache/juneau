@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.Body;
 	title="Configuration",
 	description="Contents of configuration file.",
 	htmldoc=@HtmlDoc(
-		links={
+		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
 			"edit: servlet:/edit"

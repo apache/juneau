@@ -28,7 +28,7 @@ import org.apache.juneau.*;
  * 		properties={
  * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{title}"</js>),
  * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"$L{description}"</js>),
- * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
+ * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
  * 		}
  * 	)
  * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			title=<js>"$L{title}"</js>,
  * 			description=<js>"$L{description}"</js>,
- * 			links={
+ * 			navlinks={
  * 				<js>"options: ?method=OPTIONS"</js>,
  * 				<js>"doc: doc"</js>
  * 			}
@@ -108,10 +108,10 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_header = "HtmlDocSerializer.header";
 
 	/**
-	 * <b>Configuration property:</b>  Page links.
+	 * <b>Configuration property:</b>  Page navigation links.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.links.list"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.navlinks.list"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -145,7 +145,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>,
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_navlinks</jsf>,
 	 * 				value=<js>"['options: ?method=OPTIONS', 'doc: doc']"</js>)
 	 * 		}
 	 * 	)
@@ -161,7 +161,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
-	 * 			links={
+	 * 			navlinks={
 	 * 				<js>"options: ?method=OPTIONS"</js>,
 	 * 				<js>"doc: doc"</js>
 	 * 			}
@@ -170,12 +170,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
 	 */
-	public static final String HTMLDOC_links = "HtmlDocSerializer.links.list";
+	public static final String HTMLDOC_navlinks = "HtmlDocSerializer.navlinks.list";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_links} property.
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_navlinks} property.
 	 */
-	public static final String HTMLDOC_links_add = "HtmlDocSerializer.links.list.add";
+	public static final String HTMLDOC_navlinks_add = "HtmlDocSerializer.navlinks.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Nav section contents.
@@ -203,7 +203,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * </p>
 	 *
 	 * <p>
-	 * When this property is specified, the {@link #HTMLDOC_links} property is ignored.
+	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
 	 *
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
@@ -462,7 +462,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_template = "HtmlDocSerializer.template";
 
 
-	final String[] style, stylesheet, script, links;
+	final String[] style, stylesheet, script, navlinks;
 	final String header, nav, aside, footer, noResultsMessage;
 	final boolean nowrap;
 	final HtmlDocTemplate template;
@@ -485,7 +485,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		aside = ps.getProperty(HTMLDOC_aside, String.class, null);
 		footer = ps.getProperty(HTMLDOC_footer, String.class, null);
 		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
-		links = ps.getProperty(HTMLDOC_links, String[].class, new String[0]);
+		navlinks = ps.getProperty(HTMLDOC_navlinks, String[].class, new String[0]);
 		noResultsMessage = ps.getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");
 		template = ps.getTypedProperty(HTMLDOC_template, HtmlDocTemplate.class, HtmlDocTemplateBasic.class);
 	}
@@ -496,7 +496,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 			.append("HtmlDocSerializerContext", new ObjectMap()
 				.append("header", header)
 				.append("nav", nav)
-				.append("links", links)
+				.append("navlinks", navlinks)
 				.append("aside", aside)
 				.append("footer", footer)
 				.append("style", style)

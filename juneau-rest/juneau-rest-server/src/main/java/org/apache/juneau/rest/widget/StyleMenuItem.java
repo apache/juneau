@@ -35,7 +35,7 @@ import org.apache.juneau.utils.*;
  * 			StyleMenuItem.<jk>class</jk>,
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			links={
+ * 			navlinks={
  * 				<js>"up: ..."</js>,
  * 				<js>"options: ..."</js>,
  * 				<js>"$W{QueryMenuItem}"</js>,

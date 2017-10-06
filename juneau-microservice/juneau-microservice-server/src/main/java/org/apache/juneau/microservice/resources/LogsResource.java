@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.*;
+import org.apache.juneau.dto.Link;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;

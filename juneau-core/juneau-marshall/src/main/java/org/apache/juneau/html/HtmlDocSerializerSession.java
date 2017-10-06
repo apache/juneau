@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	private final String header, nav, aside, footer, noResultsMessage;
-	private final String[] style, stylesheet, script, links;
+	private final String[] style, stylesheet, script, navlinks;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
 
@@ -51,7 +51,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			nav = ctx.nav;
 			aside = ctx.aside;
 			footer = ctx.footer;
-			links = ctx.links;
+			navlinks = ctx.navlinks;
 			style = ctx.style;
 			stylesheet = ctx.stylesheet;
 			script = ctx.script;
@@ -63,7 +63,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			nav = p.getString(HTMLDOC_nav, ctx.nav);
 			aside = p.getString(HTMLDOC_aside, ctx.aside);
 			footer = p.getString(HTMLDOC_footer, ctx.footer);
-			links = p.getStringArray(HTMLDOC_links, ctx.links);
+			navlinks = p.getStringArray(HTMLDOC_navlinks, ctx.navlinks);
 			style = p.getStringArray(HTMLDOC_style, ctx.style);
 			stylesheet = p.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
 			script = p.getStringArray(HTMLDOC_script, ctx.script);
@@ -131,15 +131,15 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_navlinks} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
+	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_navlinks} setting value in this context.
 	 *		<jk>null</jk> if not specified.
 	 *		Never an empty map.
 	 */
-	public final String[] getLinks() {
-		return links;
+	public final String[] getNavLinks() {
+		return navlinks;
 	}
 
 	/**

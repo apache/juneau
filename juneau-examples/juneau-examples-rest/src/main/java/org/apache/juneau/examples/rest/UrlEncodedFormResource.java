@@ -37,7 +37,7 @@ import org.apache.juneau.transforms.*;
 		widgets={ 
 			StyleMenuItem.class 
 		},
-		links={
+		navlinks={
 			"up: request:/..",
 			"$W{StyleMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

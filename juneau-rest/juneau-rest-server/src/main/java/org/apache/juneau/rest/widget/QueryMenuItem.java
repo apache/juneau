@@ -37,7 +37,7 @@ import org.apache.juneau.rest.converters.*;
  * 			QueryMenuItem.<jk>class</jk>,
  * 		},
  * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			links={
+ * 			navlinks={
  * 				<js>"up: ..."</js>,
  * 				<js>"options: ..."</js>,
  * 				<js>"$W{QueryMenuItem}"</js>,
