@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.Link;
+import org.apache.juneau.dto.LinkString;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
@@ -314,7 +314,7 @@ public class LogsResource extends Resource {
 		public FileResource(File f, URI uri) throws Exception {
 			this.f = f;
 			this.type = (f.isDirectory() ? "dir" : "file");
-			this.name = f.isDirectory() ? new Link(f.getName(), uri.toString()) : f.getName();
+			this.name = f.isDirectory() ? new LinkString(f.getName(), uri.toString()) : f.getName();
 			this.size = f.isDirectory() ? null : f.length();
 			this.lastModified = new Date(f.lastModified());
 			if (f.canRead() && ! f.isDirectory()) {

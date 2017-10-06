@@ -15,7 +15,7 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.Link;
+import org.apache.juneau.dto.LinkString;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
@@ -67,7 +67,7 @@ public class TumblrParserResource extends Resource {
 					Entry e = new Entry();
 					e.date = om.getString("date");
 					if (type.equals("link"))
-						e.entry = new Link(om.getString("link-text"), om.getString("link-url"));
+						e.entry = new LinkString(om.getString("link-text"), om.getString("link-url"));
 					else if (type.equals("audio"))
 						e.entry = new ObjectMap().append("type","audio").append("audio-caption", om.getString("audio-caption"));
 					else if (type.equals("video"))

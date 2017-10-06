@@ -21,7 +21,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.Link;
+import org.apache.juneau.dto.LinkString;
 import org.apache.juneau.dto.cognos.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.examples.addressbook.*;
@@ -143,10 +143,10 @@ public class AddressBookResource extends ResourceJena {
 	 * Get root page.
 	 */
 	@RestMethod(name=GET, path="/")
-	public Link[] getRoot() throws Exception {
-		return new Link[] {
-			new Link("people", "people"),
-			new Link("addresses", "addresses")
+	public LinkString[] getRoot() throws Exception {
+		return new LinkString[] {
+			new LinkString("people", "people"),
+			new LinkString("addresses", "addresses")
 		};
 	}
 

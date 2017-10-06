@@ -35,11 +35,11 @@ import org.apache.juneau.utils.*;
  * All other serializers simply convert it to a simple bean.
  */
 @HtmlLink(nameProperty = "name", hrefProperty = "href")
-public class Link implements Comparable<Link> {
+public class LinkString implements Comparable<LinkString> {
 	private String name, href;
 
 	/** No-arg constructor. */
-	public Link() {}
+	public LinkString() {}
 
 	/**
 	 * Constructor.
@@ -48,7 +48,7 @@ public class Link implements Comparable<Link> {
 	 * @param href Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
 	 * @param hrefArgs Optional arguments for {@link MessageFormat} style arguments in the href.
 	 */
-	public Link(String name, String href, Object...hrefArgs) {
+	public LinkString(String name, String href, Object...hrefArgs) {
 		setName(name);
 		setHref(href, hrefArgs);
 	}
@@ -76,7 +76,7 @@ public class Link implements Comparable<Link> {
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Link setName(String name) {
+	public LinkString setName(String name) {
 		this.name = name;
 		return this;
 	}
@@ -99,7 +99,7 @@ public class Link implements Comparable<Link> {
 	 * @param href The new value for the <property>href</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Link setHref(String href) {
+	public LinkString setHref(String href) {
 		setHref(href, new Object[0]);
 		return this;
 	}
@@ -114,7 +114,7 @@ public class Link implements Comparable<Link> {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return This object (for method chaining).
 	 */
-	public Link setHref(String href, Object...args) {
+	public LinkString setHref(String href, Object...args) {
 		for (int i = 0; i < args.length; i++)
 			args[i] = UrlEncodingSerializer.DEFAULT.serialize(PartType.PATH, args[i]);
 		this.href = format(href, args);
@@ -130,15 +130,15 @@ public class Link implements Comparable<Link> {
 	}
 
 	@Override /* Comparable */
-	public int compareTo(Link o) {
+	public int compareTo(LinkString o) {
 		return name.compareTo(o.name);
 	}
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (! (o instanceof Link))
+		if (! (o instanceof LinkString))
 			return false;
-		return (compareTo((Link)o) == 0);
+		return (compareTo((LinkString)o) == 0);
 	}
 
 	@Override /* Object */

@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.Link;
+import org.apache.juneau.dto.LinkString;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -68,12 +68,12 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	 * @throws Exception
 	 */
 	@RestMethod(name=GET, path="/")
-	public List<Link> getInterfaces(RestRequest req) throws Exception {
-		List<Link> l = new LinkedList<Link>();
+	public List<LinkString> getInterfaces(RestRequest req) throws Exception {
+		List<LinkString> l = new LinkedList<LinkString>();
 		boolean useAll = ! useOnlyAnnotated();
 		for (Class<?> c : getServiceMap().keySet()) {
 			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())
-				l.add(new Link(c.getName(), "{0}/{1}", req.getRequestURI(), c.getName()));
+				l.add(new LinkString(c.getName(), "{0}/{1}", req.getRequestURI(), c.getName()));
 		}
 		return l;
 	}
