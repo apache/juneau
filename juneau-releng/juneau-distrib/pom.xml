@@ -253,7 +253,7 @@
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-microservice-server</artifactId>
 									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.microservice-server_${project.version}.jar</destFileName>
+									<destFileName>org.apache.juneau.microservice.server_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<artifactItem>
