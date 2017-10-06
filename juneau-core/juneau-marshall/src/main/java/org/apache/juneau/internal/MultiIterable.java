@@ -30,6 +30,7 @@ public class MultiIterable<E> implements Iterable<E> {
 	 *
 	 * @param iterators The list of iterators to iterate over.
 	 */
+	@SuppressWarnings("unchecked")
 	public MultiIterable(Iterator<E>...iterators) {
 		for (Iterator<E> i : iterators)
 			append(i);

@@ -527,6 +527,7 @@ public class RestConfig implements ServletConfig {
 	 * @param paramResolvers The parameter resolvers to add to this config.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("unchecked")
 	public RestConfig addParamResolvers(Class<? extends RestParam>...paramResolvers) {
 		this.paramResolvers.addAll(Arrays.asList(paramResolvers));
 		return this;

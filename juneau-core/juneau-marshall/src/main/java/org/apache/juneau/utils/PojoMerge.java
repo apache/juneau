@@ -84,6 +84,7 @@ public class PojoMerge {
 	 * 	<br>Can contain nulls.
 	 * @return A proxy interface over the merged POJOs.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T merge(Class<T> interfaceClass, T...pojos) {
 		return merge(interfaceClass, false, pojos);
 	}

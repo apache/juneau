@@ -532,6 +532,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		}
 	}
 
+	@SafeVarargs
 	private static <T> T first(T...tt) {
 		for (T t : tt)
 			if (t != null)

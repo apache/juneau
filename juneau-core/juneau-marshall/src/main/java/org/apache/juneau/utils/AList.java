@@ -26,7 +26,7 @@ import java.util.*;
  *
  * @param <T> The entry type.
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","unchecked"})
 public final class AList<T> extends LinkedList<T> {
 
 	/**
