@@ -223,4 +223,21 @@ public final class RestUtils {
 		}
 		return list.toArray(new String[list.size()]);
 	}
+
+	static String[] resolveContent(String[] content, String[] parentContent) {
+		if (content.length == 0)
+			return parentContent;
+
+		List<String> list = new ArrayList<String>();
+		for (String l : content) {
+			if ("INHERIT".equals(l)) {
+				list.addAll(Arrays.asList(parentContent));
+			} else if ("NONE".equals(l)) {
+				return new String[0];
+			} else {
+				list.add(l);
+			}
+		}
+		return list.toArray(new String[list.size()]);
+	}
 }

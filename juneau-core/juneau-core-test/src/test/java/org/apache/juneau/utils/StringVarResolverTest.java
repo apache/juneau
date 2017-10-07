@@ -30,7 +30,7 @@ public class StringVarResolverTest {
 		String t;
 
 		t = null;
-		assertEquals("", vr.resolve(t));
+		assertEquals(null, vr.resolve(t));
 
 		t = "";
 		assertEquals("", vr.resolve(t));

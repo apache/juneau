@@ -7469,6 +7469,18 @@
 		<ul class='spaced-list'>
 			<li>
 				Annotation <code><ja>@HtmlDoc</ja>(links)</code> renamed to {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks}.
+			<li>
+				New annotation {@link org.apache.juneau.rest.annotation.HtmlDoc#head()}.
+				<br>Allows you to specify arbitrary HTML content in the <xt>&lt;head&gt;</xt> section of the page.
+			<li>
+				Removed annotation <code><ja>@HtmlDoc</ja>(favIcon)</code>.
+				<br>This was a discouraged way of defining fav-icons anyway, and with the addition of 
+				<code><ja>@HtmlDoc</ja>(head)</code>, you can define them using:
+				<p class='bcode'>
+	head={
+		<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
+	}
+				</p>
 		</ul>
 	</div>
 

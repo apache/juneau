@@ -426,6 +426,48 @@ public @interface HtmlDoc {
 	String[] script() default {};
 
 	/**
+	 * Adds arbitrary content to the HTML <xt>&lt;head&gt;</xt> element on the page.
+	 *
+	 * <p>
+	 * The format of this value is HTML.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			head={
+	 * 				<jc>// Add a shortcut link in the browser tab</jc>
+	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>,
+	 *
+	 * 				<jc>// Reload the page every 5 seconds </jc>
+	 * 				<js>"<meta http-equiv='refresh' content='5'>"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation are the
+	 * 		{@link RestConfig#setHtmlHead(String[])} and {@link RestResponse#setHtmlHead(String[])} methods.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
+	 */
+	String[] head() default {};
+
+	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
 	 *
 	 * <p>

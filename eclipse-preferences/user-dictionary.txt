@@ -492,3 +492,5 @@ strived
 protobuf
 maven
 configurability
+navlinks
+fav

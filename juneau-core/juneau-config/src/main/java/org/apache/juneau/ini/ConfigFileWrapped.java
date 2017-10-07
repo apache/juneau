@@ -241,10 +241,7 @@ public final class ConfigFileWrapped extends ConfigFile {
 
 	@Override /* ConfigFile */
 	public String get(String sectionName, String sectionKey) {
-		String s = cf.get(sectionName, sectionKey);
-		if (s == null)
-			return null;
-		return vs.resolve(s);
+		return vs.resolve(cf.get(sectionName, sectionKey));
 	}
 
 	@Override /* ConfigFile */

@@ -434,6 +434,48 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_script_add = "HtmlDocSerializer.script.list.add";
 
 	/**
+	 * <b>Configuration property:</b>  Additional head section content.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.head.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Adds the specified HTML content to the head section of the page.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>,
+	 * 				value=<js>"['<link rel=\"icon\" href=\"htdocs/mypageicon.ico\">']"</js>)
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=@HtmlDoc(
+	 * 			head={
+	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
+	public static final String HTMLDOC_head = "HtmlDocSerializer.head.list";
+
+	/**
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_head} property.
+	 */
+	public static final String HTMLDOC_links_add = "HtmlDocSerializer.head.list.add";
+
+	/**
 	 * <b>Configuration property:</b>  HTML document template.
 	 *
 	 * <ul>
@@ -462,7 +504,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_template = "HtmlDocSerializer.template";
 
 
-	final String[] style, stylesheet, script, navlinks;
+	final String[] style, stylesheet, script, navlinks, head;
 	final String header, nav, aside, footer, noResultsMessage;
 	final boolean nowrap;
 	final HtmlDocTemplate template;
@@ -480,6 +522,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		style = ps.getProperty(HTMLDOC_style, String[].class, new String[0]);
 		stylesheet = ps.getProperty(HTMLDOC_stylesheet, String[].class, new String[0]);
 		script = ps.getProperty(HTMLDOC_script, String[].class, new String[0]);
+		head = ps.getProperty(HTMLDOC_head, String[].class, new String[0]);
 		header = ps.getProperty(HTMLDOC_header, String.class, null);
 		nav = ps.getProperty(HTMLDOC_nav, String.class, null);
 		aside = ps.getProperty(HTMLDOC_aside, String.class, null);
@@ -500,6 +543,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 				.append("aside", aside)
 				.append("footer", footer)
 				.append("style", style)
+				.append("head", head)
 				.append("stylesheet", stylesheet)
 				.append("nowrap", nowrap)
 				.append("template", template)

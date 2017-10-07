@@ -728,6 +728,37 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
+	 * Sets the HTML head section contents.
+	 *
+	 * <p>
+	 * The format of this value is HTML.
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 *
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#head() @HtmlDoc.head()} annotation.
+	 *
+	 * @param value
+	 * 	The HTML head section contents.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlHead(Object...value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_head, value);
+		return this;
+	}
+
+	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
 	 *
 	 * <p>

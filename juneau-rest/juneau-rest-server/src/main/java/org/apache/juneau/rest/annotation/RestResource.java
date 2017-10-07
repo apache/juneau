@@ -506,44 +506,6 @@ public @interface RestResource {
 	String config() default "";
 
 	/**
-	 * The favicon to use for HTML views.
-	 *
-	 * <p>
-	 * The name is a path to an icon file located in either the classpath or working directory.
-	 * The resulting favicon becomes available in the servlet via the URL <js>"[servlet-path]/favicon.ico"</js>.
-	 *
-	 * <p>
-	 * If the file cannot be located, the request to <js>"[servlet-path]/favicon.ico"</js> will return
-	 * {@link HttpServletResponse#SC_NOT_FOUND}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.foo.mypackage;
-	 *
-	 * 	<ja>@RestResource</ja>(
-	 * 		favicon=<js>"mydocs/myicon.ico"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * In this example, the servlet will attempt to find the <code>myicon.ico</code> file in the following ordered
-	 * locations:
-	 * <ol>
-	 * 	<li><code>com.foo.mypackage.mydocs</code> package.
-	 * 	<li><code>org.apache.juneau.rest.mydocs</code> package (since <code>RestServletDefault</code> is in
-	 * 		<code>org.apache.juneau.rest</code>).
-	 * 	<li><code>[working-dir]/mydocs</code> directory.
-	 * </ol>
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setFavIcon(Object)}/
-	 * {@link RestConfig#setFavIcon(Class, String)} methods.
-	 */
-	String favicon() default "";
-
-	/**
 	 * Defines paths and locations of statically served files.
 	 *
 	 * <p>

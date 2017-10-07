@@ -24,6 +24,10 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+		
+		for (String h : session.getHead()) 
+			w.appendln(2, h);
+		
 		if (hasStyle(session)) {
 			w.sTag(2, "style").nl(2);
 			style(session, w, o);

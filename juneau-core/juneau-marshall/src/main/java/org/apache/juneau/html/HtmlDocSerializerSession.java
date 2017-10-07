@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	private final String header, nav, aside, footer, noResultsMessage;
-	private final String[] style, stylesheet, script, navlinks;
+	private final String[] style, stylesheet, script, navlinks, head;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
 
@@ -55,6 +55,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			style = ctx.style;
 			stylesheet = ctx.stylesheet;
 			script = ctx.script;
+			head = ctx.head;
 			nowrap = ctx.nowrap;
 			noResultsMessage = ctx.noResultsMessage;
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, ctx.template);
@@ -67,6 +68,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			style = p.getStringArray(HTMLDOC_style, ctx.style);
 			stylesheet = p.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
 			script = p.getStringArray(HTMLDOC_script, ctx.script);
+			head = p.getStringArray(HTMLDOC_head, ctx.head);
 			nowrap = p.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
 			noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
@@ -107,6 +109,18 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	public final String[] getScript() {
 		return script;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_head} setting value in this context.
+	 *
+	 * @return
+	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_head} setting value in this context.
+	 * 	An empty array if not specified.
+	 * 	Never <jk>null</jk>.
+	 */
+	public final String[] getHead() {
+		return head;
 	}
 
 	/**

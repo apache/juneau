@@ -325,6 +325,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				} else if (c2 == 'h') {
 					if ("header".equals(name))
 						return cm.htmlHeader == null ? null : resolveVars(cm.htmlHeader);
+					if ("head.list".equals(name))
+						return resolveVars(cm.htmlHead);
 				} else if (c2 == 'n') {
 					if ("nav".equals(name))
 						return cm.htmlNav == null ? null : resolveVars(cm.htmlNav);
@@ -1054,6 +1056,22 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public String resolveVars(String input) {
 		return getVarResolverSession().resolve(input);
+	}
+
+	/**
+	 * Shortcut for calling {@link #resolveVars(String[])} on all elements in the array.
+	 *
+	 * @param input The input strings to resolve variables in.
+	 * @return A copy of the array with variables resolved.
+	 */
+	public String[] resolveVars(String[] input) {
+		VarResolverSession vs = getVarResolverSession();
+		if (input == null || input.length == 0)
+			return input;
+		input = Arrays.copyOf(input, input.length);
+		for (int i = 0; i < input.length; i++)
+			input[i] = vs.resolve(input[i]);
+		return input;
 	}
 
 	/**

@@ -151,9 +151,6 @@ import org.apache.juneau.xml.*;
  * 		Provides a default HTML stylesheet by setting {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()}
  * 		to <js>"styles/juneau.css"</js>.
  * 	<li>
- * 		Provides a default favicon by setting {@link RestResource#favicon() @RestResource.favicon()} to
- * 		<js>"juneau.ico"</js>.
- * 	<li>
  * 		Provides a default classpath entry "htdocs" by setting
  * 		{@link RestResource#staticFiles() @RestResource.staticFiles()} to <js>"{htdocs:'htdocs'}"</js>.
  * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL
@@ -192,11 +189,11 @@ import org.apache.juneau.xml.*;
 			"<h2>$R{methodSummary,$R{servletDescription}}</h2>",
 			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
 		},
-		stylesheet="servlet:/styles/light.css"
+		stylesheet="servlet:/styles/light.css",
+		head={
+			"<link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/>"
+		}
 	),
-
-	// The location on the classpath or file system of the fav-icon.
-	favicon="htdocs/juneau.png",
 
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	staticFiles="{htdocs:'htdocs',styles:'styles'}"

@@ -141,10 +141,10 @@ public class RestCallHandler {
 			StreamResource r = null;
 			if (pathInfo != null) {
 				String p = pathInfo.substring(1);
-				if (p.equals("favicon.ico"))
-					r = context.getFavIcon();
-				else if (context.isStaticFile(p))
+				if (context.isStaticFile(p))
 					r = context.resolveStaticFile(p);
+				else if (p.equals("favicon.ico"))
+					res.setOutput(null);
 			}
 
 			if (r != null) {

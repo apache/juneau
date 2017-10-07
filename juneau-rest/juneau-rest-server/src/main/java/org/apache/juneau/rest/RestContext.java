@@ -79,7 +79,8 @@ public final class RestContext extends Context {
 		htmlFooter,
 		htmlNoResultsMessage;
 	private final String[]
-		htmlNavLinks;
+		htmlNavLinks,
+		htmlHead;
 	private final boolean htmlNoWrap;
 	private final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> htmlWidgets;
@@ -106,7 +107,6 @@ public final class RestContext extends Context {
 	private final RestGuard[] guards;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
-	private final StreamResource favIcon;
 	private final Map<String,String> staticFilesMap;
 	private final String[] staticFilesPrefixes;
 	private final MessageBundle msgs;
@@ -197,7 +197,6 @@ public final class RestContext extends Context {
 			this.guards = b.guards.toArray(new RestGuard[b.guards.size()]);
 			this.responseHandlers = toObjectArray(b.responseHandlers, ResponseHandler.class);
 			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
-			this.favIcon = b.favIcon;
 			this.staticFilesMap = Collections.unmodifiableMap(b.staticFilesMap);
 			this.staticFilesPrefixes = b.staticFilesPrefixes;
 			this.msgs = b.messageBundle;
@@ -214,6 +213,7 @@ public final class RestContext extends Context {
 			this.htmlStyle = b.htmlStyle;
 			this.htmlStylesheet = b.htmlStylesheet;
 			this.htmlScript = b.htmlScript;
+			this.htmlHead = b.htmlHead;
 			this.htmlFooter = b.htmlFooter;
 			this.htmlNoWrap = b.htmlNoWrap;
 			this.htmlNoResultsMessage = b.htmlNoResultsMessage;
@@ -484,7 +484,7 @@ public final class RestContext extends Context {
 		EncoderGroup encoders;
 		String clientVersionHeader = "", defaultCharset, paramFormat, htmlHeader, htmlNav, htmlAside, htmlStyle,
 				htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
-		String[] htmlNavLinks;
+		String[] htmlNavLinks, htmlHead;
 		boolean htmlNoWrap;
 		HtmlDocTemplate htmlTemplate;
 
@@ -496,7 +496,6 @@ public final class RestContext extends Context {
 		List<RestGuard> guards = new ArrayList<RestGuard>();
 		List<ResponseHandler> responseHandlers = new ArrayList<ResponseHandler>();
 		MimetypesFileTypeMap mimetypesFileTypeMap;
-		StreamResource favIcon;
 		Map<String,String> staticFilesMap;
 		String[] staticFilesPrefixes;
 		MessageBundle messageBundle;
@@ -589,19 +588,6 @@ public final class RestContext extends Context {
 
 			VarResolver vr = sc.getVarResolverBuilder().build();
 
-			if (sc.favIcon != null) {
-				Object o = sc.favIcon;
-				InputStream is = null;
-				if (o instanceof Pair) {
-					Pair<Class<?>,String> p = (Pair<Class<?>,String>)o;
-					is = ReflectionUtils.getResource(p.first(), vr.resolve(p.second()));
-				} else {
-					is = toInputStream(o);
-				}
-				if (is != null)
-					favIcon = new StreamResource(MediaType.forString("image/x-icon"), is);
-			}
-
 			staticFilesMap = new LinkedHashMap<String,String>();
 			if (sc.staticFiles != null) {
 				for (Object o : sc.staticFiles) {
@@ -633,6 +619,7 @@ public final class RestContext extends Context {
 			htmlStyle = sc.htmlStyle;
 			htmlStylesheet = sc.htmlStylesheet;
 			htmlScript = sc.htmlScript;
+			htmlHead = sc.htmlHead;
 			htmlFooter = sc.htmlFooter;
 			htmlNoWrap = sc.htmlNoWrap;
 			htmlNoResultsMessage = sc.htmlNoResultsMessage;
@@ -995,6 +982,18 @@ public final class RestContext extends Context {
 	 */
 	public String getHtmlScript() {
 		return htmlScript;
+	}
+
+	/**
+	 * The HTML page head content.
+	 *
+	 * <p>
+	 * Defined by the {@link HtmlDoc#head()} annotation or {@link RestConfig#setHtmlHead(String[])} method.
+	 *
+	 * @return The HTML page head content.
+	 */
+	public String[] getHtmlHead() {
+		return htmlHead;
 	}
 
 	/**
@@ -1750,25 +1749,6 @@ public final class RestContext extends Context {
 	 */
 	protected String getMediaTypeForName(String name) {
 		return mimetypesFileTypeMap.getContentType(name);
-	}
-
-	/**
-	 * Returns the favicon of the resource.
-	 *
-	 * <p>
-	 * This is the icon served up under <js>"/favicon.ico"</jk> recognized by browsers.
-	 *
-	 * <p>
-	 * The favicon is defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#favicon() @RestResource.favicon()} annotation.
-	 * 	<li>{@link RestConfig#setFavIcon(Object)}/{@link RestConfig#setFavIcon(Class, String)} methods.
-	 * </ul>
-	 *
-	 * @return The favicon of this resource.  Can be <jk>null</jk>.
-	 */
-	protected StreamResource getFavIcon() {
-		return favIcon;
 	}
 
 	/**

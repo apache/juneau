@@ -68,7 +68,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final RestContext context;
 	private final BeanContext beanContext;
 	final String htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
-	final String[] htmlNavLinks;
+	final String[] htmlNavLinks, htmlHead;
 	final boolean htmlNoWrap;
 	final HtmlDocTemplate htmlTemplate;
 	private final Map<String,Widget> widgets;
@@ -111,6 +111,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.htmlStyle = b.htmlStyle;
 		this.htmlStylesheet = b.htmlStylesheet;
 		this.htmlScript = b.htmlScript;
+		this.htmlHead = b.htmlHead;
 		this.htmlNoWrap = b.htmlNoWrap;
 		this.htmlTemplate = b.htmlTemplate;
 		this.htmlNoResultsMessage = b.htmlNoResultsMessage;
@@ -120,7 +121,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private static class Builder  {
 		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlNav, htmlAside,
 			htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlHeader, htmlNoResultsMessage;
-		private String[] htmlNavLinks;
+		private String[] htmlNavLinks, htmlHead;
 		private boolean htmlNoWrap;
 		private HtmlDocTemplate htmlTemplate;
 		private UrlPathPattern pathPattern;
@@ -191,6 +192,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				htmlFooter = resolveNewlineSeparatedAnnotation(hd.footer(), context.getHtmlFooter());
 				htmlStyle = resolveNewlineSeparatedAnnotation(hd.style(), context.getHtmlStyle());
 				htmlScript = resolveNewlineSeparatedAnnotation(hd.script(), context.getHtmlScript());
+				htmlHead = resolveContent(hd.head(), context.getHtmlHead());
 				htmlNavLinks = resolveLinks(hd.navlinks(), context.getHtmlNavLinks());
 				htmlStylesheet = hd.stylesheet().isEmpty() ? context.getHtmlStylesheet() : hd.stylesheet();
 				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();

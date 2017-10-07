@@ -61,6 +61,9 @@ import org.apache.juneau.transforms.*;
 			"	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>",
 			"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
 			"</div>"
+		},
+		head={
+			"<link rel='icon' href='$U{servlet:/htdocs/cat.png}'/>"
 		}
 	)
 )

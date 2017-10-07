@@ -71,15 +71,17 @@ public class VarResolverSession {
 	/**
 	 * Resolve all variables in the specified string.
 	 *
-	 * @param s The string to resolve variables in.
+	 * @param s 
+	 * 	The string to resolve variables in.
 	 * @return
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
-	 * 	Null input results in a blank string.
+	 * 	<br>Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public String resolve(String s) {
 
-		if (s == null)
-			return "";
+		if (s == null || s.isEmpty())
+			return s;
+
 		if (s.indexOf('$') == -1 && s.indexOf('\\') == -1)
 			return s;
 

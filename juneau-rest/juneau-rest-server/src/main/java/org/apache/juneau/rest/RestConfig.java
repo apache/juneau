@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestUtils.*;
 
-import java.io.*;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -112,11 +111,10 @@ public class RestConfig implements ServletConfig {
 	List<Object> responseHandlers = new ArrayList<Object>();
 	List<Object> childResources = new ArrayList<Object>();
 	List<MediaType> supportedContentTypes, supportedAcceptTypes;
-	Object favIcon;
 	List<Object> staticFiles;
 	RestContext parentContext;
 	String path, htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
-	String[] htmlNavLinks;
+	String[] htmlNavLinks, htmlHead;
 	String clientVersionHeader = "X-Client-Version";
 	String contextPath;
 
@@ -224,8 +222,6 @@ public class RestConfig implements ServletConfig {
 				serializerListener(r.serializerListener());
 				parserListener(r.parserListener());
 				contextPath(r.contextPath());
-				if (! r.favicon().isEmpty())
-					setFavIcon(c, r.favicon());
 				if (! r.staticFiles().isEmpty())
 					addStaticFiles(c, r.staticFiles());
 				if (! r.path().isEmpty())
@@ -266,6 +262,7 @@ public class RestConfig implements ServletConfig {
 				setHtmlStyle(resolveNewlineSeparatedAnnotation(hd.style(), htmlStyle));
 				setHtmlScript(resolveNewlineSeparatedAnnotation(hd.script(), htmlScript));
 				setHtmlNavLinks(resolveLinks(hd.navlinks(), htmlNavLinks));
+				setHtmlHead(resolveContent(hd.head(), htmlHead));
 
 				if (! hd.stylesheet().isEmpty())
 					setHtmlStylesheet(hd.stylesheet());
@@ -1017,49 +1014,6 @@ public class RestConfig implements ServletConfig {
 	}
 
 	/**
-	 * Specifies the icon contents that make up the contents of the page <js>"/resource-path/favicon.ico"</js>.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#favicon() @RestResource.favicon()} annotation.
-	 *
-	 * <p>
-	 * The object type can be any of the following:
-	 * <ul>
-	 * 	<li>{@link InputStream}
-	 * 	<li>{@link File}
-	 * 	<li><code><jk>byte</jk>[]</code>
-	 * </ul>
-	 *
-	 * @param favIcon The contents that make up the <code>favicon.ico</code> page.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setFavIcon(Object favIcon) {
-		this.favIcon = favIcon;
-		return this;
-	}
-
-	/**
-	 * Specifies the icon contents that make up the contents of the page <js>"/resource-path/favicon.ico"</js>.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#favicon() @RestResource.favicon()} annotation.
-	 *
-	 * <p>
-	 * Use this method to specify a resource located in the classpath.
-	 * This call uses the {@link Class#getResourceAsStream(String)} method to retrieve the stylesheet contents.
-	 *
-	 * @param resourceClass The resource class used to resolve the resource stream.
-	 * @param resourcePath
-	 * 	The path passed to the {@link Class#getResourceAsStream(String)} method.
-	 * 	Can also be a path starting with <js>"file://"</js> denoting a location to pull from the file system.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setFavIcon(Class<?> resourceClass, String resourcePath) {
-		this.favIcon = new Pair<Class<?>,String>(resourceClass, resourcePath);
-		return this;
-	}
-
-	/**
 	 * Appends to the static files resource map.
 	 *
 	 * <p>
@@ -1466,6 +1420,20 @@ public class RestConfig implements ServletConfig {
 	 */
 	public RestConfig setHtmlScript(String value) {
 		this.htmlScript = value;
+		return this;
+	}
+
+	/**
+	 * Adds to the HTML head section contents.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#head() @HtmlDoc.head()} annotation.
+	 *
+	 * @param value The HTML head section content.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setHtmlHead(String...value) {
+		this.htmlHead = value;
 		return this;
 	}
 
