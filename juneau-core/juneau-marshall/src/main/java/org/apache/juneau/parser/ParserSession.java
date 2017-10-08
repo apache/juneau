@@ -59,19 +59,11 @@ public abstract class ParserSession extends BeanSession {
 			ctx = ParserContext.DEFAULT;
 		Class<?> listenerClass;
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(ParserContext.PREFIX)) {
-			trimStrings = ctx.trimStrings;
-			strict = ctx.strict;
-			inputStreamCharset = ctx.inputStreamCharset;
-			fileCharset = ctx.fileCharset;
-			listenerClass = ctx.listener;
-		} else {
-			trimStrings = p.getBoolean(PARSER_trimStrings, ctx.trimStrings);
-			strict = p.getBoolean(PARSER_strict, ctx.strict);
-			inputStreamCharset = p.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
-			fileCharset = p.getString(PARSER_fileCharset, ctx.fileCharset);
-			listenerClass = p.getWithDefault(PARSER_listener, ctx.listener, Class.class);
-		}
+		trimStrings = p.getBoolean(PARSER_trimStrings, ctx.trimStrings);
+		strict = p.getBoolean(PARSER_strict, ctx.strict);
+		inputStreamCharset = p.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
+		fileCharset = p.getString(PARSER_fileCharset, ctx.fileCharset);
+		listenerClass = p.getWithDefault(PARSER_listener, ctx.listener, Class.class);
 		this.javaMethod = args.javaMethod;
 		this.outer = args.outer;
 		this.listener = newInstance(ParserListener.class, listenerClass);

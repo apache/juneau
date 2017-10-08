@@ -48,8 +48,8 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"toString"</js>
+	 * 	<li><b>Data type:</b> <code>AnchorText</code>
+	 * 	<li><b>Default:</b> <jsf>TO_STRING</jsf>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -58,35 +58,9 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 *
 	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		{@link #TO_STRING} / <js>"toString"</js> - Set to whatever is returned by {@link #toString()} on the
-	 * 		object.
-	 * 	<li>
-	 * 		{@link #URI} / <js>"uri"</js> - Set to the URI value.
-	 * 	<li>
-	 * 		{@link #LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
-	 * 	<li>
-	 * 		{@link #PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
-	 * 	<li>
-	 * 		{@link #URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
-	 * 		(e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
-	 * </ul>
+	 * See the {@link AnchorText} enum for possible values.
 	 */
 	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText";
-
-	/** Constant for {@link HtmlSerializerContext#HTML_uriAnchorText} property. */
-	public static final String PROPERTY_NAME = "PROPERTY_NAME";
-	/** Constant for {@link HtmlSerializerContext#HTML_uriAnchorText} property. */
-	public static final String TO_STRING = "TO_STRING";
-	/** Constant for {@link HtmlSerializerContext#HTML_uriAnchorText} property. */
-	public static final String URI = "URI";
-	/** Constant for {@link HtmlSerializerContext#HTML_uriAnchorText} property. */
-	public static final String LAST_TOKEN = "LAST_TOKEN";
-	/** Constant for {@link HtmlSerializerContext#HTML_uriAnchorText} property. */
-	public static final String URI_ANCHOR = "URI_ANCHOR";
-
 
 	/**
 	 * <b>Configuration property:</b>  Look for URLs in {@link String Strings}.
@@ -170,7 +144,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	public static final String HTML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
 
 
-	final String uriAnchorText;
+	final AnchorText uriAnchorText;
 	final boolean
 		lookForLabelParameters,
 		detectLinksInStrings,
@@ -188,7 +162,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 */
 	public HtmlSerializerContext(PropertyStore ps) {
 		super(ps);
-		uriAnchorText = ps.getProperty(HTML_uriAnchorText, String.class, TO_STRING);
+		uriAnchorText = ps.getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
 		lookForLabelParameters = ps.getProperty(HTML_lookForLabelParameters, Boolean.class, true);
 		detectLinksInStrings = ps.getProperty(HTML_detectLinksInStrings, Boolean.class, true);
 		labelParameter = ps.getProperty(HTML_labelParameter, String.class, "label");

@@ -46,11 +46,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	private final Pattern labelPattern;
 
 
-	@SuppressWarnings("hiding")
-	enum AnchorText {
-		PROPERTY_NAME, TO_STRING, URI, LAST_TOKEN, URI_ANCHOR, CONTEXT_RELATIVE, SERVLET_RELATIVE, PATH_RELATIVE
-	}
-
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
@@ -67,21 +62,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		super(ctx, args);
 		String labelParameter;
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(HtmlSerializerContext.PREFIX)) {
-			anchorText = Enum.valueOf(AnchorText.class, ctx.uriAnchorText);
-			detectLinksInStrings = ctx.detectLinksInStrings;
-			lookForLabelParameters = ctx.lookForLabelParameters;
-			labelParameter = ctx.labelParameter;
-			addKeyValueTableHeaders = ctx.addKeyValueTableHeaders;
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-		} else {
-			anchorText = Enum.valueOf(AnchorText.class, p.getString(HTML_uriAnchorText, ctx.uriAnchorText));
-			detectLinksInStrings = p.getBoolean(HTML_detectLinksInStrings, ctx.detectLinksInStrings);
-			lookForLabelParameters = p.getBoolean(HTML_lookForLabelParameters, ctx.lookForLabelParameters);
-			labelParameter = p.getString(HTML_labelParameter, ctx.labelParameter);
-			addKeyValueTableHeaders = p.getBoolean(HTML_addKeyValueTableHeaders, ctx.addKeyValueTableHeaders);
-			addBeanTypeProperties = p.getBoolean(HTML_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		}
+		anchorText = p.getWithDefault(HTML_uriAnchorText, ctx.uriAnchorText, AnchorText.class);
+		detectLinksInStrings = p.getBoolean(HTML_detectLinksInStrings, ctx.detectLinksInStrings);
+		lookForLabelParameters = p.getBoolean(HTML_lookForLabelParameters, ctx.lookForLabelParameters);
+		labelParameter = p.getString(HTML_labelParameter, ctx.labelParameter);
+		addKeyValueTableHeaders = p.getBoolean(HTML_addKeyValueTableHeaders, ctx.addKeyValueTableHeaders);
+		addBeanTypeProperties = p.getBoolean(HTML_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
 	}
 

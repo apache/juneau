@@ -58,7 +58,7 @@ public class BeanSession extends Session {
 		this.ctx = ctx;
 		Locale _locale = null;
 		ObjectMap p = getProperties();
-		if (p == null || ! p.containsKeyPrefix(BeanContext.PREFIX)) {
+		if (p == null) {
 			_locale = (args.locale != null ? args.locale : ctx.locale);
 			this.timeZone = (args.timeZone != null ? args.timeZone : ctx.timeZone);
 			this.debug = ctx.debug;

@@ -71,36 +71,22 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		jenaSettings.put("rdfXml.attributeQuoteChar", Character.toString(getQuoteChar()));
 		jenaSettings.putAll(ctx.jenaSettings);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefixes(RdfSerializerContext.PREFIX, "Rdf.")) {
-			this.rdfLanguage = ctx.rdfLanguage;
-			this.juneauNs = ctx.juneauNs;
-			this.juneauBpNs = ctx.juneauBpNs;
-			this.addLiteralTypes = ctx.addLiteralTypes;
-			this.addRootProperty = ctx.addRootProperty;
-			this.collectionFormat = ctx.collectionFormat;
-			this.looseCollections = ctx.looseCollections;
-			this.useXmlNamespaces = ctx.useXmlNamespaces;
-			this.autoDetectNamespaces = ctx.autoDetectNamespaces;
-			this.namespaces = ctx.namespaces;
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-		} else {
-			this.rdfLanguage = p.getString(RDF_language, ctx.rdfLanguage);
-			this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
-			this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
-			this.addLiteralTypes = p.getBoolean(RDF_addLiteralTypes, ctx.addLiteralTypes);
-			this.addRootProperty = p.getBoolean(RDF_addRootProperty, ctx.addRootProperty);
-			for (Map.Entry<String,Object> e : p.entrySet()) {
-				String key = e.getKey();
-				if (key.startsWith("Rdf.jena."))
-					jenaSettings.put(key.substring(9), e.getValue());
-			}
-			this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
-			this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
-			this.useXmlNamespaces = p.getBoolean(RDF_useXmlNamespaces, ctx.useXmlNamespaces);
-			this.autoDetectNamespaces = p.getBoolean(RDF_autoDetectNamespaces, ctx.autoDetectNamespaces);
-			this.namespaces = p.getWithDefault(RDF_namespaces, ctx.namespaces, Namespace[].class);
-			addBeanTypeProperties = p.getBoolean(RDF_addBeanTypeProperties, ctx.addBeanTypeProperties);
+		this.rdfLanguage = p.getString(RDF_language, ctx.rdfLanguage);
+		this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
+		this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
+		this.addLiteralTypes = p.getBoolean(RDF_addLiteralTypes, ctx.addLiteralTypes);
+		this.addRootProperty = p.getBoolean(RDF_addRootProperty, ctx.addRootProperty);
+		for (Map.Entry<String,Object> e : p.entrySet()) {
+			String key = e.getKey();
+			if (key.startsWith("Rdf.jena."))
+				jenaSettings.put(key.substring(9), e.getValue());
 		}
+		this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
+		this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
+		this.useXmlNamespaces = p.getBoolean(RDF_useXmlNamespaces, ctx.useXmlNamespaces);
+		this.autoDetectNamespaces = p.getBoolean(RDF_autoDetectNamespaces, ctx.autoDetectNamespaces);
+		this.namespaces = p.getWithDefault(RDF_namespaces, ctx.namespaces, Namespace[].class);
+		addBeanTypeProperties = p.getBoolean(RDF_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		this.model = ModelFactory.createDefaultModel();
 		addModelPrefix(juneauNs);
 		addModelPrefix(juneauBpNs);

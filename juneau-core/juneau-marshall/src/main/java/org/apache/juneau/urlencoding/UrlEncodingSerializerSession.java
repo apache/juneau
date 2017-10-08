@@ -51,11 +51,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	protected UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, encode, args);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(UrlEncodingSerializerContext.PREFIX)) {
-			expandedParams = ctx.expandedParams;
-		} else {
-			expandedParams = p.getBoolean(UrlEncodingSerializerContext.URLENC_expandedParams, ctx.expandedParams);
-		}
+		expandedParams = p.getBoolean(UrlEncodingSerializerContext.URLENC_expandedParams, ctx.expandedParams);
 	}
 
 	@Override /* Session */

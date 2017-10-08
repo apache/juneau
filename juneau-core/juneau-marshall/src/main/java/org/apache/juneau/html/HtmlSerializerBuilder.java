@@ -57,8 +57,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"toString"</js>
+	 * 	<li><b>Data type:</b> <code>AnchorText</code>
+	 * 	<li><b>Default:</b> <jsf>TO_STRING</jsf>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -67,33 +67,18 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * in HTML, this setting defines what to set the inner text to.
 	 *
 	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		{@link HtmlSerializerContext#TO_STRING} / <js>"toString"</js> - Set to whatever is returned by
-	 * 		{@link #toString()} on the object.
-	 * 	<li>
-	 * 		{@link HtmlSerializerContext#URI} / <js>"uri"</js> - Set to the URI value.
-	 * 	<li>
-	 * 		{@link HtmlSerializerContext#LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
-	 * 	<li>
-	 * 		{@link HtmlSerializerContext#PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
-	 * 	<li>
-	 * 		{@link HtmlSerializerContext#URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.
-	 * 		(e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
-	 * </ul>
+	 * See the {@link AnchorText} enum for possible values.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_uriAnchorText</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see HtmlSerializerContext#HTML_uriAnchorText
 	 */
-	public HtmlSerializerBuilder uriAnchorText(String value) {
+	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
 		return property(HTML_uriAnchorText, value);
 	}
 

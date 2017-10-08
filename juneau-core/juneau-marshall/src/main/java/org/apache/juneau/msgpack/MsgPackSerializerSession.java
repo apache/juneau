@@ -48,11 +48,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(MsgPackSerializerContext.PREFIX)) {
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-		} else {
-			addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		}
+		addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 	}
 
 	@Override /* Session */

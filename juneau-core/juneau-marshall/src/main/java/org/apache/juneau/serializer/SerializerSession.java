@@ -100,45 +100,24 @@ public abstract class SerializerSession extends BeanSession {
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(SerializerContext.PREFIX)) {
-			maxDepth = ctx.maxDepth;
-			initialDepth = ctx.initialDepth;
-			detectRecursions = ctx.detectRecursions;
-			ignoreRecursions = ctx.ignoreRecursions;
-			useWhitespace = ctx.useWhitespace;
-			maxIndent = ctx.maxIndent;
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-			trimNulls = ctx.trimNulls;
-			trimEmptyCollections = ctx.trimEmptyCollections;
-			trimEmptyMaps = ctx.trimEmptyMaps;
-			trimStrings = ctx.trimStrings;
-			quoteChar = ctx.quoteChar;
-			sortCollections = ctx.sortCollections;
-			sortMaps = ctx.sortMaps;
-			abridged = ctx.abridged;
-			uriResolution = ctx.uriResolution;
-			uriRelativity = ctx.uriRelativity;
-			listenerClass = ctx.listener;
-		} else {
-			maxDepth = p.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
-			initialDepth = p.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
-			detectRecursions = p.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
-			ignoreRecursions = p.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
-			useWhitespace = p.getBoolean(SERIALIZER_useWhitespace, ctx.useWhitespace);
-			maxIndent = p.getInt(SERIALIZER_maxIndent, ctx.maxIndent);
-			addBeanTypeProperties = p.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
-			trimNulls = p.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
-			trimEmptyCollections = p.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
-			trimEmptyMaps = p.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
-			trimStrings = p.getBoolean(SERIALIZER_trimStrings, ctx.trimStrings);
-			quoteChar = p.getString(SERIALIZER_quoteChar, ""+ctx.quoteChar).charAt(0);
-			sortCollections = p.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
-			sortMaps = p.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
-			abridged = p.getBoolean(SERIALIZER_abridged, ctx.abridged);
-			uriResolution = p.getWithDefault(SERIALIZER_uriResolution, ctx.uriResolution, UriResolution.class);
-			uriRelativity = p.getWithDefault(SERIALIZER_uriRelativity, ctx.uriRelativity, UriRelativity.class);
-			listenerClass = p.getWithDefault(SERIALIZER_listener, ctx.listener, Class.class);
-		}
+		maxDepth = p.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
+		initialDepth = p.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
+		detectRecursions = p.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
+		ignoreRecursions = p.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
+		useWhitespace = p.getBoolean(SERIALIZER_useWhitespace, ctx.useWhitespace);
+		maxIndent = p.getInt(SERIALIZER_maxIndent, ctx.maxIndent);
+		addBeanTypeProperties = p.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
+		trimNulls = p.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
+		trimEmptyCollections = p.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
+		trimEmptyMaps = p.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
+		trimStrings = p.getBoolean(SERIALIZER_trimStrings, ctx.trimStrings);
+		quoteChar = p.getString(SERIALIZER_quoteChar, ""+ctx.quoteChar).charAt(0);
+		sortCollections = p.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
+		sortMaps = p.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
+		abridged = p.getBoolean(SERIALIZER_abridged, ctx.abridged);
+		uriResolution = p.getWithDefault(SERIALIZER_uriResolution, ctx.uriResolution, UriResolution.class);
+		uriRelativity = p.getWithDefault(SERIALIZER_uriRelativity, ctx.uriRelativity, UriRelativity.class);
+		listenerClass = p.getWithDefault(SERIALIZER_listener, ctx.listener, Class.class);
 
 		uriResolver = new UriResolver(uriResolution, uriRelativity, args.uriContext == null ? ctx.uriContext : args.uriContext);
 

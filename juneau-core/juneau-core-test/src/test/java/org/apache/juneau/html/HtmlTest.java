@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlSerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -54,7 +53,7 @@ public class HtmlTest {
 		String r;
 		String expected = null;
 
-		s.uriAnchorText(TO_STRING);
+		s.uriAnchorText(AnchorText.TO_STRING);
 		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
@@ -74,7 +73,7 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.uriAnchorText(URI);
+		s.uriAnchorText(AnchorText.URI);
 		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
@@ -94,7 +93,7 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.uriAnchorText(LAST_TOKEN);
+		s.uriAnchorText(AnchorText.LAST_TOKEN);
 		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='f0/x0'>x0</a>"
@@ -114,7 +113,7 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>xe</a>";
 		assertEquals(expected, r);
 
-		s.uriAnchorText(URI_ANCHOR);
+		s.uriAnchorText(AnchorText.URI_ANCHOR);
 		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"

@@ -42,7 +42,7 @@ import org.apache.juneau.transforms.*;
 	title="Log files",
 	description="Log files from this service",
 	properties={
-		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
+		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
 	},
 	allowMethodParam="*",
 	pojoSwaps={

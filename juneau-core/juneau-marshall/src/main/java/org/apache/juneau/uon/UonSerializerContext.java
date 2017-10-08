@@ -91,30 +91,13 @@ public class UonSerializerContext extends SerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"UON"</js>
+	 * 	<li><b>Data type:</b> <code>ParamFormat</code>
+	 * 	<li><b>Default:</b> <jsf>UON</jsf>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
-	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"UON"</js> (default) - Use UON notation for values.
-	 * 		<br>String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
-	 * 		<br>Boolean strings (<js>"true"</js>/<js>"false"</js>) and numeric values (<js>"123"</js>) will also end up
-	 * 		quoted (<js>"'true'"</js>, <js>"'false'"</js>, <js>"'123'"</js>.
-	 * 	<li>
-	 * 		<js>"PLAINTEXT"</js> (default) - Serialize as plain text.
-	 * 		<br>Strings will never be quoted or escaped.
-	 * 		<br>Note that this can cause errors during parsing if you're using the URL-encoding parser to parse
-	 * 		the results since UON constructs won't be differentiable.
-	 * 		<br>However, this is not an issue if you're simply creating queries or form posts against 3rd-party
-	 * 		interfaces.
-	 * </ul>
 	 */
 	public static final String UON_paramFormat = PREFIX + "paramFormat";
 
@@ -123,7 +106,7 @@ public class UonSerializerContext extends SerializerContext {
 		encodeChars,
 		addBeanTypeProperties;
 
-	final String
+	final ParamFormat
 		paramFormat;
 
 	/**
@@ -139,7 +122,7 @@ public class UonSerializerContext extends SerializerContext {
 		encodeChars = ps.getProperty(UON_encodeChars, boolean.class, false);
 		addBeanTypeProperties = ps.getProperty(UON_addBeanTypeProperties, boolean.class,
 			ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
-		paramFormat = ps.getProperty(UON_paramFormat, String.class, "UON");
+		paramFormat = ps.getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
 	}
 
 	@Override /* Context */
@@ -157,7 +140,7 @@ public class UonSerializerContext extends SerializerContext {
 	 *
 	 * @return The value of the {@link UonSerializerContext#UON_paramFormat} setting.
 	 */
-	public String getParamFormat() {
+	public ParamFormat getParamFormat() {
 		return paramFormat;
 	}
 }

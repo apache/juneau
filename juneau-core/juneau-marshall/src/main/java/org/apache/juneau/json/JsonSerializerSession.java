@@ -50,15 +50,9 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	protected JsonSerializerSession(JsonSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(JsonSerializerContext.PREFIX)) {
-			simpleMode = ctx.simpleMode;
-			escapeSolidus = ctx.escapeSolidus;
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-		} else {
-			simpleMode = p.getBoolean(JSON_simpleMode, ctx.simpleMode);
-			escapeSolidus = p.getBoolean(JSON_escapeSolidus, ctx.escapeSolidus);
-			addBeanTypeProperties = p.getBoolean(JSON_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		}
+		simpleMode = p.getBoolean(JSON_simpleMode, ctx.simpleMode);
+		escapeSolidus = p.getBoolean(JSON_escapeSolidus, ctx.escapeSolidus);
+		addBeanTypeProperties = p.getBoolean(JSON_addBeanTypeProperties, ctx.addBeanTypeProperties);
 	}
 
 	@Override /* Session */

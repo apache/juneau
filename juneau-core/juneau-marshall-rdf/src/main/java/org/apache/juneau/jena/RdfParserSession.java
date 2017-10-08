@@ -59,21 +59,12 @@ public class RdfParserSession extends ReaderParserSession {
 		ObjectMap jenaSettings = new ObjectMap();
 		jenaSettings.putAll(ctx.jenaSettings);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefixes(RdfParserContext.PREFIX, "Rdf.")) {
-			this.rdfLanguage = ctx.rdfLanguage;
-			this.juneauNs = ctx.juneauNs;
-			this.juneauBpNs = ctx.juneauBpNs;
-			this.trimWhitespace = ctx.trimWhitespace;
-			this.collectionFormat = ctx.collectionFormat;
-			this.looseCollections = ctx.looseCollections;
-		} else {
-			this.rdfLanguage = p.getString(RDF_language, ctx.rdfLanguage);
-			this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
-			this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
-			this.trimWhitespace = p.getBoolean(RdfParserContext.RDF_trimWhitespace, ctx.trimWhitespace);
-			this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
-			this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
-		}
+		this.rdfLanguage = p.getString(RDF_language, ctx.rdfLanguage);
+		this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
+		this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
+		this.trimWhitespace = p.getBoolean(RdfParserContext.RDF_trimWhitespace, ctx.trimWhitespace);
+		this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
+		this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
 		this.model = ModelFactory.createDefaultModel();
 		addModelPrefix(juneauNs);
 		addModelPrefix(juneauBpNs);

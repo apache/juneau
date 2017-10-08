@@ -37,7 +37,7 @@ import org.apache.juneau.xml.annotation.*;
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-@SuppressWarnings({"hiding","unchecked","rawtypes"})
+@SuppressWarnings({"unchecked","rawtypes"})
 public class XmlSerializerSession extends WriterSerializerSession {
 
 	final boolean
@@ -68,23 +68,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	protected XmlSerializerSession(XmlSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(XmlSerializerContext.PREFIX)) {
-			enableNamespaces = ctx.enableNamespaces;
-			autoDetectNamespaces = ctx.autoDetectNamespaces;
-			addNamespaceUrlsToRoot = ctx.addNamespaceUrlsToRoot;
-			addNamespaces(ctx.namespaces);
-			defaultNamespace = findDefaultNamespace(ctx.defaultNamespace);
-			xsNamespace = ctx.xsNamespace;
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-		} else {
-			enableNamespaces = p.getBoolean(XML_enableNamespaces, ctx.enableNamespaces);
-			autoDetectNamespaces = p.getBoolean(XML_autoDetectNamespaces, ctx.autoDetectNamespaces);
-			addNamespaceUrlsToRoot = p.getBoolean(XML_addNamespaceUrisToRoot, ctx.addNamespaceUrlsToRoot);
-			namespaces = (p.containsKey(XML_namespaces) ? parseNamespaces(p.get(XML_namespaces)) : ctx.namespaces);
-			defaultNamespace = findDefaultNamespace(p.containsKey(XML_defaultNamespace) ? p.getString(XML_defaultNamespace) : ctx.defaultNamespace);
-			xsNamespace = (p.containsKey(XML_xsNamespace) ? parseNamespace(p.get(XML_xsNamespace)) : ctx.xsNamespace);
-			addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		}
+		enableNamespaces = p.getBoolean(XML_enableNamespaces, ctx.enableNamespaces);
+		autoDetectNamespaces = p.getBoolean(XML_autoDetectNamespaces, ctx.autoDetectNamespaces);
+		addNamespaceUrlsToRoot = p.getBoolean(XML_addNamespaceUrisToRoot, ctx.addNamespaceUrlsToRoot);
+		namespaces = (p.containsKey(XML_namespaces) ? parseNamespaces(p.get(XML_namespaces)) : ctx.namespaces);
+		defaultNamespace = findDefaultNamespace(p.containsKey(XML_defaultNamespace) ? p.getString(XML_defaultNamespace) : ctx.defaultNamespace);
+		xsNamespace = (p.containsKey(XML_xsNamespace) ? parseNamespace(p.get(XML_xsNamespace)) : ctx.xsNamespace);
+		addBeanTypeProperties = p.getBoolean(XML_addBeanTypeProperties, ctx.addBeanTypeProperties);
 	}
 
 	@Override /* Session */
@@ -109,11 +99,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (! s.startsWith("http://"))
 			return get(s, "http://unknown");
 		return get(null, s);
-	}
-
-	private void addNamespaces(Namespace...namespaces) {
-		for (Namespace ns : namespaces)
-			addNamespace(ns);
 	}
 
 	/*

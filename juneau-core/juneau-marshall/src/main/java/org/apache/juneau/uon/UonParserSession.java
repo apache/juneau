@@ -54,11 +54,7 @@ public class UonParserSession extends ReaderParserSession {
 	protected UonParserSession(UonParserContext ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(UonParserContext.PREFIX)) {
-			decodeChars = ctx.decodeChars;
-		} else {
-			decodeChars = p.getBoolean(UON_decodeChars, ctx.decodeChars);
-		}
+		decodeChars = p.getBoolean(UON_decodeChars, ctx.decodeChars);
 	}
 
 	@Override /* Session */

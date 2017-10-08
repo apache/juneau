@@ -93,6 +93,32 @@ public class UonSerializerBuilder extends SerializerBuilder {
 		return encodeChars(true);
 	}
 
+	/**
+	 * <b>Configuration property:</b>  Format to use for query/form-data/header values.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat"</js>
+	 * 	<li><b>Data type:</b> <code>ParamFormat</code>
+	 * 	<li><b>Default:</b> <jsf>UON</jsf>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Specifies the format to use for URL GET parameter keys and values.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>UON_paramFormat</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see UonSerializerContext#UON_paramFormat
+	 */
+	public UonSerializerBuilder paramFormat(ParamFormat value) {
+		return property(UON_paramFormat, value);
+	}
+
 	@Override /* SerializerBuilder */
 	public UonSerializerBuilder maxDepth(int value) {
 		super.maxDepth(value);

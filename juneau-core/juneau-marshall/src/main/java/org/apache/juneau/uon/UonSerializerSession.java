@@ -49,15 +49,9 @@ public class UonSerializerSession extends WriterSerializerSession {
 	public UonSerializerSession(UonSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (! p.containsKeyPrefix(UonSerializerContext.PREFIX)) {
-			encodeChars = encode == null ? ctx.encodeChars : encode;
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-			plainTextParams = ctx.paramFormat.equals("PLAINTEXT");
-		} else {
-			encodeChars = encode == null ? p.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
-			addBeanTypeProperties = p.getBoolean(UON_addBeanTypeProperties, ctx.addBeanTypeProperties);
-			plainTextParams = p.getString(UonSerializerContext.UON_paramFormat, ctx.paramFormat).equals("PLAINTEXT");
-		}
+		encodeChars = encode == null ? p.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
+		addBeanTypeProperties = p.getBoolean(UON_addBeanTypeProperties, ctx.addBeanTypeProperties);
+		plainTextParams = p.getWithDefault(UonSerializerContext.UON_paramFormat, ctx.paramFormat, ParamFormat.class) == ParamFormat.PLAINTEXT;
 	}
 
 	@Override /* Session */

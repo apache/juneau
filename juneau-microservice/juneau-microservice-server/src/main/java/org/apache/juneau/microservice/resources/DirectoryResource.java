@@ -71,7 +71,7 @@ import org.apache.juneau.utils.*;
 	),
 	allowMethodParam="*",
 	properties={
-		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
+		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
 		@Property(name="DirectoryResource.rootDir", value="")
 	}
 )
