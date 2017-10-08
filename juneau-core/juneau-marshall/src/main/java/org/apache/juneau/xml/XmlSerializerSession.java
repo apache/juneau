@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.xml.NamespaceFactory.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
