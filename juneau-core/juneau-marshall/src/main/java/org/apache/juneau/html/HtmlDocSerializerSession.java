@@ -47,34 +47,18 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		super(ctx, args);
 		ObjectMap p = getProperties();
 
-		// TODO - Change this to p.containsKeyPrefix(PREFIX)
-		if (p.isEmpty()) {
-			header = ctx.header;
-			nav = ctx.nav;
-			aside = ctx.aside;
-			footer = ctx.footer;
-			navlinks = ctx.navlinks;
-			style = ctx.style;
-			stylesheet = ctx.stylesheet;
-			script = ctx.script;
-			head = ctx.head;
-			nowrap = ctx.nowrap;
-			noResultsMessage = ctx.noResultsMessage;
-			template = ClassUtils.newInstance(HtmlDocTemplate.class, ctx.template);
-		} else {
-			header = p.getString(HTMLDOC_header, ctx.nav);
-			nav = p.getString(HTMLDOC_nav, ctx.nav);
-			aside = p.getString(HTMLDOC_aside, ctx.aside);
-			footer = p.getString(HTMLDOC_footer, ctx.footer);
-			navlinks = p.getStringArray(HTMLDOC_navlinks, ctx.navlinks);
-			style = p.getStringArray(HTMLDOC_style, ctx.style);
-			stylesheet = p.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
-			script = p.getStringArray(HTMLDOC_script, ctx.script);
-			head = p.getStringArray(HTMLDOC_head, ctx.head);
-			nowrap = p.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
-			noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
-			template = ClassUtils.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
-		}
+		header = p.getString(HTMLDOC_header, ctx.nav);
+		nav = p.getString(HTMLDOC_nav, ctx.nav);
+		aside = p.getString(HTMLDOC_aside, ctx.aside);
+		footer = p.getString(HTMLDOC_footer, ctx.footer);
+		navlinks = p.getStringArray(HTMLDOC_navlinks, ctx.navlinks);
+		style = p.getStringArray(HTMLDOC_style, ctx.style);
+		stylesheet = p.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
+		script = p.getStringArray(HTMLDOC_script, ctx.script);
+		head = p.getStringArray(HTMLDOC_head, ctx.head);
+		nowrap = p.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
+		noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
+		template = ClassUtils.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
 	}
 
 	@Override /* Session */
