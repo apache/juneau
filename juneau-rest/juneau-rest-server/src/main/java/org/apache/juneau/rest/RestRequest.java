@@ -95,6 +95,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private ConfigFile cf;
 	private Swagger swagger, fileSwagger;
 	private Map<String,Widget> widgets;
+	private HtmlDocContext hdc;
 
 	/**
 	 * Constructor.
@@ -167,7 +168,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
 			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset,
 			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,
-			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets) {
+			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets, HtmlDocContext hdc) {
 		this.javaMethod = javaMethod;
 		this.properties = properties;
 		this.urlEncodingParser = mUrlEncodingParser;
@@ -195,6 +196,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.defaultCharset = defaultCharset;
 		this.defFormData = defFormData;
 		this.widgets = widgets;
+		this.hdc = hdc;
 
 		if (debug) {
 			String msg = ""
@@ -318,24 +320,24 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				char c2 = StringUtils.charAt(name, 0);
 				if (c2 == 'a') {
 					if ("aside".equals(name))
-						return cm.htmlAside == null ? null : resolveVars(cm.htmlAside);
+						return resolveVars(hdc.aside);
 				} else if (c2 == 'f') {
 					if ("footer".equals(name))
-						return cm.htmlFooter == null ? null : resolveVars(cm.htmlFooter);
+						return resolveVars(hdc.footer);
 				} else if (c2 == 'h') {
 					if ("header".equals(name))
-						return cm.htmlHeader == null ? null : resolveVars(cm.htmlHeader);
+						return resolveVars(hdc.header);
 					if ("head.list".equals(name))
-						return resolveVars(cm.htmlHead);
+						return resolveVars(hdc.head);
 				} else if (c2 == 'n') {
 					if ("nav".equals(name))
-						return cm.htmlNav == null ? null : resolveVars(cm.htmlNav);
+						return resolveVars(hdc.nav);
 					if ("navlinks.list".equals(name)) {
-						if (cm.htmlNavLinks == null || cm.htmlNavLinks.length == 0)
+						if (hdc.navlinks == null || hdc.navlinks.length == 0)
 							return null;
 						try {
 							List<String> la = new ArrayList<String>();
-							for (String l : cm.htmlNavLinks) {
+							for (String l : hdc.navlinks) {
 								// Temporary backwards compatibility with JSON object format.
 								if (l.startsWith("{")) {
 									ObjectMap m = new ObjectMap(l);
@@ -351,14 +353,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 						}
 					}
 					if ("noResultsMessage".equals(name))
-						return cm.htmlNoResultsMessage == null ? null : resolveVars(cm.htmlNoResultsMessage);
+						return resolveVars(hdc.noResultsMessage);
 					if ("nowrap".equals(name))
-						return cm.htmlNoWrap;
+						return hdc.nowrap;
 				} else if (c2 == 's') {
 					if ("script.list".equals(name)) {
 						Set<String> l = new LinkedHashSet<String>();
-						if (cm.htmlScript != null)
-							l.add(resolveVars(cm.htmlScript));
+						if (hdc.script != null)
+							l.add(resolveVars(hdc.script));
 						for (Widget w : getWidgets().values()) {
 							String script;
 							try {
@@ -373,8 +375,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 					if ("style.list".equals(name)) {
 						Set<String> l = new LinkedHashSet<String>();
-						if (cm.htmlStyle != null)
-							l.add(resolveVars(cm.htmlStyle));
+						if (hdc.style != null)
+							l.add(resolveVars(hdc.style));
 						for (Widget w : getWidgets().values()) {
 							String style;
 							try {
@@ -391,12 +393,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 						String s = getStylesheet();
 						// Exclude absolute URIs to stylesheets for security reasons.
 						if (s == null || isAbsoluteUri(s))
-							s = cm.htmlStylesheet;
+							s = hdc.stylesheet;
 						return s == null ? null : resolveVars(s);
 					}
 				} else if (c2 == 't') {
 					if ("template".equals(name))
-						return cm.htmlTemplate;
+						return hdc.template;
 				}
 			}
 		} else if (c == 'P') {

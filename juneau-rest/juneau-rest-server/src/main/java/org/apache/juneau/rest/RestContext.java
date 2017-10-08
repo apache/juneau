@@ -33,7 +33,6 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
@@ -42,7 +41,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.vars.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
@@ -69,21 +67,9 @@ public final class RestContext extends Context {
 		paramFormat,
 		clientVersionHeader,
 		fullPath,
-		contextPath,
-		htmlHeader,
-		htmlNav,
-		htmlAside,
-		htmlStyle,
-		htmlStylesheet,
-		htmlScript,
-		htmlFooter,
-		htmlNoResultsMessage;
-	private final String[]
-		htmlNavLinks,
-		htmlHead;
-	private final boolean htmlNoWrap;
-	private final HtmlDocTemplate htmlTemplate;
-	private final Map<String,Widget> htmlWidgets;
+		contextPath;
+
+	private final HtmlDocContext htmlDocContext;
 
 	private final Set<String> allowMethodParams;
 
@@ -204,20 +190,7 @@ public final class RestContext extends Context {
 			this.logger = b.logger;
 			this.fullPath = b.fullPath;
 			this.contextPath = nullIfEmpty(b.contextPath);
-
-			this.htmlWidgets = Collections.unmodifiableMap(b.htmlWidgets);
-			this.htmlHeader = b.htmlHeader;
-			this.htmlNavLinks = b.htmlNavLinks;
-			this.htmlNav = b.htmlNav;
-			this.htmlAside = b.htmlAside;
-			this.htmlStyle = b.htmlStyle;
-			this.htmlStylesheet = b.htmlStylesheet;
-			this.htmlScript = b.htmlScript;
-			this.htmlHead = b.htmlHead;
-			this.htmlFooter = b.htmlFooter;
-			this.htmlNoWrap = b.htmlNoWrap;
-			this.htmlNoResultsMessage = b.htmlNoResultsMessage;
-			this.htmlTemplate = b.htmlTemplate;
+			this.htmlDocContext = new HtmlDocContext(resource, config);
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -482,11 +455,7 @@ public final class RestContext extends Context {
 		UrlEncodingSerializer urlEncodingSerializer;
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
-		String clientVersionHeader = "", defaultCharset, paramFormat, htmlHeader, htmlNav, htmlAside, htmlStyle,
-				htmlStylesheet, htmlScript, htmlFooter, htmlNoResultsMessage;
-		String[] htmlNavLinks, htmlHead;
-		boolean htmlNoWrap;
-		HtmlDocTemplate htmlTemplate;
+		String clientVersionHeader = "", defaultCharset, paramFormat;
 
 		List<MediaType> supportedContentTypes, supportedAcceptTypes;
 		Map<String,String> defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
@@ -502,7 +471,6 @@ public final class RestContext extends Context {
 		Set<String> allowMethodParams = new LinkedHashSet<String>();
 		RestLogger logger;
 		String fullPath;
-		Map<String,Widget> htmlWidgets;
 		Object resourceResolver;
 		String contextPath;
 
@@ -605,25 +573,6 @@ public final class RestContext extends Context {
 			logger = sc.logger == null ? new RestLogger.NoOp() : resolve(resource, RestLogger.class, sc.logger);
 
 			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
-
-			this.htmlWidgets = new LinkedHashMap<String,Widget>();
-			for (Class<? extends Widget> wc : sc.htmlWidgets) {
-				Widget w = resolve(resource, Widget.class, wc);
-				this.htmlWidgets.put(w.getName(), w);
-			}
-
-			htmlHeader = sc.htmlHeader;
-			htmlNavLinks = sc.htmlNavLinks;
-			htmlNav = sc.htmlNav;
-			htmlAside = sc.htmlAside;
-			htmlStyle = sc.htmlStyle;
-			htmlStylesheet = sc.htmlStylesheet;
-			htmlScript = sc.htmlScript;
-			htmlHead = sc.htmlHead;
-			htmlFooter = sc.htmlFooter;
-			htmlNoWrap = sc.htmlNoWrap;
-			htmlNoResultsMessage = sc.htmlNoResultsMessage;
-			htmlTemplate = resolve(resource, HtmlDocTemplate.class, sc.htmlTemplate);
 		}
 	}
 
@@ -889,160 +838,12 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * The HTML page header contents.
+	 * Returns the context values for the HTML doc view.
 	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#header()} annotation or {@link RestConfig#setHtmlHeader(String)} method.
-	 *
-	 * @return The HTML page header contents.
+	 * @return The context values for the HTML doc view.
 	 */
-	public String getHtmlHeader() {
-		return htmlHeader;
-	}
-
-	/**
-	 * The HTML page nav section links.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#navlinks()} annotation or {@link RestConfig#setHtmlNavLinks(String[])} method.
-	 *
-	 * @return The HTML page nav section links.
-	 */
-	public String[] getHtmlNavLinks() {
-		return htmlNavLinks;
-	}
-
-	/**
-	 * The HTML page nav section contents.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#nav()} annotation or {@link RestConfig#setHtmlNav(String)} method.
-	 *
-	 * @return The HTML page nav section contents.
-	 */
-	public String getHtmlNav() {
-		return htmlNav;
-	}
-
-	/**
-	 * The HTML page aside section contents.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#aside()} annotation or {@link RestConfig#setHtmlAside(String)} method.
-	 *
-	 * @return The HTML page aside section contents.
-	 */
-	public String getHtmlAside() {
-		return htmlAside;
-	}
-
-	/**
-	 * The HTML page footer section contents.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#footer()} annotation or {@link RestConfig#setHtmlFooter(String)} method.
-	 *
-	 * @return The HTML page footer section contents.
-	 */
-	public String getHtmlFooter() {
-		return htmlFooter;
-	}
-
-	/**
-	 * The HTML page stylesheet URL.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#stylesheet()} annotation or {@link RestConfig#setHtmlStylesheet(String)} method.
-	 *
-	 * @return The HTML page CSS URL.
-	 */
-	public String getHtmlStylesheet() {
-		return htmlStylesheet;
-	}
-
-	/**
-	 * The HTML page CSS contents.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#style()} annotation or {@link RestConfig#setHtmlStyle(String)} method.
-	 *
-	 * @return The HTML page CSS contents.
-	 */
-	public String getHtmlStyle() {
-		return htmlStyle;
-	}
-
-	/**
-	 * The HTML page Javascript contents.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#script()} annotation or {@link RestConfig#setHtmlScript(String)} method.
-	 *
-	 * @return The HTML page Javascript contents.
-	 */
-	public String getHtmlScript() {
-		return htmlScript;
-	}
-
-	/**
-	 * The HTML page head content.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#head()} annotation or {@link RestConfig#setHtmlHead(String[])} method.
-	 *
-	 * @return The HTML page head content.
-	 */
-	public String[] getHtmlHead() {
-		return htmlHead;
-	}
-
-	/**
-	 * The HTML page nowrap setting.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#nowrap()} annotation or {@link RestConfig#setHtmlNoWrap(boolean)} method.
-	 *
-	 * @return The HTML page nowrap setting.
-	 */
-	public boolean getHtmlNoWrap() {
-		return htmlNoWrap;
-	}
-
-	/**
-	 * The HTML page template.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#template()} annotation or {@link RestConfig#setHtmlTemplate(Class)} method.
-	 *
-	 * @return The HTML page template.
-	 */
-	public HtmlDocTemplate getHtmlTemplate() {
-		return htmlTemplate;
-	}
-
-	/**
-	 * The HTML page no-results message.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#noResultsMessage()} annotation or {@link RestConfig#setHtmlNoResultsMessage(String)}
-	 * method.
-	 *
-	 * @return The HTML page no-results message.
-	 */
-	public String getHtmlNoResultsMessage() {
-		return htmlNoResultsMessage;
-	}
-
-	/**
-	 * The widgets used for resolving <js>"$W{...}"<js> variables.
-	 *
-	 * <p>
-	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestConfig#addHtmlWidget(Class)} method.
-	 *
-	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
-	 */
-	public Map<String,Widget> getHtmlWidgets() {
-		return htmlWidgets;
+	public HtmlDocContext getHtmlDocContext() {
+		return htmlDocContext;
 	}
 
 	/**

@@ -1181,6 +1181,23 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Converts an array of objects to an array of strings.
+	 *
+	 * @param o The array of objects to convert to strings.
+	 * @return A new array of objects converted to strings.
+	 */
+	public static String[] toStrings(Object[] o) {
+		if (o == null)
+			return null;
+		if (o instanceof String[])
+			return (String[])o;
+		String[] s = new String[o.length];
+		for (int i = 0; i < o.length; i++)
+			s[i] = toString(o[i]);
+		return s;
+	}
+
+	/**
 	 * Converts a hexadecimal byte stream (e.g. "34A5BC") into a UTF-8 encoded string.
 	 *
 	 * @param hex The hexadecimal string.

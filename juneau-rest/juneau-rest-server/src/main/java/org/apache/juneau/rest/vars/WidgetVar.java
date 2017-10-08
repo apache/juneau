@@ -30,7 +30,7 @@ import org.apache.juneau.svl.*;
  * They're registered via the following mechanisms:
  * <ul>
  * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
- * 	<li>{@link RestConfig#addHtmlWidget(Class)}
+ * 	<li>{@link HtmlDocConfig#widget(Class)}
  * </ul>
  *
  * @see org.apache.juneau.svl

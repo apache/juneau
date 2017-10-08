@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.RestUtils.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -27,7 +26,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
@@ -35,7 +33,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
@@ -113,10 +110,10 @@ public class RestConfig implements ServletConfig {
 	List<MediaType> supportedContentTypes, supportedAcceptTypes;
 	List<Object> staticFiles;
 	RestContext parentContext;
-	String path, htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
-	String[] htmlNavLinks, htmlHead;
+	String path;
 	String clientVersionHeader = "X-Client-Version";
 	String contextPath;
+	HtmlDocConfig htmlDocConfig = new HtmlDocConfig();
 
 	Object resourceResolver = RestResourceResolverSimple.class;
 	Object logger = RestLogger.Normal.class;
@@ -124,11 +121,7 @@ public class RestConfig implements ServletConfig {
 	Object infoProvider = RestInfoProvider.class;
 	Object allowHeaderParams, allowMethodParam, allowBodyParam, renderResponseStackTraces, useStackTraceHashes, defaultCharset, paramFormat;
 
-	boolean htmlNoWrap;
-	Object htmlTemplate = HtmlDocTemplateBasic.class;
-
 	Class<?> resourceClass;
-	List<Class<? extends Widget>> htmlWidgets = new ArrayList<Class<? extends Widget>>();
 
 	/**
 	 * Constructor for top-level servlets when using dependency injection.
@@ -252,26 +245,7 @@ public class RestConfig implements ServletConfig {
 				if (! r.paramFormat().isEmpty())
 					setParamFormat(vr.resolve(r.paramFormat()));
 
-				HtmlDoc hd = r.htmldoc();
-				for (Class<? extends Widget> cw : hd.widgets())
-					addHtmlWidget(cw);
-				setHtmlHeader(resolveNewlineSeparatedAnnotation(hd.header(), htmlHeader));
-				setHtmlNav(resolveNewlineSeparatedAnnotation(hd.nav(), htmlNav));
-				setHtmlAside(resolveNewlineSeparatedAnnotation(hd.aside(), htmlAside));
-				setHtmlFooter(resolveNewlineSeparatedAnnotation(hd.footer(), htmlFooter));
-				setHtmlStyle(resolveNewlineSeparatedAnnotation(hd.style(), htmlStyle));
-				setHtmlScript(resolveNewlineSeparatedAnnotation(hd.script(), htmlScript));
-				setHtmlNavLinks(resolveLinks(hd.navlinks(), htmlNavLinks));
-				setHtmlHead(resolveContent(hd.head(), htmlHead));
-
-				if (! hd.stylesheet().isEmpty())
-					setHtmlStylesheet(hd.stylesheet());
-				if (! hd.noResultsMessage().isEmpty())
-					setHtmlNoResultsMessage(hd.noResultsMessage());
-				if (hd.nowrap())
-					setHtmlNoWrap(true);
-				if (hd.template() != HtmlDocTemplate.class)
-					setHtmlTemplate(hd.template());
+				htmlDocConfig.process(r.htmldoc());
 			}
 
 			addResponseHandlers(
@@ -1202,319 +1176,12 @@ public class RestConfig implements ServletConfig {
 	}
 
 	/**
-	 * Sets the HTML header section contents.
+	 * Returns the configuration settings specific to the HTML doc view.
 	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * The page header normally contains the title and description, but this value can be used to override the contents
-	 * to be whatever you want.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no header.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#header() @HtmlDoc.header()} annotation.
-	 *
-	 * @param value The HTML header section contents.
-	 * @return This object (for method chaining).
+	 * @return The configuration settings specific to the HTML doc view.
 	 */
-	public RestConfig setHtmlHeader(String value) {
-		this.htmlHeader = value;
-		return this;
-	}
-
-	/**
-	 * Sets the links in the HTML nav section.
-	 *
-	 * <p>
-	 * The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
-	 * relative (to the servlet) or absolute URLs.
-	 *
-	 * <p>
-	 * The page links are positioned immediately under the title and text.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This field can also use URIs of any support type in {@link UriResolver}.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#navlinks() @HtmlDoc.navlinks()} annotation.
-	 *
-	 * @param value The HTML nav section links links.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlNavLinks(String[] value) {
-		this.htmlNavLinks = value;
-		return this;
-	}
-
-	/**
-	 * Sets the HTML nav section contents.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * The nav section of the page contains the links.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * When a value is specified, the {@link #setHtmlNavLinks(String[])} value will be ignored.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#nav() @HtmlDoc.nav()} annotation.
-	 *
-	 * @param value The HTML nav section contents.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlNav(String value) {
-		this.htmlNav = value;
-		return this;
-	}
-
-	/**
-	 * Sets the HTML aside section contents.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * The aside section typically floats on the right side of the page.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#aside() @HtmlDoc.aside()} annotation.
-	 *
-	 * @param value The HTML aside section contents.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlAside(String value) {
-		this.htmlAside = value;
-		return this;
-	}
-
-	/**
-	 * Sets the HTML footer section contents.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * The footer section typically floats on the bottom of the page.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#footer() @HtmlDoc.footer()} annotation.
-	 *
-	 * @param value The HTML footer section contents.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlFooter(String value) {
-		this.htmlFooter = value;
-		return this;
-	}
-
-	/**
-	 * Sets the HTML CSS style section contents.
-	 *
-	 * <p>
-	 * The format of this value is CSS.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#style() @HtmlDoc.style()} annotation.
-	 *
-	 * @param value The HTML CSS style section contents.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlStyle(String value) {
-		this.htmlStyle = value;
-		return this;
-	}
-
-	/**
-	 * Sets the CSS URL in the HTML CSS style section.
-	 *
-	 * <p>
-	 * The format of this value is a URL.
-	 *
-	 * <p>
-	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
-	 *
-	 * <p>
-	 * The format of this value is CSS.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols defined
-	 * by {@link UriResolver}.
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
-	 *
-	 * @param value The CSS URL in the HTML CSS style section.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlStylesheet(String value) {
-		this.htmlStylesheet = value;
-		return this;
-	}
-
-	/**
-	 * Sets the HTML script section contents.
-	 *
-	 * <p>
-	 * The format of this value is Javascript.
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#script() @HtmlDoc.script()} annotation.
-	 *
-	 * @param value The HTML script section contents.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlScript(String value) {
-		this.htmlScript = value;
-		return this;
-	}
-
-	/**
-	 * Adds to the HTML head section contents.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#head() @HtmlDoc.head()} annotation.
-	 *
-	 * @param value The HTML head section content.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlHead(String...value) {
-		this.htmlHead = value;
-		return this;
-	}
-
-	/**
-	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#nowrap() @HtmlDoc.nowrap()} annotation.
-	 *
-	 * @param value The new nowrap setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlNoWrap(boolean value) {
-		this.htmlNoWrap = value;
-		return this;
-	}
-
-	/**
-	 * Specifies the text to display when serializing an empty array or collection.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc.noResultsMessage()}
-	 * annotation.
-	 *
-	 * @param value The text to display when serializing an empty array or collection.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlNoResultsMessage(String value) {
-		this.htmlNoResultsMessage = value;
-		return this;
-	}
-
-	/**
-	 * Specifies the template class to use for rendering the HTML page.
-	 *
-	 * <p>
-	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
-	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
-	 *
-	 * @param value The HTML page template to use to render the HTML page.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlTemplate(Class<? extends HtmlDocTemplate> value) {
-		this.htmlTemplate = value;
-		return this;
-	}
-
-	/**
-	 * Specifies the template class to use for rendering the HTML page.
-	 *
-	 * <p>
-	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
-	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
-	 *
-	 * @param value The HTML page template to use to render the HTML page.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig setHtmlTemplate(HtmlDocTemplate value) {
-		this.htmlTemplate = value;
-		return this;
-	}
-
-	/**
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement text.
-	 *
-	 * <p>
-	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
-	 *
-	 * @param value The widget class to add.
-	 * @return This object (for method chaining).
-	 */
-	public RestConfig addHtmlWidget(Class<? extends Widget> value) {
-		this.htmlWidgets.add(value);
-		return this;
+	public HtmlDocConfig getHtmlDocConfig() {
+		return htmlDocConfig;
 	}
 
 	/**

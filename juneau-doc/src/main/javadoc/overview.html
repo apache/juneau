@@ -7481,6 +7481,9 @@
 		<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
 	}
 				</p>
+			<li>
+				Removed several of the HTMLDOC-related methods from the <code>RestResponse/RestConfig/RestContext</code>
+				classes and moved it into the new {@link org.apache.juneau.rest.HtmlDocBuilder} class.
 		</ul>
 	</div>
 
@@ -8030,7 +8033,7 @@
 			<li>
 				Modifications to the following <ja>@HtmlDoc</ja> annotations:
 				<ul>
-					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#links() links()} - Now an array of strings instead of a JSON object.  Simplified syntax.
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks()} - Now an array of strings instead of a JSON object.  Simplified syntax.
 						<br>For example:
 						<p class='bcode'>
 	<jc>// Old syntax</jc>
@@ -8513,17 +8516,17 @@
 					<li><code><del>setHtmlTitle(String)</del></code>
 					<li><code><del>setHtmlDescription(String)</del></code>
 					<li><code><del>setHtmlBranding(String)</del></code>
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlHeader(String) setHtmlHeader(String)}
+					<li><code><del>setHtmlHeader(String)</del></code>
 					<li><code><del>setHtmlLinks(String)</del></code>
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNav(String) setHtmlNav(String)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlAside(String) setHtmlAside(String)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlFooter(String) setHtmlFooter(String)}
+					<li><code><del>setHtmlNav(String)</del></code>
+					<li><code><del>setHtmlAside(String)</del></code>
+					<li><code><del>setHtmlFooter(String)</del></code>
 					<li><code><del>setHtmlCss(String)</del></code>
 					<li><code><del>setHtmlCssUrl(String)</del></code>
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNoWrap(boolean) setHtmlNoWrap(boolean)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNoResultsMessage(String) setHtmlNoResultsMessage(String)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTemplate(Class) setHtmlTemplate(Class)}
-					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTemplate(HtmlDocTemplate) setHtmlTemplate(HtmlDocTemplate)}
+					<li><code><del>setHtmlNoWrap(boolean)</del></code>
+					<li><code><del>setHtmlNoResultsMessage(String)</del></code>
+					<li><code><del>setHtmlTemplate(Class)</del></code>
+					<li><code><del>setHtmlTemplate(HtmlDocTemplate)</del></code>
 					<li><code><del>addWidget(Class)</del></code>
 				</ul>
 			<li>
@@ -8532,17 +8535,17 @@
 					<li><code><del>setHtmlTitle(Object)</del></code>
 					<li><code><del>setHtmlDescription(Object)</del></code>
 					<li><code><del>setHtmlBranding(Object)</del></code>
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlHeader(Object) setHtmlHeader(Object)}
+					<li><code><del>setHtmlHeader(Object)</del></code>
 					<li><code><del>setHtmlLinks(Object)</del></code>
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNav(Object) setHtmlNav(Object)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlAside(Object) setHtmlAside(Object)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlFooter(Object) setHtmlFooter(Object)}
+					<li><code><del>setHtmlNav(Object)</del></code>
+					<li><code><del>setHtmlAside(Object)</del></code>
+					<li><code><del>setHtmlFooter(Object)</del></code>
 					<li><code><del>setHtmlCss(Object)</del></code>
 					<li><code><del>setHtmlCssUrl(Object)</del></code>
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNoWrap(boolean) setHtmlNoWrap(boolean)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNoResultsMessage(Object) setHtmlNoResultsMessage(Object)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlTemplate(Class) setHtmlTemplate(Class)}
-					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlTemplate(HtmlDocTemplate) setHtmlTemplate(HtmlDocTemplate)}
+					<li><code><del>setHtmlNoWrap(boolean)</del></code>
+					<li><code><del>setHtmlNoResultsMessage(Object)</del></code>
+					<li><code><del>setHtmlTemplate(Class)</del></code>
+					<li><code><del>setHtmlTemplate(HtmlDocTemplate)</del></code>
 				</ul>
 			<li>
 				<code>&amp;plainText=true</code> parameter now works on byte-based serializers by converting the output to hex.
@@ -9733,7 +9736,7 @@
 			<li>New annotations on {@link org.apache.juneau.rest.annotation.RestResource}.
 				<ul>
 					<li><code><del>RestResource.stylesheet()</del></code>
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#favicon()}
+					<li><code><del>RestResource.favicon()</del></code>
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#staticFiles()}
 				</ul>
 			<li>Eliminated <code>org.apache.juneau.rest.jaxrs.JsonProvider</code> class.  
@@ -10248,7 +10251,7 @@
 		<h6 class='topic'>Core</h6>		
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.ClassMeta#newInstance()} method can now create new instances of arrays.
-			<li>Arguments passed to {@link org.apache.juneau.dto.Link} are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
+			<li>Arguments passed to <code><del>Link</del></code> are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
 			<li>New date filters:  <code>org.apache.juneau.transforms.Datefilter.ISO8601DTZP</code> and <code>org.apache.juneau.transforms.Datefilter.SimpleP</code>.
 			<li>New {@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_nowrap} setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
 				Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
@@ -10469,7 +10472,7 @@
 				</ul>
 			<li>Code changes to facilitate breaking up bundles:
 				<ul>
-					<li><code>org.apache.juneau.rest.labels.Link</code> class moved to {@link org.apache.juneau.dto.Link}.
+					<li><code>org.apache.juneau.rest.labels.Link</code> class moved to <code><del>Link</del></code>.
 					<li>References to <code>org.apache.juneau.rest.RestException</code> in {@link org.apache.juneau.encoders.Encoder} class changed to <code>IOException</code>.
 				</ul>
 			<li>Changed configuration names for consistency with Jazz Framework.

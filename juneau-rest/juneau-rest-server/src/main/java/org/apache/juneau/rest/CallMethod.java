@@ -17,7 +17,6 @@ import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
-import static org.apache.juneau.rest.RestUtils.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
 import java.lang.annotation.*;
@@ -29,12 +28,9 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
@@ -67,11 +63,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final Response[] responses;
 	private final RestContext context;
 	private final BeanContext beanContext;
-	final String htmlHeader, htmlNav, htmlAside, htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlNoResultsMessage;
-	final String[] htmlNavLinks, htmlHead;
-	final boolean htmlNoWrap;
-	final HtmlDocTemplate htmlTemplate;
-	private final Map<String,Widget> widgets;
+	private final HtmlDocContext htmlDocContext;
 
 	CallMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
@@ -103,27 +95,11 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.priority = b.priority;
 		this.parameters = b.parameters;
 		this.responses = b.responses;
-		this.htmlHeader = b.htmlHeader;
-		this.htmlNavLinks = b.htmlNavLinks;
-		this.htmlNav = b.htmlNav;
-		this.htmlAside = b.htmlAside;
-		this.htmlFooter = b.htmlFooter;
-		this.htmlStyle = b.htmlStyle;
-		this.htmlStylesheet = b.htmlStylesheet;
-		this.htmlScript = b.htmlScript;
-		this.htmlHead = b.htmlHead;
-		this.htmlNoWrap = b.htmlNoWrap;
-		this.htmlTemplate = b.htmlTemplate;
-		this.htmlNoResultsMessage = b.htmlNoResultsMessage;
-		this.widgets = Collections.unmodifiableMap(b.htmlWidgets);
+		this.htmlDocContext = new HtmlDocContext(method, context.getHtmlDocContext());
 	}
 
 	private static class Builder  {
-		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlNav, htmlAside,
-			htmlFooter, htmlStyle, htmlStylesheet, htmlScript, htmlHeader, htmlNoResultsMessage;
-		private String[] htmlNavLinks, htmlHead;
-		private boolean htmlNoWrap;
-		private HtmlDocTemplate htmlTemplate;
+		private String httpMethod, defaultCharset, description, tags, summary, externalDocs;
 		private UrlPathPattern pathPattern;
 		private RestParam[] params;
 		private RestGuard[] guards;
@@ -141,7 +117,6 @@ class CallMethod implements Comparable<CallMethod>  {
 		private Integer priority;
 		private org.apache.juneau.rest.annotation.Parameter[] parameters;
 		private Response[] responses;
-		private Map<String,Widget> htmlWidgets;
 
 		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
@@ -178,29 +153,6 @@ class CallMethod implements Comparable<CallMethod>  {
 					defaultCharset = context.getVarResolver().resolve(m.defaultCharset());
 				if (! m.paramFormat().isEmpty())
 					paramFormat = context.getVarResolver().resolve(m.paramFormat());
-
-				HtmlDoc hd = m.htmldoc();
-				htmlWidgets = new HashMap<String,Widget>(context.getHtmlWidgets());
-				for (Class<? extends Widget> wc : hd.widgets()) {
-					Widget w = ClassUtils.newInstance(Widget.class, wc);
-					htmlWidgets.put(w.getName(), w);
-				}
-
-				htmlHeader = resolveNewlineSeparatedAnnotation(hd.header(), context.getHtmlHeader());
-				htmlNav = resolveNewlineSeparatedAnnotation(hd.nav(), context.getHtmlNav());
-				htmlAside = resolveNewlineSeparatedAnnotation(hd.aside(), context.getHtmlAside());
-				htmlFooter = resolveNewlineSeparatedAnnotation(hd.footer(), context.getHtmlFooter());
-				htmlStyle = resolveNewlineSeparatedAnnotation(hd.style(), context.getHtmlStyle());
-				htmlScript = resolveNewlineSeparatedAnnotation(hd.script(), context.getHtmlScript());
-				htmlHead = resolveContent(hd.head(), context.getHtmlHead());
-				htmlNavLinks = resolveLinks(hd.navlinks(), context.getHtmlNavLinks());
-				htmlStylesheet = hd.stylesheet().isEmpty() ? context.getHtmlStylesheet() : hd.stylesheet();
-				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();
-				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.noResultsMessage();
-				htmlTemplate =
-					hd.template() == HtmlDocTemplate.class
-					? context.getHtmlTemplate()
-					: ClassUtils.newInstance(HtmlDocTemplate.class, hd.template());
 
 				List<Inherit> si = Arrays.asList(m.serializersInherit());
 				List<Inherit> pi = Arrays.asList(m.parsersInherit());
@@ -509,6 +461,10 @@ class CallMethod implements Comparable<CallMethod>  {
 		return null;
 	}
 
+	HtmlDocContext getHtmlDocContext() {
+		return htmlDocContext;
+	}
+
 	/**
 	 * Returns the localized Swagger tags for this Java method.
 	 */
@@ -795,7 +751,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 		ObjectMap requestProperties = createRequestProperties(properties, req);
 		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
-			serializers, parsers, urlEncodingParser, beanContext, encoders, widgets);
+			serializers, parsers, urlEncodingParser, beanContext, encoders, htmlDocContext.widgets, htmlDocContext);
 		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards

@@ -108,7 +108,7 @@ public @interface HtmlDoc {
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlHeader(String)} and {@link RestResponse#setHtmlHeader(Object)} methods.
+	 * 		{@link HtmlDocConfig#header(Object)} and {@link HtmlDocBuilder#header(Object)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -157,7 +157,7 @@ public @interface HtmlDoc {
 	 * 		This field can also use URIs of any support type in {@link UriResolver}.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlNavLinks(String[])} and {@link RestResponse#setHtmlNavLinks(String[])} methods.
+	 * 		{@link HtmlDocConfig#navlinks(Object[])} and {@link HtmlDocBuilder#navlinks(Object[])} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -207,7 +207,7 @@ public @interface HtmlDoc {
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlNav(String)} and {@link RestResponse#setHtmlNav(Object)} methods.
+	 * 		{@link HtmlDocConfig#nav(Object)} and {@link HtmlDocBuilder#nav(Object)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -250,7 +250,7 @@ public @interface HtmlDoc {
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlAside(String)} and {@link RestResponse#setHtmlAside(Object)} methods.
+	 * 		{@link HtmlDocConfig#aside(Object)} and {@link HtmlDocBuilder#aside(Object)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -293,7 +293,7 @@ public @interface HtmlDoc {
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlFooter(String)} and {@link RestResponse#setHtmlFooter(Object)} methods.
+	 * 		{@link HtmlDocConfig#footer(Object)} and {@link HtmlDocBuilder#footer(Object)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -334,7 +334,7 @@ public @interface HtmlDoc {
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlStyle(String)} and {@link RestResponse#setHtmlStyle(Object)} methods.
+	 * 		{@link HtmlDocConfig#style(Object)} and {@link HtmlDocBuilder#style(Object)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -375,7 +375,7 @@ public @interface HtmlDoc {
 	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlStylesheet(String)}/{@link RestResponse#setHtmlStylesheet(Object)} methods.
+	 * 		{@link HtmlDocConfig#stylesheet(Object)}/{@link HtmlDocBuilder#stylesheet(Object)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -413,7 +413,7 @@ public @interface HtmlDoc {
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlScript(String)} and {@link RestResponse#setHtmlScript(Object)} methods.
+	 * 		{@link HtmlDocConfig#script(Object)} and {@link HtmlDocBuilder#script(Object)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -457,7 +457,7 @@ public @interface HtmlDoc {
 	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlHead(String[])} and {@link RestResponse#setHtmlHead(String[])} methods.
+	 * 		{@link HtmlDocConfig#head(Object[])} and {@link HtmlDocBuilder#head(Object[])} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -491,7 +491,7 @@ public @interface HtmlDoc {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link RestConfig#setHtmlTemplate(Class)} and {@link RestResponse#setHtmlTemplate(Class)} methods.
+	 * 		{@link HtmlDocConfig#template(Class)} and {@link HtmlDocBuilder#template(Class)} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
