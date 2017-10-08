@@ -77,7 +77,8 @@ import org.apache.juneau.*;
  */
 public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 
-	static final String HTMLDOC = "HtmlDocSerializer.";
+	@SuppressWarnings("hiding")
+	static final String PREFIX = "HtmlDocSerializer.";
 
 	/**
 	 * <b>Configuration property:</b>  Header section contents.
@@ -107,7 +108,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_header = HTMLDOC + "header";
+	public static final String HTMLDOC_header = PREFIX + "header";
 
 	/**
 	 * <b>Configuration property:</b>  Page navigation links.
@@ -172,12 +173,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
 	 */
-	public static final String HTMLDOC_navlinks = HTMLDOC + "navlinks.list";
+	public static final String HTMLDOC_navlinks = PREFIX + "navlinks.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_navlinks} property.
 	 */
-	public static final String HTMLDOC_navlinks_add = HTMLDOC + "navlinks.list.add";
+	public static final String HTMLDOC_navlinks_add = PREFIX + "navlinks.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Nav section contents.
@@ -210,7 +211,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_nav = HTMLDOC + "nav";
+	public static final String HTMLDOC_nav = PREFIX + "nav";
 
 	/**
 	 * <b>Configuration property:</b>  Aside section contents.
@@ -248,7 +249,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_aside = HTMLDOC + "aside";
+	public static final String HTMLDOC_aside = PREFIX + "aside";
 
 	/**
 	 * <b>Configuration property:</b>  Footer section contents.
@@ -280,7 +281,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_footer = HTMLDOC + "footer";
+	public static final String HTMLDOC_footer = PREFIX + "footer";
 
 	/**
 	 * <b>Configuration property:</b>  No-results message.
@@ -307,7 +308,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_noResultsMessage = HTMLDOC + "noResultsMessage";
+	public static final String HTMLDOC_noResultsMessage = PREFIX + "noResultsMessage";
 
 	/**
 	 * <b>Configuration property:</b>  Prevent word wrap on page.
@@ -322,7 +323,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 	 */
-	public static final String HTMLDOC_nowrap = HTMLDOC + "nowrap";
+	public static final String HTMLDOC_nowrap = PREFIX + "nowrap";
 
 	/**
 	 * <b>Configuration property:</b>  Stylesheet import URLs.
@@ -343,12 +344,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_stylesheet = HTMLDOC + "stylesheet";
+	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_stylesheet} property.
 	 */
-	public static final String HTMLDOC_stylesheet_add = HTMLDOC + "stylesheet.list.add";
+	public static final String HTMLDOC_stylesheet_add = PREFIX + "stylesheet.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  CSS style code.
@@ -386,12 +387,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_style = HTMLDOC + "style.list";
+	public static final String HTMLDOC_style = PREFIX + "style.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_style} property.
 	 */
-	public static final String HTMLDOC_style_add = HTMLDOC + "style.list.add";
+	public static final String HTMLDOC_style_add = PREFIX + "style.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Javascript code.
@@ -428,12 +429,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_script = HTMLDOC + "script.list";
+	public static final String HTMLDOC_script = PREFIX + "script.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_script} property.
 	 */
-	public static final String HTMLDOC_script_add = HTMLDOC + "script.list.add";
+	public static final String HTMLDOC_script_add = PREFIX + "script.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Additional head section content.
@@ -470,12 +471,12 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_head = HTMLDOC + "head.list";
+	public static final String HTMLDOC_head = PREFIX + "head.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_head} property.
 	 */
-	public static final String HTMLDOC_links_add = HTMLDOC + "head.list.add";
+	public static final String HTMLDOC_links_add = PREFIX + "head.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  HTML document template.
@@ -503,7 +504,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_template = HTMLDOC + "template";
+	public static final String HTMLDOC_template = PREFIX + "template";
 
 
 	final String[] style, stylesheet, script, navlinks, head;

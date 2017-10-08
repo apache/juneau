@@ -48,6 +48,8 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public final class RdfSerializerContext extends SerializerContext implements RdfCommonContext {
+	
+	static final String PREFIX = "RdfSerializer.";
 
 	/**
 	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
@@ -59,7 +61,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 */
-	public static final String RDF_addLiteralTypes = "RdfSerializer.addLiteralTypes";
+	public static final String RDF_addLiteralTypes = PREFIX + "addLiteralTypes";
 
 	/**
 	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
@@ -80,7 +82,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 */
-	public static final String RDF_addRootProperty = "RdfSerializer.addRootProperty";
+	public static final String RDF_addRootProperty = PREFIX + "addRootProperty";
 
 	/**
 	 * <b>Configuration property:</b>  Auto-detect namespace usage.
@@ -99,7 +101,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
 	 * the root element is serialized.
 	 */
-	public static final String RDF_autoDetectNamespaces = "RdfSerializer.autoDetectNamespaces";
+	public static final String RDF_autoDetectNamespaces = PREFIX + "autoDetectNamespaces";
 
 	/**
 	 * <b>Configuration property:</b>  Default namespaces.
@@ -114,7 +116,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */
-	public static final String RDF_namespaces = "RdfSerializer.namespaces.list";
+	public static final String RDF_namespaces = PREFIX + "namespaces.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
@@ -137,7 +139,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String RDF_addBeanTypeProperties = "RdfSerializer.addBeanTypeProperties";
+	public static final String RDF_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
 
 
 	final boolean

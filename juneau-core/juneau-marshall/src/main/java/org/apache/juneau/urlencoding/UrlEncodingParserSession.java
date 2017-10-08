@@ -48,7 +48,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (p.isEmpty()) {
 			expandedParams = ctx.expandedParams;
 		} else {
-			expandedParams = p.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
+			expandedParams = p.getBoolean(UrlEncodingParserContext.URLENC_expandedParams, false);
 		}
 	}
 

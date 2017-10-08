@@ -1180,6 +1180,29 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this map contains a key with the specified string prefix.
+	 *
+	 * @param prefix The string prefix.
+	 * @return <jk>true</jk> if this map contains a key with the specified string prefix.
+	 */
+	public boolean containsKeyPrefix(String prefix) {
+		for (String s : super.keySet())
+			if (s.startsWith(prefix))
+				return true;
+		if (inner != null) {
+			if (inner instanceof ObjectMap) {
+				if (((ObjectMap)inner).containsKeyPrefix(prefix))
+					return true;
+				return false;
+			}
+			for (String s : inner.keySet())
+				if (s.startsWith(prefix))
+					return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this map contains the specified key, ignoring the inner map if it exists.
 	 *
 	 * @param key The key to look up.

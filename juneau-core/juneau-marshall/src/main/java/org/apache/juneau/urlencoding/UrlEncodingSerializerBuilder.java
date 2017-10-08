@@ -96,10 +96,10 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UrlEncodingContext#URLENC_expandedParams
+	 * @see UrlEncodingSerializerContext#URLENC_expandedParams
 	 */
 	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
-		return property(UrlEncodingContext.URLENC_expandedParams, value);
+		return property(UrlEncodingSerializerContext.URLENC_expandedParams, value);
 	}
 
 	/**

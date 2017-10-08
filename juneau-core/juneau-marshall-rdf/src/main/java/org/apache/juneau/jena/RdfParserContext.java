@@ -48,6 +48,8 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public final class RdfParserContext extends ParserContext implements RdfCommonContext {
+	
+	static final String PREFIX = "RdfParser.";
 
 	/**
 	 * <b>Configuration property:</b>  Trim whitespace from text elements.
@@ -62,7 +64,7 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 */
-	public static final String RDF_trimWhitespace = "RdfParser.trimWhitespace";
+	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace";
 
 	final boolean trimWhitespace, looseCollections;
 	final String rdfLanguage;

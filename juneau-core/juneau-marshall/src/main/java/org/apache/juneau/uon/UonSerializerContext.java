@@ -41,6 +41,8 @@ import org.apache.juneau.urlencoding.*;
  */
 public class UonSerializerContext extends SerializerContext {
 
+	static final String PREFIX = "UonSerializer.";
+
 	/**
 	 * <b>Configuration property:</b>  Encode non-valid URI characters.
 	 *
@@ -59,7 +61,7 @@ public class UonSerializerContext extends SerializerContext {
 	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
 	 * URL-encoding of non-valid URI characters.
 	 */
-	public static final String UON_encodeChars = "UonSerializer.encodeChars";
+	public static final String UON_encodeChars = PREFIX + "encodeChars";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
@@ -82,7 +84,7 @@ public class UonSerializerContext extends SerializerContext {
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String UON_addBeanTypeProperties = "UonSerializer.addBeanTypeProperties";
+	public static final String UON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
 
 	/**
 	 * <b>Configuration property:</b>  Format to use for query/form-data/header values.
@@ -114,7 +116,7 @@ public class UonSerializerContext extends SerializerContext {
 	 * 		interfaces.
 	 * </ul>
 	 */
-	public static final String UON_paramFormat = "UonSerializer.paramFormat";
+	public static final String UON_paramFormat = PREFIX + "paramFormat";
 
 
 	final boolean

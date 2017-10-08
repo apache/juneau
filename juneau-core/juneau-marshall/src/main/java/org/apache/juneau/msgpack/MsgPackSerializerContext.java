@@ -40,6 +40,8 @@ import org.apache.juneau.serializer.*;
  */
 public final class MsgPackSerializerContext extends SerializerContext {
 
+	static final String PREFIX = "MsgPackSerializer.";
+
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 *
@@ -61,7 +63,7 @@ public final class MsgPackSerializerContext extends SerializerContext {
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String MSGPACK_addBeanTypeProperties = "MsgPackSerializer.addBeanTypeProperties";
+	public static final String MSGPACK_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
 
 	final boolean
 		addBeanTypeProperties;

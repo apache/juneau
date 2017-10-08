@@ -97,10 +97,10 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UrlEncodingContext#URLENC_expandedParams
+	 * @see UrlEncodingParserContext#URLENC_expandedParams
 	 */
 	public UrlEncodingParserBuilder expandedParams(boolean value) {
-		return property(UrlEncodingContext.URLENC_expandedParams, value);
+		return property(UrlEncodingParserContext.URLENC_expandedParams, value);
 	}
 
 	@Override /* UonParser */

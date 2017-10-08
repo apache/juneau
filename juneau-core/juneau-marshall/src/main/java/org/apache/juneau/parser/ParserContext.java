@@ -20,6 +20,8 @@ import org.apache.juneau.json.*;
  */
 public class ParserContext extends BeanContext {
 
+	static final String PREFIX = "Parser.";
+
 	/**
 	 * Default context with all default values.
 	 */
@@ -40,7 +42,7 @@ public class ParserContext extends BeanContext {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 */
-	public static final String PARSER_trimStrings = "Parser.trimStrings";
+	public static final String PARSER_trimStrings = PREFIX + "trimStrings";
 
 	/**
 	 * <b>Configuration property:</b>  Strict mode.
@@ -82,7 +84,7 @@ public class ParserContext extends BeanContext {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String PARSER_strict = "Parser.strict";
+	public static final String PARSER_strict = PREFIX + "strict";
 
 	/**
 	 * <b>Configuration property:</b>  Input stream charset.
@@ -100,7 +102,7 @@ public class ParserContext extends BeanContext {
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 	 */
-	public static final String PARSER_inputStreamCharset = "Parser.inputStreamCharset";
+	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset";
 
 	/**
 	 * <b>Configuration property:</b>  File charset.
@@ -121,7 +123,7 @@ public class ParserContext extends BeanContext {
 	 * <p>
 	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
 	 */
-	public static final String PARSER_fileCharset = "Parser.fileCharset";
+	public static final String PARSER_fileCharset = PREFIX + "fileCharset";
 
 	/**
 	 * <b>Configuration property:</b>  Parser listener.
@@ -136,7 +138,7 @@ public class ParserContext extends BeanContext {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 */
-	public static final String PARSER_listener = "PARSER.listener";
+	public static final String PARSER_listener = PREFIX + "listener";
 
 	final boolean trimStrings, strict;
 	final String inputStreamCharset, fileCharset;

@@ -54,7 +54,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (p.isEmpty()) {
 			expandedParams = ctx.expandedParams;
 		} else {
-			expandedParams = p.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
+			expandedParams = p.getBoolean(UrlEncodingSerializerContext.URLENC_expandedParams, false);
 		}
 	}
 

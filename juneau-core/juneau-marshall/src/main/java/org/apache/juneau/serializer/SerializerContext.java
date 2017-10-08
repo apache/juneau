@@ -20,6 +20,8 @@ import org.apache.juneau.annotation.*;
  */
 public class SerializerContext extends BeanContext {
 
+	static final String PREFIX = "Serializer.";
+
 	/**
 	 * Default context with all default values.
 	 */
@@ -41,7 +43,7 @@ public class SerializerContext extends BeanContext {
 	 * If this depth is exceeded, an exception is thrown.
 	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
 	 */
-	public static final String SERIALIZER_maxDepth = "Serializer.maxDepth";
+	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth";
 
 	/**
 	 * <b>Configuration property:</b>  Initial depth.
@@ -57,7 +59,7 @@ public class SerializerContext extends BeanContext {
 	 * The initial indentation level at the root.
 	 * Useful when constructing document fragments that need to be indented at a certain level.
 	 */
-	public static final String SERIALIZER_initialDepth = "Serializer.initialDepth";
+	public static final String SERIALIZER_initialDepth = PREFIX + "initialDepth";
 
 	/**
 	 * <b>Configuration property:</b>  Automatically detect POJO recursions.
@@ -88,7 +90,7 @@ public class SerializerContext extends BeanContext {
 	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_detectRecursions = "Serializer.detectRecursions";
+	public static final String SERIALIZER_detectRecursions = PREFIX + "detectRecursions";
 
 	/**
 	 * <b>Configuration property:</b>  Ignore recursion errors.
@@ -108,7 +110,7 @@ public class SerializerContext extends BeanContext {
 	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * Otherwise, an exception is thrown.
 	 */
-	public static final String SERIALIZER_ignoreRecursions = "Serializer.ignoreRecursions";
+	public static final String SERIALIZER_ignoreRecursions = PREFIX + "ignoreRecursions";
 
 	/**
 	 * <b>Configuration property:</b>  Use whitespace.
@@ -126,7 +128,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * This setting does not apply to the MessagePack serializer.
 	 */
-	public static final String SERIALIZER_useWhitespace = "Serializer.useWhitespace";
+	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace";
 
 	/**
 	 * <b>Configuration property:</b>  Maximum indentation.
@@ -144,7 +146,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * This setting does not apply to the MessagePack or RDF serializers.
 	 */
-	public static final String SERIALIZER_maxIndent = "Serializer.maxIndent";
+	public static final String SERIALIZER_maxIndent = PREFIX + "maxIndent";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
@@ -163,7 +165,7 @@ public class SerializerContext extends BeanContext {
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
 	 * the value type.
 	 */
-	public static final String SERIALIZER_addBeanTypeProperties = "Serializer.addBeanTypeProperties";
+	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
 
 	/**
 	 * <b>Configuration property:</b>  Quote character.
@@ -181,7 +183,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * This setting does not apply to the MessagePack or RDF serializers.
 	 */
-	public static final String SERIALIZER_quoteChar = "Serializer.quoteChar";
+	public static final String SERIALIZER_quoteChar = PREFIX + "quoteChar";
 
 	/**
 	 * <b>Configuration property:</b>  Trim null bean property values.
@@ -203,7 +205,7 @@ public class SerializerContext extends BeanContext {
 	 * 		Map entries with <jk>null</jk> values will be lost.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_trimNullProperties = "Serializer.trimNullProperties";
+	public static final String SERIALIZER_trimNullProperties = PREFIX + "trimNullProperties";
 
 	/**
 	 * <b>Configuration property:</b>  Trim empty lists and arrays.
@@ -227,7 +229,7 @@ public class SerializerContext extends BeanContext {
 	 * 		Bean properties with empty list values will not be set.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_trimEmptyCollections = "Serializer.trimEmptyLists";
+	public static final String SERIALIZER_trimEmptyCollections = PREFIX + "trimEmptyLists";
 
 	/**
 	 * <b>Configuration property:</b>  Trim empty maps.
@@ -249,7 +251,7 @@ public class SerializerContext extends BeanContext {
 	 * 		Bean properties with empty map values will not be set.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_trimEmptyMaps = "Serializer.trimEmptyMaps";
+	public static final String SERIALIZER_trimEmptyMaps = PREFIX + "trimEmptyMaps";
 
 	/**
 	 * <b>Configuration property:</b>  Trim strings.
@@ -264,7 +266,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
-	public static final String SERIALIZER_trimStrings = "Serializer.trimStrings";
+	public static final String SERIALIZER_trimStrings = PREFIX + "trimStrings";
 
 	/**
 	 * <b>Configuration property:</b>  URI context bean.
@@ -284,7 +286,7 @@ public class SerializerContext extends BeanContext {
 	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>
 	 * </p>
 	 */
-	public static final String SERIALIZER_uriContext = "Serializer.uriContext";
+	public static final String SERIALIZER_uriContext = PREFIX + "uriContext";
 
 	/**
 	 * <b>Configuration property:</b>  URI resolution.
@@ -315,7 +317,7 @@ public class SerializerContext extends BeanContext {
 	 * 		- Don't do any URL resolution.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_uriResolution = "Serializer.uriResolution";
+	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution";
 
 	/**
 	 * <b>Configuration property:</b>  URI relativity.
@@ -344,7 +346,7 @@ public class SerializerContext extends BeanContext {
 	 * 		- Relative URIs should be considered relative to the request URI.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_uriRelativity = "Serializer.uriRelativity";
+	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity";
 
 	/**
 	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
@@ -359,7 +361,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
-	public static final String SERIALIZER_sortCollections = "Serializer.sortCollections";
+	public static final String SERIALIZER_sortCollections = PREFIX + "sortCollections";
 
 	/**
 	 * <b>Configuration property:</b>  Sort maps alphabetically.
@@ -374,7 +376,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
-	public static final String SERIALIZER_sortMaps = "Serializer.sortMaps";
+	public static final String SERIALIZER_sortMaps = PREFIX + "sortMaps";
 
 	/**
 	 * <b>Configuration property:</b>  Abridged output.
@@ -394,7 +396,7 @@ public class SerializerContext extends BeanContext {
 	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
 	 * this setting is disabled, but not added when it is enabled.
 	 */
-	public static final String SERIALIZER_abridged = "Serializer.abridged";
+	public static final String SERIALIZER_abridged = PREFIX + "abridged";
 
 	/**
 	 * <b>Configuration property:</b>  Serializer listener.
@@ -409,7 +411,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 */
-	public static final String SERIALIZER_listener = "Serializer.listener";
+	public static final String SERIALIZER_listener = PREFIX + "listener";
 
 
 	final int maxDepth, initialDepth, maxIndent;

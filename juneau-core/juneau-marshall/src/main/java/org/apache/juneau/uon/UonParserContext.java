@@ -41,6 +41,8 @@ import org.apache.juneau.urlencoding.*;
  */
 public class UonParserContext extends ParserContext {
 
+	static final String PREFIX = "UonParser.";
+
 	/**
 	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
 	 *
@@ -55,7 +57,7 @@ public class UonParserContext extends ParserContext {
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * before being passed to this parser.
 	 */
-	public static final String UON_decodeChars = "UonParser.decodeChars";
+	public static final String UON_decodeChars = PREFIX + "decodeChars";
 
 	final boolean
 		decodeChars;

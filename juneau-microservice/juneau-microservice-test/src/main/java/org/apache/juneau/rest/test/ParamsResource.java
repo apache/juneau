@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -285,7 +285,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name=POST, path="/testFormPostsWithMultiParamsUsingProperty",
 		properties={
-			@Property(name=UrlEncodingContext.URLENC_expandedParams, value="true")
+			@Property(name=UrlEncodingSerializerContext.URLENC_expandedParams, value="true"),
+			@Property(name=UrlEncodingParserContext.URLENC_expandedParams, value="true")
 		}
 	)
 	public DTO2s.B testFormPostsWithMultiParamsViaProperty(@Body DTO2s.B content) throws Exception {

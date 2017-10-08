@@ -40,6 +40,8 @@ import org.apache.juneau.serializer.*;
  */
 public final class JsonSerializerContext extends SerializerContext {
 
+	static final String PREFIX = "JsonSerializer.";
+
 	/**
 	 * <b>Configuration property:</b>  Simple JSON mode.
 	 *
@@ -54,7 +56,7 @@ public final class JsonSerializerContext extends SerializerContext {
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
 	 */
-	public static final String JSON_simpleMode = "JsonSerializer.simpleMode";
+	public static final String JSON_simpleMode = PREFIX + "simpleMode";
 
 	/**
 	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
@@ -72,7 +74,7 @@ public final class JsonSerializerContext extends SerializerContext {
 	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
 	 * <xt>&lt;\/script&gt;</xt>.
 	 */
-	public static final String JSON_escapeSolidus = "JsonSerializer.escapeSolidus";
+	public static final String JSON_escapeSolidus = PREFIX + "escapeSolidus";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
@@ -95,7 +97,7 @@ public final class JsonSerializerContext extends SerializerContext {
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String JSON_addBeanTypeProperties = "JsonSerializer.addBeanTypeProperties";
+	public static final String JSON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
 
 	final boolean
 		simpleMode,

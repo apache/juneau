@@ -27,6 +27,26 @@ import org.apache.juneau.uon.*;
  */
 public class UrlEncodingParserContext extends UonParserContext {
 
+	static final String PREFIX = "UrlEncodingParser.";
+
+	/**
+	 * Parser bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
+	 *
+	 * <p>
+	 * This is the parser-side equivalent of the {@link UrlEncodingSerializerContext#URLENC_expandedParams} setting.
+	 *
+	 * <p>
+	 * This option only applies to beans.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>
+	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
+	 * 		is added to it.
+	 * </ul>
+	 */
+	public static final String URLENC_expandedParams = PREFIX + "expandedParams";
+
 	final boolean
 		expandedParams;
 
@@ -40,7 +60,7 @@ public class UrlEncodingParserContext extends UonParserContext {
 	 */
 	public UrlEncodingParserContext(PropertyStore ps) {
 		super(ps);
-		this.expandedParams = ps.getProperty(UrlEncodingContext.URLENC_expandedParams, boolean.class, false);
+		this.expandedParams = ps.getProperty(URLENC_expandedParams, boolean.class, false);
 	}
 
 	@Override /* Context */

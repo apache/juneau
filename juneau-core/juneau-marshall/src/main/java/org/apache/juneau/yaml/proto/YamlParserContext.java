@@ -55,7 +55,7 @@ public final class YamlParserContext extends ParserContext {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("JsonParserContext", new ObjectMap()
+			.append("YamlParserContext", new ObjectMap()
 		);
 	}
 }

@@ -41,6 +41,8 @@ import org.apache.juneau.xml.*;
  */
 public class HtmlSerializerContext extends XmlSerializerContext {
 
+	static final String PREFIX = "HtmlSerializer.";
+
 	/**
 	 * <b>Configuration property:</b>  Anchor text source.
 	 *
@@ -72,7 +74,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 		(e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
 	 * </ul>
 	 */
-	public static final String HTML_uriAnchorText = "HtmlSerializer.uriAnchorText";
+	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText";
 
 	/** Constant for {@link HtmlSerializerContext#HTML_uriAnchorText} property. */
 	public static final String PROPERTY_NAME = "PROPERTY_NAME";
@@ -100,7 +102,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
 	 */
-	public static final String HTML_detectLinksInStrings = "HtmlSerializer.detectLinksInStrings";
+	public static final String HTML_detectLinksInStrings = PREFIX + "detectLinksInStrings";
 
 	/**
 	 * <b>Configuration property:</b>  Look for link labels in the <js>"label"</js> parameter of the URL.
@@ -118,7 +120,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * <p>
 	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
 	 */
-	public static final String HTML_lookForLabelParameters = "HtmlSerializer.lookForLabelParameters";
+	public static final String HTML_lookForLabelParameters = PREFIX + "lookForLabelParameters";
 
 	/**
 	 * <b>Configuration property:</b>  The parameter name to use when using {@link #HTML_lookForLabelParameters}.
@@ -130,7 +132,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 */
-	public static final String HTML_labelParameter = "HtmlSerializer.labelParameter";
+	public static final String HTML_labelParameter = PREFIX + "labelParameter";
 
 	/**
 	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
@@ -142,7 +144,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 */
-	public static final String HTML_addKeyValueTableHeaders = "HtmlSerializer.addKeyValueTableHeaders";
+	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
@@ -165,7 +167,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String HTML_addBeanTypeProperties = "HtmlSerializer.addBeanTypeProperties";
+	public static final String HTML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
 
 
 	final String uriAnchorText;

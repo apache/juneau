@@ -43,6 +43,8 @@ import org.apache.juneau.parser.*;
  */
 public class XmlParserContext extends ParserContext {
 
+	static final String PREFIX = "XmlParser.";
+
 	/**
 	 * <b>Configuration property:</b>  Enable validation.
 	 *
@@ -57,7 +59,7 @@ public class XmlParserContext extends ParserContext {
 	 * If <jk>true</jk>, XML document will be validated.
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 */
-	public static final String XML_validating = "XmlParser.validating";
+	public static final String XML_validating = PREFIX + "validating";
 
 	/**
 	 * <b>Configuration property:</b>  XML reporter.
@@ -77,7 +79,7 @@ public class XmlParserContext extends ParserContext {
 	 * 	<li>Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 */
-	public static final String XML_reporter = "XmlParser.reporter";
+	public static final String XML_reporter = PREFIX + "reporter";
 
 	/**
 	 * <b>Configuration property:</b>  XML resolver.
@@ -92,7 +94,7 @@ public class XmlParserContext extends ParserContext {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 */
-	public static final String XML_resolver = "XmlParser.resolver";
+	public static final String XML_resolver = PREFIX + "resolver";
 
 	/**
 	 * <b>Configuration property:</b>  XML event allocator.
@@ -107,7 +109,7 @@ public class XmlParserContext extends ParserContext {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 */
-	public static final String XML_eventAllocator = "XmlParser.eventAllocator";
+	public static final String XML_eventAllocator = PREFIX + "eventAllocator";
 
 	/**
 	 * <b>Configuration property:</b>  Preserve root element during generalized parsing.
@@ -138,7 +140,7 @@ public class XmlParserContext extends ParserContext {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String XML_preserveRootElement = "XmlParser.preserveRootElement";
+	public static final String XML_preserveRootElement = PREFIX + "preserveRootElement";
 
 	final boolean
 		validating,

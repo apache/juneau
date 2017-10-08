@@ -44,6 +44,8 @@ import org.apache.juneau.xml.*;
  */
 public final class SoapXmlSerializerContext extends XmlSerializerContext {
 
+	static final String PREFIX = "SoapXmlSerializer.";
+
 	/**
 	 * Constructor
 	 *
@@ -65,5 +67,5 @@ public final class SoapXmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2003/05/soap-envelope"</js>
 	 * </ul>
 	 */
-	public static final String SOAPXML_SOAPAction = "SoapXmlSerializer.SOAPAction";
+	public static final String SOAPXML_SOAPAction = PREFIX + "SOAPAction";
 }

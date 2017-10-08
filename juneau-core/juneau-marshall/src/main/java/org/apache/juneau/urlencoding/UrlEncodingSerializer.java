@@ -14,7 +14,7 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.uon.UonSerializerContext.*;
-import static org.apache.juneau.urlencoding.UrlEncodingContext.*;
+import static org.apache.juneau.urlencoding.UrlEncodingSerializerContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;

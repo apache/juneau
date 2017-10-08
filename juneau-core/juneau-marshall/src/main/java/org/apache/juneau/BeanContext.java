@@ -59,7 +59,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
  * These <code>ClassMeta</code> objects are time-consuming to construct.
- * Therefore, instances of {@link BeanContext} that share the same <js>"BeanContext.*"</js> property values share
+ * Therefore, instances of {@link BeanContext} that share the same <js>"Bean.*"</js> property values share
  * the same cache.  This allows for efficient reuse of <code>ClassMeta</code> objects so that the information about
  * classes only needs to be calculated once.
  * Because of this, many of the properties defined on the {@link BeanContext} class cannot be overridden on the session.
@@ -230,11 +230,13 @@ import org.apache.juneau.transform.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {
 
+	static final String PREFIX = "Bean.";
+
 	/**
 	 * <b>Configuration property:</b>  Beans require no-arg constructors.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireDefaultConstructor"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beansRequireDefaultConstructor"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -246,13 +248,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 */
-	public static final String BEAN_beansRequireDefaultConstructor = "BeanContext.beansRequireDefaultConstructor";
+	public static final String BEAN_beansRequireDefaultConstructor = PREFIX + "beansRequireDefaultConstructor";
 
 	/**
 	 * <b>Configuration property:</b>  Beans require {@link Serializable} interface.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSerializable"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beansRequireSerializable"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -264,13 +266,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 */
-	public static final String BEAN_beansRequireSerializable = "BeanContext.beansRequireSerializable";
+	public static final String BEAN_beansRequireSerializable = PREFIX + "beansRequireSerializable";
 
 	/**
 	 * <b>Configuration property:</b>  Beans require setters for getters.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSettersForGetters"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beansRequireSettersForGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -280,13 +282,13 @@ public class BeanContext extends Context {
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * Otherwise, they will be ignored.
 	 */
-	public static final String BEAN_beansRequireSettersForGetters = "BeanContext.beansRequireSettersForGetters";
+	public static final String BEAN_beansRequireSettersForGetters = PREFIX + "beansRequireSettersForGetters";
 
 	/**
 	 * <b>Configuration property:</b>  Beans require at least one property.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSomeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beansRequireSomeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -298,14 +300,14 @@ public class BeanContext extends Context {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 */
-	public static final String BEAN_beansRequireSomeProperties = "BeanContext.beansRequireSomeProperties";
+	public static final String BEAN_beansRequireSomeProperties = PREFIX + "beansRequireSomeProperties";
 
 	/**
 	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * value.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beanMapPutReturnsOldValue"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -318,25 +320,25 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty.
 	 */
-	public static final String BEAN_beanMapPutReturnsOldValue = "BeanContext.beanMapPutReturnsOldValue";
+	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + "beanMapPutReturnsOldValue";
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean constructors with the specified minimum visibility.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beanConstructorVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 */
-	public static final String BEAN_beanConstructorVisibility = "BeanContext.beanConstructorVisibility";
+	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility";
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean classes with the specified minimum visibility.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beanClassVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -347,13 +349,13 @@ public class BeanContext extends Context {
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class.
 	 */
-	public static final String BEAN_beanClassVisibility = "BeanContext.beanClassVisibility";
+	public static final String BEAN_beanClassVisibility = PREFIX + "beanClassVisibility";
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean fields with the specified minimum visibility.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beanFieldVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -367,13 +369,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Use {@link Visibility#NONE} to prevent bean fields from being interpreted as bean properties altogether.
 	 */
-	public static final String BEAN_beanFieldVisibility = "BeanContext.beanFieldVisibility";
+	public static final String BEAN_beanFieldVisibility = PREFIX + "beanFieldVisibility";
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean methods with the specified minimum visibility.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.methodVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -384,13 +386,13 @@ public class BeanContext extends Context {
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then the method
 	 * will not be interpreted as a bean getter or setter.
 	 */
-	public static final String BEAN_methodVisibility = "BeanContext.methodVisibility";
+	public static final String BEAN_methodVisibility = PREFIX + "methodVisibility";
 
 	/**
 	 * <b>Configuration property:</b>  Use Java {@link Introspector} for determining bean properties.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.useJavaBeanIntrospector"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.useJavaBeanIntrospector"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -400,13 +402,13 @@ public class BeanContext extends Context {
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * Most {@link Bean @Bean} annotations will be ignored.
 	 */
-	public static final String BEAN_useJavaBeanIntrospector = "BeanContext.useJavaBeanIntrospector";
+	public static final String BEAN_useJavaBeanIntrospector = PREFIX + "useJavaBeanIntrospector";
 
 	/**
 	 * <b>Configuration property:</b>  Use interface proxies.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.useInterfaceProxies"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.useInterfaceProxies"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -416,13 +418,13 @@ public class BeanContext extends Context {
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 */
-	public static final String BEAN_useInterfaceProxies = "BeanContext.useInterfaceProxies";
+	public static final String BEAN_useInterfaceProxies = PREFIX + "useInterfaceProxies";
 
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownBeanProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.ignoreUnknownBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -432,13 +434,13 @@ public class BeanContext extends Context {
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public static final String BEAN_ignoreUnknownBeanProperties = "BeanContext.ignoreUnknownBeanProperties";
+	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + "ignoreUnknownBeanProperties";
 
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties with null values.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownNullBeanProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.ignoreUnknownNullBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -448,13 +450,13 @@ public class BeanContext extends Context {
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public static final String BEAN_ignoreUnknownNullBeanProperties = "BeanContext.ignoreUnknownNullBeanProperties";
+	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + "ignoreUnknownNullBeanProperties";
 
 	/**
 	 * <b>Configuration property:</b>  Ignore properties without setters.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignorePropertiesWithoutSetters"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.ignorePropertiesWithoutSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -464,13 +466,13 @@ public class BeanContext extends Context {
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public static final String BEAN_ignorePropertiesWithoutSetters = "BeanContext.ignorePropertiesWithoutSetters";
+	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + "ignorePropertiesWithoutSetters";
 
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on getters.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnGetters"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.ignoreInvocationExceptionsOnGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -480,13 +482,13 @@ public class BeanContext extends Context {
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 */
-	public static final String BEAN_ignoreInvocationExceptionsOnGetters = "BeanContext.ignoreInvocationExceptionsOnGetters";
+	public static final String BEAN_ignoreInvocationExceptionsOnGetters = PREFIX + "ignoreInvocationExceptionsOnGetters";
 
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on setters.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnSetters"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.ignoreInvocationExceptionsOnSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -496,13 +498,13 @@ public class BeanContext extends Context {
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 */
-	public static final String BEAN_ignoreInvocationExceptionsOnSetters = "BeanContext.ignoreInvocationExceptionsOnSetters";
+	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + "ignoreInvocationExceptionsOnSetters";
 
 	/**
 	 * <b>Configuration property:</b>  Sort bean properties in alphabetical order.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.sortProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.sortProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -519,13 +521,13 @@ public class BeanContext extends Context {
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
 	 * in the Java file.
 	 */
-	public static final String BEAN_sortProperties = "BeanContext.sortProperties";
+	public static final String BEAN_sortProperties = PREFIX + "sortProperties";
 
 	/**
 	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanPackages.set"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.notBeanPackages.set"</js>
 	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>
 	 * 	<ul>
@@ -550,23 +552,23 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Note that you can specify prefix patterns to include all subpackages.
 	 */
-	public static final String BEAN_notBeanPackages = "BeanContext.notBeanPackages.set";
+	public static final String BEAN_notBeanPackages = PREFIX + "notBeanPackages.set";
 
 	/**
 	 * <b>Configuration property:</b>  Add to packages whose classes should not be considered beans.
 	 */
-	public static final String BEAN_notBeanPackages_add = "BeanContext.notBeanPackages.set.add";
+	public static final String BEAN_notBeanPackages_add = PREFIX + "notBeanPackages.set.add";
 
 	/**
 	 * <b>Configuration property:</b>  Remove from packages whose classes should not be considered beans.
 	 */
-	public static final String BEAN_notBeanPackages_remove = "BeanContext.notBeanPackages.set.remove";
+	public static final String BEAN_notBeanPackages_remove = PREFIX + "notBeanPackages.set.remove";
 
 	/**
 	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanClasses.set"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.notBeanClasses.set"</js>
 	 * 	<li><b>Data type:</b> <code>Set&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty set
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -576,23 +578,23 @@ public class BeanContext extends Context {
 	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
 	 * bean-like.
 	 */
-	public static final String BEAN_notBeanClasses = "BeanContext.notBeanClasses.set";
+	public static final String BEAN_notBeanClasses = PREFIX + "notBeanClasses.set";
 
 	/**
 	 * <b>Configuration property:</b>  Add to classes that should not be considered beans.
 	 */
-	public static final String BEAN_notBeanClasses_add = "BeanContext.notBeanClasses.set.add";
+	public static final String BEAN_notBeanClasses_add = PREFIX + "notBeanClasses.set.add";
 
 	/**
 	 * <b>Configuration property:</b>  Remove from classes that should not be considered beans.
 	 */
-	public static final String BEAN_notBeanClasses_remove = "BeanContext.notBeanClasses.set.remove";
+	public static final String BEAN_notBeanClasses_remove = PREFIX + "notBeanClasses.set.remove";
 
 	/**
 	 * <b>Configuration property:</b>  Bean filters to apply to beans.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanFilters.list"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beanFilters.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -616,23 +618,23 @@ public class BeanContext extends Context {
 	 * 		All other bean properties will be ignored.
 	 * </ul>
 	 */
-	public static final String BEAN_beanFilters = "BeanContext.beanFilters.list";
+	public static final String BEAN_beanFilters = PREFIX + "beanFilters.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to bean filters.
 	 */
-	public static final String BEAN_beanFilters_add = "BeanContext.beanFilters.list.add";
+	public static final String BEAN_beanFilters_add = PREFIX + "beanFilters.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Remove from bean filters.
 	 */
-	public static final String BEAN_beanFilters_remove = "BeanContext.beanFilters.list.remove";
+	public static final String BEAN_beanFilters_remove = PREFIX + "beanFilters.list.remove";
 
 	/**
 	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.pojoSwaps.list"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.pojoSwaps.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -650,23 +652,23 @@ public class BeanContext extends Context {
 	 * When multiple swaps are applicable to the same class, the media type pattern defined by
 	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes()} are used to come up with the best match.
 	 */
-	public static final String BEAN_pojoSwaps = "BeanContext.pojoSwaps.list";
+	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to POJO swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_add = "BeanContext.pojoSwaps.list.add";
+	public static final String BEAN_pojoSwaps_add = PREFIX + "pojoSwaps.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Remove from POJO swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_remove = "BeanContext.pojoSwaps.list.remove";
+	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.list.remove";
 
 	/**
 	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.map"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.implClasses.map"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;Class,Class&gt;</code>
 	 * 	<li><b>Default:</b> empty map
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -677,18 +679,18 @@ public class BeanContext extends Context {
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 	 * parse).
 	 */
-	public static final String BEAN_implClasses = "BeanContext.implClasses.map";
+	public static final String BEAN_implClasses = PREFIX + "implClasses.map";
 
 	/**
 	 * <b>Configuration property:</b>  Add an implementation class.
 	 */
-	public static final String BEAN_implClasses_put = "BeanContext.implClasses.map.put";
+	public static final String BEAN_implClasses_put = PREFIX + "implClasses.map.put";
 
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.includeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b> <code>{}</code>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -709,18 +711,18 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 */
-	public static final String BEAN_includeProperties = "BeanContext.includeProperties.map";
+	public static final String BEAN_includeProperties = PREFIX + "includeProperties.map";
 
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
 	 */
-	public static final String BEAN_includeProperties_put = "BeanContext.includeProperties.map.put";
+	public static final String BEAN_includeProperties_put = PREFIX + "includeProperties.map.put";
 
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.excludeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b> <code>{}</code>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -741,18 +743,18 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 */
-	public static final String BEAN_excludeProperties = "BeanContext.excludeProperties.map";
+	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.map";
 
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
 	 */
-	public static final String BEAN_excludeProperties_put = "BeanContext.excludeProperties.map.put";
+	public static final String BEAN_excludeProperties_put = PREFIX + "excludeProperties.map.put";
 
 	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.list"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beanDictionary.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -768,35 +770,35 @@ public class BeanContext extends Context {
 	 * 		annotations.
 	 * </ul>
 	 */
-	public static final String BEAN_beanDictionary = "BeanContext.beanDictionary.list";
+	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to bean dictionary.
 	 */
-	public static final String BEAN_beanDictionary_add = "BeanContext.beanDictionary.list.add";
+	public static final String BEAN_beanDictionary_add = PREFIX + "beanDictionary.list.add";
 
 	/**
 	 * <b>Configuration property:</b>  Remove from bean dictionary.
 	 */
-	public static final String BEAN_beanDictionary_remove = "BeanContext.beanDictionary.list.remove";
+	public static final String BEAN_beanDictionary_remove = PREFIX + "beanDictionary.list.remove";
 
 	/**
 	 * <b>Configuration property:</b>  Name to use for the bean type properties used to represent a bean type.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanTypePropertyName"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.beanTypePropertyName"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"_type"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 */
-	public static final String BEAN_beanTypePropertyName = "BeanContext.beanTypePropertyName";
+	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName";
 
 	/**
 	 * <b>Configuration property:</b>  Default parser to use when converting <code>Strings</code> to POJOs.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.defaultParser"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.defaultParser"</js>
 	 * 	<li><b>Data type:</b> <code>Class</code>
 	 * 	<li><b>Default:</b> {@link JsonSerializer}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -805,13 +807,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
-	public static final String BEAN_defaultParser = "BeanContext.defaultParser";
+	public static final String BEAN_defaultParser = PREFIX + "defaultParser";
 
 	/**
 	 * <b>Configuration property:</b>  Locale.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.locale"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.locale"</js>
 	 * 	<li><b>Data type:</b> <code>Locale</code>
 	 * 	<li><b>Default:</b> <code>Locale.getDefault()</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -820,13 +822,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
-	public static final String BEAN_locale = "BeanContext.locale";
+	public static final String BEAN_locale = PREFIX + "locale";
 
 	/**
 	 * <b>Configuration property:</b>  TimeZone.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.timeZone"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.timeZone"</js>
 	 * 	<li><b>Data type:</b> <code>TimeZone</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -835,13 +837,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
-	public static final String BEAN_timeZone = "BeanContext.timeZone";
+	public static final String BEAN_timeZone = PREFIX + "timeZone";
 
 	/**
 	 * <b>Configuration property:</b>  Media type.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.mediaType"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.mediaType"</js>
 	 * 	<li><b>Data type:</b> <code>MediaType</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -850,13 +852,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
 	 */
-	public static final String BEAN_mediaType = "BeanContext.mediaType";
+	public static final String BEAN_mediaType = PREFIX + "mediaType";
 
 	/**
 	 * <b>Configuration property:</b>  Debug mode.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.debug"</js>
+	 * 	<li><b>Name:</b> <js>"Bean.debug"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -880,7 +882,7 @@ public class BeanContext extends Context {
 	 * 		in order to determine how that method was invoked.
 	 * </ul>
 	 */
-	public static final String BEAN_debug = "BeanContext.debug";
+	public static final String BEAN_debug = PREFIX + "debug";
 
 	/*
 	 * The default package pattern exclusion list.
@@ -990,7 +992,7 @@ public class BeanContext extends Context {
 	public BeanContext(PropertyStore ps) {
 		super(ps);
 
-		PropertyStore.PropertyMap pm = ps.getPropertyMap("BeanContext");
+		PropertyStore.PropertyMap pm = ps.getPropertyMap("Bean");
 		hashCode = pm.hashCode();
 		classLoader = ps.classLoader;
 		defaultParser = ps.defaultParser;
