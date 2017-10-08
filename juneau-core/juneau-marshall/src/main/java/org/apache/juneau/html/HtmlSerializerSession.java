@@ -14,7 +14,6 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.html.HtmlSerializerContext.*;
-import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.xml.XmlUtils.*;
 
 import java.io.*;
@@ -68,7 +67,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		super(ctx, args);
 		String labelParameter;
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(HtmlSerializerContext.PREFIX)) {
 			anchorText = Enum.valueOf(AnchorText.class, ctx.uriAnchorText);
 			detectLinksInStrings = ctx.detectLinksInStrings;
 			lookForLabelParameters = ctx.lookForLabelParameters;
@@ -81,9 +80,22 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			lookForLabelParameters = p.getBoolean(HTML_lookForLabelParameters, ctx.lookForLabelParameters);
 			labelParameter = p.getString(HTML_labelParameter, ctx.labelParameter);
 			addKeyValueTableHeaders = p.getBoolean(HTML_addKeyValueTableHeaders, ctx.addKeyValueTableHeaders);
-			addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
+			addBeanTypeProperties = p.getBoolean(HTML_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlSerializerSession", new ObjectMap()
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
+				.append("anchorText", anchorText)
+				.append("detectLinksInStrings", detectLinksInStrings)
+				.append("labelPattern", labelPattern)
+				.append("lookForLabelParameters", lookForLabelParameters)
+			);
 	}
 
 	/**

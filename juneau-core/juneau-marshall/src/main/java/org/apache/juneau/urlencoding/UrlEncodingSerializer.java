@@ -259,7 +259,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 					return o.toString();
 				if (cm.isCharSequence()) {
 					String s = o.toString();
-					boolean ptt = (plainTextParams != null ? plainTextParams : ctx.plainTextParams());
+					boolean ptt = (plainTextParams != null ? plainTextParams : ctx.getParamFormat().equals("PLAINTEXT"));
 					if (ptt || s.isEmpty() || ! UonUtils.needsQuotes(s))
 						return (urlEncode ? urlEncode(s) : s);
 				}

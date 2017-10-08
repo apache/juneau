@@ -61,7 +61,7 @@ public class XmlParserSession extends ReaderParserSession {
 	protected XmlParserSession(XmlParserContext ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(XmlParserContext.PREFIX)) {
 			validating = ctx.validating;
 			reporter = ctx.reporter;
 			resolver = ctx.resolver;
@@ -74,6 +74,18 @@ public class XmlParserSession extends ReaderParserSession {
 			eventAllocator = (XMLEventAllocator)p.getWithDefault(XML_eventAllocator, ctx.eventAllocator);
 			preserveRootElement = p.getBoolean(XML_preserveRootElement, ctx.preserveRootElement);
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlParser", new ObjectMap()
+				.append("eventAllocator", eventAllocator)
+				.append("preserveRootElement", preserveRootElement)
+				.append("reporter", reporter)
+				.append("resolver", resolver)
+				.append("validating", validating)
+			);
 	}
 
 	/**

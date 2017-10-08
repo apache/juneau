@@ -58,7 +58,7 @@ public class BeanSession extends Session {
 		this.ctx = ctx;
 		Locale _locale = null;
 		ObjectMap p = getProperties();
-		if (p == null || p.isEmpty()) {
+		if (p == null || ! p.containsKeyPrefix(BeanContext.PREFIX)) {
 			_locale = (args.locale != null ? args.locale : ctx.locale);
 			this.timeZone = (args.timeZone != null ? args.timeZone : ctx.timeZone);
 			this.debug = ctx.debug;
@@ -70,6 +70,18 @@ public class BeanSession extends Session {
 			this.mediaType = (args.mediaType != null ? args.mediaType : getPropertyWithDefault(BEAN_mediaType, ctx.mediaType, MediaType.class));
 		}
 		this.locale = _locale == null ? Locale.getDefault() : _locale;
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.appendAll(ctx.asMap())
+			.append("BeanSession", new ObjectMap()
+				.append("debug", debug)
+				.append("locale", locale)
+				.append("mediaType", mediaType)
+				.append("timeZone", timeZone)
+			);
 	}
 
 	/**
@@ -1076,16 +1088,6 @@ public class BeanSession extends Session {
 	 */
 	public final MediaType getMediaType() {
 		return mediaType;
-	}
-
-	@Override /* Session */
-	public final ObjectMap asMap() {
-		return super.asMap()
-			.appendAll(ctx.asMap())
-			.append("BeanSession", new ObjectMap()
-				.append("locale", locale)
-				.append("timeZone", timeZone)
-			);
 	}
 
 	@Override /* Session */

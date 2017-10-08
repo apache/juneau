@@ -51,11 +51,19 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	protected UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, encode, args);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(UrlEncodingSerializerContext.PREFIX)) {
 			expandedParams = ctx.expandedParams;
 		} else {
-			expandedParams = p.getBoolean(UrlEncodingSerializerContext.URLENC_expandedParams, false);
+			expandedParams = p.getBoolean(UrlEncodingSerializerContext.URLENC_expandedParams, ctx.expandedParams);
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingSerializerSession", new ObjectMap()
+				.append("expandedParams", expandedParams)
+			);
 	}
 
 	/*

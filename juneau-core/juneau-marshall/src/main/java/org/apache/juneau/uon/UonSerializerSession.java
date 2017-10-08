@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.uon.UonSerializerContext.*;
 
 import java.util.*;
@@ -50,15 +49,25 @@ public class UonSerializerSession extends WriterSerializerSession {
 	public UonSerializerSession(UonSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(UonSerializerContext.PREFIX)) {
 			encodeChars = encode == null ? ctx.encodeChars : encode;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
-			plainTextParams = ctx.plainTextParams;
+			plainTextParams = ctx.paramFormat.equals("PLAINTEXT");
 		} else {
 			encodeChars = encode == null ? p.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
-			addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
-			plainTextParams = p.getString(UonSerializerContext.UON_paramFormat, "UON").equals("PLAINTEXT");
+			addBeanTypeProperties = p.getBoolean(UON_addBeanTypeProperties, ctx.addBeanTypeProperties);
+			plainTextParams = p.getString(UonSerializerContext.UON_paramFormat, ctx.paramFormat).equals("PLAINTEXT");
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonSerializerSession", new ObjectMap()
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("encodeChars", encodeChars)
+				.append("plainTextParams", plainTextParams)
+			);
 	}
 
 	/**

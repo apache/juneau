@@ -59,7 +59,7 @@ public abstract class ParserSession extends BeanSession {
 			ctx = ParserContext.DEFAULT;
 		Class<?> listenerClass;
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(ParserContext.PREFIX)) {
 			trimStrings = ctx.trimStrings;
 			strict = ctx.strict;
 			inputStreamCharset = ctx.inputStreamCharset;
@@ -77,6 +77,19 @@ public abstract class ParserSession extends BeanSession {
 		this.listener = newInstance(ParserListener.class, listenerClass);
 	}
 
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ParserSession", new ObjectMap()
+				.append("fileCharset", fileCharset)
+				.append("inputStreamCharset", inputStreamCharset)
+				.append("javaMethod", javaMethod)
+				.append("listener", listener)
+				.append("outer", outer)
+				.append("strict", strict)
+				.append("trimStrings", trimStrings)
+			);
+	}
 
 	//--------------------------------------------------------------------------------
 	// Abstract methods

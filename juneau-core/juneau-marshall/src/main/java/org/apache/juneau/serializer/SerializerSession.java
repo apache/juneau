@@ -100,7 +100,7 @@ public abstract class SerializerSession extends BeanSession {
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(SerializerContext.PREFIX)) {
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
 			detectRecursions = ctx.detectRecursions;
@@ -135,8 +135,8 @@ public abstract class SerializerSession extends BeanSession {
 			sortCollections = p.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
 			sortMaps = p.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
 			abridged = p.getBoolean(SERIALIZER_abridged, ctx.abridged);
-			uriResolution = p.getWithDefault(SERIALIZER_uriResolution, UriResolution.ROOT_RELATIVE, UriResolution.class);
-			uriRelativity = p.getWithDefault(SERIALIZER_uriRelativity, UriRelativity.RESOURCE, UriRelativity.class);
+			uriResolution = p.getWithDefault(SERIALIZER_uriResolution, ctx.uriResolution, UriResolution.class);
+			uriRelativity = p.getWithDefault(SERIALIZER_uriRelativity, ctx.uriRelativity, UriRelativity.class);
 			listenerClass = p.getWithDefault(SERIALIZER_listener, ctx.listener, Class.class);
 		}
 
@@ -150,6 +150,29 @@ public abstract class SerializerSession extends BeanSession {
 		} else {
 			set = Collections.emptyMap();
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("SerializerSession", new ObjectMap()
+				.append("maxDepth", maxDepth)
+				.append("initialDepth", initialDepth)
+				.append("maxIndent", maxIndent)
+				.append("detectRecursions", detectRecursions)
+				.append("ignoreRecursions", ignoreRecursions)
+				.append("useWhitespace", useWhitespace)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("trimNulls", trimNulls)
+				.append("trimEmptyCollections", trimEmptyCollections)
+				.append("trimEmptyMaps", trimEmptyMaps)
+				.append("trimStrings", trimStrings)
+				.append("sortCollections", sortCollections)
+				.append("sortMaps", sortMaps)
+				.append("abridged", abridged)
+				.append("quoteChar", quoteChar)
+				.append("uriResolver", uriResolver)
+			);
 	}
 
 	/**

@@ -50,7 +50,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	protected JsonSerializerSession(JsonSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(JsonSerializerContext.PREFIX)) {
 			simpleMode = ctx.simpleMode;
 			escapeSolidus = ctx.escapeSolidus;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
@@ -61,6 +61,15 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 	}
 
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSerializerSession", new ObjectMap()
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("escapeSolidus", escapeSolidus)
+				.append("simpleMode", simpleMode)
+			);
+	}
 
 	@Override /* SerializerSesssion */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {

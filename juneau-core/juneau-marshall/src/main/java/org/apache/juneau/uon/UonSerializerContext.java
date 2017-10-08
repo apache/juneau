@@ -121,8 +121,10 @@ public class UonSerializerContext extends SerializerContext {
 
 	final boolean
 		encodeChars,
-		addBeanTypeProperties,
-		plainTextParams;
+		addBeanTypeProperties;
+
+	final String
+		paramFormat;
 
 	/**
 	 * Constructor.
@@ -137,7 +139,7 @@ public class UonSerializerContext extends SerializerContext {
 		encodeChars = ps.getProperty(UON_encodeChars, boolean.class, false);
 		addBeanTypeProperties = ps.getProperty(UON_addBeanTypeProperties, boolean.class,
 			ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
-		plainTextParams = ps.getProperty(UON_paramFormat, String.class, "UON").equals("PLAINTEXT");
+		paramFormat = ps.getProperty(UON_paramFormat, String.class, "UON");
 	}
 
 	@Override /* Context */
@@ -146,16 +148,16 @@ public class UonSerializerContext extends SerializerContext {
 			.append("UonSerializerContext", new ObjectMap()
 				.append("encodeChars", encodeChars)
 				.append("addBeanTypeProperties", addBeanTypeProperties)
-				.append("plainTextParams", plainTextParams)
+				.append("paramFormat", paramFormat)
 			);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the {@link UonSerializerContext#UON_paramFormat} is <js>"PLAINTEXT"</js>.
+	 * Returns the value of the {@link UonSerializerContext#UON_paramFormat} setting.
 	 *
-	 * @return <jk>true</jk> if the {@link UonSerializerContext#UON_paramFormat} is <js>"PLAINTEXT"</js>.
+	 * @return The value of the {@link UonSerializerContext#UON_paramFormat} setting.
 	 */
-	public boolean plainTextParams() {
-		return plainTextParams;
+	public String getParamFormat() {
+		return paramFormat;
 	}
 }

@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.serializer.SerializerContext.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
@@ -181,6 +182,10 @@ import org.apache.juneau.xml.*;
 		UrlEncodingParser.class,
 		MsgPackParser.class,
 		PlainTextParser.class
+	},
+	properties={
+		// URI-resolution is disabled by default.  Need to enable it.
+		@Property(name=SERIALIZER_uriResolution, value="ROOT_RELATIVE")
 	},
 	allowMethodParam="OPTIONS",
 	htmldoc=@HtmlDoc(

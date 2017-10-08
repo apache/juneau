@@ -59,7 +59,7 @@ public class RdfParserSession extends ReaderParserSession {
 		ObjectMap jenaSettings = new ObjectMap();
 		jenaSettings.putAll(ctx.jenaSettings);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefixes(RdfParserContext.PREFIX, "Rdf.")) {
 			this.rdfLanguage = ctx.rdfLanguage;
 			this.juneauNs = ctx.juneauNs;
 			this.juneauBpNs = ctx.juneauBpNs;
@@ -71,7 +71,7 @@ public class RdfParserSession extends ReaderParserSession {
 			this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
 			this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
 			this.trimWhitespace = p.getBoolean(RdfParserContext.RDF_trimWhitespace, ctx.trimWhitespace);
-			this.collectionFormat = RdfCollectionFormat.valueOf(p.getString(RDF_collectionFormat, "DEFAULT"));
+			this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
 			this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
 		}
 		this.model = ModelFactory.createDefaultModel();
@@ -88,6 +88,19 @@ public class RdfParserSession extends ReaderParserSession {
 			for (Map.Entry<String,Object> e : jenaSettings.entrySet())
 				rdfReader.setProperty(e.getKey(), e.getValue());
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RdfParser", new ObjectMap()
+				.append("collectionFormat", collectionFormat)
+				.append("looseCollections", looseCollections)
+				.append("juneauNs", juneauNs)
+				.append("juneauBpNs", juneauBpNs)
+				.append("rdfLanguage", rdfLanguage)
+				.append("trimWhitespace", trimWhitespace)
+			);
 	}
 
 	@Override /* ReaderParserSession */

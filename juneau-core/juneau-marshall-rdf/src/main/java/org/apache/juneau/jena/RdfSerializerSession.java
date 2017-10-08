@@ -71,7 +71,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		jenaSettings.put("rdfXml.attributeQuoteChar", Character.toString(getQuoteChar()));
 		jenaSettings.putAll(ctx.jenaSettings);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefixes(RdfSerializerContext.PREFIX, "Rdf.")) {
 			this.rdfLanguage = ctx.rdfLanguage;
 			this.juneauNs = ctx.juneauNs;
 			this.juneauBpNs = ctx.juneauBpNs;
@@ -94,7 +94,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				if (key.startsWith("Rdf.jena."))
 					jenaSettings.put(key.substring(9), e.getValue());
 			}
-			this.collectionFormat = RdfCollectionFormat.valueOf(p.getString(RDF_collectionFormat, "DEFAULT"));
+			this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
 			this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
 			this.useXmlNamespaces = p.getBoolean(RDF_useXmlNamespaces, ctx.useXmlNamespaces);
 			this.autoDetectNamespaces = p.getBoolean(RDF_autoDetectNamespaces, ctx.autoDetectNamespaces);
@@ -118,6 +118,24 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		for (Map.Entry<String,Object> e : jenaSettings.entrySet())
 			if (e.getKey().startsWith(propPrefix))
 				writer.setProperty(e.getKey().substring(propPrefix.length()), e.getValue());
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RdfSerializerSession", new ObjectMap()
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addLiteralTypes", addLiteralTypes)
+				.append("addRootProperty", addRootProperty)
+				.append("autoDetectNamespaces", autoDetectNamespaces)
+				.append("collectionFormat", collectionFormat)
+				.append("juneauNs", juneauNs)
+				.append("juneauBpNs", juneauBpNs)
+				.append("looseCollections", looseCollections)
+				.append("namespaces", namespaces)
+				.append("rdfLanguage", rdfLanguage)
+				.append("useXmlNamespaces", useXmlNamespaces)
+			);
 	}
 
 	/*

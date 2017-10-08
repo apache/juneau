@@ -55,6 +55,13 @@ public class YamlSerializerSession extends WriterSerializerSession {
 		}
 	}
 
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("YamlSerializerSession", new ObjectMap()
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+			);
+	}
 
 	@Override /* SerializerSesssion */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {

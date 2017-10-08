@@ -54,11 +54,19 @@ public class UonParserSession extends ReaderParserSession {
 	protected UonParserSession(UonParserContext ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(UonParserContext.PREFIX)) {
 			decodeChars = ctx.decodeChars;
 		} else {
 			decodeChars = p.getBoolean(UON_decodeChars, ctx.decodeChars);
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonParser", new ObjectMap()
+				.append("decodeChars", decodeChars)
+			);
 	}
 
 	/**

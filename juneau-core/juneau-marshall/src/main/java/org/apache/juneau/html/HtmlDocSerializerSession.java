@@ -46,6 +46,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
+
+		// TODO - Change this to p.containsKeyPrefix(PREFIX)
 		if (p.isEmpty()) {
 			header = ctx.header;
 			nav = ctx.nav;
@@ -73,6 +75,25 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
 			template = ClassUtils.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlDocSerializerSession", new ObjectMap()
+				.append("aside", aside)
+				.append("head", head)
+				.append("header", header)
+				.append("footer", footer)
+				.append("nav", nav)
+				.append("navlinks", navlinks)
+				.append("noResultsMessage", noResultsMessage)
+				.append("nowrap", nowrap)
+				.append("script", script)
+				.append("style", style)
+				.append("stylesheet", stylesheet)
+				.append("template", template)
+			);
 	}
 
 	/**

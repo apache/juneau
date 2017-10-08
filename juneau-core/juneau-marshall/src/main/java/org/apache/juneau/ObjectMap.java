@@ -1203,6 +1203,20 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Same as {@link #containsKeyPrefix(String)} except returns <jk>true</jk> if this map contains at least one
+	 * of the specified prefixes.
+	 *
+	 * @param prefixes The string prefixes.
+	 * @return <jk>true</jk> if this map contains a key with at least one of the specified string prefix.
+	 */
+	public boolean containsKeyPrefixes(String...prefixes) {
+		for (String p : prefixes)
+			if (containsKeyPrefix(p))
+				return true;
+		return false;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this map contains the specified key, ignoring the inner map if it exists.
 	 *
 	 * @param key The key to look up.

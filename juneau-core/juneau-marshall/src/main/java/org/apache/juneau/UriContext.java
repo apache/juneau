@@ -42,7 +42,8 @@ public class UriContext {
 	 */
 	public static final UriContext DEFAULT = new UriContext();
 
-	final String authority, contextRoot, servletPath, pathInfo, parentPath;
+	@SuppressWarnings("javadoc")
+	public final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
 	// Lazy-initialized fields.
 	private String aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;

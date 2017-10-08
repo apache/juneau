@@ -45,11 +45,19 @@ public class UrlEncodingParserSession extends UonParserSession {
 	protected UrlEncodingParserSession(UrlEncodingParserContext ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(UrlEncodingParserContext.PREFIX)) {
 			expandedParams = ctx.expandedParams;
 		} else {
-			expandedParams = p.getBoolean(UrlEncodingParserContext.URLENC_expandedParams, false);
+			expandedParams = p.getBoolean(UrlEncodingParserContext.URLENC_expandedParams, ctx.expandedParams);
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingParser", new ObjectMap()
+				.append("expandedParams", expandedParams)
+			);
 	}
 
 	/**

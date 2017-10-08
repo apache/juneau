@@ -68,7 +68,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	protected XmlSerializerSession(XmlSerializerContext ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
+		if (! p.containsKeyPrefix(XmlSerializerContext.PREFIX)) {
 			enableNamespaces = ctx.enableNamespaces;
 			autoDetectNamespaces = ctx.autoDetectNamespaces;
 			addNamespaceUrlsToRoot = ctx.addNamespaceUrlsToRoot;
@@ -85,6 +85,20 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			xsNamespace = (p.containsKey(XML_xsNamespace) ? parseNamespace(p.get(XML_xsNamespace)) : ctx.xsNamespace);
 			addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlSerializerSession", new ObjectMap()
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+				.append("autoDetectNamespaces", autoDetectNamespaces)
+				.append("defaultNamespace", defaultNamespace)
+				.append("enableNamespaces", enableNamespaces)
+				.append("namespaces", namespaces)
+				.append("xsNamespace", xsNamespace)
+			);
 	}
 
 	private static Namespace findDefaultNamespace(String s) {
