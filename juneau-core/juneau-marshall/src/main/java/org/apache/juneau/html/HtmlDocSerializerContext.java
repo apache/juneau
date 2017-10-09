@@ -85,7 +85,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.header"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -104,11 +104,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_header = PREFIX + "header";
+	public static final String HTMLDOC_header = PREFIX + "header.list";
 
 	/**
 	 * <b>Configuration property:</b>  Page navigation links.
@@ -185,7 +182,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nav"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -207,18 +204,15 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <p>
 	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_nav = PREFIX + "nav";
+	public static final String HTMLDOC_nav = PREFIX + "nav.list";
 
 	/**
 	 * <b>Configuration property:</b>  Aside section contents.
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.aside"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -245,18 +239,15 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_aside = PREFIX + "aside";
+	public static final String HTMLDOC_aside = PREFIX + "aside.list";
 
 	/**
 	 * <b>Configuration property:</b>  Footer section contents.
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.footer"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -277,11 +268,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 		)
 	 * 	)
 	 * </p>
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_footer = PREFIX + "footer";
+	public static final String HTMLDOC_footer = PREFIX + "footer.list";
 
 	/**
 	 * <b>Configuration property:</b>  No-results message.
@@ -330,8 +318,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.stylesheet"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Data type:</b> <code>String[]</code>
+	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -340,11 +328,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
-	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet";
+	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet.list";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_stylesheet} property.
@@ -356,8 +341,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.style.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Data type:</b> <code>String[]</code>
+	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -399,8 +384,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.script.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Data type:</b> <code>String[]</code>
+	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -441,8 +426,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.head.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Data type:</b> <code>String[]</code>
+	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -507,8 +492,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_template = PREFIX + "template";
 
 
-	final String[] style, stylesheet, script, navlinks, head;
-	final String header, nav, aside, footer, noResultsMessage;
+	final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
+	final String noResultsMessage;
 	final boolean nowrap;
 	final HtmlDocTemplate template;
 
@@ -526,10 +511,10 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		stylesheet = ps.getProperty(HTMLDOC_stylesheet, String[].class, new String[0]);
 		script = ps.getProperty(HTMLDOC_script, String[].class, new String[0]);
 		head = ps.getProperty(HTMLDOC_head, String[].class, new String[0]);
-		header = ps.getProperty(HTMLDOC_header, String.class, null);
-		nav = ps.getProperty(HTMLDOC_nav, String.class, null);
-		aside = ps.getProperty(HTMLDOC_aside, String.class, null);
-		footer = ps.getProperty(HTMLDOC_footer, String.class, null);
+		header = ps.getProperty(HTMLDOC_header, String[].class, new String[0]);
+		nav = ps.getProperty(HTMLDOC_nav, String[].class, new String[0]);
+		aside = ps.getProperty(HTMLDOC_aside, String[].class, new String[0]);
+		footer = ps.getProperty(HTMLDOC_footer, String[].class, new String[0]);
 		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
 		navlinks = ps.getProperty(HTMLDOC_navlinks, String[].class, new String[0]);
 		noResultsMessage = ps.getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");

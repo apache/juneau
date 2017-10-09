@@ -30,7 +30,6 @@ import org.apache.juneau.svl.*;
  * They're registered via the following mechanisms:
  * <ul>
  * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
- * 	<li>{@link HtmlDocConfig#widget(Class)}
  * </ul>
  *
  * @see org.apache.juneau.svl
@@ -57,9 +56,26 @@ public class WidgetVar extends SimpleVar {
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
+		boolean isScript = false, isStyle = false;
+
+		if (key.endsWith(".script")) {
+			key = key.substring(0, key.length() - 7);
+			isScript = true;
+		}
+
+		if (key.endsWith(".style")) {
+			key = key.substring(0, key.length() - 6);
+			isStyle = true;
+		}
+
 		Widget w = req.getWidgets().get(key);
 		if (w == null)
 			return "unknown-widget-"+key;
+
+		if (isScript)
+			return w.getScript(req);
+		if (isStyle)
+			return w.getStyle(req);
 		return w.getHtml(req);
 	}
 }

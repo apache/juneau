@@ -28,9 +28,11 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
@@ -63,7 +65,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final Response[] responses;
 	private final RestContext context;
 	private final BeanContext beanContext;
-	private final HtmlDocContext htmlDocContext;
+	private final Map<String,Widget> widgets;
 
 	CallMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
@@ -95,7 +97,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.priority = b.priority;
 		this.parameters = b.parameters;
 		this.responses = b.responses;
-		this.htmlDocContext = new HtmlDocContext(method, context.getHtmlDocContext());
+		this.widgets = Collections.unmodifiableMap(b.widgets);
 	}
 
 	private static class Builder  {
@@ -117,6 +119,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		private Integer priority;
 		private org.apache.juneau.rest.annotation.Parameter[] parameters;
 		private Response[] responses;
+		private Map<String,Widget> widgets;
 
 		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
@@ -145,7 +148,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				urlEncodingParser = context.getUrlEncodingParser();
 				beanContext = context.getBeanContext();
 				encoders = context.getEncoders();
-				properties = context.getProperties();
+				properties = new ObjectMap().setInner(context.getProperties());
 				defaultCharset = context.getDefaultCharset();
 				String paramFormat = context.getParamFormat();
 
@@ -153,6 +156,19 @@ class CallMethod implements Comparable<CallMethod>  {
 					defaultCharset = context.getVarResolver().resolve(m.defaultCharset());
 				if (! m.paramFormat().isEmpty())
 					paramFormat = context.getVarResolver().resolve(m.paramFormat());
+
+				HtmlDocBuilder hdb = new HtmlDocBuilder(properties);
+
+				HtmlDoc hd = m.htmldoc();
+				hdb.process(hd);
+
+				widgets = new HashMap<String,Widget>(context.getWidgets());
+				for (Class<? extends Widget> wc : hd.widgets()) {
+					Widget w = ClassUtils.newInstance(Widget.class, wc);
+					widgets.put(w.getName(), w);
+					hdb.script("INHERIT", "$W{"+w.getName()+".script}");
+					hdb.style("INHERIT", "$W{"+w.getName()+".style}");
+				}
 
 				List<Inherit> si = Arrays.asList(m.serializersInherit());
 				List<Inherit> pi = Arrays.asList(m.parsersInherit());
@@ -461,10 +477,6 @@ class CallMethod implements Comparable<CallMethod>  {
 		return null;
 	}
 
-	HtmlDocContext getHtmlDocContext() {
-		return htmlDocContext;
-	}
-
 	/**
 	 * Returns the localized Swagger tags for this Java method.
 	 */
@@ -749,9 +761,10 @@ class CallMethod implements Comparable<CallMethod>  {
 			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
 		req.getPathMatch().setRemainder(remainder);
 
-		ObjectMap requestProperties = createRequestProperties(properties, req);
+		ObjectMap requestProperties = new ResolvingObjectMap(req.getVarResolverSession()).setInner(properties);
+
 		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
-			serializers, parsers, urlEncodingParser, beanContext, encoders, htmlDocContext.widgets, htmlDocContext);
+			serializers, parsers, urlEncodingParser, beanContext, encoders, widgets);
 		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards
@@ -826,38 +839,6 @@ class CallMethod implements Comparable<CallMethod>  {
 			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
 		}
 		return SC_OK;
-	}
-
-	/**
-	 * This method creates all the request-time properties.
-	 */
-	ObjectMap createRequestProperties(final ObjectMap methodProperties, final RestRequest req) {
-		@SuppressWarnings("serial")
-		ObjectMap m = new ObjectMap() {
-			@Override /* Map */
-			public Object get(Object key) {
-				Object o = super.get(key);
-				if (o == null) {
-					String k = key.toString();
-					int i = k.indexOf('.');
-					if (i != -1) {
-						String prefix = k.substring(0, i);
-						String remainder = k.substring(i+1);
-						Object v = req.resolveProperty(CallMethod.this, prefix, remainder);
-						if (v != null)
-							return v;
-					}
-					o = req.getPathMatch().get(k);
-					if (o == null)
-						o = req.getHeader(k);
-				}
-				if (o instanceof String)
-					o = req.getVarResolverSession().resolve(o.toString());
-				return o;
-			}
-		};
-		m.setInner(methodProperties);
-		return m;
 	}
 
 	@Override /* Object */

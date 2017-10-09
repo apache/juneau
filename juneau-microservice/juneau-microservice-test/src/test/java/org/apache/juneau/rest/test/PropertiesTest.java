@@ -30,14 +30,4 @@ public class PropertiesTest extends RestTestcase {
 		String r = client.doGet(URL + "/testPropertiesDefinedOnMethod").getResponseAsString();
 		assertTrue(r.matches("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=.*/testProperties/testPropertiesDefinedOnMethod,R1b=.*/testProperties,R2=bar,R3=baz,R4=a1,R5=c,R6=c"));
 	}
-
-	//====================================================================================================
-	// Make sure attributes/parameters/headers are available through ctx.getProperties().
-	//====================================================================================================
-	@Test
-	public void testProperties() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT;
-		String r = client.doGet(URL + "/testProperties/a1?P=p1").header("H", "h1").getResponseAsString();
-		assertEquals("A=a1,P=p1,H=h1", r);
-	}
 }

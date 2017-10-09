@@ -29,8 +29,8 @@ import org.apache.juneau.serializer.*;
  */
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
-	private final String header, nav, aside, footer, noResultsMessage;
-	private final String[] style, stylesheet, script, navlinks, head;
+	private final String noResultsMessage;
+	private final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
 
@@ -47,10 +47,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		super(ctx, args);
 		ObjectMap p = getProperties();
 
-		header = p.getString(HTMLDOC_header, ctx.nav);
-		nav = p.getString(HTMLDOC_nav, ctx.nav);
-		aside = p.getString(HTMLDOC_aside, ctx.aside);
-		footer = p.getString(HTMLDOC_footer, ctx.footer);
+		header = p.getStringArray(HTMLDOC_header, ctx.nav);
+		nav = p.getStringArray(HTMLDOC_nav, ctx.nav);
+		aside = p.getStringArray(HTMLDOC_aside, ctx.aside);
+		footer = p.getStringArray(HTMLDOC_footer, ctx.footer);
 		navlinks = p.getStringArray(HTMLDOC_navlinks, ctx.navlinks);
 		style = p.getStringArray(HTMLDOC_style, ctx.style);
 		stylesheet = p.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
@@ -145,7 +145,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	<jk>null</jk> if not specified.
 	 * 	 Never an empty string.
 	 */
-	public final String getHeader() {
+	public final String[] getHeader() {
 		return header;
 	}
 
@@ -180,7 +180,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty string.
 	 */
-	public final String getNav() {
+	public final String[] getNav() {
 		return nav;
 	}
 
@@ -192,7 +192,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	<jk>null</jk> if not specified.
 	 *  	Never an empty string.
 	 */
-	public final String getAside() {
+	public final String[] getAside() {
 		return aside;
 	}
 
@@ -204,7 +204,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty string.
 	 */
-	public final String getFooter() {
+	public final String[] getFooter() {
 		return footer;
 	}
 

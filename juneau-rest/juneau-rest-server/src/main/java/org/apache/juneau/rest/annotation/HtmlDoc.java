@@ -107,8 +107,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#header(Object)} and {@link HtmlDocBuilder#header(Object)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#header(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -156,8 +155,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		This field can also use URIs of any support type in {@link UriResolver}.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#navlinks(Object[])} and {@link HtmlDocBuilder#navlinks(Object[])} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#navlinks(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -206,8 +204,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#nav(Object)} and {@link HtmlDocBuilder#nav(Object)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#nav(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -249,8 +246,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#aside(Object)} and {@link HtmlDocBuilder#aside(Object)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#aside(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -292,8 +288,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#footer(Object)} and {@link HtmlDocBuilder#footer(Object)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#footer(Object[])} methods.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -333,8 +328,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#style(Object)} and {@link HtmlDocBuilder#style(Object)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#style(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -374,8 +368,7 @@ public @interface HtmlDoc {
 	 * 		defined by {@link UriResolver}.
 	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#stylesheet(Object)}/{@link HtmlDocBuilder#stylesheet(Object)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#stylesheet(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -383,7 +376,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 */
-	String stylesheet() default "";
+	String[] stylesheet() default {};
 
 	/**
 	 * Sets the HTML script section contents.
@@ -412,8 +405,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#script(Object)} and {@link HtmlDocBuilder#script(Object)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#script(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -456,8 +448,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#head(Object[])} and {@link HtmlDocBuilder#head(Object[])} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#head(Object[])} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -490,8 +481,7 @@ public @interface HtmlDoc {
 	 * <h6 class='topic'>Other Notes</h6>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The programmatic equivalent to this annotation are the
-	 * 		{@link HtmlDocConfig#template(Class)} and {@link HtmlDocBuilder#template(Class)} methods.
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#template(Class)} method.
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>

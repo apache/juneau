@@ -15,8 +15,8 @@ package org.apache.juneau.rest;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -37,7 +37,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -74,7 +73,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	private final RestContext context;
 
-	private final String method, stylesheet;
+	private final String method;
 	private RequestBody body;
 	private Method javaMethod;
 	private ObjectMap properties;
@@ -95,7 +94,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private ConfigFile cf;
 	private Swagger swagger, fileSwagger;
 	private Map<String,Widget> widgets;
-	private HtmlDocContext hdc;
 
 	/**
 	 * Constructor.
@@ -125,11 +123,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				_method = m;
 
 			method = _method;
-
-			String _stylesheet = getQuery().getString("stylesheet");
-			if (_stylesheet != null)
-				req.getSession().setAttribute("stylesheet", _stylesheet);
-			stylesheet = (String)req.getSession().getAttribute("stylesheet");
 
 			headers = new RequestHeaders();
 			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
@@ -168,7 +161,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
 			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset,
 			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,
-			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets, HtmlDocContext hdc) {
+			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets) {
 		this.javaMethod = javaMethod;
 		this.properties = properties;
 		this.urlEncodingParser = mUrlEncodingParser;
@@ -196,7 +189,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.defaultCharset = defaultCharset;
 		this.defFormData = defFormData;
 		this.widgets = widgets;
-		this.hdc = hdc;
+
+		String stylesheet = getQuery().getString("stylesheet");
+		if (stylesheet != null)
+			getSession().setAttribute("stylesheet", stylesheet.replace(' ', '$'));  // Prevent SVL insertion.
+		stylesheet = (String)getSession().getAttribute("stylesheet");
+		if (stylesheet != null)
+			properties.put(HTMLDOC_stylesheet, new String[]{stylesheet});
 
 		if (debug) {
 			String msg = ""
@@ -316,91 +315,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		} else if (c == 'H') {
 			if ("Header".equals(category))
 				return getHeader(name);
-			if ("HtmlDocSerializer".equals(category) && cm != null) {
-				char c2 = StringUtils.charAt(name, 0);
-				if (c2 == 'a') {
-					if ("aside".equals(name))
-						return resolveVars(hdc.aside);
-				} else if (c2 == 'f') {
-					if ("footer".equals(name))
-						return resolveVars(hdc.footer);
-				} else if (c2 == 'h') {
-					if ("header".equals(name))
-						return resolveVars(hdc.header);
-					if ("head.list".equals(name))
-						return resolveVars(hdc.head);
-				} else if (c2 == 'n') {
-					if ("nav".equals(name))
-						return resolveVars(hdc.nav);
-					if ("navlinks.list".equals(name)) {
-						if (hdc.navlinks == null || hdc.navlinks.length == 0)
-							return null;
-						try {
-							List<String> la = new ArrayList<String>();
-							for (String l : hdc.navlinks) {
-								// Temporary backwards compatibility with JSON object format.
-								if (l.startsWith("{")) {
-									ObjectMap m = new ObjectMap(l);
-									for (Map.Entry<String,Object> e : m.entrySet())
-										la.add(resolveVars(e.getKey()) + ":" + resolveVars(StringUtils.toString(e.getValue())));
-								} else {
-									la.add(resolveVars(l));
-								}
-							}
-							return la;
-						} catch (ParseException e) {
-							throw new RuntimeException(e);
-						}
-					}
-					if ("noResultsMessage".equals(name))
-						return resolveVars(hdc.noResultsMessage);
-					if ("nowrap".equals(name))
-						return hdc.nowrap;
-				} else if (c2 == 's') {
-					if ("script.list".equals(name)) {
-						Set<String> l = new LinkedHashSet<String>();
-						if (hdc.script != null)
-							l.add(resolveVars(hdc.script));
-						for (Widget w : getWidgets().values()) {
-							String script;
-							try {
-								script = w.getScript(this);
-							} catch (Exception e) {
-								script = e.getLocalizedMessage();
-							}
-							if (script != null)
-								l.add(resolveVars(script));
-						}
-						return l;
-					}
-					if ("style.list".equals(name)) {
-						Set<String> l = new LinkedHashSet<String>();
-						if (hdc.style != null)
-							l.add(resolveVars(hdc.style));
-						for (Widget w : getWidgets().values()) {
-							String style;
-							try {
-								style = w.getStyle(this);
-							} catch (Exception e) {
-								style = e.getLocalizedMessage();
-							}
-							if (style != null)
-								l.add(resolveVars(style));
-						}
-						return l;
-					}
-					if ("stylesheet".equals(name)) {
-						String s = getStylesheet();
-						// Exclude absolute URIs to stylesheets for security reasons.
-						if (s == null || isAbsoluteUri(s))
-							s = hdc.stylesheet;
-						return s == null ? null : resolveVars(s);
-					}
-				} else if (c2 == 't') {
-					if ("template".equals(name))
-						return hdc.template;
-				}
-			}
 		} else if (c == 'P') {
 			if ("Path".equals(category))
 				return getPath(name);
@@ -454,14 +368,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * Servlet calls this method to initialize the properties.
-	 */
-	RestRequest setProperties(ObjectMap properties) {
-		this.properties = properties;
-		return this;
-	}
 
 	/**
 	 * Retrieve the properties active for this request.
@@ -896,15 +802,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * Returns the value of the <jk>"stylesheet"</js> parameter.
-	 *
-	 * @return The value of the <jk>"stylesheet"</js> parameter, or <jk>null</jk> if it wasn't specified.
-	 */
-	protected String getStylesheet() {
-		return stylesheet;
-	}
 
 	/**
 	 * Returns the serializers associated with this request.

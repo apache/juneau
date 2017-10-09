@@ -24,10 +24,11 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		
-		for (String h : session.getHead()) 
-			w.appendln(2, h);
-		
+
+		String[] head = session.getHead();
+		for (int i = 0; i < head.length; i++)
+			w.sIf(i > 0).appendln(2, head[i]);
+
 		if (hasStyle(session)) {
 			w.sTag(2, "style").nl(2);
 			style(session, w, o);
@@ -44,24 +45,22 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	public void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
 		String[] stylesheet = session.getStylesheet();
-		if (! ArrayUtils.contains("NONE", stylesheet))
-			for (String ss : stylesheet)
-				w.append(3, "@import ").q().append(session.resolveUri(ss)).q().appendln("; ");
+		for (int i = 0; i < stylesheet.length; i++)
+			w.sIf(i > 0).append(3, "@import ").q().append(session.resolveUri(stylesheet[i])).q().appendln(";");
 
 		if (session.isNoWrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 
-		if (session.getStyle() != null)
-			for (String style : session.getStyle())
-				w.append(3, style).appendln(" ");
+		String[] style = session.getStyle();
+		for (int i = 0; i < style.length; i++)
+			w.sIf(i > 0 || stylesheet.length > 0).appendln(3, style[i]);
 	}
 
 	@Override /* HtmlDocTemplate */
 	public void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-
-		if (session.getScript() != null)
-			for (String script : session.getScript())
-				w.append(3, script);
+		String[] script = session.getScript();
+		for (int i = 0; i < script.length; i++)
+			w.sIf(i > 0).appendln(3, script[i]);
 	}
 
 	@Override /* HtmlDocTemplate */
@@ -103,18 +102,18 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	@Override /* HtmlDocTemplate */
 	public void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		// Write the title of the page.
-		String header = session.getHeader();
-		if (exists(header))
-			w.append(3, header).nl(3);
+		String[] header = session.getHeader();
+		for (int i = 0; i < header.length; i++)
+			w.sIf(i > 0).appendln(3, header[i]);
 	}
 
 
 	@Override /* HtmlDocTemplate */
 	public void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String nav = session.getNav();
-		if (nav != null) {
-			if (exists(nav))
-				w.append(3, nav).nl(3);
+		String[] nav = session.getNav();
+		if (nav.length > 0) {
+			for (int i = 0; i < nav.length; i++)
+				w.sIf(i > 0).appendln(3, nav[i]);
 		} else {
 			String[] links = session.getNavLinks();
 			if (links.length > 0) {
@@ -142,9 +141,9 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String aside = session.getAside();
-		if (exists(aside))
-			w.append(4, aside);
+		String[] aside = session.getAside();
+		for (int i = 0; i < aside.length; i++)
+			w.sIf(i > 0).appendln(4, aside[i]);
 	}
 
 	@Override /* HtmlDocTemplate */
@@ -172,9 +171,9 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String footer = session.getFooter();
-		if (exists(footer))
-			w.append(3, footer).nl(3);
+		String[] footer = session.getFooter();
+		for (int i = 0; i < footer.length; i++)
+			w.sIf(i > 0).appendln(3, footer[i]);
 	}
 
 	@Override /* HtmlDocTemplate */
@@ -189,22 +188,22 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 
 	@Override /* HtmlDocTemplate */
 	public boolean hasHeader(HtmlDocSerializerSession session) {
-		return exists(session.getHeader());
+		return session.getHeader().length > 0;
 	}
 
 	@Override /* HtmlDocTemplate */
 	public boolean hasNav(HtmlDocSerializerSession session) {
-		return exists(session.getNav()) || session.getNavLinks().length > 0;
+		return session.getNav().length > 0 || session.getNavLinks().length > 0;
 	}
 
 	@Override /* HtmlDocTemplate */
 	public boolean hasAside(HtmlDocSerializerSession session) {
-		return exists(session.getAside());
+		return session.getAside().length > 0;
 	}
 
 	@Override /* HtmlDocTemplate */
 	public boolean hasFooter(HtmlDocSerializerSession session) {
-		return exists(session.getFooter());
+		return session.getFooter().length > 0;
 	}
 
 	private static boolean exists(String s) {

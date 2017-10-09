@@ -41,6 +41,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.vars.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
@@ -69,7 +70,7 @@ public final class RestContext extends Context {
 		fullPath,
 		contextPath;
 
-	private final HtmlDocContext htmlDocContext;
+	private final Map<String,Widget> widgets;
 
 	private final Set<String> allowMethodParams;
 
@@ -190,7 +191,7 @@ public final class RestContext extends Context {
 			this.logger = b.logger;
 			this.fullPath = b.fullPath;
 			this.contextPath = nullIfEmpty(b.contextPath);
-			this.htmlDocContext = new HtmlDocContext(resource, config);
+			this.widgets = Collections.unmodifiableMap(b.widgets);
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -471,6 +472,7 @@ public final class RestContext extends Context {
 		Set<String> allowMethodParams = new LinkedHashSet<String>();
 		RestLogger logger;
 		String fullPath;
+		Map<String,Widget> widgets;
 		Object resourceResolver;
 		String contextPath;
 
@@ -573,6 +575,18 @@ public final class RestContext extends Context {
 			logger = sc.logger == null ? new RestLogger.NoOp() : resolve(resource, RestLogger.class, sc.logger);
 
 			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
+
+			HtmlDocBuilder hdb = new HtmlDocBuilder(sc.properties);
+
+			this.widgets = new LinkedHashMap<String,Widget>();
+
+			for (Class<? extends Widget> wc : sc.widgets) {
+				Widget w = resolve(resource, Widget.class, wc);
+				String n = w.getName();
+				this.widgets.put(n, w);
+				hdb.script("INHERIT", "$W{"+n+".script}");
+				hdb.style("INHERIT", "$W{"+n+".style}");
+			}
 		}
 	}
 
@@ -838,12 +852,15 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * Returns the context values for the HTML doc view.
+	 * The widgets used for resolving <js>"$W{...}"<js> variables.
 	 *
-	 * @return The context values for the HTML doc view.
+	 * <p>
+	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestConfig#addWidget(Class)} method.
+	 *
+	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
 	 */
-	public HtmlDocContext getHtmlDocContext() {
-		return htmlDocContext;
+	public Map<String,Widget> getWidgets() {
+		return widgets;
 	}
 
 	/**

@@ -33,6 +33,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
@@ -113,7 +114,8 @@ public class RestConfig implements ServletConfig {
 	String path;
 	String clientVersionHeader = "X-Client-Version";
 	String contextPath;
-	HtmlDocConfig htmlDocConfig = new HtmlDocConfig();
+	HtmlDocBuilder htmlDocBuilder;
+	List<Class<? extends Widget>> widgets = new ArrayList<Class<? extends Widget>>();
 
 	Object resourceResolver = RestResourceResolverSimple.class;
 	Object logger = RestLogger.Normal.class;
@@ -156,6 +158,7 @@ public class RestConfig implements ServletConfig {
 			ConfigFileBuilder cfb = new ConfigFileBuilder();
 
 			properties = new ObjectMap();
+			htmlDocBuilder = new HtmlDocBuilder(properties);
 			configFile = cfb.build();
 			varResolverBuilder = new VarResolverBuilder()
 				.vars(
@@ -245,7 +248,11 @@ public class RestConfig implements ServletConfig {
 				if (! r.paramFormat().isEmpty())
 					setParamFormat(vr.resolve(r.paramFormat()));
 
-				htmlDocConfig.process(r.htmldoc());
+				HtmlDoc hd = r.htmldoc();
+				for (Class<? extends Widget> cw : hd.widgets())
+					this.widgets.add(cw);
+
+				htmlDocBuilder.process(hd);
 			}
 
 			addResponseHandlers(
@@ -1176,12 +1183,27 @@ public class RestConfig implements ServletConfig {
 	}
 
 	/**
-	 * Returns the configuration settings specific to the HTML doc view.
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement text.
 	 *
-	 * @return The configuration settings specific to the HTML doc view.
+	 * <p>
+	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 *
+	 * @param value The widget class to add.
+	 * @return This object (for method chaining).
 	 */
-	public HtmlDocConfig getHtmlDocConfig() {
-		return htmlDocConfig;
+	public RestConfig addWidget(Class<? extends Widget> value) {
+		this.widgets.add(value);
+		return this;
+	}
+	
+	/**
+	 * Returns an instance of an HTMLDOC builder for setting HTMLDOC-related properties.
+	 * 
+	 * @return An instance of an HTMLDOC builder for setting HTMLDOC-related properties.
+	 */
+	public HtmlDocBuilder getHtmlDocBuilder() {
+		return htmlDocBuilder;
 	}
 
 	/**

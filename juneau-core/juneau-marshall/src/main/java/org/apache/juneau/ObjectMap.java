@@ -692,25 +692,16 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Specialized method that calls {@link #getString(String)} and splits the results as a simple comma-delimited list.
+	 * Returns the specified entry value converted to a {@link String}.
 	 *
 	 * <p>
-	 * If the value is already a collection, the individual entries are converted to strings using {@link #toString()}.
+	 * Shortcut for <code>get(key, String[].<jk>class</jk>)</code>.
 	 *
-	 * @param key the key.
-	 * @return
-	 * 	A list of tokens, trimmed of whitespace.
-	 * 	An empty list if entry not found.
-	 * 	Never <jk>null</jk>.
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 */
 	public String[] getStringArray(String key) {
-		Object s = get(key, Object.class);
-		if (s == null)
-			return new String[0];
-		if (s instanceof Collection)
-			return ArrayUtils.toStringArray((Collection<?>)s);
-		String[] r = split(StringUtils.toString(s));
-		return r;
+		return getStringArray(key, null);
 	}
 
 	/**

@@ -14,8 +14,12 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
+import java.util.*;
+import java.util.regex.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
 
@@ -23,7 +27,15 @@ import org.apache.juneau.utils.*;
  * Programmatic interface for setting properties used by the HtmlDoc serializer.
  *
  * <p>
- * This class is instantiated by calling the {@link RestResponse#getHtmlDocBuilder()} method.
+ * Basically just a convenience wrapper around the servlet or method level properties for setting properties defined
+ * by the {@link HtmlDocSerializerContext} class.
+ *
+ * <p>
+ * This class is instantiated through the following methods.
+ * <ul>
+ * 	<li>{@link RestConfig#getHtmlDocBuilder()} - Set values programmatically during servlet initialization.
+ * 	<li>{@link RestResponse#getHtmlDocBuilder()} - Set values programmatically during a REST request.
+ * </ul>
  */
 public class HtmlDocBuilder {
 
@@ -31,6 +43,33 @@ public class HtmlDocBuilder {
 
 	HtmlDocBuilder(ObjectMap properties) {
 		this.properties = properties;
+	}
+
+	void process(HtmlDoc hd) {
+		if (hd.header().length > 0)
+			header((Object[])hd.header());
+		if (hd.nav().length > 0)
+			nav((Object[])hd.nav());
+		if (hd.aside().length > 0)
+			aside((Object[])hd.aside());
+		if (hd.footer().length > 0)
+			footer((Object[])hd.footer());
+		if (hd.style().length > 0)
+			style((Object[])hd.style());
+		if (hd.script().length > 0)
+			script((Object[])hd.script());
+		if (hd.navlinks().length > 0)
+			navlinks((Object[])hd.navlinks());
+		if (hd.head().length > 0)
+			head((Object[])hd.head());
+		if (hd.stylesheet().length > 0)
+			stylesheet((Object[])hd.stylesheet());
+		if (! hd.noResultsMessage().isEmpty())
+			noResultsMessage(hd.noResultsMessage());
+		if (hd.nowrap())
+			nowrap(true);
+		if (hd.template() != HtmlDocTemplate.class)
+			template(hd.template());
 	}
 
 	/**
@@ -44,7 +83,8 @@ public class HtmlDocBuilder {
 	 * to be whatever you want.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no header.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
@@ -64,8 +104,8 @@ public class HtmlDocBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public HtmlDocBuilder header(Object value) {
-		return set(HTMLDOC_header, value);
+	public HtmlDocBuilder header(Object...value) {
+		return set(HTMLDOC_header, resolveList(value, properties.getStringArray(HTMLDOC_header)));
 	}
 
 	/**
@@ -83,7 +123,8 @@ public class HtmlDocBuilder {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This field can also use URIs of any support type in {@link UriResolver}.
@@ -102,7 +143,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder navlinks(Object...value) {
-		return set(HTMLDOC_navlinks, value);
+		return set(HTMLDOC_navlinks, resolveLinks(value, properties.getStringArray(HTMLDOC_navlinks)));
 	}
 
 	/**
@@ -125,7 +166,8 @@ public class HtmlDocBuilder {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#nav() @HtmlDoc.nav()} annotation.
@@ -141,8 +183,8 @@ public class HtmlDocBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public HtmlDocBuilder nav(Object value) {
-		return set(HTMLDOC_nav, value);
+	public HtmlDocBuilder nav(Object...value) {
+		return set(HTMLDOC_nav, resolveList(value, properties.getStringArray(HTMLDOC_nav)));
 	}
 
 	/**
@@ -159,7 +201,8 @@ public class HtmlDocBuilder {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#aside() @HtmlDoc.aside()} annotation.
@@ -175,8 +218,8 @@ public class HtmlDocBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public HtmlDocBuilder aside(Object value) {
-		return set(HTMLDOC_aside, value);
+	public HtmlDocBuilder aside(Object...value) {
+		return set(HTMLDOC_aside, resolveList(value, properties.getStringArray(HTMLDOC_aside)));
 	}
 
 	/**
@@ -193,7 +236,8 @@ public class HtmlDocBuilder {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#footer() @HtmlDoc.footer()} annotation.
@@ -209,8 +253,8 @@ public class HtmlDocBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public HtmlDocBuilder footer(Object value) {
-		return set(HTMLDOC_footer, value);
+	public HtmlDocBuilder footer(Object...value) {
+		return set(HTMLDOC_footer, resolveList(value, properties.getStringArray(HTMLDOC_footer)));
 	}
 
 	/**
@@ -224,7 +268,8 @@ public class HtmlDocBuilder {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#style() @HtmlDoc.style()} annotation.
@@ -240,8 +285,8 @@ public class HtmlDocBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public HtmlDocBuilder style(Object value) {
-		return set(HTMLDOC_style, value);
+	public HtmlDocBuilder style(Object...value) {
+		return set(HTMLDOC_style, resolveList(value, properties.getStringArray(HTMLDOC_style)));
 	}
 
 	/**
@@ -275,8 +320,8 @@ public class HtmlDocBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public HtmlDocBuilder stylesheet(Object value) {
-		return set(HTMLDOC_stylesheet, value);
+	public HtmlDocBuilder stylesheet(Object...value) {
+		return set(HTMLDOC_stylesheet, resolveSet(value, properties.getStringArray(HTMLDOC_nav)));
 	}
 
 	/**
@@ -290,7 +335,8 @@ public class HtmlDocBuilder {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#script() @HtmlDoc.script()} annotation.
@@ -306,8 +352,8 @@ public class HtmlDocBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public HtmlDocBuilder script(Object value) {
-		return set(HTMLDOC_script, value);
+	public HtmlDocBuilder script(Object...value) {
+		return set(HTMLDOC_script, resolveList(value, properties.getStringArray(HTMLDOC_script)));
 	}
 
 	/**
@@ -321,7 +367,8 @@ public class HtmlDocBuilder {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * A value of <js>"INHERIT"</js> means copy the values from the parent.
+	 * <br>A value of <js>"NONE"</js> can be used to force no value.
 	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link HtmlDoc#head() @HtmlDoc.head()} annotation.
@@ -337,7 +384,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder head(Object...value) {
-		return set(HTMLDOC_head, value);
+		return set(HTMLDOC_head, resolveList(value, properties.getStringArray(HTMLDOC_head)));
 	}
 
 	/**
@@ -399,6 +446,60 @@ public class HtmlDocBuilder {
 	 */
 	public HtmlDocBuilder template(HtmlDocTemplate value) {
 		return set(HTMLDOC_template, value);
+	}
+
+	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
+
+	private static String[] resolveLinks(Object[] value, String[] prev) {
+		List<String> list = new ArrayList<String>();
+		for (Object v : value) {
+			String s = StringUtils.toString(v);
+			if ("INHERIT".equals(s)) {
+				list.addAll(Arrays.asList(prev));
+			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
+					Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
+					lm.matches();
+					String key = lm.group(1);
+					int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
+					String remainder = lm.group(3);
+					list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+			} else {
+				list.add(s);
+			}
+		}
+		return list.toArray(new String[list.size()]);
+	}
+
+	private static String[] resolveSet(Object[] value, String[] prev) {
+		Set<String> set = new HashSet<>();
+		for (Object v : value) {
+			String s = StringUtils.toString(v);
+			if ("INHERIT".equals(s)) {
+				if (prev != null)
+					set.addAll(Arrays.asList(prev));
+			} else if ("NONE".equals(s)) {
+				return new String[0];
+			} else {
+				set.add(s);
+			}
+		}
+		return set.toArray(new String[set.size()]);
+	}
+
+	private static String[] resolveList(Object[] value, String[] prev) {
+		List<String> set = new LinkedList<>();
+		for (Object v : value) {
+			String s = StringUtils.toString(v);
+			if ("INHERIT".equals(s)) {
+				if (prev != null)
+					set.addAll(Arrays.asList(prev));
+			} else if ("NONE".equals(s)) {
+				return new String[0];
+			} else {
+				set.add(s);
+			}
+		}
+		return set.toArray(new String[set.size()]);
 	}
 
 	private HtmlDocBuilder set(String key, Object value) {

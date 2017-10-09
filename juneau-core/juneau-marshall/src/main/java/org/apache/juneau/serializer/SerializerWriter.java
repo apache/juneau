@@ -277,6 +277,23 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
+	 * Writes a space if the boolean expression is <jk>true</jk> and {@code useWhitespace} is false.
+	 * 
+	 * <p>
+	 * Intended for cases in XML where text should be separated by either a space or newline.
+	 * This ensures the text is separated by a space if whitespace is disabled.
+	 *
+	 * @param b The boolean flag.
+	 * @return This object (for method chaining).
+	 * @throws IOException If a problem occurred trying to write to the writer.
+	 */
+	public SerializerWriter sIf(boolean b) throws IOException {
+		if (b && ! useWhitespace)
+			out.write(' ');
+		return this;
+	}
+
+	/**
 	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled and the boolean flag is true.
 	 *
 	 * @param b The boolean flag.
