@@ -964,13 +964,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A copy of the array with variables resolved.
 	 */
 	public String[] resolveVars(String[] input) {
-		VarResolverSession vs = getVarResolverSession();
-		if (input == null || input.length == 0)
-			return input;
-		input = Arrays.copyOf(input, input.length);
-		for (int i = 0; i < input.length; i++)
-			input[i] = vs.resolve(input[i]);
-		return input;
+		return getVarResolverSession().resolve(input);
 	}
 
 	/**

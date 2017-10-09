@@ -15,6 +15,7 @@ package org.apache.juneau.svl;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -71,7 +72,7 @@ public class VarResolverSession {
 	/**
 	 * Resolve all variables in the specified string.
 	 *
-	 * @param s 
+	 * @param s
 	 * 	The string to resolve variables in.
 	 * @return
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
@@ -114,6 +115,92 @@ public class VarResolverSession {
 		} catch (IOException e) {
 			throw new RuntimeException(e); // Never happens.
 		}
+	}
+
+	/**
+	 * Convenience method for resolving variables in arbitrary objects.
+	 *
+	 * <p>
+	 * Supports resolving variables in the following object types:
+	 * <ul>
+	 * 	<li>{@link CharSequence}
+	 * 	<li>Arrays containing values of type {@link CharSequence}.
+	 * 	<li>Collections containing values of type {@link CharSequence}.
+	 * 		<br>Collection class must have a no-arg constructor.
+	 * 	<li>Maps containing values of type {@link CharSequence}.
+	 * 		<br>Map class must have a no-arg constructor.
+	 * </ul>
+	 *
+	 * @param o The object.
+	 * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was
+	 * needed.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <T> T resolve(T o) {
+		if (o == null)
+			return null;
+		if (o instanceof CharSequence)
+			return (T)resolve(o.toString());
+		if (o.getClass().isArray()) {
+			if (! containsVars(o))
+				return o;
+			Object o2 = Array.newInstance(o.getClass().getComponentType(), Array.getLength(o));
+			for (int i = 0; i < Array.getLength(o); i++)
+				Array.set(o2, i, resolve(Array.get(o, i)));
+			return (T)o2;
+		}
+		if (o instanceof Collection) {
+			try {
+				Collection c = (Collection)o;
+				if (! containsVars(c))
+					return o;
+				Collection c2 = c.getClass().newInstance();
+				for (Object o2 : c)
+					c2.add(resolve(o2));
+				return (T)c2;
+			} catch (Exception e) {
+				return o;
+			}
+		}
+		if (o instanceof Map) {
+			try {
+				Map m = (Map)o;
+				if (! containsVars(m))
+					return o;
+				Map m2 = m.getClass().newInstance();
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					m2.put(e.getKey(), resolve(e.getValue()));
+				return (T)m2;
+			} catch (Exception e) {
+				return o;
+			}
+		}
+		return o;
+	}
+
+	private static boolean containsVars(Object array) {
+		for (int i = 0; i < Array.getLength(array); i++) {
+			Object o = Array.get(array, i);
+			if (o instanceof CharSequence && o.toString().contains("$"))
+				return true;
+		}
+		return false;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static boolean containsVars(Collection c) {
+		for (Object o : c)
+			if (o instanceof CharSequence && o.toString().contains("$"))
+				return true;
+		return false;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static boolean containsVars(Map m) {
+		for (Object o : m.values())
+			if (o instanceof CharSequence && o.toString().contains("$"))
+				return true;
+		return false;
 	}
 
 	/*
