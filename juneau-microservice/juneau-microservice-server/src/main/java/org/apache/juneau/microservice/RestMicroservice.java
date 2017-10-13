@@ -309,7 +309,7 @@ public class RestMicroservice extends Microservice {
 			if (f.exists())
 				xmlConfig = IOUtils.read((File)jettyXml);
 			else 
-				throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", jettyXml);
+				throw new FormattedRuntimeException("Jetty.xml file ''{0}'' was specified but not found on the file system.", f.getName());
 		} else {
 			xmlConfig = IOUtils.read(jettyXml);
 		}
