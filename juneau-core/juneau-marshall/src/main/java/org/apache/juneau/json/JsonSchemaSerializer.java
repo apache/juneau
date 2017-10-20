@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 

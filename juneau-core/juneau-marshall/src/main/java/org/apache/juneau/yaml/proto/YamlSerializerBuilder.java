@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.yaml.proto;
 
-import static org.apache.juneau.json.JsonSerializerContext.*;
+import static org.apache.juneau.yaml.proto.YamlSerializer.*;
 
 import java.util.*;
 
@@ -72,10 +72,10 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see YamlSerializerContext#JSON_simpleMode
+	 * @see #YAML_simpleMode
 	 */
 	public YamlSerializerBuilder simple(boolean value) {
-		return property(JSON_simpleMode, value);
+		return property(YAML_simpleMode, value);
 	}
 
 	/**
@@ -110,10 +110,10 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see YamlSerializerContext#JSON_escapeSolidus
+	 * @see #YAML_escapeSolidus
 	 */
 	public YamlSerializerBuilder escapeSolidus(boolean value) {
-		return property(JSON_escapeSolidus, value);
+		return property(YAML_escapeSolidus, value);
 	}
 
 	@Override /* SerializerBuilder */

@@ -970,7 +970,7 @@
 		</div>
 		
 		<!-- ======================================================================================================= -->
-		<a id="juneau-marshall-Transforms"></a>
+		<a id="juneau-marshall.Transforms"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.1.6 - Transforms</h4>
 		<div class='topic'>
 			<p>
@@ -1618,7 +1618,7 @@
 				<li class='info'>
 					Serialized type names are DISABLED by default.
 					They must be enabled on the serializer using the 
-					{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} 
+					{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypeProperties} 
 					configuration property.
 				<li class='info'>
 					The <js>"_type"</js> property name can be overridden using the 
@@ -2113,7 +2113,7 @@
 					Reuse instances of serializers and parsers whenever possible.
 					<br>They are designed to be thread safe and maintain internal caches of bean metadata to increase performance.
 				<li>
-					The {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_detectRecursions SERIALIZER_detectRecursions} 
+					The {@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions} 
 					option on the {@link org.apache.juneau.serializer.Serializer} class can cause a performance penalty of 
 					around 20%.  
 					Therefore, it's recommended that this option be used only when necessary. 
@@ -5753,7 +5753,7 @@
 					<li>
 						You are setting <l>XML_enableNamespaces</l> to <l>true</l> to enable XML namespaces. 
 						By default, XML namespace support is disabled per 
-						{@link org.apache.juneau.xml.XmlSerializerContext#XML_enableNamespaces}, so you have to explicitly 
+						{@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces}, so you have to explicitly 
 						enable it on our serializers.
 					<li>
 						The <l>XML_autoDetectNamespaces</l> setting is needed to get the XML serializer to add <l>xmlns</l> 
@@ -8000,9 +8000,9 @@
 			<li>
 				New/modified settings in {@link org.apache.juneau.html.HtmlDocSerializerContext}:
 				<ul>
-					<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_script HTMLDOC_script}
-					<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_style HTMLDOC_style} - Was <jsf>HTMLDOC_css</jsf>.
-					<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_stylesheet HTMLDOC_stylesheet} - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
+					<li><code><del>HTMLDOC_script</del></code>
+					<li><code><del>HTMLDOC_style</del></code> - Was <jsf>HTMLDOC_css</jsf>.
+					<li><code><del>HTMLDOC_stylesheet</del></code> - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
 				</ul>
 			<li>
 				New {@link org.apache.juneau.utils.ResourceFinder} utility class.
@@ -8291,10 +8291,10 @@
 							<li>{@link org.apache.juneau.UriResolver}
 						</ul>
 					<li>New configuration properties:
-						<li>{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriContext}
-						<li>{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriRelativity}
-						<li>{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriResolution}
-						<li>{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_maxIndent}
+						<li><code><del>SerializerContext.SERIALIZER_uriContext</del></code>
+						<li><code><del>SerializerContext.SERIALIZER_uriRelativity</del></code>
+						<li><code><del>SerializerContext.SERIALIZER_uriResolution</del></code>
+						<li><code><del>SerializerContext.SERIALIZER_maxIndent</del></code>
 				</ul>
 			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#value()}.
 				<br>The following two annotations are considered equivalent:
@@ -8304,7 +8304,7 @@
 	<ja>@BeanProperty</ja>(<js>"foo"</js>)
 				</p>
 			<li>Fixed a race condition in ClassMeta.
-			<li><jsf>URLENC_paramFormat</jsf> has been moved to {@link org.apache.juneau.uon.UonSerializerContext#UON_paramFormat}, 
+			<li><jsf>URLENC_paramFormat</jsf> has been moved to <code><del>UonSerializer.UON_paramFormat</del></code>, 
 				and the UON/URL-Encoding serializers will now always serialize all values as plain text.
 				<br>This means that arrays and maps are converted to simple comma-delimited lists.
 			<li>Listener APIs added to serializers and parsers:
@@ -8334,14 +8334,14 @@
 							<li><code><del>HtmlDocSerializerContext.HTMLDOC_title</del></code>
 							<li><code><del>HtmlDocSerializerContext.HTMLDOC_description</del></code>
 							<li><code><del>HtmlDocSerializerContext.HTMLDOC_branding</del></code>
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_header}
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_nav}
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_aside}
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_footer}
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_noResultsMessage}
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_header</del></code>
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_nav</del></code>
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_aside</del></code>
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_footer</del></code>
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_noResultsMessage</del></code>
 							<li><code><del>HtmlDocSerializerContext.HTMLDOC_cssUrl</del></code>
 							<li><code><del>HtmlDocSerializerContext.HTMLDOC_css</del></code>
-							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_template}
+							<li><code><del>HtmlDocSerializerContext.HTMLDOC_template</del></code>
 						</ul>
 					<li>New interface {@link org.apache.juneau.html.HtmlDocTemplate} that allows full control over rendering
 						of HTML produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
@@ -8646,15 +8646,15 @@
 			<li>Revamped the config file API to use a build:  {@link org.apache.juneau.ini.ConfigFileBuilder}.
 			<li>Removed the <code><del>Lockable</del></code> interface.
 			<li>New <code>addBeanTypeProperties</code> setting added to serializers to override the 
-				{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} setting
+				<code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> setting
 				for individual serializers in a serializer group:
 				<ul>
-					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_addBeanTypeProperties}
-					<li>{@link org.apache.juneau.json.JsonSerializerContext#JSON_addBeanTypeProperties}
-					<li>{@link org.apache.juneau.msgpack.MsgPackSerializerContext#MSGPACK_addBeanTypeProperties}
-					<li>{@link org.apache.juneau.uon.UonSerializerContext#UON_addBeanTypeProperties}
-					<li>{@link org.apache.juneau.xml.XmlSerializerContext#XML_addBeanTypeProperties}
-					<li>{@link org.apache.juneau.jena.RdfSerializerContext#RDF_addBeanTypeProperties}
+					<li><code><del>HtmlSerializerContext.HTML_addBeanTypeProperties</del></code>
+					<li><code><del>JsonSerializerContext.JSON_addBeanTypeProperties</del></code>
+					<li><code><del>MsgPackSerializerContext.MSGPACK_addBeanTypeProperties</del></code>
+					<li><code><del>UonSerializerContext.UON_addBeanTypeProperties</del></code>
+					<li><code><del>XmlSerializerContext.#XML_addBeanTypeProperties</del></code>
+					<li><code><del>RdfSerializerContext.RDF_addBeanTypeProperties</del></code>
 				</ul>
 			<li>UON notation serializers and parsers moved into the new <code>org.apache.juneau.uon</code> package.
 			<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#VOID} format to identify HTML void elements.
@@ -8690,7 +8690,7 @@
 					<li>{@link org.apache.juneau.dto.html5.HtmlElementContainer#getChild(int...)}
 					<li>{@link org.apache.juneau.dto.html5.HtmlElementMixed#getChild(int...)}
 				</ul>
-			<li>New common serializer setting: {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_abridged}.
+			<li>New common serializer setting: <code><del>SerializerContext.SERIALIZER_abridged</del></code>.
 			<li>Support for defining interface proxies against 3rd-party REST interfaces.
 				<br>New package {@link org.apache.juneau.remoteable} for all remoteable proxy interface annotations.
 				<br><ja>@Remoteable</ja> annotation has been moved to this package.
@@ -9102,9 +9102,9 @@
 				and replaced them with the ability to define subtypes using the existing {@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean.beanDictionary()}
 				annotation on parent classes and interfaces.
 				<br>This has the added benefit of simplifying the overall code.
-			<li>The {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} setting is now enabled by default.
+			<li>The <code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> setting is now enabled by default.
 			<li>Combined the <code>SERIALIZER_addIndentation</code>/<code>JSON_addWhitespace</code>/<code>UON_addWhitespace</code>
-				properties into a single {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_useWhitespace} setting.
+				properties into a single <code><del>SerializerContext.SERIALIZER_useWhitespace</del></code> setting.
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -9155,9 +9155,9 @@
 				</ul>
 			<li>New properties in {@link org.apache.juneau.parser.ParserContext}.
 				<ul>
-					<li>{@link org.apache.juneau.parser.ParserContext#PARSER_strict}
-					<li>{@link org.apache.juneau.parser.ParserContext#PARSER_inputStreamCharset}
-					<li>{@link org.apache.juneau.parser.ParserContext#PARSER_fileCharset}
+					<li><code><del>ParserContext.PARSER_strict</del></code>
+					<li><code><del>ParserContext.PARSER_inputStreamCharset</del></code>
+					<li><code><del>ParserContext.PARSER_fileCharset</del></code>
 				</ul>
 			<li>Removed <code>JsonParserContext.JSON_strictMode</code>.  Replaced by <code>PARSER_strict</code>.		
 			<li><code><jk>byte[]</jk></code> arrays can now be passed to {@link org.apache.juneau.parser.Parser#parse(Object,Class)} for reader-based parsers.	
@@ -9212,7 +9212,7 @@
 					<li>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
 					<li>{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} - Define a type dictionary
 						for a particular bean property value.  This overrides the value specified using {@link org.apache.juneau.BeanContext#BEAN_beanDictionary}.
-					<li>{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} - Controls whether type properties are serialized.
+					<li><code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> - Controls whether type properties are serialized.
 				</ul>
 				In addition, the {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()} value replaces the <code>@Xml.name()</code> annotation, and the 
 				<js>"type"</js> and <js>"_class"</js> attributes in the XML and HTML serializers have been standardized on a single <js>"_type"</js> attribute.
@@ -9249,10 +9249,10 @@
 			<li>Various enhancements to <code><del>BeanContext.convertToType(Object,Class)</del></code>.
 			<li>New properties on {@link org.apache.juneau.html.HtmlSerializer}:
 				<ul>
-					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_detectLinksInStrings} - Automatically detect hyperlinks in strings.
-					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_lookForLabelParameters} - Specify anchor text by appending <code>&amp;label=MyLabel</code> to URL.
-					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_labelParameter} - Specify what URL parameter to use as the anchor text label.
-					<li>New {@link org.apache.juneau.html.HtmlSerializerContext#URI_ANCHOR} option for {@link org.apache.juneau.html.HtmlSerializerContext#HTML_uriAnchorText}.				
+					<li><code><del>HtmlSerializerContext.HTML_detectLinksInStrings</del></code> - Automatically detect hyperlinks in strings.
+					<li><code><del>HtmlSerializerContext.HTML_lookForLabelParameters</del></code> - Specify anchor text by appending <code>&amp;label=MyLabel</code> to URL.
+					<li><code><del>HtmlSerializerContext.HTML_labelParameter</del></code> - Specify what URL parameter to use as the anchor text label.
+					<li><code><del>HtmlSerializerContext.URI_ANCHOR</del></code> option for <code><del>HtmlSerializerContext.HTML_uriAnchorText</del></code>.				
 				</ul>
 			</li>
 			<li>Removed generics from {@link org.apache.juneau.BeanPropertyMeta}.
@@ -9360,8 +9360,8 @@
 			<li>New <code>ClassFilter</code> class.
 			<li><del><code>ConfigFile.getResolving(StringVarResolver,boolean)</code></del> method.
 			<li><del><code>ConfigFile.getStringVar()</code></del> method.
-			<li>New {@link org.apache.juneau.parser.ParserContext#PARSER_trimStrings} property.
-			<li>New {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_trimStrings} property.
+			<li>New <code><del>ParserContext.PARSER_trimStrings</del></code> property.
+			<li>New <code><del>SerializerContext.SERIALIZER_trimStrings</del></code> property.
 			<li><del><code>Args.getStringVar()}</code></del> method.
 			<li>New {@link org.apache.juneau.utils.ManifestFile} class
 			<li>New {@link org.apache.juneau.utils.MessageBundle} class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
@@ -10010,7 +10010,7 @@
 			<li>Fixed bug in {@link org.apache.juneau.internal.MultiSet} where exception was being thrown if last set was empty.
 			<li>New {@link org.apache.juneau.utils.ZipFileList} class for providing efficiently zipped directories through the REST interface.
 			<li>New <code>RdfProperties.RDF_useXmlNamespaces</code> property.			
-			<li>New {@link org.apache.juneau.xml.XmlParserContext#XML_preserveRootElement} property.
+			<li>New <code><del>XmlParserContext.XML_preserveRootElement</del></code> property.
 			<li>Worked around bug in Sun VM on OS/X where XML parser was throwing an exception when trying to set a reporter.			
 		</ul>
 		
@@ -10018,7 +10018,7 @@
 		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.rest.response.ZipFileListResponseHandler} class.
-			<li>Simplified lables in servlet resource bundles:
+			<li>Simplified labels in servlet resource bundles:
 				<ul>
 					<li><code>"[ClassName].ResourceDescription"</code> is now <code>"[ClassName].label"</code>.
 					<li><code>"[ClassName].MethodDescription.[methodName]"</code> is now <code>"[ClassName].[methodName]"</code>.
@@ -10115,7 +10115,7 @@
 			<li>New {@link org.apache.juneau.dto.jsonschema.JsonType#ANY} enum.
 			<li>New {@link org.apache.juneau.html.annotation.Html#asPlainText @Html.asPlainText()} annotation.
 			<li>New <code><del>HtmlDocSerializerContext.HTMLDOC_cssImports</del></code> property.
-			<li>Signifant changes to RDF support.
+			<li>Significant changes to RDF support.
 				<ul>
 					<li>New {@link org.apache.juneau.jena.annotation.Rdf @Rdf} and {@link org.apache.juneau.jena.annotation.RdfSchema @RdfSchema}
 						annotations.  These replace the use of defining namespaced through the XML annotations, and allows XML and RDF to be
@@ -10123,9 +10123,8 @@
 					<li>Support for serializing arrays/collections as RDF bags, RDF lists, and multi-valued properties.   
 					<li>Fixed warning message about <js>"tab"</js> setting when using the N3/Turtle serializers.
 				</ul>
-			<li>New {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_sortCollections} and 
-				{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_sortMaps} properties.
-			<li>
+			<li>New <code><del>SerializerContext.SERIALIZER_sortCollections</del></code> and 
+				<code><del>SerializerContext.SERIALIZER_sortMaps</del></code> properties.
 			<li>FindBug fixes.
 		</ul>
 
@@ -10253,7 +10252,7 @@
 			<li>{@link org.apache.juneau.ClassMeta#newInstance()} method can now create new instances of arrays.
 			<li>Arguments passed to <code><del>Link</del></code> are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
 			<li>New date filters:  <code>org.apache.juneau.transforms.Datefilter.ISO8601DTZP</code> and <code>org.apache.juneau.transforms.Datefilter.SimpleP</code>.
-			<li>New {@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_nowrap} setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
+			<li>New <code><del>HtmlDocSerializerContext.HTMLDOC_nowrap</del></code> setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
 				Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
 			<li>Fixed bug in {@link org.apache.juneau.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <code>ClassCastException</code>.  
 				New behavior creates an empty array or <code>Collection</code>.
@@ -10323,13 +10322,13 @@
 				<ul>
 					<li>Improved whitespace handling in {@link org.apache.juneau.uon.UonParser}.
 					<li>New <code><del>UonParserContext.UON_whitespaceAware</del></code> property for controlling whether whitespace is ignored.
-					<li>New {@link org.apache.juneau.urlencoding.UrlEncodingContext#URLENC_expandedParams} property for controlling whether arrays/Collections 
+					<li>New <code><del>UrlEncodingContext.URLENC_expandedParams</del></code> property for controlling whether arrays/Collections 
 						should be serialized/parsed as multi-part parameters.
 					<li>New {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() @UrlEncoding.expandedParams()}
 						annotation that specifies that bean properties of type array/Collection be serialized as multi-part parameters (e.g. <code>&amp;key=val1&amp;key=val2</code>).
 				</ul>
 			</li>
-			<li>New {@link org.apache.juneau.json.JsonSerializerContext#JSON_escapeSolidus} property for controlling whether slash characters should be escaped.
+			<li>New <code><del>JsonSerializerContext.JSON_escapeSolidus</del></code> property for controlling whether slash characters should be escaped.
 			<li>New {@link org.apache.juneau.internal.TeeOutputStream} and {@link org.apache.juneau.internal.TeeWriter} classes.
 			<li>New {@link org.apache.juneau.ClassMeta#isInstance(Object)} method.
 			<li>Performance improvements when using the {@link org.apache.juneau.BeanMap#add(String,Object)} method.  
@@ -10530,7 +10529,7 @@
 			<li>Improved error handling.  
 			<li>New <code><del>ParserContext.PARSER_debug</del></code> and <code><del>SerializerContext.SERIALIZER_debug</del></code>.
 				settings for logging additional information for debugging problems.
-			<li>New {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_ignoreRecursions} setting for explicitely ignoring recursions when 
+			<li>New {@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions} setting for explicitely ignoring recursions when 
 				serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
 				and throws exceptions when they occur.
 			<li>Improved handling of <code>StackOverflowErrors</code>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
@@ -11326,8 +11325,8 @@
 				New Jena-based {@link org.apache.juneau.jena.RdfParser} for parsing RDF/XML, RDF/XML-ABBREV, N3, Turtle, and N-Triple back into POJOs.
 			</li>
 			<li>
-				{@link org.apache.juneau.xml.XmlSerializerContext#XML_autoDetectNamespaces} default changed to <jk>true</jk>.<br>
-				The old default value would cause XML with unmapped namespaces if you didn't manually specify them via the {@link org.apache.juneau.xml.XmlSerializerContext#XML_namespaces} annotation.<br>
+				<code><del>XmlSerializerContext.XML_autoDetectNamespaces</del></code> default changed to <jk>true</jk>.<br>
+				The old default value would cause XML with unmapped namespaces if you didn't manually specify them via the <code><del>XmlSerializerContext.XML_namespaces</del></code> annotation.<br>
 				While setting the default to <jk>true</jk> is somewhat slower (since the serializer must crawl the POJO tree to find namespaces), the benefits of having it work out-of-the-box outweighs the performance concerns.<br>
 				For developers concerned about performance, they can always change it back to false and specify the namespaces themselves.	
 			</li>
@@ -11393,7 +11392,7 @@
 				</ul>
 			</li>
 			<li>
-				<jsf>TRIM_NULLS</jsf> setting changed to {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_trimNullProperties}.<br>
+				<jsf>TRIM_NULLS</jsf> setting changed to <code><del>SerializerContext.SERIALIZER_trimNullProperties</del></code>.<br>
 				New property default is <jk>true</jk>. 
 				Only applies to bean properties, not map or collection entries.
 			</li>
@@ -11608,7 +11607,7 @@
 				New {@link org.apache.juneau.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <code>java.net.URI</code> or <code>java.net.URL</code>.
 			</li>
 			<li>
-				New {@link org.apache.juneau.html.HtmlSerializerContext#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
+				New {@link org.apache.juneau.html.HtmlSerializer#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
 			</li>
 			<li>
 				Renamed <code>BeanProperty#uri</code> annotation to <code>BeanProperty#beanUri</code> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.

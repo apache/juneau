@@ -29,16 +29,30 @@ import org.apache.juneau.xml.*;
  * <h5 class='section'>Description:</h5>
  *
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link SoapXmlSerializerContext}
- * 	<li>{@link BeanContext}
- * </ul>
  */
 public final class SoapXmlSerializer extends XmlSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "SoapXmlSerializer.";
+
+	/**
+	 * <b>Configuration property:</b>  The <code>SOAPAction</code> HTTP header value to set on responses.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"SoapXmlSerializer.SOAPAction"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2003/05/soap-envelope"</js>
+	 * </ul>
+	 */
+	public static final String SOAPXML_SOAPAction = PREFIX + "SOAPAction";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final SoapXmlSerializerContext ctx;
 

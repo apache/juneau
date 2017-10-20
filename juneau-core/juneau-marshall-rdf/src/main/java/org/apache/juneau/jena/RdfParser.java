@@ -13,18 +13,13 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfCommonContext.*;
+import static org.apache.juneau.jena.RdfCommon.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
 /**
  * Parses RDF into POJOs.
- *
- * <h5 class='section'>Configurable properties:</h5>
- * 
- * Refer to <a class="doclink" href="package-summary.html#ParserConfigurableProperties">Configurable Properties</a>
- * for the entire list of configurable properties.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * 
@@ -46,6 +41,32 @@ import org.apache.juneau.parser.*;
  */
 public class RdfParser extends ReaderParser {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "RdfParser.";
+
+	/**
+	 * <b>Configuration property:</b>  Trim whitespace from text elements.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
+	 */
+	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace";
+
+	
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+	
 	/** Default XML parser, all default settings.*/
 	public static final RdfParser DEFAULT_XML = new Xml(PropertyStore.create());
 
@@ -58,6 +79,10 @@ public class RdfParser extends ReaderParser {
 	/** Default N3 parser, all default settings.*/
 	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Consumes RDF/XML input */
 	public static class Xml extends RdfParser {
@@ -111,6 +136,10 @@ public class RdfParser extends ReaderParser {
 		}
 	}
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final RdfParserContext ctx;
 

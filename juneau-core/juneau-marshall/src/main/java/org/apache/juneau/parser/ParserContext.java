@@ -12,133 +12,21 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.parser.Parser.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 
 /**
- * Configurable properties common to all parsers.
+ * Contains a snapshot-in-time read-only copy of the settings on the {@link Parser} class.
  */
 public class ParserContext extends BeanContext {
-
-	static final String PREFIX = "Parser.";
 
 	/**
 	 * Default context with all default values.
 	 */
 	@SuppressWarnings("hiding")
-	protected static final ParserContext DEFAULT = new ParserContext(PropertyStore.create());
+	static final ParserContext DEFAULT = new ParserContext(PropertyStore.create());
 
-	/**
-	 * <b>Configuration property:</b>  Trim parsed strings.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.trimStrings"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 */
-	public static final String PARSER_trimStrings = PREFIX + "trimStrings";
-
-	/**
-	 * <b>Configuration property:</b>  Strict mode.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.strict"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, strict mode for the parser is enabled.
-	 *
-	 * <p>
-	 * Strict mode can mean different things for different parsers.
-	 *
-	 * <table class='styled'>
-	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
-	 * 	<tr>
-	 * 		<td>All reader-based parsers</td>
-	 * 		<td>
-	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
-	 * 			Otherwise, malformed input is ignored.
-	 * 		</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>{@link JsonParser}</td>
-	 * 		<td>
-	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
-	 * 			<ul>
-	 * 				<li>Unquoted attributes.
-	 * 				<li>Missing attribute values.
-	 * 				<li>Concatenated strings.
-	 * 				<li>Javascript comments.
-	 * 				<li>Numbers and booleans when Strings are expected.
-	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
-	 * 			</ul>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
-	 */
-	public static final String PARSER_strict = PREFIX + "strict";
-
-	/**
-	 * <b>Configuration property:</b>  Input stream charset.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"UTF-8"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 *
-	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-	 */
-	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset";
-
-	/**
-	 * <b>Configuration property:</b>  File charset.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.fileCharset"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"default"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <p>
-	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
-	 */
-	public static final String PARSER_fileCharset = PREFIX + "fileCharset";
-
-	/**
-	 * <b>Configuration property:</b>  Parser listener.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.listener"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? extends ParserListener&gt;</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during parsing.
-	 */
-	public static final String PARSER_listener = PREFIX + "listener";
 
 	final boolean trimStrings, strict;
 	final String inputStreamCharset, fileCharset;

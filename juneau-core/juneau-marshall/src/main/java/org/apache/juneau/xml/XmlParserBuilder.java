@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlParserContext.*;
+import static org.apache.juneau.xml.XmlParser.*;
 
 import java.util.*;
 
@@ -79,7 +79,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParserContext#XML_validating
+	 * @see XmlParser#XML_validating
 	 */
 	public XmlParserBuilder validating(boolean value) {
 		return property(XML_validating, value);
@@ -114,7 +114,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParserContext#XML_reporter
+	 * @see XmlParser#XML_reporter
 	 */
 	public XmlParserBuilder reporter(XMLReporter value) {
 		return property(XML_reporter, value);
@@ -144,7 +144,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParserContext#XML_resolver
+	 * @see XmlParser#XML_resolver
 	 */
 	public XmlParserBuilder resolver(XMLResolver value) {
 		return property(XML_resolver, value);
@@ -174,7 +174,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParserContext#XML_eventAllocator
+	 * @see XmlParser#XML_eventAllocator
 	 */
 	public XmlParserBuilder eventAllocator(XMLEventAllocator value) {
 		return property(XML_eventAllocator, value);
@@ -215,7 +215,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParserContext#XML_preserveRootElement
+	 * @see XmlParser#XML_preserveRootElement
 	 */
 	public XmlParserBuilder preserveRootElement(boolean value) {
 		return property(XML_preserveRootElement, value);

@@ -35,19 +35,20 @@ import org.apache.juneau.transform.*;
  * <p>
  * Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform
  * defined on it.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link ParserContext}
- * </ul>
  */
 public class PlainTextParser extends ReaderParser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
 	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

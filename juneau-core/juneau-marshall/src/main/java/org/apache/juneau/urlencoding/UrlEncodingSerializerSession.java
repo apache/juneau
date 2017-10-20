@@ -13,6 +13,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -41,7 +42,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param encode Override the {@link UonSerializerContext#UON_encodeChars} setting.
+	 * @param encode Override the {@link UonSerializer#UON_encodeChars} setting.
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -51,7 +52,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	protected UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, encode, args);
 		ObjectMap p = getProperties();
-		expandedParams = p.getBoolean(UrlEncodingSerializerContext.URLENC_expandedParams, ctx.expandedParams);
+		expandedParams = p.getBoolean(URLENC_expandedParams, ctx.expandedParams);
 	}
 
 	@Override /* Session */

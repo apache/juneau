@@ -21,23 +21,53 @@ import org.apache.juneau.serializer.*;
  * <h5 class='section'>Media types:</h5>
  *
  * Handles <code>Accept</code> types: <code>octal/msgpack</code>
+ *
  * <p>
  * Produces <code>Content-Type</code> types: <code>octal/msgpack</code>
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link MsgPackSerializerContext}
- * 	<li>{@link SerializerContext}
- * 	<li>{@link BeanContext}
- * </ul>
  */
 public class MsgPackSerializer extends OutputStreamSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "MsgPackSerializer.";
+
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"MsgPackSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
+	 * the value type.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String MSGPACK_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
 	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final MsgPackSerializerContext ctx;
 

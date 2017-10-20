@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.ParserContext.*;
+import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -126,11 +126,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ParserContext#PARSER_inputStreamCharset}).
+	 * 			{@link Parser#PARSER_inputStreamCharset}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ParserContext#PARSER_inputStreamCharset}).
+	 * 			{@link Parser#PARSER_inputStreamCharset}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ParserContext#PARSER_fileCharset}).
+	 * 			{@link Parser#PARSER_fileCharset}).
 	 * 	</ul>
 	 * 	<br>For byte-based parsers, this can be any of the following types:
 	 * 	<ul>
@@ -204,18 +204,18 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the {@link ParserContext#PARSER_trimStrings} setting value for this session.
+	 * Returns the {@link Parser#PARSER_trimStrings} setting value for this session.
 	 *
-	 * @return The {@link ParserContext#PARSER_trimStrings} setting value for this session.
+	 * @return The {@link Parser#PARSER_trimStrings} setting value for this session.
 	 */
 	protected final boolean isTrimStrings() {
 		return trimStrings;
 	}
 
 	/**
-	 * Returns the {@link ParserContext#PARSER_strict} setting value for this session.
+	 * Returns the {@link Parser#PARSER_strict} setting value for this session.
 	 *
-	 * @return The {@link ParserContext#PARSER_strict} setting value for this session.
+	 * @return The {@link Parser#PARSER_strict} setting value for this session.
 	 */
 	protected final boolean isStrict() {
 		return strict;
@@ -391,11 +391,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 			{@link Parser#PARSER_inputStreamCharset} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 			{@link Parser#PARSER_inputStreamCharset} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ParserContext#PARSER_fileCharset} property value).
+	 * 			{@link Parser#PARSER_fileCharset} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>

@@ -285,8 +285,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name=POST, path="/testFormPostsWithMultiParamsUsingProperty",
 		properties={
-			@Property(name=UrlEncodingSerializerContext.URLENC_expandedParams, value="true"),
-			@Property(name=UrlEncodingParserContext.URLENC_expandedParams, value="true")
+			@Property(name=UrlEncodingSerializer.URLENC_expandedParams, value="true"),
+			@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
 		}
 	)
 	public DTO2s.B testFormPostsWithMultiParamsViaProperty(@Body DTO2s.B content) throws Exception {

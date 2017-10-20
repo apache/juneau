@@ -13,7 +13,7 @@
 package org.apache.juneau.xml;
 
 import static javax.xml.stream.XMLStreamConstants.*;
-import static org.apache.juneau.xml.XmlParserContext.*;
+import static org.apache.juneau.xml.XmlParser.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -39,7 +39,6 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlParserSession extends ReaderParserSession {
 
 	private static final int UNKNOWN=0, OBJECT=1, ARRAY=2, STRING=3, NUMBER=4, BOOLEAN=5, NULL=6;
-
 
 	private final boolean
 		validating,

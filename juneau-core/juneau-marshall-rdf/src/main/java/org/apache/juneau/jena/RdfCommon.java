@@ -22,7 +22,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Configurable properties common to both the {@link RdfSerializer} and {@link RdfParser} classes.
  */
-public interface RdfCommonContext {
+public interface RdfCommon {
 
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.

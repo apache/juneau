@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonSerializerContext.*;
+import static org.apache.juneau.json.JsonSerializer.*;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see JsonSerializerContext#JSON_simpleMode
+	 * @see JsonSerializer#JSON_simpleMode
 	 */
 	public JsonSerializerBuilder simple(boolean value) {
 		return property(JSON_simpleMode, value);
@@ -110,7 +110,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see JsonSerializerContext#JSON_escapeSolidus
+	 * @see JsonSerializer#JSON_escapeSolidus
 	 */
 	public JsonSerializerBuilder escapeSolidus(boolean value) {
 		return property(JSON_escapeSolidus, value);

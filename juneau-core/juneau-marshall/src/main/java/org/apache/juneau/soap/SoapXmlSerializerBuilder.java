@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.soap.SoapXmlSerializerContext.*;
+import static org.apache.juneau.soap.SoapXmlSerializer.*;
 
 import java.util.*;
 
@@ -69,7 +69,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SoapXmlSerializerContext#SOAPXML_SOAPAction
+	 * @see SoapXmlSerializer#SOAPXML_SOAPAction
 	 */
 	public SoapXmlSerializerBuilder uriAnchorText(String value) {
 		return property(SOAPXML_SOAPAction, value);

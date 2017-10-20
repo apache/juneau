@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -53,14 +51,6 @@ import org.apache.juneau.xml.*;
  *
  * <p>
  * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul class='spaced-list'>
- * 	<li>
- * 		{@link HtmlSerializerContext}
- * </ul>
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  *
@@ -135,6 +125,117 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings("hiding")
 public class HtmlSerializer extends XmlSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "HtmlSerializer.";
+
+	/**
+	 * <b>Configuration property:</b>  Anchor text source.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
+	 * 	<li><b>Data type:</b> <code>AnchorText</code>
+	 * 	<li><b>Default:</b> <jsf>TO_STRING</jsf>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
+	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
+	 *
+	 * <p>
+	 * See the {@link AnchorText} enum for possible values.
+	 */
+	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText";
+
+	/**
+	 * <b>Configuration property:</b>  Look for URLs in {@link String Strings}.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
+	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
+	 */
+	public static final String HTML_detectLinksInStrings = PREFIX + "detectLinksInStrings";
+
+	/**
+	 * <b>Configuration property:</b>  Look for link labels in the <js>"label"</js> parameter of the URL.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 *
+	 * <p>
+	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
+	 */
+	public static final String HTML_lookForLabelParameters = PREFIX + "lookForLabelParameters";
+
+	/**
+	 * <b>Configuration property:</b>  The parameter name to use when using {@link #HTML_lookForLabelParameters}.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"label"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 */
+	public static final String HTML_labelParameter = PREFIX + "labelParameter";
+
+	/**
+	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 */
+	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders";
+
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined
+	 * from the value type.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String HTML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Default serializer, all default settings. */
 	public static final HtmlSerializer DEFAULT = new HtmlSerializer(PropertyStore.create());
 
@@ -144,6 +245,10 @@ public class HtmlSerializer extends XmlSerializer {
 	/** Default serializer, single quotes, whitespace added. */
 	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes. */
 	public static class Sq extends HtmlSerializer {
@@ -171,6 +276,10 @@ public class HtmlSerializer extends XmlSerializer {
 		}
 	}
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	final HtmlSerializerContext ctx;
 	private volatile HtmlSchemaDocSerializer schemaSerializer;

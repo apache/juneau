@@ -168,7 +168,7 @@
 						<windowtitle>${project.name} ${project.version}</windowtitle>
 						<author>true</author>
 						<linksource>true</linksource>
-						<source>1.6</source>
+						<source>1.7</source>
 						<bootclasspath>${sun.boot.class.path}</bootclasspath>
 						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
 						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>

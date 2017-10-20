@@ -13,7 +13,7 @@
 package org.apache.juneau.html;
 
 /**
- * Identifies possible values for the {@link HtmlSerializerContext#HTML_uriAnchorText} setting.
+ * Identifies possible values for the {@link HtmlSerializer#HTML_uriAnchorText} setting.
  */
 public enum AnchorText {
 

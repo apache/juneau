@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.ParserContext.*;
+import static org.apache.juneau.parser.Parser.*;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_trimStrings
+	 * @see Parser#PARSER_trimStrings
 	 */
 	public ParserBuilder trimStrings(boolean value) {
 		return property(PARSER_trimStrings, value);
@@ -126,7 +126,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_strict
+	 * @see Parser#PARSER_strict
 	 */
 	public ParserBuilder strict(boolean value) {
 		return property(PARSER_strict, value);
@@ -164,7 +164,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_inputStreamCharset
+	 * @see Parser#PARSER_inputStreamCharset
 	 */
 	public ParserBuilder inputStreamCharset(String value) {
 		return property(PARSER_inputStreamCharset, value);
@@ -196,7 +196,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_fileCharset
+	 * @see Parser#PARSER_fileCharset
 	 */
 	public ParserBuilder fileCharset(String value) {
 		return property(PARSER_fileCharset, value);
@@ -217,7 +217,7 @@ public class ParserBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_listener
+	 * @see Parser#PARSER_listener
 	 */
 	public ParserBuilder listener(Class<? extends ParserListener> value) {
 		return property(PARSER_listener, value);

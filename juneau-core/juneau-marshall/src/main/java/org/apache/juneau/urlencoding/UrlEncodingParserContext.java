@@ -12,40 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.uon.*;
 
 /**
- * Configurable properties on the {@link UrlEncodingParser} class.
- *
- * <p>
- * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
- * passed into the constructor.
- *
- * <p>
- * See {@link PropertyStore} for more information about context properties.
+ * Contains a snapshot-in-time read-only copy of the settings on the {@link UrlEncodingParser} class.
  */
 public class UrlEncodingParserContext extends UonParserContext {
-
-	static final String PREFIX = "UrlEncodingParser.";
-
-	/**
-	 * Parser bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
-	 *
-	 * <p>
-	 * This is the parser-side equivalent of the {@link UrlEncodingSerializerContext#URLENC_expandedParams} setting.
-	 *
-	 * <p>
-	 * This option only applies to beans.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>
-	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 		is added to it.
-	 * </ul>
-	 */
-	public static final String URLENC_expandedParams = PREFIX + "expandedParams";
 
 	final boolean
 		expandedParams;

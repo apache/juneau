@@ -342,7 +342,7 @@
 	<xt>&lt;/rdf:RDF&gt;</xt>
 		</p>
 		<p>
-			Namespace auto-detection ({@link org.apache.juneau.xml.XmlSerializerContext#XML_autoDetectNamespaces}) is 
+			Namespace auto-detection ({@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces}) is 
 			enabled on serializers by default.
 			<br>This causes the serializer to make a first-pass over the data structure to look for namespaces.
 			<br>In high-performance environments, you may want to consider disabling auto-detection and providing an 
@@ -440,9 +440,9 @@
 		<ja>@URI</ja> <jk>public</jk> String <jf>addressBookUri</jf>;
 		</p>
 		<p>
-			Also take note of the {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriResolution},
-			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriRelativity}, and 
-			and {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriContext}
+			Also take note of the {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution},
+			{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}, and 
+			and {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
 			settings that can be specified on the serializer to resolve relative and context-root-relative URIs to 
 			fully-qualified URIs.
 		</p>
@@ -657,7 +657,7 @@
 			locate the root at all.
 		</p>
 		<p>
-			To resolve this issue, the property {@link org.apache.juneau.jena.RdfSerializerContext#RDF_addRootProperty} 
+			To resolve this issue, the property {@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty} 
 			was introduced.
 			<br>When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
 			by the parser.
@@ -716,7 +716,7 @@
 	<div class='topic'>
 		<p>
 			XML-Schema data-types can be added to non-<code>String</code> literals through the 
-			{@link org.apache.juneau.jena.RdfSerializerContext#RDF_addLiteralTypes} setting.
+			{@link org.apache.juneau.jena.RdfSerializer#RDF_addLiteralTypes} setting.
 		</p>
 		<p>
 			To enable, set the <jsf>RDF_addLiteralTypes</jsf> property to <jk>true</jk> on the serializer:
@@ -773,12 +773,12 @@
 			The RDF serializer is designed to be used against tree structures.
 			<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
 			<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
-			be thrown (if {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_maxDepth} is not reached 
+			be thrown (if {@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth} is not reached 
 			first).
 		</p>
 		<p>
 			If you still want to use the XML serializer on such models, Juneau provides the 
-			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_detectRecursions} setting.
+			{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions} setting.
 			<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 			serialization when a duplicate is encountered.
 		</p>

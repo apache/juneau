@@ -16,35 +16,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Properties associated with the {@link SoapXmlSerializer} class.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the SOAP/XML serializer</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
- * 	<tr>
- * 		<td>{@link #SOAPXML_SOAPAction}</td>
- * 		<td>The <code>SOAPAction</code> HTTP header value to set on responses.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"http://www.w3.org/2003/05/soap-envelope"</js></td>
- * 	</tr>
- * </table>
- *
- * <h6 class='topic'>Inherited configurable properties</h6>
- * <ul class='doctree'>
- * 	<li class='jc'>
- * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
- * 		- Properties associated with handling beans on serializers and parsers.
- * 		<ul>
- * 			<li class='jc'>
- * 				<a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
- * 				- Configurable properties common to all serializers.
- * 		</ul>
- * 	</li>
- * </ul>
+ * Contains a snapshot-in-time read-only copy of the settings on the {@link SoapXmlSerializer} class.
  */
 public final class SoapXmlSerializerContext extends XmlSerializerContext {
-
-	static final String PREFIX = "SoapXmlSerializer.";
 
 	/**
 	 * Constructor
@@ -57,15 +31,4 @@ public final class SoapXmlSerializerContext extends XmlSerializerContext {
 	public SoapXmlSerializerContext(PropertyStore ps) {
 		super(ps);
 	}
-
-	/**
-	 * <b>Configuration property:</b>  The <code>SOAPAction</code> HTTP header value to set on responses.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"SoapXmlSerializer.SOAPAction"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2003/05/soap-envelope"</js>
-	 * </ul>
-	 */
-	public static final String SOAPXML_SOAPAction = PREFIX + "SOAPAction";
 }

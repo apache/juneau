@@ -13,7 +13,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpMethodName.*;

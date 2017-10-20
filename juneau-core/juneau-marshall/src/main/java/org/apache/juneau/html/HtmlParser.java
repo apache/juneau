@@ -28,20 +28,21 @@ import org.apache.juneau.xml.*;
  * See the {@link HtmlSerializer} class for a description of the HTML generated.
  * <p>
  * This class is used primarily for automated testing of the {@link HtmlSerializer} class.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link HtmlSerializerContext}
- * </ul>
  */
 @SuppressWarnings({ "hiding" })
 public class HtmlParser extends XmlParser {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Default parser, all default settings.*/
 	public static final HtmlParser DEFAULT = new HtmlParser(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final HtmlParserContext ctx;
 

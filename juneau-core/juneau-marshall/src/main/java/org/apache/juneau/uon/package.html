@@ -638,12 +638,12 @@
 			The URL-encoding serializer is designed to be used against POJO tree structures.
 			It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
 			<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
-			be thrown (if {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_maxDepth} is not reached 
+			be thrown (if {@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth} is not reached 
 			first).
 		</p>
 		<p>
 			If you still want to use the URL-encoding serializer on such models, Juneau provides the 
-			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_detectRecursions} setting.
+			{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions} setting.
 			<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 			serialization when a duplicate is encountered.
 		</p>

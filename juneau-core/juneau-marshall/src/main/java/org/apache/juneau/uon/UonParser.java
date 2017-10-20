@@ -12,10 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.uon.UonParserContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.urlencoding.*;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
@@ -27,17 +26,35 @@ import org.apache.juneau.parser.*;
  * <h5 class='section'>Description:</h5>
  *
  * This parser uses a state machine, which makes it very fast and efficient.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link UonParserContext}
- * 	<li>{@link ParserContext}
- * 	<li>{@link BeanContext}
- * </ul>
  */
 public class UonParser extends ReaderParser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "UonParser.";
+
+	/**
+	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
+	 * before being passed to this parser.
+	 */
+	public static final String UON_decodeChars = PREFIX + "decodeChars";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonParser}, all default settings. */
 	public static final UonParser DEFAULT = new UonParser(PropertyStore.create());
@@ -45,6 +62,10 @@ public class UonParser extends ReaderParser {
 	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
 	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, decoding. */
 	public static class Decoding extends UonParser {
@@ -59,6 +80,10 @@ public class UonParser extends ReaderParser {
 		}
 	}
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final UonParserContext ctx;
 

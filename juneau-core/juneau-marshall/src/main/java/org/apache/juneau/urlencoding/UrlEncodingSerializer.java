@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
-import static org.apache.juneau.uon.UonSerializerContext.*;
-import static org.apache.juneau.urlencoding.UrlEncodingSerializerContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -37,14 +34,6 @@ import org.apache.juneau.uon.*;
  *
  * This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link UonSerializerContext}
- * 	<li>{@link BeanContext}
- * </ul>
  *
  * <p>
  * The following shows a sample object defined in Javascript:
@@ -128,6 +117,51 @@ import org.apache.juneau.uon.*;
 @SuppressWarnings("hiding")
 public class UrlEncodingSerializer extends UonSerializer implements PartSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "UrlEncodingSerializer.";
+
+	/**
+	 * Serialize bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
+	 *
+	 * <p>
+	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 *
+	 * <p>
+	 * Example:
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
+	 * 		<jk>public</jk> List&lt;String&gt; f2 = <jk>new</jk> LinkedList&lt;String&gt;(Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>}));
+	 * 	}
+	 *
+	 * 	UrlEncodingSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
+	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();
+	 *
+	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
+	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
+	 * </p>
+	 *
+	 * <p>
+	 * This option only applies to beans.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>
+	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
+	 * 		is added to it.
+	 * </ul>
+	 */
+	public static final String URLENC_expandedParams = PREFIX + "expandedParams";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
 	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(PropertyStore.create());
 
@@ -139,6 +173,11 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
 	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(PropertyStore.create());
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();</code>.
@@ -184,6 +223,11 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			super(propertyStore.copy().append(UON_paramFormat, "PLAINTEXT"));
 		}
 	}
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final UrlEncodingSerializerContext ctx;
 
@@ -259,7 +303,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 					return o.toString();
 				if (cm.isCharSequence()) {
 					String s = o.toString();
-					boolean ptt = (plainTextParams != null ? plainTextParams : ctx.getParamFormat().equals("PLAINTEXT"));
+					boolean ptt = (plainTextParams != null ? plainTextParams : ctx.getParamFormat() == ParamFormat.PLAINTEXT);
 					if (ptt || s.isEmpty() || ! UonUtils.needsQuotes(s))
 						return (urlEncode ? urlEncode(s) : s);
 				}

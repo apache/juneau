@@ -61,15 +61,6 @@ import org.apache.juneau.serializer.*;
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link YamlSerializerContext}
- * 	<li>{@link SerializerContext}
- * 	<li>{@link BeanContext}
- * </ul>
- *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
@@ -87,9 +78,81 @@ import org.apache.juneau.serializer.*;
  */
 public class YamlSerializer extends WriterSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "YamlSerializer.";
+
+	/**
+	 * <b>Configuration property:</b>  Simple JSON mode.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
+	 * Otherwise, they are always quoted.
+	 */
+	public static final String YAML_simpleMode = PREFIX + "simpleMode";
+
+	/**
+	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
+	 * The JSON specification allows for either format.
+	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
+	 * <xt>&lt;\/script&gt;</xt>.
+	 */
+	public static final String YAML_escapeSolidus = PREFIX + "escapeSolidus";
+
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
+	 * the value type.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String YAML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Default serializer, all default settings.*/
 	public static final YamlSerializer DEFAULT = new YamlSerializer(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	final YamlSerializerContext ctx;
 

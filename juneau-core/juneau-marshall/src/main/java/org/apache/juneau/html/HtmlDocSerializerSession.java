@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.html.HtmlDocSerializer.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -81,10 +81,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_style} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_style} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_style} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_style} setting value in this context.
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
@@ -93,10 +93,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_stylesheet} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_stylesheet} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_stylesheet} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_stylesheet} setting value in this context.
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
@@ -105,10 +105,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_script} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_script} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_script} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_script} setting value in this context.
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
@@ -117,10 +117,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_head} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_head} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_head} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_head} setting value in this context.
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
@@ -129,19 +129,19 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_nowrap} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_nowrap} setting value in this context.
 	 *
-	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_nowrap} setting value in this context.
+	 * @return The {@link HtmlDocSerializer#HTMLDOC_nowrap} setting value in this context.
 	 */
 	public final boolean isNoWrap() {
 		return nowrap;
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_header} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_header} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_header} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_header} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
 	 * 	 Never an empty string.
 	 */
@@ -150,10 +150,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_navlinks} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_navlinks} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
 	 *		<jk>null</jk> if not specified.
 	 *		Never an empty map.
 	 */
@@ -173,10 +173,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_nav} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_nav} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_nav} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_nav} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty string.
 	 */
@@ -185,10 +185,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_aside} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_aside} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_aside} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_aside} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
 	 *  	Never an empty string.
 	 */
@@ -197,10 +197,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_footer} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_footer} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_footer} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_footer} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty string.
 	 */
@@ -209,10 +209,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer#HTMLDOC_noResultsMessage} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage} setting value in this context.
+	 * 	The {@link HtmlDocSerializer#HTMLDOC_noResultsMessage} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty string.
 	 */

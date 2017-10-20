@@ -15,7 +15,7 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.xml.NamespaceFactory.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.apache.juneau.xml.XmlSerializer.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
@@ -120,9 +120,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link XmlSerializerContext#XML_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link XmlSerializer#XML_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link XmlSerializerContext#XML_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link XmlSerializer#XML_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
 	protected boolean isAddBeanTypeProperties() {

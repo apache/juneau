@@ -29,8 +29,17 @@ import org.apache.juneau.serializer.*;
  */
 public class JsoSerializer extends OutputStreamSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Default serializer, all default settings.*/
 	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore.create());
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final SerializerContext ctx;
 

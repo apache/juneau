@@ -161,7 +161,7 @@ public class SerializerWriter extends Writer {
 	 * @return This object (for method chaining).
 	 */
 	private SerializerWriter append(int indent, boolean newline, String text) throws IOException {
-		
+
 		// If text contains newlines, we break it up into lines and indent them separately.
 		if (text.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
 			for (StringTokenizer st = new StringTokenizer(text, "\n"); st.hasMoreTokens();) {
@@ -186,8 +186,8 @@ public class SerializerWriter extends Writer {
 	 * {@link URI} objects, or any other type that returns a URI via it's <code>toString()</code> method.
 	 *
 	 * <p>
-	 * The URI is resolved based on the {@link SerializerContext#SERIALIZER_uriRelativity} and
-	 * {@link SerializerContext#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the
+	 * The URI is resolved based on the {@link Serializer#SERIALIZER_uriRelativity} and
+	 * {@link Serializer#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the
 	 * session.
 	 *
 	 * @param uri The URI to serialize.
@@ -278,7 +278,7 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * Writes a space if the boolean expression is <jk>true</jk> and {@code useWhitespace} is false.
-	 * 
+	 *
 	 * <p>
 	 * Intended for cases in XML where text should be separated by either a space or newline.
 	 * This ensures the text is separated by a space if whitespace is disabled.

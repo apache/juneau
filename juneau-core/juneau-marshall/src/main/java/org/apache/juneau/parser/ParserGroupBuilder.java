@@ -15,7 +15,7 @@ package org.apache.juneau.parser;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.parser.ParserContext.*;
+import static org.apache.juneau.parser.Parser.*;
 
 import java.util.*;
 
@@ -207,55 +207,55 @@ public class ParserGroupBuilder {
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_trimStrings} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_trimStrings
+	 * @see Parser#PARSER_trimStrings
 	 */
 	public ParserGroupBuilder trimStrings(boolean value) {
 		return property(PARSER_trimStrings, value);
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_strict} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_strict
+	 * @see Parser#PARSER_strict
 	 */
 	public ParserGroupBuilder strict(boolean value) {
 		return property(PARSER_strict, value);
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_inputStreamCharset} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_inputStreamCharset
+	 * @see Parser#PARSER_inputStreamCharset
 	 */
 	public ParserGroupBuilder inputStreamCharset(String value) {
 		return property(PARSER_inputStreamCharset, value);
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_fileCharset} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_fileCharset
+	 * @see Parser#PARSER_fileCharset
 	 */
 	public ParserGroupBuilder fileCharset(String value) {
 		return property(PARSER_fileCharset, value);
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_listener} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_listener} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_listener
+	 * @see Parser#PARSER_listener
 	 */
 	public ParserGroupBuilder listener(Class<? extends ParserListener> value) {
 		return property(PARSER_listener, value);

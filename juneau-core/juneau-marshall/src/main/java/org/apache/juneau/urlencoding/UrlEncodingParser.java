@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.uon.UonParserContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -38,21 +37,46 @@ import org.apache.juneau.uon.*;
  *
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link UonParserContext}
- * 	<li>{@link BeanContext}
- * </ul>
  */
 @SuppressWarnings({ "unchecked", "hiding" })
 public class UrlEncodingParser extends UonParser implements PartParser {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "UrlEncodingParser.";
+
+	/**
+	 * Parser bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
+	 *
+	 * <p>
+	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
+	 *
+	 * <p>
+	 * This option only applies to beans.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>
+	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
+	 * 		is added to it.
+	 * </ul>
+	 */
+	public static final String URLENC_expandedParams = PREFIX + "expandedParams";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Reusable instance of {@link UrlEncodingParser}. */
 	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final UrlEncodingParserContext ctx;
 

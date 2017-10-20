@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;

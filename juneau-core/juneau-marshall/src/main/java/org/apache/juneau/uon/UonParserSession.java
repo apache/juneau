@@ -13,7 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.uon.UonParserContext.*;
+import static org.apache.juneau.uon.UonParser.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -69,7 +69,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * Create a specialized parser session for parsing URL parameters.
 	 *
 	 * <p>
-	 * The main difference is that characters are never decoded, and the {@link UonParserContext#UON_decodeChars}
+	 * The main difference is that characters are never decoded, and the {@link UonParser#UON_decodeChars}
 	 * property is always ignored.
 	 *
 	 * @param ctx

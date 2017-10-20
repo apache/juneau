@@ -20,8 +20,17 @@ import org.apache.juneau.serializer.*;
  */
 public final class CsvSerializer extends WriterSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Default serializer, all default settings.*/
 	public static final CsvSerializer DEFAULT = new CsvSerializer(PropertyStore.create());
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final CsvSerializerContext ctx;
 

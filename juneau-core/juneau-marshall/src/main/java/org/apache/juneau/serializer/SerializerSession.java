@@ -14,7 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
+import static org.apache.juneau.serializer.Serializer.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -84,7 +84,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * 	<br>If <jk>null</jk>, defaults to {@link SerializerContext#DEFAULT}.
+	 * 	Can be <jk>null</jk>.
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -286,126 +286,126 @@ public abstract class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_maxDepth} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_maxDepth} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
 	 */
 	protected final int getMaxDepth() {
 		return maxDepth;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_initialDepth} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_initialDepth} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
 	 */
 	protected final int getInitialDepth() {
 		return initialDepth;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_detectRecursions} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_detectRecursions} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
 	 */
 	protected final boolean isDetectRecursions() {
 		return detectRecursions;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_ignoreRecursions} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_ignoreRecursions} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
 	 */
 	protected final boolean isIgnoreRecursions() {
 		return ignoreRecursions;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_useWhitespace} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_useWhitespace} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_useWhitespace} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_useWhitespace} setting value for this session.
 	 */
 	protected final boolean isUseWhitespace() {
 		return useWhitespace;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_maxIndent} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_maxIndent} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_maxIndent} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_maxIndent} setting value for this session.
 	 */
 	protected final int getMaxIndent() {
 		return maxIndent;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 */
 	protected boolean isAddBeanTypeProperties() {
 		return addBeanTypeProperties;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_quoteChar} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_quoteChar} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_quoteChar} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_quoteChar} setting value for this session.
 	 */
 	protected final char getQuoteChar() {
 		return quoteChar;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_trimNullProperties} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_trimNullProperties} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
 	 */
 	protected final boolean isTrimNulls() {
 		return trimNulls;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_trimEmptyCollections} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_trimEmptyCollections} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
 	 */
 	protected final boolean isTrimEmptyCollections() {
 		return trimEmptyCollections;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_trimEmptyMaps} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_trimEmptyMaps} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
 	 */
 	protected final boolean isTrimEmptyMaps() {
 		return trimEmptyMaps;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_trimStrings} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_trimStrings} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
 	 */
 	protected final boolean isTrimStrings() {
 		return trimStrings;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_sortCollections} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_sortCollections} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
 	 */
 	protected final boolean isSortCollections() {
 		return sortCollections;
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_sortMaps} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_sortMaps} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
 	 */
 	protected final boolean isSortMaps() {
 		return sortMaps;
@@ -446,7 +446,7 @@ public abstract class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if {@link SerializerContext#SERIALIZER_detectRecursions} is enabled, and the specified
+	 * Returns <jk>true</jk> if {@link Serializer#SERIALIZER_detectRecursions} is enabled, and the specified
 	 * object is already higher up in the serialization chain.
 	 *
 	 * @param attrName The bean property attribute name, or some other identifier.
@@ -852,7 +852,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * Returns the parser-side expected type for the object.
 	 *
 	 * <p>
-	 * The return value depends on the {@link SerializerContext#SERIALIZER_abridged} setting.
+	 * The return value depends on the {@link Serializer#SERIALIZER_abridged} setting.
 	 * When enabled, the parser already knows the Java POJO type being parsed, so there is
 	 * no reason to add <js>"_type"</js> attributes to the root-level object.
 	 *

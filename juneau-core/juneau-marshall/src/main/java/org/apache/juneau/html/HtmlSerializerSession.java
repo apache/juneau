@@ -13,7 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializerSession.ContentResult.*;
-import static org.apache.juneau.html.HtmlSerializerContext.*;
+import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.xml.XmlUtils.*;
 
 import java.io.*;
@@ -169,18 +169,18 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlSerializerContext#HTML_addKeyValueTableHeaders} setting value for this session.
+	 * Returns the {@link HtmlSerializer#HTML_addKeyValueTableHeaders} setting value for this session.
 	 *
-	 * @return The {@link HtmlSerializerContext#HTML_addKeyValueTableHeaders} setting value for this session.
+	 * @return The {@link HtmlSerializer#HTML_addKeyValueTableHeaders} setting value for this session.
 	 */
 	public final boolean isAddKeyValueTableHeaders() {
 		return addKeyValueTableHeaders;
 	}
 
 	/**
-	 * Returns the {@link HtmlSerializerContext#HTML_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link HtmlSerializer#HTML_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link HtmlSerializerContext#HTML_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link HtmlSerializer#HTML_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
 	public final boolean isAddBeanTypeProperties() {

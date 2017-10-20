@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -96,10 +98,10 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UrlEncodingSerializerContext#URLENC_expandedParams
+	 * @see UrlEncodingSerializer#URLENC_expandedParams
 	 */
 	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
-		return property(UrlEncodingSerializerContext.URLENC_expandedParams, value);
+		return property(URLENC_expandedParams, value);
 	}
 
 	/**
@@ -132,17 +134,17 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * @param paramFormat The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonSerializerContext#UON_paramFormat
+	 * @see UonSerializer#UON_paramFormat
 	 */
 	public UrlEncodingSerializerBuilder paramFormat(String paramFormat) {
-		return property(UonSerializerContext.UON_paramFormat, paramFormat);
+		return property(UON_paramFormat, paramFormat);
 	}
 
 	/**
 	 * Shortcut for calling <code>paramFormat(<js>"PLAINTEXT"</js>)</code>.
 	 *
 	 * @return This object (for method chaining).
-	 * @see UonSerializerContext#UON_paramFormat
+	 * @see UonSerializer#UON_paramFormat
 	 */
 	public UrlEncodingSerializerBuilder plainTextParams() {
 		return paramFormat("PLAINTEXT");

@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.html.HtmlSerializerContext.*;
+import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.awt.image.*;

@@ -13,18 +13,14 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfCommonContext.*;
+import static org.apache.juneau.jena.RdfCommon.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJOs to RDF.
- *
- * <h5 class='section'>Configurable properties:</h5>
- * 
- * Refer to <a class="doclink" href="package-summary.html#SerializerConfigurableProperties">Configurable Properties</a>
- * 	for the entire list of configurable properties.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * 
@@ -43,6 +39,107 @@ import org.apache.juneau.serializer.*;
  */
 public class RdfSerializer extends WriterSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "RdfSerializer.";
+
+	/**
+	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 */
+	public static final String RDF_addLiteralTypes = PREFIX + "addLiteralTypes";
+
+	/**
+	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * to identify the root node in the graph.
+	 * This helps locate the root node during parsing.
+	 * 
+	 * <p>
+	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
+	 * identify root notes, which can introduce a considerable performance degradation.
+	 */
+	public static final String RDF_addRootProperty = PREFIX + "addRootProperty";
+
+	/**
+	 * <b>Configuration property:</b>  Auto-detect namespace usage.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Detect namespace usage before serialization.
+	 * 
+	 * <p>
+	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
+	 * the root element is serialized.
+	 */
+	public static final String RDF_autoDetectNamespaces = PREFIX + "autoDetectNamespaces";
+
+	/**
+	 * <b>Configuration property:</b>  Default namespaces.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * The default list of namespaces associated with this serializer.
+	 */
+	public static final String RDF_namespaces = PREFIX + "namespaces.list";
+
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred 
+	 * through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined 
+	 * from the value type.
+	 * 
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String RDF_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Default RDF/XML serializer, all default settings.*/
 	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore.create());
 
@@ -58,6 +155,10 @@ public class RdfSerializer extends WriterSerializer {
 	/** Default N3 serializer, all default settings.*/
 	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Produces RDF/XML output */
 	public static class Xml extends RdfSerializer {
@@ -124,6 +225,10 @@ public class RdfSerializer extends WriterSerializer {
 		}
 	}
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final RdfSerializerContext ctx;
 

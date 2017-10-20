@@ -12,95 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.uon.UonSerializer.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
- * Configurable properties on the {@link UonSerializer} class.
- *
- * <p>
- * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
- * passed into the constructor.
- *
- * <p>
- * See {@link PropertyStore} for more information about context properties.
- *
- * <h6 class='topic'>Inherited configurable properties</h6>
- * <ul class='doctree'>
- * 	<li class='jc'>
- * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
- * 		- Properties associated with handling beans on serializers and parsers.
- * 		<ul>
- * 			<li class='jc'>
- * 				<a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a>
- * 				- Configurable properties common to all serializers.
- * 		</ul>
- * 	</li>
- * </ul>
+ * Contains a snapshot-in-time read-only copy of the settings on the {@link UonSerializer} class.
  */
 public class UonSerializerContext extends SerializerContext {
-
-	static final String PREFIX = "UonSerializer.";
-
-	/**
-	 * <b>Configuration property:</b>  Encode non-valid URI characters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.encodeChars"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
-	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
-	 * URL-encoding of non-valid URI characters.
-	 */
-	public static final String UON_encodeChars = PREFIX + "encodeChars";
-
-	/**
-	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.addBeanTypeProperties"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
-	 * the value type.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
-	 */
-	public static final String UON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
-
-	/**
-	 * <b>Configuration property:</b>  Format to use for query/form-data/header values.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat"</js>
-	 * 	<li><b>Data type:</b> <code>ParamFormat</code>
-	 * 	<li><b>Default:</b> <jsf>UON</jsf>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Specifies the format to use for URL GET parameter keys and values.
-	 */
-	public static final String UON_paramFormat = PREFIX + "paramFormat";
-
 
 	final boolean
 		encodeChars,
@@ -136,9 +56,9 @@ public class UonSerializerContext extends SerializerContext {
 	}
 
 	/**
-	 * Returns the value of the {@link UonSerializerContext#UON_paramFormat} setting.
+	 * Returns the value of the {@link UonSerializer#UON_paramFormat} setting.
 	 *
-	 * @return The value of the {@link UonSerializerContext#UON_paramFormat} setting.
+	 * @return The value of the {@link UonSerializer#UON_paramFormat} setting.
 	 */
 	public ParamFormat getParamFormat() {
 		return paramFormat;

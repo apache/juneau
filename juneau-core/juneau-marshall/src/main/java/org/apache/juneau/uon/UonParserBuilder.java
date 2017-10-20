@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.uon.UonParserContext.*;
+import static org.apache.juneau.uon.UonParser.*;
 
 import java.util.*;
 
@@ -73,7 +73,7 @@ public class UonParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonParserContext#UON_decodeChars
+	 * @see UonParser#UON_decodeChars
 	 */
 	public UonParserBuilder decodeChars(boolean value) {
 		return property(UON_decodeChars, value);

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.jena.RdfParser.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -19,53 +21,10 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Configurable properties on the {@link RdfParser} class.
- * 
- * <p>
- * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
- * passed into the constructor.
- * 
- * <p>
- * See {@link PropertyStore} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF parsers</h6>
- * <ul class='doctree'>
- * 	<li class='jc'>
- * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> 
- * 		- Properties associated with handling beans on serializers and parsers.
- * 		<ul>
- * 			<li class='jc'>
- * 				<a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> 
- * 				- Configurable properties common to all parsers.
- * 				<ul>
- * 					<li class='jic'>
- * 						<a class="doclink" href="RdfCommonContext.html#ConfigProperties">RdfCommonContext</a> 
- * 						- Configurable properties common to the RDF serializers and parsers.
- * 				</ul>
- * 			</li>
- * 		</ul>
- * 	</li>
- * </ul>
+ * Contains a snapshot-in-time read-only copy of the settings on the {@link RdfParser} class.
  */
-public final class RdfParserContext extends ParserContext implements RdfCommonContext {
+public final class RdfParserContext extends ParserContext implements RdfCommon {
 	
-	static final String PREFIX = "RdfParser.";
-
-	/**
-	 * <b>Configuration property:</b>  Trim whitespace from text elements.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
-	 */
-	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace";
-
 	final boolean trimWhitespace, looseCollections;
 	final String rdfLanguage;
 	final Namespace juneauNs, juneauBpNs;
@@ -103,4 +62,3 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 			);
 	}
 }
-

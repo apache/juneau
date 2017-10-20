@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
+import static org.apache.juneau.msgpack.MsgPackSerializer.*;
 
 import java.util.*;
 
@@ -60,9 +60,9 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	}
 
 	/**
-	 * Returns the {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link MsgPackSerializer#MSGPACK_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link MsgPackSerializer#MSGPACK_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
 	protected final boolean isAddBeanTypeProperties() {

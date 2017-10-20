@@ -120,9 +120,9 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#BEAN_debug} setting value for this session.
+	 * Returns the {@link BeanContext#BEAN_debug} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#BEAN_debug} setting value for this session.
+	 * @return The {@link BeanContext#BEAN_debug} setting value for this session.
 	 */
 	public final boolean isDebug() {
 		return debug;

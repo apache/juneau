@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.uon.UonParserContext.*;
+import static org.apache.juneau.uon.UonParser.*;
+import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
 
 import java.util.*;
 
@@ -97,10 +98,10 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UrlEncodingParserContext#URLENC_expandedParams
+	 * @see UrlEncodingParser#URLENC_expandedParams
 	 */
 	public UrlEncodingParserBuilder expandedParams(boolean value) {
-		return property(UrlEncodingParserContext.URLENC_expandedParams, value);
+		return property(URLENC_expandedParams, value);
 	}
 
 	@Override /* UonParser */

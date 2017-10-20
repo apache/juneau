@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfParserContext.*;
+import static org.apache.juneau.jena.RdfCommon.*;
+import static org.apache.juneau.jena.RdfParser.*;
 
 import java.util.*;
 
@@ -75,7 +75,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfParserContext#RDF_trimWhitespace
+	 * @see RdfParser#RDF_trimWhitespace
 	 */
 	public RdfParserBuilder trimWhitespace(boolean value) {
 		return property(RDF_trimWhitespace, value);
@@ -127,7 +127,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfParserContext#RDF_language
+	 * @see RdfCommon#RDF_language
 	 */
 	public RdfParserBuilder language(String value) {
 		return property(RDF_language, value);
@@ -194,7 +194,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfParserContext#RDF_juneauNs
+	 * @see RdfCommon#RDF_juneauNs
 	 */
 	public RdfParserBuilder juneauNs(Namespace value) {
 		return property(RDF_juneauNs, value);
@@ -216,7 +216,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfParserContext#RDF_juneauBpNs
+	 * @see RdfCommon#RDF_juneauBpNs
 	 */
 	public RdfParserBuilder juneauBpNs(Namespace value) {
 		return property(RDF_juneauBpNs, value);
@@ -232,7 +232,8 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * </ul>
 	 * 
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF parsers.
+	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
+	 * inherited by the RDF parsers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
@@ -242,7 +243,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfParserContext#RDF_useXmlNamespaces
+	 * @see RdfCommon#RDF_useXmlNamespaces
 	 */
 	public RdfParserBuilder useXmlNamespaces(boolean value) {
 		return property(RDF_useXmlNamespaces, value);
@@ -286,7 +287,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommonContext#RDF_collectionFormat
+	 * @see RdfCommon#RDF_collectionFormat
 	 */
 	public RdfParserBuilder collectionFormat(RdfCollectionFormat value) {
 		return property(RDF_collectionFormat, value);
@@ -343,7 +344,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommonContext#RDF_looseCollections
+	 * @see RdfCommon#RDF_looseCollections
 	 */
 	public RdfParserBuilder looseCollections(boolean value) {
 		return property(RDF_looseCollections, value);

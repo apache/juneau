@@ -13,14 +13,13 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
+import static org.apache.juneau.jena.RdfCommon.*;
+import static org.apache.juneau.jena.RdfSerializer.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -97,7 +96,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		writer = model.getWriter(rdfLanguage);
 
 		// Only apply properties with this prefix!
-		String propPrefix = RdfCommonContext.LANG_PROP_MAP.get(rdfLanguage);
+		String propPrefix = RdfCommon.LANG_PROP_MAP.get(rdfLanguage);
 		if (propPrefix == null)
 			throw new FormattedRuntimeException("Unknown RDF language encountered: ''{0}''", rdfLanguage);
 
@@ -132,9 +131,9 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link Serializer#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
 	public final boolean isAddBeanTypeProperties() {

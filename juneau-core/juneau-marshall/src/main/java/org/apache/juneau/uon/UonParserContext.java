@@ -12,52 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.uon.UonParser.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
- * Configurable properties on the {@link UonParser} class.
- *
- * <p>
- * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
- * passed into the constructor.
- *
- * <p>
- * See {@link PropertyStore} for more information about context properties.
- *
- * <h6 class='topic'>Inherited configurable properties</h6>
- * <ul class='doctree'>
- * 	<li class='jc'>
- * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
- * 		- Properties associated with handling beans on serializers and parsers.
- * 		<ul>
- * 			<li class='jc'>
- * 				<a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a>
- * 				- Configurable properties common to all parsers.
- * 		</ul>
- * 	</li>
- * </ul>
+ * Contains a snapshot-in-time read-only copy of the settings on the {@link UonParser} class.
  */
 public class UonParserContext extends ParserContext {
-
-	static final String PREFIX = "UonParser.";
-
-	/**
-	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
-	 * before being passed to this parser.
-	 */
-	public static final String UON_decodeChars = PREFIX + "decodeChars";
 
 	final boolean
 		decodeChars;

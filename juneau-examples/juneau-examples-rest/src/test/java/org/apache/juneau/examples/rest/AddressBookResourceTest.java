@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.examples.rest.TestUtils.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.apache.juneau.xml.XmlSerializer.*;
 import static org.junit.Assert.*;
 
 import java.util.*;

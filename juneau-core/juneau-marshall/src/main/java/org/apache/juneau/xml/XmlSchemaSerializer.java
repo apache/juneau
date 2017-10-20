@@ -28,14 +28,6 @@ import org.apache.juneau.serializer.*;
  * <h5 class='section'>Description:</h5>
  *
  * Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link XmlSerializerContext}
- * 	<li>{@link BeanContext}
- * </ul>
  */
 public class XmlSchemaSerializer extends XmlSerializer {
 
@@ -45,7 +37,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	 * @param propertyStore Initialize with the specified config property store.
 	 */
 	public XmlSchemaSerializer(PropertyStore propertyStore) {
-		super(propertyStore.copy().append(XmlSerializerContext.XML_enableNamespaces, true), "text/xml", "text/xml+schema");
+		super(propertyStore.copy().append(XML_enableNamespaces, true), "text/xml", "text/xml+schema");
 	}
 
 	@Override /* Serializer */

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.apache.juneau.xml.XmlSerializer.*;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializerContext#XML_enableNamespaces
+	 * @see XmlSerializer#XML_enableNamespaces
 	 */
 	public XmlSerializerBuilder enableNamespaces(boolean value) {
 		return property(XML_enableNamespaces, value);
@@ -101,7 +101,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 * Detect namespace usage before serialization.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link XmlSerializerContext#XML_addNamespaceUrisToRoot} to reduce the list of namespace
+	 * Used in conjunction with {@link XmlSerializer#XML_addNamespaceUrisToRoot} to reduce the list of namespace
 	 * URLs appended to the root element to only those that will be used in the resulting document.
 	 *
 	 * <p>
@@ -109,13 +109,13 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 * the root element is serialized.
 	 *
 	 * <p>
-	 * This setting is ignored if {@link XmlSerializerContext#XML_enableNamespaces} is not enabled.
+	 * This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Auto-detection of namespaces can be costly performance-wise.
 	 * 		In high-performance environments, it's recommended that namespace detection be disabled, and that
-	 * 		namespaces be manually defined through the {@link XmlSerializerContext#XML_namespaces} property.
+	 * 		namespaces be manually defined through the {@link XmlSerializer#XML_namespaces} property.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -126,7 +126,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializerContext#XML_autoDetectNamespaces
+	 * @see XmlSerializer#XML_autoDetectNamespaces
 	 */
 	public XmlSerializerBuilder autoDetectNamespaces(boolean value) {
 		return property(XML_autoDetectNamespaces, value);
@@ -146,7 +146,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
 	 *
 	 * <p>
-	 * This setting is ignored if {@link XmlSerializerContext#XML_enableNamespaces} is not enabled.
+	 * This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -156,7 +156,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializerContext#XML_addNamespaceUrisToRoot
+	 * @see XmlSerializer#XML_addNamespaceUrisToRoot
 	 */
 	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		return property(XML_addNamespaceUrisToRoot, value);
@@ -183,7 +183,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializerContext#XML_defaultNamespace
+	 * @see XmlSerializer#XML_defaultNamespace
 	 */
 	public XmlSerializerBuilder defaultNamespace(String value) {
 		return property(XML_defaultNamespace, value);
@@ -211,7 +211,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializerContext#XML_xsNamespace
+	 * @see XmlSerializer#XML_xsNamespace
 	 */
 	public XmlSerializerBuilder xsNamespace(Namespace value) {
 		return property(XML_xsNamespace, value);
@@ -238,7 +238,7 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializerContext#XML_namespaces
+	 * @see XmlSerializer#XML_namespaces
 	 */
 	public XmlSerializerBuilder namespaces(Namespace...values) {
 		return property(XML_namespaces, values);

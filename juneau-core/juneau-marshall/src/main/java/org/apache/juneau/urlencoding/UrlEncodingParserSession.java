@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -45,7 +47,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	protected UrlEncodingParserSession(UrlEncodingParserContext ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		ObjectMap p = getProperties();
-		expandedParams = p.getBoolean(UrlEncodingParserContext.URLENC_expandedParams, ctx.expandedParams);
+		expandedParams = p.getBoolean(URLENC_expandedParams, ctx.expandedParams);
 	}
 
 	@Override /* Session */

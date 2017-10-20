@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlSerializerContext.*;
+import static org.apache.juneau.html.HtmlSerializer.*;
 
 import java.util.*;
 
@@ -76,7 +76,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializerContext#HTML_uriAnchorText
+	 * @see HtmlSerializer#HTML_uriAnchorText
 	 */
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
 		return property(HTML_uriAnchorText, value);
@@ -94,7 +94,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializerContext#HTML_uriAnchorText}.
+	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -104,7 +104,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializerContext#HTML_detectLinksInStrings
+	 * @see HtmlSerializer#HTML_detectLinksInStrings
 	 */
 	public HtmlSerializerBuilder detectLinksInStrings(boolean value) {
 		return property(HTML_detectLinksInStrings, value);
@@ -124,7 +124,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <p>
-	 * The parameter name can be changed via the {@link HtmlSerializerContext#HTML_labelParameter} property.
+	 * The parameter name can be changed via the {@link HtmlSerializer#HTML_labelParameter} property.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -134,14 +134,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializerContext#HTML_lookForLabelParameters
+	 * @see HtmlSerializer#HTML_lookForLabelParameters
 	 */
 	public HtmlSerializerBuilder lookForLabelParameters(boolean value) {
 		return property(HTML_lookForLabelParameters, value);
 	}
 
 	/**
-	 * <b>Configuration property:</b>  The parameter name to use when using {@link HtmlSerializerContext#HTML_lookForLabelParameters}.
+	 * <b>Configuration property:</b>  The parameter name to use when using {@link HtmlSerializer#HTML_lookForLabelParameters}.
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>
@@ -158,7 +158,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializerContext#HTML_labelParameter
+	 * @see HtmlSerializer#HTML_labelParameter
 	 */
 	public HtmlSerializerBuilder labelParameter(String value) {
 		return property(HTML_labelParameter, value);
@@ -182,7 +182,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializerContext#HTML_addKeyValueTableHeaders
+	 * @see HtmlSerializer#HTML_addKeyValueTableHeaders
 	 */
 	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		return property(HTML_addKeyValueTableHeaders, value);

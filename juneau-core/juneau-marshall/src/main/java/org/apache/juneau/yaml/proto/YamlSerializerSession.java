@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.yaml.proto;
 
-import static org.apache.juneau.json.JsonSerializerContext.*;
+import static org.apache.juneau.yaml.proto.YamlSerializer.*;
 
 import java.util.*;
 
@@ -51,7 +51,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 		if (p.isEmpty()) {
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
-			addBeanTypeProperties = p.getBoolean(JSON_addBeanTypeProperties, ctx.addBeanTypeProperties);
+			addBeanTypeProperties = p.getBoolean(YAML_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 	}
 
@@ -224,9 +224,9 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 
 	/**
-	 * Returns the {@link YamlSerializerContext#JSON_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link #YAML_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link YamlSerializerContext#JSON_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link #YAML_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
 	protected final boolean isAddBeanTypeProperties() {

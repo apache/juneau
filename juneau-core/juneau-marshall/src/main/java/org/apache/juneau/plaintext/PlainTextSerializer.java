@@ -33,19 +33,20 @@ import org.apache.juneau.transform.*;
  * <p>
  * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;}
  * transform defined on it.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link SerializerContext}
- * 	<li>{@link BeanContext}
- * </ul>
  */
 public class PlainTextSerializer extends WriterSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/** Default serializer, all default settings.*/
 	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore.create());
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final SerializerContext ctx;
 

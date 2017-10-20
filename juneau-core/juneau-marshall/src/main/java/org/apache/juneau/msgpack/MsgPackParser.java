@@ -21,19 +21,20 @@ import org.apache.juneau.parser.*;
  * <h5 class='section'>Media types:</h5>
  *
  * Handles <code>Content-Type</code> types: <code>octal/msgpack</code>
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link MsgPackParserContext}
- * </ul>
  */
 public class MsgPackParser extends InputStreamParser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
 	public static final MsgPackParser DEFAULT = new MsgPackParser(PropertyStore.create());
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final MsgPackParserContext ctx;
 

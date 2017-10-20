@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.html.HtmlDocSerializer.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.uon.UonSerializerContext.*;
+import static org.apache.juneau.uon.UonSerializer.*;
 
 import java.util.*;
 
@@ -39,7 +39,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param encode Override the {@link UonSerializerContext#UON_encodeChars} setting.
+	 * @param encode Override the {@link UonSerializer#UON_encodeChars} setting.
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -51,7 +51,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 		ObjectMap p = getProperties();
 		encodeChars = encode == null ? p.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
 		addBeanTypeProperties = p.getBoolean(UON_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		plainTextParams = p.getWithDefault(UonSerializerContext.UON_paramFormat, ctx.paramFormat, ParamFormat.class) == ParamFormat.PLAINTEXT;
+		plainTextParams = p.getWithDefault(UON_paramFormat, ctx.paramFormat, ParamFormat.class) == ParamFormat.PLAINTEXT;
 	}
 
 	@Override /* Session */
@@ -65,9 +65,9 @@ public class UonSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link UonSerializerContext#UON_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link UonSerializer#UON_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link UonSerializerContext#UON_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link UonSerializer#UON_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
 	public final boolean isAddBeanTypeProperties() {

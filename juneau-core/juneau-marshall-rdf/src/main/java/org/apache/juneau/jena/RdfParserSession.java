@@ -14,7 +14,8 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfCommonContext.*;
+import static org.apache.juneau.jena.RdfCommon.*;
+import static org.apache.juneau.jena.RdfParser.*;
 
 import java.util.*;
 
@@ -62,7 +63,7 @@ public class RdfParserSession extends ReaderParserSession {
 		this.rdfLanguage = p.getString(RDF_language, ctx.rdfLanguage);
 		this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
 		this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
-		this.trimWhitespace = p.getBoolean(RdfParserContext.RDF_trimWhitespace, ctx.trimWhitespace);
+		this.trimWhitespace = p.getBoolean(RDF_trimWhitespace, ctx.trimWhitespace);
 		this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
 		this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
 		this.model = ModelFactory.createDefaultModel();

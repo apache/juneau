@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.uon.UonSerializerContext.*;
+import static org.apache.juneau.uon.UonSerializer.*;
 
 import java.util.*;
 
@@ -78,7 +78,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonSerializerContext#UON_encodeChars
+	 * @see UonSerializer#UON_encodeChars
 	 */
 	public UonSerializerBuilder encodeChars(boolean value) {
 		return property(UON_encodeChars, value);
@@ -113,7 +113,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonSerializerContext#UON_paramFormat
+	 * @see UonSerializer#UON_paramFormat
 	 */
 	public UonSerializerBuilder paramFormat(ParamFormat value) {
 		return property(UON_paramFormat, value);

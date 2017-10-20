@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * URIs are automatically resolved to absolute or root-relative form based on the serializer
- * {@link SerializerContext#SERIALIZER_uriResolution} and {@link SerializerContext#SERIALIZER_uriRelativity}
+ * {@link Serializer#SERIALIZER_uriResolution} and {@link Serializer#SERIALIZER_uriRelativity}
  * configuration settings, and the URI context defined by the {@link UriContext} that's part of the serializer
  * session.
  *

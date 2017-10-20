@@ -77,18 +77,18 @@ import org.apache.juneau.transform.*;
  * handled.  These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
  *
  * <p>
- * Some settings (e.g. {@link BeanContext#BEAN_beansRequireDefaultConstructor}) are used to differentiate between bean
+ * Some settings (e.g. {@link #BEAN_beansRequireDefaultConstructor}) are used to differentiate between bean
  * and non-bean classes.
  * Attempting to create a bean map around one of these objects will throw a {@link BeanRuntimeException}.
  * The purpose for this behavior is so that the serializers can identify these non-bean classes and convert them to
  * plain strings using the {@link Object#toString()} method.
  *
  * <p>
- * Some settings (e.g. {@link BeanContext#BEAN_beanFieldVisibility}) are used to determine what kinds of properties are
+ * Some settings (e.g. {@link #BEAN_beanFieldVisibility}) are used to determine what kinds of properties are
  * detected on beans.
  *
  * <p>
- * Some settings (e.g. {@link BeanContext#BEAN_beanMapPutReturnsOldValue}) change the runtime behavior of bean maps.
+ * Some settings (e.g. {@link #BEAN_beanMapPutReturnsOldValue}) change the runtime behavior of bean maps.
  *
  * <p>
  * Settings are specified using the {@link PropertyStore#setProperty(String, Object)} method and related convenience
@@ -871,7 +871,7 @@ public class BeanContext extends Context {
 	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * 	<li>
-	 * 		Enables {@link SerializerContext#SERIALIZER_detectRecursions}.
+	 * 		Enables {@link Serializer#SERIALIZER_detectRecursions}.
 	 * </ul>
 	 *
 	 * <p>
@@ -1585,7 +1585,7 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the type property name as defined by {@link BeanContext#BEAN_beanTypePropertyName}.
+	 * Returns the type property name as defined by {@link #BEAN_beanTypePropertyName}.
 	 *
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
@@ -1594,7 +1594,7 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the bean registry defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
+	 * Returns the bean registry defined in this bean context defined by {@link #BEAN_beanDictionary}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */

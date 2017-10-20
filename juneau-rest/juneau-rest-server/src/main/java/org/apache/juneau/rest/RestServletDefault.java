@@ -13,7 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
+import static org.apache.juneau.serializer.Serializer.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;

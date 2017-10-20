@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
+import static org.apache.juneau.serializer.Serializer.*;
 
 import java.util.*;
 
@@ -73,7 +73,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_maxDepth
+	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public SerializerBuilder maxDepth(int value) {
 		return property(SERIALIZER_maxDepth, value);
@@ -100,7 +100,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_initialDepth
+	 * @see Serializer#SERIALIZER_initialDepth
 	 */
 	public SerializerBuilder initialDepth(int value) {
 		return property(SERIALIZER_initialDepth, value);
@@ -124,7 +124,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * <p>
 	 * The behavior when recursions are detected depends on the value for
-	 * {@link SerializerContext#SERIALIZER_ignoreRecursions}.
+	 * {@link Serializer#SERIALIZER_ignoreRecursions}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -139,7 +139,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_detectRecursions
+	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
 	public SerializerBuilder detectRecursions(boolean value) {
 		return property(SERIALIZER_detectRecursions, value);
@@ -156,7 +156,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * Used in conjunction with {@link SerializerContext#SERIALIZER_detectRecursions}.
+	 * Used in conjunction with {@link Serializer#SERIALIZER_detectRecursions}.
 	 * Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
 	 *
 	 * <p>
@@ -171,7 +171,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_ignoreRecursions
+	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 */
 	public SerializerBuilder ignoreRecursions(boolean value) {
 		return property(SERIALIZER_ignoreRecursions, value);
@@ -197,7 +197,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_useWhitespace
+	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
 	public SerializerBuilder useWhitespace(boolean value) {
 		return property(SERIALIZER_useWhitespace, value);
@@ -232,7 +232,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_maxIndent
+	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public SerializerBuilder maxIndent(int value) {
 		return property(SERIALIZER_maxIndent, value);
@@ -263,7 +263,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_addBeanTypeProperties
+	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
 	public SerializerBuilder addBeanTypeProperties(boolean value) {
 		return property(SERIALIZER_addBeanTypeProperties, value);
@@ -289,7 +289,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_quoteChar
+	 * @see Serializer#SERIALIZER_quoteChar
 	 */
 	public SerializerBuilder quoteChar(char value) {
 		return property(SERIALIZER_quoteChar, value);
@@ -328,7 +328,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimNullProperties
+	 * @see Serializer#SERIALIZER_trimNullProperties
 	 */
 	public SerializerBuilder trimNullProperties(boolean value) {
 		return property(SERIALIZER_trimNullProperties, value);
@@ -359,7 +359,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimEmptyCollections
+	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 */
 	public SerializerBuilder trimEmptyCollections(boolean value) {
 		return property(SERIALIZER_trimEmptyCollections, value);
@@ -389,7 +389,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimEmptyMaps
+	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 */
 	public SerializerBuilder trimEmptyMaps(boolean value) {
 		return property(SERIALIZER_trimEmptyMaps, value);
@@ -415,7 +415,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimStrings
+	 * @see Serializer#SERIALIZER_trimStrings
 	 */
 	public SerializerBuilder trimStrings(boolean value) {
 		return property(SERIALIZER_trimStrings, value);
@@ -446,7 +446,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriContext
+	 * @see Serializer#SERIALIZER_uriContext
 	 */
 	public SerializerBuilder uriContext(UriContext value) {
 		return property(SERIALIZER_uriContext, value);
@@ -488,7 +488,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriResolution
+	 * @see Serializer#SERIALIZER_uriResolution
 	 */
 	public SerializerBuilder uriResolution(UriResolution value) {
 		return property(SERIALIZER_uriResolution, value);
@@ -528,7 +528,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriRelativity
+	 * @see Serializer#SERIALIZER_uriRelativity
 	 */
 	public SerializerBuilder uriRelativity(UriRelativity value) {
 		return property(SERIALIZER_uriRelativity, value);
@@ -552,7 +552,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortCollections
+	 * @see Serializer#SERIALIZER_sortCollections
 	 */
 	public SerializerBuilder sortCollections(boolean value) {
 		return property(SERIALIZER_sortCollections, value);
@@ -576,7 +576,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortMaps
+	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public SerializerBuilder sortMaps(boolean value) {
 		return property(SERIALIZER_sortMaps, value);
@@ -602,7 +602,7 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortMaps
+	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public SerializerBuilder abridged(boolean value) {
 		return property(SERIALIZER_abridged, value);
@@ -623,7 +623,6 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_listener
 	 */
 	public SerializerBuilder listener(Class<? extends SerializerListener> value) {
 		return property(SERIALIZER_listener, value);

@@ -13,7 +13,7 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.jena.RdfCommonContext.*;
+import static org.apache.juneau.jena.RdfCommon.*;
 
 import java.net.*;
 import java.util.*;

@@ -16,27 +16,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Configurable properties on the {@link JsonParser} class.
- *
- * <p>
- * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
- * passed into the constructor.
- *
- * <p>
- * See {@link PropertyStore} for more information about context properties.
- *
- * <h6 class='topic'>Inherited configurable properties</h6>
- * <ul class='doctree'>
- * 	<li class='jc'>
- * 		<a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a>
- * 		- Properties associated with handling beans on serializers and parsers.
- * 		<ul>
- * 			<li class='jc'>
- * 				<a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a>
- * 				- Configurable properties common to all parsers.
- * 		</ul>
- * 	</li>
- * </ul>
+ * Contains a snapshot-in-time read-only copy of the settings on the {@link JsonParser} class.
  */
 public final class JsonParserContext extends ParserContext {
 

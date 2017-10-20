@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.parser.ParserContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
@@ -99,21 +97,23 @@ import org.apache.juneau.parser.*;
  * {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)} or {@link ObjectList#ObjectList(CharSequence)
  * ObjectList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
- *
- * <h5 class='section'>Configurable properties:</h5>
- *
- * This class has the following properties associated with it:
- * <ul>
- * 	<li>{@link JsonParserContext}
- * </ul>
  */
 public class JsonParser extends ReaderParser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT = new JsonParser(PropertyStore.create());
 
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(PropertyStore.create());
+
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, strict mode. */
 	public static class Strict extends JsonParser {
@@ -128,6 +128,10 @@ public class JsonParser extends ReaderParser {
 		}
 	}
 
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final JsonParserContext ctx;
 

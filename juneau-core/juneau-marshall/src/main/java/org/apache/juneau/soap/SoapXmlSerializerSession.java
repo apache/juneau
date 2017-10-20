@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.soap.SoapXmlSerializerContext.*;
+import static org.apache.juneau.soap.SoapXmlSerializer.*;
 
 import java.util.*;
 

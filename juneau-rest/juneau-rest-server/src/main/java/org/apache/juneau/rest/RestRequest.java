@@ -15,8 +15,9 @@ package org.apache.juneau.rest;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.serializer.Serializer.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -68,7 +69,7 @@ import org.apache.juneau.utils.*;
  * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
  * class.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "unused" })
 public final class RestRequest extends HttpServletRequestWrapper {
 
 	private final RestContext context;
@@ -206,7 +207,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		}
 
 		if (isPlainText())
-			this.properties.put(SerializerContext.SERIALIZER_useWhitespace, true);
+			this.properties.put(SERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -264,17 +265,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 			<js>"HtmlDocSerializer"</js>
 	 * 			<br>Valid names:
 	 * 			<ul>
-	 * 				<li><js>"aside"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_aside}
-	 * 				<li><js>"footer"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_footer}
-	 * 				<li><js>"header"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_header}
-	 * 				<li><js>"navlinks.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_navlinks}
-	 * 				<li><js>"nav"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_nav}
-	 * 				<li><js>"noResultsMessage"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage}
-	 * 				<li><js>"nowrap"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_nowrap}
-	 * 				<li><js>"script.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_script}
-	 * 				<li><js>"style.list"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_style}
-	 * 				<li><js>"stylesheet"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_stylesheet}
-	 * 				<li><js>"template"</js> - See {@link HtmlDocSerializerContext#HTMLDOC_template}
+	 * 				<li><js>"aside"</js> - See {@link HtmlDocSerializer#HTMLDOC_aside}
+	 * 				<li><js>"footer"</js> - See {@link HtmlDocSerializer#HTMLDOC_footer}
+	 * 				<li><js>"header"</js> - See {@link HtmlDocSerializer#HTMLDOC_header}
+	 * 				<li><js>"navlinks.list"</js> - See {@link HtmlDocSerializer#HTMLDOC_navlinks}
+	 * 				<li><js>"nav"</js> - See {@link HtmlDocSerializer#HTMLDOC_nav}
+	 * 				<li><js>"noResultsMessage"</js> - See {@link HtmlDocSerializer#HTMLDOC_noResultsMessage}
+	 * 				<li><js>"nowrap"</js> - See {@link HtmlDocSerializer#HTMLDOC_nowrap}
+	 * 				<li><js>"script.list"</js> - See {@link HtmlDocSerializer#HTMLDOC_script}
+	 * 				<li><js>"style.list"</js> - See {@link HtmlDocSerializer#HTMLDOC_style}
+	 * 				<li><js>"stylesheet"</js> - See {@link HtmlDocSerializer#HTMLDOC_stylesheet}
+	 * 				<li><js>"template"</js> - See {@link HtmlDocSerializer#HTMLDOC_template}
 	 * 			</ul>
 	 * 		<li>
 	 * 			<js>"Path"</js> - Value returned by {@link RestRequest#getPath(String)}.

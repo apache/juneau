@@ -13,8 +13,9 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.parser.ParserContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
+import static org.apache.juneau.parser.Parser.*;
+import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.uon.UonSerializer.*;
 
 import java.lang.reflect.*;
 import java.net.*;
@@ -909,211 +910,211 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_maxDepth} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_maxDepth
+	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public RestClientBuilder maxDepth(int value) {
 		return property(SERIALIZER_maxDepth, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_initialDepth} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_initialDepth
+	 * @see Serializer#SERIALIZER_initialDepth
 	 */
 	public RestClientBuilder initialDepth(int value) {
 		return property(SERIALIZER_initialDepth, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_detectRecursions} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_detectRecursions
+	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
 	public RestClientBuilder detectRecursions(boolean value) {
 		return property(SERIALIZER_detectRecursions, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_ignoreRecursions} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_ignoreRecursions
+	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 */
 	public RestClientBuilder ignoreRecursions(boolean value) {
 		return property(SERIALIZER_ignoreRecursions, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_useWhitespace} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_useWhitespace
+	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
 	public RestClientBuilder useWhitespace(boolean value) {
 		return property(SERIALIZER_useWhitespace, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_maxIndent} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_maxIndent
+	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public RestClientBuilder maxIndent(boolean value) {
 		return property(SERIALIZER_maxIndent, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_addBeanTypeProperties
+	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
 	public RestClientBuilder addBeanTypeProperties(boolean value) {
 		return property(SERIALIZER_addBeanTypeProperties, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_quoteChar} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_quoteChar
+	 * @see Serializer#SERIALIZER_quoteChar
 	 */
 	public RestClientBuilder quoteChar(char value) {
 		return property(SERIALIZER_quoteChar, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimNullProperties} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimNullProperties
+	 * @see Serializer#SERIALIZER_trimNullProperties
 	 */
 	public RestClientBuilder trimNullProperties(boolean value) {
 		return property(SERIALIZER_trimNullProperties, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimEmptyCollections
+	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 */
 	public RestClientBuilder trimEmptyCollections(boolean value) {
 		return property(SERIALIZER_trimEmptyCollections, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimEmptyMaps
+	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 */
 	public RestClientBuilder trimEmptyMaps(boolean value) {
 		return property(SERIALIZER_trimEmptyMaps, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimStrings} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimStrings
+	 * @see Serializer#SERIALIZER_trimStrings
 	 */
 	public RestClientBuilder trimStrings(boolean value) {
 		return property(SERIALIZER_trimStrings, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_uriContext} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriContext
+	 * @see Serializer#SERIALIZER_uriContext
 	 */
 	public RestClientBuilder uriContext(UriContext value) {
 		return property(SERIALIZER_uriContext, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_uriResolution} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriResolution
+	 * @see Serializer#SERIALIZER_uriResolution
 	 */
 	public RestClientBuilder uriResolution(UriResolution value) {
 		return property(SERIALIZER_uriResolution, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_uriRelativity} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriRelativity
+	 * @see Serializer#SERIALIZER_uriRelativity
 	 */
 	public RestClientBuilder uriRelativity(UriRelativity value) {
 		return property(SERIALIZER_uriRelativity, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_sortCollections} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortCollections
+	 * @see Serializer#SERIALIZER_sortCollections
 	 */
 	public RestClientBuilder sortCollections(boolean value) {
 		return property(SERIALIZER_sortCollections, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_sortMaps} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortMaps
+	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public RestClientBuilder sortMaps(boolean value) {
 		return property(SERIALIZER_sortMaps, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_abridged} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_abridged
+	 * @see Serializer#SERIALIZER_abridged
 	 */
 	public RestClientBuilder abridged(boolean value) {
 		return property(SERIALIZER_abridged, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_listener} and {@link ParserContext#PARSER_listener} property on all
+	 * Sets the {@link Serializer#SERIALIZER_listener} and {@link Parser#PARSER_listener} property on all
 	 * 	serializers and parsers in this group.
 	 *
 	 * @param sl The new serializer listener.
 	 * @param pl The new parser listener.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_abridged
+	 * @see Serializer#SERIALIZER_abridged
 	 */
 	public RestClientBuilder listeners(Class<? extends SerializerListener> sl, Class<? extends ParserListener> pl) {
 		property(SERIALIZER_listener, sl);
@@ -1122,44 +1123,44 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_trimStrings} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_trimStrings
+	 * @see Parser#PARSER_trimStrings
 	 */
 	public RestClientBuilder trimStringsP(boolean value) {
 		return property(PARSER_trimStrings, value);
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_strict} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_strict
+	 * @see Parser#PARSER_strict
 	 */
 	public RestClientBuilder strict(boolean value) {
 		return property(PARSER_strict, value);
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_inputStreamCharset} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_inputStreamCharset
+	 * @see Parser#PARSER_inputStreamCharset
 	 */
 	public RestClientBuilder inputStreamCharset(String value) {
 		return property(PARSER_inputStreamCharset, value);
 	}
 
 	/**
-	 * Sets the {@link ParserContext#PARSER_fileCharset} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see ParserContext#PARSER_fileCharset
+	 * @see Parser#PARSER_fileCharset
 	 */
 	public RestClientBuilder fileCharset(String value) {
 		return property(PARSER_fileCharset, value);
@@ -1180,7 +1181,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * Sets the {@link UonSerializerContext#UON_paramFormat} property on the URL-encoding serializers in this group.
+	 * Sets the {@link UonSerializer#UON_paramFormat} property on the URL-encoding serializers in this group.
 	 *
 	 * <p>
 	 * This overrides the behavior of the URL-encoding serializer to quote and escape characters in query names and
@@ -1188,10 +1189,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonSerializerContext#UON_paramFormat
+	 * @see UonSerializer#UON_paramFormat
 	 */
 	public RestClientBuilder paramFormat(String value) {
-		super.property(UonSerializerContext.UON_paramFormat, value);
+		super.property(UON_paramFormat, value);
 		return this;
 	}
 
@@ -1218,7 +1219,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder plainTextParts() {
-		super.property(UonSerializerContext.UON_paramFormat, "PLAINTEXT");
+		super.property(UON_paramFormat, "PLAINTEXT");
 		return this;
 	}
 

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
+import static org.apache.juneau.jena.RdfCommon.*;
+import static org.apache.juneau.jena.RdfSerializer.*;
 
 import java.util.*;
 
@@ -102,7 +102,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommonContext#RDF_language
+	 * @see RdfCommon#RDF_language
 	 */
 	public RdfSerializerBuilder language(String value) {
 		return property(RDF_language, value);
@@ -170,7 +170,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializerContext#RDF_juneauNs
+	 * @see RdfCommon#RDF_juneauNs
 	 */
 	public RdfSerializerBuilder juneauNs(Namespace value) {
 		return property(RDF_juneauNs, value);
@@ -193,7 +193,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializerContext#RDF_juneauBpNs
+	 * @see RdfCommon#RDF_juneauBpNs
 	 */
 	public RdfSerializerBuilder juneauBpNs(Namespace value) {
 		return property(RDF_juneauBpNs, value);
@@ -209,7 +209,8 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * </ul>
 	 * 
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
+	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
+	 * inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
@@ -220,7 +221,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortMaps
+	 * @see RdfCommon#RDF_useXmlNamespaces
 	 */
 	public RdfSerializerBuilder useXmlNamespaces(boolean value) {
 		return property(RDF_useXmlNamespaces, value);
@@ -244,7 +245,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializerContext#RDF_addLiteralTypes
+	 * @see RdfSerializer#RDF_addLiteralTypes
 	 */
 	public RdfSerializerBuilder addLiteralTypes(boolean value) {
 		return property(RDF_addLiteralTypes, value);
@@ -277,7 +278,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializerContext#RDF_addRootProperty
+	 * @see RdfSerializer#RDF_addRootProperty
 	 */
 	public RdfSerializerBuilder addRootProperty(boolean value) {
 		return property(RDF_addRootProperty, value);
@@ -308,7 +309,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializerContext#RDF_autoDetectNamespaces
+	 * @see RdfSerializer#RDF_autoDetectNamespaces
 	 */
 	public RdfSerializerBuilder autoDetectNamespaces(boolean value) {
 		return property(RDF_autoDetectNamespaces, value);
@@ -335,7 +336,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializerContext#RDF_namespaces
+	 * @see RdfSerializer#RDF_namespaces
 	 */
 	public RdfSerializerBuilder namespaces(Namespace...values) {
 		return property(RDF_namespaces, values);
@@ -379,7 +380,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommonContext#RDF_collectionFormat
+	 * @see RdfCommon#RDF_collectionFormat
 	 */
 	public RdfSerializerBuilder collectionFormat(RdfCollectionFormat value) {
 		return property(RDF_collectionFormat, value);
@@ -436,7 +437,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommonContext#RDF_looseCollections
+	 * @see RdfCommon#RDF_looseCollections
 	 */
 	public RdfSerializerBuilder looseCollections(boolean value) {
 		return property(RDF_looseCollections, value);

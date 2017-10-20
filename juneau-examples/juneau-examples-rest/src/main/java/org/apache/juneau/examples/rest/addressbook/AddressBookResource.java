@@ -13,9 +13,9 @@
 package org.apache.juneau.examples.rest.addressbook;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
+import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.jena.RdfCommon.*;
+import static org.apache.juneau.jena.RdfSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;

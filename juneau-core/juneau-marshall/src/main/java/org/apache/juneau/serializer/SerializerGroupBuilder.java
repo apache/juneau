@@ -15,7 +15,7 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
+import static org.apache.juneau.serializer.Serializer.*;
 
 import java.util.*;
 
@@ -207,55 +207,55 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_maxDepth} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_maxDepth
+	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public SerializerGroupBuilder maxDepth(int value) {
 		return property(SERIALIZER_maxDepth, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_initialDepth} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_initialDepth
+	 * @see Serializer#SERIALIZER_initialDepth
 	 */
 	public SerializerGroupBuilder initialDepth(int value) {
 		return property(SERIALIZER_initialDepth, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_detectRecursions} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_detectRecursions
+	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
 	public SerializerGroupBuilder detectRecursions(boolean value) {
 		return property(SERIALIZER_detectRecursions, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_ignoreRecursions} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_ignoreRecursions
+	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 */
 	public SerializerGroupBuilder ignoreRecursions(boolean value) {
 		return property(SERIALIZER_ignoreRecursions, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_useWhitespace} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_useWhitespace
+	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
 	public SerializerGroupBuilder useWhitespace(boolean value) {
 		return property(SERIALIZER_useWhitespace, value);
@@ -271,33 +271,33 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_maxIndent} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_maxIndent
+	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public SerializerGroupBuilder maxIndent(boolean value) {
 		return property(SERIALIZER_maxIndent, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_addBeanTypeProperties
+	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
 	public SerializerGroupBuilder addBeanTypeProperties(boolean value) {
 		return property(SERIALIZER_addBeanTypeProperties, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_quoteChar} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_quoteChar
+	 * @see Serializer#SERIALIZER_quoteChar
 	 */
 	public SerializerGroupBuilder quoteChar(char value) {
 		return property(SERIALIZER_quoteChar, value);
@@ -313,121 +313,121 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimNullProperties} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimNullProperties
+	 * @see Serializer#SERIALIZER_trimNullProperties
 	 */
 	public SerializerGroupBuilder trimNullProperties(boolean value) {
 		return property(SERIALIZER_trimNullProperties, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimEmptyCollections
+	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 */
 	public SerializerGroupBuilder trimEmptyCollections(boolean value) {
 		return property(SERIALIZER_trimEmptyCollections, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimEmptyMaps
+	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 */
 	public SerializerGroupBuilder trimEmptyMaps(boolean value) {
 		return property(SERIALIZER_trimEmptyMaps, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_trimStrings} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_trimStrings
+	 * @see Serializer#SERIALIZER_trimStrings
 	 */
 	public SerializerGroupBuilder trimStrings(boolean value) {
 		return property(SERIALIZER_trimStrings, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_uriContext} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriContext
+	 * @see Serializer#SERIALIZER_uriContext
 	 */
 	public SerializerGroupBuilder uriContext(UriContext value) {
 		return property(SERIALIZER_uriContext, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_uriResolution} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriResolution
+	 * @see Serializer#SERIALIZER_uriResolution
 	 */
 	public SerializerGroupBuilder uriResolution(UriResolution value) {
 		return property(SERIALIZER_uriResolution, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_uriRelativity} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_uriRelativity
+	 * @see Serializer#SERIALIZER_uriRelativity
 	 */
 	public SerializerGroupBuilder uriRelativity(UriRelativity value) {
 		return property(SERIALIZER_uriRelativity, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_sortCollections} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortCollections
+	 * @see Serializer#SERIALIZER_sortCollections
 	 */
 	public SerializerGroupBuilder sortCollections(boolean value) {
 		return property(SERIALIZER_sortCollections, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_sortMaps} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_sortMaps
+	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public SerializerGroupBuilder sortMaps(boolean value) {
 		return property(SERIALIZER_sortMaps, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_abridged} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_abridged
+	 * @see Serializer#SERIALIZER_abridged
 	 */
 	public SerializerGroupBuilder abridged(boolean value) {
 		return property(SERIALIZER_abridged, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_listener} property on all serializers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_listener} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_listener
+	 * @see Serializer#SERIALIZER_listener
 	 */
 	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
 		return property(SERIALIZER_listener, value);

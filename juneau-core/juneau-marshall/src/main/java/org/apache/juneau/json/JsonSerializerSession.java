@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonSerializerContext.*;
+import static org.apache.juneau.json.JsonSerializer.*;
 
 import java.util.*;
 
@@ -238,9 +238,9 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 
 	/**
-	 * Returns the {@link JsonSerializerContext#JSON_addBeanTypeProperties} setting value for this session.
+	 * Returns the {@link JsonSerializer#JSON_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link JsonSerializerContext#JSON_addBeanTypeProperties} setting value for this session.
+	 * @return The {@link JsonSerializer#JSON_addBeanTypeProperties} setting value for this session.
 	 */
 	@Override /* SerializerSession */
 	protected final boolean isAddBeanTypeProperties() {
