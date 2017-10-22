@@ -122,7 +122,6 @@ import org.apache.juneau.xml.*;
  * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
  */
-@SuppressWarnings("hiding")
 public class HtmlSerializer extends XmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

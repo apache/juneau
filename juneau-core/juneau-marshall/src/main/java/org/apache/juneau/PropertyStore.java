@@ -485,7 +485,6 @@ public final class PropertyStore {
 	 * @param properties The properties to add to this store.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public PropertyStore addProperties(Map<String,Object> properties) {
 		if (properties != null)
 			for (Map.Entry<String,Object> e : properties.entrySet())
@@ -928,7 +927,6 @@ public final class PropertyStore {
 	 * The {@link PropertyMap#hashCode()} and {@link PropertyMap#equals(Object)} methods can be used to compare with
 	 * other property maps.
 	 */
-	@SuppressWarnings("hiding")
 	public class PropertyMap {
 
 		private final Map<String,Property> map = new ConcurrentSkipListMap<String,Property>();

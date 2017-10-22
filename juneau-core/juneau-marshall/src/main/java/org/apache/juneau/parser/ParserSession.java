@@ -690,7 +690,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @throws Exception If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @param <T> The class type to convert the string to.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws Exception {
 		if (s == null)
 			return null;

@@ -59,7 +59,6 @@ import org.apache.juneau.transforms.*;
  * </ul>
  */
 @Bean(typeName="entry")
-@SuppressWarnings("hiding")
 public class Entry extends CommonEntry {
 
 	private Content content;

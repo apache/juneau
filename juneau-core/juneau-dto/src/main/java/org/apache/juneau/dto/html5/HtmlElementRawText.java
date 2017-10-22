@@ -31,7 +31,6 @@ import org.apache.juneau.xml.annotation.*;
  *		</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 public class HtmlElementRawText extends HtmlElement {
 
 	private Object text;

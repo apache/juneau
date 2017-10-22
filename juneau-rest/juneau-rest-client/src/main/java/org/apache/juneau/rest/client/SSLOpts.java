@@ -152,7 +152,6 @@ public class SSLOpts {
 	 * <p>
 	 * Used as enum for {@link SSLOpts#getCertValidate()} property.
 	 */
-	@SuppressWarnings("hiding")
 	public static enum CertValidate {
 
 		/**
@@ -172,7 +171,6 @@ public class SSLOpts {
 	 * <p>
 	 * Used as enum for {@link SSLOpts#getHostVerify()} property.
 	 */
-	@SuppressWarnings("hiding")
 	public enum HostVerify {
 
 		/**

@@ -105,7 +105,7 @@ public final class YamlParserSession extends ReaderParserSession {
 		return c;
 	}
 
-	private <T> T parseAnything(ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();

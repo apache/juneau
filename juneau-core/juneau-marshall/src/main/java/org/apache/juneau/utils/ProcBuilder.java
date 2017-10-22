@@ -29,7 +29,6 @@ import org.apache.juneau.utils.IOPipe.*;
  * <p>
  * Similar to {@link java.lang.ProcessBuilder} but with additional features.
  */
-@SuppressWarnings("hiding")
 public class ProcBuilder {
 
 	private java.lang.ProcessBuilder pb = new java.lang.ProcessBuilder();

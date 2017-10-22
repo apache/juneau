@@ -53,7 +53,6 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Builder class for the {@link RestClient} class.
  */
-@SuppressWarnings({"hiding"})
 public class RestClientBuilder extends CoreObjectBuilder {
 
 	private HttpClientConnectionManager httpClientConnectionManager;

@@ -46,7 +46,7 @@ public final class CsvParserSession extends ReaderParserSession {
 		return o;
 	}
 
-	@SuppressWarnings({"static-method","unused"})
+	@SuppressWarnings({"static-method"})
 	private <T> T parseAnything(ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 		throw new NoSuchMethodException("Not implemented.");
 	}

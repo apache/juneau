@@ -47,7 +47,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="name,url")
-@SuppressWarnings("hiding")
 public class License extends SwaggerElement {
 
 	private String name;

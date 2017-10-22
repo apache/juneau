@@ -49,7 +49,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="logo")
-@SuppressWarnings("hiding")
 public class Logo extends Common {
 
 	private URI uri;

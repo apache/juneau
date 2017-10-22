@@ -53,7 +53,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="category")
-@SuppressWarnings("hiding")
 public class Category extends Common {
 
 	private String term;

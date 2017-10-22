@@ -51,7 +51,6 @@ public class SearchArgs {
 	/**
 	 * Builder for {@link SearchArgs} class.
 	 */
-	@SuppressWarnings("hiding")
 	public static class Builder {
 		Map<String,String> search = new LinkedHashMap<String,String>();
 		List<String> view = new ArrayList<String>();

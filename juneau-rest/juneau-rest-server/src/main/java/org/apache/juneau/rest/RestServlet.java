@@ -33,7 +33,6 @@ import org.apache.juneau.utils.*;
  * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this
  * class.
  */
-@SuppressWarnings("hiding")
 public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

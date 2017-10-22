@@ -106,7 +106,6 @@ public class ReaderResource implements Writable {
 	/**
 	 * Builder class for constructing {@link ReaderResource} objects.
 	 */
-	@SuppressWarnings("hiding")
 	public static class Builder {
 		ArrayList<Object> contents = new ArrayList<Object>();
 		MediaType mediaType;

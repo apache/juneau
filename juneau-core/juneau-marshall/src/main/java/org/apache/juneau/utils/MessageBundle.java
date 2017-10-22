@@ -149,7 +149,6 @@ public class MessageBundle extends ResourceBundle {
 	 * @param bundlePath The bundle path.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public MessageBundle addSearchPath(Class<?> forClass, String bundlePath) {
 		assertSameThread(creationThreadId, "This method can only be called from the same thread that created the object.");
 		MessageBundle srb = new MessageBundle(forClass, bundlePath);

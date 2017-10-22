@@ -44,7 +44,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="name,description,externalDocs")
-@SuppressWarnings("hiding")
 public class Tag extends SwaggerElement {
 
 	private String name;

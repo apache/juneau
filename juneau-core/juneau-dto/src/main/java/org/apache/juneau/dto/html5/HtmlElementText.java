@@ -30,7 +30,6 @@ import org.apache.juneau.xml.annotation.*;
  *		</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 public class HtmlElementText extends HtmlElement {
 
 	private Object text;

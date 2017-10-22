@@ -49,7 +49,6 @@ import org.apache.juneau.annotation.*;
  * 	</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 public class Person extends Common {
 
 	private String name;

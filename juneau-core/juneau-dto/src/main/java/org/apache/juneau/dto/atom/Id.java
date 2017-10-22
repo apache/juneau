@@ -44,7 +44,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="id")
-@SuppressWarnings("hiding")
 public class Id extends Common {
 
 	private String text;

@@ -24,7 +24,6 @@ public class SerializerContext extends BeanContext {
 	/**
 	 * Default context with all default values.
 	 */
-	@SuppressWarnings("hiding")
 	static final SerializerContext DEFAULT = new SerializerContext(PropertyStore.create());
 
 

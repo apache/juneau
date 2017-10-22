@@ -37,7 +37,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="name,namespace,prefix,attribute,wrapped")
-@SuppressWarnings("hiding")
 public class Xml extends SwaggerElement {
 
 	private String name;

@@ -114,7 +114,6 @@ import org.apache.juneau.uon.*;
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
-@SuppressWarnings("hiding")
 public class UrlEncodingSerializer extends UonSerializer implements PartSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

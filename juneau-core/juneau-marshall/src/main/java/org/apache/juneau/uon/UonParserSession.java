@@ -122,7 +122,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * @return The parsed object.
 	 * @throws Exception
 	 */
-	public <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
+	public <T> T parseAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -763,7 +763,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * @return A new {@link UonReader} object.
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ "static-method", "hiding" })
+	@SuppressWarnings({ "static-method" })
 	public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws Exception {
 		Reader r = pipe.getReader();
 		if (r instanceof UonReader)

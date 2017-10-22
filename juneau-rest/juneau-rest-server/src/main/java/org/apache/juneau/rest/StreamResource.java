@@ -111,7 +111,6 @@ public class StreamResource implements Streamable {
 	/**
 	 * Builder class for constructing {@link StreamResource} objects.
 	 */
-	@SuppressWarnings("hiding")
 	public static class Builder {
 		ArrayList<Object> contents = new ArrayList<Object>();
 		MediaType mediaType;

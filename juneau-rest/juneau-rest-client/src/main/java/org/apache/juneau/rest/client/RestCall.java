@@ -68,7 +68,7 @@ import org.apache.juneau.utils.*;
  * 		API</a> for more information and code examples.
  * </ul>
  */
-@SuppressWarnings({ "hiding", "unchecked" })
+@SuppressWarnings({ "unchecked" })
 public final class RestCall {
 
 	private final RestClient client;                       // The client that created this call.

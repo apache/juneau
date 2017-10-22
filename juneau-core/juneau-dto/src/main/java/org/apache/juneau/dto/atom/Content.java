@@ -77,7 +77,6 @@ import org.apache.juneau.xml.annotation.*;
  * 	</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 public class Content extends Text {
 
 	private URI src;

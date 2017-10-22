@@ -34,7 +34,6 @@ import org.apache.juneau.utils.*;
  * 	String setting = cf.get(<js>"MySection/mysetting"</js>);
  * </p>
  */
-@SuppressWarnings("hiding")
 public class ConfigFileBuilder {
 
 	private WriterSerializer serializer = JsonSerializer.DEFAULT_LAX;

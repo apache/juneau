@@ -38,7 +38,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security")
-@SuppressWarnings("hiding")
 public class Swagger extends SwaggerElement {
 
 	/** Represents a null swagger */

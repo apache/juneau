@@ -445,7 +445,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	@SuppressWarnings("hiding")
 	private void serializeBeanMap(HtmlWriter out, BeanMap<?> m, ClassMeta<?> eType,
 			BeanPropertyMeta ppMeta) throws Exception {
 		int i = indent;
@@ -517,7 +516,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "hiding" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeCollection(HtmlWriter out, Object in, ClassMeta<?> sType,
 			ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
 

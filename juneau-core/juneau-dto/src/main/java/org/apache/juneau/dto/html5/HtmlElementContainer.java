@@ -123,7 +123,6 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param children The children to add as child elements.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public HtmlElement children(Object...children) {
 		if (children.length > 0) {
 			if (this.children == null)

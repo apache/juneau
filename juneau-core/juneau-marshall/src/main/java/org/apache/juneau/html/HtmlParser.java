@@ -29,7 +29,6 @@ import org.apache.juneau.xml.*;
  * <p>
  * This class is used primarily for automated testing of the {@link HtmlSerializer} class.
  */
-@SuppressWarnings({ "hiding" })
 public class HtmlParser extends XmlParser {
 
 	//-------------------------------------------------------------------------------------------------------------------

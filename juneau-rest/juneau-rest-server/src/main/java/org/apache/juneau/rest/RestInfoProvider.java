@@ -40,7 +40,6 @@ import org.apache.juneau.svl.*;
  * 	<li>The {@link RestConfig#setInfoProvider(Class)}/{@link RestConfig#setInfoProvider(RestInfoProvider)} methods.
  * </ul>
  */
-@SuppressWarnings("hiding")
 public class RestInfoProvider {
 
 	private final RestContext context;

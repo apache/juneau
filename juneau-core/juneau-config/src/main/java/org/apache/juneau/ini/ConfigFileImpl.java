@@ -212,7 +212,6 @@ public final class ConfigFileImpl extends ConfigFile {
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	@Override /* ConfigFile */
 	protected String serialize(Object value, Serializer serializer, boolean newline) throws SerializeException {
 		if (value == null)
@@ -235,7 +234,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	@SuppressWarnings({ "unchecked", "hiding" })
+	@SuppressWarnings({ "unchecked" })
 	protected <T> T parse(String s, Parser parser, Type type, Type...args) throws ParseException {
 
 		if (StringUtils.isEmpty(s))
@@ -505,7 +504,6 @@ public final class ConfigFileImpl extends ConfigFile {
 		return (s2 == null ? null : s2.toString());
 	}
 
-	@SuppressWarnings("hiding")
 	@Override /* ConfigFile */
 	public String put(String sectionName, String sectionKey, Object value, Serializer serializer, boolean encoded,
 			boolean newline) throws SerializeException {

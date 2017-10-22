@@ -26,7 +26,6 @@ import org.apache.juneau.*;
  *
  * @param <T> The class type of the wrapped bean.
  */
-@SuppressWarnings("hiding")
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	private Set<String> keys = Collections.newSetFromMap(new LinkedHashMap<String,Boolean>());

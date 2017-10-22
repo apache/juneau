@@ -38,7 +38,7 @@ import org.apache.juneau.uon.*;
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  */
-@SuppressWarnings({ "unchecked", "hiding" })
+@SuppressWarnings({ "unchecked" })
 public class UrlEncodingParser extends UonParser implements PartParser {
 
 	//-------------------------------------------------------------------------------------------------------------------

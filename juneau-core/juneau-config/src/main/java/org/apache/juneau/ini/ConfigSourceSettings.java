@@ -24,7 +24,6 @@ public class ConfigSourceSettings {
 	private final Charset charset;
 	private final boolean readonly, createIfNotExists;
 
-	@SuppressWarnings("hiding")
 	static class Builder {
 		private List<String> searchPaths = Arrays.asList(new String[]{"."});
 		private Charset charset = Charset.defaultCharset();

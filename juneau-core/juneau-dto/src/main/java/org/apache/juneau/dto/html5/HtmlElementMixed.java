@@ -127,7 +127,6 @@ public class HtmlElementMixed extends HtmlElement {
 	 * 	Can also be containers of strings and elements.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public HtmlElement children(Object...children) {
 		if (children.length != 0)
 			for (Object c : children)

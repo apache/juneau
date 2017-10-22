@@ -55,7 +55,6 @@ import org.apache.juneau.annotation.*;
  * 	</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 public class Source extends CommonEntry {
 
 	private Generator generator;

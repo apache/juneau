@@ -40,7 +40,6 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
-@SuppressWarnings("hiding")
 class CallMethod implements Comparable<CallMethod>  {
 	private final java.lang.reflect.Method method;
 	private final String httpMethod;

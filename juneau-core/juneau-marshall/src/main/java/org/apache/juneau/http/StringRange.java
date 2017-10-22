@@ -293,7 +293,6 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * @param type The type to match against this range.
 	 * @return <jk>true</jk> if the specified type matches this range.
 	 */
-	@SuppressWarnings("hiding")
 	public boolean matches(String type) {
 		if (qValue == 0)
 			return false;

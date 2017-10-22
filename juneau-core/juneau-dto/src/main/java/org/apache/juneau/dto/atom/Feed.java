@@ -63,7 +63,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="feed")
-@SuppressWarnings("hiding")
 public class Feed extends CommonEntry {
 
 	private Generator generator;  // atomGenerator?

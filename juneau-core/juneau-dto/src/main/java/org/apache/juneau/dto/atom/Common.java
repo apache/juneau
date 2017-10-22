@@ -49,7 +49,6 @@ import org.apache.juneau.xml.annotation.*;
  * 	</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 public abstract class Common {
 
 	private URI base;

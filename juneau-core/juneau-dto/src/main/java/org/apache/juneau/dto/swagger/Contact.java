@@ -48,7 +48,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="name,url,email")
-@SuppressWarnings("hiding")
 public class Contact extends SwaggerElement {
 
 	private String name;

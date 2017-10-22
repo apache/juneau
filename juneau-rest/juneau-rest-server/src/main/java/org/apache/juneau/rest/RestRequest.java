@@ -158,7 +158,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	@SuppressWarnings("hiding")
 	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
 			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset,
 			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,

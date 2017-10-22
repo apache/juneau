@@ -77,7 +77,6 @@ import org.apache.juneau.utils.*;
  * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)</code> before
  * you modify this config object, you won't see the changes!
  */
-@SuppressWarnings({"hiding"})
 public class RestConfig implements ServletConfig {
 
 	final ServletConfig inner;

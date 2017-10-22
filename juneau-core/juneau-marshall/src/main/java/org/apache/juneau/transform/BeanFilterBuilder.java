@@ -46,7 +46,6 @@ import org.apache.juneau.*;
  * <h5 class='section'>Additional information:</h5>
  * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
  */
-@SuppressWarnings("hiding")
 public abstract class BeanFilterBuilder {
 
 	Class<?> beanClass;

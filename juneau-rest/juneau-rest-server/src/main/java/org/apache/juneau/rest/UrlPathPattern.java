@@ -46,7 +46,6 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 		vars = b.vars.toArray(new String[b.vars.size()]);
 	}
 
-	@SuppressWarnings("hiding")
 	class Builder {
 		boolean isDotAll, isOnlyDotAll;
 		Pattern pattern;

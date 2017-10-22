@@ -91,7 +91,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	@SuppressWarnings("hiding")
 	final void init(ObjectMap properties, String defaultCharset, SerializerGroup mSerializers, UrlEncodingSerializer mUrlEncodingSerializer, EncoderGroup encoders) {
 		this.properties = properties;
 		this.serializerGroup = mSerializers;

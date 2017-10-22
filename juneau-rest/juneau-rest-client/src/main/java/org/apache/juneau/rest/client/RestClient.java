@@ -602,7 +602,7 @@ public class RestClient extends CoreObject {
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return The new proxy interface.
 	 */
-	@SuppressWarnings({ "unchecked", "hiding" })
+	@SuppressWarnings({ "unchecked" })
 	public <T> T getRemoteableProxy(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {

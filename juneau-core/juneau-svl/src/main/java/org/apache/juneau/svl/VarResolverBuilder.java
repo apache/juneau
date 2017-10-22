@@ -21,7 +21,6 @@ import org.apache.juneau.svl.vars.*;
 /**
  * Builder class for building instances of {@link VarResolver}.
  */
-@SuppressWarnings("hiding")
 public class VarResolverBuilder {
 
 	private final List<Class<? extends Var>> vars = new ArrayList<Class<? extends Var>>();

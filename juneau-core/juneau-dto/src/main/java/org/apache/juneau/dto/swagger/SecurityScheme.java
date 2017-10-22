@@ -68,7 +68,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes")
-@SuppressWarnings("hiding")
 public class SecurityScheme extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"basic", "apiKey", "oauth2"};

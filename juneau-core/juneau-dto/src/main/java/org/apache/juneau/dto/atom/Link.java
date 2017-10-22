@@ -51,7 +51,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="link")
-@SuppressWarnings("hiding")
 public class Link extends Common {
 
 	private String href;

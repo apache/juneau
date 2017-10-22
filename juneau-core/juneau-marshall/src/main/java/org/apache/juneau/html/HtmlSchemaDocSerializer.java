@@ -38,7 +38,6 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
-	@SuppressWarnings("hiding")
 	final HtmlDocSerializerContext ctx;
 
 	/**

@@ -74,7 +74,6 @@ public class RequestBody {
 		return this;
 	}
 
-	@SuppressWarnings("hiding")
 	RequestBody load(byte[] body) {
 		this.body = body;
 		return this;

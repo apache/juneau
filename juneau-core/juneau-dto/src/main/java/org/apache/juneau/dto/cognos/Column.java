@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<xt>&lt;item</xt> <xa>name</xa>=<xs>'name'</xs> <xa>type</xa>=<xs>'xs:String'</xs> <xa>length</xa>=<xs>'255'</xs>/&gt;
  * </p>
  */
-@SuppressWarnings({"rawtypes","hiding"})
+@SuppressWarnings({"rawtypes"})
 @Bean(typeName="item", properties="name,type,length")
 public class Column {
 

@@ -24,7 +24,6 @@ public class ParserContext extends BeanContext {
 	/**
 	 * Default context with all default values.
 	 */
-	@SuppressWarnings("hiding")
 	static final ParserContext DEFAULT = new ParserContext(PropertyStore.create());
 
 

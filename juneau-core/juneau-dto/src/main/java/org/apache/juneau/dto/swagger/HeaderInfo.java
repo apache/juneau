@@ -46,7 +46,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
-@SuppressWarnings({"hiding", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class HeaderInfo extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};

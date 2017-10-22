@@ -94,7 +94,6 @@ import org.apache.juneau.http.*;
  * </ul>
  */
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security")
-@SuppressWarnings("hiding")
 public class Operation extends SwaggerElement {
 
 	private List<String> tags;

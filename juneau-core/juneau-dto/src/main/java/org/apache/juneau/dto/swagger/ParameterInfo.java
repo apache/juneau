@@ -79,7 +79,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
-@SuppressWarnings("hiding")
 public class ParameterInfo extends SwaggerElement {
 
 	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};

@@ -36,7 +36,6 @@ import org.apache.juneau.internal.*;
  * By default, the input stream is closed and the output stream is not.
  * This can be changed by calling {@link #closeOut()} and {@link #close(boolean, boolean)}.
  */
-@SuppressWarnings("hiding")
 public class IOPipe {
 
 	private Object input, output;

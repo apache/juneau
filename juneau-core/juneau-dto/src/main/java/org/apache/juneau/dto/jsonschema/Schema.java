@@ -43,7 +43,6 @@ import org.apache.juneau.transform.*;
  * 	</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 @Bean(typeName="schema",
 	properties="id,$schema,$ref, title,description,type,definitions,properties,"
 		+ "patternProperties,dependencies,items,multipleOf,maximum,exclusiveMaximum,"

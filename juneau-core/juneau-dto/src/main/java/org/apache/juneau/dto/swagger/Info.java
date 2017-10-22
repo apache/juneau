@@ -53,7 +53,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="title,description,termsOfService,contact,license,version")
-@SuppressWarnings("hiding")
 public class Info extends SwaggerElement {
 
 	private String title;

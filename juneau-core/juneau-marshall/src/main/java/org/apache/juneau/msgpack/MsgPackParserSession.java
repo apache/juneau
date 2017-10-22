@@ -53,7 +53,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	/*
 	 * Workhorse method.
 	 */
-	private <T> T parseAnything(ClassMeta<T> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -88,7 +88,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 			} else if (dt == MAP && sType.isObject()) {
 				ObjectMap om = new ObjectMap(this);
 				for (int i = 0; i < length; i++)
-					om.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, om, pMeta));
+					om.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, om, pMeta));
 				o = cast(om, pMeta, eType);
 			}
 
@@ -140,7 +140,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				if (dt == MAP) {
 					ObjectMap m = new ObjectMap(this);
 					for (int i = 0; i < length; i++)
-						m.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (
@@ -158,7 +158,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				if (dt == MAP) {
 					ObjectMap m = new ObjectMap(this);
 					for (int i = 0; i < length; i++)
-						m.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (
@@ -175,7 +175,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 			} else if (dt == MAP) {
 				ObjectMap m = new ObjectMap(this);
 				for (int i = 0; i < length; i++)
-					m.put(parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
+					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);
 				else

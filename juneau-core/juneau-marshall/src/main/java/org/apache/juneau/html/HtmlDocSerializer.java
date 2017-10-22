@@ -68,7 +68,6 @@ import org.apache.juneau.serializer.*;
  * These variables are replaced at runtime based on the HTTP request locale.
  * Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  */
-@SuppressWarnings("hiding")
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

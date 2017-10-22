@@ -51,7 +51,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="generator")
-@SuppressWarnings("hiding")
 public class Generator extends Common {
 
 	private URI uri;

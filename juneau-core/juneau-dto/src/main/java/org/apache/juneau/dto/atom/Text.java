@@ -56,7 +56,6 @@ import org.apache.juneau.xml.annotation.*;
  * 	</li>
  * </ul>
  */
-@SuppressWarnings("hiding")
 public class Text extends Common {
 
 	private String type;

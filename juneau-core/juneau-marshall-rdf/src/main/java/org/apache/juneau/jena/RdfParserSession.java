@@ -229,7 +229,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return collectionFormat == RdfCollectionFormat.MULTI_VALUED;
 	}
 
-	private <T> T parseAnything(ClassMeta<T> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
