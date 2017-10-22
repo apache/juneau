@@ -11,6 +11,12 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 7.0.0
+
+** Improvement
+
+** New Feature
+
 
 Release Notes - Juneau - Version 6.4.0
 
