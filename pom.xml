@@ -277,15 +277,15 @@
 		</plugins>
 	</reporting>
 
-	<url>http://juneau.incubator.apache.org</url>
+	<url>http://juneau.apache.org</url>
 	<organization>
 		<name>Apache</name>
 		<url>http://www.apache.org/</url>
 	</organization>
 	<scm>
-		<connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-juneau.git</connection>
-		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-juneau.git</developerConnection>
-		<url>https://github.com/apache/incubator-juneau</url>
+		<connection>scm:git:https://git-wip-us.apache.org/repos/asf/juneau.git</connection>
+		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/juneau.git</developerConnection>
+		<url>https://github.com/apache/juneau</url>
 		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
@@ -295,7 +295,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Apache Juneau Developers</name>
-			<post>dev@juneau.incubator.apache.org</post>
+			<post>dev@juneau.apache.org</post>
 			<subscribe>list-subscribe@juneau.apache.org</subscribe>
 			<unsubscribe>list-unsubscribe@juneau.apache.org</unsubscribe>
 			<archive>https://lists.apache.org/list.html?dev@juneau.apache.org</archive>
