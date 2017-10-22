@@ -304,10 +304,10 @@
 	<developers>
 		<developer>
 			<id>JamesBognar</id>
-			<email>james.bognar@salesforce.com</email>
+			<email>jamesbognar@apache.org</email>
 			<name>James Bognar</name>
 			<roles>
-				<role>commiter</role>
+				<role>PMC Chair</role>
 			</roles>
 		</developer>
 	</developers>
