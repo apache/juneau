@@ -303,12 +303,49 @@
 	</mailingLists>
 	<developers>
 		<developer>
-			<id>JamesBognar</id>
-			<email>jamesbognar@apache.org</email>
+			<id>johnadament</id>
+			<name>John D. Ament</name>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>sblackmon</id>
+			<name>Steve Blackmon</name>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>clr</id>
+			<name>Craig L Russell</name>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>stain</id>
+			<name>Stian Soiland-Reyes</name>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>jochen</id>
+			<name>Jochen Wiedmann</name>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>jamesbognar</id>
 			<name>James Bognar</name>
-			<roles>
-				<role>PMC Chair</role>
-			</roles>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>dmg</id>
+			<name>David M Goddard</name>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>phaumer</id>
+			<name>Peter Haumer</name>
+			<roles><role>PMC</role></roles>
+		</developer>
+		<developer>
+			<id>yidonguk</id>
+			<name>Raphi D Lee</name>
+			<roles><role>PMC</role></roles>
 		</developer>
 	</developers>
 </project>
