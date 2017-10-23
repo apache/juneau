@@ -71,32 +71,4 @@ public abstract class CoreObject {
 	public BeanContext getBeanContext() {
 		return beanContext;
 	}
-
-	/**
-	 * Returns the universal <code>Object</code> metadata object.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>getBeanContext().object();</code>.
-	 * </ul>
-	 *
-	 * @return The reusable {@link ClassMeta} for representing the {@link Object} class.
-	 */
-	public ClassMeta<Object> object() {
-		return getBeanContext().object();
-	}
-
-	/**
-	 * Returns the universal <code>String</code> metadata object.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>getBeanContext().string();</code>.
-	 * </ul>
-	 *
-	 * @return The reusable {@link ClassMeta} for representing the {@link String} class.
-	 */
-	public ClassMeta<String> string() {
-		return getBeanContext().string();
-	}
 }

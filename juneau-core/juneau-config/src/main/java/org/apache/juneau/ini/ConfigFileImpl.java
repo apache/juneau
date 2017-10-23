@@ -97,7 +97,7 @@ public final class ConfigFileImpl extends ConfigFile {
 			for (Section s : sections.values())
 				s.setReadOnly();
 		}
-		this.pBeanSession = this.parser.getBeanContext().createSession();
+		this.pBeanSession = this.parser.createSession();
 	}
 
 	/**
