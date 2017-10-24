@@ -15,9 +15,6 @@
 -->
 <projectDescription>
 	<name>juneau-releng</name>
-	<comment></comment>
-	<projects>
-	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
