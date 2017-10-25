@@ -161,7 +161,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 			out.attr(toString(key)).append(':').s();
 
-			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
+			serializeAnything(out, value, valueType, toString(key), null);
 
 			if (mapEntries.hasNext())
 				out.nl(i);

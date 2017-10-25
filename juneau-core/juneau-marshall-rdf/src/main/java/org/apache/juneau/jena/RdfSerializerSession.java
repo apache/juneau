@@ -335,7 +335,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 			Namespace ns = juneauBpNs;
 			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
-			RDFNode n = serializeAnything(value, false, valueType, key == null ? null : toString(key), null, r);
+			RDFNode n = serializeAnything(value, false, valueType, toString(key), null, r);
 			if (n != null)
 				r.addProperty(p, n);
 		}

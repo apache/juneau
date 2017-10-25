@@ -119,32 +119,29 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 
 		// '\0' characters are considered null.
-		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
+		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
 			out.append("null");
-		else if (sType.isNumber() || sType.isBoolean())
+		} else if (sType.isNumber() || sType.isBoolean()) {
 			out.append(o);
-		else if (sType.isBean())
+		} else if (sType.isBean()) {
 			serializeBeanMap(out, toBeanMap(o), typeName);
-		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
+		} else if (sType.isUri() || (pMeta != null && pMeta.isUri())) {
 			out.uriValue(o);
-		else if (sType.isMap()) {
+		} else if (sType.isMap()) {
 			if (o instanceof BeanMap)
 				serializeBeanMap(out, (BeanMap)o, typeName);
 			else
 				serializeMap(out, (Map)o, eType);
-		}
-		else if (sType.isCollection()) {
+		} else if (sType.isCollection()) {
 			serializeCollection(out, (Collection) o, eType);
-		}
-		else if (sType.isArray()) {
+		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
-		}
-		else if (sType.isReader() || sType.isInputStream()) {
+		} else if (sType.isReader() || sType.isInputStream()) {
 			IOUtils.pipe(o, out);
-		}
-		else
+		} else {
 			out.stringValue(toString(o));
-
+		}
+		
 		if (wrapperAttr != null) {
 			indent--;
 			out.cre(indent-1).append('}');

@@ -318,11 +318,11 @@ public final class JsonParserSession extends ReaderParserSession {
 					state = S5;
 				}
 			} else if (state == S5) {
-				if (c == ',')
+				if (c == ',') {
 					state = S6;
-				else if (isCommentOrWhitespace(c))
+				} else if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
-				else if (c == '}') {
+				} else if (c == '}') {
 					return m;
 				} else {
 					break;

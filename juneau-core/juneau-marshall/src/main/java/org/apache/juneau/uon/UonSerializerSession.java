@@ -199,7 +199,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 			Object value = e.getValue();
 			Object key = generalize(e.getKey(), keyType);
 			out.cr(indent).appendObject(key, false).append('=');
-			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
+			serializeAnything(out, value, valueType, toString(key), null);
 			if (mapEntries.hasNext())
 				out.append(',');
 		}

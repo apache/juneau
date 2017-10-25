@@ -714,9 +714,16 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Converts the specified object to a <code>String</code>.
+	 * 
+	 * <p>
+	 * Also has the following effects:
+	 * <ul>
+	 * 	<li><code>Class</code> object is converted to a readable name.  See {@link ClassUtils#getReadableClassName(Class)}.
+	 * 	<li>Whitespace is trimmed if the trim-strings setting is enabled.
+	 * </ul>
 	 *
 	 * @param o The object to convert to a <code>String</code>.
-	 * @return The
+	 * @return The object converted to a String, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public final String toString(Object o) {
 		if (o == null)
