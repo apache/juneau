@@ -384,7 +384,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		CR_NORMAL     // Normal content.  Use whitespace.
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	private void serializeMap(HtmlWriter out, Map m, ClassMeta<?> sType,
 			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws Exception {
 
@@ -694,7 +694,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return null;
 		c = sort(c);
 		Object[] th;
-		Set<ClassMeta> prevC = new HashSet<ClassMeta>();
+		Set<ClassMeta> prevC = new HashSet<>();
 		Object o1 = null;
 		for (Object o : c)
 			if (o != null) {
@@ -723,7 +723,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (canIgnoreValue(cm, null, o1))
 			return null;
 		if (cm.isMap() && ! cm.isBeanMap()) {
-			Set<Object> set = new LinkedHashSet<Object>();
+			Set<Object> set = new LinkedHashSet<>();
 			for (Object o : c) {
 				if (! canIgnoreValue(cm, null, o)) {
 					if (! cm.isInstance(o))
@@ -737,7 +737,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			}
 			th = set.toArray(new Object[set.size()]);
 		} else {
-			Map<String,Boolean> m = new LinkedHashMap<String,Boolean>();
+			Map<String,Boolean> m = new LinkedHashMap<>();
 			for (Object o : c) {
 				if (! canIgnoreValue(cm, null, o)) {
 					if (! cm.isInstance(o))
@@ -761,7 +761,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		boolean isSortable = true;
 		for (Object o : th)
 			isSortable &= (o instanceof Comparable);
-		Set<Object> s = (isSortable ? new TreeSet<Object>() : new LinkedHashSet<Object>());
+		Set<Object> s = (isSortable ? new TreeSet<>() : new LinkedHashSet<>());
 		s.addAll(Arrays.asList(th));
 
 		for (Object o : c) {

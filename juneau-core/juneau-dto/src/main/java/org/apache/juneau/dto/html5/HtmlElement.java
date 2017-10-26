@@ -85,7 +85,7 @@ public abstract class HtmlElement {
 	 */
 	public HtmlElement attr(String key, Object val) {
 		if (this.attrs == null)
-			this.attrs = new LinkedHashMap<String,Object>();
+			this.attrs = new LinkedHashMap<>();
 		if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
 			val = StringUtils.toURI(val);
 		this.attrs.put(key, val);
@@ -112,7 +112,7 @@ public abstract class HtmlElement {
 	 */
 	public HtmlElement attrUri(String key, Object val) {
 		if (this.attrs == null)
-			this.attrs = new LinkedHashMap<String,Object>();
+			this.attrs = new LinkedHashMap<>();
 		this.attrs.put(key, StringUtils.toURI(val));
 		return this;
 	}

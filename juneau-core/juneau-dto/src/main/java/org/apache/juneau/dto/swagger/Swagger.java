@@ -313,7 +313,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addSchemes(Collection<String> schemes) {
 		if (schemes != null) {
 			if (this.schemes == null)
-				this.schemes = new LinkedList<String>();
+				this.schemes = new LinkedList<>();
 			this.schemes.addAll(schemes);
 		}
 		return this;
@@ -400,7 +400,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addConsumes(Collection<MediaType> consumes) {
 		if (consumes != null) {
 			if (this.consumes == null)
-				this.consumes = new LinkedList<MediaType>();
+				this.consumes = new LinkedList<>();
 			this.consumes.addAll(consumes);
 		}
 		return this;
@@ -497,7 +497,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addProduces(Collection<MediaType> produces) {
 		if (produces != null) {
 			if (this.produces == null)
-				this.produces = new LinkedList<MediaType>();
+				this.produces = new LinkedList<>();
 			this.produces.addAll(produces);
 		}
 		return this;
@@ -562,10 +562,10 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addPath(String path, String methodName, Operation operation) {
 		if (paths == null)
-			paths = new TreeMap<String,Map<String,Operation>>();
+			paths = new TreeMap<>();
 		Map<String,Operation> p = paths.get(path);
 		if (p == null) {
-			p = new TreeMap<String,Operation>(new MethodSorter());
+			p = new TreeMap<>(new MethodSorter());
 			paths.put(path, p);
 		}
 		p.put(methodName, operation);
@@ -623,7 +623,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addDefinition(String name, SchemaInfo schema) {
 		if (definitions == null)
-			definitions = new TreeMap<String,SchemaInfo>();
+			definitions = new TreeMap<>();
 		definitions.put(name, schema);
 		return this;
 	}
@@ -686,7 +686,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addParameter(String name, ParameterInfo parameter) {
 		if (parameters == null)
-			parameters = new TreeMap<String,ParameterInfo>();
+			parameters = new TreeMap<>();
 		parameters.put(name, parameter);
 		return this;
 	}
@@ -749,7 +749,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addResponse(String name, ResponseInfo response) {
 		if (responses == null)
-			responses = new TreeMap<String,ResponseInfo>();
+			responses = new TreeMap<>();
 		responses.put(name, response);
 		return this;
 	}
@@ -805,7 +805,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {
 		if (securityDefinitions == null)
-			securityDefinitions = new TreeMap<String,SecurityScheme>();
+			securityDefinitions = new TreeMap<>();
 		securityDefinitions.put(name, securityScheme);
 		return this;
 	}
@@ -873,7 +873,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addSecurity(Map<String,List<String>> security) {
 		if (this.security == null)
-			this.security = new LinkedList<Map<String,List<String>>>();
+			this.security = new LinkedList<>();
 		this.security.add(security);
 		return this;
 	}
@@ -887,7 +887,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger security(String scheme, String...alternatives) {
-		Map<String,List<String>> m = new LinkedHashMap<String,List<String>>();
+		Map<String,List<String>> m = new LinkedHashMap<>();
 		m.put(scheme, Arrays.asList(alternatives));
 		return addSecurity(m);
 	}
@@ -950,7 +950,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addTags(Tag...tags) {
 		if (this.tags == null)
-			this.tags = new LinkedList<Tag>();
+			this.tags = new LinkedList<>();
 		this.tags.addAll(Arrays.asList(tags));
 		return this;
 	}

@@ -77,18 +77,19 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	@Override /* ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		UonReader r = getUonReader(pipe, true);
-		T o = parseAnything(type, r, getOuter());
-		return o;
+		try (UonReader r = getUonReader(pipe, true)) {
+			return parseAnything(type, r, getOuter());
+		}
 	}
 
 	@Override /* ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		UonReader r = getUonReader(pipe, true);
-		if (r.peekSkipWs() == '?')
-			r.read();
-		m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
-		return m;
+		try (UonReader r = getUonReader(pipe, true)) {
+			if (r.peekSkipWs() == '?')
+				r.read();
+			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
+			return m;
+		}
 	}
 
 	private <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer) throws Exception {
@@ -121,7 +122,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
 			// ?1=foo&2=bar...
 			Collection c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new ObjectList(this) : (Collection)sType.newInstance();
-			Map<Integer,Object> m = new TreeMap<Integer,Object>();
+			Map<Integer,Object> m = new TreeMap<>();
 			parseIntoMap2(r, m, sType, c2);
 			c2.addAll(m.values());
 			if (sType.isArray())

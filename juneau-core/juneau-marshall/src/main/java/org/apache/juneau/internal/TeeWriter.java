@@ -79,7 +79,7 @@ public class TeeWriter extends Writer {
 	public TeeWriter add(String id, Writer w, boolean close) {
 		if (id != null) {
 			if (writerMap == null)
-				writerMap = new TreeMap<String,Writer>();
+				writerMap = new TreeMap<>();
 			writerMap.put(id, w);
 		}
 		return add(w, close);

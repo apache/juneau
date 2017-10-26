@@ -132,7 +132,9 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
 					ZipEntry e = new ZipEntry(path);
 					e.setSize(f.length());
 					zos.putNextEntry(e);
-					IOPipe.create(new FileInputStream(f), zos).run();
+					try (FileInputStream fis = new FileInputStream(f)) {
+						IOPipe.create(fis, zos).run();
+					}
 				}
 			}
 		}

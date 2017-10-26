@@ -129,10 +129,10 @@ public final class RestContext extends Context {
 		destroyMethodParams;
 
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
-	private final Map<String,StreamResource> staticFilesCache = new ConcurrentHashMap<String,StreamResource>();
+	private final Map<String,StreamResource> staticFilesCache = new ConcurrentHashMap<>();
 
 	private final ResourceFinder resourceFinder;
-	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<Integer,AtomicInteger>();
+	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
 
 
 	/**
@@ -197,26 +197,26 @@ public final class RestContext extends Context {
 			// Initialize the child resources.
 			// Done after initializing fields above since we pass this object to the child resources.
 			//----------------------------------------------------------------------------------------------------
-			List<String> methodsFound = new LinkedList<String>();   // Temporary to help debug transient duplicate method issue.
-			Map<String,CallRouter.Builder> routers = new LinkedHashMap<String,CallRouter.Builder>();
-			Map<String,CallMethod> _javaRestMethods = new LinkedHashMap<String,CallMethod>();
+			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
+			Map<String,CallRouter.Builder> routers = new LinkedHashMap<>();
+			Map<String,CallMethod> _javaRestMethods = new LinkedHashMap<>();
 			Map<String,Method>
-				_startCallMethods = new LinkedHashMap<String,Method>(),
-				_preCallMethods = new LinkedHashMap<String,Method>(),
-				_postCallMethods = new LinkedHashMap<String,Method>(),
-				_endCallMethods = new LinkedHashMap<String,Method>(),
-				_postInitMethods = new LinkedHashMap<String,Method>(),
-				_postInitChildFirstMethods = new LinkedHashMap<String,Method>(),
-				_destroyMethods = new LinkedHashMap<String,Method>();
+				_startCallMethods = new LinkedHashMap<>(),
+				_preCallMethods = new LinkedHashMap<>(),
+				_postCallMethods = new LinkedHashMap<>(),
+				_endCallMethods = new LinkedHashMap<>(),
+				_postInitMethods = new LinkedHashMap<>(),
+				_postInitChildFirstMethods = new LinkedHashMap<>(),
+				_destroyMethods = new LinkedHashMap<>();
 			List<RestParam[]>
-				_preCallMethodParams = new ArrayList<RestParam[]>(),
-				_postCallMethodParams = new ArrayList<RestParam[]>();
+				_preCallMethodParams = new ArrayList<>(),
+				_postCallMethodParams = new ArrayList<>();
 			List<Class<?>[]>
-				_startCallMethodParams = new ArrayList<Class<?>[]>(),
-				_endCallMethodParams = new ArrayList<Class<?>[]>(),
-				_postInitMethodParams = new ArrayList<Class<?>[]>(),
-				_postInitChildFirstMethodParams = new ArrayList<Class<?>[]>(),
-				_destroyMethodParams = new ArrayList<Class<?>[]>();
+				_startCallMethodParams = new ArrayList<>(),
+				_endCallMethodParams = new ArrayList<>(),
+				_postInitMethodParams = new ArrayList<>(),
+				_postInitChildFirstMethodParams = new ArrayList<>(),
+				_destroyMethodParams = new ArrayList<>();
 
 			for (java.lang.reflect.Method method : resource.getClass().getMethods()) {
 				if (method.isAnnotationPresent(RestMethod.class)) {
@@ -263,9 +263,10 @@ public final class RestContext extends Context {
 											try {
 												// Parse the args and invoke the method.
 												Parser p = req.getBody().getParser();
-												Object input = p.isReaderParser() ? req.getReader() : req.getInputStream();
-												Object output = m.invoke(o, p.parseArgs(input, m.getGenericParameterTypes()));
-												res.setOutput(output);
+												try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {
+													Object output = m.invoke(o, p.parseArgs(in, m.getGenericParameterTypes()));
+													res.setOutput(output);
+												}
 												return SC_OK;
 											} catch (Exception e) {
 												throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
@@ -377,7 +378,7 @@ public final class RestContext extends Context {
 			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
 			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
-			Map<String,CallRouter> _callRouters = new LinkedHashMap<String,CallRouter>();
+			Map<String,CallRouter> _callRouters = new LinkedHashMap<>();
 			for (CallRouter.Builder crb : routers.values())
 				_callRouters.put(crb.getHttpMethodName(), crb.build());
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
@@ -450,7 +451,7 @@ public final class RestContext extends Context {
 		ObjectMap properties;
 		Class<?>[] beanFilters;
 		Class<?>[] pojoSwaps;
-		Map<Class<?>,RestParam> paramResolvers = new HashMap<Class<?>,RestParam>();
+		Map<Class<?>,RestParam> paramResolvers = new HashMap<>();
 		SerializerGroup serializers;
 		ParserGroup parsers;
 		UrlEncodingSerializer urlEncodingSerializer;
@@ -459,17 +460,17 @@ public final class RestContext extends Context {
 		String clientVersionHeader = "", defaultCharset, paramFormat;
 
 		List<MediaType> supportedContentTypes, supportedAcceptTypes;
-		Map<String,String> defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+		Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 		Map<String,Object> defaultResponseHeaders;
 		BeanContext beanContext;
-		List<RestConverter> converters = new ArrayList<RestConverter>();
-		List<RestGuard> guards = new ArrayList<RestGuard>();
-		List<ResponseHandler> responseHandlers = new ArrayList<ResponseHandler>();
+		List<RestConverter> converters = new ArrayList<>();
+		List<RestGuard> guards = new ArrayList<>();
+		List<ResponseHandler> responseHandlers = new ArrayList<>();
 		MimetypesFileTypeMap mimetypesFileTypeMap;
 		Map<String,String> staticFilesMap;
 		String[] staticFilesPrefixes;
 		MessageBundle messageBundle;
-		Set<String> allowMethodParams = new LinkedHashSet<String>();
+		Set<String> allowMethodParams = new LinkedHashSet<>();
 		RestLogger logger;
 		String fullPath;
 		Map<String,Widget> widgets;
@@ -541,7 +542,7 @@ public final class RestContext extends Context {
 			supportedContentTypes = sc.supportedContentTypes != null ? sc.supportedContentTypes : serializers.getSupportedMediaTypes();
 			supportedAcceptTypes = sc.supportedAcceptTypes != null ? sc.supportedAcceptTypes : parsers.getSupportedMediaTypes();
 			defaultRequestHeaders.putAll(sc.defaultRequestHeaders);
-			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<String,Object>(sc.defaultResponseHeaders));
+			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(sc.defaultResponseHeaders));
 			beanContext = ps.getBeanContext();
 			contextPath = sc.contextPath;
 
@@ -558,7 +559,7 @@ public final class RestContext extends Context {
 
 			VarResolver vr = sc.getVarResolverBuilder().build();
 
-			staticFilesMap = new LinkedHashMap<String,String>();
+			staticFilesMap = new LinkedHashMap<>();
 			if (sc.staticFiles != null) {
 				for (Object o : sc.staticFiles) {
 					if (o instanceof Pair) {
@@ -578,7 +579,7 @@ public final class RestContext extends Context {
 
 			HtmlDocBuilder hdb = new HtmlDocBuilder(sc.properties);
 
-			this.widgets = new LinkedHashMap<String,Widget>();
+			this.widgets = new LinkedHashMap<>();
 
 			for (Class<? extends Widget> wc : sc.widgets) {
 				Widget w = resolve(resource, Widget.class, wc);
@@ -741,17 +742,14 @@ public final class RestContext extends Context {
 					String remainder = (p.equals(key) ? "" : p.substring(key.length()));
 					if (remainder.isEmpty() || remainder.startsWith("/")) {
 						String p2 = trimSlashes(e.getValue()) + remainder;
-						InputStream is = getResource(p2, null);
-						if (is != null) {
-							try {
+						try (InputStream is = getResource(p2, null)) {
+							if (is != null) {
 								int i = p2.lastIndexOf('/');
 								String name = (i == -1 ? p2 : p2.substring(i+1));
 								String mediaType = mimetypesFileTypeMap.getContentType(name);
 								ObjectMap headers = new ObjectMap().append("Cache-Control", "max-age=86400, public");
 								staticFilesCache.put(pathInfo, new StreamResource(MediaType.forString(mediaType), headers, is));
 								return staticFilesCache.get(pathInfo);
-							} finally {
-								is.close();
 							}
 						}
 					}
@@ -822,9 +820,9 @@ public final class RestContext extends Context {
 			Parser p = parsers.getParser(mediaType);
 			if (p != null) {
 				try {
-					if (p.isReaderParser())
-						return p.parse(new InputStreamReader(is, UTF8), c);
-					return p.parse(is, c);
+					try (Closeable in = p.isReaderParser() ? new InputStreamReader(is, UTF8) : is) {
+						return p.parse(in, c);
+					}
 				} catch (ParseException e) {
 					throw new ServletException("Could not parse resource '' as media type '"+mediaType+"'.");
 				}

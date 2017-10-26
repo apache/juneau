@@ -44,20 +44,13 @@ public class ZipFileListResponseHandler implements ResponseHandler {
 			ZipFileList m = (ZipFileList)output;
 			res.setContentType("application/zip");
 			res.setHeader("Content-Disposition", "attachment;filename=" + m.fileName); //$NON-NLS-2$
-			OutputStream os = res.getOutputStream();
-			try {
-				ZipOutputStream zos = new ZipOutputStream(os);
-				try {
+			try (OutputStream os = res.getOutputStream()) {
+				try (ZipOutputStream zos = new ZipOutputStream(os)) {
 					for (ZipFileEntry e : m)
 						e.write(zos);
 				} catch (Exception e) {
 					e.printStackTrace();
-				} finally {
-					zos.flush();
-					zos.close();
 				}
-			} finally {
-				os.flush();
 			}
 			return true;
 		}

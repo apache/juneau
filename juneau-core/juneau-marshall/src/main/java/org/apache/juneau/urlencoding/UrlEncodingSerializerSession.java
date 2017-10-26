@@ -151,7 +151,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * Converts a Collection into an integer-indexed map.
 	 */
 	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
-		Map<Integer,Object> m = new TreeMap<Integer,Object>();
+		Map<Integer,Object> m = new TreeMap<>();
 		int i = 0;
 		for (Object o : c)
 			m.put(i++, o);
@@ -162,7 +162,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * Converts an array into an integer-indexed map.
 	 */
 	private static Map<Integer,Object> getCollectionMap(Object array) {
-		Map<Integer,Object> m = new TreeMap<Integer,Object>();
+		Map<Integer,Object> m = new TreeMap<>();
 		for (int i = 0; i < Array.getLength(array); i++)
 			m.put(i, Array.get(array, i));
 		return m;

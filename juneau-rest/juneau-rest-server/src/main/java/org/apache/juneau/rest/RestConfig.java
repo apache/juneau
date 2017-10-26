@@ -92,21 +92,21 @@ public class RestConfig implements ServletConfig {
 	VarResolverBuilder varResolverBuilder;
 
 	List<Class<?>>
-		beanFilters = new ArrayList<Class<?>>(),
-		pojoSwaps = new ArrayList<Class<?>>(),
-		paramResolvers = new ArrayList<Class<?>>();
+		beanFilters = new ArrayList<>(),
+		pojoSwaps = new ArrayList<>(),
+		paramResolvers = new ArrayList<>();
 	Class<? extends SerializerListener> serializerListener;
 	Class<? extends ParserListener> parserListener;
 	SerializerGroupBuilder serializers = new SerializerGroupBuilder();
 	ParserGroupBuilder parsers = new ParserGroupBuilder();
 	EncoderGroupBuilder encoders = new EncoderGroupBuilder().append(IdentityEncoder.INSTANCE);
-	List<Object> converters = new ArrayList<Object>();
-	List<Object> guards = new ArrayList<Object>();
+	List<Object> converters = new ArrayList<>();
+	List<Object> guards = new ArrayList<>();
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
-	Map<String,String> defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
-	Map<String,Object> defaultResponseHeaders = new LinkedHashMap<String,Object>();
-	List<Object> responseHandlers = new ArrayList<Object>();
-	List<Object> childResources = new ArrayList<Object>();
+	Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	Map<String,Object> defaultResponseHeaders = new LinkedHashMap<>();
+	List<Object> responseHandlers = new ArrayList<>();
+	List<Object> childResources = new ArrayList<>();
 	List<MediaType> supportedContentTypes, supportedAcceptTypes;
 	List<Object> staticFiles;
 	RestContext parentContext;
@@ -114,7 +114,7 @@ public class RestConfig implements ServletConfig {
 	String clientVersionHeader = "X-Client-Version";
 	String contextPath;
 	HtmlDocBuilder htmlDocBuilder;
-	List<Class<? extends Widget>> widgets = new ArrayList<Class<? extends Widget>>();
+	List<Class<? extends Widget>> widgets = new ArrayList<>();
 
 	Object resourceResolver = RestResourceResolverSimple.class;
 	Object logger = RestLogger.Normal.class;
@@ -272,7 +272,7 @@ public class RestConfig implements ServletConfig {
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
 	 */
 	void init(Object resource) throws ServletException {
-		Map<String,Method> map = new LinkedHashMap<String,Method>();
+		Map<String,Method> map = new LinkedHashMap<>();
 		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
 			if (m.isAnnotationPresent(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
 				Visibility.setAccessible(m);
@@ -881,7 +881,7 @@ public class RestConfig implements ServletConfig {
 	 * @return This object (for method chaining).
 	 */
 	public RestConfig addChildResource(String path, Object child) {
-		this.childResources.add(new Pair<String,Object>(path, child));
+		this.childResources.add(new Pair<>(path, child));
 		return this;
 	}
 
@@ -934,7 +934,7 @@ public class RestConfig implements ServletConfig {
 	 * @return This object (for method chaining).
 	 */
 	public RestConfig setSupportedAcceptTypes(String...mediaTypes) {
-		supportedAcceptTypes = new ArrayList<MediaType>();
+		supportedAcceptTypes = new ArrayList<>();
 		for (String mediaType : mediaTypes)
 			supportedAcceptTypes.add(MediaType.forString(mediaType));
 		return this;
@@ -970,7 +970,7 @@ public class RestConfig implements ServletConfig {
 	 * @return This object (for method chaining).
 	 */
 	public RestConfig setSupportedContentTypes(String...mediaTypes) {
-		supportedContentTypes = new ArrayList<MediaType>();
+		supportedContentTypes = new ArrayList<>();
 		for (String mediaType : mediaTypes)
 			supportedContentTypes.add(MediaType.forString(mediaType));
 		return this;
@@ -1013,7 +1013,7 @@ public class RestConfig implements ServletConfig {
 	 */
 	public RestConfig addStaticFiles(Class<?> resourceClass, String staticFilesString) {
 		if (staticFiles == null)
-			staticFiles = new ArrayList<Object>();
+			staticFiles = new ArrayList<>();
 		staticFiles.add(new Pair<Class<?>,Object>(resourceClass, staticFilesString));
 		return this;
 	}

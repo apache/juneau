@@ -108,7 +108,7 @@ import org.apache.juneau.internal.*;
  */
 public final class AcceptLanguage extends HeaderRangeArray {
 
-	private static final Cache<String,AcceptLanguage> cache = new Cache<String,AcceptLanguage>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,AcceptLanguage> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <code>Accept-Language</code> header.

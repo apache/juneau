@@ -48,8 +48,8 @@ public class BeanRegistry {
 
 	BeanRegistry(BeanContext beanContext, BeanRegistry parent, Class<?>...classes) {
 		this.beanContext = beanContext;
-		this.map = new ConcurrentHashMap<String,ClassMeta<?>>();
-		this.reverseMap = new ConcurrentHashMap<Class<?>,String>();
+		this.map = new ConcurrentHashMap<>();
+		this.reverseMap = new ConcurrentHashMap<>();
 		for (Class<?> c : beanContext.beanDictionaryClasses)
 			addClass(c);
 		if (parent != null)

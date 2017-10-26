@@ -82,7 +82,7 @@ public class StreamResource implements Streamable {
 	public StreamResource(MediaType mediaType, Map<String,Object> headers, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 
-		Map<String,String> m = new LinkedHashMap<String,String>();
+		Map<String,String> m = new LinkedHashMap<>();
 		if (headers != null)
 			for (Map.Entry<String,Object> e : headers.entrySet())
 				m.put(e.getKey(), StringUtils.toString(e.getValue()));
@@ -112,9 +112,9 @@ public class StreamResource implements Streamable {
 	 * Builder class for constructing {@link StreamResource} objects.
 	 */
 	public static class Builder {
-		ArrayList<Object> contents = new ArrayList<Object>();
+		ArrayList<Object> contents = new ArrayList<>();
 		MediaType mediaType;
-		Map<String,String> headers = new LinkedHashMap<String,String>();
+		Map<String,String> headers = new LinkedHashMap<>();
 
 		/**
 		 * Specifies the resource media type string.

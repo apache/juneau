@@ -38,7 +38,6 @@ public abstract class Session {
 	private final ObjectMap properties;
 	private final Context ctx;
 	private Map<String,Object> cache;
-	private boolean closed;
 	private List<String> warnings;                 // Any warnings encountered.
 
 
@@ -138,7 +137,7 @@ public abstract class Session {
 	 */
 	public final void addToCache(String key, Object val) {
 		if (cache == null)
-			cache = new TreeMap<String,Object>();
+			cache = new TreeMap<>();
 		cache.put(key, val);
 	}
 
@@ -155,7 +154,7 @@ public abstract class Session {
 	public final void addToCache(Map<String,Object> cacheObjects) {
 		if (cacheObjects != null) {
 			if (cache == null)
-				cache = new TreeMap<String,Object>();
+				cache = new TreeMap<>();
 			cache.putAll(cacheObjects);
 		}
 	}
@@ -180,7 +179,7 @@ public abstract class Session {
 	 */
 	public final void addWarning(String msg, Object... args) {
 		if (warnings == null)
-			warnings = new LinkedList<String>();
+			warnings = new LinkedList<>();
 		getLogger().warning(msg, args);
 		warnings.add((warnings.size() + 1) + ": " + format(msg, args));
 	}
@@ -235,23 +234,12 @@ public abstract class Session {
 			return e.getLocalizedMessage();
 		}
 	}
-
+	
 	/**
-	 * Perform cleanup on this context object if necessary.
-	 *
-	 * @return <jk>true</jk> if this method wasn't previously called.
-	 * @throws BeanRuntimeException If called more than once, or in debug mode and warnings occurred.
+	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session.
 	 */
-	public boolean close() throws BeanRuntimeException {
-		if (closed)
-			return false;
-		closed = true;
-		return true;
-	}
-
-	@Override /* Object */
-	protected void finalize() throws Throwable {
-//		if (! closed)
-//			throw new RuntimeException("Session was not closed.");
+	public void checkForWarnings() {
+		if (! warnings.isEmpty())
+			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));		
 	}
 }

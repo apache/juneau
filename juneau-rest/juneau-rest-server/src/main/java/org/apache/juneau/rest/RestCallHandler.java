@@ -307,15 +307,16 @@ public class RestCallHandler {
 		} catch (IllegalStateException e2) {
 			w = new PrintWriter(new OutputStreamWriter(res.getOutputStream(), UTF8));
 		}
-		String httpMessage = RestUtils.getHttpResponseText(status);
-		if (httpMessage != null)
-			w.append("HTTP ").append(String.valueOf(status)).append(": ").append(httpMessage).append("\n\n");
-		if (context != null && context.isRenderResponseStackTraces())
-			e.printStackTrace(w);
-		else
-			w.append(e.getFullStackMessage(true));
-		w.flush();
-		w.close();
+		
+		try (PrintWriter w2 = w) {
+			String httpMessage = RestUtils.getHttpResponseText(status);
+			if (httpMessage != null)
+				w2.append("HTTP ").append(String.valueOf(status)).append(": ").append(httpMessage).append("\n\n");
+			if (context != null && context.isRenderResponseStackTraces())
+				e.printStackTrace(w2);
+			else
+				w2.append(e.getFullStackMessage(true));
+		}
 	}
 
 	/**
@@ -328,7 +329,7 @@ public class RestCallHandler {
 	 * @return The session objects for that request.
 	 */
 	public Map<String,Object> getSessionObjects(RestRequest req) {
-		Map<String,Object> m = new HashMap<String,Object>();
+		Map<String,Object> m = new HashMap<>();
 		m.put(RequestVar.SESSION_req, req);
 		return m;
 	}

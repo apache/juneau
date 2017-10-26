@@ -25,7 +25,7 @@ import java.util.regex.*;
  * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger 
  * names.
  */
-public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry> {
+public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
 	private BufferedReader br;
 	private LogEntryFormatter formatter;
 	private Date start, end;
@@ -52,9 +52,9 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		this.end = end;
 		this.threadFilter = thread;
 		if (loggers != null)
-			this.loggerFilter = new HashSet<String>(Arrays.asList(loggers));
+			this.loggerFilter = new HashSet<>(Arrays.asList(loggers));
 		if (severity != null)
-			this.severityFilter = new HashSet<String>(Arrays.asList(severity));
+			this.severityFilter = new HashSet<>(Arrays.asList(severity));
 
 		// Find the first line.
 		String line;
@@ -104,11 +104,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		return this;
 	}
 
-	/**
-	 * Closes the underlying reader.
-	 *
-	 * @throws IOException
-	 */
+	@Override /* Closeable */
 	public void close() throws IOException {
 		br.close();
 	}
@@ -165,7 +161,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 
 		private void addText(String t) {
 			if (additionalText == null)
-				additionalText = new LinkedList<String>();
+				additionalText = new LinkedList<>();
 			additionalText.add(t);
 		}
 

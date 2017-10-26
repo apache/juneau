@@ -23,15 +23,14 @@ import org.apache.juneau.svl.vars.*;
  */
 public class VarResolverBuilder {
 
-	private final List<Class<? extends Var>> vars = new ArrayList<Class<? extends Var>>();
-	private final Map<String,Object> contextObjects = new HashMap<String,Object>();
+	private final List<Class<? extends Var>> vars = new ArrayList<>();
+	private final Map<String,Object> contextObjects = new HashMap<>();
 
 	/**
 	 * Create a new var resolver using the settings in this builder.
 	 *
 	 * @return A new var resolver.
 	 */
-	@SuppressWarnings("unchecked")
 	public VarResolver build() {
 		return new VarResolver(vars.toArray(new Class[vars.size()]), contextObjects);
 	}

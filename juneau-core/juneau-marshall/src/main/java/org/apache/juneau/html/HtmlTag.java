@@ -60,7 +60,7 @@ enum HtmlTag {
 	xP(-18, "</p>"),
 	xHTML(-19, "</html>");
 
-	private Map<Integer,HtmlTag> cache = new HashMap<Integer,HtmlTag>();
+	private Map<Integer,HtmlTag> cache = new HashMap<>();
 
 	int id;
 	String label;

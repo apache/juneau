@@ -51,20 +51,21 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		XmlWriter w = getXmlWriter(out);
-		w.append("<?xml")
-			.attr("version", "1.0")
-			.attr("encoding", "UTF-8")
-			.appendln("?>");
-		w.oTag("soap", "Envelope")
-			.attr("xmlns", "soap", getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
-			.appendln(">");
-		w.sTag(1, "soap", "Body").nl(1);
-		indent += 2;
-		w.flush();
-		super.doSerialize(out, o);
-		w.ie(1).eTag("soap", "Body").nl(1);
-		w.eTag("soap", "Envelope").nl(0);
+		try (XmlWriter w = getXmlWriter(out)) {
+			w.append("<?xml")
+				.attr("version", "1.0")
+				.attr("encoding", "UTF-8")
+				.appendln("?>");
+			w.oTag("soap", "Envelope")
+				.attr("xmlns", "soap", getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
+				.appendln(">");
+			w.sTag(1, "soap", "Body").nl(1);
+			indent += 2;
+			w.flush();
+			super.doSerialize(out, o);
+			w.ie(1).eTag("soap", "Body").nl(1);
+			w.eTag("soap", "Envelope").nl(0);
+		}
 	}
 
 	@Override /* Serializer */

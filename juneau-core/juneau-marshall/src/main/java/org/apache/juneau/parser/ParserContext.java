@@ -36,7 +36,6 @@ public class ParserContext extends BeanContext {
 	 *
 	 * @param ps The property store that created this context.
 	 */
-	@SuppressWarnings("unchecked")
 	public ParserContext(PropertyStore ps) {
 		super(ps);
 		this.trimStrings = ps.getProperty(PARSER_trimStrings, boolean.class, false);

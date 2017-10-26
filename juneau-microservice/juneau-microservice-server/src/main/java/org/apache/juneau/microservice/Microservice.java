@@ -476,6 +476,7 @@ public abstract class Microservice {
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
+	@SuppressWarnings("resource")
 	public Microservice start() throws Exception {
 
 		// --------------------------------------------------------------------------------
@@ -487,8 +488,8 @@ public abstract class Microservice {
 			// If running within an eclipse workspace, need to get it from the file system.
 			File f = new File("META-INF/MANIFEST.MF");
 			if (f.exists()) {
-				try {
-					m.read(new FileInputStream(f));
+				try (FileInputStream fis = new FileInputStream(f)) {
+					m.read(fis);
 				} catch (IOException e) {
 					System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f));
 					throw e;

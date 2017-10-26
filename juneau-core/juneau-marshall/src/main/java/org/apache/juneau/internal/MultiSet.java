@@ -24,7 +24,7 @@ import java.util.*;
 public class MultiSet<E> extends AbstractSet<E> {
 
 	/** Inner collections. */
-	private List<Collection<E>> l = new ArrayList<Collection<E>>();
+	private List<Collection<E>> l = new ArrayList<>();
 
 	/**
 	 * Create a new Set that consists as a coalesced set of the specified collections.

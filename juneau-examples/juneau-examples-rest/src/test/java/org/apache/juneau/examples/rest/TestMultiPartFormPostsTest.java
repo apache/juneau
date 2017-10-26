@@ -35,7 +35,9 @@ public class TestMultiPartFormPostsTest extends RestTestcase {
 	public void testUpload() throws Exception {
 		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
 		File f = createTempFile("testMultiPartFormPosts.txt");
-		IOPipe.create(new StringReader("test!"), new FileWriter(f)).closeOut().run();
+		try (FileWriter fw = new FileWriter(f)) {
+			IOPipe.create(new StringReader("test!"), fw).run();
+		}
 		HttpEntity entity = MultipartEntityBuilder.create().addBinaryBody(f.getName(), f).build();
 		client.doPost(URL + "/upload", entity);
 

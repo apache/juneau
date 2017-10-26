@@ -110,66 +110,63 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 		if (isEmpty(qs))
 			return m;
 
-		// We're reading from a string, so we don't need to make sure close() is called on the pipe.
-		ParserPipe p = new ParserPipe(qs, false, false, null, null);
-		UonReader r = new UonReader(p, true);
+		try (ParserPipe p = new ParserPipe(qs, false, false, null, null)) {
+			
+			final int S1=1; // Looking for attrName start.
+			final int S2=2; // Found attrName start, looking for = or & or end.
+			final int S3=3; // Found =, looking for valStart.
+			final int S4=4; // Found valStart, looking for & or end.
 
-		final int S1=1; // Looking for attrName start.
-		final int S2=2; // Found attrName start, looking for = or & or end.
-		final int S3=3; // Found =, looking for valStart.
-		final int S4=4; // Found valStart, looking for & or end.
+			try (UonReader r = new UonReader(p, true)) {
+				int c = r.peekSkipWs();
+				if (c == '?')
+					r.read();
 
-		try {
-			int c = r.peekSkipWs();
-			if (c == '?')
-				r.read();
-
-			int state = S1;
-			String currAttr = null;
-			while (c != -1) {
-				c = r.read();
-				if (state == S1) {
-					if (c != -1) {
-						r.unread();
-						r.mark();
-						state = S2;
-					}
-				} else if (state == S2) {
-					if (c == -1) {
-						add(m, r.getMarked(), null);
-					} else if (c == '\u0001') {
-						m.put(r.getMarked(0,-1), null);
-						state = S1;
-					} else if (c == '\u0002') {
-						currAttr = r.getMarked(0,-1);
-						state = S3;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == '\u0001') {
-						add(m, currAttr, "");
-					} else {
-						if (c == '\u0002')
+				int state = S1;
+				String currAttr = null;
+				while (c != -1) {
+					c = r.read();
+					if (state == S1) {
+						if (c != -1) {
+							r.unread();
+							r.mark();
+							state = S2;
+						}
+					} else if (state == S2) {
+						if (c == -1) {
+							add(m, r.getMarked(), null);
+						} else if (c == '\u0001') {
+							m.put(r.getMarked(0,-1), null);
+							state = S1;
+						} else if (c == '\u0002') {
+							currAttr = r.getMarked(0,-1);
+							state = S3;
+						}
+					} else if (state == S3) {
+						if (c == -1 || c == '\u0001') {
+							add(m, currAttr, "");
+						} else {
+							if (c == '\u0002')
+								r.replace('=');
+							r.unread();
+							r.mark();
+							state = S4;
+						}
+					} else if (state == S4) {
+						if (c == -1) {
+							add(m, currAttr, r.getMarked());
+						} else if (c == '\u0001') {
+							add(m, currAttr, r.getMarked(0,-1));
+							state = S1;
+						} else if (c == '\u0002') {
 							r.replace('=');
-						r.unread();
-						r.mark();
-						state = S4;
-					}
-				} else if (state == S4) {
-					if (c == -1) {
-						add(m, currAttr, r.getMarked());
-					} else if (c == '\u0001') {
-						add(m, currAttr, r.getMarked(0,-1));
-						state = S1;
-					} else if (c == '\u0002') {
-						r.replace('=');
+						}
 					}
 				}
 			}
-		} finally {
-			r.close();
-		}
 
-		return m;
+			return m;
+		}
 	}
 
 	private static void add(Map<String,String[]> m, String key, String val) {
@@ -199,17 +196,14 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 				return null;
 		}
 		UonParserSession session = createParameterSession();
-		ParserPipe pipe = session.createPipe(in);
-		try {
-			UonReader r = session.getUonReader(pipe, false);
-			return session.parseAnything(type, r, null, true, null);
+		try (ParserPipe pipe = session.createPipe(in)) {
+			try (UonReader r = session.getUonReader(pipe, false)) {
+				return session.parseAnything(type, r, null, true, null);
+			}
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ParseException(session.getLastLocation(), e);
-		} finally {
-			pipe.close();
-			session.close();
+			throw new ParseException(e);
 		}
 	}
 

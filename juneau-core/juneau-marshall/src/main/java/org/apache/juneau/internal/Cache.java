@@ -38,7 +38,7 @@ public class Cache<K,V> {
 		this.nocache = disabled;
 		this.maxSize = maxSize;
 		if (! nocache)
-			cache = new ConcurrentHashMap<K,V>();
+			cache = new ConcurrentHashMap<>();
 		else
 			cache = null;
 	}

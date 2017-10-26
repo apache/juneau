@@ -370,12 +370,10 @@ public class RestMicroservice extends Microservice {
 	
 	private static int findOpenPort(int[] ports) {
 		for (int port : ports) {
-			try {
-				// If port is 0, try a random port between ports[0] and 32767.
-				if (port == 0)
-					port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
-				ServerSocket ss = new ServerSocket(port);
-				ss.close();
+			// If port is 0, try a random port between ports[0] and 32767.
+			if (port == 0)
+				port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
+			try (ServerSocket ss = new ServerSocket(port)) {
 				return port;
 			} catch (IOException e) {}
 		}

@@ -254,17 +254,17 @@ public final class PropertyStore {
 	// All configuration properties in this object.
 	// Keys are property prefixes (e.g. 'BeanContext').
 	// Values are maps containing properties for that specific prefix.
-	private Map<String,PropertyMap> properties = new ConcurrentSkipListMap<String,PropertyMap>();
+	private Map<String,PropertyMap> properties = new ConcurrentSkipListMap<>();
 
 	// Context cache.
 	// This gets cleared every time any properties change on this object.
-	private final Map<Class<? extends Context>,Context> contexts = new ConcurrentHashMap<Class<? extends Context>,Context>();
+	private final Map<Class<? extends Context>,Context> contexts = new ConcurrentHashMap<>();
 
 	// Global Context cache.
 	// Property stores that are the 'same' will use the same maps from this cache.
 	// 'same' means the context properties are all the same when converted to strings.
 	private static final ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>>
-		globalContextCache = new ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>>();
+		globalContextCache = new ConcurrentHashMap<>();
 
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private Lock rl = lock.readLock(), wl = lock.writeLock();
@@ -929,7 +929,7 @@ public final class PropertyStore {
 	 */
 	public class PropertyMap {
 
-		private final Map<String,Property> map = new ConcurrentSkipListMap<String,Property>();
+		private final Map<String,Property> map = new ConcurrentSkipListMap<>();
 		private volatile int hashCode = 0;
 		private final ReadWriteLock lock = new ReentrantReadWriteLock();
 		private final Lock rl = lock.readLock(), wl = lock.writeLock();
@@ -1038,7 +1038,7 @@ public final class PropertyStore {
 		public Map<String,Object> asMap() {
 			rl.lock();
 			try {
-				Map<String,Object> m = new LinkedHashMap<String,Object>();
+				Map<String,Object> m = new LinkedHashMap<>();
 				for (Property p : map.values())
 					m.put(p.name, p.value);
 				return m;
@@ -1223,7 +1223,7 @@ public final class PropertyStore {
 		private final Set<Object> value;
 
 		private SetProperty(String name, Object value) {
-			super(name, "SET", new ConcurrentSkipListSet<Object>(PROPERTY_COMPARATOR));
+			super(name, "SET", new ConcurrentSkipListSet<>(PROPERTY_COMPARATOR));
 			this.value = (Set<Object>)value();
 			add(value);
 		}
@@ -1283,7 +1283,7 @@ public final class PropertyStore {
 		private final LinkedList<Object> value;
 
 		private ListProperty(String name, Object value) {
-			super(name, "LIST", new LinkedList<Object>());
+			super(name, "LIST", new LinkedList<>());
 			this.value = (LinkedList<Object>)value();
 			add(value);
 		}
@@ -1298,7 +1298,7 @@ public final class PropertyStore {
 				for (ListIterator<Object> i = l.listIterator(l.size()); i.hasPrevious();)
 					add(i.previous());
 			} else if (val instanceof Collection) {
-				List<Object> l = new ArrayList<Object>((Collection<Object>)val);
+				List<Object> l = new ArrayList<>((Collection<Object>)val);
 				for (ListIterator<Object> i = l.listIterator(l.size()); i.hasPrevious();)
 					add(i.previous());
 			} else {
@@ -1345,7 +1345,7 @@ public final class PropertyStore {
 
 		MapProperty(String name, Object value) {
 			// ConcurrentSkipListMap doesn't support Map.Entry.remove(), so use TreeMap instead.
-			super(name, "MAP", Collections.synchronizedMap(new TreeMap<Object,Object>(PROPERTY_COMPARATOR)));
+			super(name, "MAP", Collections.synchronizedMap(new TreeMap<>(PROPERTY_COMPARATOR)));
 			this.value = (Map<Object,Object>)value();
 			put(value);
 		}
@@ -1413,7 +1413,7 @@ public final class PropertyStore {
 	 * Compares two objects for "string"-equality.
 	 * Basically mean both objects are equal if they're the same when converted to strings.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	private static boolean same(Object o1, Object o2) {
 		if (o1 == o2)
 			return true;

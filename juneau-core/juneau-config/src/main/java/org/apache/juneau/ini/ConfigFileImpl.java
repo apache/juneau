@@ -143,15 +143,8 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	@Override /* ConfigFile */
 	public ConfigFileImpl load() throws IOException {
-		Reader r = null;
-		if (file != null && file.exists())
-			r = new InputStreamReader(new FileInputStream(file), charset);
-		else
-			r = new StringReader("");
-		try {
+		try (Reader r = FileReaderBuilder.create(file).charset(charset).allowNoFile().build()) {
 			load(r);
-		} finally {
-			r.close();
 		}
 		return this;
 	}
@@ -162,15 +155,14 @@ public final class ConfigFileImpl extends ConfigFile {
 		writeLock();
 		try {
 			this.sections = Collections.synchronizedMap(new LinkedHashMap<String,Section>());
-			BufferedReader in = new BufferedReader(r);
-			try {
+			try (BufferedReader in = new BufferedReader(r)) {
 				writeLock();
 				hasBeenModified = false;
 				try {
 					sections.clear();
 					String line = null;
 					Section section = getSection(null, true);
-					ArrayList<String> lines = new ArrayList<String>();
+					ArrayList<String> lines = new ArrayList<>();
 					boolean canAppend = false;
 					while ((line = in.readLine()) != null) {
 						if (isSection(line)) {
@@ -201,8 +193,6 @@ public final class ConfigFileImpl extends ConfigFile {
 				} finally {
 					writeUnlock();
 				}
-			} finally {
-				in.close();
 			}
 		} finally {
 			writeUnlock();
@@ -648,13 +638,10 @@ public final class ConfigFileImpl extends ConfigFile {
 		try {
 			if (file == null)
 				throw new UnsupportedOperationException("No backing file specified for config file.");
-			Writer out = new OutputStreamWriter(new FileOutputStream(file), charset);
-			try {
+			try (Writer out = FileWriterBuilder.create(file).charset(charset).build()) {
 				serializeTo(out);
 				hasBeenModified = false;
 				modifiedTimestamp = file.lastModified();
-			} finally {
-				out.close();
 			}
 			for (ConfigFileListener l : listeners)
 				l.onSave(this);

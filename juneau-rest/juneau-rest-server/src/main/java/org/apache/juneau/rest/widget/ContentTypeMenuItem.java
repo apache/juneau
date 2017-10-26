@@ -67,7 +67,7 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 	@Override /* MenuItemWidget */
 	public Div getContent(RestRequest req) {
 		Div div = div();
-		Set<MediaType> l = new TreeSet<MediaType>();
+		Set<MediaType> l = new TreeSet<>();
 		for (Serializer s : req.getSerializerGroup().getSerializers())
 			l.add(s.getMediaTypes()[0]);
 		for (MediaType mt : l) {

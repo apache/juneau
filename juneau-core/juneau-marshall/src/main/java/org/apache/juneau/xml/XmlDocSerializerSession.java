@@ -41,12 +41,13 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		XmlWriter w = getXmlWriter(out);
-		w.append("<?xml")
-			.attr("version", "1.0")
-			.attr("encoding", "UTF-8")
-			.appendln("?>");
-		w.flush();
-		super.doSerialize(out, o);
+		try (XmlWriter w = getXmlWriter(out)) {
+			w.append("<?xml")
+				.attr("version", "1.0")
+				.attr("encoding", "UTF-8")
+				.appendln("?>");
+			w.flush();
+			super.doSerialize(out, o);
+		}
 	}
 }

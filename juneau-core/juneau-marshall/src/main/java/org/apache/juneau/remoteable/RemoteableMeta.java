@@ -51,7 +51,7 @@ public class RemoteableMeta {
 		if (! isOneOf(expose, "ALL", "DECLARED", "ANNOTATED"))
 			throw new RemoteableMetadataException(c, "Invalid value specified for ''expose'' annotation.  Valid values are [ALL,ANNOTATED,DECLARED].");
 
-		Map<Method,RemoteableMethodMeta> _methods = new LinkedHashMap<Method,RemoteableMethodMeta>();
+		Map<Method,RemoteableMethodMeta> _methods = new LinkedHashMap<>();
 		for (Method m : expose.equals("DECLARED") ? c.getDeclaredMethods() : c.getMethods()) {
 			if (isPublic(m)) {
 				RemoteMethod rm = c.getAnnotation(RemoteMethod.class);

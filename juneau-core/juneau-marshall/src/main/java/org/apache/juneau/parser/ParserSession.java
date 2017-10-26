@@ -420,11 +420,8 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
-		ParserPipe pipe = createPipe(input);
-		try {
+		try (ParserPipe pipe = createPipe(input)) {
 			return (T)parseInner(pipe, getClassMeta(type, args));
-		} finally {
-			pipe.close();
 		}
 	}
 
@@ -464,11 +461,8 @@ public abstract class ParserSession extends BeanSession {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
-		ParserPipe pipe = createPipe(input);
-		try {
+		try (ParserPipe pipe = createPipe(input)) {
 			return parseInner(pipe, getClassMeta(type));
-		} finally {
-			pipe.close();
 		}
 	}
 
@@ -489,11 +483,8 @@ public abstract class ParserSession extends BeanSession {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
-		ParserPipe pipe = createPipe(input);
-		try {
+		try (ParserPipe pipe = createPipe(input)) {
 			return parseInner(pipe, type);
-		} finally {
-			pipe.close();
 		}
 	}
 
@@ -512,9 +503,9 @@ public abstract class ParserSession extends BeanSession {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	private <T> T parseInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException {
+		if (type.isVoid())
+			return null;
 		try {
-			if (type.isVoid())
-				return null;
 			return doParse(pipe, type);
 		} catch (ParseException e) {
 			throw e;
@@ -526,6 +517,8 @@ public abstract class ParserSession extends BeanSession {
 		} catch (Exception e) {
 			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
+		} finally {
+			checkForWarnings();
 		}
 	}
 
@@ -554,15 +547,14 @@ public abstract class ParserSession extends BeanSession {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
-		ParserPipe pipe = createPipe(input);
-		try {
+		try (ParserPipe pipe = createPipe(input)) {
 			return doParseIntoMap(pipe, m, keyType, valueType);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new ParseException(getLastLocation(), e);
 		} finally {
-			pipe.close();
+			checkForWarnings();
 		}
 	}
 
@@ -604,8 +596,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
-		ParserPipe pipe = createPipe(input);
-		try {
+		try (ParserPipe pipe = createPipe(input)) {
 			return doParseIntoCollection(pipe, c, elementType);
 		} catch (ParseException e) {
 			throw e;
@@ -618,7 +609,7 @@ public abstract class ParserSession extends BeanSession {
 			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} finally {
-			pipe.close();
+			checkForWarnings();
 		}
 	}
 
@@ -660,8 +651,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
-		ParserPipe pipe = createPipe(input);
-		try {
+		try (ParserPipe pipe = createPipe(input)) {
 			return doParse(pipe, getArgsClassMeta(argTypes));
 		} catch (ParseException e) {
 			throw e;
@@ -674,7 +664,7 @@ public abstract class ParserSession extends BeanSession {
 			throw new ParseException(getLastLocation(), "Exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} finally {
-			pipe.close();
+			checkForWarnings();
 		}
 	}
 

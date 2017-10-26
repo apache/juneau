@@ -308,7 +308,7 @@ public final class PojoQuery {
 	private static void doSort(List list, Map<String,Boolean> sortList) {
 
 		// We reverse the list and sort last to first.
-		List<String> columns = new ArrayList<String>(sortList.keySet());
+		List<String> columns = new ArrayList<>(sortList.keySet());
 		Collections.reverse(columns);
 
 		for (final String c : columns) {
@@ -403,7 +403,7 @@ public final class PojoQuery {
 	 */
 	private class MapMatcher implements IMatcher<Map> {
 
-		Map<String,IMatcher> entryMatchers = new HashMap<String,IMatcher>();
+		Map<String,IMatcher> entryMatchers = new HashMap<>();
 
 		public MapMatcher(Map query, boolean ignoreCase) {
 			for (Map.Entry e : (Set<Map.Entry>)query.entrySet())
@@ -536,7 +536,7 @@ public final class PojoQuery {
 
 		public NumberPattern(String searchPattern) {
 
-			List<NumberRange> l = new LinkedList<NumberRange>();
+			List<NumberRange> l = new LinkedList<>();
 
 			for (String s : breakUpTokens(searchPattern)) {
 				boolean isNot = (s.charAt(0) == '!');
@@ -583,7 +583,7 @@ public final class PojoQuery {
 				if (! startsWith(s2[i], '!'))
 					s2[i] = "^"+s2[i];
 
-			List<String> l = new LinkedList<String>();
+			List<String> l = new LinkedList<>();
 			l.addAll(Arrays.asList(s2));
 			return l;
 		}
@@ -708,7 +708,7 @@ public final class PojoQuery {
 	 */
 	private class TimestampPattern {
 		TimestampRange[] ranges;
-		List<TimestampRange> l = new LinkedList<TimestampRange>();
+		List<TimestampRange> l = new LinkedList<>();
 
 		public TimestampPattern(String s) {
 
@@ -951,9 +951,9 @@ public final class PojoQuery {
 
 		public SearchPattern(String searchPattern, boolean ignoreCase) {
 
-			List<Pattern> ors = new LinkedList<Pattern>();
-			List<Pattern> ands = new LinkedList<Pattern>();
-			List<Pattern> nots = new LinkedList<Pattern>();
+			List<Pattern> ors = new LinkedList<>();
+			List<Pattern> ands = new LinkedList<>();
+			List<Pattern> nots = new LinkedList<>();
 
 			for (String arg : breakUpTokens(searchPattern)) {
 				char prefix = arg.charAt(0);
@@ -1035,7 +1035,7 @@ public final class PojoQuery {
 			s = s.replace('\u9998', '-');
 
 			String[] sa = splitQuoted(s, ' ');
-			List<String> l = new ArrayList<String>(sa.length);
+			List<String> l = new ArrayList<>(sa.length);
 			int numOrs = 0;
 			for (int i = 0; i < sa.length; i++) {
 				String token = sa[i];
@@ -1105,7 +1105,7 @@ public final class PojoQuery {
 		if (s == null || s.matches("\\s*"))
 			return new String[0];
 
-		List<String> l = new LinkedList<String>();
+		List<String> l = new LinkedList<>();
 		char[] sArray = s.toCharArray();
 		int x1 = 0;
 		int escapeCount = 0;

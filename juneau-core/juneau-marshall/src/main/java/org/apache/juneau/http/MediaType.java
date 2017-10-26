@@ -36,11 +36,10 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 @BeanIgnore
-@SuppressWarnings("unchecked")
 public class MediaType implements Comparable<MediaType> {
 
 	private static final boolean nocache = Boolean.getBoolean("juneau.nocache");
-	private static final ConcurrentHashMap<String,MediaType> cache = new ConcurrentHashMap<String,MediaType>();
+	private static final ConcurrentHashMap<String,MediaType> cache = new ConcurrentHashMap<>();
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
@@ -135,20 +134,20 @@ public class MediaType implements Comparable<MediaType> {
 		this.hasSubtypeMeta = b.hasSubtypeMeta;
 	}
 
-	private static class Builder {
+	static class Builder {
 		private String mediaType, type, subType;
 		private String[] subTypes, subTypesSorted;
 		private Map<String,Set<String>> parameters;
 		private boolean hasSubtypeMeta;
 
-		private Builder(String mt) {
+		Builder(String mt) {
 			mt = mt.trim();
 
 			int i = mt.indexOf(';');
 			if (i == -1) {
 				this.parameters = Collections.EMPTY_MAP;
 			} else {
-				this.parameters = new TreeMap<String,Set<String>>();
+				this.parameters = new TreeMap<>();
 				String[] tokens = mt.substring(i+1).split(";");
 
 				for (int j = 0; j < tokens.length; j++) {

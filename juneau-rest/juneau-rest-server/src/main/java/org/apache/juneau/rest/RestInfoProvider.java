@@ -53,7 +53,7 @@ public class RestInfoProvider {
 		version,
 		tags,
 		externalDocs;
-	private final ConcurrentHashMap<Locale,Swagger> swaggers = new ConcurrentHashMap<Locale,Swagger>();
+	private final ConcurrentHashMap<Locale,Swagger> swaggers = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.

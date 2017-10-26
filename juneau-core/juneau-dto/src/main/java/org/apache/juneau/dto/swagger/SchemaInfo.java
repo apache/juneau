@@ -679,7 +679,7 @@ public class SchemaInfo extends SwaggerElement {
 					addEnum((Collection<Object>)o);
 				else {
 					if (this._enum == null)
-						this._enum = new LinkedList<Object>();
+						this._enum = new LinkedList<>();
 					this._enum.add(o);
 				}
 			}
@@ -794,7 +794,7 @@ public class SchemaInfo extends SwaggerElement {
 					addAllOf((Collection<Object>)o);
 				else {
 					if (this.allOf == null)
-						this.allOf = new LinkedList<Object>();
+						this.allOf = new LinkedList<>();
 					this.allOf.add(o);
 				}
 			}
@@ -843,7 +843,7 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	public SchemaInfo addProperty(String name, Map<String,Object> propertyProperties) {
 		if (this.properties == null)
-			this.properties = new TreeMap<String,Map<String,Object>>();
+			this.properties = new TreeMap<>();
 		this.properties.put(name, propertyProperties);
 		return this;
 	}
@@ -858,7 +858,7 @@ public class SchemaInfo extends SwaggerElement {
 	public SchemaInfo property(String name, Object...propertyProperties) {
 		if (propertyProperties.length % 2 != 0)
 			throw new RuntimeException("Invalid number of arguments passed to SchemaInfo.property(String,Object...)");
-		Map<String,Object> m = new LinkedHashMap<String,Object>();
+		Map<String,Object> m = new LinkedHashMap<>();
 		for (int i = 0; i < propertyProperties.length; i += 2)
 			m.put(String.valueOf(propertyProperties[i]), propertyProperties[i+1]);
 		return addProperty(name, m);
@@ -895,7 +895,7 @@ public class SchemaInfo extends SwaggerElement {
 	public SchemaInfo additionalProperties(Object...additionalProperties) {
 		if (additionalProperties.length % 2 != 0)
 			throw new RuntimeException("Invalid number of arguments passed to SchemaInfo.additionalProperties(Object...)");
-		Map<String,Object> m = new LinkedHashMap<String,Object>();
+		Map<String,Object> m = new LinkedHashMap<>();
 		for (int i = 0; i < additionalProperties.length; i += 2)
 			m.put(String.valueOf(additionalProperties[i]), additionalProperties[i+1]);
 		return setAdditionalProperties(m);

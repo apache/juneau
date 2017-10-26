@@ -126,7 +126,7 @@ public class HtmlElementContainer extends HtmlElement {
 	public HtmlElement children(Object...children) {
 		if (children.length > 0) {
 			if (this.children == null)
-				this.children = new LinkedList<Object>();
+				this.children = new LinkedList<>();
 			for (Object c : children)
 				this.children.add(c);
 		}
@@ -141,7 +141,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 */
 	public HtmlElement child(Object child) {
 		if (this.children == null)
-			this.children = new LinkedList<Object>();
+			this.children = new LinkedList<>();
 		this.children.add(child);
 		return this;
 	}

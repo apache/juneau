@@ -34,7 +34,7 @@ public class ParserGroupBuilder {
 	 * Create an empty parser group builder.
 	 */
 	public ParserGroupBuilder() {
-		this.parsers = new ArrayList<Object>();
+		this.parsers = new ArrayList<>();
 		this.propertyStore = PropertyStore.create();
 	}
 
@@ -47,7 +47,7 @@ public class ParserGroupBuilder {
 	 * @param propertyStore The property store containing all settings common to all parsers in this group.
 	 */
 	public ParserGroupBuilder(PropertyStore propertyStore) {
-		this.parsers = new ArrayList<Object>();
+		this.parsers = new ArrayList<>();
 		this.propertyStore = propertyStore;
 	}
 
@@ -57,7 +57,7 @@ public class ParserGroupBuilder {
 	 * @param copyFrom The parser group that we're copying settings and parsers from.
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
-		this.parsers = new ArrayList<Object>();
+		this.parsers = new ArrayList<>();
 		addReverse(parsers, copyFrom.getParsers());
 		this.propertyStore = copyFrom.createPropertyStore();
 	}
@@ -104,7 +104,7 @@ public class ParserGroupBuilder {
 	 * @return A new {@link ParserGroup} object.
 	 */
 	public ParserGroup build() {
-		List<Parser> l = new ArrayList<Parser>();
+		List<Parser> l = new ArrayList<>();
 		for (Object p : parsers) {
 			Class<?> c = null;
 			PropertyStore ps = propertyStore;

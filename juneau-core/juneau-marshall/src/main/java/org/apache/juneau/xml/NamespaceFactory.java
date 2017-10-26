@@ -30,7 +30,7 @@ import org.apache.juneau.parser.*;
  */
 public final class NamespaceFactory {
 
-	private static ConcurrentHashMap<String,Namespace> cache = new ConcurrentHashMap<String,Namespace>();
+	private static ConcurrentHashMap<String,Namespace> cache = new ConcurrentHashMap<>();
 
 	/**
 	 * Get the {@link Namespace} with the specified name and URI, and create a new one if this is the first time it's

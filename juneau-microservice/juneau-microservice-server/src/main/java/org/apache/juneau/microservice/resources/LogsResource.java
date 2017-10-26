@@ -104,7 +104,7 @@ public class LogsResource extends Resource {
 		File f = getFile(path);
 
 		if (f.isDirectory()) {
-			Set<FileResource> l = new TreeSet<FileResource>(new FileResourceComparator());
+			Set<FileResource> l = new TreeSet<>(new FileResourceComparator());
 			File[] files = f.listFiles(filter);
 			if (files != null) {
 				for (File fc : files) {
@@ -155,24 +155,17 @@ public class LogsResource extends Resource {
 			if (o instanceof Reader)
 				res.setOutput(o);
 			else {
-				LogParser p = (LogParser)o;
-				Writer w = res.getNegotiatedWriter();
-				try {
+				try (LogParser p = (LogParser)o; Writer w = res.getNegotiatedWriter()) {
 					p.writeTo(w);
-				} finally {
-					w.flush();
-					w.close();
 				}
 			}
 			return;
 		}
 
 		res.setContentType("text/html");
-		PrintWriter w = res.getNegotiatedWriter();
-		try {
+		try (PrintWriter w = res.getNegotiatedWriter()) {
 			w.println("<html><body style='font-family:monospace;font-size:8pt;white-space:pre;'>");
-			LogParser lp = getLogParser(f, startDate, endDate, thread, loggers, severity);
-			try {
+			try (LogParser lp = getLogParser(f, startDate, endDate, thread, loggers, severity)) {
 				if (! lp.hasNext())
 					w.append("<span style='color:gray'>[EMPTY]</span>");
 				else for (LogParser.Entry le : lp) {
@@ -191,11 +184,7 @@ public class LogsResource extends Resource {
 					le.appendHtml(w).append("</span>");
 				}
 				w.append("</body></html>");
-			} finally {
-				lp.close();
 			}
-		} finally {
-			w.close();
 		}
 	}
 

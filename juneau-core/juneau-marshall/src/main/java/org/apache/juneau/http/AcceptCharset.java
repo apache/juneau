@@ -76,7 +76,7 @@ import org.apache.juneau.internal.*;
  */
 public final class AcceptCharset extends HeaderRangeArray {
 
-	private static final Cache<String,AcceptCharset> cache = new Cache<String,AcceptCharset>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,AcceptCharset> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <code>Accept-Charset</code> header.

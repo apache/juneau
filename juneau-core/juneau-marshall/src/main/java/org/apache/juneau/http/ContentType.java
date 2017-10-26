@@ -53,7 +53,7 @@ import org.apache.juneau.internal.*;
  */
 public class ContentType extends MediaType {
 
-	private static Cache<String,ContentType> cache = new Cache<String,ContentType>(NOCACHE, CACHE_MAX_SIZE);
+	private static Cache<String,ContentType> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <code>Content-Type</code> header.

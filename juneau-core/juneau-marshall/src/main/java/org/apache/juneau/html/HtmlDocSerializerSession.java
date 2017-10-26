@@ -223,17 +223,18 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	@Override /* Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 
-		HtmlWriter w = getHtmlWriter(out);
-		HtmlDocTemplate t = getTemplate();
+		try (HtmlWriter w = getHtmlWriter(out)) {
+			HtmlDocTemplate t = getTemplate();
 
-		w.sTag("html").nl(0);
-		w.sTag(1, "head").nl(1);
-		t.head(this, w, o);
-		w.eTag(1, "head").nl(1);
-		w.sTag(1, "body").nl(1);
-		t.body(this, w, o);
-		w.eTag(1, "body").nl(1);
-		w.eTag("html").nl(0);
+			w.sTag("html").nl(0);
+			w.sTag(1, "head").nl(1);
+			t.head(this, w, o);
+			w.eTag(1, "head").nl(1);
+			w.sTag(1, "body").nl(1);
+			t.body(this, w, o);
+			w.eTag(1, "body").nl(1);
+			w.eTag("html").nl(0);
+		}
 	}
 
 	/**
@@ -245,11 +246,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @throws Exception
 	 */
 	public void parentSerialize(Object out, Object o) throws Exception {
-		SerializerPipe pipe = createPipe(out);
-		try {
+		try (SerializerPipe pipe = createPipe(out)) {
 			super.doSerialize(pipe, o);
-		} finally  {
-			pipe.close();
 		}
 	}
 }

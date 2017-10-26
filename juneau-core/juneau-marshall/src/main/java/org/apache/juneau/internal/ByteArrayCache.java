@@ -29,7 +29,7 @@ public class ByteArrayCache {
 	 */
 	public static final ByteArrayCache DEFAULT = new ByteArrayCache();
 
-	private final ConcurrentHashMap<ByteArray,byte[]> cache = new ConcurrentHashMap<ByteArray,byte[]>();
+	private final ConcurrentHashMap<ByteArray,byte[]> cache = new ConcurrentHashMap<>();
 
 	/**
 	 * Add the specified byte array to this cache.
@@ -73,11 +73,11 @@ public class ByteArrayCache {
 		return cache.size();
 	}
 
-	private static class ByteArray {
-		private int hashCode;
-		private byte[] contents;
+	static final class ByteArray {
+		int hashCode;
+		byte[] contents;
 
-		private ByteArray(byte[] contents) {
+		ByteArray(byte[] contents) {
 			this.contents = contents;
 			int multiplier = 1;
 			for (int i = 0; i < contents.length; i++) {

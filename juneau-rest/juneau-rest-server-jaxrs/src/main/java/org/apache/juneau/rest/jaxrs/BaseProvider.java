@@ -117,15 +117,11 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			TimeZone timeZone = getTimeZone(headers);
 			
 			SerializerSession session = s.createSession(new SerializerSessionArgs(mp, null, locale, timeZone, sm.getMediaType(), null));
+			
+			// Leave this open in case an error occurs.
+			Closeable c = s.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os;
+			session.serialize(c, o);
 
-			if (s.isWriterSerializer()) {
-				OutputStreamWriter w = new OutputStreamWriter(os, UTF8);
-				session.serialize(w, o);
-				w.close();  // Leave open if exception occurs.
-			} else {
-				session.serialize(os, o);
-				os.close();  // Leave open if exception occurs.
-			}
 		} catch (SerializeException e) {
 			throw new IOException(e);
 		}
@@ -149,12 +145,8 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
 			ParserSession session = p.createSession(new ParserSessionArgs(mp, null, locale, timeZone, pm.getMediaType(), null));
-			try {
-				Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
-				return session.parse(in2, p.getBeanContext().getClassMeta(gType));
-			} finally {
-				session.close();
-			}
+			Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
+			return session.parse(in2, p.getBeanContext().getClassMeta(gType));
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}

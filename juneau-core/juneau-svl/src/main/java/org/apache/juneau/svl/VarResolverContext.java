@@ -41,7 +41,7 @@ public class VarResolverContext {
 
 		this.vars = Arrays.copyOf(vars, vars.length);
 
-		Map<String,Var> m = new ConcurrentSkipListMap<String,Var>();
+		Map<String,Var> m = new ConcurrentSkipListMap<>();
 		for (Class<?> c : vars) {
 			if (! isParentClass(Var.class, c))
 				throw new RuntimeException("Invalid variable class.  Must extend from Var");
@@ -50,7 +50,7 @@ public class VarResolverContext {
 		}
 
 		this.varMap = Collections.unmodifiableMap(m);
-		this.contextObjects = contextObjects == null ? null : Collections.unmodifiableMap(new ConcurrentHashMap<String,Object>(contextObjects));
+		this.contextObjects = contextObjects == null ? null : Collections.unmodifiableMap(new ConcurrentHashMap<>(contextObjects));
 	}
 
 	/**

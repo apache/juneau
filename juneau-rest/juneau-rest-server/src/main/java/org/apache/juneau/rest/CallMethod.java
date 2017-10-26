@@ -161,7 +161,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				HtmlDoc hd = m.htmldoc();
 				hdb.process(hd);
 
-				widgets = new HashMap<String,Widget>(context.getWidgets());
+				widgets = new HashMap<>(context.getWidgets());
 				for (Class<? extends Widget> wc : hd.widgets()) {
 					Widget w = ClassUtils.newInstance(Widget.class, wc);
 					widgets.put(w.getName(), w);
@@ -209,7 +209,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				for (int i = 0; i < guards.length; i++)
 					guards[i] = newInstance(RestGuard.class, m.guards()[i]);
 
-				List<RestMatcher> optionalMatchers = new LinkedList<RestMatcher>(), requiredMatchers = new LinkedList<RestMatcher>();
+				List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
 				for (int i = 0; i < m.matchers().length; i++) {
 					Class<? extends RestMatcher> c = m.matchers()[i];
 					RestMatcher matcher = null;
@@ -241,7 +241,7 @@ class CallMethod implements Comparable<CallMethod>  {
 					for (String p1 : m.flags())
 						sgb.property(p1, true);
 					if (m.bpi().length > 0) {
-						Map<String,String> bpiMap = new LinkedHashMap<String,String>();
+						Map<String,String> bpiMap = new LinkedHashMap<>();
 						for (String s : m.bpi()) {
 							for (String s2 : split(s, ';')) {
 								int i = s2.indexOf(':');
@@ -254,7 +254,7 @@ class CallMethod implements Comparable<CallMethod>  {
 						sgb.includeProperties(bpiMap);
 					}
 					if (m.bpx().length > 0) {
-						Map<String,String> bpxMap = new LinkedHashMap<String,String>();
+						Map<String,String> bpxMap = new LinkedHashMap<>();
 						for (String s : m.bpx()) {
 							for (String s2 : split(s, ';')) {
 								int i = s2.indexOf(':');
@@ -319,7 +319,7 @@ class CallMethod implements Comparable<CallMethod>  {
 					encoders = g.build();
 				}
 
-				defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+				defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 				for (String s : m.defaultRequestHeaders()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
@@ -328,7 +328,7 @@ class CallMethod implements Comparable<CallMethod>  {
 					defaultRequestHeaders.put(h[0], h[1]);
 				}
 
-				defaultQuery = new LinkedHashMap<String,String>();
+				defaultQuery = new LinkedHashMap<>();
 				for (String s : m.defaultQuery()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
@@ -337,7 +337,7 @@ class CallMethod implements Comparable<CallMethod>  {
 					defaultQuery.put(h[0], h[1]);
 				}
 
-				defaultFormData = new LinkedHashMap<String,String>();
+				defaultFormData = new LinkedHashMap<>();
 				for (String s : m.defaultFormData()) {
 					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
@@ -535,7 +535,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
-		Map<String,ParameterInfo> m = new TreeMap<String,ParameterInfo>();
+		Map<String,ParameterInfo> m = new TreeMap<>();
 
 		// First parse @RestMethod.parameters() annotation.
 		for (org.apache.juneau.rest.annotation.Parameter v : parameters) {
@@ -632,13 +632,12 @@ class CallMethod implements Comparable<CallMethod>  {
 
 		if (m.isEmpty())
 			return null;
-		return new ArrayList<ParameterInfo>(m.values());
+		return new ArrayList<>(m.values());
 	}
 
 	/**
 	 * Returns the localized Swagger response information about this Java method.
 	 */
-	@SuppressWarnings("unchecked")
 	private Map<Integer,ResponseInfo> getResponses(RestRequest req) throws ParseException {
 		Operation o = getSwaggerOperationFromFile(req);
 		if (o != null && o.getResponses() != null)
@@ -646,8 +645,8 @@ class CallMethod implements Comparable<CallMethod>  {
 
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
-		Map<Integer,ResponseInfo> m = new TreeMap<Integer,ResponseInfo>();
-		Map<String,HeaderInfo> m2 = new TreeMap<String,HeaderInfo>();
+		Map<Integer,ResponseInfo> m = new TreeMap<>();
+		Map<String,HeaderInfo> m2 = new TreeMap<>();
 
 		// First parse @RestMethod.parameters() annotation.
 		for (Response r : responses) {

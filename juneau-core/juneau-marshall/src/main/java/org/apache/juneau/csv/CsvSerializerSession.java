@@ -44,36 +44,37 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected final void doSerialize(SerializerPipe out, Object o) throws Exception {
-		Writer w = out.getWriter();
-		ClassMeta<?> cm = getClassMetaForObject(o);
-		Collection<?> l = null;
-		if (cm.isArray()) {
-			l = Arrays.asList((Object[])o);
-		} else {
-			l = (Collection<?>)o;
-		}
-		// TODO - Doesn't support DynaBeans.
-		if (l.size() > 0) {
-			ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
-			if (entryType.isBean()) {
-				BeanMeta<?> bm = entryType.getBeanMeta();
-				int i = 0;
-				for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
-					if (i++ > 0)
-						w.append(',');
-					append(w, pm.getName());
-				}
-				w.append('\n');
-				for (Object o2 : l) {
-					i = 0;
-					BeanMap<?> bean = toBeanMap(o2);
+	protected final void doSerialize(SerializerPipe pipe, Object o) throws Exception {
+		try (Writer w = pipe.getWriter()) {
+			ClassMeta<?> cm = getClassMetaForObject(o);
+			Collection<?> l = null;
+			if (cm.isArray()) {
+				l = Arrays.asList((Object[])o);
+			} else {
+				l = (Collection<?>)o;
+			}
+			// TODO - Doesn't support DynaBeans.
+			if (l.size() > 0) {
+				ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
+				if (entryType.isBean()) {
+					BeanMeta<?> bm = entryType.getBeanMeta();
+					int i = 0;
 					for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
 						if (i++ > 0)
 							w.append(',');
-						append(w, pm.get(bean, pm.getName()));
+						append(w, pm.getName());
 					}
 					w.append('\n');
+					for (Object o2 : l) {
+						i = 0;
+						BeanMap<?> bean = toBeanMap(o2);
+						for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
+							if (i++ > 0)
+								w.append(',');
+							append(w, pm.get(bean, pm.getName()));
+						}
+						w.append('\n');
+					}
 				}
 			}
 		}

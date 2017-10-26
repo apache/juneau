@@ -82,19 +82,17 @@ public abstract class MenuItemWidget extends Widget {
 			+ "\n\t<div class='popup-content'>\n"
 		);
 		Object o = getContent(req);
-		if (o instanceof Reader)
-			IOUtils.pipe((Reader)o, new StringBuilderWriter(sb));
-		else if (o instanceof CharSequence)
+		if (o instanceof Reader) {
+			try (Reader r = (Reader)o; Writer w = new StringBuilderWriter(sb)) {
+				IOUtils.pipe(r, w);
+			}
+		} else if (o instanceof CharSequence) {
 			sb.append((CharSequence)o);
-		else {
+		} else {
 			SerializerSessionArgs args = new SerializerSessionArgs(req.getProperties(), null, req.getLocale(), null, null, req.getUriContext());
 			WriterSerializerSession session = HtmlSerializer.DEFAULT.createSession(args);
-			try {
-				session.indent = 2;
-				session.serialize(sb, o);
-			} finally {
-				session.close();
-			}
+			session.indent = 2;
+			session.serialize(sb, o);
 		}
 		sb.append(""
 			+ "\n\t</div>"

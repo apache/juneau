@@ -52,10 +52,10 @@ public class ResourceFinder {
 	private static final List<Locale> ROOT_LOCALE = Arrays.asList(Locale.ROOT);
 
 	// Maps resource names+locales to found resources.
-	private final ConcurrentHashMap<ResourceKey,Resource> cache = new ConcurrentHashMap<ResourceKey,Resource>();
+	private final ConcurrentHashMap<ResourceKey,Resource> cache = new ConcurrentHashMap<>();
 
 	// Maps resolved URLs to resources.
-	private final ConcurrentHashMap<URL,Resource> cacheByUrl = new ConcurrentHashMap<URL,Resource>();
+	private final ConcurrentHashMap<URL,Resource> cacheByUrl = new ConcurrentHashMap<>();
 
 	private final Class<?> c;
 
@@ -218,7 +218,9 @@ public class ResourceFinder {
 					URL url = f.toURI().toURL();
 					Resource r = cacheByUrl.get(url);
 					if (r == null) {
-						r = new Resource(IOUtils.readBytes(new FileInputStream(f), 1024));
+						try (FileInputStream fis = new FileInputStream(f)) {
+							r = new Resource(IOUtils.readBytes(fis, 1024));
+						}
 						cacheByUrl.putIfAbsent(url, r);
 						r = cacheByUrl.get(url);
 					}

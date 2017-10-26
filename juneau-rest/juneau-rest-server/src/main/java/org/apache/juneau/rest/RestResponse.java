@@ -300,6 +300,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			}
 			os = getOutputStream();
 			if (encoder != null) {
+				@SuppressWarnings("resource")
 				final OutputStream os2 = encoder.getOutputStream(os);
 				os = new ServletOutputStream(){
 					@Override /* OutputStream */

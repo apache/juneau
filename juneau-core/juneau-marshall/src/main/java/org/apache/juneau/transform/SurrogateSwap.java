@@ -56,7 +56,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c) {
-		List<SurrogateSwap<?,?>> l = new LinkedList<SurrogateSwap<?,?>>();
+		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		for (Constructor<?> cc : c.getConstructors()) {
 			if (cc.getAnnotation(BeanIgnore.class) == null) {
 				Class<?>[] pt = cc.getParameterTypes();

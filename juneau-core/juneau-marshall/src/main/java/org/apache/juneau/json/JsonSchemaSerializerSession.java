@@ -120,7 +120,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static List<String> getEnumStrings(Class<? extends Enum> c) {
-		List<String> l = new LinkedList<String>();
+		List<String> l = new LinkedList<>();
 		for (Object e : EnumSet.allOf(c))
 			l.add(e.toString());
 		return l;

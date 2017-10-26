@@ -42,7 +42,7 @@ public class BeanSession extends Session {
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
 	private final boolean debug;
-	private Stack<StringBuilder> sbStack = new Stack<StringBuilder>();
+	private Stack<StringBuilder> sbStack = new Stack<>();
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -777,7 +777,7 @@ public class BeanSession extends Session {
 		BeanMeta m = cm.getBeanMeta();
 		if (m == null)
 			throw new BeanRuntimeException(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
-		return new BeanMap<T>(this, o, m);
+		return new BeanMap<>(this, o, m);
 	}
 
 	/**
@@ -820,7 +820,7 @@ public class BeanSession extends Session {
 		T bean = null;
 		if (m.constructorArgs.length == 0)
 			bean = newBean(outer, c);
-		return new BeanMap<T>(this, bean, m);
+		return new BeanMap<>(this, bean, m);
 	}
 
 	/**
@@ -1091,12 +1091,8 @@ public class BeanSession extends Session {
 	}
 
 	@Override /* Session */
-	public boolean close() throws BeanRuntimeException {
-		if (super.close()) {
-			if (debug && hasWarnings())
-				throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
-			return true;
-		}
-		return false;
+	public void checkForWarnings() {
+		if (debug)
+			super.checkForWarnings();
 	}
 }

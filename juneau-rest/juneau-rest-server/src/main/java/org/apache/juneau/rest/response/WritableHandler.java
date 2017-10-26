@@ -38,10 +38,9 @@ public final class WritableHandler implements ResponseHandler {
 				for (Map.Entry<String,String> h : r.getHeaders().entrySet())
 					res.setHeader(h.getKey(), h.getValue());
 			}
-			Writer w = res.getNegotiatedWriter();
-			((Writable)output).writeTo(w);
-			w.flush();
-			w.close();
+			try (Writer w = res.getNegotiatedWriter()) {
+				((Writable)output).writeTo(w);
+			}
 			return true;
 		}
 		return false;

@@ -43,9 +43,8 @@ public class JsoSerializerSession extends OutputStreamSerializerSession {
 
 	@Override /* OutputStreamSerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		ObjectOutputStream oos = new ObjectOutputStream(out.getOutputStream());
-		oos.writeObject(o);
-		oos.flush();
-		oos.close();
+		try (ObjectOutputStream oos = new ObjectOutputStream(out.getOutputStream())) {
+			oos.writeObject(o);
+		}
 	}
 }

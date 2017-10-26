@@ -98,7 +98,7 @@ public class DataSet {
 	 */
 	public DataSet(Column[] columns, Object o, BeanSession session) throws Exception {
 		metaData = columns;
-		data = new LinkedList<Row>();
+		data = new LinkedList<>();
 		if (o != null) {
 			if (o.getClass().isArray())
 				o = Arrays.asList((Object[])o);
@@ -140,7 +140,7 @@ public class DataSet {
 	 */
 	@Bean(typeName="row")
 	public static class Row {
-		private List<String> values = new LinkedList<String>();
+		private List<String> values = new LinkedList<>();
 
 		private void add(String value) {
 			values.add(value);

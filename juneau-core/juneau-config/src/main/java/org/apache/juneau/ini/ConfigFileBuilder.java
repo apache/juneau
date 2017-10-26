@@ -20,6 +20,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.FileWriterBuilder;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -112,7 +113,7 @@ public class ConfigFileBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigFileBuilder paths(String...searchPaths) {
-		this.searchPaths = new LinkedList<File>();
+		this.searchPaths = new LinkedList<>();
 		for (String p : searchPaths)
 			this.searchPaths.add(new File(p));
 		return this;
@@ -296,20 +297,14 @@ public class ConfigFileBuilder {
 					return;
 
 				} else if (command.equalsIgnoreCase("createBatchEnvFile")) {
-					Writer fw = new OutputStreamWriter(new FileOutputStream(envFile), Charset.defaultCharset());
-					try {
+					try (Writer fw = FileWriterBuilder.create(envFile).build()) {
 						cf.serializeTo(fw, BATCH);
-					} finally {
-						fw.close();
 					}
 					return;
 
 				} else if (command.equalsIgnoreCase("createShellEnvFile")) {
-					Writer fw = new OutputStreamWriter(new FileOutputStream(envFile), Charset.defaultCharset());
-					try {
+					try (Writer fw = FileWriterBuilder.create(envFile).build()) {
 						cf.serializeTo(fw, SHELL);
-					} finally {
-						fw.close();
 					}
 					return;
 				}

@@ -169,7 +169,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 
 		// The map size may change as we're iterating over it, so
 		// grab a snapshot of the entries in a separate list.
-		List<SimpleMapEntry> entries = new ArrayList<SimpleMapEntry>(m.size());
+		List<SimpleMapEntry> entries = new ArrayList<>(m.size());
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 			entries.add(new SimpleMapEntry(e.getKey(), e.getValue()));
 
@@ -209,11 +209,11 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		}
 	}
 
-	private static class SimpleMapEntry {
+	final static class SimpleMapEntry {
 		final Object key;
 		final Object value;
 
-		private SimpleMapEntry(Object key, Object value) {
+		SimpleMapEntry(Object key, Object value) {
 			this.key = key;
 			this.value = value;
 		}
@@ -223,7 +223,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws Exception {
 
 		ClassMeta<?> elementType = type.getElementType();
-		List<Object> l = new ArrayList<Object>(c.size());
+		List<Object> l = new ArrayList<>(c.size());
 
 		c = sort(c);
 		l.addAll(c);

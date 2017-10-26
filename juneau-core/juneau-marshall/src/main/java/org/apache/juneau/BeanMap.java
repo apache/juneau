@@ -87,7 +87,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		this.bean = bean;
 		this.meta = meta;
 		if (meta.constructorArgs.length > 0)
-			propertyCache = new TreeMap<String,Object>();
+			propertyCache = new TreeMap<>();
 		this.beanTypePropertyName = session.getBeanTypePropertyName(meta.classMeta);
 	}
 
@@ -376,7 +376,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Set<String> keySet() {
 		if (meta.dynaProperty == null)
 			return meta.properties.keySet();
-		Set<String> l = new LinkedHashSet<String>();
+		Set<String> l = new LinkedHashSet<>();
 		for (String p : meta.properties.keySet())
 			if (! "*".equals(p))
 				l.add(p);
@@ -447,7 +447,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public List<BeanPropertyValue> getValues(final boolean ignoreNulls, BeanPropertyValue...prependVals) {
 		Collection<BeanPropertyMeta> properties = getProperties();
 		int capacity = (ignoreNulls && properties.size() > 10) ? 10 : properties.size() + prependVals.length;
-		List<BeanPropertyValue> l = new ArrayList<BeanPropertyValue>(capacity);
+		List<BeanPropertyValue> l = new ArrayList<>(capacity);
 		for (BeanPropertyValue v : prependVals)
 			if (v != null)
 				l.add(v);
@@ -507,7 +507,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		// If this bean has a dyna-property, then we need to construct the entire set before returning.
 		// Otherwise, we can create an iterator without a new data structure.
 		if (meta.dynaProperty != null) {
-			Set<Entry<String,Object>> s = new LinkedHashSet<Entry<String,Object>>();
+			Set<Entry<String,Object>> s = new LinkedHashSet<>();
 			for (BeanPropertyMeta pMeta : getProperties()) {
 				if (pMeta.isDyna()) {
 					try {

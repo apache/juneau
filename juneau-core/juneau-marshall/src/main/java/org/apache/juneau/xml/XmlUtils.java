@@ -70,7 +70,9 @@ public final class XmlUtils {
 			return "_xE000_";
 		try {
 			if (needsElementNameEncoding(s))
-				return encodeElementNameInner(new StringBuilderWriter(s.length() * 2), s).toString();
+				try (Writer w = new StringBuilderWriter(s.length() * 2)) {
+					return encodeElementNameInner(w, s).toString();
+				}
 		} catch (IOException e) {
 			throw new RuntimeException(e); // Never happens
 		}

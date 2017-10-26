@@ -119,19 +119,12 @@ public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 	 * @return The parsed schema.
 	 */
 	public Schema load(URI uri) {
-		Reader r = getReader(uri);
-		if (r == null)
-			return null;
-		try {
+		try (Reader r = getReader(uri)) {
+			if (r == null)
+				return null;
 			return JsonParser.DEFAULT.parse(r, Schema.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		} finally {
-			try {
-				r.close();
-			} catch (IOException e) {
-				// Ignore
-			}
 		}
 	}
 

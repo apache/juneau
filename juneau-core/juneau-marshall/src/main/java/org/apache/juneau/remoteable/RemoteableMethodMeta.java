@@ -65,13 +65,13 @@ public class RemoteableMethodMeta {
 	private static class Builder {
 		private String httpMethod, url;
 		private List<RemoteMethodArg>
-			pathArgs = new LinkedList<RemoteMethodArg>(),
-			queryArgs = new LinkedList<RemoteMethodArg>(),
-			headerArgs = new LinkedList<RemoteMethodArg>(),
-			formDataArgs = new LinkedList<RemoteMethodArg>(),
-			requestBeanArgs = new LinkedList<RemoteMethodArg>();
+			pathArgs = new LinkedList<>(),
+			queryArgs = new LinkedList<>(),
+			headerArgs = new LinkedList<>(),
+			formDataArgs = new LinkedList<>(),
+			requestBeanArgs = new LinkedList<>();
 		private List<Integer>
-			otherArgs = new LinkedList<Integer>();
+			otherArgs = new LinkedList<>();
 		private Integer bodyArg;
 		private ReturnValue returnValue;
 

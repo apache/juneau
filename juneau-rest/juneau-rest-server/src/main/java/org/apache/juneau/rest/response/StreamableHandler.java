@@ -39,10 +39,9 @@ public final class StreamableHandler implements ResponseHandler {
 				for (Map.Entry<String,String> h : r.getHeaders().entrySet())
 					res.setHeader(h.getKey(), h.getValue());
 			}
-			OutputStream os = res.getOutputStream();
-			((Streamable)output).streamTo(os);
-			os.flush();
-			os.close();
+			try (OutputStream os = res.getOutputStream()) {
+				((Streamable)output).streamTo(os);
+			}
 			return true;
 		}
 		return false;

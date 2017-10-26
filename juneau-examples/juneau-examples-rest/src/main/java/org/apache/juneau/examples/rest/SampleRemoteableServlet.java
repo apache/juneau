@@ -52,7 +52,7 @@ public class SampleRemoteableServlet extends RemoteableServlet {
 
 	@Override /* RemoteableServlet */
 	protected Map<Class<?>,Object> getServiceMap() throws Exception {
-		Map<Class<?>,Object> m = new LinkedHashMap<Class<?>,Object>();
+		Map<Class<?>,Object> m = new LinkedHashMap<>();
 
 		// In this simplified example, we expose the same POJO service under two different interfaces.
 		// One is IAddressBook which only exposes methods defined on that interface, and

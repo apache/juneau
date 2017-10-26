@@ -329,7 +329,7 @@ public class CalendarUtils {
 		SHORT_DT
 	}
 
-	private static ThreadLocal<Map<DateFormatKey,DateFormat>> patternCache = new ThreadLocal<Map<DateFormatKey,DateFormat>>();
+	private static ThreadLocal<Map<DateFormatKey,DateFormat>> patternCache = new ThreadLocal<>();
 
 	static class DateFormatKey {
 		final CalendarUtils.Format format;
@@ -371,7 +371,7 @@ public class CalendarUtils {
 
 		Map<DateFormatKey,DateFormat> m1 = patternCache.get();
 		if (m1 == null) {
-			m1 = new ConcurrentHashMap<DateFormatKey,DateFormat>();
+			m1 = new ConcurrentHashMap<>();
 			patternCache.set(m1);
 		}
 

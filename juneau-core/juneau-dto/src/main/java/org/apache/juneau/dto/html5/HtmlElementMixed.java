@@ -145,7 +145,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 */
 	public HtmlElement child(Object child) {
 		if (this.children == null)
-			this.children = new LinkedList<Object>();
+			this.children = new LinkedList<>();
 		if (child instanceof Collection)
 			this.children.addAll((Collection<?>)child);
 		else

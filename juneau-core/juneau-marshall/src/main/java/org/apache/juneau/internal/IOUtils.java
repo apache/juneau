@@ -49,8 +49,9 @@ public final class IOUtils {
 	public static String read(File in) throws IOException {
 		if (in == null || ! in.exists())
 			return null;
-		Reader r = new InputStreamReader(new FileInputStream(in), Charset.defaultCharset());
-		return read(r, 0, 1024);
+		try (Reader r = FileReaderBuilder.create(in).build()) {
+			return read(r, 0, 1024);
+		}
 	}
 
 	/**
@@ -95,11 +96,8 @@ public final class IOUtils {
 	public static int write(File out, Reader in) throws IOException {
 		assertFieldNotNull(out, "out");
 		assertFieldNotNull(in, "in");
-		Writer w = new OutputStreamWriter(new FileOutputStream(out), Charset.defaultCharset());
-		try {
-			return IOPipe.create(in, w).closeOut().run();
-		} finally {
-			w.close();
+		try (Writer w = FileWriterBuilder.create(out).build()) {
+			return IOPipe.create(in, w).run();
 		}
 	}
 
@@ -114,11 +112,8 @@ public final class IOUtils {
 	public static int write(File out, InputStream in) throws IOException {
 		assertFieldNotNull(out, "out");
 		assertFieldNotNull(in, "in");
-		OutputStream os = new FileOutputStream(out);
-		try {
-			return IOPipe.create(in, os).closeOut().run();
-		} finally {
-			os.close();
+		try (OutputStream os = new FileOutputStream(out)) {
+			return IOPipe.create(in, os).run();
 		}
 	}
 
@@ -197,11 +192,8 @@ public final class IOUtils {
 		if (f == null || ! (f.exists() && f.canRead()))
 			return null;
 
-		FileInputStream fis = new FileInputStream(f);
-		try {
+		try (FileInputStream fis = new FileInputStream(f)) {
 			return readBytes(fis, (int)f.length());
-		} finally {
-			fis.close();
 		}
 	}
 

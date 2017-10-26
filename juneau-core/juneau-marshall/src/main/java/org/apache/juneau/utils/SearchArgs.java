@@ -31,9 +31,9 @@ public class SearchArgs {
 	private final boolean ignoreCase;
 
 	private SearchArgs(Builder b) {
-		this.search = unmodifiableMap(new LinkedHashMap<String,String>(b.search));
-		this.view = unmodifiableList(new ArrayList<String>(b.view));
-		this.sort = unmodifiableMap(new LinkedHashMap<String,Boolean>(b.sort));
+		this.search = unmodifiableMap(new LinkedHashMap<>(b.search));
+		this.view = unmodifiableList(new ArrayList<>(b.view));
+		this.sort = unmodifiableMap(new LinkedHashMap<>(b.sort));
 		this.position = b.position;
 		this.limit = b.limit;
 		this.ignoreCase = b.ignoreCase;
@@ -52,9 +52,9 @@ public class SearchArgs {
 	 * Builder for {@link SearchArgs} class.
 	 */
 	public static class Builder {
-		Map<String,String> search = new LinkedHashMap<String,String>();
-		List<String> view = new ArrayList<String>();
-		Map<String,Boolean> sort = new LinkedHashMap<String,Boolean>();
+		Map<String,String> search = new LinkedHashMap<>();
+		List<String> view = new ArrayList<>();
+		Map<String,Boolean> sort = new LinkedHashMap<>();
 		int position, limit;
 		boolean ignoreCase;
 

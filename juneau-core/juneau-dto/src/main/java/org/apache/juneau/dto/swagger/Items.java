@@ -739,7 +739,7 @@ public class Items extends SwaggerElement {
 					addEnum((Collection<Object>)o);
 				else {
 					if (this._enum == null)
-						this._enum = new LinkedList<Object>();
+						this._enum = new LinkedList<>();
 					this._enum.add(o);
 				}
 			}

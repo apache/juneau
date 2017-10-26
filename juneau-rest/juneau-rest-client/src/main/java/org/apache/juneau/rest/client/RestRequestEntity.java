@@ -18,6 +18,7 @@ import java.io.*;
 
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
@@ -44,10 +45,13 @@ public final class RestRequestEntity extends BasicHttpEntity {
 
 	@Override /* BasicHttpEntity */
 	public void writeTo(OutputStream os) throws IOException {
+		os = new NoCloseOutputStream(os);
 		if (output instanceof InputStream) {
-			IOPipe.create(output, os).closeOut().run();
+			IOPipe.create(output, os).run();
 		} else if (output instanceof Reader) {
-			IOPipe.create(output, new OutputStreamWriter(os, UTF8)).closeOut().run();
+			try (OutputStreamWriter osw = new OutputStreamWriter(os, UTF8)) {
+				IOPipe.create(output, osw).run();
+			}
 		} else {
 			try {
 				if (serializer == null) {
@@ -55,15 +59,8 @@ public final class RestRequestEntity extends BasicHttpEntity {
 					os.close();
 				} else {
 					SerializerSession session = serializer.createSession();
-					if (session.isWriterSerializer()) {
-						Writer w = new OutputStreamWriter(os, UTF8);
-						session.serialize(w, output);
-						w.flush();
-						w.close();
-					} else {
-						session.serialize(os, output);
-						os.flush();
-						os.close();
+					try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
+						session.serialize(c, output);
 					}
 				}
 			} catch (SerializeException e) {
@@ -80,8 +77,7 @@ public final class RestRequestEntity extends BasicHttpEntity {
 	@Override /* BasicHttpEntity */
 	public InputStream getContent() {
 		if (outputBytes == null) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			try {
+			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 				writeTo(baos);
 				outputBytes = baos.toByteArray();
 			} catch (IOException e) {

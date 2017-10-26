@@ -38,7 +38,7 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 	public AnnotationBeanFilterBuilder(Class<?> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {
 		super(annotatedClass);
 
-		ListIterator<Bean> li = new ArrayList<Bean>(annotations.values()).listIterator(annotations.size());
+		ListIterator<Bean> li = new ArrayList<>(annotations.values()).listIterator(annotations.size());
 		while (li.hasPrevious()) {
 			Bean b = li.previous();
 

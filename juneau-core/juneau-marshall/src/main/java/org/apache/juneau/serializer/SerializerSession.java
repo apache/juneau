@@ -22,6 +22,7 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.ClassUtils;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.transform.*;
@@ -65,7 +66,7 @@ public abstract class SerializerSession extends BeanSession {
 	private final UriResolver uriResolver;
 
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
-	private final LinkedList<StackElement> stack = new LinkedList<StackElement>();  // Contains the current objects in the current branch of the model.
+	private final LinkedList<StackElement> stack = new LinkedList<>();              // Contains the current objects in the current branch of the model.
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
 
 	// Writable properties
@@ -125,7 +126,7 @@ public abstract class SerializerSession extends BeanSession {
 
 		this.indent = initialDepth;
 		if (detectRecursions || isDebug()) {
-			set = new IdentityHashMap<Object,Object>();
+			set = new IdentityHashMap<>();
 		} else {
 			set = Collections.emptyMap();
 		}
@@ -229,8 +230,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final void serialize(Object out, Object o) throws SerializeException {
-		SerializerPipe pipe = createPipe(out);
-		try {
+		try (SerializerPipe pipe = createPipe(out)) {
 			doSerialize(pipe, o);
 		} catch (SerializeException e) {
 			throw e;
@@ -240,8 +240,7 @@ public abstract class SerializerSession extends BeanSession {
 		} catch (Exception e) {
 			throw new SerializeException(this, e);
 		} finally {
-			pipe.close();
-			close();
+			checkForWarnings();
 		}
 	}
 
@@ -600,7 +599,7 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	protected final <K,V> Map<K,V> sort(Map<K,V> m) {
 		if (sortMaps && m != null && (! m.isEmpty()) && m.keySet().iterator().next() instanceof Comparable<?>)
-			return new TreeMap<K,V>(m);
+			return new TreeMap<>(m);
 		return m;
 	}
 
@@ -612,7 +611,7 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	protected final <E> Collection<E> sort(Collection<E> c) {
 		if (sortCollections && c != null && (! c.isEmpty()) && c.iterator().next() instanceof Comparable<?>)
-			return new TreeSet<E>(c);
+			return new TreeSet<>(c);
 		return c;
 	}
 
@@ -635,7 +634,7 @@ public abstract class SerializerSession extends BeanSession {
 		Class<?> componentType = type.getComponentType();
 		if (componentType.isPrimitive()) {
 			int l = Array.getLength(array);
-			List<Object> list = new ArrayList<Object>(l);
+			List<Object> list = new ArrayList<>(l);
 			for (int i = 0; i < l; i++)
 				list.add(Array.get(array, i));
 			return list;
@@ -782,7 +781,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
 	 */
 	protected final Map<String,Object> getLastLocation() {
-		Map<String,Object> m = new LinkedHashMap<String,Object>();
+		Map<String,Object> m = new LinkedHashMap<>();
 		if (currentClass != null)
 			m.put("currentClass", currentClass);
 		if (currentProperty != null)

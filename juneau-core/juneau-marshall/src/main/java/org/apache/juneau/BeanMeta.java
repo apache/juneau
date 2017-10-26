@@ -113,7 +113,7 @@ public class BeanMeta<T> {
 		this.ctx = ctx;
 		this.c = classMeta.getInnerClass();
 
-		Builder<T> b = new Builder<T>(classMeta, ctx, beanFilter, pNames);
+		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames);
 		this.notABeanReason = b.init(this);
 
 		this.beanFilter = beanFilter;
@@ -138,8 +138,8 @@ public class BeanMeta<T> {
 		BeanFilter beanFilter;
 		String[] pNames;
 		Map<String,BeanPropertyMeta> properties;
-		Map<Method,String> getterProps = new HashMap<Method,String>();
-		Map<Method,String> setterProps = new HashMap<Method,String>();
+		Map<Method,String> getterProps = new HashMap<>();
+		Map<Method,String> setterProps = new HashMap<>();
 		BeanPropertyMeta dynaProperty;
 
 		Map<Class<?>,Class<?>[]> typeVarImpls;
@@ -151,7 +151,7 @@ public class BeanMeta<T> {
 		String dictionaryName, typePropertyName;
 		boolean sortProperties;
 
-		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
+		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
 			this.ctx = ctx;
 			this.beanFilter = beanFilter;
@@ -169,7 +169,7 @@ public class BeanMeta<T> {
 					mVis = ctx.beanMethodVisibility,
 					fVis = ctx.beanFieldVisibility;
 
-				List<Class<?>> bdClasses = new ArrayList<Class<?>>();
+				List<Class<?>> bdClasses = new ArrayList<>();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
 					bdClasses.addAll(Arrays.asList(beanFilter.getBeanDictionary()));
 				Bean bean = classMeta.innerClass.getAnnotation(Bean.class);
@@ -193,7 +193,7 @@ public class BeanMeta<T> {
 				if (stopClass == null)
 					stopClass = Object.class;
 
-				Map<String,BeanPropertyMeta.Builder> normalProps = new LinkedHashMap<String,BeanPropertyMeta.Builder>();
+				Map<String,BeanPropertyMeta.Builder> normalProps = new LinkedHashMap<>();
 
 				/// See if this class matches one the patterns in the exclude-class list.
 				if (ctx.isNotABean(c))
@@ -237,7 +237,7 @@ public class BeanMeta<T> {
 					throw new BeanRuntimeException(c, "Could not set accessibility to true on no-arg constructor");
 
 				// Explicitly defined property names in @Bean annotation.
-				Set<String> fixedBeanProps = new LinkedHashSet<String>();
+				Set<String> fixedBeanProps = new LinkedHashSet<>();
 				String[] includeProperties = ctx.getIncludeProperties(c);
 				String[] excludeProperties = ctx.getExcludeProperties(c);
 
@@ -312,7 +312,7 @@ public class BeanMeta<T> {
 					}
 				}
 
-				typeVarImpls = new HashMap<Class<?>,Class<?>[]>();
+				typeVarImpls = new HashMap<>();
 				findTypeVarImpls(c, typeVarImpls);
 				if (typeVarImpls.isEmpty())
 					typeVarImpls = null;
@@ -383,7 +383,7 @@ public class BeanMeta<T> {
 					// Only include specified properties if BeanFilter.includeKeys is specified.
 					// Note that the order must match includeKeys.
 					} else if (includeKeys != null) {
-						Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();
+						Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
 						for (String k : includeKeys) {
 							if (properties.containsKey(k))
 								properties2.put(k, properties.get(k));
@@ -397,7 +397,7 @@ public class BeanMeta<T> {
 						properties.remove(ep);
 
 				if (pNames != null) {
-					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();
+					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
 					for (String k : pNames) {
 						if (properties.containsKey(k))
 							properties2.put(k, properties.get(k));
@@ -554,7 +554,7 @@ public class BeanMeta<T> {
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
 	private static List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, PropertyNamer pn) {
-		List<BeanMethod> l = new LinkedList<BeanMethod>();
+		List<BeanMethod> l = new LinkedList<>();
 
 		for (Class<?> c2 : findClasses(c, stopClass)) {
 			for (Method m : c2.getDeclaredMethods()) {
@@ -619,7 +619,7 @@ public class BeanMeta<T> {
 	}
 
 	private static Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v) {
-		List<Field> l = new LinkedList<Field>();
+		List<Field> l = new LinkedList<>();
 		for (Class<?> c2 : findClasses(c, stopClass)) {
 			for (Field f : c2.getDeclaredFields()) {
 				int m = f.getModifiers();
@@ -636,7 +636,7 @@ public class BeanMeta<T> {
 	}
 
 	private static List<Class<?>> findClasses(Class<?> c, Class<?> stopClass) {
-		LinkedList<Class<?>> l = new LinkedList<Class<?>>();
+		LinkedList<Class<?>> l = new LinkedList<>();
 		findClasses(c, l, stopClass);
 		return l;
 	}
@@ -668,7 +668,7 @@ public class BeanMeta<T> {
 	public Collection<BeanPropertyMeta> getPropertyMetas(final String...pNames) {
 		if (pNames == null)
 			return getPropertyMetas();
-		List<BeanPropertyMeta> l = new ArrayList<BeanPropertyMeta>(pNames.length);
+		List<BeanPropertyMeta> l = new ArrayList<>(pNames.length);
 		for (int i = 0; i < pNames.length; i++)
 			l.add(getPropertyMeta(pNames[i]));
 		return l;

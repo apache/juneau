@@ -381,12 +381,7 @@ public abstract class Parser extends CoreObject {
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
-		ParserSession session = createSession();
-		try {
-			return session.parse(input, type, args);
-		} finally {
-			session.close();
-		}
+		return createSession().parse(input, type, args);
 	}
 
 	/**
@@ -425,12 +420,7 @@ public abstract class Parser extends CoreObject {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
-		ParserSession session = createSession();
-		try {
-			return session.parse(input, type);
-		} finally {
-			session.close();
-		}
+		return createSession().parse(input, type);
 	}
 
 	/**
@@ -450,12 +440,7 @@ public abstract class Parser extends CoreObject {
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
-		ParserSession session = createSession();
-		try {
-			return session.parse(input, type);
-		} finally {
-			session.close();
-		}
+		return createSession().parse(input, type);
 	}
 
 	/**
@@ -510,12 +495,7 @@ public abstract class Parser extends CoreObject {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
-		ParserSession session = createSession();
-		try {
-			return session.parseIntoMap(input, m, keyType, valueType);
-		} finally {
-			session.close();
-		}
+		return createSession().parseIntoMap(input, m, keyType, valueType);
 	}
 
 	/**
@@ -539,12 +519,7 @@ public abstract class Parser extends CoreObject {
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
-		ParserSession session = createSession();
-		try {
-			return session.parseIntoCollection(input, c, elementType);
-		} finally {
-			session.close();
-		}
+		return createSession().parseIntoCollection(input, c, elementType);
 	}
 
 	/**
@@ -571,12 +546,7 @@ public abstract class Parser extends CoreObject {
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
 			return new Object[0];
-		ParserSession session = createSession();
-		try {
-			return session.parseArgs(input, argTypes);
-		} finally {
-			session.close();
-		}
+		return createSession().parseArgs(input, argTypes);
 	}
 
 

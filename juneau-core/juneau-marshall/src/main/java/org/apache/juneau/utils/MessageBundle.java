@@ -51,7 +51,7 @@ import org.apache.juneau.annotation.*;
 @ThreadSafe
 public class MessageBundle extends ResourceBundle {
 
-	private static final ThreadLocal<Locale> clientLocale = new ThreadLocal<Locale>();
+	private static final ThreadLocal<Locale> clientLocale = new ThreadLocal<>();
 
 	private final ResourceBundle rb;
 	private final String bundlePath, className;
@@ -60,17 +60,17 @@ public class MessageBundle extends ResourceBundle {
 
 	// A map that contains all keys [shortKeyName->keyName] and [keyName->keyName], where shortKeyName
 	// refers to keys prefixed and stripped of the class name (e.g. "foobar"->"MyClass.foobar")
-	private final Map<String,String> keyMap = new ConcurrentHashMap<String,String>();
+	private final Map<String,String> keyMap = new ConcurrentHashMap<>();
 
 	// Contains all keys present in all bundles in searchBundles.
-	private final ConcurrentSkipListSet<String> allKeys = new ConcurrentSkipListSet<String>();
+	private final ConcurrentSkipListSet<String> allKeys = new ConcurrentSkipListSet<>();
 
 	// Bundles to search through to find properties.
 	// Typically this will be a list of resource bundles for each class up the class hierarchy chain.
-	private final CopyOnWriteArrayList<MessageBundle> searchBundles = new CopyOnWriteArrayList<MessageBundle>();
+	private final CopyOnWriteArrayList<MessageBundle> searchBundles = new CopyOnWriteArrayList<>();
 
 	// Cache of message bundles per locale.
-	private final ConcurrentHashMap<Locale,MessageBundle> localizedBundles = new ConcurrentHashMap<Locale,MessageBundle>();
+	private final ConcurrentHashMap<Locale,MessageBundle> localizedBundles = new ConcurrentHashMap<>();
 
 	/**
 	 * Sets the locale for this thread so that calls to {@link #getClientString(String, Object...)} return messages in
@@ -252,7 +252,7 @@ public class MessageBundle extends ResourceBundle {
 	 * @return The set of all keys in the resource bundle with the prefix.
 	 */
 	public Set<String> keySet(String prefix) {
-		Set<String> set = new HashSet<String>();
+		Set<String> set = new HashSet<>();
 		for (String s : keySet()) {
 			if (s.equals(prefix) || (s.startsWith(prefix) && s.charAt(prefix.length()) == '.'))
 				set.add(s);
@@ -317,7 +317,7 @@ public class MessageBundle extends ResourceBundle {
 		if (mb != null)
 			return mb;
 		mb = new MessageBundle(forClass, bundlePath, locale);
-		List<MessageBundle> l = new ArrayList<MessageBundle>(searchBundles.size()-1);
+		List<MessageBundle> l = new ArrayList<>(searchBundles.size()-1);
 		for (int i = 1; i < searchBundles.size(); i++) {
 			MessageBundle srb = searchBundles.get(i);
 			srb = new MessageBundle(srb.forClass, srb.bundlePath, locale);

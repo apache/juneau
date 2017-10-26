@@ -200,8 +200,8 @@ public final class ClassUtils {
 	}
 
 	private final static Map<Class<?>, Class<?>>
-		pmap1 = new HashMap<Class<?>, Class<?>>(),
-		pmap2 = new HashMap<Class<?>, Class<?>>();
+		pmap1 = new HashMap<>(),
+		pmap2 = new HashMap<>();
 	static {
 		pmap1.put(boolean.class, Boolean.class);
 		pmap1.put(byte.class, Byte.class);
@@ -450,7 +450,7 @@ public final class ClassUtils {
 	public static Class<?> resolveParameterType(Class<?> c, int index, Class<?> oc) {
 
 		// We need to make up a mapping of type names.
-		Map<Type,Type> typeMap = new HashMap<Type,Type>();
+		Map<Type,Type> typeMap = new HashMap<>();
 		while (c != oc.getSuperclass()) {
 			extractTypes(typeMap, oc);
 			oc = oc.getSuperclass();
@@ -477,12 +477,12 @@ public final class ClassUtils {
 
 		} else if (actualType instanceof TypeVariable) {
 			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
-			List<Class<?>> nestedOuterTypes = new LinkedList<Class<?>>();
+			List<Class<?>> nestedOuterTypes = new LinkedList<>();
 			for (Class<?> ec = oc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
 				try {
 					Class<?> outerClass = oc.getClass();
 					nestedOuterTypes.add(outerClass);
-					Map<Type,Type> outerTypeMap = new HashMap<Type,Type>();
+					Map<Type,Type> outerTypeMap = new HashMap<>();
 					extractTypes(outerTypeMap, outerClass);
 					for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
 						Type key = entry.getKey(), value = entry.getValue();
@@ -820,7 +820,7 @@ public final class ClassUtils {
 				if (con != null)
 					return (T)con.newInstance(args);
 				if (outer != null) {
-					Object[] args2 = new AList<Object>().append(outer).appendAll(args).toArray();
+					Object[] args2 = new AList<>().append(outer).appendAll(args).toArray();
 					con = findPublicConstructor(c3, args2);
 					if (con != null)
 						return (T)con.newInstance(args2);

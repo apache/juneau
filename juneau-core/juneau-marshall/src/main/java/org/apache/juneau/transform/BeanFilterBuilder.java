@@ -222,7 +222,7 @@ public abstract class BeanFilterBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder setBeanDictionary(Class<?>...c) {
-		beanDictionary = new ArrayList<Class<?>>(Arrays.asList(c));
+		beanDictionary = new ArrayList<>(Arrays.asList(c));
 		return this;
 	}
 
@@ -234,7 +234,7 @@ public abstract class BeanFilterBuilder {
 	 */
 	public BeanFilterBuilder beanDictionary(Class<?>...c) {
 		if (beanDictionary == null)
-			beanDictionary = new ArrayList<Class<?>>(Arrays.asList(c));
+			beanDictionary = new ArrayList<>(Arrays.asList(c));
 		else for (Class<?> cc : c)
 			beanDictionary.add(cc);
 		return this;

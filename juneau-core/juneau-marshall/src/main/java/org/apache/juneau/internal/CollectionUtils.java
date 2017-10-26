@@ -28,12 +28,12 @@ public class CollectionUtils {
 	public static <K,V> LinkedHashMap<K,V> reverse(Map<K,V> in) {
 		if (in == null)
 			return null;
-		LinkedHashMap<K,V> m = new LinkedHashMap<K,V>();
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
 
 		// Note:  Entry objects are reusable in an entry set, so we simply can't
 		// create a reversed iteration of that set.
-		List<K> keys = new ArrayList<K>(in.keySet());
-		List<V> values = new ArrayList<V>(in.values());
+		List<K> keys = new ArrayList<>(in.keySet());
+		List<V> values = new ArrayList<>(in.values());
 		for (int i = in.size()-1; i >= 0; i--)
 			m.put(keys.get(i), values.get(i));
 

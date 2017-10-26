@@ -55,7 +55,7 @@ import org.apache.juneau.http.*;
 public final class EncoderGroup {
 
 	// Maps Accept-Encoding headers to matching encoders.
-	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<String,EncoderMatch>();
+	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
 
 	private final String[] encodings;
 	private final List<String> encodingsList;
@@ -68,10 +68,10 @@ public final class EncoderGroup {
 	 * @param encoders The encoders to add to this group.
 	 */
 	public EncoderGroup(Encoder[] encoders) {
-		this.encoders = Collections.unmodifiableList(new ArrayList<Encoder>(Arrays.asList(encoders)));
+		this.encoders = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(encoders)));
 
-		List<String> lc = new ArrayList<String>();
-		List<Encoder> l = new ArrayList<Encoder>();
+		List<String> lc = new ArrayList<>();
+		List<Encoder> l = new ArrayList<>();
 		for (Encoder e : encoders) {
 			for (String c: e.getCodings()) {
 				lc.add(c);

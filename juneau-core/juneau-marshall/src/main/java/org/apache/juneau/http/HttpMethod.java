@@ -55,7 +55,7 @@ public enum HttpMethod {
 	/** A non-standard value. */
 	OTHER;
 
-	private static final Map<String,HttpMethod> cache = new TreeMap<String,HttpMethod>(String.CASE_INSENSITIVE_ORDER);
+	private static final Map<String,HttpMethod> cache = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	static {
 		cache.put("OPTIONS", OPTIONS);
 		cache.put("GET", GET);

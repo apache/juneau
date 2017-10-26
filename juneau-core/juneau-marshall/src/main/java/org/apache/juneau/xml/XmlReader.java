@@ -45,6 +45,7 @@ public final class XmlReader implements XMLStreamReader {
 	protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws Exception {
 		this.pipe = pipe;
 		try {
+			@SuppressWarnings("resource")
 			Reader r = pipe.getBufferedReader();
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);

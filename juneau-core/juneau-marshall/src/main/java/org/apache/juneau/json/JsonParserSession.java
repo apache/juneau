@@ -81,34 +81,37 @@ public final class JsonParserSession extends ReaderParserSession {
 
 	@Override /* ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		ParserReader r = pipe.getParserReader();
-		if (r == null)
-			return null;
-		T o = parseAnything(type, r, getOuter(), null);
-		validateEnd(r);
-		return o;
+		try (ParserReader r = pipe.getParserReader()) {
+			if (r == null)
+				return null;
+			T o = parseAnything(type, r, getOuter(), null);
+			validateEnd(r);
+			return o;
+		}
 	}
 
 	@Override /* ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		ParserReader r = pipe.getParserReader();
-		m = parseIntoMap2(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
-		validateEnd(r);
-		return m;
+		try (ParserReader r = pipe.getParserReader()) {
+			m = parseIntoMap2(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
+			validateEnd(r);
+			return m;
+		}
 	}
 
 	@Override /* ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		ParserReader r = pipe.getParserReader();
-		c = parseIntoCollection2(r, c, getClassMeta(elementType), null);
-		validateEnd(r);
-		return c;
+		try (ParserReader r = pipe.getParserReader()) {
+			c = parseIntoCollection2(r, c, getClassMeta(elementType), null);
+			validateEnd(r);
+			return c;
+		}
 	}
 
 	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
-			eType = (ClassMeta<T>)object();
+			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
 		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 		setCurrentClass(sType);

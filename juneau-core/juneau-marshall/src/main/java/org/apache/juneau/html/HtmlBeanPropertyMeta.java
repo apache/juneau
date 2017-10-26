@@ -52,7 +52,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		this.anchorText = b.anchorText;
 	}
 
-	private static class Builder {
+	static final class Builder {
 		boolean asXml, noTables, noTableHeaders, asPlainText;
 		Class<? extends HtmlRender> render = HtmlRender.class;
 		String link, anchorText;

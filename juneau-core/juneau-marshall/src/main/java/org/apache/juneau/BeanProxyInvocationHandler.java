@@ -38,7 +38,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 	 */
 	public BeanProxyInvocationHandler(BeanMeta<T> meta) {
 		this.meta = meta;
-		this.beanProps = new HashMap<String, Object>();
+		this.beanProps = new HashMap<>();
 	}
 
 	/**

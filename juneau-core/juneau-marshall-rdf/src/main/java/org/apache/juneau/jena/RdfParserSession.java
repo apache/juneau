@@ -43,7 +43,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private final Model model;
 	private final boolean trimWhitespace, looseCollections;
 	private final RDFReader rdfReader;
-	private final Set<Resource> urisVisited = new HashSet<Resource>();
+	private final Set<Resource> urisVisited = new HashSet<>();
 	private final RdfCollectionFormat collectionFormat;
 
 	/**
@@ -162,7 +162,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * 	or by resorting to scanning the model for all nodes with no incoming predicates.
 	 */
 	private List<Resource> getRoots(Model m) {
-		List<Resource> l = new LinkedList<Resource>();
+		List<Resource> l = new LinkedList<>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
 		Property root = m.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
@@ -175,7 +175,7 @@ public class RdfParserSession extends ReaderParserSession {
 		// Otherwise, we need to find all resources that aren't objects.
 		// We want to explicitly ignore statements where the subject
 		// and object are the same node.
-		Set<RDFNode> objects = new HashSet<RDFNode>();
+		Set<RDFNode> objects = new HashSet<>();
 		for (StmtIterator i = m.listStatements(); i.hasNext();) {
 			Statement st = i.next();
 			RDFNode subject = st.getSubject();
@@ -232,7 +232,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private <T> T parseAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
-			eType = (ClassMeta<T>)object();
+			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
 		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 		setCurrentClass(sType);

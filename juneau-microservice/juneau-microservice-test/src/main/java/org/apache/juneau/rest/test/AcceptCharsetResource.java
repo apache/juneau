@@ -82,9 +82,9 @@ public class AcceptCharsetResource extends RestServlet {
 
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-					Writer w = new OutputStreamWriter(out.getOutputStream());
-					w.append(o.toString()).append('/').append(getStringProperty("characterEncoding"));
-					w.flush();
+					try (Writer w = new OutputStreamWriter(out.getOutputStream())) {
+						w.append(o.toString()).append('/').append(getStringProperty("characterEncoding"));
+					}
 				}
 			};
 		}

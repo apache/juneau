@@ -451,7 +451,7 @@ public class HtmlDocBuilder {
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 	private static String[] resolveLinks(Object[] value, String[] prev) {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for (Object v : value) {
 			String s = StringUtils.toString(v);
 			if ("INHERIT".equals(s)) {

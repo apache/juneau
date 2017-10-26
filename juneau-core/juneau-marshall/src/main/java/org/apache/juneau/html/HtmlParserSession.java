@@ -36,7 +36,7 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class HtmlParserSession extends XmlParserSession {
 
-	private static final Set<String> whitespaceElements = new HashSet<String>(
+	private static final Set<String> whitespaceElements = new HashSet<>(
 		Arrays.asList(
 			new String[]{"br","bs","sp","ff"}
 		)
@@ -312,7 +312,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	}
 
 	private static Map<String,String> getAttributes(XmlReader r) {
-		Map<String,String> m = new TreeMap<String,String>() ;
+		Map<String,String> m = new TreeMap<>() ;
 		for (int i = 0; i < r.getAttributeCount(); i++)
 			m.put(r.getAttributeLocalName(i), r.getAttributeValue(i));
 		return m;
@@ -375,7 +375,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			ClassMeta<E> type, BeanPropertyMeta pMeta) throws Exception {
 
 		HtmlTag tag = nextTag(r, TR);
-		List<String> keys = new ArrayList<String>();
+		List<String> keys = new ArrayList<>();
 		while (true) {
 			tag = nextTag(r, TH, xTR);
 			if (tag == xTR)

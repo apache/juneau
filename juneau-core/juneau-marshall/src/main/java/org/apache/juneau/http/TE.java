@@ -93,7 +93,7 @@ import org.apache.juneau.internal.*;
  */
 public final class TE extends HeaderRangeArray {
 
-	private static final Cache<String,TE> cache = new Cache<String,TE>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,TE> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <code>Accept</code> header.

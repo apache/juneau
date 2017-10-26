@@ -247,7 +247,7 @@ public class ProcBuilder {
 	 * @param env The new set of environment variables.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({"rawtypes"})
 	public ProcBuilder env(Map env) {
 		if (env != null)
 			for (Map.Entry e : (Set<Map.Entry>)env.entrySet())
@@ -395,7 +395,7 @@ public class ProcBuilder {
 	};
 
 	private static List<String> toList(Object...args) {
-		List<String> l = new LinkedList<String>();
+		List<String> l = new LinkedList<>();
 		for (Object o : args) {
 			if (o.getClass().isArray())
 				for (int i = 0; i < Array.getLength(o); i++)

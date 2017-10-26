@@ -409,7 +409,7 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public SecurityScheme addScope(String name, String description) {
 		if (scopes == null)
-			scopes = new TreeMap<String,String>();
+			scopes = new TreeMap<>();
 		scopes.put(name, description);
 		return this;
 	}

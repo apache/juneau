@@ -166,7 +166,7 @@ public class Operation extends SwaggerElement {
 	public Operation addTags(Collection<String> tags) {
 		if (tags != null) {
 			if (this.tags == null)
-				this.tags = new LinkedList<String>();
+				this.tags = new LinkedList<>();
 			this.tags.addAll(tags);
 		}
 		return this;
@@ -412,7 +412,7 @@ public class Operation extends SwaggerElement {
 	public Operation addConsumes(Collection<MediaType> consumes) {
 		if (consumes != null) {
 			if (this.consumes == null)
-				this.consumes = new LinkedList<MediaType>();
+				this.consumes = new LinkedList<>();
 			this.consumes.addAll(consumes);
 		}
 		return this;
@@ -485,7 +485,7 @@ public class Operation extends SwaggerElement {
 	public Operation addProduces(MediaType...produces) {
 		if (produces != null) {
 			if (this.produces == null)
-				this.produces = new LinkedList<MediaType>();
+				this.produces = new LinkedList<>();
 			this.produces.addAll(Arrays.asList(produces));
 		}
 		return this;
@@ -506,7 +506,7 @@ public class Operation extends SwaggerElement {
 	public Operation addProduces(Collection<MediaType> produces) {
 		if (produces != null) {
 			if (this.produces == null)
-				this.produces = new LinkedList<MediaType>();
+				this.produces = new LinkedList<>();
 			this.produces.addAll(produces);
 		}
 		return this;
@@ -597,7 +597,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation addParameters(ParameterInfo...parameters) {
 		if (this.parameters == null)
-			this.parameters = new LinkedList<ParameterInfo>();
+			this.parameters = new LinkedList<>();
 		this.parameters.addAll(Arrays.asList(parameters));
 		return this;
 	}
@@ -660,7 +660,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation addResponse(Integer statusCode, ResponseInfo response) {
 		if (responses == null)
-			responses = new TreeMap<Integer,ResponseInfo>();
+			responses = new TreeMap<>();
 		responses.put(statusCode, response);
 		return this;
 	}
@@ -744,7 +744,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation addSchemes(Collection<String> schemes) {
 		if (this.schemes == null)
-			this.schemes = new LinkedList<String>();
+			this.schemes = new LinkedList<>();
 		this.schemes.addAll(schemes);
 		return this;
 	}
@@ -848,7 +848,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation addSecurity(Map<String,List<String>> security) {
 		if (this.security == null)
-			this.security = new LinkedList<Map<String,List<String>>>();
+			this.security = new LinkedList<>();
 		this.security.add(security);
 		return this;
 	}
@@ -863,7 +863,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation security(String scheme, String...alternatives) {
-		Map<String,List<String>> m = new LinkedHashMap<String,List<String>>();
+		Map<String,List<String>> m = new LinkedHashMap<>();
 		m.put(scheme, Arrays.asList(alternatives));
 		return addSecurity(m);
 	}

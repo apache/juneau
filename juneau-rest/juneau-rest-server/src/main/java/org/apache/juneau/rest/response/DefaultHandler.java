@@ -38,6 +38,7 @@ import org.apache.juneau.serializer.*;
  */
 public class DefaultHandler implements ResponseHandler {
 
+	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
 		SerializerGroup g = res.getSerializerGroup();
@@ -67,7 +68,7 @@ public class DefaultHandler implements ResponseHandler {
 						Writer w = res.getNegotiatedWriter();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						session.serialize(baos, output);
-						w.write(StringUtils.toHex(baos.toByteArray()));
+						w.write(StringUtils.toSpacedHex(baos.toByteArray()));
 						w.close();  // Leave open if exception occurs.
 					} else {
 						OutputStream os = res.getNegotiatedOutputStream();

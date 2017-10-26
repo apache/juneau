@@ -74,7 +74,7 @@ public final class RestCall {
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
 	private HttpResponse response;                         // The response.
-	private List<RestCallInterceptor> intercepters = new ArrayList<RestCallInterceptor>();               // Used for intercepting and altering requests.
+	private List<RestCallInterceptor> intercepters = new ArrayList<>();               // Used for intercepting and altering requests.
 
 	private boolean isConnected = false;                   // connect() has been called.
 	private boolean allowRedirectsOnPosts;
@@ -1616,13 +1616,13 @@ public final class RestCall {
 		if (cs == null)
 			cs = "UTF-8";
 
-		Reader isr = new InputStreamReader(is, cs);
-
 		if (writers.size() > 0) {
-			StringWriter sw = new StringWriter();
-			writers.add(sw, true);
-			IOPipe.create(isr, writers).byLines(byLines).run();
-			return new StringReader(sw.toString());
+			try (Reader isr = new InputStreamReader(is, cs)) {
+				StringWriter sw = new StringWriter();
+				writers.add(sw, true);
+				IOPipe.create(isr, writers).byLines(byLines).run();
+				return new StringReader(sw.toString());
+			}
 		}
 
 		return new InputStreamReader(is, cs);
@@ -1708,6 +1708,7 @@ public final class RestCall {
 	 * @throws IOException If an exception occurred while streaming was already occurring.
 	 * @throws IllegalStateException If an attempt is made to read the response more than once.
 	 */
+	@SuppressWarnings("resource")
 	public InputStream getInputStream() throws IOException {
 		if (isClosed)
 			throw new IllegalStateException("Method cannot be called.  Response has already been consumed.");
@@ -1722,6 +1723,7 @@ public final class RestCall {
 			ByteArrayInOutStream baios = new ByteArrayInOutStream();
 			outputStreams.add(baios, true);
 			IOPipe.create(is, baios).run();
+			is.close();
 			return baios.getInputStream();
 		}
 		return is;
@@ -1736,10 +1738,8 @@ public final class RestCall {
 	 * @throws IOException If an exception occurred while streaming was already occurring.
 	 */
 	public String getResponseAsString() throws IOException {
-		try {
-			Reader r = getReader();
-			String s = read(r).toString();
-			return s;
+		try (Reader r = getReader()) {
+			return read(r).toString();
 		} catch (IOException e) {
 			isFailed = true;
 			throw e;
@@ -1982,15 +1982,9 @@ public final class RestCall {
 			if (type.getInnerClass().equals(InputStream.class))
 				return (T)getInputStream();
 			Parser p = getParser();
-			T o = null;
-			if (! p.isReaderParser()) {
-				InputStream is = getInputStream();
-				o = ((InputStreamParser)p).parse(is, type);
-			} else {
-				Reader r = getReader();
-				o = ((ReaderParser)p).parse(r, type);
+			try (Closeable in = p.isReaderParser() ? getReader() : getInputStream()) {
+				return p.parse(in, type);
 			}
-			return o;
 		} catch (ParseException e) {
 			isFailed = true;
 			throw e;

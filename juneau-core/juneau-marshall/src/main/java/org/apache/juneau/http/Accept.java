@@ -148,7 +148,7 @@ import org.apache.juneau.internal.*;
  */
 public final class Accept {
 
-	private static final Cache<String,Accept> cache = new Cache<String,Accept>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,Accept> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <code>Accept</code> header.

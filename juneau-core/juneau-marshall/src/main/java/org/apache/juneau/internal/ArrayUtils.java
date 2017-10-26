@@ -231,7 +231,7 @@ public final class ArrayUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> toList(Object array, Class<T> componentType) {
-		List<T> l = new ArrayList<T>(Array.getLength(array));
+		List<T> l = new ArrayList<>(Array.getLength(array));
 		for (int i = 0; i < Array.getLength(array); i++)
 			l.add((T)Array.get(array, i));
 		return l;
@@ -370,7 +370,7 @@ public final class ArrayUtils {
 	 * @return A new list of objects copied from the iterable.
 	 */
 	public static List<?> toList(Iterable<?> i) {
-		List<Object> l = new ArrayList<Object>();
+		List<Object> l = new ArrayList<>();
 		Iterator<?> i2 = i.iterator();
 		while (i2.hasNext())
 			l.add(i2.next());

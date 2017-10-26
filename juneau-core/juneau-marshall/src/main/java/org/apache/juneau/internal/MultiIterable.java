@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class MultiIterable<E> implements Iterable<E> {
 
-	final List<Iterator<E>> iterators = new LinkedList<Iterator<E>>();
+	final List<Iterator<E>> iterators = new LinkedList<>();
 
 	/**
 	 * Constructor.

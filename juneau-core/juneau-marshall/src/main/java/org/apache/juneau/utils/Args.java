@@ -111,7 +111,7 @@ public final class Args extends ObjectMap {
 	 * @param args Arguments passed in through a <code>main(String[] args)</code> method.
 	 */
 	public Args(String[] args) {
-		List<String> argList = new LinkedList<String>(Arrays.asList(args));
+		List<String> argList = new LinkedList<>(Arrays.asList(args));
 
 		// Capture the main arguments.
 		Integer i = 0;

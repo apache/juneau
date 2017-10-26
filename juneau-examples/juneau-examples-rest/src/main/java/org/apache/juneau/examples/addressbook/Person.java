@@ -43,7 +43,7 @@ public class Person {
 	@Swap(CalendarSwap.DateMedium.class) 
 	public Calendar birthDate;
 	
-	public LinkedList<Address> addresses = new LinkedList<Address>();
+	public LinkedList<Address> addresses = new LinkedList<>();
 
 	/** Bean constructor - Needed for instantiating on server side */
 	public Person() {}

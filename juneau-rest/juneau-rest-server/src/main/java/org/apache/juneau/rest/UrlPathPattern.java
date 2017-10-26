@@ -49,7 +49,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	class Builder {
 		boolean isDotAll, isOnlyDotAll;
 		Pattern pattern;
-		List<String> vars = new LinkedList<String>();
+		List<String> vars = new LinkedList<>();
 
 		private Builder(String patternString) {
 			if (! startsWith(patternString, '/'))

@@ -45,9 +45,9 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 
 	@Override /* ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		MsgPackInputStream is = new MsgPackInputStream(pipe);
-		T o = parseAnything(type, is, getOuter(), null);
-		return o;
+		try (MsgPackInputStream is = new MsgPackInputStream(pipe)) {
+			return parseAnything(type, is, getOuter(), null);
+		}
 	}
 
 	/*
@@ -56,7 +56,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
-			eType = (ClassMeta<T>)object();
+			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
 		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 		setCurrentClass(sType);

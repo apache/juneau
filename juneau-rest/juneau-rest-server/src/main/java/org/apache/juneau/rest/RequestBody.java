@@ -230,6 +230,18 @@ public class RequestBody {
 	}
 
 	/**
+	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
+	 *
+	 * @return The incoming input from the connection as a plain string.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public String asSpacedHex() throws IOException {
+		if (body == null)
+			body = readBytes(getInputStream(), 1024);
+		return toSpacedHex(body);
+	}
+
+	/**
 	 * Returns the HTTP body content as a {@link Reader}.
 	 *
 	 * <p>
@@ -272,6 +284,7 @@ public class RequestBody {
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
+	@SuppressWarnings("resource")
 	public ServletInputStream getInputStream() throws IOException {
 
 		if (body != null)
@@ -358,8 +371,9 @@ public class RequestBody {
 				try {
 					req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
 					ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.getContext().getResource()));
-					Object in = session.isReaderParser() ? getUnbufferedReader() : getInputStream();
-					return session.parse(in, cm);
+					try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
+						return session.parse(in, cm);
+					}
 				} catch (ParseException e) {
 					throw new RestException(SC_BAD_REQUEST,
 						"Could not convert request body content to class type ''{0}'' using parser ''{1}''.",

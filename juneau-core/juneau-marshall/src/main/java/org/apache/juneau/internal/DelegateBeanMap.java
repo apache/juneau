@@ -92,7 +92,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	@Override /* BeanMap */
 	public BeanMeta<T> getMeta() {
-		return new BeanMetaFiltered<T>(super.getMeta(), keys);
+		return new BeanMetaFiltered<>(super.getMeta(), keys);
 	}
 
 	@Override /* Map */
@@ -113,7 +113,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	@Override /* BeanMap */
 	public Collection<BeanPropertyMeta> getProperties() {
-		List<BeanPropertyMeta> l = new ArrayList<BeanPropertyMeta>(keys.size());
+		List<BeanPropertyMeta> l = new ArrayList<>(keys.size());
 		for (final String key : keys) {
 			BeanPropertyMeta p = this.getPropertyMeta(key);
 			if (overrideValues.containsKey(key))
@@ -125,10 +125,10 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return l;
 	}
 
-	private class BeanMapEntryOverride extends BeanMapEntry {
+	final class BeanMapEntryOverride extends BeanMapEntry {
 		Object value;
 
-		private BeanMapEntryOverride(BeanMap<?> bm, BeanPropertyMeta bpm, Object value) {
+		BeanMapEntryOverride(BeanMap<?> bm, BeanPropertyMeta bpm, Object value) {
 			super(bm, bpm, bpm.getName());
 			this.value = value;
 		}

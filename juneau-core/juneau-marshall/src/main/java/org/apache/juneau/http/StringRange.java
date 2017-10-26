@@ -85,7 +85,7 @@ public final class StringRange implements Comparable<StringRange>  {
 		if (value.indexOf(',') == -1)
 			return new StringRange[]{new StringRange(value)};
 
-		Set<StringRange> ranges = new TreeSet<StringRange>();
+		Set<StringRange> ranges = new TreeSet<>();
 
 		for (String r : StringUtils.split(value)) {
 			r = r.trim();
@@ -99,7 +99,6 @@ public final class StringRange implements Comparable<StringRange>  {
 		return ranges.toArray(new StringRange[ranges.size()]);
 	}
 
-	@SuppressWarnings("unchecked")
 	private StringRange(String token) {
 		Builder b = new Builder(token);
 		this.type = b.type;
@@ -136,7 +135,7 @@ public final class StringRange implements Comparable<StringRange>  {
 						String k = parm[0], v = parm[1];
 						if (isInExtensions) {
 							if (extensions == null)
-								extensions = new TreeMap<String,Set<String>>();
+								extensions = new TreeMap<>();
 							if (! extensions.containsKey(k))
 								extensions.put(k, new TreeSet<String>());
 							extensions.get(k).add(v);

@@ -175,7 +175,7 @@ public class TestUtils {
 		if (xmlSchema.indexOf('\u0000') != -1) {
 
 			// Break it up into a map of namespaceURI->schema document
-			final Map<String,String> schemas = new HashMap<String,String>();
+			final Map<String,String> schemas = new HashMap<>();
 			String[] ss = xmlSchema.split("\u0000");
 			xmlSchema = ss[0];
 			for (String s : ss) {
@@ -253,9 +253,11 @@ public class TestUtils {
 		if (is == null) {
 			is = new FileInputStream(p);
 		}
-		String e = read(is);
-		e = e.replaceAll("\r", "");
-		return e;
+		try (InputStream is2 = is) {
+			String e = read(is2);
+			e = e.replaceAll("\r", "");
+			return e;
+		}
 	}
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();

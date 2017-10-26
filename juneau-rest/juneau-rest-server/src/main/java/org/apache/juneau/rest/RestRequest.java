@@ -1093,7 +1093,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				sb.append("---Body UTF-8---\n");
 				sb.append(body.asString()).append("\n");
 				sb.append("---Body Hex---\n");
-				sb.append(body.asHex()).append("\n");
+				sb.append(body.asSpacedHex()).append("\n");
 			} catch (Exception e1) {
 				sb.append(e1.getLocalizedMessage());
 				context.getLogger().log(WARNING, e1, "Error occurred while trying to read debug input.");

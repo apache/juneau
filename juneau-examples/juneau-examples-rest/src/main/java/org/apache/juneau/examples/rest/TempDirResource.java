@@ -88,7 +88,9 @@ public class TempDirResource extends DirectoryResource {
 			FileItemStream item = iter.next();
 			if (item.getFieldName().equals("contents")) {
 				File f = new File(getRootDir(), item.getName());
-				IOPipe.create(item.openStream(), new FileOutputStream(f)).closeOut().run();
+				try (FileOutputStream fos = new FileOutputStream(f)) {
+					IOPipe.create(item.openStream(), fos).run();
+				}
 			}
 		}
 		return new Redirect(); // Redirect to the servlet root.

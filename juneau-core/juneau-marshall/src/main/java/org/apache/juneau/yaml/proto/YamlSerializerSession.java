@@ -65,7 +65,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 	@Override /* SerializerSesssion */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		serializeAnything(getJsonWriter(out), o, getExpectedRootType(o), "root", null);
+		serializeAnything(getYamlWriter(out), o, getExpectedRootType(o), "root", null);
 	}
 
 	/*
@@ -240,7 +240,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 	 * @return The output target object wrapped in an {@link YamlWriter}.
 	 * @throws Exception
 	 */
-	protected final YamlWriter getJsonWriter(SerializerPipe out) throws Exception {
+	protected final YamlWriter getYamlWriter(SerializerPipe out) throws Exception {
 		Object output = out.getRawOutput();
 		if (output instanceof YamlWriter)
 			return (YamlWriter)output;

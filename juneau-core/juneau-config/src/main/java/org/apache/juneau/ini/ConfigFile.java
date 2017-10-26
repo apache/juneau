@@ -839,7 +839,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 			Set<String> keys = getSectionKeys(sectionName);
 			if (keys == null)
 				throw new IllegalArgumentException("Section not found");
-			keys = new LinkedHashSet<String>(keys);
+			keys = new LinkedHashSet<>(keys);
 			for (Method m : bean.getClass().getMethods()) {
 				int mod = m.getModifiers();
 				if (isPublic(mod) && (!isStatic(mod)) && m.getName().startsWith("set") && m.getParameterTypes().length == 1) {

@@ -76,7 +76,7 @@ public class Tooltip {
     */
    public Tooltip(String display, Object...content) {
    	this.display = display;
-   	this.content = new ArrayList<Object>(Arrays.asList(content));
+   	this.content = new ArrayList<>(Arrays.asList(content));
    }
 
    /**

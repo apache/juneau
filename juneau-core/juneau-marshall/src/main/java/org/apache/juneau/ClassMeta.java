@@ -293,7 +293,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes","hiding"})
-	private class ClassMetaBuilder<T> {
+	private final class ClassMetaBuilder<T> {
 		Class<T> innerClass;
 		Class<? extends T> implClass;
 		BeanContext beanContext;
@@ -319,8 +319,8 @@ public final class ClassMeta<T> implements Type {
 			numberConstructorType = null;
 		Object primitiveDefault = null;
 		Map<String,Method>
-			publicMethods = new LinkedHashMap<String,Method>(),
-			remoteableMethods = new LinkedHashMap<String,Method>();
+			publicMethods = new LinkedHashMap<>(),
+			remoteableMethods = new LinkedHashMap<>();
 		ClassMeta<?>
 			keyType = null,
 			valueType = null,
@@ -332,7 +332,7 @@ public final class ClassMeta<T> implements Type {
 			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
-		List<PojoSwap> pojoSwaps = new ArrayList<PojoSwap>();
+		List<PojoSwap> pojoSwaps = new ArrayList<>();
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
 		PojoSwap<?,?>[] childPojoSwaps;
@@ -340,7 +340,7 @@ public final class ClassMeta<T> implements Type {
 			childSwapMap,
 			childUnswapMap;
 
-		private ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps) {
+		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
 

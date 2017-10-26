@@ -64,7 +64,7 @@ import org.apache.juneau.http.*;
 public final class SerializerGroup {
 
 	// Maps Accept headers to matching serializers.
-	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<String,SerializerMatch>();
+	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
 
 	private final MediaType[] mediaTypes;
 	private final List<MediaType> mediaTypesList;
@@ -87,10 +87,10 @@ public final class SerializerGroup {
 	public SerializerGroup(PropertyStore propertyStore, Serializer[] serializers) {
 		this.propertyStore = propertyStore.copy();
 		this.beanContext = propertyStore.getBeanContext();
-		this.serializers = Collections.unmodifiableList(new ArrayList<Serializer>(Arrays.asList(serializers)));
+		this.serializers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(serializers)));
 
-		List<MediaType> lmt = new ArrayList<MediaType>();
-		List<Serializer> l = new ArrayList<Serializer>();
+		List<MediaType> lmt = new ArrayList<>();
+		List<Serializer> l = new ArrayList<>();
 		for (Serializer s : serializers) {
 			for (MediaType m: s.getMediaTypes()) {
 				lmt.add(m);

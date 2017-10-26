@@ -64,7 +64,7 @@ import org.apache.juneau.urlencoding.*;
 @SuppressWarnings("rawtypes")
 public class RestClient extends CoreObject {
 
-	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<Class,PartSerializer>();
+	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<>();
 
 	private final Map<String,String> headers;
 	private final CloseableHttpClient httpClient;
@@ -115,7 +115,7 @@ public class RestClient extends CoreObject {
 		this.urlEncodingSerializer = urlEncodingSerializer;
 		this.partSerializer = partSerializer;
 
-		Map<String,String> h2 = new ConcurrentHashMap<String,String>(headers);
+		Map<String,String> h2 = new ConcurrentHashMap<>(headers);
 
 		this.headers = Collections.unmodifiableMap(h2);
 		this.rootUrl = rootUri;
@@ -124,7 +124,7 @@ public class RestClient extends CoreObject {
 		this.retryInterval = retryInterval;
 		this.debug = debug;
 
-		List<RestCallInterceptor> l = new ArrayList<RestCallInterceptor>(intercepters);
+		List<RestCallInterceptor> l = new ArrayList<>(intercepters);
 		if (debug)
 			l.add(RestCallLogger.DEFAULT);
 
@@ -668,9 +668,8 @@ public class RestClient extends CoreObject {
 
 							if (rmm.getRequestBeanArgs().length > 0) {
 								BeanSession bs = getBeanContext().createSession();
-
 								for (RemoteMethodArg rma : rmm.getRequestBeanArgs()) {
-									BeanMap<?> bm = bs.toBeanMap(args[rma.index]);
+									BeanMap<?> bm = bs.toBeanMap(args[rma.index]); 
 
 									for (BeanPropertyValue bpv : bm.getValues(false)) {
 										BeanPropertyMeta pMeta = bpv.getMeta();

@@ -39,7 +39,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 		.simple()
 		.build();
 
-	private static final ConcurrentHashMap<Class<?>,String> rbMap = new ConcurrentHashMap<Class<?>,String>();
+	private static final ConcurrentHashMap<Class<?>,String> rbMap = new ConcurrentHashMap<>();
 
 	private final ResourceBundle rb;
 	private final java.util.logging.Logger innerLogger;

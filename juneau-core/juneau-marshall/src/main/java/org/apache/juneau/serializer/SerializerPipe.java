@@ -38,7 +38,7 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link File}
  * </ul>
  */
-public final class SerializerPipe {
+public final class SerializerPipe implements Closeable {
 
 	private final Object output;
 	private final boolean autoClose;
@@ -68,8 +68,11 @@ public final class SerializerPipe {
 	 * 	<li>{@link OutputStream}
 	 * 	<li>{@link File}
 	 * </ul>
-	 *
-	 * @return The output object wrapped in an output stream.
+	 * 
+	 * @return 
+	 * 	The output object wrapped in an output stream.
+	 * 	Calling {@link OutputStream#close()} on the returned object simply flushes the response and does not close
+	 * 	the underlying stream.
 	 * @throws IOException If object could not be converted to an output stream.
 	 */
 	public OutputStream getOutputStream() throws IOException {
@@ -83,7 +86,7 @@ public final class SerializerPipe {
 		else
 			throw new IOException("Cannot convert object of type "+output.getClass().getName()+" to an OutputStream.");
 
-		return outputStream;
+		return new NoCloseOutputStream(outputStream);
 	}
 
 
@@ -101,7 +104,10 @@ public final class SerializerPipe {
 	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
 	 * </ul>
 	 *
-	 * @return The output object wrapped in a Writer.
+	 * @return 
+	 * 	The output object wrapped in a writer.
+	 * 	Calling {@link Writer#close()} on the returned object simply flushes the response and does not close
+	 * 	the underlying writer.
 	 * @throws IOException If object could not be converted to a writer.
 	 */
 	public Writer getWriter() throws IOException {
@@ -119,7 +125,7 @@ public final class SerializerPipe {
 		else
 			throw new IOException("Cannot convert object of type "+output.getClass().getName()+" to a Writer.");
 
-		return writer;
+		return new NoCloseWriter(writer);
 	}
 
 	/**
@@ -140,7 +146,7 @@ public final class SerializerPipe {
 	 *
 	 * <p>
 	 * Used when wrapping the stream returned by {@link #getOutputStream()} so that the wrapped stream will be flushed
-	 * and closed when {@link #close()} is called.
+	 * when {@link #close()} is called.
 	 *
 	 * @param outputStream The wrapped stream.
 	 */
@@ -160,6 +166,7 @@ public final class SerializerPipe {
 	/**
 	 * Closes the output pipe.
 	 */
+	@Override /* Closeable */
 	public void close() {
 		try {
 			IOUtils.flush(writer, outputStream);

@@ -116,7 +116,7 @@ public class BeanPropertyMeta {
 
 		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
 
-			List<Class<?>> bdClasses = new ArrayList<Class<?>>();
+			List<Class<?>> bdClasses = new ArrayList<>();
 
 			if (field == null && getter == null)
 				return false;
@@ -841,7 +841,7 @@ public class BeanPropertyMeta {
 			} else /* isArray() */ {
 
 				if (m.arrayPropertyCache == null)
-					m.arrayPropertyCache = new TreeMap<String,List<?>>();
+					m.arrayPropertyCache = new TreeMap<>();
 
 				List l = m.arrayPropertyCache.get(name);
 				if (l == null) {
@@ -952,7 +952,7 @@ public class BeanPropertyMeta {
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
 	 */
 	public <A extends Annotation> List<A> findAnnotations(Class<A> a) {
-		List<A> l = new LinkedList<A>();
+		List<A> l = new LinkedList<>();
 		if (field != null) {
 			addIfNotNull(l, field.getAnnotation(a));
 			appendAnnotations(a, field.getType(), l);

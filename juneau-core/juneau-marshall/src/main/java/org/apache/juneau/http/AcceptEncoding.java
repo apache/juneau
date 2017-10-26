@@ -96,7 +96,7 @@ import org.apache.juneau.internal.*;
  */
 public final class AcceptEncoding extends HeaderRangeArray {
 
-	private static final Cache<String,AcceptEncoding> cache = new Cache<String,AcceptEncoding>(NOCACHE, CACHE_MAX_SIZE);
+	private static final Cache<String,AcceptEncoding> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <code>Accept-Encoding</code> header.

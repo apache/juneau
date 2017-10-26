@@ -61,13 +61,11 @@ public class PhotosResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	// Our cache of photos
-	private Map<String,Photo> photos = new TreeMap<String,Photo>();
+	private Map<String,Photo> photos = new TreeMap<>();
 
 	@Override /* Servlet */
 	public void init() {
-		try {
-			// Preload an image.
-			InputStream is = getClass().getResourceAsStream("averycutecat.jpg");
+		try (InputStream is = getClass().getResourceAsStream("averycutecat.jpg")) {
 			BufferedImage image = ImageIO.read(is);
 			Photo photo = new Photo("cat", image);
 			photos.put(photo.id, photo);

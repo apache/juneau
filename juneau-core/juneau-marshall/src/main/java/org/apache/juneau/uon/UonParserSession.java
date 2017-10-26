@@ -87,26 +87,29 @@ public class UonParserSession extends ReaderParserSession {
 
 	@Override /* ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		UonReader r = getUonReader(pipe, decodeChars);
-		T o = parseAnything(type, r, getOuter(), true, null);
-		validateEnd(r);
-		return o;
+		try (UonReader r = getUonReader(pipe, decodeChars)) {
+			T o = parseAnything(type, r, getOuter(), true, null);
+			validateEnd(r);
+			return o;
+		}
 	}
 
 	@Override /* ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		UonReader r = getUonReader(pipe, decodeChars);
-		m = parseIntoMap(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
-		validateEnd(r);
-		return m;
+		try (UonReader r = getUonReader(pipe, decodeChars)) {
+			m = parseIntoMap(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
+			validateEnd(r);
+			return m;
+		}
 	}
 
 	@Override /* ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		UonReader r = getUonReader(pipe, decodeChars);
-		c = parseIntoCollection(r, c, (ClassMeta<E>)getClassMeta(elementType), false, null);
-		validateEnd(r);
-		return c;
+		try (UonReader r = getUonReader(pipe, decodeChars)) {
+			c = parseIntoCollection(r, c, (ClassMeta<E>)getClassMeta(elementType), false, null);
+			validateEnd(r);
+			return c;
+		}
 	}
 
 	/**
@@ -125,7 +128,7 @@ public class UonParserSession extends ReaderParserSession {
 	public <T> T parseAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
-			eType = (ClassMeta<T>)object();
+			eType = object();
 		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
 		ClassMeta<?> sType = swap == null ? eType : swap.getSwapClassMeta(this);
 

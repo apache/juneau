@@ -67,9 +67,9 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	private static class XmlBeanMetaBuilder {
 		Map<String,BeanPropertyMeta>
-			attrs = new LinkedHashMap<String,BeanPropertyMeta>(),
-			elements = new LinkedHashMap<String,BeanPropertyMeta>(),
-			collapsedProperties = new LinkedHashMap<String,BeanPropertyMeta>();
+			attrs = new LinkedHashMap<>(),
+			elements = new LinkedHashMap<>(),
+			collapsedProperties = new LinkedHashMap<>();
 		BeanPropertyMeta
 			attrsProperty,
 			contentProperty;

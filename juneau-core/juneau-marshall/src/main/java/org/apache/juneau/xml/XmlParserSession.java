@@ -506,7 +506,7 @@ public class XmlParserSession extends ReaderParserSession {
 				if (cp != null && cpf.isOneOf(MIXED, MIXED_PWS)) {
 					if (cpcm.isCollectionOrArray()) {
 						if (l == null)
-							l = new LinkedList<Object>();
+							l = new LinkedList<>();
 						l.add(getText(r, false));
 					} else {
 						cp.set(m, null, getText(r, trim));
@@ -539,7 +539,7 @@ public class XmlParserSession extends ReaderParserSession {
 					if (isWhitespaceElement(r) && (breg == null || ! breg.hasName(r.getLocalName()))) {
 						if (cpcm.isCollectionOrArray()) {
 							if (l == null)
-								l = new LinkedList<Object>();
+								l = new LinkedList<>();
 							l.add(parseWhitespaceElement(r));
 						} else {
 							cp.set(m, null, parseWhitespaceElement(r));
@@ -547,7 +547,7 @@ public class XmlParserSession extends ReaderParserSession {
 					} else {
 						if (cpcm.isCollectionOrArray()) {
 							if (l == null)
-								l = new LinkedList<Object>();
+								l = new LinkedList<>();
 							l.add(parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 						} else {
 							cp.set(m, null, parseAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));

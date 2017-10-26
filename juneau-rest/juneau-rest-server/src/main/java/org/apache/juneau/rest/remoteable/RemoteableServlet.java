@@ -39,7 +39,7 @@ import org.apache.juneau.rest.annotation.*;
 @SuppressWarnings("serial")
 public abstract class RemoteableServlet extends RestServletDefault {
 
-	private final Map<String,Class<?>> classNameMap = new ConcurrentHashMap<String,Class<?>>();
+	private final Map<String,Class<?>> classNameMap = new ConcurrentHashMap<>();
 
 	//--------------------------------------------------------------------------------
 	// Abstract methods
@@ -69,7 +69,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	 */
 	@RestMethod(name=GET, path="/")
 	public List<LinkString> getInterfaces(RestRequest req) throws Exception {
-		List<LinkString> l = new LinkedList<LinkString>();
+		List<LinkString> l = new LinkedList<>();
 		boolean useAll = ! useOnlyAnnotated();
 		for (Class<?> c : getServiceMap().keySet()) {
 			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())

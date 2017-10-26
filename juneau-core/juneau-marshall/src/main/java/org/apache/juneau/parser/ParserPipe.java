@@ -49,7 +49,7 @@ import org.apache.juneau.internal.*;
  * Note that Readers and InputStreams will NOT be automatically closed when {@link #close()} is called, but
  * streams and readers created from other types (e.g. Files) WILL be automatically closed.
  */
-public final class ParserPipe {
+public final class ParserPipe implements Closeable {
 
 	private final Object input;
 	private final boolean debug, strict;
@@ -265,9 +265,7 @@ public final class ParserPipe {
 		return inputString != null;
 	}
 
-	/**
-	 * Perform cleanup on this context object if necessary.
-	 */
+	@Override /* Closeable */
 	public void close() {
 		try {
 			IOUtils.close(reader, inputStream);

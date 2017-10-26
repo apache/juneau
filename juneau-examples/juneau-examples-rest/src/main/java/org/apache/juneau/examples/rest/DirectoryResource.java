@@ -103,7 +103,7 @@ public class DirectoryResource extends Resource {
 		properties.put("path", f.getAbsolutePath());
 
 		if (f.isDirectory()) {
-			List<FileResource> l = new LinkedList<FileResource>();
+			List<FileResource> l = new LinkedList<>();
 			File[] lfc = f.listFiles();
 			if (lfc != null) {
 				for (File fc : lfc) {
@@ -141,14 +141,16 @@ public class DirectoryResource extends Resource {
 
 		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
 		String parentSubPath = f.getParentFile().getAbsolutePath().substring(rootDir.getAbsolutePath().length());
-		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(f));
-		IOPipe.create(req.getInputStream(), bos).closeOut().run();
+		try (InputStream is = req.getInputStream(); OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
+			IOPipe.create(is, os).run();
+		}
 		if (req.getContentType().contains("html"))
 			return new Redirect(parentSubPath);
 		return "File added";
 	}
 
 	/** VIEW request handler (overloaded GET for viewing file contents) */
+	@SuppressWarnings("resource")
 	@RestMethod(name="VIEW", path="/*")
 	public void doView(RestRequest req, RestResponse res) throws Exception {
 
@@ -167,6 +169,7 @@ public class DirectoryResource extends Resource {
 	}
 
 	/** DOWNLOAD request handler (overloaded GET for downloading file contents) */
+	@SuppressWarnings("resource")
 	@RestMethod(name="DOWNLOAD")
 	public void doDownload(RestRequest req, RestResponse res) throws Exception {
 

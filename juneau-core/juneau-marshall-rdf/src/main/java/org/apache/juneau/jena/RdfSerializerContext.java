@@ -36,7 +36,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	final Namespace juneauNs;
 	final Namespace juneauBpNs;
 	final RdfCollectionFormat collectionFormat;
-	final Map<String,Object> jenaSettings = new HashMap<String,Object>();
+	final Map<String,Object> jenaSettings = new HashMap<>();
 	final Namespace[] namespaces;
 
 	/**

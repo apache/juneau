@@ -32,8 +32,9 @@ public final class InputStreamHandler implements ResponseHandler {
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
 		if (output instanceof InputStream) {
 			res.setHeader("Content-Type", res.getContentType());
-			OutputStream os = res.getNegotiatedOutputStream();
-			IOPipe.create(output, os).closeOut().run();
+			try (OutputStream os = res.getNegotiatedOutputStream()) {
+				IOPipe.create(output, os).run();
+			}
 			return true;
 		}
 		return false;

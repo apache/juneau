@@ -175,14 +175,14 @@ public class IOPipe {
 					c += i;
 					out.write(b, 0, i);
 				}
+				out.flush();
 			} else {
 				Reader in = (input instanceof Reader ? (Reader)input : new InputStreamReader((InputStream)input, UTF8));
 				Writer out = (output instanceof Writer ? (Writer)output : new OutputStreamWriter((OutputStream)output, UTF8));
 				output = out;
 				input = in;
 				if (byLines || lineProcessor != null) {
-					Scanner s = new Scanner(in);
-					try {
+					try (Scanner s = new Scanner(in)) {
 						while (s.hasNextLine()) {
 							String l = s.nextLine();
 							if (lineProcessor != null)
@@ -194,8 +194,6 @@ public class IOPipe {
 								c += l.length() + 1;
 							}
 						}
-					} finally {
-						s.close();
 					}
 				} else {
 					int i;
@@ -205,6 +203,7 @@ public class IOPipe {
 						out.write(b, 0, i);
 					}
 				}
+				out.flush();
 			}
 		} finally {
 			closeQuietly(input, output);

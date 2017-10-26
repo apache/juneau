@@ -67,9 +67,9 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	private Parser parser;
 	private PartSerializer partSerializer;
 
-	private Map<String,String> headers = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String,String> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-	private List<RestCallInterceptor> intercepters = new ArrayList<RestCallInterceptor>();
+	private List<RestCallInterceptor> intercepters = new ArrayList<>();
 
 	private String rootUrl;
 	private SSLOpts sslOpts;
@@ -127,6 +127,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 		super(propertyStore);
 	}
 
+	@SuppressWarnings("resource")
 	@Override /* CoreObjectBuilder */
 	public RestClient build() {
 		try {
@@ -219,6 +220,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 *
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 */
+	@SuppressWarnings("resource")
 	protected HttpClientConnectionManager createConnectionManager() {
 		if (sslOpts != null) {
 			HostnameVerifier hv = null;

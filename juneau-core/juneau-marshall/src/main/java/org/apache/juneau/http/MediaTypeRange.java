@@ -78,7 +78,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 		if (value.indexOf(',') == -1)
 			return new MediaTypeRange[]{new MediaTypeRange(value)};
 
-		Set<MediaTypeRange> ranges = new TreeSet<MediaTypeRange>();
+		Set<MediaTypeRange> ranges = new TreeSet<>();
 
 		for (String r : StringUtils.split(value)) {
 			r = r.trim();
@@ -92,7 +92,6 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 		return ranges.toArray(new MediaTypeRange[ranges.size()]);
 	}
 
-	@SuppressWarnings("unchecked")
 	private MediaTypeRange(String token) {
 		Builder b = new Builder(token);
 		this.mediaType = b.mediaType;
@@ -100,12 +99,12 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 		this.extensions = (b.extensions == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(b.extensions));
 	}
 
-	private static class Builder {
-		private MediaType mediaType;
-		private Float qValue = 1f;
-		private Map<String,Set<String>> extensions;
+	static class Builder {
+		MediaType mediaType;
+		Float qValue = 1f;
+		Map<String,Set<String>> extensions;
 
-		private Builder(String token) {
+		Builder(String token) {
 
 			token = token.trim();
 
@@ -129,7 +128,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 						String k = parm[0], v = parm[1];
 						if (isInExtensions) {
 							if (extensions == null)
-								extensions = new TreeMap<String,Set<String>>();
+								extensions = new TreeMap<>();
 							if (! extensions.containsKey(k))
 								extensions.put(k, new TreeSet<String>());
 							extensions.get(k).add(v);

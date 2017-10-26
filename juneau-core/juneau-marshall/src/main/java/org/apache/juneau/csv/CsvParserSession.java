@@ -39,11 +39,11 @@ public final class CsvParserSession extends ReaderParserSession {
 
 	@Override /* ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		ParserReader r = pipe.getParserReader();
-		if (r == null)
-			return null;
-		T o = parseAnything(type, r, getOuter(), null);
-		return o;
+		try (ParserReader r = pipe.getParserReader()) {
+			if (r == null)
+				return null;
+			return parseAnything(type, r, getOuter(), null);
+		}
 	}
 
 	@SuppressWarnings({"static-method"})

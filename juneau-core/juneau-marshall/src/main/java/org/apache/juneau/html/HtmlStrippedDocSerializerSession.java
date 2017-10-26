@@ -40,12 +40,13 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		HtmlWriter w = getHtmlWriter(out);
-		if (o == null
-			|| (o instanceof Collection && ((Collection<?>)o).size() == 0)
-			|| (o.getClass().isArray() && Array.getLength(o) == 0))
-			w.sTag(1, "p").append("No Results").eTag("p").nl(1);
-		else
-			super.doSerialize(out, o);
+		try (HtmlWriter w = getHtmlWriter(out)) {
+			if (o == null
+				|| (o instanceof Collection && ((Collection<?>)o).size() == 0)
+				|| (o.getClass().isArray() && Array.getLength(o) == 0))
+				w.sTag(1, "p").append("No Results").eTag("p").nl(1);
+			else
+				super.doSerialize(out, o);
+		}
 	}
 }

@@ -85,7 +85,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		if (xmlSchema.indexOf('\u0000') != -1) {
 
 			// Break it up into a map of namespaceURI->schema document
-			final Map<String,String> schemas = new HashMap<String,String>();
+			final Map<String,String> schemas = new HashMap<>();
 			String[] ss = xmlSchema.split("\u0000");
 			xmlSchema = ss[0];
 			for (String s : ss) {
@@ -146,9 +146,9 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		private Namespace defaultNs;
 		private BeanSession session;
 		private LinkedList<QueueEntry>
-			elementQueue = new LinkedList<QueueEntry>(),
-			attributeQueue = new LinkedList<QueueEntry>(),
-			typeQueue = new LinkedList<QueueEntry>();
+			elementQueue = new LinkedList<>(),
+			attributeQueue = new LinkedList<>(),
+			typeQueue = new LinkedList<>();
 
 		private Schemas(BeanSession session, Namespace xs, Namespace defaultNs, Namespace[] allNs) throws IOException {
 			this.session = session;
@@ -232,9 +232,9 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		private Namespace defaultNs, targetNs;
 		private Schemas schemas;
 		private Set<String>
-			processedTypes = new HashSet<String>(),
-			processedAttributes = new HashSet<String>(),
-			processedElements = new HashSet<String>();
+			processedTypes = new HashSet<>(),
+			processedAttributes = new HashSet<>(),
+			processedElements = new HashSet<>();
 
 		public Schema(Schemas schemas, Namespace xs, Namespace targetNs, Namespace defaultNs, Namespace[] allNs) throws IOException {
 			this.schemas = schemas;

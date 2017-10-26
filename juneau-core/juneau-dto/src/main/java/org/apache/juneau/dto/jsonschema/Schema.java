@@ -361,7 +361,7 @@ public class Schema {
 	 */
 	public Schema addDefinition(String name, Schema definition) {
 		if (this.definitions == null)
-			this.definitions = new LinkedHashMap<String,Schema>();
+			this.definitions = new LinkedHashMap<>();
 		this.definitions.put(name, definition);
 		setMasterOn(definition);
 		return this;
@@ -443,7 +443,7 @@ public class Schema {
 	 */
 	public Schema addProperties(Schema...properties) {
 		if (this.properties == null)
-			this.properties = new LinkedHashMap<String,Schema>();
+			this.properties = new LinkedHashMap<>();
 		for (Schema p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(Schema.class,
@@ -494,7 +494,7 @@ public class Schema {
 	 */
 	public Schema addPatternProperties(SchemaProperty...properties) {
 		if (this.patternProperties == null)
-			this.patternProperties = new LinkedHashMap<String,Schema>();
+			this.patternProperties = new LinkedHashMap<>();
 		for (Schema p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(Schema.class,
@@ -537,7 +537,7 @@ public class Schema {
 	 */
 	public Schema addDependency(String name, Schema dependency) {
 		if (this.dependencies == null)
-			this.dependencies = new LinkedHashMap<String,Schema>();
+			this.dependencies = new LinkedHashMap<>();
 		this.dependencies.put(name, dependency);
 		setMasterOn(dependency);
 		return this;
@@ -1065,7 +1065,7 @@ public class Schema {
 	 */
 	public Schema addRequired(List<String> required) {
 		if (this.required == null)
-			this.required = new LinkedList<String>();
+			this.required = new LinkedList<>();
 		for (String r : required)
 			this.required.add(r);
 		return this;
@@ -1079,7 +1079,7 @@ public class Schema {
 	 */
 	public Schema addRequired(String...required) {
 		if (this.required == null)
-			this.required = new LinkedList<String>();
+			this.required = new LinkedList<>();
 		for (String r : required)
 			this.required.add(r);
 		return this;
@@ -1093,7 +1093,7 @@ public class Schema {
 	 */
 	public Schema addRequired(SchemaProperty...properties) {
 		if (this.required == null)
-			this.required = new LinkedList<String>();
+			this.required = new LinkedList<>();
 		for (SchemaProperty p : properties)
 			this.required.add(p.getName());
 		return this;
@@ -1228,7 +1228,7 @@ public class Schema {
 	 */
 	public Schema addEnum(String..._enum) {
 		if (this._enum == null)
-			this._enum = new LinkedList<String>();
+			this._enum = new LinkedList<>();
 		for (String e : _enum)
 			this._enum.add(e);
 		return this;
@@ -1263,7 +1263,7 @@ public class Schema {
 	 */
 	public Schema addAllOf(Schema...allOf) {
 		if (this.allOf == null)
-			this.allOf = new LinkedList<Schema>();
+			this.allOf = new LinkedList<>();
 		setMasterOn(allOf);
 		for (Schema s : allOf)
 			this.allOf.add(s);
@@ -1299,7 +1299,7 @@ public class Schema {
 	 */
 	public Schema addAnyOf(Schema...anyOf) {
 		if (this.anyOf == null)
-			this.anyOf = new LinkedList<Schema>();
+			this.anyOf = new LinkedList<>();
 		setMasterOn(anyOf);
 		for (Schema s : anyOf)
 			this.anyOf.add(s);
@@ -1335,7 +1335,7 @@ public class Schema {
 	 */
 	public Schema addOneOf(Schema...oneOf) {
 		if (this.oneOf == null)
-			this.oneOf = new LinkedList<Schema>();
+			this.oneOf = new LinkedList<>();
 		setMasterOn(oneOf);
 		for (Schema s : oneOf)
 			this.oneOf.add(s);

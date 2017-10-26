@@ -116,13 +116,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		private static final long serialVersionUID = 1L;
 
 		@Override /* Map */
-		@SuppressWarnings("unchecked")
 		public Set<Map.Entry<String,Object>> entrySet() {
 			return Collections.EMPTY_MAP.entrySet();
 		}
 
 		@Override /* Map */
-		@SuppressWarnings("unchecked")
 		public Set<String> keySet() {
 			return Collections.EMPTY_MAP.keySet();
 		}
@@ -1426,7 +1424,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	public Set<String> keySet() {
 		if (inner == null)
 			return super.keySet();
-		LinkedHashSet<String> s = new LinkedHashSet<String>();
+		LinkedHashSet<String> s = new LinkedHashSet<>();
 		s.addAll(inner.keySet());
 		s.addAll(super.keySet());
 		return s;

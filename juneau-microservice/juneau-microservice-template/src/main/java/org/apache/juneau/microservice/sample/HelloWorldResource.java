@@ -29,7 +29,10 @@ import org.apache.juneau.rest.annotation.RestResource;
 public class HelloWorldResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
-	/** GET request handler */
+	/** 
+	 * GET request handler.
+	 * @return The string "Hello world!" 
+	 */
 	@RestMethod(name=GET, path="/*")
 	public String sayHello() {
 		return "Hello world!";

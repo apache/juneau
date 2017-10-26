@@ -84,7 +84,7 @@ public final class ReflectionUtils {
 	 * @return The found matches, or an empty array if annotation was not found.
 	 */
 	public static <T extends Annotation> List<T> findAnnotations(Class<T> a, Class<?> c) {
-		List<T> l = new LinkedList<T>();
+		List<T> l = new LinkedList<>();
 		appendAnnotations(a, c, l);
 		return l;
 	}
@@ -115,7 +115,7 @@ public final class ReflectionUtils {
 	 * @return The found matches, or an empty map if annotation was not found.
 	 */
 	public static <T extends Annotation> LinkedHashMap<Class<?>,T> findAnnotationsMap(Class<T> a, Class<?> c) {
-		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<Class<?>,T>();
+		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<>();
 		findAnnotationsMap(a, c, m);
 		return m;
 	}

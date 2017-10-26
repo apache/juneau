@@ -28,8 +28,9 @@ public final class ReaderHandler implements ResponseHandler {
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
 		if (output instanceof Reader) {
-			Writer w = res.getNegotiatedWriter();
-			IOPipe.create(output, w).closeOut().run();
+			try (Writer w = res.getNegotiatedWriter()) {
+				IOPipe.create(output, w).run();
+			}
 			return true;
 		}
 		return false;

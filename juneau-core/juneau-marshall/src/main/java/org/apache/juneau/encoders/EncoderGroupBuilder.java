@@ -28,7 +28,7 @@ public class EncoderGroupBuilder {
 	 * Create an empty encoder group builder.
 	 */
 	public EncoderGroupBuilder() {
-		this.encoders = new ArrayList<Encoder>();
+		this.encoders = new ArrayList<>();
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class EncoderGroupBuilder {
 	 * @param copyFrom The encoder group that we're copying settings and encoders from.
 	 */
 	public EncoderGroupBuilder(EncoderGroup copyFrom) {
-		this.encoders = new ArrayList<Encoder>();
+		this.encoders = new ArrayList<>();
 		addReverse(encoders, copyFrom.getEncoders());
 	}
 
@@ -95,7 +95,7 @@ public class EncoderGroupBuilder {
 	 * @return A new {@link EncoderGroup} object.
 	 */
 	public EncoderGroup build() {
-		List<Encoder> l = new ArrayList<Encoder>();
+		List<Encoder> l = new ArrayList<>();
 		for (Object e : encoders)
 			l.add(newInstance(Encoder.class, e));
 		Collections.reverse(l);

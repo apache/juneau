@@ -479,8 +479,6 @@ public abstract class Serializer extends CoreObject {
 	 * 	contexts.
 	 * @return
 	 * 	The new session object.
-	 * 	<br>Note that you must call {@link SerializerSession#close()} on this object to perform any necessary
-	 * 	cleanup.
 	 */
 	public abstract SerializerSession createSession(SerializerSessionArgs args);
 
@@ -494,8 +492,6 @@ public abstract class Serializer extends CoreObject {
 	 *
 	 * @return
 	 * 	The new session object.
-	 * 	<br>Note that you must call {@link SerializerSession#close()} on this object to perform any necessary
-	 * 	cleanup.
 	 */
 	public final SerializerSession createSession() {
 		return createSession(createDefaultSessionArgs());
@@ -536,12 +532,7 @@ public abstract class Serializer extends CoreObject {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public final void serialize(Object o, Object output) throws SerializeException {
-		SerializerSession s = createSession();
-		try {
-			s.serialize(o, output);
-		} finally {
-			s.close();
-		}
+		createSession().serialize(o, output);
 	}
 
 	/**
@@ -556,12 +547,7 @@ public abstract class Serializer extends CoreObject {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public Object serialize(Object o) throws SerializeException {
-		SerializerSession s = createSession();
-		try {
-			return s.serialize(o);
-		} finally {
-			s.close();
-		}
+		return createSession().serialize(o);
 	}
 
 	//--------------------------------------------------------------------------------

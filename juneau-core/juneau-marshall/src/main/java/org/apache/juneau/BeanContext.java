@@ -926,7 +926,7 @@ public class BeanContext extends Context {
 	// then we reuse the same Class->ClassMeta cache map.
 	// This significantly reduces the number of times we need to construct ClassMeta objects which can be expensive.
 	private static final ConcurrentHashMap<Integer,Map<Class,ClassMeta>> cmCacheCache
-		= new ConcurrentHashMap<Integer,Map<Class,ClassMeta>>();
+		= new ConcurrentHashMap<>();
 
 	/** Default config.  All default settings. */
 	public static final BeanContext DEFAULT = PropertyStore.create().getContext(BeanContext.class);
@@ -1020,8 +1020,8 @@ public class BeanContext extends Context {
 
 		notBeanClasses = pm.get(BEAN_notBeanClasses, Class[].class, new Class[0]);
 
-		List<String> l1 = new LinkedList<String>();
-		List<String> l2 = new LinkedList<String>();
+		List<String> l1 = new LinkedList<>();
+		List<String> l2 = new LinkedList<>();
 		for (String s : pm.get(BEAN_notBeanPackages, String[].class, new String[0])) {
 			if (s.endsWith(".*"))
 				l2.add(s.substring(0, s.length()-2));
@@ -1031,7 +1031,7 @@ public class BeanContext extends Context {
 		notBeanPackageNames = l1.toArray(new String[l1.size()]);
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
-		LinkedList<BeanFilter> lbf = new LinkedList<BeanFilter>();
+		LinkedList<BeanFilter> lbf = new LinkedList<>();
 		for (Class<?> c : pm.get(BEAN_beanFilters, Class[].class, new Class[0])) {
 			if (isParentClass(BeanFilter.class, c))
 				lbf.add(newInstance(BeanFilter.class, c));
@@ -1042,7 +1042,7 @@ public class BeanContext extends Context {
 		}
 		beanFilters = lbf.toArray(new BeanFilter[0]);
 
-		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<PojoSwap<?,?>>();
+		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
 		for (Class<?> c : pm.get(BEAN_pojoSwaps, Class[].class, new Class[0])) {
 			if (isParentClass(PojoSwap.class, c))
 				lpf.add(newInstance(PojoSwap.class, c));
@@ -1053,7 +1053,7 @@ public class BeanContext extends Context {
 		}
 		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
-		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
+		implClasses = new TreeMap<>(new ClassComparator());
 		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
 		if (m != null)
 			for (Map.Entry<Class,Class> e : m.entrySet())
@@ -1071,7 +1071,7 @@ public class BeanContext extends Context {
 		mediaType = pm.get(BEAN_mediaType, MediaType.class, null);
 
 		if (! cmCacheCache.containsKey(hashCode)) {
-			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<Class,ClassMeta>();
+			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
 			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
 			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
 			cmCacheCache.putIfAbsent(hashCode, cm);
@@ -1231,7 +1231,7 @@ public class BeanContext extends Context {
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<T>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type));
+					cm = new ClassMeta<>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type));
 			}
 		}
 		if (waitForInit)
@@ -1441,7 +1441,7 @@ public class BeanContext extends Context {
 		if (o instanceof ParameterizedType) {
 			ParameterizedType pt = (ParameterizedType)o;
 			if (! pt.getRawType().equals(Enum.class)) {
-				List<ClassMeta<?>> l = new LinkedList<ClassMeta<?>>();
+				List<ClassMeta<?>> l = new LinkedList<>();
 				for (Type pt2 : pt.getActualTypeArguments()) {
 					if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
 						return null;
@@ -1498,7 +1498,7 @@ public class BeanContext extends Context {
 				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
 					return cm2;
-				return new ClassMeta<T>(cm2, keyType, valueType, null);
+				return new ClassMeta<>(cm2, keyType, valueType, null);
 			}
 
 			if (cm2.isCollection()) {
@@ -1508,7 +1508,7 @@ public class BeanContext extends Context {
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;
-				return new ClassMeta<T>(cm2, null, null, elementType);
+				return new ClassMeta<>(cm2, null, null, elementType);
 			}
 
 			return cm2;
@@ -1539,7 +1539,7 @@ public class BeanContext extends Context {
 	private final <T> PojoSwap[] findPojoSwaps(Class<T> c) {
 		// Note:  On first
 		if (c != null) {
-			List<PojoSwap> l = new ArrayList<PojoSwap>();
+			List<PojoSwap> l = new ArrayList<>();
 			for (PojoSwap f : pojoSwaps)
 				if (isParentClass(f.getNormalClass(), c))
 					l.add(f);
@@ -1561,7 +1561,7 @@ public class BeanContext extends Context {
 		for (PojoSwap f : pojoSwaps) {
 			if (isParentClass(c, f.getNormalClass())) {
 				if (l == null)
-					l = new ArrayList<PojoSwap>();
+					l = new ArrayList<>();
 				l.add(f);
 			}
 		}

@@ -136,7 +136,7 @@ public class DirectoryResource extends Resource {
 		req.setAttribute("path", f.getAbsolutePath());
 
 		if (f.isDirectory()) {
-			List<FileResource> l = new LinkedList<FileResource>();
+			List<FileResource> l = new LinkedList<>();
 			File[] files = f.listFiles();
 			if (files != null) {
 				for (File fc : files) {
@@ -186,8 +186,9 @@ public class DirectoryResource extends Resource {
 
 		File f = new File(rootDir.getAbsolutePath() + req.getPathInfo());
 		String parentSubPath = f.getParentFile().getAbsolutePath().substring(rootDir.getAbsolutePath().length());
-		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(f));
-		IOPipe.create(req.getInputStream(), bos).closeOut().run();
+		try (InputStream is = req.getInputStream(); OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
+			IOPipe.create(is, os).run();
+		}
 		if (req.getContentType().contains("html"))
 			return new Redirect(parentSubPath);
 		return "File added";

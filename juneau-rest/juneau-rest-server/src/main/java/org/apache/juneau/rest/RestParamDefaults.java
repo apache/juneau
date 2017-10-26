@@ -45,7 +45,7 @@ class RestParamDefaults {
 	static final Map<Class<?>,RestParam> STANDARD_RESOLVERS;
 
 	static {
-		Map<Class<?>,RestParam> m = new HashMap<Class<?>,RestParam>();
+		Map<Class<?>,RestParam> m = new HashMap<>();
 
 		@SuppressWarnings("rawtypes")
 		Class[] r = new Class[] {

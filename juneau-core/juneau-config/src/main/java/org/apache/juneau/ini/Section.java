@@ -32,8 +32,8 @@ public class Section implements Map<String,String> {
 
 	// The data structures that make up this object.
 	// These must be kept synchronized.
-	private LinkedList<String> lines = new LinkedList<String>();
-	private List<String> headerComments = new LinkedList<String>();
+	private LinkedList<String> lines = new LinkedList<>();
+	private List<String> headerComments = new LinkedList<>();
 	private Map<String,String> entries;
 
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -43,7 +43,7 @@ public class Section implements Map<String,String> {
 	 * Constructor.
 	 */
 	public Section() {
-		this.entries = new LinkedHashMap<String,String>();
+		this.entries = new LinkedHashMap<>();
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class Section implements Map<String,String> {
 	 * @param contents Predefined contents to copy into this section.
 	 */
 	public Section(Map<String,String> contents) {
-		this.entries = new LinkedHashMap<String,String>(contents);
+		this.entries = new LinkedHashMap<>(contents);
 	}
 
 	Section setReadOnly() {
@@ -512,7 +512,7 @@ public class Section implements Map<String,String> {
 	 * be associated with the next section.
 	 */
 	List<String> removeTrailingComments() {
-		LinkedList<String> l = new LinkedList<String>();
+		LinkedList<String> l = new LinkedList<>();
 		while ((! lines.isEmpty()) && lines.getLast().startsWith("#"))
 			l.addFirst(lines.removeLast());
 		return l;

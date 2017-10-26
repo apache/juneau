@@ -37,8 +37,8 @@ class CallRouter {
 	 * Builder class.
 	 */
 	static class Builder {
-		private List<CallMethod> childMethods = new ArrayList<CallMethod>();
-		private Set<String> collisions = new HashSet<String>();
+		private List<CallMethod> childMethods = new ArrayList<>();
+		private Set<String> collisions = new HashSet<>();
 		private String httpMethodName;
 
 		Builder(String httpMethodName) {

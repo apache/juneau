@@ -92,7 +92,7 @@ public class TeeOutputStream extends OutputStream {
 	public TeeOutputStream add(String id, OutputStream os, boolean close) {
 		if (id != null) {
 			if (outputStreamMap == null)
-				outputStreamMap = new TreeMap<String,OutputStream>();
+				outputStreamMap = new TreeMap<>();
 			outputStreamMap.put(id, os);
 		}
 		return add(os, close);

@@ -79,7 +79,7 @@ public class ReaderResource implements Writable {
 		this.mediaType = mediaType;
 		this.varSession = varSession;
 
-		Map<String,String> m = new LinkedHashMap<String,String>();
+		Map<String,String> m = new LinkedHashMap<>();
 		if (headers != null)
 			for (Map.Entry<String,String> e : headers.entrySet())
 				m.put(e.getKey(), StringUtils.toString(e.getValue()));
@@ -107,10 +107,10 @@ public class ReaderResource implements Writable {
 	 * Builder class for constructing {@link ReaderResource} objects.
 	 */
 	public static class Builder {
-		ArrayList<Object> contents = new ArrayList<Object>();
+		ArrayList<Object> contents = new ArrayList<>();
 		MediaType mediaType;
 		VarResolverSession varResolver;
-		Map<String,String> headers = new LinkedHashMap<String,String>();
+		Map<String,String> headers = new LinkedHashMap<>();
 
 		/**
 		 * Specifies the resource media type string.

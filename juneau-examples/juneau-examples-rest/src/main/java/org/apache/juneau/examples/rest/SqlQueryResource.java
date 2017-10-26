@@ -132,7 +132,7 @@ public class SqlQueryResource extends Resource {
 	@RestMethod(name=POST, path="/", summary="Execute one or more queries")
 	public List<Object> doPost(@Body PostInput in) throws Exception {
 
-		List<Object> results = new LinkedList<Object>();
+		List<Object> results = new LinkedList<>();
 
 		// Don't try to submit empty input.
 		if (isEmpty(in.sql))
@@ -143,30 +143,32 @@ public class SqlQueryResource extends Resource {
 		if (in.limit < 1 || in.limit > 10000)
 			throw new RestException(SC_BAD_REQUEST, "Invalid value for limit.  Must be between 1-10000");
 
-		// Create a connection and statement.
-		// If these fais, let the exception filter up as a 500 error.
-		Connection c = DriverManager.getConnection(connectionUrl);
-		c.setAutoCommit(false);
-		Statement st = c.createStatement();
 		String sql = null;
 
-		try {
-			for (String s : in.sql.split(";")) {
-				sql = s.trim();
-				if (! sql.isEmpty()) {
-					Object o = null;
-					if (allowUpdates || (allowTempUpdates && ! sql.matches("(?:i)commit.*"))) {
-						if (st.execute(sql)) {
-							ResultSet rs = st.getResultSet();
-							o = new ResultSetList(rs, in.pos, in.limit, includeRowNums);
+		// Create a connection and statement.
+		// If these fais, let the exception filter up as a 500 error.
+		try (Connection c = DriverManager.getConnection(connectionUrl)) {
+			c.setAutoCommit(false);
+			try (Statement st = c.createStatement()) {
+				for (String s : in.sql.split(";")) {
+					sql = s.trim();
+					if (! sql.isEmpty()) {
+						Object o = null;
+						if (allowUpdates || (allowTempUpdates && ! sql.matches("(?:i)commit.*"))) {
+							if (st.execute(sql)) {
+								try (ResultSet rs = st.getResultSet()) {
+									o = new ResultSetList(rs, in.pos, in.limit, includeRowNums);
+								}
+							} else {
+								o = st.getUpdateCount();
+							}
 						} else {
-							o = st.getUpdateCount();
+							try (ResultSet rs = st.executeQuery(sql)) {
+								o = new ResultSetList(rs, in.pos, in.limit, includeRowNums);
+							}
 						}
-					} else {
-						ResultSet rs = st.executeQuery(sql);
-						o = new ResultSetList(rs, in.pos, in.limit, includeRowNums);
+						results.add(o);
 					}
-					results.add(o);
 				}
 			}
 			if (allowUpdates)
@@ -174,10 +176,7 @@ public class SqlQueryResource extends Resource {
 			else if (allowTempUpdates)
 				c.rollback();
 		} catch (SQLException e) {
-			c.rollback();
 			throw new RestException(SC_BAD_REQUEST, "Invalid query:  {0}", sql).initCause(e);
-		} finally {
-			c.close();
 		}
 
 		return results;

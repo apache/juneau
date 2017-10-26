@@ -29,7 +29,7 @@ public final class RdfParserContext extends ParserContext implements RdfCommon {
 	final String rdfLanguage;
 	final Namespace juneauNs, juneauBpNs;
 	final RdfCollectionFormat collectionFormat;
-	final Map<String,Object> jenaSettings = new HashMap<String,Object>();
+	final Map<String,Object> jenaSettings = new HashMap<>();
 
 	/**
 	 * Constructor.

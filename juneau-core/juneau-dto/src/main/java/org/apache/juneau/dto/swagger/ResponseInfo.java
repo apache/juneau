@@ -187,7 +187,7 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
 		if (headers == null)
-			headers = new TreeMap<String,HeaderInfo>();
+			headers = new TreeMap<>();
 		headers.put(name, header);
 		return this;
 	}
@@ -247,7 +247,7 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public ResponseInfo addExample(String mimeType, Object example) {
 		if (examples == null)
-			examples = new TreeMap<String,Object>();
+			examples = new TreeMap<>();
 		examples.put(mimeType, example);
 		return this;
 	}

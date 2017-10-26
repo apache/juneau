@@ -73,9 +73,9 @@ public class LogEntryFormatter extends Formatter {
 	public LogEntryFormatter(String format, String dateFormat, boolean useStackTraceHashes) {
 		this.df = new SimpleDateFormat(dateFormat);
 		if (useStackTraceHashes)
-			hashes = new ConcurrentHashMap<String,AtomicInteger>();
+			hashes = new ConcurrentHashMap<>();
 
-		fieldIndexes = new HashMap<String,Integer>();
+		fieldIndexes = new HashMap<>();
 
 		format = format
 			.replaceAll("\\{date\\}", "%1\\$s")

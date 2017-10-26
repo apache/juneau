@@ -313,10 +313,9 @@ public final class StringUtils {
 	 */
 	public static String getStackTrace(Throwable t) {
 		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		t.printStackTrace(pw);
-		pw.flush();
-		pw.close();
+		try (PrintWriter pw = new PrintWriter(sw)) {
+			t.printStackTrace(pw);
+		}
 		return sw.toString();
 	}
 
@@ -504,7 +503,7 @@ public final class StringUtils {
 		if (s.indexOf(c) == -1)
 			return new String[]{s};
 
-		List<String> l = new LinkedList<String>();
+		List<String> l = new LinkedList<>();
 		char[] sArray = s.toCharArray();
 		int x1 = 0, escapeCount = 0;
 		for (int i = 0; i < sArray.length; i++) {
@@ -534,7 +533,7 @@ public final class StringUtils {
 	public static String[] split(String[] s, char c) {
 		if (s == null)
 			return null;
-		List<String> l = new LinkedList<String>();
+		List<String> l = new LinkedList<>();
 		for (String ss : s) {
 			if (ss == null || ss.indexOf(c) == -1)
 				l.add(ss);
@@ -560,7 +559,6 @@ public final class StringUtils {
 	 * @param trim Trim strings after parsing.
 	 * @return The parsed map.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
 	public static Map<String,String> splitMap(String s, char delim, char eq, boolean trim) {
 
 		char[] unEscapeChars = new char[]{'\\', delim, eq};
@@ -570,7 +568,7 @@ public final class StringUtils {
 		if (isEmpty(s))
 			return Collections.EMPTY_MAP;
 
-		Map<String,String> m = new LinkedHashMap<String,String>();
+		Map<String,String> m = new LinkedHashMap<>();
 
 		int
 			S1 = 1,  // Found start of key, looking for equals.
@@ -1212,6 +1210,21 @@ public final class StringUtils {
 		return cs.decode(buff).toString();
 	}
 
+	/**
+	 * Converts a space-deliminted hexadecimal byte stream (e.g. "34 A5 BC") into a UTF-8 encoded string.
+	 *
+	 * @param hex The hexadecimal string.
+	 * @return The UTF-8 string.
+	 */
+	public static String fromSpacedHexToUTF8(String hex) {
+		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
+		for (int i = 0; i < hex.length(); i+=3)
+			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		buff.rewind();
+		Charset cs = Charset.forName("UTF-8");
+		return cs.decode(buff).toString();
+	}
+
 	private final static char[] HEX = "0123456789ABCDEF".toCharArray();
 
 	/**
@@ -1222,7 +1235,24 @@ public final class StringUtils {
 	 */
 	public static String toHex(byte[] bytes) {
 		StringBuilder sb = new StringBuilder(bytes.length * 2);
-		for ( int j = 0; j < bytes.length; j++ ) {
+		for (int j = 0; j < bytes.length; j++) {
+			int v = bytes[j] & 0xFF;
+			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Same as {@link #toHex(byte[])} but puts spaces between the byte strings.
+	 *
+	 * @param bytes The bytes to convert to hexadecimal.
+	 * @return A new string consisting of hexadecimal characters.
+	 */
+	public static String toSpacedHex(byte[] bytes) {
+		StringBuilder sb = new StringBuilder(bytes.length * 3);
+		for (int j = 0; j < bytes.length; j++) {
+			if (j > 0)
+				sb.append(' ');
 			int v = bytes[j] & 0xFF;
 			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
 		}
@@ -1238,6 +1268,20 @@ public final class StringUtils {
 	public static byte[] fromHex(String hex) {
 		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
 		for (int i = 0; i < hex.length(); i+=2)
+			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		buff.rewind();
+		return buff.array();
+	}
+
+	/**
+	 * Same as {@link #fromHex(String)} except expects spaces between the byte strings.
+	 *
+	 * @param hex The string to convert to a byte array.
+	 * @return A new byte array.
+	 */
+	public static byte[] fromSpacedHex(String hex) {
+		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
+		for (int i = 0; i < hex.length(); i+=3)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
 		buff.rewind();
 		return buff.array();

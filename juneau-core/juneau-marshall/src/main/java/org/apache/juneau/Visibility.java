@@ -131,7 +131,7 @@ public enum Visibility {
 	 * 	The same method if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Method#setAccessible(boolean)} throws a security exception.
 	 */
-	public <T> Method transform(Method x) {
+	public Method transform(Method x) {
 		if (x == null)
 			return null;
 		if (isVisible(x))

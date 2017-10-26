@@ -40,14 +40,11 @@ public class ManifestFile extends ObjectMap {
 	 */
 	public ManifestFile(File f) throws IOException {
 		Manifest mf = new Manifest();
-		FileInputStream fis = new FileInputStream(f);
-		try {
+		try (FileInputStream fis = new FileInputStream(f)) {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
 			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
-		} finally {
-			closeQuietly(fis);
 		}
 	}
 

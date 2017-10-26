@@ -72,7 +72,7 @@ import org.apache.juneau.http.*;
 public final class ParserGroup {
 
 	// Maps Content-Type headers to matches.
-	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<String,ParserMatch>();
+	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
 
 	private final MediaType[] mediaTypes;            // List of media types
 	private final List<MediaType> mediaTypesList;
@@ -93,10 +93,10 @@ public final class ParserGroup {
 	 */
 	public ParserGroup(PropertyStore propertyStore, Parser[] parsers) {
 		this.propertyStore = propertyStore.copy();
-		this.parsers = Collections.unmodifiableList(new ArrayList<Parser>(Arrays.asList(parsers)));
+		this.parsers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(parsers)));
 
-		List<MediaType> lmt = new ArrayList<MediaType>();
-		List<Parser> l = new ArrayList<Parser>();
+		List<MediaType> lmt = new ArrayList<>();
+		List<Parser> l = new ArrayList<>();
 		for (Parser p : parsers) {
 			for (MediaType m: p.getMediaTypes()) {
 				lmt.add(m);

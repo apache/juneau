@@ -97,11 +97,11 @@ public class AddressBook extends LinkedList<Person> implements IAddressBook {
 
 	@Override /* IAddressBook */
 	public List<Address> getAddresses() {
-		Set<Address> s = new LinkedHashSet<Address>();
+		Set<Address> s = new LinkedHashSet<>();
 		for (Person p : this)
 			for (Address a : p.addresses)
 				s.add(a);
-		return new ArrayList<Address>(s);
+		return new ArrayList<>(s);
 	}
 
 	@Override /* IAddressBook */

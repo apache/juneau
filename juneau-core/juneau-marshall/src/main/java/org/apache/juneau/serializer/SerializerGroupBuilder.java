@@ -34,7 +34,7 @@ public class SerializerGroupBuilder {
 	 * Create an empty serializer group builder.
 	 */
 	public SerializerGroupBuilder() {
-		this.serializers = new ArrayList<Object>();
+		this.serializers = new ArrayList<>();
 		this.propertyStore = PropertyStore.create();
 	}
 
@@ -47,7 +47,7 @@ public class SerializerGroupBuilder {
 	 * @param propertyStore The property store containing all settings common to all serializers in this group.
 	 */
 	public SerializerGroupBuilder(PropertyStore propertyStore) {
-		this.serializers = new ArrayList<Object>();
+		this.serializers = new ArrayList<>();
 		this.propertyStore = propertyStore;
 	}
 
@@ -57,7 +57,7 @@ public class SerializerGroupBuilder {
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
-		this.serializers = new ArrayList<Object>();
+		this.serializers = new ArrayList<>();
 		addReverse(serializers, copyFrom.getSerializers());
 		this.propertyStore = copyFrom.createPropertyStore();
 	}
@@ -104,7 +104,7 @@ public class SerializerGroupBuilder {
 	 * @return A new {@link SerializerGroup} object.
 	 */
 	public SerializerGroup build() {
-		List<Serializer> l = new ArrayList<Serializer>();
+		List<Serializer> l = new ArrayList<>();
 		for (Object s : serializers) {
 			Class<?> c = null;
 			PropertyStore ps = propertyStore;

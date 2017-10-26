@@ -51,7 +51,6 @@ public class SerializerContext extends BeanContext {
 	 *
 	 * @param ps The property store that created this context.
 	 */
-	@SuppressWarnings("unchecked")
 	public SerializerContext(PropertyStore ps) {
 		super(ps);
 		maxDepth = ps.getProperty(SERIALIZER_maxDepth, int.class, 100);
