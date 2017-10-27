@@ -324,7 +324,7 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * Represents a non-existent pojo swap.
 	 */
-	public final static PojoSwap NULL = new PojoSwap((Class)null, (Class)null) {};
+	public static final PojoSwap NULL = new PojoSwap((Class)null, (Class)null) {};
 
 	private final Class<T> normalClass;
 	private final Class<?> swapClass;

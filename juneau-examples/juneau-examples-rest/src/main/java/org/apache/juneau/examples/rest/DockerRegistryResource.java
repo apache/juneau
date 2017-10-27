@@ -52,7 +52,7 @@ public class DockerRegistryResource extends Resource {
 	/**
 	 * Initializes the registry URL and rest client.
 	 * 
-	 * @param servletConfig The resource config.
+	 * @param config The resource config.
 	 * @throws Exception
 	 */
 	@RestHook(INIT) 

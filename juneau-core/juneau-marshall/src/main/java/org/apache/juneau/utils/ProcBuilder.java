@@ -364,31 +364,31 @@ public class ProcBuilder {
 		abstract boolean matches();
 	}
 
-	private static String OS = System.getProperty("os.name").toLowerCase();
+	static final String OS = System.getProperty("os.name").toLowerCase();
 
 	/** Operating system matcher: Any operating system. */
-	public final static Matcher ANY = new Matcher() {
+	public static final Matcher ANY = new Matcher() {
 		@Override boolean matches() {
 			return true;
 		}
 	};
 
 	/** Operating system matcher: Any Windows system. */
-	public final static Matcher WINDOWS = new Matcher() {
+	public static final Matcher WINDOWS = new Matcher() {
 		@Override boolean matches() {
 			return OS.indexOf("win") >= 0;
 		}
 	};
 
 	/** Operating system matcher: Any Mac system. */
-	public final static Matcher MAC = new Matcher() {
+	public static final Matcher MAC = new Matcher() {
 		@Override boolean matches() {
 			return OS.indexOf("mac") >= 0;
 		}
 	};
 
 	/** Operating system matcher: Any Unix or Linux system. */
-	public final static Matcher UNIX = new Matcher() {
+	public static final Matcher UNIX = new Matcher() {
 		@Override boolean matches() {
 			return OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0;
 		}

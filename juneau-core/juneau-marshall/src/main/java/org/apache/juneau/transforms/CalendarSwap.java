@@ -615,7 +615,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 		}
 	}
 
-	private static Calendar convert(Calendar in, ClassMeta<?> hint) throws ParseException {
+	static final Calendar convert(Calendar in, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (hint.isInstance(in) || ! hint.canCreateNewInstance())
 				return in;
@@ -628,7 +628,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 		}
 	}
 
-	private static Calendar convert(Date in, ClassMeta<?> hint, BeanSession session) throws ParseException {
+	static final Calendar convert(Date in, ClassMeta<?> hint, BeanSession session) throws ParseException {
 		try {
 			if (hint == null || ! hint.canCreateNewInstance())
 				hint = session.getClassMeta(GregorianCalendar.class);

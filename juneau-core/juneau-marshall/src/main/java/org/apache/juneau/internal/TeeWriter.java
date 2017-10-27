@@ -136,27 +136,4 @@ public class TeeWriter extends Writer {
 		if (e != null)
 			throw e;
 	}
-
-	private static class NoCloseWriter extends Writer {
-		private Writer writer;
-
-		private NoCloseWriter(Writer writer) {
-			this.writer = writer;
-		}
-
-		@Override /* Writer */
-		public void write(char[] cbuf, int off, int len) throws IOException {
-			writer.write(cbuf, off, len);
-		}
-
-		@Override /* Writer */
-		public void flush() throws IOException {
-			writer.flush();
-		}
-
-		@Override /* Writer */
-		public void close() throws IOException {
-			// Do nothing.
-		}
-	}
 }

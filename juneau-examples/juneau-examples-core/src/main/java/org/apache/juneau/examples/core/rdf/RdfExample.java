@@ -22,7 +22,17 @@ package org.apache.juneau.examples.core.rdf;
 import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.jena.RdfSerializer;
 
+/**
+ * TODO
+ */
 public class RdfExample {
+
+	/**
+	 * TODO
+	 * 
+	 * @param args 
+	 * @throws Exception 
+	 */
 	public static void main(String[] args) throws Exception {
 		Pojo pojo = new Pojo("rdf","This is RDF format.");
 		// this creates an RDF serializer with the default XML structure

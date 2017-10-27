@@ -104,10 +104,10 @@ public class ConfigSourceMemory extends ConfigSource {
 	}
 
 	private static class MemoryFile {
-		private String contents;
-		private long lastModified;
+		String contents;
+		long lastModified;
 
-		private MemoryFile(String contents) {
+		MemoryFile(String contents) {
 			this.contents = contents;
 			this.lastModified = System.currentTimeMillis();
 		}

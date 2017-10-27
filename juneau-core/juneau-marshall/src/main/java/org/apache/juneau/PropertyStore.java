@@ -276,11 +276,11 @@ public final class PropertyStore {
 	ReaderParser defaultParser;
 
 	// Bean session for converting strings to POJOs.
-	private static BeanSession beanSession;
+	private volatile static BeanSession beanSession;
 
 	// Used to keep properties in alphabetical order regardless of whether
 	// they're not strings.
-	private static Comparator<Object> PROPERTY_COMPARATOR = new Comparator<Object>() {
+	static final Comparator<Object> PROPERTY_COMPARATOR = new Comparator<Object>() {
 		@Override
 		public int compare(Object o1, Object o2) {
 			return unswap(o1).toString().compareTo(unswap(o2).toString());
@@ -910,7 +910,7 @@ public final class PropertyStore {
 	 * Hashcode generator that treats strings and primitive values the same.
 	 * (e.g. <code>123</code> and <js>"123"</js> result in the same hashcode.)
 	 */
-	private static class NormalizingHashCode extends HashCode {
+	static final class NormalizingHashCode extends HashCode {
 		@Override /* HashCode */
 		protected Object unswap(Object o) {
 			return PropertyStore.unswap(o);
@@ -927,7 +927,7 @@ public final class PropertyStore {
 	 * The {@link PropertyMap#hashCode()} and {@link PropertyMap#equals(Object)} methods can be used to compare with
 	 * other property maps.
 	 */
-	public class PropertyMap {
+	final class PropertyMap {
 
 		private final Map<String,Property> map = new ConcurrentSkipListMap<>();
 		private volatile int hashCode = 0;
@@ -935,7 +935,7 @@ public final class PropertyStore {
 		private final Lock rl = lock.readLock(), wl = lock.writeLock();
 		private final String prefix;
 
-		private PropertyMap(String prefix) {
+		PropertyMap(String prefix) {
 			this.prefix = prefix;
 			prefix = prefix + '.';
 			Properties p = System.getProperties();
@@ -947,7 +947,7 @@ public final class PropertyStore {
 		/**
 		 * Copy constructor.
 		 */
-		private PropertyMap(PropertyMap orig, PropertyMap apply) {
+		PropertyMap(PropertyMap orig, PropertyMap apply) {
 			this.prefix = apply.prefix;
 			if (orig != null)
 				for (Map.Entry<String,Property> e : orig.map.entrySet())
@@ -973,7 +973,7 @@ public final class PropertyStore {
 		 * @param def The default value if the specified property is not set.
 		 * @return The property value.
 		 */
-		public <T> T get(String name, Class<T> type, T def) {
+		<T> T get(String name, Class<T> type, T def) {
 			rl.lock();
 			try {
 				Property p = map.get(name);
@@ -1005,7 +1005,7 @@ public final class PropertyStore {
 		 * @return The property value.
 		 */
 		@SuppressWarnings("unchecked")
-		public <K,V> Map<K,V> getMap(String name, Class<K> keyType, Class<V> valueType, Map<K,V> def) {
+		<K,V> Map<K,V> getMap(String name, Class<K> keyType, Class<V> valueType, Map<K,V> def) {
 			rl.lock();
 			try {
 				Property p = map.get(name);
@@ -1035,7 +1035,7 @@ public final class PropertyStore {
 		 *
 		 * @return A new {@link LinkedHashMap} with all values in this property map.
 		 */
-		public Map<String,Object> asMap() {
+		Map<String,Object> asMap() {
 			rl.lock();
 			try {
 				Map<String,Object> m = new LinkedHashMap<>();
@@ -1047,7 +1047,7 @@ public final class PropertyStore {
 			}
 		}
 
-		private void set(String name, Object value) {
+		void set(String name, Object value) {
 			wl.lock();
 			hashCode = 0;
 			try {
@@ -1060,7 +1060,7 @@ public final class PropertyStore {
 			}
 		}
 
-		private void addTo(String name, Object value) {
+		void addTo(String name, Object value) {
 			wl.lock();
 			hashCode = 0;
 			try {
@@ -1072,7 +1072,7 @@ public final class PropertyStore {
 			}
 		}
 
-		private void putTo(String name, Object key, Object value) {
+		void putTo(String name, Object key, Object value) {
 			wl.lock();
 			hashCode = 0;
 			try {
@@ -1084,7 +1084,7 @@ public final class PropertyStore {
 			}
 		}
 
-		private void putTo(String name, Object value) {
+		void putTo(String name, Object value) {
 			wl.lock();
 			hashCode = 0;
 			try {
@@ -1096,7 +1096,7 @@ public final class PropertyStore {
 			}
 		}
 
-		private void removeFrom(String name, Object value) {
+		void removeFrom(String name, Object value) {
 			wl.lock();
 			hashCode = 0;
 			try {
@@ -1146,10 +1146,10 @@ public final class PropertyStore {
 	}
 
 	private abstract static class Property {
-		private final String name, type;
-		private final Object value;
+		final String name, type;
+		final Object value;
 
-		private static Property create(String name, Object value) {
+		static final Property create(String name, Object value) {
 			if (name.endsWith(".set"))
 				return new SetProperty(name, value);
 			else if (name.endsWith(".list"))
@@ -1211,7 +1211,7 @@ public final class PropertyStore {
 		}
 	}
 
-	private static class SimpleProperty extends Property {
+	private static final class SimpleProperty extends Property {
 
 		SimpleProperty(String name, Object value) {
 			super(name, "SIMPLE", value);
@@ -1219,10 +1219,10 @@ public final class PropertyStore {
 	}
 
 	@SuppressWarnings({"unchecked"})
-	private static class SetProperty extends Property {
+	private static final class SetProperty extends Property {
 		private final Set<Object> value;
 
-		private SetProperty(String name, Object value) {
+		SetProperty(String name, Object value) {
 			super(name, "SET", new ConcurrentSkipListSet<>(PROPERTY_COMPARATOR));
 			this.value = (Set<Object>)value();
 			add(value);
@@ -1279,10 +1279,10 @@ public final class PropertyStore {
 	}
 
 	@SuppressWarnings({"unchecked"})
-	private static class ListProperty extends Property {
+	private static final class ListProperty extends Property {
 		private final LinkedList<Object> value;
 
-		private ListProperty(String name, Object value) {
+		ListProperty(String name, Object value) {
 			super(name, "LIST", new LinkedList<>());
 			this.value = (LinkedList<Object>)value();
 			add(value);
@@ -1340,7 +1340,7 @@ public final class PropertyStore {
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes"})
-	private static class MapProperty extends Property {
+	private static final class MapProperty extends Property {
 		final Map<Object,Object> value;
 
 		MapProperty(String name, Object value) {
@@ -1384,7 +1384,7 @@ public final class PropertyStore {
 	 * @param o The object to normalize.
 	 * @return The normalized object.
 	 */
-	private static final Object unswap(Object o) {
+	static Object unswap(Object o) {
 		if (o instanceof Class)
 			return ((Class<?>)o).getName();
 		if (o instanceof Number || o instanceof Boolean)
@@ -1392,7 +1392,7 @@ public final class PropertyStore {
 		return o;
 	}
 
-	private static BeanSession getBeanSession() {
+	static BeanSession getBeanSession() {
 		if (beanSession == null && BeanContext.DEFAULT != null)
 			beanSession = BeanContext.DEFAULT.createSession();
 		return beanSession;
@@ -1405,7 +1405,7 @@ public final class PropertyStore {
 	 * Note that a bean session will not be available when constructing the BeanContext.DEFAULT context.
 	 * (it's a chicken-and-egg thing).
 	 */
-	private static boolean isBeanSessionAvailable() {
+	static boolean isBeanSessionAvailable() {
 		return getBeanSession() != null;
 	}
 
@@ -1414,7 +1414,7 @@ public final class PropertyStore {
 	 * Basically mean both objects are equal if they're the same when converted to strings.
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	private static boolean same(Object o1, Object o2) {
+	static boolean same(Object o1, Object o2) {
 		if (o1 == o2)
 			return true;
 		if (o1 instanceof Map) {

@@ -99,28 +99,28 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.widgets = Collections.unmodifiableMap(b.widgets);
 	}
 
-	private static class Builder  {
-		private String httpMethod, defaultCharset, description, tags, summary, externalDocs;
-		private UrlPathPattern pathPattern;
-		private RestParam[] params;
-		private RestGuard[] guards;
-		private RestMatcher[] optionalMatchers, requiredMatchers;
-		private RestConverter[] converters;
-		private SerializerGroup serializers;
-		private ParserGroup parsers;
-		private EncoderGroup encoders;
-		private UrlEncodingParser urlEncodingParser;
-		private UrlEncodingSerializer urlEncodingSerializer;
-		private BeanContext beanContext;
-		private ObjectMap properties;
-		private Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
-		private boolean plainParams, deprecated;
-		private Integer priority;
-		private org.apache.juneau.rest.annotation.Parameter[] parameters;
-		private Response[] responses;
-		private Map<String,Widget> widgets;
+	private static final class Builder  {
+		String httpMethod, defaultCharset, description, tags, summary, externalDocs;
+		UrlPathPattern pathPattern;
+		RestParam[] params;
+		RestGuard[] guards;
+		RestMatcher[] optionalMatchers, requiredMatchers;
+		RestConverter[] converters;
+		SerializerGroup serializers;
+		ParserGroup parsers;
+		EncoderGroup encoders;
+		UrlEncodingParser urlEncodingParser;
+		UrlEncodingSerializer urlEncodingSerializer;
+		BeanContext beanContext;
+		ObjectMap properties;
+		Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
+		boolean plainParams, deprecated;
+		Integer priority;
+		org.apache.juneau.rest.annotation.Parameter[] parameters;
+		Response[] responses;
+		Map<String,Widget> widgets;
 
-		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
+		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 
 			try {

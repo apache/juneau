@@ -34,9 +34,9 @@ import org.apache.juneau.*;
  */
 public final class SimpleMap extends AbstractMap<String,Object> {
 
-	private final String[] keys;
-	private final Object[] values;
-	private final Map.Entry<String,Object>[] entries;
+	final String[] keys;
+	final Object[] values;
+	final Map.Entry<String,Object>[] entries;
 
 	/**
 	 * Constructor.
@@ -90,11 +90,11 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 		throw new FormattedIllegalArgumentException("No key ''{0}'' defined in map", key);
 	}
 
-	private class SimpleMapEntry implements Map.Entry<String,Object> {
+	final class SimpleMapEntry implements Map.Entry<String,Object> {
 
 		private int index;
 
-		private SimpleMapEntry(int index) {
+		SimpleMapEntry(int index) {
 			this.index = index;
 		}
 

@@ -161,7 +161,7 @@ public class CommonParser_UrlEncodingTest {
 	}
 
 	public static class MyParserListener extends ParserListener {
-		final static List<String> events = new LinkedList<String>();
+		static final List<String> events = new LinkedList<String>();
 
 		@Override /* ParserListener */
 		public <T> void onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class<T> beanClass, T bean, int line, int col) {

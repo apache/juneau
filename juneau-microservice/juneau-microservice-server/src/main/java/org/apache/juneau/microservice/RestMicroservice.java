@@ -67,7 +67,7 @@ import org.eclipse.jetty.xml.*;
  */
 public class RestMicroservice extends Microservice {
 	
-	private Server server;
+	Server server;
 	private Object jettyXml;
 	
 	private static volatile RestMicroservice INSTANCE;

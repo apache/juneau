@@ -430,15 +430,15 @@ public class RequestBody {
 	/**
 	 * ServletInputStream wrapper around a normal input stream.
 	 */
-	private static class ServletInputStream2 extends ServletInputStream {
+	static final class ServletInputStream2 extends ServletInputStream {
 
 		private final InputStream is;
 
-		private ServletInputStream2(InputStream is) {
+		ServletInputStream2(InputStream is) {
 			this.is = is;
 		}
 
-		private ServletInputStream2(byte[] b) {
+		ServletInputStream2(byte[] b) {
 			this(new ByteArrayInputStream(b));
 		}
 

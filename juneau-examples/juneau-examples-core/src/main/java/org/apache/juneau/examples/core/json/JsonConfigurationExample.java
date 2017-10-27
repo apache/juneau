@@ -22,7 +22,17 @@ package org.apache.juneau.examples.core.json;
 import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.json.JsonSerializerBuilder;
 
+/**
+ * TODO
+ */
 public class JsonConfigurationExample {
+
+	/**
+	 * TODO
+	 * 
+	 * @param args 
+	 * @throws Exception 
+	 */
 	public static void main(String[] args) throws Exception {
 		Pojo aPojo = new Pojo("a","</pojo>");
 		// Json Serializers can be configured using properties defined in JsonSerializerContext

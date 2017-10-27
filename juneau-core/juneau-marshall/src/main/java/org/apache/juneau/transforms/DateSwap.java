@@ -615,7 +615,7 @@ public class DateSwap extends StringSwap<Date> {
 		}
 	}
 
-	private static Date convert(Date in, ClassMeta<?> hint) throws Exception {
+	static final Date convert(Date in, ClassMeta<?> hint) throws Exception {
 		if (in == null)
 			return null;
 		if (hint == null || hint.isInstance(in))

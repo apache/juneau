@@ -67,8 +67,9 @@ public final class RestContext extends Context {
 		defaultCharset,
 		paramFormat,
 		clientVersionHeader,
-		fullPath,
 		contextPath;
+	
+	final String fullPath;
 
 	private final Map<String,Widget> widgets;
 
@@ -443,7 +444,7 @@ public final class RestContext extends Context {
 		routers.get(httpMethodName).add(cm);
 	}
 
-	private static class Builder {
+	private static final class Builder {
 
 		boolean allowHeaderParams, allowBodyParam, renderResponseStackTraces, useStackTraceHashes;
 		VarResolver varResolver;
@@ -478,7 +479,7 @@ public final class RestContext extends Context {
 		String contextPath;
 
 		@SuppressWarnings("unchecked")
-		private Builder(Object resource, RestConfig sc) throws Exception {
+		Builder(Object resource, RestConfig sc) throws Exception {
 
 			PropertyStore ps = sc.createPropertyStore();
 
@@ -591,13 +592,13 @@ public final class RestContext extends Context {
 		}
 	}
 
-	private static boolean getBoolean(Object o, String systemProperty, boolean def) {
+	static final boolean getBoolean(Object o, String systemProperty, boolean def) {
 		if (o == null)
 			o = SystemUtils.getFirstBoolean(def, systemProperty);
 		return "true".equalsIgnoreCase(o.toString());
 	}
 
-	private static String getString(Object o, String systemProperty, String def) {
+	static final String getString(Object o, String systemProperty, String def) {
 		if (o == null)
 			o = SystemUtils.getFirstString(def, systemProperty);
 		return o.toString();
@@ -1658,7 +1659,7 @@ public final class RestContext extends Context {
 	/**
 	 * Takes in an object of type T or a Class<T> and either casts or constructs a T.
 	 */
-	private static <T> T resolve(Object outer, Class<T> c, Object o, Object...cArgs) throws RestServletException {
+	static final <T> T resolve(Object outer, Class<T> c, Object o, Object...cArgs) throws RestServletException {
 		try {
 			return ClassUtils.newInstanceFromOuter(outer, c, o, cArgs);
 		} catch (Exception e) {

@@ -27,7 +27,7 @@ public interface RdfCommon {
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
-	final static Map<String,String> LANG_PROP_MAP = new AMap<String,String>()
+	static final Map<String,String> LANG_PROP_MAP = new AMap<String,String>()
 		.append("RDF/XML","rdfXml.")
 		.append("RDF/XML-ABBREV","rdfXml.")
 		.append("N3","n3.")

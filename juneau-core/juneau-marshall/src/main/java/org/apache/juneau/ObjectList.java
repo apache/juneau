@@ -97,7 +97,7 @@ import org.apache.juneau.utils.*;
 public class ObjectList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;
 
-	private transient BeanSession session = null;
+	transient BeanSession session = null;
 	private transient PojoRest pojoRest;
 
 	/**

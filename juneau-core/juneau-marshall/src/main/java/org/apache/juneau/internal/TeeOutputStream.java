@@ -130,32 +130,4 @@ public class TeeOutputStream extends OutputStream {
 		for (OutputStream os : outputStreams)
 			os.close();
 	}
-
-	private static class NoCloseOutputStream extends OutputStream {
-		private OutputStream os;
-
-		private NoCloseOutputStream(OutputStream os) {
-			this.os = os;
-		}
-
-		@Override /* OutputStream */
-		public void write(int b) throws IOException {
-			os.write(b);
-		}
-
-		@Override /* OutputStream */
-		public void write(byte b[], int off, int len) throws IOException {
-			os.write(b, off, len);
-		}
-
-		@Override /* OutputStream */
-		public void flush() throws IOException {
-			os.flush();
-		}
-
-		@Override /* OutputStream */
-		public void close() throws IOException {
-			// Do nothing.
-		}
-	}
 }

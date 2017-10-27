@@ -139,25 +139,25 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 	}
 
 	/* An encapsulation of all schemas present in the metamodel of the serialized object. */
-	private class Schemas extends LinkedHashMap<Namespace,Schema> {
+	final class Schemas extends LinkedHashMap<Namespace,Schema> {
 
 		private static final long serialVersionUID = 1L;
 
 		private Namespace defaultNs;
-		private BeanSession session;
+		BeanSession session;
 		private LinkedList<QueueEntry>
 			elementQueue = new LinkedList<>(),
 			attributeQueue = new LinkedList<>(),
 			typeQueue = new LinkedList<>();
 
-		private Schemas(BeanSession session, Namespace xs, Namespace defaultNs, Namespace[] allNs) throws IOException {
+		Schemas(BeanSession session, Namespace xs, Namespace defaultNs, Namespace[] allNs) throws IOException {
 			this.session = session;
 			this.defaultNs = defaultNs;
 			for (Namespace ns : allNs)
 				put(ns, new Schema(this, xs, ns, defaultNs, allNs));
 		}
 
-		private Schema getSchema(Namespace ns) {
+		Schema getSchema(Namespace ns) {
 			if (ns == null)
 				ns = defaultNs;
 			Schema s = get(ns);
@@ -166,7 +166,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			return s;
 		}
 
-		private void process(Object o) throws IOException {
+		void process(Object o) throws IOException {
 			ClassMeta<?> cm = getClassMetaForObject(o);
 			Namespace ns = defaultNs;
 			if (cm == null)
@@ -180,8 +180,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			processQueue();
 		}
 
-
-		private void processQueue() throws IOException {
+		void processQueue() throws IOException {
 			boolean b;
 			do {
 				b = false;
@@ -200,21 +199,21 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			} while (b);
 		}
 
-		private void queueElement(Namespace ns, String name, ClassMeta<?> cm) {
+		void queueElement(Namespace ns, String name, ClassMeta<?> cm) {
 			elementQueue.add(new QueueEntry(ns, name, cm));
 		}
 
-		private void queueType(Namespace ns, String name, ClassMeta<?> cm) {
+		void queueType(Namespace ns, String name, ClassMeta<?> cm) {
 			if (name == null)
 				name = XmlUtils.encodeElementName(cm);
 			typeQueue.add(new QueueEntry(ns, name, cm));
 		}
 
-		private void queueAttribute(Namespace ns, String name, ClassMeta<?> cm) {
+		void queueAttribute(Namespace ns, String name, ClassMeta<?> cm) {
 			attributeQueue.add(new QueueEntry(ns, name, cm));
 		}
 
-		private void serializeTo(Writer w) throws IOException {
+		void serializeTo(Writer w) throws IOException {
 			boolean b = false;
 			for (Schema s : values()) {
 				if (b)
@@ -225,8 +224,28 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		}
 	}
 
+	@Override /* SerializerSession */
+	protected boolean isUseWhitespace() {
+		return super.isUseWhitespace();
+	}
+	
+	@Override /* SerializerSession */
+	protected int getMaxIndent() {
+		return super.getMaxIndent();
+	}
+
+	@Override /* SerializerSession */
+	protected boolean isTrimStrings() {
+		return super.isTrimStrings();
+	}
+
+	@Override /* SerializerSession */
+	protected char getQuoteChar() {
+		return super.getQuoteChar();
+	}
+
 	/* An encapsulation of a single schema. */
-	private class Schema {
+	private final class Schema {
 		private StringWriter sw = new StringWriter();
 		private XmlWriter w;
 		private Namespace defaultNs, targetNs;
@@ -261,7 +280,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			}
 		}
 
-		private boolean processElement(String name, ClassMeta<?> cm) throws IOException {
+		boolean processElement(String name, ClassMeta<?> cm) throws IOException {
 			if (processedElements.contains(name))
 				return false;
 			processedElements.add(name);
@@ -282,7 +301,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			return true;
 		}
 
-		private boolean processAttribute(String name, ClassMeta<?> cm) throws IOException {
+		boolean processAttribute(String name, ClassMeta<?> cm) throws IOException {
 			if (processedAttributes.contains(name))
 				return false;
 			processedAttributes.add(name);
@@ -297,7 +316,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			return true;
 		}
 
-		private boolean processType(String name, ClassMeta<?> cm) throws IOException {
+		boolean processType(String name, ClassMeta<?> cm) throws IOException {
 			if (processedTypes.contains(name))
 				return false;
 			processedTypes.add(name);
@@ -533,14 +552,14 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 	}
 
 	@SafeVarargs
-	private static <T> T first(T...tt) {
+	static <T> T first(T...tt) {
 		for (T t : tt)
 			if (t != null)
 				return t;
 		return null;
 	}
 
-	private static String getXmlAttrType(ClassMeta<?> cm) {
+	static String getXmlAttrType(ClassMeta<?> cm) {
 		if (cm.isBoolean())
 			return "boolean";
 		if (cm.isNumber()) {

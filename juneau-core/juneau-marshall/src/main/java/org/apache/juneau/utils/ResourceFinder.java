@@ -46,7 +46,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Results are cached for fast lookup.
  */
-public class ResourceFinder {
+public final class ResourceFinder {
 
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 	private static final List<Locale> ROOT_LOCALE = Arrays.asList(Locale.ROOT);
@@ -119,9 +119,9 @@ public class ResourceFinder {
 	// Support classes and methods.
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static class ResourceKey {
-		private final String name;
-		private final Locale locale;
+	private static final class ResourceKey {
+		final String name;
+		final Locale locale;
 
 		ResourceKey(String name, Locale locale) {
 			this.name = name;
@@ -142,15 +142,15 @@ public class ResourceFinder {
 		}
 	}
 
-	private static class Resource {
+	private static final class Resource {
 		private byte[] bytes;
 		private String string;
 
-		private Resource(byte[] bytes) {
+		Resource(byte[] bytes) {
 			this.bytes = bytes;
 		}
 
-		private String asString() {
+		String asString() {
 			if (bytes == null)
 				return null;
 			try {
@@ -162,14 +162,14 @@ public class ResourceFinder {
 			return string;
 		}
 
-		private InputStream asInputStream() {
+		InputStream asInputStream() {
 			if (bytes == null)
 				return null;
 			return new ByteArrayInputStream(bytes);
 		}
 	}
 
-	private Resource getResource(String name, Locale locale) throws IOException {
+	Resource getResource(String name, Locale locale) throws IOException {
 		ResourceKey key = new ResourceKey(name, locale);
 		Resource r = cache.get(key);
 		if (r != null)
@@ -298,7 +298,7 @@ public class ResourceFinder {
 	 * @param locale The locale to get the list of candidate locales for.
 	 * @return The list of candidate locales.
 	 */
-	private static List<Locale> getCandidateLocales(Locale locale) {
+	static final List<Locale> getCandidateLocales(Locale locale) {
 		if (locale == null)
 			return ROOT_LOCALE;
 		return RB_CONTROL.getCandidateLocales("", locale);

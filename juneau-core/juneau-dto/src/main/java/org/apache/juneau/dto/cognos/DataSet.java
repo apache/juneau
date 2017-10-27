@@ -139,10 +139,10 @@ public class DataSet {
 	 * </p>
 	 */
 	@Bean(typeName="row")
-	public static class Row {
+	public static final class Row {
 		private List<String> values = new LinkedList<>();
 
-		private void add(String value) {
+		void add(String value) {
 			values.add(value);
 		}
 

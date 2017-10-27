@@ -62,20 +62,20 @@ public class RemoteableMethodMeta {
 		this.returnValue = b.returnValue;
 	}
 
-	private static class Builder {
-		private String httpMethod, url;
-		private List<RemoteMethodArg>
+	private static final class Builder {
+		String httpMethod, url;
+		List<RemoteMethodArg>
 			pathArgs = new LinkedList<>(),
 			queryArgs = new LinkedList<>(),
 			headerArgs = new LinkedList<>(),
 			formDataArgs = new LinkedList<>(),
 			requestBeanArgs = new LinkedList<>();
-		private List<Integer>
+		List<Integer>
 			otherArgs = new LinkedList<>();
-		private Integer bodyArg;
-		private ReturnValue returnValue;
+		Integer bodyArg;
+		ReturnValue returnValue;
 
-		private Builder(String restUrl, Method m) {
+		Builder(String restUrl, Method m) {
 			Remoteable r = m.getDeclaringClass().getAnnotation(Remoteable.class);
 			RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 

@@ -29,14 +29,14 @@ import javax.servlet.http.*;
 class CallRouter {
 	private final CallMethod[] callMethods;
 
-	private CallRouter(CallMethod[] callMethods) {
+	CallRouter(CallMethod[] callMethods) {
 		this.callMethods = callMethods;
 	}
 
 	/**
 	 * Builder class.
 	 */
-	static class Builder {
+	static final class Builder {
 		private List<CallMethod> childMethods = new ArrayList<>();
 		private Set<String> collisions = new HashSet<>();
 		private String httpMethodName;

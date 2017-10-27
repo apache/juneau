@@ -117,7 +117,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		for (final String key : keys) {
 			BeanPropertyMeta p = this.getPropertyMeta(key);
 			if (overrideValues.containsKey(key))
-				p = new BeanPropertyMeta.Builder(this.meta, key, overrideValues.get(key), p).build();
+				p = BeanPropertyMeta.builder(this.meta, key).overrideValue(overrideValues.get(key)).delegateFor(p).build();
 			if (p == null)
 				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", key);
 			l.add(p);

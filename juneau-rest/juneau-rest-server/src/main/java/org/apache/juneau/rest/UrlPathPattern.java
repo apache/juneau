@@ -46,12 +46,12 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 		vars = b.vars.toArray(new String[b.vars.size()]);
 	}
 
-	class Builder {
+	private final class Builder {
 		boolean isDotAll, isOnlyDotAll;
 		Pattern pattern;
 		List<String> vars = new LinkedList<>();
 
-		private Builder(String patternString) {
+		Builder(String patternString) {
 			if (! startsWith(patternString, '/'))
 				patternString = '/' + patternString;
 			if (patternString.equals("/*")) {

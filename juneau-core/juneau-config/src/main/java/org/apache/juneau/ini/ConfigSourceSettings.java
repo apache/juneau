@@ -24,10 +24,10 @@ public class ConfigSourceSettings {
 	private final Charset charset;
 	private final boolean readonly, createIfNotExists;
 
-	static class Builder {
-		private List<String> searchPaths = Arrays.asList(new String[]{"."});
-		private Charset charset = Charset.defaultCharset();
-		private boolean readonly = false, createIfNotExists = true;
+	static final class Builder {
+		List<String> searchPaths = Arrays.asList(new String[]{"."});
+		Charset charset = Charset.defaultCharset();
+		boolean readonly = false, createIfNotExists = true;
 
 		Builder searchPaths(String[] searchPaths) {
 			this.searchPaths = Arrays.asList(searchPaths);

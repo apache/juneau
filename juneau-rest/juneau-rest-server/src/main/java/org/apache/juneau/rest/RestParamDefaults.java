@@ -965,7 +965,7 @@ class RestParamDefaults {
 		}
 	}
 
-	private static boolean isCollection(Type t) {
+	static final boolean isCollection(Type t) {
 		return BeanContext.DEFAULT.getClassMeta(t).isCollectionOrArray();
 	}
 }

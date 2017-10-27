@@ -746,7 +746,7 @@ public class RestClient extends CoreObject {
 		}
 	}
 
-	private static String getName(String name1, String name2, BeanPropertyMeta pMeta) {
+	static final String getName(String name1, String name2, BeanPropertyMeta pMeta) {
 		String n = name1.isEmpty() ? name2 : name1;
 		ClassMeta<?> cm = pMeta.getClassMeta();
 		if (n.isEmpty() && (cm.isMapOrBean() || cm.isReader() || cm.isInstanceOf(NameValuePairs.class)))
@@ -756,7 +756,7 @@ public class RestClient extends CoreObject {
 		return n;
 	}
 
-	private static PartSerializer getPartSerializer(Class c, PartSerializer c2) {
+	static final PartSerializer getPartSerializer(Class c, PartSerializer c2) {
 		if (c2 != null)
 			return c2;
 		if (c == PartSerializer.class)

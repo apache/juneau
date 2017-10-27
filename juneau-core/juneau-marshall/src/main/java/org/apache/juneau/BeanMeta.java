@@ -128,7 +128,7 @@ public class BeanMeta<T> {
 		this.extMeta = b.extMeta;
 		this.beanRegistry = b.beanRegistry;
 		this.typePropertyName = b.typePropertyName;
-		this.typeProperty = new BeanPropertyMeta.Builder(this, typePropertyName, ctx.string(), beanRegistry).build();
+		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
 		this.sortProperties = b.sortProperties;
 	}
 
@@ -159,7 +159,7 @@ public class BeanMeta<T> {
 		}
 
 		@SuppressWarnings("unchecked")
-		private String init(BeanMeta<T> beanMeta) {
+		String init(BeanMeta<T> beanMeta) {
 			Class<?> c = classMeta.getInnerClass();
 
 			try {
@@ -261,7 +261,7 @@ public class BeanMeta<T> {
 				// First populate the properties with those specified in the bean annotation to
 				// ensure that ordering first.
 				for (String name : fixedBeanProps)
-					normalProps.put(name, new BeanPropertyMeta.Builder(beanMeta, name));
+					normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
 
 				if (ctx.useJavaBeanIntrospector) {
 					BeanInfo bi = null;
@@ -273,7 +273,7 @@ public class BeanMeta<T> {
 						for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
 							String name = pd.getName();
 							if (! normalProps.containsKey(name))
-								normalProps.put(name, new BeanPropertyMeta.Builder(beanMeta, name));
+								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
 							normalProps.get(name).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
 						}
 					}
@@ -284,7 +284,7 @@ public class BeanMeta<T> {
 						String name = findPropertyName(f, fixedBeanProps);
 						if (name != null) {
 							if (! normalProps.containsKey(name))
-								normalProps.put(name, new BeanPropertyMeta.Builder(beanMeta, name));
+								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
 							normalProps.get(name).setField(f);
 						}
 					}
@@ -460,7 +460,7 @@ public class BeanMeta<T> {
 	 * @return The {@link ClassMeta} of this bean.
 	 */
 	@BeanIgnore
-	public ClassMeta<T> getClassMeta() {
+	public final ClassMeta<T> getClassMeta() {
 		return classMeta;
 	}
 
@@ -469,7 +469,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */
-	public String getDictionaryName() {
+	public final String getDictionaryName() {
 		return dictionaryName;
 	}
 
@@ -479,14 +479,14 @@ public class BeanMeta<T> {
 	 *
 	 * @return The type name property.
 	 */
-	public BeanPropertyMeta getTypeProperty() {
+	public final BeanPropertyMeta getTypeProperty() {
 		return typeProperty;
 	}
 
 	/*
 	 * Temporary getter/setter method struct.
 	 */
-	private static class BeanMethod {
+	private static final class BeanMethod {
 		String propertyName;
 		boolean isSetter;
 		Method method;
@@ -553,7 +553,7 @@ public class BeanMeta<T> {
 	 * @param fixedBeanProps Only include methods whose properties are in this list.
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
-	private static List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, PropertyNamer pn) {
+	static final List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, PropertyNamer pn) {
 		List<BeanMethod> l = new LinkedList<>();
 
 		for (Class<?> c2 : findClasses(c, stopClass)) {
@@ -618,7 +618,7 @@ public class BeanMeta<T> {
 		return l;
 	}
 
-	private static Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v) {
+	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v) {
 		List<Field> l = new LinkedList<>();
 		for (Class<?> c2 : findClasses(c, stopClass)) {
 			for (Field f : c2.getDeclaredFields()) {
@@ -760,7 +760,7 @@ public class BeanMeta<T> {
 	 * @param t The type we're recursing.
 	 * @param m Where the results are loaded.
 	 */
-	private static void findTypeVarImpls(Type t, Map<Class<?>,Class<?>[]> m) {
+	static final void findTypeVarImpls(Type t, Map<Class<?>,Class<?>[]> m) {
 		if (t instanceof Class) {
 			Class<?> c = (Class<?>)t;
 			findTypeVarImpls(c.getGenericSuperclass(), m);
@@ -789,7 +789,7 @@ public class BeanMeta<T> {
 		}
 	}
 
-	private static String bpName(BeanProperty bp) {
+	static final String bpName(BeanProperty bp) {
 		if (bp == null)
 			return "";
 		if (! bp.name().isEmpty())

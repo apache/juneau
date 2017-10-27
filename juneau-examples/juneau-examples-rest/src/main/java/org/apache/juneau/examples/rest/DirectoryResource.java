@@ -62,11 +62,10 @@ import org.apache.juneau.utils.*;
 public class DirectoryResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
-
 	private File rootDir;     // The root directory
 
 	// Settings enabled through servlet init parameters
-	private boolean allowDeletes, allowPuts, allowViews;
+	boolean allowDeletes, allowPuts, allowViews;
 
 	private static Logger logger = Logger.getLogger(DirectoryResource.class.getName());
 

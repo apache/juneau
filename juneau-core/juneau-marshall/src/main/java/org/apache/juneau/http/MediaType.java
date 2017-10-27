@@ -134,11 +134,11 @@ public class MediaType implements Comparable<MediaType> {
 		this.hasSubtypeMeta = b.hasSubtypeMeta;
 	}
 
-	static class Builder {
-		private String mediaType, type, subType;
-		private String[] subTypes, subTypesSorted;
-		private Map<String,Set<String>> parameters;
-		private boolean hasSubtypeMeta;
+	static final class Builder {
+		String mediaType, type, subType;
+		String[] subTypes, subTypesSorted;
+		Map<String,Set<String>> parameters;
+		boolean hasSubtypeMeta;
 
 		Builder(String mt) {
 			mt = mt.trim();

@@ -26,9 +26,9 @@ import org.apache.juneau.*;
  */
 public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
 
-	private Map<K,V> innerMap;
-	private Set<Map.Entry<K,V>> entries;
-	private final ClassMeta<Map<K,V>> classMeta;
+	final Map<K,V> innerMap;
+	final Set<Map.Entry<K,V>> entries;
+	final ClassMeta<Map<K,V>> classMeta;
 
 	/**
 	 * Constructor.
@@ -79,7 +79,7 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 	/**
 	 * A set with ordered entries (i.e. a List with a Set API).
 	 */
-	private static class ListSet<E> extends AbstractSet<E> {
+	private static final class ListSet<E> extends AbstractSet<E> {
 
 		private List<E> entries;
 

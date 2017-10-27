@@ -293,10 +293,10 @@ public class LogsResource extends Resource {
 	 */
 	@SuppressWarnings("javadoc")
 	public static class FileResource {
-		private File f;
-		public String type;
-		public Object name;
-		public Long size;
+		final File f;
+		public final String type;
+		public final Object name;
+		public final Long size;
 		@Swap(DateSwap.DateTimeMedium.class) public Date lastModified;
 		public URI view, highlighted, parsed, download, delete;
 
@@ -316,7 +316,7 @@ public class LogsResource extends Resource {
 		}
 	}
 
-	private static class FileResourceComparator implements Comparator<FileResource>, Serializable {
+	static final class FileResourceComparator implements Comparator<FileResource>, Serializable {
 		private static final long serialVersionUID = 1L;
 		@Override /* Comparator */
 		public int compare(FileResource o1, FileResource o2) {

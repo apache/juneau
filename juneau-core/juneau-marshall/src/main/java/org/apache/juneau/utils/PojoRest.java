@@ -131,7 +131,7 @@ public final class PojoRest {
 	private static final int GET=1, PUT=2, POST=3, DELETE=4;
 
 	private ReaderParser parser = JsonParser.DEFAULT;
-	private final BeanSession session;
+	final BeanSession session;
 
 	/** If true, the root cannot be overwritten */
 	private boolean rootLocked = false;

@@ -325,7 +325,7 @@ public abstract class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link Serializer#SERIALIZER_useWhitespace} setting value for this session.
 	 */
-	protected final boolean isUseWhitespace() {
+	protected boolean isUseWhitespace() {
 		return useWhitespace;
 	}
 
@@ -334,7 +334,7 @@ public abstract class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link Serializer#SERIALIZER_maxIndent} setting value for this session.
 	 */
-	protected final int getMaxIndent() {
+	protected int getMaxIndent() {
 		return maxIndent;
 	}
 
@@ -352,7 +352,7 @@ public abstract class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link Serializer#SERIALIZER_quoteChar} setting value for this session.
 	 */
-	protected final char getQuoteChar() {
+	protected char getQuoteChar() {
 		return quoteChar;
 	}
 
@@ -388,7 +388,7 @@ public abstract class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
 	 */
-	protected final boolean isTrimStrings() {
+	protected boolean isTrimStrings() {
 		return trimStrings;
 	}
 
@@ -735,20 +735,20 @@ public abstract class SerializerSession extends BeanSession {
 		return s;
 	}
 
-	private static class StackElement {
-		private int depth;
-		private String name;
-		private Object o;
-		private ClassMeta<?> aType;
+	private static final class StackElement {
+		final int depth;
+		final String name;
+		final Object o;
+		final ClassMeta<?> aType;
 
-		private StackElement(int depth, String name, Object o, ClassMeta<?> aType) {
+		StackElement(int depth, String name, Object o, ClassMeta<?> aType) {
 			this.depth = depth;
 			this.name = name;
 			this.o = o;
 			this.aType = aType;
 		}
 
-		private String toString(boolean simple) {
+		String toString(boolean simple) {
 			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']');
 			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
@@ -798,7 +798,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param typeName The type name of the bean.
 	 * @return A new bean property value.
 	 */
-	protected final static BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
+	protected static final BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
 		BeanMeta<?> bm = m.getMeta();
 		return new BeanPropertyValue(bm.getTypeProperty(), bm.getTypeProperty().getName(), typeName, null);
 	}

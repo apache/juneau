@@ -30,7 +30,7 @@ public class SearchArgs {
 	private final int position, limit;
 	private final boolean ignoreCase;
 
-	private SearchArgs(Builder b) {
+	SearchArgs(Builder b) {
 		this.search = unmodifiableMap(new LinkedHashMap<>(b.search));
 		this.view = unmodifiableList(new ArrayList<>(b.view));
 		this.sort = unmodifiableMap(new LinkedHashMap<>(b.sort));
@@ -51,7 +51,7 @@ public class SearchArgs {
 	/**
 	 * Builder for {@link SearchArgs} class.
 	 */
-	public static class Builder {
+	public static final class Builder {
 		Map<String,String> search = new LinkedHashMap<>();
 		List<String> view = new ArrayList<>();
 		Map<String,Boolean> sort = new LinkedHashMap<>();

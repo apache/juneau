@@ -722,7 +722,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param parent The parent to set.
 	 * @throws Exception
 	 */
-	protected final static void setParent(ClassMeta<?> cm, Object o, Object parent) throws Exception {
+	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws Exception {
 		Setter m = cm.getParentProperty();
 		if (m != null)
 			m.set(o, parent);
@@ -736,7 +736,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param name The name to set.
 	 * @throws Exception
 	 */
-	protected final static void setName(ClassMeta<?> cm, Object o, Object name) throws Exception {
+	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws Exception {
 		if (cm != null) {
 			Setter m = cm.getNameProperty();
 			if (m != null)

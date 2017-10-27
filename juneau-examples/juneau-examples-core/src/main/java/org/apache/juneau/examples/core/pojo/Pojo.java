@@ -21,6 +21,9 @@ package org.apache.juneau.examples.core.pojo;
 
 import org.apache.juneau.annotation.BeanConstructor;
 
+/**
+ * TODO
+ */
 public class Pojo {
 	private final String id;
 	private final String name;

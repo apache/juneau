@@ -76,7 +76,7 @@ public class PetStoreResource extends ResourceJena {
 	/**
 	 * Initializes the pet store database.
 	 * 
-	 * @param RestConfig config The resource config.
+	 * @param config config The resource config.
 	 * @throws Exception
 	 */
 	@RestHook(INIT) 
@@ -234,7 +234,7 @@ public class PetStoreResource extends ResourceJena {
 		}
 	}
 	
-	private int getNextAvailableId() {
+	final int getNextAvailableId() {
 		int i = 100;
 		for (Integer k : petDB.keySet())
 			i = Math.max(i, k);

@@ -75,8 +75,8 @@ public class RestInfoProvider {
 		this.externalDocs = b.externalDocs;
 	}
 
-	private static class Builder {
-		private String
+	private static final class Builder {
+		String
 			siteName,
 			title,
 			description,

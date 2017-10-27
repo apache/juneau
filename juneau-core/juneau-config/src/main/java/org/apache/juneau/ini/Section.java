@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Defines a section in a config file.
  */
-public class Section implements Map<String,String> {
+public final class Section implements Map<String,String> {
 
 	private ConfigFileImpl configFile;
 	String name;   // The config section name, or "default" if the default section.  Never null.
@@ -34,7 +34,7 @@ public class Section implements Map<String,String> {
 	// These must be kept synchronized.
 	private LinkedList<String> lines = new LinkedList<>();
 	private List<String> headerComments = new LinkedList<>();
-	private Map<String,String> entries;
+	Map<String,String> entries;
 
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private boolean readOnly;
@@ -282,7 +282,7 @@ public class Section implements Map<String,String> {
 		}
 	}
 
-	private void removeLine(String key) {
+	void removeLine(String key) {
 		for (Iterator<String> i = lines.iterator(); i.hasNext();) {
 			String k = i.next();
 			if (k.startsWith("*") || k.startsWith(">")) {
@@ -535,21 +535,21 @@ public class Section implements Map<String,String> {
 		lines.add((encoded ? "*" : ">") + key);
 	}
 
-	private void readLock() {
+	void readLock() {
 		lock.readLock().lock();
 	}
 
-	private void readUnlock() {
+	void readUnlock() {
 		lock.readLock().unlock();
 	}
 
-	private void writeLock() {
+	void writeLock() {
 		if (readOnly)
 			throw new UnsupportedOperationException("Cannot modify read-only ConfigFile.");
 		lock.writeLock().lock();
 	}
 
-	private void writeUnlock() {
+	void writeUnlock() {
 		lock.writeLock().unlock();
 	}
 
@@ -557,17 +557,17 @@ public class Section implements Map<String,String> {
 		return s.replaceAll("^\\s*\\#\\s*", "").trim();
 	}
 
-	private Set<String> createChanges() {
+	Set<String> createChanges() {
 		return (configFile != null && configFile.getListeners().size() > 0 ? new LinkedHashSet<String>() : null);
 	}
 
-	private void signalChanges(Set<String> changes) {
+	void signalChanges(Set<String> changes) {
 		if (changes != null && ! changes.isEmpty())
 			for (ConfigFileListener l : configFile.getListeners())
 				l.onChange(configFile, changes);
 	}
 
-	private void addChange(Set<String> changes, String key, String oldVal, String newVal) {
+	void addChange(Set<String> changes, String key, String oldVal, String newVal) {
 		if (changes != null)
 			if (! isEquals(oldVal, newVal))
 				changes.add(getFullKey(name, key));

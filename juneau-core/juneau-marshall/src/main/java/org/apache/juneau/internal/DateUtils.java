@@ -161,7 +161,7 @@ public final class DateUtils {
 	 * The instances are stored in a thread-local way because SimpleDateFormat is not thread-safe as noted in
 	 * {@link SimpleDateFormat its javadoc}.
 	 */
-	final static class DateFormatHolder {
+	static final class DateFormatHolder {
 		private static final ThreadLocal<SoftReference<Map<String,SimpleDateFormat>>> THREADLOCAL_FORMATS =
 				new ThreadLocal<SoftReference<Map<String,SimpleDateFormat>>>() {
 			@Override

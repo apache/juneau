@@ -37,7 +37,7 @@ import org.eclipse.jetty.util.log.AbstractLogger;
  * 
  */
 public class JettyLogger extends AbstractLogger {
-	private final static boolean SHOW_SOURCE = SystemUtils.getFirstBoolean(true, "org.eclipse.jetty.util.log.SOURCE", "org.eclipse.jetty.util.log.javautil.SOURCE");
+	private static final boolean SHOW_SOURCE = SystemUtils.getFirstBoolean(true, "org.eclipse.jetty.util.log.SOURCE", "org.eclipse.jetty.util.log.javautil.SOURCE");
 
 	private Level configuredLevel;
 	private Logger logger;

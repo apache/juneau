@@ -111,7 +111,7 @@ public class StreamResource implements Streamable {
 	/**
 	 * Builder class for constructing {@link StreamResource} objects.
 	 */
-	public static class Builder {
+	public static final class Builder {
 		ArrayList<Object> contents = new ArrayList<>();
 		MediaType mediaType;
 		Map<String,String> headers = new LinkedHashMap<>();

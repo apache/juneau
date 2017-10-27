@@ -81,7 +81,7 @@ public class DirectoryResource extends Resource {
 	private File rootDir;     // The root directory
 
 	// Settings enabled through servlet init parameters
-	private boolean allowDeletes, allowPuts, allowViews;
+	boolean allowDeletes, allowPuts, allowViews;
 
 	private static Logger logger = Logger.getLogger(DirectoryResource.class.getName());
 

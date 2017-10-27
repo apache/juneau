@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * several methods on the {@link BeanMap} API.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class BeanPropertyMeta {
+public final class BeanPropertyMeta {
 
 	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
 	private final BeanContext beanContext;                    // The context that created this meta.
@@ -70,48 +70,83 @@ public class BeanPropertyMeta {
 	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
 
 	/**
+	 * Creates a builder for {@link #BeanPropertyMeta} objects.
+	 * 
+	 * @param beanMeta The metadata on the bean
+	 * @param name The bean property name.
+	 * @return A new builder.
+	 */
+	public static Builder builder(BeanMeta<?> beanMeta, String name) {
+		return new Builder(beanMeta, name);
+	}
+	
+	/**
 	 * BeanPropertyMeta builder class.
 	 */
-	public static class Builder {
-		private BeanMeta<?> beanMeta;
-		private BeanContext beanContext;
+	public static final class Builder {
+		BeanMeta<?> beanMeta;
+		BeanContext beanContext;
 		String name;
 		Field field;
 		Method getter, setter;
-		private boolean isConstructorArg, isUri, isDyna;
-		private ClassMeta<?> rawTypeMeta, typeMeta;
-		private String[] properties;
-		private PojoSwap swap;
-		private BeanRegistry beanRegistry;
-		private Object overrideValue;
-		private BeanPropertyMeta delegateFor;
-		private MetadataMap extMeta = new MetadataMap();
+		boolean isConstructorArg, isUri, isDyna;
+		ClassMeta<?> rawTypeMeta, typeMeta;
+		String[] properties;
+		PojoSwap swap;
+		BeanRegistry beanRegistry;
+		Object overrideValue;
+		BeanPropertyMeta delegateFor;
+		MetadataMap extMeta = new MetadataMap();
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
 			this.beanContext = beanMeta.ctx;
 			this.name = name;
 		}
-
-		Builder(BeanMeta<?> beanMeta, String name, ClassMeta<?> rawTypeMeta, BeanRegistry beanRegistry) {
-			this(beanMeta, name);
-			this.rawTypeMeta = rawTypeMeta;
+		
+		/**
+		 * Sets the raw metadata type for this bean property.
+		 * 
+		 * @param rawMetaType The raw metadata type for this bean property.
+		 * @return This object (for method chaining().
+		 */
+		public Builder rawMetaType(ClassMeta<?> rawMetaType) {
+			this.rawTypeMeta = rawMetaType;
 			this.typeMeta = rawTypeMeta;
-			this.beanRegistry = beanRegistry;
+			return this;
 		}
 
 		/**
-		 * BeanPropertyMeta builder for delegate classes.
-		 *
-		 * @param beanMeta The Bean that this property belongs to.
-		 * @param name The property name.
-		 * @param overrideValue The overridden value of this bean property.
-		 * @param delegateFor The original bean property that this one is overriding.
+		 * Sets the bean registry to use with this bean property.
+		 * 
+		 * @param beanRegistry The bean registry to use with this bean property.
+		 * @return This object (for method chaining().
 		 */
-		public Builder(BeanMeta<?> beanMeta, String name, Object overrideValue, BeanPropertyMeta delegateFor) {
-			this(beanMeta, name);
-			this.delegateFor = delegateFor;
+		public Builder beanRegistry(BeanRegistry beanRegistry) {
+			this.beanRegistry = beanRegistry;
+			return this;
+		}
+
+		/**
+		 * Sets the overridden value of this bean property.
+		 * 
+		 * @param overrideValue The overridden value of this bean property.
+		 * @return This object (for method chaining().
+		 */
+		public Builder overrideValue(Object overrideValue) {
 			this.overrideValue = overrideValue;
+			return this;
+		}
+
+		/**
+		 * Sets the original bean property that this one is overriding.
+		 * 
+		 * @param delegateFor The original bean property that this one is overriding.
+		 * @return This object (for method chaining().
+		 */
+		public Builder delegateFor(BeanPropertyMeta delegateFor) {
+			this.delegateFor = delegateFor;
+			return this;
 		}
 
 		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {

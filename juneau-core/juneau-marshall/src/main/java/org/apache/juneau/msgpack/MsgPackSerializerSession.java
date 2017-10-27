@@ -209,7 +209,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		}
 	}
 
-	final static class SimpleMapEntry {
+	private static final class SimpleMapEntry {
 		final Object key;
 		final Object value;
 

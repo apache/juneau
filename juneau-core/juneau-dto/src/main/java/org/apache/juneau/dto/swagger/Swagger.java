@@ -1013,7 +1013,7 @@ public class Swagger extends SwaggerElement {
 		return setExternalDocs(externalDocs);
 	}
 
-	private static class MethodSorter implements Comparator<String> {
+	static final class MethodSorter implements Comparator<String> {
 		private final Map<String,Integer> methods = new AMap<String,Integer>()
 			.append("get",7)
 			.append("put",6)

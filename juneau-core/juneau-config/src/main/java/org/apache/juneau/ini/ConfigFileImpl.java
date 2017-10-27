@@ -43,7 +43,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	private final Charset charset;
 	final List<ConfigFileListener> listeners = Collections.synchronizedList(new ArrayList<ConfigFileListener>());
 
-	private Map<String,Section> sections;  // The actual data.
+	Map<String,Section> sections;  // The actual data.
 
 	private static final String DEFAULT = "default";
 
@@ -780,7 +780,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	 * Finds the keys that are different between the two sections and adds it to
 	 * the specified set.
 	 */
-	private static void findChanges(Set<String> s, Section a, Section b) {
+	static final void findChanges(Set<String> s, Section a, Section b) {
 		if (s == null)
 			return;
 		String sname = (a == null ? b.name : a.name);
@@ -798,16 +798,16 @@ public final class ConfigFileImpl extends ConfigFile {
 		}
 	}
 
-	private static void addChange(Set<String> changes, String section, String key, String oldVal, String newVal) {
+	static final void addChange(Set<String> changes, String section, String key, String oldVal, String newVal) {
 		if (! isEquals(oldVal, newVal))
 			changes.add(getFullKey(section, key));
 	}
 
-	private Set<String> createChanges() {
+	final Set<String> createChanges() {
 		return (listeners.size() > 0 ? new LinkedHashSet<String>() : null);
 	}
 
-	private void signalChanges(Set<String> changes) {
+	final void signalChanges(Set<String> changes) {
 		if (changes != null && ! changes.isEmpty())
 			for (ConfigFileListener l : listeners)
 				l.onChange(this, changes);

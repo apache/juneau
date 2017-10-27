@@ -331,7 +331,7 @@ public final class PojoQuery {
 		}
 	}
 
-	private static Comparable toComparable(Object o) {
+	static final Comparable toComparable(Object o) {
 		if (o == null)
 			return null;
 		if (o instanceof Comparable)
@@ -856,7 +856,7 @@ public final class PojoQuery {
 	 * @param pp Where parsing last left off.
 	 * @return An object representing a timestamp.
 	 */
-	private CalendarP parseDate(String seg, ParsePosition pp) {
+	CalendarP parseDate(String seg, ParsePosition pp) {
 
 		CalendarP cal = null;
 
@@ -1100,7 +1100,7 @@ public final class PojoQuery {
 	 * split("a,b,c",',') -> {"a","b","c"}
 	 * split("a,'b,b,b',c",',') -> {"a","'b,b,b'","c"}
 	 */
-	private static String[] splitQuoted(String s, char c) {
+	static final String[] splitQuoted(String s, char c) {
 
 		if (s == null || s.matches("\\s*"))
 			return new String[0];

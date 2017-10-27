@@ -25,12 +25,12 @@ import java.util.regex.*;
  * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger 
  * names.
  */
-public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
+public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
 	private BufferedReader br;
-	private LogEntryFormatter formatter;
-	private Date start, end;
-	private Set<String> loggerFilter, severityFilter;
-	private String threadFilter;
+	LogEntryFormatter formatter;
+	Date start, end;
+	Set<String> loggerFilter, severityFilter;
+	String threadFilter;
 	private Entry next;
 
 	/**
@@ -130,7 +130,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 	 * Represents a single line from the log file.
 	 */
 	@SuppressWarnings("javadoc")
-	public class Entry {
+	public final class Entry {
 		public Date date;
 		public String severity, logger;
 		protected String line, text;
@@ -159,7 +159,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 			}
 		}
 
-		private void addText(String t) {
+		void addText(String t) {
 			if (additionalText == null)
 				additionalText = new LinkedList<>();
 			additionalText.add(t);
@@ -198,7 +198,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 			return w;
 		}
 
-		private boolean matches() {
+		boolean matches() {
 			if (! isRecord)
 				return false;
 			if (start != null && date.before(start))
@@ -215,7 +215,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		}
 	}
 
-	private static String toHtml(String s) {
+	static final String toHtml(String s) {
 		if (s.indexOf('<') != -1)
 			return s.replaceAll("<", "&lt;");//$NON-NLS-2$
 		return s;

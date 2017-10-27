@@ -106,7 +106,7 @@ public class ReaderResource implements Writable {
 	/**
 	 * Builder class for constructing {@link ReaderResource} objects.
 	 */
-	public static class Builder {
+	public static final class Builder {
 		ArrayList<Object> contents = new ArrayList<>();
 		MediaType mediaType;
 		VarResolverSession varResolver;

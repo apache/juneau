@@ -99,7 +99,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 		this.extensions = (b.extensions == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(b.extensions));
 	}
 
-	static class Builder {
+	static final class Builder {
 		MediaType mediaType;
 		Float qValue = 1f;
 		Map<String,Set<String>> extensions;

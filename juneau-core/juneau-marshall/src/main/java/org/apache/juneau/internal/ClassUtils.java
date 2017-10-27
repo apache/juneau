@@ -163,7 +163,7 @@ public final class ClassUtils {
 	/**
 	 * Comparator for use with {@link TreeMap TreeMaps} with {@link Class} keys.
 	 */
-	public final static class ClassComparator implements Comparator<Class<?>>, Serializable {
+	public static final class ClassComparator implements Comparator<Class<?>>, Serializable {
 
 		private static final long serialVersionUID = 1L;
 
@@ -199,7 +199,7 @@ public final class ClassUtils {
 		return sb.toString();
 	}
 
-	private final static Map<Class<?>, Class<?>>
+	private static final Map<Class<?>, Class<?>>
 		pmap1 = new HashMap<>(),
 		pmap2 = new HashMap<>();
 	static {

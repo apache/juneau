@@ -201,7 +201,7 @@ public final class StringUtils {
 		}
 	}
 
-	private final static Pattern fpRegex = Pattern.compile(
+	private static final Pattern fpRegex = Pattern.compile(
 		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"
 	);
 
@@ -1225,7 +1225,7 @@ public final class StringUtils {
 		return cs.decode(buff).toString();
 	}
 
-	private final static char[] HEX = "0123456789ABCDEF".toCharArray();
+	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
 	/**
 	 * Converts a byte array into a simple hexadecimal character string.

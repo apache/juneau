@@ -106,12 +106,12 @@ public final class StringRange implements Comparable<StringRange>  {
 		this.extensions = (b.extensions == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(b.extensions));
 	}
 
-	private static class Builder {
-		private String type;
-		private Float qValue = 1f;
-		private Map<String,Set<String>> extensions;
+	static final class Builder {
+		String type;
+		Float qValue = 1f;
+		Map<String,Set<String>> extensions;
 
-		private Builder(String token) {
+		Builder(String token) {
 
 			token = token.trim();
 
