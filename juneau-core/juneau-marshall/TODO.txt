@@ -12,3 +12,5 @@
 ***************************************************************************************************************************
 
 Create tests that ensure serializers don't close output but parsers do close input.
+Injectable beans.
+Add create() methods to serializer and parser classes.

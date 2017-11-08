@@ -64,4 +64,14 @@ public class SerializedRequestAttrVar extends StreamedVar {
 				s.serialize(w, o);
 		}
 	}
+	
+	@Override  /* Var */
+	protected boolean allowNested() {
+		return false;
+	}
+
+	@Override  /* Var */
+	protected boolean allowRecurse() {
+		return false;
+	}
 }

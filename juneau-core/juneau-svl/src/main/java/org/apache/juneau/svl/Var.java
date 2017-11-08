@@ -84,6 +84,45 @@ public abstract class Var {
 	protected String getName() {
 		return name;
 	}
+	
+	/**
+	 * Returns whether nested variables are supported by this variable.
+	 * 
+	 * <p>
+	 * For example, in <js>"$X{$Y{xxx}}"</js>, $Y is a nested variable that will be resolved if this method returns
+	 * <jk>true</jk>.
+	 * 
+	 * <p>
+	 * The default implementation of this method always returns <jk>true</jk>.  
+	 * Subclasses can override this method to override the default behavior.
+	 * 
+	 * @return <jk>true</jk> if nested variables are supported by this variable.
+	 */
+	protected boolean allowNested() {
+		return true;
+	}
+	
+	/**
+	 * Returns whether variables in the resolved contents of this variable should also be resolved.
+	 * 
+	 * <p>
+	 * For example, if <js>"$X{xxx}"</js> resolves to <js>"$Y{xxx}"<js>, then the $Y variable will be recursively
+	 * resolved if this method returns <jk>true</jk>.
+	 * 
+	 * <p>
+	 * The default implementation of this method always returns <jk>true</jk>.  
+	 * Subclasses can override this method to override the default behavior.
+	 * 
+	 * <h6 class='topic'>Important Note</h6>
+	 * <p>
+	 * As a general rule, variables that resolve user-entered data should not be recursively resolved as this may 
+	 * cause a security hole.
+	 * 
+	 * @return <jk>true</jk> if resolved variables should be recursively resolved.
+	 */
+	protected boolean allowRecurse() {
+		return true;
+	}
 
 	/**
 	 * The method called from {@link VarResolver}.

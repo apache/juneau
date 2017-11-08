@@ -102,7 +102,7 @@ public class VarResolverSession {
 					s = v.doResolve(this, val);
 					if (s == null)
 						s = "";
-					return resolve(s);
+					return (v.allowRecurse() ? resolve(s) : s);
 				} catch (Exception e) {
 					return '{' + e.getLocalizedMessage() + '}';
 				}
@@ -320,7 +320,6 @@ public class VarResolverSession {
 						depth--;
 					} else {
 						varVal = s.substring(x+1, i);
-						varVal = (hasInternalVar ? resolve(varVal) : varVal);
 						Var r = getVar(varType);
 						if (r == null) {
 							if (hasInnerEscapes)
@@ -329,6 +328,7 @@ public class VarResolverSession {
 								out.append(s, x2, i+1);
 							x = i+1;
 						} else {
+							varVal = (hasInternalVar && r.allowNested() ? resolve(varVal) : varVal);
 							try {
 								if (r.streamed)
 									r.resolveTo(this, out, varVal);
@@ -337,7 +337,7 @@ public class VarResolverSession {
 									if (replacement == null)
 										replacement = "";
 									// If the replacement also contains variables, replace them now.
-									if (replacement.indexOf('$') != -1)
+									if (replacement.indexOf('$') != -1 && r.allowRecurse())
 										replacement = resolve(replacement);
 									out.append(replacement);
 								}

@@ -73,6 +73,16 @@ public class RequestVar extends DefaultingVar {
 	public RequestVar() {
 		super(NAME);
 	}
+	
+	@Override /* Var */
+	protected boolean allowNested() {
+		return false;
+	}
+
+	@Override /* Var */
+	protected boolean allowRecurse() {
+		return false;
+	}
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {

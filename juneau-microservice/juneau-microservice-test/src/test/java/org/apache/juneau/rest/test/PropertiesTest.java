@@ -28,6 +28,6 @@ public class PropertiesTest extends RestTestcase {
 	public void testPropertiesDefinedOnMethod() throws Exception {
 		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r = client.doGet(URL + "/testPropertiesDefinedOnMethod").getResponseAsString();
-		assertTrue(r.matches("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=.*/testProperties/testPropertiesDefinedOnMethod,R1b=.*/testProperties,R2=bar,R3=baz,R4=a1,R5=c,R6=c"));
+		assertTrue(r.matches("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=.*/testProperties/testPropertiesDefinedOnMethod,R1b=.*/testProperties,R2=bar,R3=,R4=a1,R5=c,R6=c"));
 	}
 }
