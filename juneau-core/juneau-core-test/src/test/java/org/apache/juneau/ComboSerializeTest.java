@@ -168,7 +168,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// JSON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonT = new JsonSerializerBuilder().simple().beanTypePropertyName("t").build();
+	WriterSerializer sJsonT = JsonSerializer.create().simple().beanTypePropertyName("t").build();
 
 	@Test
 	public void a21_serializeJsonT() throws Exception {
@@ -198,7 +198,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// XML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sXmlT = new XmlSerializerBuilder().sq().beanTypePropertyName("t").build();
+	WriterSerializer sXmlT = XmlSerializer.create().sq().beanTypePropertyName("t").build();
 
 	@Test
 	public void b21_serializeXmlT() throws Exception {
@@ -238,7 +238,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// HTML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sHtmlT = new HtmlSerializerBuilder().sq().beanTypePropertyName("t").build();
+	WriterSerializer sHtmlT = HtmlSerializer.create().sq().beanTypePropertyName("t").build();
 
 	@Test
 	public void c21_serializeHtmlT() throws Exception {
@@ -268,7 +268,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// UON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUonT = new UonSerializerBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sUonT = UonSerializer.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void d21_serializeUonT() throws Exception {
@@ -298,7 +298,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// UrlEncoding - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUrlEncodingT = new UrlEncodingSerializerBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sUrlEncodingT = UrlEncodingSerializer.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void e21_serializeUrlEncodingT() throws Exception {
@@ -328,7 +328,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// MsgPack - 't' property
 	//--------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPackT = new MsgPackSerializerBuilder().beanTypePropertyName("t").build();
+	OutputStreamSerializer sMsgPackT = MsgPackSerializer.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void f21_serializeMsgPackT() throws Exception {
@@ -348,7 +348,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = new RdfSerializerBuilder().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").build();
+	WriterSerializer sRdfXmlT = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").build();
 
 	@Test
 	public void g21_serializeRdfXmlT() throws Exception {
@@ -358,7 +358,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlR = new RdfSerializerBuilder().language(LANG_RDF_XML_ABBREV).ws().build();
+	WriterSerializer sRdfXmlR = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).ws().build();
 
 	@Test
 	public void g31_serializeRdfXmlR() throws Exception {

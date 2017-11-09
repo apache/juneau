@@ -29,7 +29,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = new HtmlParserBuilder().beanDictionary(A1.class).build();
+		ReaderParser p = HtmlParser.create().beanDictionary(A1.class).build();
 		Map m = null;
 		String in;
 
@@ -63,7 +63,7 @@ public class CommonParserTest {
 		t2.add(new A3("name0","value0"));
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
-		in = new HtmlSerializerBuilder().addBeanTypeProperties(true).build().serialize(t1);
+		in = HtmlSerializer.create().addBeanTypeProperties(true).build().serialize(t1);
 		t1 = (A1)p.parse(in, Object.class);
 		assertEquals("value1", t1.list.get(1).value);
 
@@ -94,7 +94,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = HtmlParser.create().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
@@ -142,7 +142,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		HtmlParser p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		HtmlParser p = HtmlParser.create().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		p.parse(in, B.class);

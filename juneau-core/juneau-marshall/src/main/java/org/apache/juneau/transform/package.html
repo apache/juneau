@@ -151,7 +151,7 @@
 		}
 	}
 	
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyBeanFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyBeanFilter.<jk>class</jk>).build();
 	Person p = getPerson();
 	String json = s.serialize(p);  <jc>// Prints "{age:45,name:'John Smith'}"</jc>
 		</p>
@@ -174,7 +174,7 @@
 		}
 	}
 	
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyBeanFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyBeanFilter.<jk>class</jk>).build();
 	Person p = getPerson();
 	String json = s.serialize(p);  <jc>// Prints "{age:45}"</jc>
 		</p>
@@ -207,12 +207,12 @@
 	}
 	
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyBeanFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyBeanFilter.<jk>class</jk>).build();
 	Person person = getPerson();
 	String json = s.serialize(p);  <jc>// Prints "{AGE:45,NAME:'John Smith'}"</jc>
 	
 	<jc>// Parse back into bean</jc>
-	ReaderParser p = <jk>new</jk> JsonParserBuilder().beanFilters(MyBeanFilter.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().beanFilters(MyBeanFilter.<jk>class</jk>).build();
 	person = p.parse(json, Person.class); <jc>// Read back into original object</jc>
 		</p>
 		<p>
@@ -266,7 +266,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyBeanFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyBeanFilter.<jk>class</jk>).build();
 	MyClass c = <jk>new</jk> MyClassBar();
 	String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
 		</p>	
@@ -296,7 +296,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyClass.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyClass.<jk>class</jk>).build();
 		</p>
 		<p>
 			In fact, this is the shortcut used in the <code>RequestEchoResource</code> sample class:
@@ -409,11 +409,11 @@
 	}
 
 	<jc>// Create a new JSON serializer, associate our date swap with it, and serialize a sample bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	Serializer serializer = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
 	String json = serializer.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
 	
 	<jc>// Create a JSON parser, associate our date swap with it, and reconstruct our bean (including the date).</jc>
-	ReaderParser parser = <jk>new</jk> JsonParserBuilder().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	ReaderParser parser = JsonParser.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
 	MyBean bean = parser.parse(json, MyBean.<jk>class</jk>);
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 		</p>
@@ -482,8 +482,8 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
-	ReaderParser parser = <jk>new</jk> JsonParserBuilder().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	Serializer serializer = JsonSerializer.<jsm>create</jsm>().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	ReaderParser parser = JsonParser.<jsm>create</jsm>().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
 	
 	<jk>byte</jk>[] a1 = {1,2,3};
 	String s1 = serializer.serialize(a1);		<jc>// Produces "'AQID'"</jc>
@@ -562,7 +562,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	Serializer serializer = JsonSerializer.<jsm>create</jsm>().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
 	
 	<jc>// Construct an iterator we want to serialize.</jc>
 	Iterator iterator = <jk>new</jk> ObjectList(1,2,3).iterator();
@@ -571,7 +571,7 @@
 	String s = serializer.serialize(iterator);		<jc>// Produces "[1,2,3]"</jc>
 	
 	<jc>// Try to parse it.</jc>
-	ReaderParser parser = <jk>new</jk> JsonParserBuilder().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	ReaderParser parser = JsonParser.<jsm>create</jsm>().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
 	iterator = parser.parse(s, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
 		</p>
 	</div>
@@ -616,7 +616,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyBeanFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyBeanFilter.<jk>class</jk>).build();
 	MyClass c = <jk>new</jk> MyClassBar();
 	String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
 		</p>	
@@ -646,7 +646,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyClass.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyClass.<jk>class</jk>).build();
 		</p>
 	</div>
 
@@ -702,7 +702,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().pojoSwaps(MySerializableSurrogate.<jk>class</jk>).build();
+	Serializer serializer = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySerializableSurrogate.<jk>class</jk>).build();
 		</p>
 		<p>
 			When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate 

@@ -277,6 +277,21 @@ public class UonSerializer extends WriterSerializer {
 		return new UonSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link UonSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> UonSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link UonSerializerBuilder} object.
+	 */
+	public static UonSerializerBuilder create() {
+		return new UonSerializerBuilder();
+	}
 
 
 	//--------------------------------------------------------------------------------

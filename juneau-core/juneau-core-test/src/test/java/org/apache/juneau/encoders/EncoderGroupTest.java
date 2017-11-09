@@ -25,7 +25,7 @@ public class EncoderGroupTest {
 	@Test
 	public void testEncoderGroupMatching() throws Exception {
 
-		EncoderGroup g = new EncoderGroupBuilder().append(Encoder1.class, Encoder2.class, Encoder3.class).build();
+		EncoderGroup g = EncoderGroup.create().append(Encoder1.class, Encoder2.class, Encoder3.class).build();
 		assertType(Encoder1.class, g.getEncoder("gzip1"));
 		assertType(Encoder2.class, g.getEncoder("gzip2"));
 		assertType(Encoder2.class, g.getEncoder("gzip2a"));
@@ -66,15 +66,15 @@ public class EncoderGroupTest {
 		EncoderGroupBuilder gb = null;
 		EncoderGroup g = null;
 
-		gb = new EncoderGroupBuilder().append(E1.class, E2.class);
+		gb = EncoderGroup.create().append(E1.class, E2.class);
 		g = gb.build();
 		assertObjectEquals("['E1','E2','E2a']", g.getSupportedEncodings());
 
-		gb = new EncoderGroupBuilder(g).append(E3.class, E4.class);
+		gb = g.builder().append(E3.class, E4.class);
 		g = gb.build();
 		assertObjectEquals("['E3','E4','E4a','E1','E2','E2a']", g.getSupportedEncodings());
 
-		gb = new EncoderGroupBuilder(g).append(E5.class);
+		gb = g.builder().append(E5.class);
 		g = gb.build();
 		assertObjectEquals("['E5','E3','E4','E4a','E1','E2','E2a']", g.getSupportedEncodings());
 	}

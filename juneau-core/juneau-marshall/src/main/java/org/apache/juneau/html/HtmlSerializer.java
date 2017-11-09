@@ -324,6 +324,22 @@ public class HtmlSerializer extends XmlSerializer {
 		return new HtmlSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link HtmlSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> HtmlSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link HtmlSerializerBuilder} object.
+	 */
+	public static HtmlSerializerBuilder create() {
+		return new HtmlSerializerBuilder();
+	}
+
 	@Override /* XmlSerializer */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)

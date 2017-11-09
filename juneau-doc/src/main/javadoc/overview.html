@@ -548,7 +548,7 @@
 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
 
 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
-	JsonSerializer serializer = <jk>new</jk> JsonSerializerBuilder().simple().sq().build();
+	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
 	
 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
@@ -669,7 +669,7 @@
 			</p>
 			<p class='bcode'>
 	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
-	SerializerGroup sg = <jk>new</jk> SerializerGroupBuilder()
+	SerializerGroup sg = SerializerGroup.<jsm>create</jsm>()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
 		.ws   <jc>// or .useWhitespace(true)</jc>
 		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
@@ -680,7 +680,7 @@
 		.serialize(myPersonObject, myWriter);
 		
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
-	ParserGroup pg = <jk>new</jk> ParserGroupBuilder()
+	ParserGroup pg = ParserGroup.<jsm>create</jsm>()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
  		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
  		.build();
@@ -832,7 +832,7 @@
 				<br>For example, the following code shows how to configure a JSON serializer:
 			</p>
 			<p class='bcode'>
-	JsonSerializer s = <jk>new</jk> JsonSerializerBuilder().simple().ws().sq().build();
+	JsonSerializer s = JsonSerializer.<jsm>create</jsm>().simple().ws().sq().build();
 			</p>
 			<p>
 				However, each of the serializers and parsers already contain reusable instances with common configurations.
@@ -1072,11 +1072,11 @@
 	}
 
 	<jc>// Create a new JSON serializer, associate our date swap with it, and serialize a sample bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	Serializer serializer = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
 	String json = serializer.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
 	
 	<jc>// Create a JSON parser, associate our date swap with it, and reconstruct our bean (including the date).</jc>
-	ReaderParser parser = <jk>new</jk> JsonParserBuilder().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	ReaderParser parser = JsonParser.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
 	MyBean bean = parser.parse(json, MyBean.<jk>class</jk>);
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 				</p>
@@ -1163,7 +1163,7 @@
 		<ja>@Test</ja>
 		<jk>public void</jk> doTest() <jk>throws</jk> Exception {
 
-			SerializerGroup g = <jk>new</jk> SerializerGroupBuilder()
+			SerializerGroup g = SerializerGroup.<jsm>create</jsm>()
 				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
 				.sq()
 				.pojoSwaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
@@ -1439,7 +1439,7 @@
 				</p>
 				<p class='bcode'>			
 	<jc>// Create a new JSON serializer and associate a bean filter with it.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyAddressBeanFilter.<jk>class</jk>).build();
+	Serializer serializer = JsonSerializer.<jsm>create</jsm>().beanFilters(MyAddressBeanFilter.<jk>class</jk>).build();
 				</p>
 				<p>
 					Note that if you use the annotation, you do NOT need to set anything on the serializers/parsers.
@@ -1466,7 +1466,7 @@
 	}
 	
 	<jc>// Create a new JSON serializer that only exposes street,city,state on Address bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().beanFilters(AddressInterface.<jk>class</jk>).build();
+	Serializer serializer = JsonSerializer.<jsm>create</jsm>().beanFilters(AddressInterface.<jk>class</jk>).build();
 				</p>
 				
 				<h6 class='topic'>Additional Information</h6>
@@ -2462,7 +2462,7 @@
 			<h6 class='figure'>Example with no namespaces</h6>
 			<p class='bcode'>
 	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().sq().ws().build();
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
 
 	<jc>// Serialize to ATOM/XML</jc>
 	String atomXml = s.serialize(feed);
@@ -2797,7 +2797,7 @@
 	URL key4;
 	
 	<jc>// Load our config file</jc>
-	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	ConfigFile f = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	
 	<jc>// Read values from default section</jc>
 	key1 = f.getInt(<js>"key1"</js>);
@@ -2816,7 +2816,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>)
+	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>,
 			<js>"key1 = 1"</js>,
@@ -2839,7 +2839,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>)
+	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>)
 		.addHeaderComments(<js>"section1"</js>,
@@ -2958,7 +2958,7 @@
 	}
 
 	<jc>// Example usage</jc>
-	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
 		</p>
 		<p>
@@ -2998,7 +2998,7 @@
 	}
 	
 	<jc>// Example usage</jc>
-	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
 	<jk>int</jk> myInt = ci.getInt();
 	ci.setBean(<jk>new</jk> MyBean());
@@ -3385,7 +3385,7 @@
 			<p class='bcode'>
 	
 	<jc>// Create a client with basic JSON support.</jc>
-	RestClient client = <jk>new</jk> RestClientBuilder().rootUrl(<js>"http://localhost/remoteable"</js>).build();
+	RestClient client = RestClient.<jsm>create</jsm>().rootUrl(<js>"http://localhost/remoteable"</js>).build();
 	
  	<jc>// Get an interface proxy.</jc>
  	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
@@ -3729,7 +3729,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a reusable JSON client.</jc>
-	RestClient client = <jk>new</jk> RestClientBuilder().build();
+	RestClient client = RestClient.<jsm>create</jsm>().build();
 	
 	<jc>// The address of the root resource.</jc>
 	String url = <js>"http://localhost:9080/sample/addressBook"</js>;
@@ -3743,7 +3743,7 @@
 	
 	<jc>// Add a person to the address book.
 	// Use XML as the transport medium.</jc>
-	client = <jk>new</jk> RestClientBuilder(XmlSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>).build();
+	client = RestClient.<jsm>create</jsm>().serializer(XmlSerializer.<jk>class</jk>).parser(XmlSerializer.<jk>class</jk>).build();
 	Person p = <jk>new</jk> Person(<js>"Joe Smith"</js>, 21);
 	<jk>int</jk> returnCode = client.doPost(url + <js>"/entries"</js>, p).run();
 		</p>
@@ -3782,7 +3782,7 @@
 		String callMyMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
 	}
 	
-	RestClient client = <jk>new</jk> RestClientBuilder().build();
+	RestClient client = RestClient.<jsm>create</jsm>().build();
 	MyProxyInterface p = client.getRemoteableProxy(MyProxyInterface.<jk>class</jk>, <js>"http://hostname/some/rest/interface"</js>);
 	String response = p.callMyMethod(UUID.<jsm>generate</jsm>(), <jk>true</jk>, <jk>new</jk> MyPojo());
 			</p>
@@ -6010,9 +6010,9 @@
 				System.<jsf>out</jsf>.println(<js>"Running client test..."</js>); 
 				
 				<jc>// Create a client to handle XML requests and responses.</jc> 
-				RestClient client = <jk>new</jk> RestClientBuilder().build(); 
-				RestClient xmlClient = <jk>new</jk> RestClientBuilder(XmlSerializer.<jsf>DEFAULT</jsf>, 
-					XmlParser.<jsf>DEFAULT</jsf>).build(); 
+				RestClient client = RestClient.<jsm>create</jsm>().build(); 
+				RestClient xmlClient = RestClient.<jsm>create</jsm>().serializer(XmlSerializer.<jsf>DEFAULT</jsf>)
+					.parser(XmlParser.<jsf>DEFAULT</jsf>).build(); 
 				
 				String root = <js>"http://localhost:10000/addressBook"</js>; 
 				
@@ -6216,7 +6216,7 @@
 			</p>
 			<p class='bcode'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
-	RestClient client = <jk>new</jk> RestClientBuilder()
+	RestClient client = RestClient.<jsm>create</jsm>()
 		.rootUrl(<js>"http://localhost:10000/remoteable"</js>)
 		.build();
 	
@@ -6550,7 +6550,7 @@
 		
 		<jc>// Get registry URL from examples.cfg file.</jc>
 		<jk>private</jk> String <jf>registryUrl</jf> = getConfig().getString(<js>"DockerRegistry/url"</js>); 
-		RestClient <jf>rc</jf> = <jk>new</jk> RestClientBuilder().build(); 
+		RestClient <jf>rc</jf> = RestClient.<jsm>create</jsm>().build(); 
 		
 		<jd>/** [GET /] - Show child resources. */</jd> 
 		<ja>@SuppressWarnings</ja>(<js>"nls"</js>) 
@@ -6649,7 +6649,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{blogName}"</js>) 
 		<jk>public</jk> ObjectList parseBlog(<ja>@Path</ja> String blogName) <jk>throws</jk> Exception { 
 			ObjectList l = <jk>new</jk> ObjectList(); 
-			RestClient rc = <jk>new</jk> RestClientBuilder().build(); 
+			RestClient rc = RestClient.<jsm>create</jsm>().build(); 
 			String site = <js>"http:<jc>//"</js> + blogName + <js>".tumblr.com/api/read/json"</js>;</jc> 
 			ObjectMap m = rc.doGet(site).getResponse(ObjectMap.<jk>class</jk>); 
 			<jk>int</jk> postsTotal = m.getInt(<js>"posts-total"</js>); 
@@ -7256,7 +7256,7 @@
 			} 
 		) 
 		<jk>public</jk> ConfigFile setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
-			ConfigFile cf2 = <jk>new</jk> ConfigFileBuilder().build().load(contents); 
+			ConfigFile cf2 = ConfigFile.<jsm>create</jsm>().build().load(contents); 
 			<jk>return</jk> getConfig().merge(cf2).save(); 
 		} 
 		
@@ -7450,13 +7450,38 @@
 	<h3 class='topic' onclick='toggle(this)'>7.0.1 (TBD)</h3>
 	<div class='topic'>
 	
+		<h6 class='topic'>juneau-marshall</h6>
+		<ul class='spaced-list'>
+			<li>New static <code>create()</code> methods for builders on serializers and parsers.
+				<br>This simplifies the syntax of creation of serializers and parsers by scratch.
+				<p class='bcode'>
+	<jc>// Old way</jc>
+	JsonSerializer s1 = <jk>new</jk> JsonSerializerBuilder().ws().build();
+	
+	<jc>// New way</jc>
+	JsonSerializer s2 = JsonSerializer.<jsm>create</jsm>().ws().build();
+				</p>
+				<br>The same static create methods have also been added to the following classes:
+				<ul>
+					<li>{@link org.apache.juneau.serializer.SerializerGroup#create()}
+					<li>{@link org.apache.juneau.parser.ParserGroup#create()}
+					<li>{@link org.apache.juneau.encoders.EncoderGroup#create()}
+					<li>{@link org.apache.juneau.rest.client.RestClient#create()}
+					<li>{@link org.apache.juneau.ini.ConfigFile#create()}
+				</ul>
+		</ul>
+
+		<h6 class='topic'>juneau-marshall-rdf</h6>
+		<ul class='spaced-list'>
+		</ul>
+
 		<h6 class='topic'>juneau-svl</h6>
 		<ul class='spaced-list'>
 			<li>New methods on {@link org.apache.juneau.svl.Var} class to restrict when nested and embedded variables
 			are resolved.
 				<ul>
-					<li>{@link org.apache.juneau.svl.Var.allowNested}
-					<li>{@link org.apache.juneau.svl.Var.allowRecurse}
+					<li>{@link org.apache.juneau.svl.Var#allowNested()}
+					<li>{@link org.apache.juneau.svl.Var#allowRecurse()}
 				</ul>
 		</ul>
 
@@ -8645,7 +8670,7 @@
 	WriterSerializer s = <jk>new</jk> JsonSerializer().setUseWhitespace(<jk>true</jk>).pojoSwaps(BSwap.<jk>class</jk>).lock();
 
 	<jc>// New way</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().ws().pojoSwaps(BSwap.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().ws().pojoSwaps(BSwap.<jk>class</jk>).build();
 
 	<jc>/* Cloning an existing serializer or parser */ </jc>
 	
@@ -8817,7 +8842,7 @@
 	}
 
 	<jc>// Client side</jc>
-	RestClient client = <jk>new</jk> RestClientBuilder().rootUrl(<jf>samplesUrl</jf>).build();			
+	RestClient client = RestClient.<jsm>create</jsm>().rootUrl(<jf>samplesUrl</jf>).build();			
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>, <js>"/addressBook/myproxy"</js>);
 			</p>
 				See {@link org.apache.juneau.rest.annotation.RestMethod#name()} for more information.

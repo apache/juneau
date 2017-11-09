@@ -51,6 +51,22 @@ public final class JsoParser extends InputStreamParser {
 	public JsoParserBuilder builder() {
 		return new JsoParserBuilder(propertyStore);
 	}
+	
+	/**
+	 * Instantiates a new clean-slate {@link JsoParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> JsoParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link JsoParserBuilder} object.
+	 */
+	public static JsoParserBuilder create() {
+		return new JsoParserBuilder();
+	}
 
 	@Override /* Parser */
 	public InputStreamParserSession createSession(ParserSessionArgs args) {

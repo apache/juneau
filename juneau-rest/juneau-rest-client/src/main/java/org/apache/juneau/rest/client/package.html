@@ -125,7 +125,7 @@
 	<jc>// Examples below use the Juneau Address Book resource example</jc>
 
 	<jc>// Create a reusable client with JSON support</jc>
-	RestClient client = <jk>new</jk> RestClientBuilder().build();
+	RestClient client = RestClient.<jsm>create</jsm>().build();
 	
 	<jc>// GET request, ignoring output</jc>
 	<jk>try</jk> {
@@ -194,7 +194,7 @@
 		.getResponse(Boolean.<jk>class</jk>);
 			
 	<jc>// GET request, getting a filtered object</jc>
-	client = <jk>new</jk> RestClientBuilder().pojoSwaps(CalendarSwap.<jsf>ISO8601</jsf>.<jk>class</jk>).build();
+	client = RestClient.<jsm>create</jsm>().pojoSwaps(CalendarSwap.<jsf>ISO8601</jsf>.<jk>class</jk>).build();
 	Calendar birthDate = client.doGet(<js>"http://localhost:9080/sample/addressBook/0/birthDate"</js>)
 		.getResponse(GregorianCalendar.<jk>class</jk>);
 
@@ -236,18 +236,18 @@
 		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 	<jc>// Create a client that ignores self-signed or otherwise invalid certificates.</jc>
-	RestClientBuilder builder = <jk>new</jk> RestClientBuilder() 
+	RestClientBuilder builder = RestClient.<jsm>create</jsm>() 
 		.enableSSL(SSLOpts.<jsf>LAX</jsf>);
 		
 	<jc>// ...or...</jc>
-	RestClientBuilder builder = <jk>new</jk> RestClientBuilder() 
+	RestClientBuilder builder = RestClient.<jsm>create</jsm>() 
 		.enableLaxSSL();
 		</p>
 		<p>
 			This is functionally equivalent to the following:
 		</p>
 		<p class='bcode'>
-	RestClientBuilder builder = <jk>new</jk> RestClientBuilder();
+	RestClientBuilder builder = RestClient.<jsm>create</jsm>();
 	
 	HostnameVerifier hv = <jk>new</jk> NoopHostnameVerifier();
 	TrustManager tm = <jk>new</jk> SimpleX509TrustManager(<jk>true</jk>);
@@ -291,7 +291,7 @@
 			<h6 class='figure'>Code that reads an <code>SSLOpts</code> bean from the config file</h6>
 			<p class='bcode'>
 		<jc>// Read config file and set SSL options based on what's in that file.</jc>
-		ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+		ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 		SSLOpts ssl = cf.getObject(SSLOpts.<jk>class</jk>, <js>"Connection/ssl"</js>);
 		RestClient rc = <jk>new</jk> RestClient().enableSSL(ssl);
 			</p>
@@ -315,7 +315,7 @@
 			<h6 class='topic'>Example:</h6>
 			<p class='bcode'>
 	<jc>// Create a client that performs BASIC authentication using the specified user/pw.</jc>
-	RestClient restClient = <jk>new</jk> RestClientBuilder() 
+	RestClient restClient = RestClient.<jsm>create</jsm>() 
 		.basicAuth(<jsf>HOST</jsf>, <jsf>PORT</jsf>, <jsf>USER</jsf>, <jsf>PW</jsf>)
 		.build();
 			</p>
@@ -323,7 +323,7 @@
 				This is functionally equivalent to the following:
 			</p>
 			<p class='bcode'>
-	RestClientBuilder builder = <jk>new</jk> RestClientBuilder();
+	RestClientBuilder builder = RestClient.<jsm>create</jsm>();
 	AuthScope scope = <jk>new</jk> AuthScope(<jsf>HOST</jsf>, <jsf>PORT</jsf>);
 	Credentials up = <jk>new</jk> UsernamePasswordCredentials(<jsf>USER</jsf>, <jsf>PW</jsf>);
 	CredentialsProvider p = <jk>new</jk> BasicCredentialsProvider();
@@ -883,7 +883,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
-	RestClient client = <jk>new</jk> RestClientBuilder()
+	RestClient client = RestClient.<jsm>create</jsm>()
 		.rootUrl(<js>"https://localhost:9080/juneau/sample/remoteable"</js>)
 		.build();
 	
@@ -929,7 +929,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a rest client with a root URL</jc>
-	RestClient rc = <jk>new</jk> RestClientBuilder().rootUrl(<js>"http://localhost:9080/foobar"</js>).build();
+	RestClient rc = RestClient.<jsm>create</jsm>().rootUrl(<js>"http://localhost:9080/foobar"</js>).build();
 	String r = rc.doGet(<js>"/baz"</js>).getResponseAsString();  <jc>// Gets "http://localhost:9080/foobar/baz"</jc>
 		</p>
 		<p>
@@ -940,7 +940,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a rest client that ignores unknown fields in the response</jc>
-	RestClient rc = <jk>new</jk> RestClientBuilder()
+	RestClient rc = RestClient.<jsm>create</jsm>()
 		.property(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
 		<jc>// or .ignoreUnknownBeanProperties(true)</jc>
 		.build();

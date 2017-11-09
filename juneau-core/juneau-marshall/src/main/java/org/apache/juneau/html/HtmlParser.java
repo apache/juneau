@@ -60,6 +60,22 @@ public class HtmlParser extends XmlParser {
 		return new HtmlParserBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link HtmlParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> HtmlParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link HtmlParserBuilder} object.
+	 */
+	public static HtmlParserBuilder create() {
+		return new HtmlParserBuilder();
+	}
+
 	@Override /* Parser */
 	public HtmlParserSession createSession(ParserSessionArgs args) {
 		return new HtmlParserSession(ctx, args);

@@ -97,9 +97,9 @@ public class RestConfig implements ServletConfig {
 		paramResolvers = new ArrayList<>();
 	Class<? extends SerializerListener> serializerListener;
 	Class<? extends ParserListener> parserListener;
-	SerializerGroupBuilder serializers = new SerializerGroupBuilder();
-	ParserGroupBuilder parsers = new ParserGroupBuilder();
-	EncoderGroupBuilder encoders = new EncoderGroupBuilder().append(IdentityEncoder.INSTANCE);
+	SerializerGroupBuilder serializers = SerializerGroup.create();
+	ParserGroupBuilder parsers = ParserGroup.create();
+	EncoderGroupBuilder encoders = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
 	List<Object> converters = new ArrayList<>();
 	List<Object> guards = new ArrayList<>();
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();

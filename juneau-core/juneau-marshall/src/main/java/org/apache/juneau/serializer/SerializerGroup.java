@@ -74,6 +74,27 @@ public final class SerializerGroup {
 	private final BeanContext beanContext;
 
 	/**
+	 * Instantiates a new clean-slate {@link SerializerGroupBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> SerializerGroupBuilder()</code>.
+	 * 
+	 * @return A new {@link SerializerGroupBuilder} object.
+	 */
+	public static SerializerGroupBuilder create() {
+		return new SerializerGroupBuilder();
+	}
+	
+	/**
+	 * Returns a builder that's a copy of the settings on this serializer group.
+	 * 
+	 * @return A new {@link SerializerGroupBuilder} initialized to this group.
+	 */
+	public SerializerGroupBuilder builder() {
+		return new SerializerGroupBuilder(this);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param propertyStore

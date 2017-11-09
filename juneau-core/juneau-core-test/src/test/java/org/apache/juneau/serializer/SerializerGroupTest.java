@@ -27,7 +27,7 @@ public class SerializerGroupTest {
 	@Test
 	public void testSerializerGroupMatching() throws Exception {
 
-		SerializerGroup sg = new SerializerGroupBuilder().append(SA1.class, SA2.class, SA3.class).build();
+		SerializerGroup sg = SerializerGroup.create().append(SA1.class, SA2.class, SA3.class).build();
 		assertType(SA1.class, sg.getSerializer("text/foo"));
 		assertType(SA1.class, sg.getSerializer("text/foo_a"));
 		assertType(SA1.class, sg.getSerializer("text/xxx+foo_a"));
@@ -76,15 +76,15 @@ public class SerializerGroupTest {
 		SerializerGroupBuilder gb = null;
 		SerializerGroup g = null;
 
-		gb = new SerializerGroupBuilder().append(SB1.class, SB2.class);
+		gb = SerializerGroup.create().append(SB1.class, SB2.class);
 		g = gb.build();
 		assertObjectEquals("['text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 
-		gb = new SerializerGroupBuilder(g).append(SB3.class, SB4.class);
+		gb = g.builder().append(SB3.class, SB4.class);
 		g = gb.build();
 		assertObjectEquals("['text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 
-		gb = new SerializerGroupBuilder(g).append(SB5.class);
+		gb = g.builder().append(SB5.class);
 		g = gb.build();
 		assertObjectEquals("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 	}
@@ -127,7 +127,7 @@ public class SerializerGroupTest {
 		SerializerGroupBuilder gb = null;
 		SerializerGroup g = null;
 
-		gb = new SerializerGroupBuilder().append(SC1.class, SC2.class, SC3.class);
+		gb = SerializerGroup.create().append(SC1.class, SC2.class, SC3.class);
 		g = gb.build();
 		assertType(SC1.class, g.getSerializer("text/foo"));
 		assertType(SC2.class, g.getSerializer("foo/json"));

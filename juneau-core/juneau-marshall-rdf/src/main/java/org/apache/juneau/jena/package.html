@@ -241,7 +241,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev()
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev()
 		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 
 	<jc>// Create our bean.</jc>
@@ -350,7 +350,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
 		.autoDetectNamespaces(<jk>false</jk>)
@@ -455,7 +455,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
 		.relativeUriBase(<js>"http://myhost/sample"</js>);
@@ -586,7 +586,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev().property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev().property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
@@ -667,7 +667,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
 		.addRootProperty(<jk>true</jk>)
@@ -723,7 +723,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
 		.addLiteralTypes(<jk>true</jk>)
@@ -852,7 +852,7 @@
 	</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
 		.addRootProperty(<jk>true</jk>)

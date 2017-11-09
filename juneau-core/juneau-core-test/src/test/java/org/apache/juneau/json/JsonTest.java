@@ -33,8 +33,8 @@ public class JsonTest {
 		Map<String,Object> m = new LinkedHashMap<String,Object>();
 		List<Object> l = new LinkedList<Object>();
 
-		WriterSerializer s1 = new JsonSerializerBuilder().simple().trimNullProperties(false).build();
-		WriterSerializer s2 = new JsonSerializerBuilder().simple().trimNullProperties(false).quoteChar('"').build();
+		WriterSerializer s1 = JsonSerializer.create().simple().trimNullProperties(false).build();
+		WriterSerializer s2 = JsonSerializer.create().simple().trimNullProperties(false).quoteChar('"').build();
 		String r;
 
 		// Null keys and values
@@ -109,7 +109,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testBackslashesInStrings() throws Exception {
-		JsonSerializer s = new JsonSerializerBuilder().simple().trimNullProperties(false).quoteChar('"').build();
+		JsonSerializer s = JsonSerializer.create().simple().trimNullProperties(false).quoteChar('"').build();
 		String r, r2;
 
 		// [\\]
@@ -289,13 +289,13 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testEscapeSolidus() throws Exception {
-		JsonSerializer s = new JsonSerializerBuilder().escapeSolidus(false).build();
+		JsonSerializer s = JsonSerializer.create().escapeSolidus(false).build();
 		String r = s.serialize("foo/bar");
 		assertEquals("\"foo/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);
 		assertEquals("foo/bar", r);
 
-		s = new JsonSerializerBuilder().escapeSolidus(true).build();
+		s = JsonSerializer.create().escapeSolidus(true).build();
 		r = s.serialize("foo/bar");
 		assertEquals("\"foo\\/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);

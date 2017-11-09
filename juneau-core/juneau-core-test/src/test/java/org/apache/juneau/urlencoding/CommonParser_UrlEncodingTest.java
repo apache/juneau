@@ -27,7 +27,7 @@ import org.junit.*;
 @SuppressWarnings({"rawtypes","serial","javadoc"})
 public class CommonParser_UrlEncodingTest {
 
-	ReaderParser p = new UrlEncodingParserBuilder().beanDictionary(A1.class).build();
+	ReaderParser p = UrlEncodingParser.create().beanDictionary(A1.class).build();
 
 	//====================================================================================================
 	// testFromSerializer
@@ -72,7 +72,7 @@ public class CommonParser_UrlEncodingTest {
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
 
-		in = new UrlEncodingSerializerBuilder().addBeanTypeProperties(true).build().serialize(b);
+		in = UrlEncodingSerializer.create().addBeanTypeProperties(true).build().serialize(b);
 		b = (A1)p.parse(in, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
@@ -103,7 +103,7 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = UrlEncodingParser.create().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in =  "a=1&unknown=3&b=2";
@@ -152,7 +152,7 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		UonParser p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		UonParser p = UrlEncodingParser.create().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = "a=1&unknownProperty=foo&b=2";
 		p.parse(in, B.class);

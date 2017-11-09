@@ -41,7 +41,7 @@ public class IgnoredClassesTest {
 	@Test
 	public void testIgnorePackages() throws Exception {
 		A a = new A();
-		JsonSerializerBuilder s = new JsonSerializerBuilder().simple();
+		JsonSerializerBuilder s = JsonSerializer.create().simple();
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.build().serialize(a));

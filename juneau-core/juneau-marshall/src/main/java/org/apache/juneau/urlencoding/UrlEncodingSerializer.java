@@ -266,10 +266,25 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		this.ctx = createContext(UrlEncodingSerializerContext.class);
 	}
 
-
 	@Override /* CoreObject */
 	public UrlEncodingSerializerBuilder builder() {
 		return new UrlEncodingSerializerBuilder(propertyStore);
+	}
+
+	/**
+	 * Instantiates a new clean-slate {@link UrlEncodingSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> UrlEncodingSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link UrlEncodingSerializerBuilder} object.
+	 */
+	public static UrlEncodingSerializerBuilder create() {
+		return new UrlEncodingSerializerBuilder();
 	}
 
 

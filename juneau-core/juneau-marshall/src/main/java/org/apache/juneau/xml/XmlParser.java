@@ -177,6 +177,22 @@ public class XmlParser extends ReaderParser {
 		return new XmlParserBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link XmlParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> XmlParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link XmlParserBuilder} object.
+	 */
+	public static XmlParserBuilder create() {
+		return new XmlParserBuilder();
+	}
+
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new XmlParserSession(ctx, args);

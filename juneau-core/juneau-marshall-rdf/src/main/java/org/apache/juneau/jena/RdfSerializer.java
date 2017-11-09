@@ -263,6 +263,22 @@ public class RdfSerializer extends WriterSerializer {
 		return new RdfSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link RdfSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> RdfSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link RdfSerializerBuilder} object.
+	 */
+	public static RdfSerializerBuilder create() {
+		return new RdfSerializerBuilder();
+	}
+
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new RdfSerializerSession(ctx, args);

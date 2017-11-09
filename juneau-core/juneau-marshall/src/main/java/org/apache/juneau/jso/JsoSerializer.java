@@ -58,6 +58,22 @@ public class JsoSerializer extends OutputStreamSerializer {
 		return new JsoSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link JsoSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> JsoSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link JsoSerializerBuilder} object.
+	 */
+	public static JsoSerializerBuilder create() {
+		return new JsoSerializerBuilder();
+	}
+
 	@Override /* Serializer */
 	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsoSerializerSession(ctx, args);

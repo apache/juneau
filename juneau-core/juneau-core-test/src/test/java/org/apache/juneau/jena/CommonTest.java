@@ -30,7 +30,7 @@ import org.junit.*;
 public class CommonTest {
 
 	private RdfSerializerBuilder getBasicSerializer() {
-		return new RdfSerializerBuilder()
+		return RdfSerializer.create()
 			.sq()
 			.useWhitespace(false)
 			.property(RDF_rdfxml_allowBadUris, true)
@@ -280,7 +280,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev().sq();
+		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev().sq();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

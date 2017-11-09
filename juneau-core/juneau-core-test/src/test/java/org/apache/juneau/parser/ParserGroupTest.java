@@ -27,7 +27,7 @@ public class ParserGroupTest {
 	@Test
 	public void testParserGroupMatching() throws Exception {
 
-		ParserGroup g = new ParserGroupBuilder().append(Parser1.class, Parser2.class, Parser3.class).build();
+		ParserGroup g = ParserGroup.create().append(Parser1.class, Parser2.class, Parser3.class).build();
 		assertType(Parser1.class, g.getParser("text/foo"));
 		assertType(Parser1.class, g.getParser("text/foo_a"));
 		assertType(Parser1.class, g.getParser("text/foo_a+xxx"));
@@ -71,15 +71,15 @@ public class ParserGroupTest {
 		ParserGroupBuilder gb = null;
 		ParserGroup g = null;
 
-		gb = new ParserGroupBuilder().append(P1.class, P2.class);
+		gb = ParserGroup.create().append(P1.class, P2.class);
 		g = gb.build();
 		assertObjectEquals("['text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 
-		gb = new ParserGroupBuilder(g).append(P3.class, P4.class);
+		gb = g.builder().append(P3.class, P4.class);
 		g = gb.build();
 		assertObjectEquals("['text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 
-		gb = new ParserGroupBuilder(g).append(P5.class);
+		gb = g.builder().append(P5.class);
 		g = gb.build();
 		assertObjectEquals("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 	}

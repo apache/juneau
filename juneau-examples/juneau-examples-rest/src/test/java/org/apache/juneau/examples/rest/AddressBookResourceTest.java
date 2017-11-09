@@ -92,7 +92,7 @@ public class AddressBookResourceTest extends RestTestcase {
 			+"\n		}"
 			+"\n	]"
 			+"\n}";
-		JsonParser p = new JsonParserBuilder().pojoSwaps(CalendarSwap.DateMedium.class).build();
+		JsonParser p = JsonParser.create().pojoSwaps(CalendarSwap.DateMedium.class).build();
 		Person person = p.parse(in, Person.class);
 		if (debug) System.err.println(person);
 	}

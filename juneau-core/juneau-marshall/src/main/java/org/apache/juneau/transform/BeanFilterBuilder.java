@@ -129,7 +129,7 @@ public abstract class BeanFilterBuilder {
 	 * 		}
 	 * 	}
 	 *
-	 * 	JsonSerializer s = new JsonSerializerBuilder().beanFilters(AFilter.<jk>class</jk>).build();
+	 * 	JsonSerializer s = JsonSerializer.create().beanFilters(AFilter.<jk>class</jk>).build();
 	 * 	A1 a1 = <jk>new</jk> A1();
 	 * 	String r = s.serialize(a1);
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>

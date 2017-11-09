@@ -29,7 +29,7 @@ import org.apache.juneau.transforms.*;
  */
 public class JuneauLogger extends java.util.logging.Logger {
 
-	private static final WriterSerializer serializer = new JsonSerializerBuilder()
+	private static final WriterSerializer serializer = JsonSerializer.create()
 		.pojoSwaps(
 			CalendarSwap.ISO8601DTZ.class,
 			DateSwap.ISO8601DTZ.class,

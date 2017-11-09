@@ -35,7 +35,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
+		XmlSerializerBuilder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -67,7 +67,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
+		XmlSerializerBuilder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -101,7 +101,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
+		XmlSerializerBuilder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -135,7 +135,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
+		XmlSerializerBuilder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -251,7 +251,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		XmlSerializerBuilder s = new XmlSerializerBuilder().enableNamespaces(false);
+		XmlSerializerBuilder s = XmlSerializer.create().enableNamespaces(false);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

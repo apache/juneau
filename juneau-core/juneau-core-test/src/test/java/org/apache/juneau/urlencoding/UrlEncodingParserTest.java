@@ -845,7 +845,7 @@ public class UrlEncodingParserTest {
 		UrlEncodingParser p;
 		String in;
 
-		p = new UrlEncodingParserBuilder().expandedParams(true).build();
+		p = UrlEncodingParser.create().expandedParams(true).build();
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"

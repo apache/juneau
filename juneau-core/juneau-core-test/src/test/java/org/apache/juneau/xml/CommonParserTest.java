@@ -103,7 +103,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new XmlParserBuilder().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = XmlParser.create().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in =  "<object><a>1</a><unknown>foo</unknown><b>2</b></object>";
@@ -158,7 +158,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		XmlParser p = new XmlParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		XmlParser p = XmlParser.create().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
 		p.parse(in, B.class);

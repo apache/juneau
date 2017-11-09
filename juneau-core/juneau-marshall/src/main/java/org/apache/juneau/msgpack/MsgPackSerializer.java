@@ -86,6 +86,22 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		return new MsgPackSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link MsgPackSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> MsgPackSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link MsgPackSerializerBuilder} object.
+	 */
+	public static MsgPackSerializerBuilder create() {
+		return new MsgPackSerializerBuilder();
+	}
+	
 	@Override /* Serializer */
 	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
 		return new MsgPackSerializerSession(ctx, args);

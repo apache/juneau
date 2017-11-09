@@ -63,6 +63,27 @@ public final class EncoderGroup {
 	private final List<Encoder> encoders;
 
 	/**
+	 * Instantiates a new clean-slate {@link EncoderGroupBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> EncoderGroupBuilder()</code>.
+	 * 
+	 * @return A new {@link EncoderGroupBuilder} object.
+	 */
+	public static EncoderGroupBuilder create() {
+		return new EncoderGroupBuilder();
+	}
+
+	/**
+	 * Returns a builder that's a copy of the settings on this encoder group.
+	 * 
+	 * @return A new {@link EncoderGroupBuilder} initialized to this group.
+	 */
+	public EncoderGroupBuilder builder() {
+		return new EncoderGroupBuilder(this);
+	}
+	
+	/**
 	 * Constructor
 	 *
 	 * @param encoders The encoders to add to this group.

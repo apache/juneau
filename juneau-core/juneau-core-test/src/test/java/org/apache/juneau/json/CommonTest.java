@@ -32,7 +32,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		JsonSerializerBuilder s = new JsonSerializerBuilder().simple();
+		JsonSerializerBuilder s = JsonSerializer.create().simple();
 		JsonParser p = JsonParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -64,7 +64,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		JsonSerializerBuilder s = new JsonSerializerBuilder().simple();
+		JsonSerializerBuilder s = JsonSerializer.create().simple();
 		JsonParser p = JsonParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -98,7 +98,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		JsonSerializerBuilder s = new JsonSerializerBuilder().simple();
+		JsonSerializerBuilder s = JsonSerializer.create().simple();
 		JsonParser p = JsonParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -132,7 +132,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		JsonSerializerBuilder s = new JsonSerializerBuilder().simple();
+		JsonSerializerBuilder s = JsonSerializer.create().simple();
 		JsonParser p = JsonParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -241,7 +241,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		JsonSerializerBuilder s = new JsonSerializerBuilder().simple();
+		JsonSerializerBuilder s = JsonSerializer.create().simple();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -297,7 +297,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		JsonSerializer s = new JsonSerializerBuilder().simple().trimNullProperties(false).sortProperties(true).build();
+		JsonSerializer s = JsonSerializer.create().simple().trimNullProperties(false).sortProperties(true).build();
 
 		J a = new J();
 		a.setF1("J");

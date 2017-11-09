@@ -81,6 +81,27 @@ public final class ParserGroup {
 	private final PropertyStore propertyStore;
 
 	/**
+	 * Instantiates a new clean-slate {@link ParserGroupBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> ParserGroupBuilder()</code>.
+	 * 
+	 * @return A new {@link ParserGroupBuilder} object.
+	 */
+	public static ParserGroupBuilder create() {
+		return new ParserGroupBuilder();
+	}
+	
+	/**
+	 * Returns a builder that's a copy of the settings on this parser group.
+	 * 
+	 * @return A new {@link ParserGroupBuilder} initialized to this group.
+	 */
+	public ParserGroupBuilder builder() {
+		return new ParserGroupBuilder(this);
+	}
+	
+	/**
 	 * Constructor.
 	 *
 	 * @param propertyStore

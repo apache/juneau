@@ -197,6 +197,22 @@ public class YamlSerializer extends WriterSerializer {
 		return new YamlSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link YamlSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> YamlSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link YamlSerializerBuilder} object.
+	 */
+	public static YamlSerializerBuilder create() {
+		return new YamlSerializerBuilder();
+	}
+
 
 	//--------------------------------------------------------------------------------
 	// Entry point methods

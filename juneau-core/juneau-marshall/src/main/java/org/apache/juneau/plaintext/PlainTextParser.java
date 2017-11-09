@@ -77,6 +77,22 @@ public class PlainTextParser extends ReaderParser {
 		return new PlainTextParserBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link PlainTextParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> PlainTextParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link PlainTextParserBuilder} object.
+	 */
+	public static PlainTextParserBuilder create() {
+		return new PlainTextParserBuilder();
+	}
+
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new PlainTextParserSession(args);

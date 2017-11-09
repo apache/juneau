@@ -89,6 +89,17 @@ public class RestClient extends CoreObject {
 	private volatile ExecutorService executorService;
 	boolean executorServiceShutdownOnClose = true;
 
+	/**
+	 * Instantiates a new clean-slate {@link RestClientBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> RestClientBuilder()</code>.
+	 * 
+	 * @return A new {@link RestClientBuilder} object.
+	 */
+	public static RestClientBuilder create() {
+		return new RestClientBuilder();
+	}
 
 	RestClient(
 			PropertyStore propertyStore,

@@ -32,11 +32,11 @@ public class RdfTest {
 		String rdfXml;
 		String expected;
 
-		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev()
+		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
 			.property(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty(true);
-		RdfParser p = new RdfParserBuilder().xml().build();
+		RdfParser p = RdfParser.create().xml().build();
 
 		//--------------------------------------------------------------------------------
 		// Normal format - Sequence
@@ -169,7 +169,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		// Note - Must specify collection format on parser for it to be able to understand this layout.
-		p = new RdfParserBuilder().xml().collectionFormat(RdfCollectionFormat.MULTI_VALUED).build();
+		p = RdfParser.create().xml().collectionFormat(RdfCollectionFormat.MULTI_VALUED).build();
 		a2 = p.parse(rdfXml, A.class);
 		assertEqualObjects(a, a2);
 	}
@@ -192,7 +192,7 @@ public class RdfTest {
 	public void testCollectionFormatAnnotations() throws Exception {
 		B b = new B().init(), b2;
 		String rdfXml, expected;
-		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev()
+		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
 			.property(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty(true);
@@ -425,7 +425,7 @@ public class RdfTest {
 	public void testCollectionFormatAnnotationOnClass() throws Exception {
 		C c = new C().init(), c2;
 		String rdfXml, expected;
-		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev()
+		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
 			.property(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty(true);
@@ -524,8 +524,8 @@ public class RdfTest {
 
 	@Test
 	public void testLooseCollectionsOfBeans() throws Exception {
-		WriterSerializer s = new RdfSerializerBuilder().xmlabbrev().looseCollections(true).build();
-		ReaderParser p = new RdfParserBuilder().xml().looseCollections(true).build();
+		WriterSerializer s = RdfSerializer.create().xmlabbrev().looseCollections(true).build();
+		ReaderParser p = RdfParser.create().xml().looseCollections(true).build();
 		String rdfXml, expected;
 
 		List<D> l = new LinkedList<D>();

@@ -25,8 +25,8 @@ public class YamlTest {
 //		Map<String,Object> m = new LinkedHashMap<String,Object>();
 //		List<Object> l = new LinkedList<Object>();
 //
-//		WriterSerializer s1 = new YamlSerializerBuilder().simple().trimNullProperties(false).build();
-//		WriterSerializer s2 = new YamlSerializerBuilder().simple().trimNullProperties(false).quoteChar('"').build();
+//		WriterSerializer s1 = YamlSerializer.create().simple().trimNullProperties(false).build();
+//		WriterSerializer s2 = YamlSerializer.create().simple().trimNullProperties(false).quoteChar('"').build();
 //		String r;
 //
 //		// Null keys and values
@@ -101,7 +101,7 @@ public class YamlTest {
 //	//====================================================================================================
 //	@Test
 //	public void testBackslashesInStrings() throws Exception {
-//		YamlSerializer s = new YamlSerializerBuilder().simple().trimNullProperties(false).quoteChar('"').build();
+//		YamlSerializer s = YamlSerializer.create().simple().trimNullProperties(false).quoteChar('"').build();
 //		String r, r2;
 //
 //		// [\\]
@@ -200,13 +200,13 @@ public class YamlTest {
 //	//====================================================================================================
 //	@Test
 //	public void testEscapeSolidus() throws Exception {
-//		YamlSerializer s = new YamlSerializerBuilder().escapeSolidus(false).build();
+//		YamlSerializer s = YamlSerializer.create().escapeSolidus(false).build();
 //		String r = s.serialize("foo/bar");
 //		assertEquals("\"foo/bar\"", r);
 //		r = YamlParser.DEFAULT.parse(r, String.class);
 //		assertEquals("foo/bar", r);
 //
-//		s = new YamlSerializerBuilder().escapeSolidus(true).build();
+//		s = YamlSerializer.create().escapeSolidus(true).build();
 //		r = s.serialize("foo/bar");
 //		assertEquals("\"foo\\/bar\"", r);
 //		r = YamlParser.DEFAULT.parse(r, String.class);

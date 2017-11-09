@@ -256,7 +256,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output, no namespaces yet.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder()
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
 		.ws()  <jc>// or .useWhitespace(true)</jc>  
 		.sq()  <jc>// or .quoteChar('\'')</jc>
 		.ns()  <jc>// or .enableNamespaces(false)</jc>
@@ -2042,7 +2042,7 @@
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
 	<jc>// Note that this is identical to XmlSerializer.DEFAULT_NS_SQ_READABLE.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().ns().ws().sq().build();
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ns().ws().sq().build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
@@ -2135,7 +2135,7 @@
 			not need to be prefixed:
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder()
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
 		.ws()
 		.sq()
 		.ns()
@@ -2174,7 +2174,7 @@
 			</p>
 			<p class='bcode'>
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder()
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
 		.ws()
 		.sq()
 		.autoDetectNamespaces(<jk>false</jk>)
@@ -2322,7 +2322,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().ws().sq().build();
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ws().sq().build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
@@ -2435,7 +2435,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder()
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
 		.ws()
 		.ns()
 		.sq()
@@ -2745,7 +2745,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder()
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
 		.ws()
 		.sq()
 		.ns()
@@ -2830,7 +2830,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().ws().sq().ns().build();
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ws().sq().ns().build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 

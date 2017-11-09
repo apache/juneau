@@ -49,56 +49,56 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json DEFAULT",
-				new JsonSerializerBuilder().trimNullProperties(false),
-				new JsonParserBuilder(),
+				JsonSerializer.create().trimNullProperties(false),
+				JsonParser.create(),
 				0
 			},
 			{ /* 1 */
 				"Json DEFAULT_LAX",
-				new JsonSerializerBuilder().simple().trimNullProperties(false),
-				new JsonParserBuilder(),
+				JsonSerializer.create().simple().trimNullProperties(false),
+				JsonParser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json DEFAULT_SQ",
-				new JsonSerializerBuilder().simple().trimNullProperties(false),
-				new JsonParserBuilder(),
+				JsonSerializer.create().simple().trimNullProperties(false),
+				JsonParser.create(),
 				0
 			},
 			{ /* 3 */
 				"Xml DEFAULT w/namespaces,validation",
-				new XmlSerializerBuilder().sq().ns().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
-				new XmlParserBuilder(),
+				XmlSerializer.create().sq().ns().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
+				XmlParser.create(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml DEFAULT wo/namespaces,validation",
-				new XmlSerializerBuilder().sq().trimNullProperties(false),
-				new XmlParserBuilder(),
+				XmlSerializer.create().sq().trimNullProperties(false),
+				XmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html",
-				new HtmlSerializerBuilder().trimNullProperties(false),
-				new HtmlParserBuilder(),
+				HtmlSerializer.create().trimNullProperties(false),
+				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"UrlEncoding",
-				new UrlEncodingSerializerBuilder().trimNullProperties(false),
-				new UrlEncodingParserBuilder(),
+				UrlEncodingSerializer.create().trimNullProperties(false),
+				UrlEncodingParser.create(),
 				0
 			},
 			{ /* 7 */
 				"Uon",
-				new UonSerializerBuilder().trimNullProperties(false),
-				new UonParserBuilder(),
+				UonSerializer.create().trimNullProperties(false),
+				UonParser.create(),
 				0
 			},
 			{ /* 8 */
 				"MsgPack",
-				new MsgPackSerializerBuilder().trimNullProperties(false),
-				new MsgPackParserBuilder(),
+				MsgPackSerializer.create().trimNullProperties(false),
+				MsgPackParser.create(),
 				0
 			},
 //			{ /* 9 */

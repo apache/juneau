@@ -35,7 +35,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		UonSerializerBuilder s = new UonSerializerBuilder().encoding();
+		UonSerializerBuilder s = UonSerializer.create().encoding();
 		A t1 = A.create(), t2;
 
 		s.trimNullProperties(false);
@@ -66,7 +66,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		UonSerializerBuilder s = new UonSerializerBuilder().encoding();
+		UonSerializerBuilder s = UonSerializer.create().encoding();
 		B t1 = B.create(), t2;
 		String r;
 
@@ -99,7 +99,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		UonSerializerBuilder s = new UonSerializerBuilder().encoding();
+		UonSerializerBuilder s = UonSerializer.create().encoding();
 		C t1 = C.create(), t2;
 		String r;
 
@@ -132,7 +132,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		UonSerializerBuilder s = new UonSerializerBuilder().encoding();
+		UonSerializerBuilder s = UonSerializer.create().encoding();
 		D t1 = D.create(), t2;
 		String r;
 
@@ -234,7 +234,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		UonSerializerBuilder s = new UonSerializerBuilder();
+		UonSerializerBuilder s = UonSerializer.create();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

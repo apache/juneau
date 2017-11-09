@@ -28,7 +28,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		JsonSerializerBuilder s = new JsonSerializerBuilder().simple().pojoSwaps(ReaderSwap.Json.class);
+		JsonSerializerBuilder s = JsonSerializer.create().simple().pojoSwaps(ReaderSwap.Json.class);
 
 		Reader r;
 		Map<String,Object> m;

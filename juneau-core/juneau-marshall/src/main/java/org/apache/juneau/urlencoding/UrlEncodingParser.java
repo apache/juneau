@@ -96,6 +96,22 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	}
 
 	/**
+	 * Instantiates a new clean-slate {@link UrlEncodingParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> UrlEncodingParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link UrlEncodingParserBuilder} object.
+	 */
+	public static UrlEncodingParserBuilder create() {
+		return new UrlEncodingParserBuilder();
+	}
+
+	/**
 	 * Parse a URL query string into a simple map of key/value pairs.
 	 *
 	 * @param qs The query string to parse.

@@ -593,79 +593,79 @@ public class UriResolutionTest {
 
 	@Test
 	public void a1_testJsonSerialize() throws Exception {
-		Serializer s = new JsonSerializerBuilder().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = JsonSerializer.create().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.json);
 	}
 
 	@Test
 	public void a2_testJsonParse() throws Exception {
-		Serializer s = new JsonSerializerBuilder().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = JsonSerializer.create().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, JsonParser.DEFAULT);
 	}
 
 	@Test
 	public void b1_testXmlSerialize() throws Exception {
-		Serializer s = new XmlSerializerBuilder().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = XmlSerializer.create().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.xml);
 	}
 
 	@Test
 	public void b2_testXmlParse() throws Exception {
-		Serializer s = new XmlSerializerBuilder().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = XmlSerializer.create().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, XmlParser.DEFAULT);
 	}
 
 	@Test
 	public void c1_testHtmlSerialize() throws Exception {
-		Serializer s = new HtmlSerializerBuilder().sq().lookForLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = HtmlSerializer.create().sq().lookForLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.html);
 	}
 
 	@Test
 	public void c2_testHtmlParse() throws Exception {
-		Serializer s = new HtmlSerializerBuilder().sq().lookForLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = HtmlSerializer.create().sq().lookForLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, HtmlParser.DEFAULT);
 	}
 
 	@Test
 	public void d1_testUonSerialize() throws Exception {
-		Serializer s = new UonSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = UonSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.uon);
 	}
 
 	@Test
 	public void d2_testUonParse() throws Exception {
-		Serializer s = new UonSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = UonSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, UonParser.DEFAULT);
 	}
 
 	@Test
 	public void e1_testUrlEncodingSerialize() throws Exception {
-		Serializer s = new UrlEncodingSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = UrlEncodingSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.urlEncoding);
 	}
 
 	@Test
 	public void e2_testUrlEncodingParse() throws Exception {
-		Serializer s = new UrlEncodingSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = UrlEncodingSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, UrlEncodingParser.DEFAULT);
 	}
 
 	@Test
 	public void f1_testMsgPackSerialize() throws Exception {
-		Serializer s = new MsgPackSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = MsgPackSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.msgPack);
 	}
 
 	@Test
 	public void f2_testMsgPackParse() throws Exception {
-		Serializer s = new MsgPackSerializerBuilder().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = MsgPackSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, MsgPackParser.DEFAULT);
 	}
 
 	@Test
 	public void g1_testRdfXmlSerialize() throws Exception {
-		Serializer s = new RdfSerializerBuilder().language(Constants.LANG_RDF_XML_ABBREV).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = RdfSerializer.create().language(Constants.LANG_RDF_XML_ABBREV).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.rdfXml);
 	}
 }

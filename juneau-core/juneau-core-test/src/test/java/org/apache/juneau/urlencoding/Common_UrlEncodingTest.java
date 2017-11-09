@@ -33,7 +33,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
+		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
 		A t1 = A.create(), t2;
 
 		s.trimNullProperties(false);
@@ -64,7 +64,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
+		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
 		B t1 = B.create(), t2;
 		String r;
 
@@ -97,7 +97,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
+		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
 		C t1 = C.create(), t2;
 		String r;
 
@@ -130,7 +130,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
+		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
 		D t1 = D.create(), t2;
 		String r;
 
@@ -235,7 +235,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
+		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

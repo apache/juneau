@@ -567,8 +567,8 @@ public class BeanConfigTest {
 	public void testClassMetaCaching() throws Exception {
 		ParserBuilder p1, p2;
 
-		p1 = new JsonParserBuilder();
-		p2 = new JsonParserBuilder();
+		p1 = JsonParser.create();
+		p2 = JsonParser.create();
 		assertSameCache(p1, p2);
 
 		p1.beansRequireDefaultConstructor(true);
@@ -727,8 +727,8 @@ public class BeanConfigTest {
 		p2.pojoSwaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
 		assertDifferentCache(p1, p2);
 
-		p1 = new JsonParserBuilder();
-		p2 = new JsonParserBuilder();
+		p1 = JsonParser.create();
+		p2 = JsonParser.create();
 		p1.beanFilters(DummyBeanFilterA.class);
 		assertDifferentCache(p1, p2);
 		p2.beanFilters(DummyBeanFilterA.class);

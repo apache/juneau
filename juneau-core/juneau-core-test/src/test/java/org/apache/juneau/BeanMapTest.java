@@ -479,7 +479,7 @@ public class BeanMapTest {
 		m.put("b", new D2());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = new JsonParserBuilder().beanDictionary(D2.class).build();
+		JsonParser p = JsonParser.create().beanDictionary(D2.class).build();
 		m.put("lb1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
@@ -665,7 +665,7 @@ public class BeanMapTest {
 		assertEquals(HEnum.THREE, t7.getEnum2());
 
 		// Create instance directly from JSON.
-		JsonParser p = new JsonParserBuilder().beanDictionary(H.class).build();
+		JsonParser p = JsonParser.create().beanDictionary(H.class).build();
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);
@@ -957,7 +957,7 @@ public class BeanMapTest {
 
 		// JSON
 		String json = "{baz:789,foo:123,bar:456}";
-		p = new JsonParserBuilder().ignoreUnknownBeanProperties(true).build();
+		p = JsonParser.create().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(json, O.class);
 		assertEquals(123, t.foo);
 
@@ -971,7 +971,7 @@ public class BeanMapTest {
 
 		// XML
 		String xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
-		p = new XmlParserBuilder().ignoreUnknownBeanProperties(true).build();
+		p = XmlParser.create().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(xml, O.class);
 		assertEquals(123, t.foo);
 
@@ -985,7 +985,7 @@ public class BeanMapTest {
 
 		// HTML
 		String html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
-		p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).build();
+		p = HtmlParser.create().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(html, O.class);
 		assertEquals(123, t.foo);
 
@@ -999,7 +999,7 @@ public class BeanMapTest {
 
 		// UON
 		String uon = "(baz=789,foo=123,bar=456)";
-		p = new UonParserBuilder().ignoreUnknownBeanProperties(true).build();
+		p = UonParser.create().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(uon, O.class);
 		assertEquals(123, t.foo);
 
@@ -1013,7 +1013,7 @@ public class BeanMapTest {
 
 		// URL-Encoding
 		String urlencoding = "baz=789&foo=123&bar=456";
-		p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).build();
+		p = UrlEncodingParser.create().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(urlencoding, O.class);
 		assertEquals(123, t.foo);
 

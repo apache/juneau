@@ -41,7 +41,7 @@ public class CommonParserTest {
 	}
 
 	private RdfSerializerBuilder getBasicSerializer() {
-		return new RdfSerializerBuilder()
+		return RdfSerializer.create()
 			.sq()
 			.addLiteralTypes(true)
 			.useWhitespace(false)
@@ -56,7 +56,7 @@ public class CommonParserTest {
 	@Test
 	public void testFromSerializer() throws Exception {
 		WriterSerializer s = getBasicSerializer().build();
-		ReaderParser p = new RdfParserBuilder().xml().trimWhitespace(true).build();
+		ReaderParser p = RdfParser.create().xml().trimWhitespace(true).build();
 		Map m = null;
 		String in;
 		Integer one = Integer.valueOf(1);
@@ -139,7 +139,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new RdfParserBuilder().xml().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = RdfParser.create().xml().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
@@ -148,7 +148,7 @@ public class CommonParserTest {
 		assertEquals(t.b, 2);
 
 		try {
-			p = new RdfParserBuilder().xml().build();
+			p = RdfParser.create().xml().build();
 			p.parse(in, B.class);
 			fail("Exception expected");
 		} catch (ParseException e) {}
@@ -163,7 +163,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCollectionPropertiesWithNoSetters() throws Exception {
-		RdfParser p = new RdfParserBuilder().xml().build();
+		RdfParser p = RdfParser.create().xml().build();
 		String in = wrap("<rdf:Description><jp:ints><rdf:Seq><rdf:li>1</rdf:li><rdf:li>2</rdf:li></rdf:Seq></jp:ints><jp:beans><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:a>1</jp:a><jp:b>2</jp:b></rdf:li></rdf:Seq></jp:beans></rdf:Description>");
 		C t = p.parse(in, C.class);
 		assertEquals(t.getInts().size(), 2);
@@ -186,7 +186,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		RdfParser p = new RdfParserBuilder().xml().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		RdfParser p = RdfParser.create().xml().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
 		p.parse(in, B.class);

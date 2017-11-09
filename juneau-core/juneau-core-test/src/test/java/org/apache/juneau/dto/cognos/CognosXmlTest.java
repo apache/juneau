@@ -72,7 +72,7 @@ public class CognosXmlTest {
 			new Column("productLineCode", "xs:int")
 		};
 
-		XmlSerializer s = new XmlSerializerBuilder()
+		XmlSerializer s = XmlSerializer.create()
 			.ws()
 			.sq()
 			.defaultNamespace("cognos")

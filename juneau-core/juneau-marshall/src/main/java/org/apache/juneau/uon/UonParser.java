@@ -116,6 +116,22 @@ public class UonParser extends ReaderParser {
 	}
 
 	/**
+	 * Instantiates a new clean-slate {@link UonParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> UonParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link UonParserBuilder} object.
+	 */
+	public static UonParserBuilder create() {
+		return new UonParserBuilder();
+	}
+
+	/**
 	 * Create a UON parser session for parsing parameter values.
 	 *
 	 * @return A new parser session.

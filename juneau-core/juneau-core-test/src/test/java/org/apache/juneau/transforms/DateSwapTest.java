@@ -37,11 +37,11 @@ public class DateSwapTest {
 	public void testBeanWithDate() throws Exception {
 		A testBeanA = new A().init();
 
-		final String jsonData = new JsonSerializerBuilder()
+		final String jsonData = JsonSerializer.create()
 			.pojoSwaps(DateSwap.ISO8601DT.class)
 			.build()
 			.serialize(testBeanA);
-		final ObjectMap data = new JsonParserBuilder()
+		final ObjectMap data = JsonParser.create()
 			.pojoSwaps(DateSwap.ISO8601DT.class)
 			.build()
 			.parse(jsonData, ObjectMap.class);

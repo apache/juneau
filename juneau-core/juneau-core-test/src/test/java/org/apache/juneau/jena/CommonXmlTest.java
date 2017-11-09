@@ -26,7 +26,7 @@ import org.junit.*;
 public class CommonXmlTest {
 
 	private RdfSerializerBuilder getBasicSerializer() {
-		return new RdfSerializerBuilder()
+		return RdfSerializer.create()
 			.sq()
 			.useWhitespace(false)
 			.property(RDF_rdfxml_allowBadUris, true)

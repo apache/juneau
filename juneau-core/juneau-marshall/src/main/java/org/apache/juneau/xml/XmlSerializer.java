@@ -395,6 +395,21 @@ public class XmlSerializer extends WriterSerializer {
 		return new XmlSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link XmlSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> XmlSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link XmlSerializerBuilder} object.
+	 */
+	public static XmlSerializerBuilder create() {
+		return new XmlSerializerBuilder();
+	}
 
 	/**
 	 * Returns the schema serializer based on the settings of this serializer.

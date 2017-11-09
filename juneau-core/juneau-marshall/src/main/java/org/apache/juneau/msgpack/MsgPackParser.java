@@ -53,6 +53,22 @@ public class MsgPackParser extends InputStreamParser {
 		return new MsgPackParserBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link MsgPackParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> MsgPackParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link MsgPackParserBuilder} object.
+	 */
+	public static MsgPackParserBuilder create() {
+		return new MsgPackParserBuilder();
+	}
+
 	@Override /* Parser */
 	public MsgPackParserSession createSession(ParserSessionArgs args) {
 		return new MsgPackParserSession(ctx, args);

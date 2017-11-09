@@ -49,6 +49,22 @@ public class CsvParser extends ReaderParser {
 		return new CsvParserBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link CsvParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code>CsvParser.create()
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link CsvParserBuilder} object.
+	 */
+	public static CsvParserBuilder create() {
+		return new CsvParserBuilder();
+	}
+
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new CsvParserSession(ctx, args);

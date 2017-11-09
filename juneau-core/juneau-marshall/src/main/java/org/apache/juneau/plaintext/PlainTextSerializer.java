@@ -92,6 +92,22 @@ public class PlainTextSerializer extends WriterSerializer {
 		return new PlainTextSerializerBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link PlainTextSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> PlainTextSerializerBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link PlainTextSerializerBuilder} object.
+	 */
+	public static PlainTextSerializerBuilder create() {
+		return new PlainTextSerializerBuilder();
+	}
+
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new PlainTextSerializerSession(ctx, args);

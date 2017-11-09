@@ -302,9 +302,25 @@ public class JsonSerializer extends WriterSerializer {
 	public JsonSerializerBuilder builder() {
 		return new JsonSerializerBuilder(propertyStore);
 	}
+	
+	/**
+	 * Instantiates a new clean-slate {@link JsonSerializerBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> JsonSerializerBuilder()</code>.
+	 * 
+	 * @return A new {@link JsonSerializerBuilder} object.
+	 */
+	public static JsonSerializerBuilder create() {
+		return new JsonSerializerBuilder();
+	}
 
 	/**
 	 * Returns the schema serializer based on the settings of this serializer.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
 	 *
 	 * @return The schema serializer.
 	 */

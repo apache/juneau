@@ -42,7 +42,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		return Arrays.asList(new Object[][] {
 			{ /* 0 */
 				"JsonSerializer.DEFAULT/JsonParser.DEFAULT",
-				new JsonSerializerBuilder().addBeanTypeProperties(true),
+				JsonSerializer.create().addBeanTypeProperties(true),
 				new JsonParserBuilder().useInterfaceProxies(false),
 				0
 			},

@@ -49,136 +49,136 @@ public abstract class RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json - default",
-				new JsonSerializerBuilder().trimNullProperties(false),
-				new JsonParserBuilder(),
+				JsonSerializer.create().trimNullProperties(false),
+				JsonParser.create(),
 				0
 			},
 			{ /* 1 */
 				"Json - lax",
-				new JsonSerializerBuilder().simple().trimNullProperties(false),
-				new JsonParserBuilder(),
+				JsonSerializer.create().simple().trimNullProperties(false),
+				JsonParser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json - lax, readable",
-				new JsonSerializerBuilder().simple().ws().trimNullProperties(false),
-				new JsonParserBuilder(),
+				JsonSerializer.create().simple().ws().trimNullProperties(false),
+				JsonParser.create(),
 				0
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				new XmlSerializerBuilder().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
-				new XmlParserBuilder(),
+				XmlSerializer.create().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
+				XmlParser.create(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml - no namespaces, validation",
-				new XmlSerializerBuilder().sq().trimNullProperties(false),
-				new XmlParserBuilder(),
+				XmlSerializer.create().sq().trimNullProperties(false),
+				XmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html - default",
-				new HtmlSerializerBuilder().trimNullProperties(false),
-				new HtmlParserBuilder(),
+				HtmlSerializer.create().trimNullProperties(false),
+				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"Html - readable",
-				new HtmlSerializerBuilder().sq().ws().trimNullProperties(false),
-				new HtmlParserBuilder(),
+				HtmlSerializer.create().sq().ws().trimNullProperties(false),
+				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 7 */
 				"Html - with key/value headers",
-				new HtmlSerializerBuilder().addKeyValueTableHeaders(true),
-				new HtmlParserBuilder(),
+				HtmlSerializer.create().addKeyValueTableHeaders(true),
+				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 8 */
 				"Uon - default",
-				new UonSerializerBuilder().trimNullProperties(false),
-				new UonParserBuilder(),
+				UonSerializer.create().trimNullProperties(false),
+				UonParser.create(),
 				0
 			},
 			{ /* 9 */
 				"Uon - readable",
-				new UonSerializerBuilder().ws().trimNullProperties(false),
-				new UonParserBuilder(),
+				UonSerializer.create().ws().trimNullProperties(false),
+				UonParser.create(),
 				0
 			},
 			{ /* 10 */
 				"Uon - encoded",
-				new UonSerializerBuilder().encoding().trimNullProperties(false),
-				new UonParserBuilder().decoding(),
+				UonSerializer.create().encoding().trimNullProperties(false),
+				UonParser.create().decoding(),
 				0
 			},
 			{ /* 11 */
 				"UrlEncoding - default",
-				new UrlEncodingSerializerBuilder().trimNullProperties(false),
-				new UrlEncodingParserBuilder(),
+				UrlEncodingSerializer.create().trimNullProperties(false),
+				UrlEncodingParser.create(),
 				0
 			},
 			{ /* 12 */
 				"UrlEncoding - readable",
-				new UrlEncodingSerializerBuilder().ws().trimNullProperties(false),
-				new UrlEncodingParserBuilder(),
+				UrlEncodingSerializer.create().ws().trimNullProperties(false),
+				UrlEncodingParser.create(),
 				0
 			},
 			{ /* 13 */
 				"UrlEncoding - expanded params",
-				new UrlEncodingSerializerBuilder().expandedParams(true),
-				new UrlEncodingParserBuilder().expandedParams(true),
+				UrlEncodingSerializer.create().expandedParams(true),
+				UrlEncodingParser.create().expandedParams(true),
 				0
 			},
 			{ /* 14 */
 				"Rdf.Xml",
-				new RdfSerializerBuilder().trimNullProperties(false).addLiteralTypes(true),
-				new RdfParserBuilder().xml(),
+				RdfSerializer.create().trimNullProperties(false).addLiteralTypes(true),
+				RdfParser.create().xml(),
 				0
 			},
 			{ /* 15 */
 				"Rdf.XmlAbbrev",
-				new RdfSerializerBuilder().xmlabbrev().trimNullProperties(false).addLiteralTypes(true),
-				new RdfParserBuilder().xml(),
+				RdfSerializer.create().xmlabbrev().trimNullProperties(false).addLiteralTypes(true),
+				RdfParser.create().xml(),
 				0
 			},
 			{ /* 16 */
 				"Rdf.Turtle",
-				new RdfSerializerBuilder().turtle().trimNullProperties(false).addLiteralTypes(true),
-				new RdfParserBuilder().turtle(),
+				RdfSerializer.create().turtle().trimNullProperties(false).addLiteralTypes(true),
+				RdfParser.create().turtle(),
 				0
 			},
 			{ /* 17 */
 				"Rdf.NTriple",
-				new RdfSerializerBuilder().ntriple().trimNullProperties(false).addLiteralTypes(true),
-				new RdfParserBuilder().ntriple(),
+				RdfSerializer.create().ntriple().trimNullProperties(false).addLiteralTypes(true),
+				RdfParser.create().ntriple(),
 				0
 			},
 			{ /* 18 */
 				"Rdf.N3",
-				new RdfSerializerBuilder().n3().trimNullProperties(false).addLiteralTypes(true),
-				new RdfParserBuilder().n3(),
+				RdfSerializer.create().n3().trimNullProperties(false).addLiteralTypes(true),
+				RdfParser.create().n3(),
 				0
 			},
 			{ /* 19 */
 				"MsgPack",
-				new MsgPackSerializerBuilder().trimNullProperties(false),
-				new MsgPackParserBuilder(),
+				MsgPackSerializer.create().trimNullProperties(false),
+				MsgPackParser.create(),
 				0
 			},
 
 			// Validation testing only
 			{ /* 20 */
 				"Json schema",
-				new JsonSchemaSerializerBuilder().trimNullProperties(false),
+				JsonSchemaSerializer.create().trimNullProperties(false),
 				null,
 				RETURN_ORIGINAL_OBJECT
 			},
 			{ /* 21 */
 				"Xml schema",
-				new XmlSchemaSerializerBuilder().trimNullProperties(false),
-				new XmlValidatorParserBuilder(),
+				XmlSchemaSerializer.create().trimNullProperties(false),
+				XmlValidatorParser.create(),
 				RETURN_ORIGINAL_OBJECT | CHECK_XML_WHITESPACE
 			},
 		});

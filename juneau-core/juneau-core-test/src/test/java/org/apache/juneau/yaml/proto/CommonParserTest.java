@@ -29,7 +29,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = new YamlParserBuilder().beanDictionary(A1.class).build();
+		ReaderParser p = YamlParser.create().beanDictionary(A1.class).build();
 
 		Map m = null;
 		m = (Map)p.parse("{a:1}", Object.class);
@@ -83,7 +83,7 @@ public class CommonParserTest {
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
-		String json = new YamlSerializerBuilder().addBeanTypeProperties(true).beanDictionary(A1.class).build().serialize(b);
+		String json = YamlSerializer.create().addBeanTypeProperties(true).beanDictionary(A1.class).build().serialize(b);
 		b = (A1)p.parse(json, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
@@ -114,7 +114,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new YamlParserBuilder().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = YamlParser.create().ignoreUnknownBeanProperties(true).build();
 		B b;
 
 		String in =  "{a:1,unknown:3,b:2}";
@@ -161,7 +161,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		YamlParser p = new YamlParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		YamlParser p = YamlParser.create().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String json = "{a:1,unknownProperty:\"/foo\",b:2}";
 		p.parse(json, B.class);

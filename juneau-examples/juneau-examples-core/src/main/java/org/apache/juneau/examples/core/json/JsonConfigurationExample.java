@@ -20,7 +20,7 @@
 package org.apache.juneau.examples.core.json;
 
 import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.json.JsonSerializerBuilder;
+import org.apache.juneau.json.*;
 
 /**
  * TODO
@@ -36,11 +36,11 @@ public class JsonConfigurationExample {
 	public static void main(String[] args) throws Exception {
 		Pojo aPojo = new Pojo("a","</pojo>");
 		// Json Serializers can be configured using properties defined in JsonSerializerContext
-		String withWhitespace = new JsonSerializerBuilder().ws().build().serialize(aPojo);
+		String withWhitespace = JsonSerializer.create().ws().build().serialize(aPojo);
 		// the output will be padded with spaces after format characters
 		System.out.println(withWhitespace);
 
-		String escaped = new JsonSerializerBuilder().escapeSolidus(true).build().serialize(aPojo);
+		String escaped = JsonSerializer.create().escapeSolidus(true).build().serialize(aPojo);
 		// the output will have escaped /
 		System.out.println(escaped);
 	}

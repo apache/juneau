@@ -279,8 +279,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// JSON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonT = new JsonSerializerBuilder().simple().beanTypePropertyName("t").build();
-	ReaderParser pJsonT = new JsonParserBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sJsonT = JsonSerializer.create().simple().beanTypePropertyName("t").build();
+	ReaderParser pJsonT = JsonParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void a21_serializeJsonT() throws Exception {
@@ -342,8 +342,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// XML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sXmlT = new XmlSerializerBuilder().sq().beanTypePropertyName("t").build();
-	ReaderParser pXmlT = new XmlParserBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sXmlT = XmlSerializer.create().sq().beanTypePropertyName("t").build();
+	ReaderParser pXmlT = XmlParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void b21_serializeXmlT() throws Exception {
@@ -426,8 +426,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// HTML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sHtmlT = new HtmlSerializerBuilder().sq().beanTypePropertyName("t").build();
-	ReaderParser pHtmlT =  new HtmlParserBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sHtmlT = HtmlSerializer.create().sq().beanTypePropertyName("t").build();
+	ReaderParser pHtmlT =  HtmlParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void c21_serializeHtmlT() throws Exception {
@@ -489,8 +489,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUonT = new UonSerializerBuilder().beanTypePropertyName("t").build();
-	ReaderParser pUonT = new UonParserBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sUonT = UonSerializer.create().beanTypePropertyName("t").build();
+	ReaderParser pUonT = UonParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void d21_serializeUonT() throws Exception {
@@ -552,8 +552,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// UrlEncoding - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUrlEncodingT = new UrlEncodingSerializerBuilder().beanTypePropertyName("t").build();
-	ReaderParser pUrlEncodingT = new UrlEncodingParserBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sUrlEncodingT = UrlEncodingSerializer.create().beanTypePropertyName("t").build();
+	ReaderParser pUrlEncodingT = UrlEncodingParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void e21_serializeUrlEncodingT() throws Exception {
@@ -620,8 +620,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// MsgPack - 't' property
 	//--------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPackT = new MsgPackSerializerBuilder().beanTypePropertyName("t").build();
-	InputStreamParser pMsgPackT = new MsgPackParserBuilder().beanTypePropertyName("t").build();
+	OutputStreamSerializer sMsgPackT = MsgPackSerializer.create().beanTypePropertyName("t").build();
+	InputStreamParser pMsgPackT = MsgPackParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void f21_serializeMsgPackT() throws Exception {
@@ -667,8 +667,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = new RdfSerializerBuilder().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").build();
-	ReaderParser pRdfXmlT = new RdfParserBuilder().beanTypePropertyName("t").build();
+	WriterSerializer sRdfXmlT = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").build();
+	ReaderParser pRdfXmlT = RdfParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void g21_serializeRdfXmlT() throws Exception {
@@ -688,7 +688,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlR = new RdfSerializerBuilder().language(LANG_RDF_XML_ABBREV).ws().build();
+	WriterSerializer sRdfXmlR = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).ws().build();
 	ReaderParser pRdfXmlR = RdfParser.DEFAULT_XML;
 
 	@Test

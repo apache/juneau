@@ -331,8 +331,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public void testSurrogates() throws Exception {
 		pojoSwaps(D2.class);
 
-		JsonSerializer s = new JsonSerializerBuilder().simple().pojoSwaps(D2.class).build();
-		JsonParser p = new JsonParserBuilder().pojoSwaps(D2.class).build();
+		JsonSerializer s = JsonSerializer.create().simple().pojoSwaps(D2.class).build();
+		JsonParser p = JsonParser.create().pojoSwaps(D2.class).build();
 		Object r;
 		D1 d1 = D1.create();
 

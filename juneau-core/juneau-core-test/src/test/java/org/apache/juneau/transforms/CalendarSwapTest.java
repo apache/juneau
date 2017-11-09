@@ -52,7 +52,7 @@ public class CalendarSwapTest {
 	}
 
 	private RdfSerializer getRdfSerializer() {
-		return new RdfSerializerBuilder()
+		return RdfSerializer.create()
 			.sq()
 			.useWhitespace(false)
 			.property(RdfCommon.RDF_rdfxml_allowBadUris, true)
@@ -186,7 +186,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterHtml() throws Exception {
-		WriterSerializer s = new HtmlSerializerBuilder().sq().addKeyValueTableHeaders(true).build();
+		WriterSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true).build();
 		ReaderParser p = HtmlParser.DEFAULT;
 
 		Calendar c = testDate;

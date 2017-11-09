@@ -179,8 +179,8 @@ class CallMethod implements Comparable<CallMethod>  {
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
 						|| m.bpx().length > 0) {
-					sgb = new SerializerGroupBuilder();
-					pgb = new ParserGroupBuilder();
+					sgb = SerializerGroup.create();
+					pgb = ParserGroup.create();
 					uepb = new UrlEncodingParserBuilder(urlEncodingParser.createPropertyStore());
 
 					if (si.contains(SERIALIZERS) || m.serializers().length == 0)
@@ -302,7 +302,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				}
 
 				if (m.encoders().length > 0 || ! m.inheritEncoders()) {
-					EncoderGroupBuilder g = new EncoderGroupBuilder();
+					EncoderGroupBuilder g = EncoderGroup.create();
 					if (m.inheritEncoders())
 						g.append(encoders);
 					else

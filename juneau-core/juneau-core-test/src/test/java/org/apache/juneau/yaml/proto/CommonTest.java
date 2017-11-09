@@ -33,7 +33,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		YamlSerializerBuilder s = new YamlSerializerBuilder().simple();
+		YamlSerializerBuilder s = YamlSerializer.create().simple();
 		YamlParser p = YamlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -65,7 +65,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		YamlSerializerBuilder s = new YamlSerializerBuilder().simple();
+		YamlSerializerBuilder s = YamlSerializer.create().simple();
 		YamlParser p = YamlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -99,7 +99,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		YamlSerializerBuilder s = new YamlSerializerBuilder().simple();
+		YamlSerializerBuilder s = YamlSerializer.create().simple();
 		YamlParser p = YamlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -133,7 +133,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		YamlSerializerBuilder s = new YamlSerializerBuilder().simple();
+		YamlSerializerBuilder s = YamlSerializer.create().simple();
 		YamlParser p = YamlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -240,7 +240,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		YamlSerializerBuilder s = new YamlSerializerBuilder().simple();
+		YamlSerializerBuilder s = YamlSerializer.create().simple();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -293,7 +293,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		YamlSerializer s = new YamlSerializerBuilder().simple().trimNullProperties(false).sortProperties(true).build();
+		YamlSerializer s = YamlSerializer.create().simple().trimNullProperties(false).sortProperties(true).build();
 
 		J a = new J();
 		a.setF1("J");

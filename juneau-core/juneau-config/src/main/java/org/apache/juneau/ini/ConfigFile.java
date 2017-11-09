@@ -37,6 +37,19 @@ import org.apache.juneau.svl.*;
  * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.ini</a> for usage information.
  */
 public abstract class ConfigFile implements Map<String,Section> {
+	
+	/**
+	 * Instantiates a new clean-slate {@link ConfigFileBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> ConfigFileBuilder()</code>.
+	 * 
+	 * @return A new {@link ConfigFileBuilder} object.
+	 */
+	public static ConfigFileBuilder create() {
+		return new ConfigFileBuilder();
+	}
+	
 
 	//--------------------------------------------------------------------------------
 	// Abstract methods

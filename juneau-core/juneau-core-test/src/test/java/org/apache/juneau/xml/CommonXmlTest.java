@@ -61,7 +61,7 @@ public class CommonXmlTest {
 	//====================================================================================================
 	@Test
 	public void testBeanUriAnnotationOnlyUriProperty() throws Exception {
-		XmlSerializer s = new XmlSerializerBuilder().sq().addNamespaceUrisToRoot(false).build();
+		XmlSerializer s = XmlSerializer.create().sq().addNamespaceUrisToRoot(false).build();
 
 		B t = new B("http://foo");
 		String xml = s.serialize(t);

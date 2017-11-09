@@ -160,6 +160,22 @@ public class JsonParser extends ReaderParser {
 		return new JsonParserBuilder(propertyStore);
 	}
 
+	/**
+	 * Instantiates a new clean-slate {@link JsonParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> JsonParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link JsonParserBuilder} object.
+	 */
+	public static JsonParserBuilder create() {
+		return new JsonParserBuilder();
+	}
+
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new JsonParserSession(ctx, args);

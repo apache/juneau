@@ -134,7 +134,7 @@
 		<h6 class='figure'>Example with no namespaces</h6>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().sq().ws().build();
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
 
 	<jc>// Serialize to ATOM/XML</jc>
 	String atomXml = s.serialize(feed);
@@ -191,7 +191,7 @@
 		<h6 class='figure'>Example with namespaces</h6>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output with namespaces.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().sq().ws().build();
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
 
 	<jc>// Serialize to ATOM/XML</jc>
 	String atomXml = s.serialize(feed);
@@ -252,7 +252,7 @@
 		<h6 class='figure'>Example with namespaces with ATOM as the default namespace</h6>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output with namespaces.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().sq().ws().defaultNamespaceUri(<js>"atom"</js>).build();
+	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().defaultNamespaceUri(<js>"atom"</js>).build();
 
 	<jc>// Serialize to ATOM/XML</jc>
 	String atomXml = s.serialize(feed);
@@ -416,7 +416,7 @@
 			<h6 class='figure'>ATOM/RDF/XML example</h6>
 			<p class='bcode'>
 	<jc>// Get RDF/XML serializer with readable output.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.ws()
 		.sq()

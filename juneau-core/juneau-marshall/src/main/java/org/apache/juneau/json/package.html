@@ -295,7 +295,7 @@
 		We could have also created a new serializer with the same settings using the following code:
 	</p>
 	<p class='bcode'>
-	JsonSerializer s = <jk>new</jk> JsonSerializerBuilder().simple().ws().sq().build();
+	JsonSerializer s = JsonSerializer.<jsm>create</jsm>().simple().ws().sq().build();
 	</p>
 	
 	<p>
