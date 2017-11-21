@@ -14,7 +14,6 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.util.*;
@@ -117,7 +116,7 @@ public class SerializerGroupBuilder {
 				ps = s2.createPropertyStore().copyFrom(propertyStore);
 				c = s2.getClass();
 			}
-			l.add(newInstance(Serializer.class, c, ps));
+			l.add(propertyStore.getBeanContext().newInstance(Serializer.class, c, ps));
 		}
 		Collections.reverse(l);
 		return new SerializerGroup(propertyStore, l.toArray(new Serializer[l.size()]));

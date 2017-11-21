@@ -1686,6 +1686,8 @@ public final class StringUtils {
 			return null;
 		if (o instanceof ClassMeta)
 			return ((ClassMeta<?>)o).getReadableName();
+		if (BeanContext.DEFAULT == null)
+			return o.toString();
 		ClassMeta<?> cm = BeanContext.DEFAULT.getClassMetaForObject(o);
 		if (cm.isMapOrBean() || cm.isCollectionOrArray())
 			return JsonSerializer.DEFAULT_LAX.toString(o);
@@ -1694,5 +1696,65 @@ public final class StringUtils {
 		if (cm.isMethod())
 			return ClassUtils.toString((Method)o);
 		return o.toString();
+	}
+	
+	/**
+	 * Converts a string containing a possible multiplier suffix to an integer.
+	 * 
+	 * <p>
+	 * The string can contain any of the following multiplier suffixes:
+	 * <ul>
+	 * 	<li><js>"K"</js> - x 1024
+	 * 	<li><js>"M"</js> - x 1024*1024
+	 * 	<li><js>"G"</js> - x 1024*1024*1024
+	 * </ul>
+	 * 
+	 * @param s The string to parse.
+	 * @return The parsed value.
+	 */
+	public static int parseIntWithSuffix(String s) {
+		assertFieldNotNull(s, "s");
+		int m = 1;
+		if (s.endsWith("G")) {
+			m = 1024*1024*1024;
+			s = s.substring(0, s.length()-1).trim();
+		} else if (s.endsWith("M")) {
+			m = 1024*1024;
+			s = s.substring(0, s.length()-1).trim();
+		} else if (s.endsWith("K")) {
+			m = 1024;
+			s = s.substring(0, s.length()-1).trim();
+		}
+		return Integer.parseInt(s) * m;
+	}
+	
+	/**
+	 * Converts a string containing a possible multiplier suffix to a long.
+	 * 
+	 * <p>
+	 * The string can contain any of the following multiplier suffixes:
+	 * <ul>
+	 * 	<li><js>"K"</js> - x 1024
+	 * 	<li><js>"M"</js> - x 1024*1024
+	 * 	<li><js>"G"</js> - x 1024*1024*1024
+	 * </ul>
+	 * 
+	 * @param s The string to parse.
+	 * @return The parsed value.
+	 */
+	public static long parseLongWithSuffix(String s) {
+		assertFieldNotNull(s, "s");
+		int m = 1;
+		if (s.endsWith("G")) {
+			m = 1024*1024*1024;
+			s = s.substring(0, s.length()-1).trim();
+		} else if (s.endsWith("M")) {
+			m = 1024*1024;
+			s = s.substring(0, s.length()-1).trim();
+		} else if (s.endsWith("K")) {
+			m = 1024;
+			s = s.substring(0, s.length()-1).trim();
+		}
+		return Long.parseLong(s) * m;
 	}
 }

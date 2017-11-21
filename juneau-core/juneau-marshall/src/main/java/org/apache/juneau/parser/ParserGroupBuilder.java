@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 
 import java.util.*;
@@ -117,7 +116,7 @@ public class ParserGroupBuilder {
 				ps = p2.createPropertyStore().copyFrom(propertyStore);
 				c = p2.getClass();
 			}
-			l.add(newInstance(Parser.class, c, ps));
+			l.add(propertyStore.getBeanContext().newInstance(Parser.class, c, ps));
 		}
 		Collections.reverse(l);
 		return new ParserGroup(propertyStore, l.toArray(new Parser[l.size()]));

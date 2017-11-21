@@ -68,6 +68,8 @@ public final class RestContext extends Context {
 		paramFormat,
 		clientVersionHeader,
 		contextPath;
+	private final long
+		maxInput;
 	
 	final String fullPath;
 
@@ -164,6 +166,7 @@ public final class RestContext extends Context {
 			this.allowMethodParams = Collections.unmodifiableSet(b.allowMethodParams);
 			this.defaultCharset = b.defaultCharset;
 			this.paramFormat = b.paramFormat;
+			this.maxInput = b.maxInput;
 			this.varResolver = b.varResolver;
 			this.configFile = b.configFile;
 			this.properties = b.properties;
@@ -459,6 +462,7 @@ public final class RestContext extends Context {
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
 		String clientVersionHeader = "", defaultCharset, paramFormat;
+		long maxInput;
 
 		List<MediaType> supportedContentTypes, supportedAcceptTypes;
 		Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -492,6 +496,7 @@ public final class RestContext extends Context {
 			defaultCharset = getString(sc.defaultCharset, "juneau.defaultCharset", "utf-8");
 			paramFormat = getString(sc.paramFormat, "juneau.paramFormat", "UON");
 			resourceResolver = sc.resourceResolver;
+			maxInput = getLong(sc.maxInput, "juneau.maxInput", 100_000_000l);
 
 			String amp = getString(sc.allowMethodParam, "juneau.allowMethodParam", "HEAD,OPTIONS");
 			if ("true".equals(amp))
@@ -602,6 +607,15 @@ public final class RestContext extends Context {
 		if (o == null)
 			o = SystemUtils.getFirstString(def, systemProperty);
 		return o.toString();
+	}
+
+	static final long getLong(Object o, String systemProperty, long def) {
+		String s = StringUtils.toString(o);
+		if (s == null)
+			s = System.getProperty(systemProperty);
+		if (StringUtils.isEmpty(s))
+			return def;
+		return StringUtils.parseLongWithSuffix(s);
 	}
 
 	/**
@@ -1124,6 +1138,15 @@ public final class RestContext extends Context {
 	 */
 	protected String getParamFormat() {
 		return paramFormat;
+	}
+
+	/**
+	 * Returns the value of the {@link RestResource#maxInput()} setting.
+	 *
+	 * @return The value of the {@link RestResource#maxInput()} setting.
+	 */
+	protected long getMaxInput() {
+		return maxInput;
 	}
 
 	/**

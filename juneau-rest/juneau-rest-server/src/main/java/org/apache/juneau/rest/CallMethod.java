@@ -57,6 +57,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final ObjectMap properties;
 	private final Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
 	private final String defaultCharset;
+	private final long maxInput;
 	private final boolean deprecated;
 	private final String description, tags, summary, externalDocs;
 	private final Integer priority;
@@ -88,6 +89,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.defaultQuery = b.defaultQuery;
 		this.defaultFormData = b.defaultFormData;
 		this.defaultCharset = b.defaultCharset;
+		this.maxInput = b.maxInput;
 		this.deprecated = b.deprecated;
 		this.description = b.description;
 		this.tags = b.tags;
@@ -115,6 +117,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		ObjectMap properties;
 		Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
 		boolean plainParams, deprecated;
+		long maxInput;
 		Integer priority;
 		org.apache.juneau.rest.annotation.Parameter[] parameters;
 		Response[] responses;
@@ -149,10 +152,13 @@ class CallMethod implements Comparable<CallMethod>  {
 				encoders = context.getEncoders();
 				properties = new ObjectMap().setInner(context.getProperties());
 				defaultCharset = context.getDefaultCharset();
+				maxInput = context.getMaxInput();
 				String paramFormat = context.getParamFormat();
 
 				if (! m.defaultCharset().isEmpty())
 					defaultCharset = context.getVarResolver().resolve(m.defaultCharset());
+				if (! m.maxInput().isEmpty())
+					maxInput = StringUtils.parseLongWithSuffix(context.getVarResolver().resolve(m.maxInput()));
 				if (! m.paramFormat().isEmpty())
 					paramFormat = context.getVarResolver().resolve(m.paramFormat());
 
@@ -163,7 +169,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				widgets = new HashMap<>(context.getWidgets());
 				for (Class<? extends Widget> wc : hd.widgets()) {
-					Widget w = ClassUtils.newInstance(Widget.class, wc);
+					Widget w = beanContext.newInstance(Widget.class, wc);
 					widgets.put(w.getName(), w);
 					hdb.script("INHERIT", "$W{"+w.getName()+".script}");
 					hdb.style("INHERIT", "$W{"+w.getName()+".style}");
@@ -203,20 +209,20 @@ class CallMethod implements Comparable<CallMethod>  {
 				String p = m.path();
 				converters = new RestConverter[m.converters().length];
 				for (int i = 0; i < converters.length; i++)
-					converters[i] = newInstance(RestConverter.class, m.converters()[i]);
+					converters[i] = beanContext.newInstance(RestConverter.class, m.converters()[i]);
 
 				guards = new RestGuard[m.guards().length];
 				for (int i = 0; i < guards.length; i++)
-					guards[i] = newInstance(RestGuard.class, m.guards()[i]);
+					guards[i] = beanContext.newInstance(RestGuard.class, m.guards()[i]);
 
 				List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
 				for (int i = 0; i < m.matchers().length; i++) {
 					Class<? extends RestMatcher> c = m.matchers()[i];
 					RestMatcher matcher = null;
 					if (isParentClass(RestMatcherReflecting.class, c))
-						matcher = newInstance(RestMatcherReflecting.class, c, servlet, method);
+						matcher = beanContext.newInstance(RestMatcherReflecting.class, c, servlet, method);
 					else
-						matcher = newInstance(RestMatcher.class, c);
+						matcher = beanContext.newInstance(RestMatcher.class, c);
 					if (matcher.mustMatch())
 						requiredMatchers.add(matcher);
 					else
@@ -762,7 +768,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		ObjectMap requestProperties = new ResolvingObjectMap(req.getVarResolverSession()).setInner(properties);
 
 		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
-			serializers, parsers, urlEncodingParser, beanContext, encoders, widgets);
+			maxInput, serializers, parsers, urlEncodingParser, beanContext, encoders, widgets);
 		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards

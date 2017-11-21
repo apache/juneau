@@ -32,10 +32,11 @@ public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
+	 * @param bc Bean context used for instantiating {@link PropertyNamer} instances. 
 	 * @param interfaceClass The class to use as an interface on all child classes.
 	 */
-	public InterfaceBeanFilterBuilder(Class<?> interfaceClass) {
+	public InterfaceBeanFilterBuilder(BeanContext bc, Class<?> interfaceClass) {
 		super(interfaceClass);
 		interfaceClass(interfaceClass);
 		Map<Class<?>,Bean> annotations = ReflectionUtils.findAnnotationsMap(Bean.class, interfaceClass);
@@ -58,7 +59,7 @@ public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
 
 			try {
 				if (b.propertyNamer() != PropertyNamerDefault.class)
-					propertyNamer(b.propertyNamer());
+					propertyNamer(bc, b.propertyNamer());
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

@@ -475,11 +475,12 @@ public class XmlParserSession extends ReaderParserSession {
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String key = getAttributeName(r, i);
 			String val = r.getAttributeValue(i);
+			String ns = r.getAttributeNamespace(i);
 			BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
 			if (bpm == null) {
 				if (xmlMeta.getAttrsProperty() != null) {
 					xmlMeta.getAttrsProperty().add(m, key, key, val);
-				} else {
+				} else if (ns == null) {
 					Location l = r.getLocation();
 					onUnknownProperty(r.getPipe(), key, m, l.getLineNumber(), l.getColumnNumber());
 				}
@@ -593,6 +594,8 @@ public class XmlParserSession extends ReaderParserSession {
 						throw new ParseException("End element found where one was not expected.  {0}", XmlUtils.toReadableEvent(r));
 				}
 				depth--;
+			} else if (event == COMMENT) {
+				// Ignore comments.
 			} else {
 				throw new ParseException("Unexpected event type: {0}", XmlUtils.toReadableEvent(r));
 			}

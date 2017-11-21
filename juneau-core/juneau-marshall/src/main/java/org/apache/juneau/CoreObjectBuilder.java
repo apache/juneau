@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -78,7 +77,7 @@ public abstract class CoreObjectBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends CoreObject> T build(Class<T> c) {
-		return (T)newInstance(CoreObject.class, c, propertyStore);
+		return (T)propertyStore.getBeanContext().newInstance(CoreObject.class, c, propertyStore);
 	}
 
 	//--------------------------------------------------------------------------------
@@ -1577,7 +1576,7 @@ public abstract class CoreObjectBuilder {
 	public CoreObjectBuilder mediaType(MediaType value) {
 		return property(BEAN_mediaType, value);
 	}
-
+	
 	/**
 	 * <b>Configuration property:</b>  Debug mode.
 	 *

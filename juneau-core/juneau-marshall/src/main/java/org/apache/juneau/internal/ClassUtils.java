@@ -16,6 +16,7 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.utils.*;
@@ -540,31 +541,19 @@ public final class ClassUtils {
 	 * 	Can be a super type of the actual return type.
 	 * 	For example, if the actual return type is <code>CharSequence</code>, then <code>Object</code> will match but
 	 * 	<code>String</code> will not.
-	 * @param parameterTypes
-	 * 	The parameter types of the method.
+	 * @param argTypes
+	 * 	The argument types of the method.
 	 * 	Can be subtypes of the actual parameter types.
 	 * 	For example, if the parameter type is <code>CharSequence</code>, then <code>String</code> will match but
 	 * 	<code>Object</code> will not.
 	 * @return The matched method, or <jk>null</jk> if no match was found.
 	 */
-	public static Method findPublicMethod(Class<?> c, String name, Class<?> returnType, Class<?>...parameterTypes) {
+	public static Method findPublicMethod(Class<?> c, String name, Class<?> returnType, Class<?>...argTypes) {
 		for (Method m : c.getMethods()) {
 			if (isPublic(m) && m.getName().equals(name)) {
 				Class<?> rt = m.getReturnType();
-				if (isParentClass(returnType, rt)) {
-					Class<?>[] pt = m.getParameterTypes();
-					if (pt.length == parameterTypes.length) {
-						boolean matches = true;
-						for (int i = 0; i < pt.length; i++) {
-							if (! isParentClass(pt[i], parameterTypes[i])) {
-								matches = false;
-								break;
-							}
-						}
-						if (matches)
-							return m;
-					}
-				}
+				if (isParentClass(returnType, rt) && argsMatch(m.getParameterTypes(), argTypes)) 
+					return m;
 			}
 		}
 		return null;
@@ -574,31 +563,55 @@ public final class ClassUtils {
 	 * Finds a public constructor with the specified parameters without throwing an exception.
 	 *
 	 * @param c The class to search for a constructor.
-	 * @param parameterTypes
-	 * 	The parameter types in the constructor.
+	 * @param argTypes
+	 * 	The argument types in the constructor.
 	 * 	Can be subtypes of the actual constructor argument types.
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Class<?>...parameterTypes) {
+	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Class<?>...argTypes) {
+		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
+		if (cce != null && argsMatch(cce.paramTypes, argTypes)) 
+			return (Constructor<T>)cce.constructor;
+		
 		for (Constructor<?> n : c.getConstructors()) {
-			if (isPublic(n)) {
-				Class<?>[] pt = n.getParameterTypes();
-				if (pt.length == parameterTypes.length) {
-					boolean matches = true;
-					for (int i = 0; i < pt.length; i++) {
-						if (! isParentClass(pt[i], parameterTypes[i])) {
-							matches = false;
-							break;
-						}
-					}
-					if (matches)
-						return (Constructor<T>)n;
-				}
+			if (isPublic(n) && argsMatch(n.getParameterTypes(), argTypes)) {
+				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
+				return (Constructor<T>)n;
 			}
 		}
 		return null;
 	}
+	
+	private static final class ConstructorCacheEntry {
+		final Constructor<?> constructor;
+		final Class<?>[] paramTypes;
+		
+		ConstructorCacheEntry(Class<?> forClass, Constructor<?> constructor) {
+			this.constructor = constructor;
+			this.paramTypes = constructor.getParameterTypes();
+		}
+	}
+	
+	private static final Map<Class<?>,ConstructorCacheEntry> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
+	
+	/**
+	 * Returns <jk>true</jk> if the specified argument types are valid for the specified parameter types.
+	 * 
+	 * @param paramTypes The parameters types specified on a method.
+	 * @param argTypes The class types of the arguments being passed to the method.
+	 * @return <jk>true</jk> if the arguments match the parameters.
+	 */
+	public static boolean argsMatch(Class<?>[] paramTypes, Class<?>[] argTypes) {
+		if (paramTypes.length == argTypes.length) {
+			for (int i = 0; i < paramTypes.length; i++) 
+				if (! isParentClass(paramTypes[i], argTypes[i])) 
+					return false;
+			return true;
+		}
+		return false;
+	}
+	
 
 	/**
 	 * Finds the public constructor that can take in the specified arguments.
@@ -625,115 +638,6 @@ public final class ClassUtils {
 			pt[i] = args[i] == null ? null : args[i].getClass();
 		return pt;
 	}
-
-// This code is inherently unsafe (but still potentially useful?)
-//
-//	/**
-//	 * Converts class name strings to ClassMeta objects.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <ul>
-//	 * 	<li><js>"java.lang.String"</js>
-//	 * 	<li><js>"com.foo.sample.MyBean[]"</js>
-//	 * 	<li><js>"java.util.HashMap<java.lang.String,java.lang.Integer>"</js>
-//	 * 	<li><js>"[Ljava.lang.String;"</js> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>)
-//	 * </ul>
-//	 *
-//	 * @param s The class name.
-//	 * @return The ClassMeta corresponding to the class name string.
-//	 */
-//	protected final ClassMeta<?> getClassMetaFromString(String s) {
-//		int d = 0;
-//		if (s == null || s.isEmpty())
-//			return null;
-//
-//		// Check for Class.getName() on array class types.
-//		if (s.charAt(0) == '[') {
-//			try {
-//				return getClassMeta(findClass(s));
-//			} catch (ClassNotFoundException e) {
-//				throw new RuntimeException(e);
-//			}
-//		}
-//
-//		int i1 = 0;
-//		int i2 = 0;
-//		int dim = 0;
-//		List<ClassMeta<?>> p = null;
-//		for (int i = 0; i < s.length(); i++) {
-//			char c = s.charAt(i);
-//			if (c == '<') {
-//				if (d == 0) {
-//					i1 = i;
-//					i2 = i+1;
-//					p = new LinkedList<ClassMeta<?>>();
-//				}
-//				d++;
-//			} else if (c == '>') {
-//				d--;
-//				if (d == 0 && p != null)
-//					p.add(getClassMetaFromString(s.substring(i2, i)));
-//			} else if (c == ',' && d == 1) {
-//				if (p != null)
-//					p.add(getClassMetaFromString(s.substring(i2, i)));
-//				i2 = i+1;
-//			}
-//			if (c == '[') {
-//				if (i1 == 0)
-//					i1 = i;
-//				dim++;
-//			}
-//		}
-//		if (i1 == 0)
-//			i1 = s.length();
-//		try {
-//			String name = s.substring(0, i1).trim();
-//			char x = name.charAt(0);
-//			Class<?> c = null;
-//			if (x >= 'b' && x <= 's') {
-//				if (x == 'b' && name.equals("boolean"))
-//					c = boolean.class;
-//				else if (x == 'b' && name.equals("byte"))
-//					c = byte.class;
-//				else if (x == 'c' && name.equals("char"))
-//					c = char.class;
-//				else if (x == 'd' && name.equals("double"))
-//					c = double.class;
-//				else if (x == 'i' && name.equals("int"))
-//					c = int.class;
-//				else if (x == 'l' && name.equals("long"))
-//					c = long.class;
-//				else if (x == 's' && name.equals("short"))
-//					c = short.class;
-//				else
-//					c = findClass(name);
-//			} else {
-//				c = findClass(name);
-//			}
-//
-//			ClassMeta<?> cm = getClassMeta(c);
-//
-//			if (p != null) {
-//				if (cm.isMap())
-//					cm = new ClassMeta(c, this).setKeyType(p.get(0)).setValueType(p.get(1));
-//				if (cm.isCollection())
-//					cm = new ClassMeta(c, this).setElementType(p.get(0));
-//			}
-//
-//			while (dim > 0) {
-//				cm = new ClassMeta(Array.newInstance(cm.getInnerClass(), 0).getClass(), this);
-//				dim--;
-//			}
-//
-//			return cm;
-//		} catch (ClassNotFoundException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-//
-//	private Class<?> findClass(String name) throws ClassNotFoundException {
-//		return classLoader == null ? Class.forName(name) : Class.forName(name, true, classLoader);
-//	}
 
 	/**
 	 * Returns a {@link MethodInfo} bean that describes the specified method.

@@ -68,7 +68,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	@Override /* SerializerSession */
 	public final byte[] serialize(Object o) throws SerializeException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		serialize(baos, o);
+		serialize(o, baos);
 		return baos.toByteArray();
 	}
 }

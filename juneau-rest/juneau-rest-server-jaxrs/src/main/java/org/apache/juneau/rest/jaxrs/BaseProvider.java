@@ -120,7 +120,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			
 			// Leave this open in case an error occurs.
 			Closeable c = s.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os;
-			session.serialize(c, o);
+			session.serialize(o, c);
 
 		} catch (SerializeException e) {
 			throw new IOException(e);

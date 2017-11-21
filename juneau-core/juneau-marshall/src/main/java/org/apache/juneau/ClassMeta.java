@@ -661,7 +661,7 @@ public final class ClassMeta<T> implements Type {
 			try {
 				Map<Class<?>,Bean> ba = findAnnotationsMap(Bean.class, innerClass);
 				if (! ba.isEmpty())
-					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
+					return new AnnotationBeanFilterBuilder(beanContext, innerClass, ba).build();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -684,7 +684,7 @@ public final class ClassMeta<T> implements Type {
 				c = s.impl();
 
 			if (isParentClass(PojoSwap.class, c)) {
-				PojoSwap ps = ClassUtils.newInstance(PojoSwap.class, c);
+				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);
 				if (s.mediaTypes().length > 0)
 					ps.forMediaTypes(MediaType.forStrings(s.mediaTypes()));
 				if (! s.template().isEmpty())

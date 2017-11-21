@@ -73,7 +73,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	@Override /* SerializerSession */
 	public final String serialize(Object o) throws SerializeException {
 		StringWriter w = new StringWriter();
-		serialize(w, o);
+		serialize(o, w);
 		return w.toString();
 	}
 }

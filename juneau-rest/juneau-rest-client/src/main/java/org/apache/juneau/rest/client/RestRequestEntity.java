@@ -60,7 +60,7 @@ public final class RestRequestEntity extends BasicHttpEntity {
 				} else {
 					SerializerSession session = serializer.createSession();
 					try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
-						session.serialize(c, output);
+						session.serialize(output, c);
 					}
 				}
 			} catch (SerializeException e) {

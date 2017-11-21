@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.beans.*;
 import java.util.*;
 
@@ -205,13 +203,14 @@ public abstract class BeanFilterBuilder {
 
 	/**
 	 * The property namer to use to name bean properties.
-	 *
+	 * 
+	 * @param bc The bean context used to instantiate the property namer. 
 	 * @param c The property namer class.  Must have a public no-arg constructor.
 	 * @return This object (for method chaining).
 	 * @throws Exception Thrown from constructor method.
 	 */
-	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> c) throws Exception {
-		this.propertyNamer = newInstance(PropertyNamer.class, c);
+	public BeanFilterBuilder propertyNamer(BeanContext bc, Class<? extends PropertyNamer> c) throws Exception {
+		this.propertyNamer = bc.newInstance(PropertyNamer.class, c);
 		return this;
 	}
 

@@ -994,7 +994,40 @@ public class BeanSession extends Session {
 	public final BeanRegistry getBeanRegistry() {
 		return ctx.beanRegistry;
 	}
+	
+	/**
+	 * Shortcut for calling {@link BeanContext#newInstance(Class, Object, Object...)}.
+	 *
+	 * @param c The class to cast to.
+	 * @param c2
+	 * 	The class to instantiate.
+	 * 	Can also be an instance of the class.
+	 * @param args The arguments to pass to the constructor.
+	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws RuntimeException if constructor could not be found or called.
+	 */
+	public <T> T newInstance(Class<T> c, Object c2, Object...args) {
+		return ctx.newInstance(c, c2, args);
+	}
 
+	/**
+	 * Shortcut for calling {@link BeanContext#newInstanceFromOuter(Object, Class, Object, Object...)}.
+	 *
+	 * @param outer
+	 * 	The outer object.
+	 * 	Can be <jk>null</jk>.
+	 * @param c The class to cast to.
+	 * @param c2
+	 * 	The class to instantiate.
+	 * 	Can also be an instance of the class.
+	 * @param args The arguments to pass to the constructor.
+	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws RuntimeException if constructor could not be found or called.
+	 */
+	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, Object...args) {
+		return ctx.newInstanceFromOuter(outer, c, c2, args);
+	}
+	
 	/**
 	 * Creates a reusable {@link StringBuilder} object from an internal pool.
 	 *

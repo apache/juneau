@@ -120,7 +120,7 @@ public class RestConfig implements ServletConfig {
 	Object logger = RestLogger.Normal.class;
 	Object callHandler = RestCallHandler.class;
 	Object infoProvider = RestInfoProvider.class;
-	Object allowHeaderParams, allowMethodParam, allowBodyParam, renderResponseStackTraces, useStackTraceHashes, defaultCharset, paramFormat;
+	Object allowHeaderParams, allowMethodParam, allowBodyParam, renderResponseStackTraces, useStackTraceHashes, defaultCharset, paramFormat, maxInput;
 
 	Class<?> resourceClass;
 
@@ -246,6 +246,8 @@ public class RestConfig implements ServletConfig {
 					setDefaultCharset(vr.resolve(r.defaultCharset()));
 				if (! r.paramFormat().isEmpty())
 					setParamFormat(vr.resolve(r.paramFormat()));
+				if (! r.maxInput().isEmpty())
+					setMaxInput(vr.resolve(r.maxInput()));
 
 				HtmlDoc hd = r.htmldoc();
 				for (Class<? extends Widget> cw : hd.widgets())
@@ -1147,6 +1149,20 @@ public class RestConfig implements ServletConfig {
 	 */
 	public RestConfig setParamFormat(String value) {
 		this.paramFormat = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <code>maxInput</code> setting on this resource.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#maxInput() RestResource.maxInput()} annotation.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setMaxInput(String value) {
+		this.maxInput = value;
 		return this;
 	}
 

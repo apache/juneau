@@ -325,7 +325,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 			StringWriter w = new StringWriter();
 			UonSerializerSession s = new UonSerializerSession(ctx, urlEncode, createDefaultSessionArgs());
-			s.serialize(w, o);
+			s.serialize(o, w);
 			return w.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

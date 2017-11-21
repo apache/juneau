@@ -48,7 +48,7 @@ public class XmlContentTest {
 
 		sw = new StringWriter();
 		session = s1.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
-		session.serialize(sw, t);
+		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
 		t2 = p.parse(r, A.class);
@@ -56,7 +56,7 @@ public class XmlContentTest {
 
 		sw = new StringWriter();
 		session = s2.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
-		session.serialize(sw, t);
+		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
 		t2 = p.parse(r, A.class);
@@ -156,7 +156,7 @@ public class XmlContentTest {
 
 		sw = new StringWriter();
 		session = s1.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
-		session.serialize(sw, t);
+		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
 		t2 = p.parse(r, B.class);
@@ -164,7 +164,7 @@ public class XmlContentTest {
 
 		sw = new StringWriter();
 		session = s2.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
-		session.serialize(sw, t);
+		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
 		t2 = p.parse(r, B.class);

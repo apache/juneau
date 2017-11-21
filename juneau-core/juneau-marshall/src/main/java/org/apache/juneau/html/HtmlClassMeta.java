@@ -39,7 +39,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 			noTables = html.noTables();
 			noTableHeaders = html.noTableHeaders();
 			asPlainText = html.asPlainText();
-			render = ClassUtils.newInstance(HtmlRender.class, html.render());
+			render = cm.getBeanContext().newInstance(HtmlRender.class, html.render());
 		} else {
 			asXml = false;
 			noTables = false;

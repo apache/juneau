@@ -159,7 +159,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
 	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
-			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset,
+			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset, long maxInput,
 			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,
 			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets) {
 		this.javaMethod = javaMethod;
@@ -183,7 +183,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.setParsers(mParsers)
 			.setHeaders(headers)
 			.setBeanSession(beanSession)
-			.setUrlEncodingParser(mUrlEncodingParser);
+			.setUrlEncodingParser(mUrlEncodingParser)
+			.setMaxInput(maxInput);
 		this.serializerGroup = mSerializers;
 		this.parserGroup = mParsers;
 		this.defaultCharset = defaultCharset;

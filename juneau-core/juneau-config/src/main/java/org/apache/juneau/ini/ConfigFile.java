@@ -672,7 +672,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * Convenience method for getting int config values.
 	 *
 	 * <p>
-	 * <js>"M"</js> and <js>"K"</js> can be used to identify millions and thousands.
+	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
@@ -691,6 +691,41 @@ public abstract class ConfigFile implements Map<String,Section> {
 		if (StringUtils.isEmpty(s))
 			return def;
 		return parseIntWithSuffix(s);
+	}
+
+	/**
+	 * Convenience method for getting long config values.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @return The value, or <code>0</code> if the section or key does not exist or cannot be parsed as a long.
+	 */
+	public final long getLong(String key) {
+		return getLong(key, 0);
+	}
+
+	/**
+	 * Convenience method for getting long config values.
+	 *
+	 * <p>
+	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<code><js>"100K"</js> => 1024000</code>
+	 * 	<li>
+	 * 		<code><js>"100M"</js> => 104857600</code>
+	 * </ul>
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param def The default value if config file or value does not exist.
+	 * @return The value, or the default value if the section or key does not exist or cannot be parsed as an integer.
+	 */
+	public final long getLong(String key, long def) {
+		String s = getString(key);
+		if (StringUtils.isEmpty(s))
+			return def;
+		return parseLongWithSuffix(s);
 	}
 
 	/**
@@ -1211,18 +1246,5 @@ public abstract class ConfigFile implements Map<String,Section> {
 	protected VarResolver getVarResolver() {
 		// Only ConfigFileWrapped returns a value.
 		return null;
-	}
-
-	private static int parseIntWithSuffix(String s) {
-		assertFieldNotNull(s, "s");
-		int m = 1;
-		if (s.endsWith("M")) {
-			m = 1024*1024;
-			s = s.substring(0, s.length()-1).trim();
-		} else if (s.endsWith("K")) {
-			m = 1024;
-			s = s.substring(0, s.length()-1).trim();
-		}
-		return Integer.parseInt(s) * m;
 	}
 }

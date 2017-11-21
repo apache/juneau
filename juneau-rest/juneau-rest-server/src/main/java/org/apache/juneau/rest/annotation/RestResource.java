@@ -860,4 +860,22 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String paramFormat() default "";
+	
+	/**
+	 * The maximum allowed input size (in bytes) on HTTP requests.
+	 * 
+	 * <p>
+	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
+	 * in out-of-memory errors which could affect system stability.
+	 * 
+	 * <ul>
+	 * 	<li>String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>Can contain variables.
+	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>Defaults to <js>"100M"</js>.
+	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
+	 * </ul>
+	 */
+	String maxInput() default "";
 }

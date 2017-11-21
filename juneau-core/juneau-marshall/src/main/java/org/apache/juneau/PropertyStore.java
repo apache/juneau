@@ -719,7 +719,7 @@ public final class PropertyStore {
 			if (pm != null)
 				o = pm.get(name, type, null);
 			if (o == null && def != null)
-				o = ClassUtils.newInstance(type, def, args);
+				o = getBeanSession().newInstance(type, def, args);
 			if (o == null)
 				return null;
 			if (ClassUtils.isParentClass(type, o.getClass()))

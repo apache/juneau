@@ -41,6 +41,7 @@ public class RequestBody {
 	private Encoder encoder;
 	private ParserGroup parsers;
 	private UrlEncodingParser urlEncodingParser;
+	private long maxInput;
 	private RequestHeaders headers;
 	private BeanSession beanSession;
 	private int contentLength = 0;
@@ -66,6 +67,11 @@ public class RequestBody {
 
 	RequestBody setUrlEncodingParser(UrlEncodingParser urlEncodingParser) {
 		this.urlEncodingParser = urlEncodingParser;
+		return this;
+	}
+
+	RequestBody setMaxInput(long maxInput) {
+		this.maxInput = maxInput;
 		return this;
 	}
 
@@ -284,20 +290,17 @@ public class RequestBody {
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
-	@SuppressWarnings("resource")
 	public ServletInputStream getInputStream() throws IOException {
 
 		if (body != null)
-			return new ServletInputStream2(body);
+			return new BoundedServletInputStream(body);
 
 		Encoder enc = getEncoder();
 
-		ServletInputStream is = req.getRawInputStream();
-		if (enc != null) {
-			final InputStream is2 = enc.getInputStream(is);
-			return new ServletInputStream2(is2);
-		}
-		return is;
+		if (enc == null)
+			return new BoundedServletInputStream(req.getRawInputStream(), maxInput);
+		
+		return new BoundedServletInputStream(enc.getInputStream(req.getRawInputStream()), maxInput);
 	}
 
 	/**
@@ -430,21 +433,77 @@ public class RequestBody {
 	/**
 	 * ServletInputStream wrapper around a normal input stream.
 	 */
-	static final class ServletInputStream2 extends ServletInputStream {
+	static final class BoundedServletInputStream extends ServletInputStream {
 
 		private final InputStream is;
+		private final ServletInputStream sis;
+		private long remain;
 
-		ServletInputStream2(InputStream is) {
+		BoundedServletInputStream(InputStream is, long max) {
 			this.is = is;
+			this.sis = null;
+			this.remain = max;
 		}
 
-		ServletInputStream2(byte[] b) {
-			this(new ByteArrayInputStream(b));
+		BoundedServletInputStream(ServletInputStream sis, long max) {
+			this.sis = sis;
+			this.is = sis;
+			this.remain = max;
+		}
+
+		BoundedServletInputStream(byte[] b) {
+			this(new ByteArrayInputStream(b), Long.MAX_VALUE);
 		}
 
 		@Override /* InputStream */
 		public final int read() throws IOException {
+			decrement();
 			return is.read();
+		}
+
+		@Override /* InputStream */
+		public int read(byte[] b) throws IOException {
+			return read(b, 0, b.length);
+		}
+
+		@Override /* InputStream */
+		public int read(final byte[] b, final int off, final int len) throws IOException {
+			long numBytes = Math.min(len, remain);
+			int r = is.read(b, off, (int) numBytes);
+			if (r == -1) 
+				return -1;
+			decrement(numBytes);
+			return r;
+		}
+
+		@Override /* InputStream */
+		public long skip(final long n) throws IOException {
+			long toSkip = Math.min(n, remain);
+			long r = is.skip(toSkip);
+			decrement(r);
+			return r;
+		}
+
+		@Override /* InputStream */
+		public int available() throws IOException {
+			if (remain <= 0)
+				return 0;
+			return is.available();
+		}
+
+		@Override /* InputStream */
+		public synchronized void reset() throws IOException {
+			is.reset();
+		}
+
+		@Override /* InputStream */
+		public synchronized void mark(int limit) {
+			is.mark(limit);
+		}
+
+		@Override /* InputStream */
+		public boolean markSupported() {
+			return is.markSupported();
 		}
 
 		@Override /* InputStream */
@@ -454,17 +513,30 @@ public class RequestBody {
 
 		@Override /* ServletInputStream */
 		public boolean isFinished() {
-			return false;
+			return sis == null ? false : sis.isFinished();
 		}
 
 		@Override /* ServletInputStream */
 		public boolean isReady() {
-			return true;
+			return sis == null ? true : sis.isReady();
 		}
 
 		@Override /* ServletInputStream */
 		public void setReadListener(ReadListener arg0) {
-			throw new NoSuchMethodError();
+			if (sis != null)
+				sis.setReadListener(arg0);
+		}
+		
+		private void decrement() throws IOException {
+			remain--;
+			if (remain < 0)
+				throw new IOException("Input limit exceeded.  See @RestResource.maxInput().");
+		}
+
+		private void decrement(long count) throws IOException {
+			remain -= count;
+			if (remain < 0)
+				throw new IOException("Input limit exceeded.  See @RestResource.maxInput().");
 		}
 	}
 }

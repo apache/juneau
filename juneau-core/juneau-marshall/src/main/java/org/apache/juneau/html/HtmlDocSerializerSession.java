@@ -15,7 +15,6 @@ package org.apache.juneau.html;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -58,7 +57,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		head = p.getStringArray(HTMLDOC_head, ctx.head);
 		nowrap = p.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
 		noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
-		template = ClassUtils.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
+		template = ctx.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
 	}
 
 	@Override /* Session */

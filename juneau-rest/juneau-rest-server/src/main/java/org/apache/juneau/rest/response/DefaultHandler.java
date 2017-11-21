@@ -67,17 +67,17 @@ public class DefaultHandler implements ResponseHandler {
 					if (req.isPlainText()) {
 						Writer w = res.getNegotiatedWriter();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						session.serialize(baos, output);
+						session.serialize(output, baos);
 						w.write(StringUtils.toSpacedHex(baos.toByteArray()));
 						w.close();  // Leave open if exception occurs.
 					} else {
 						OutputStream os = res.getNegotiatedOutputStream();
-						session.serialize(os, output);
+						session.serialize(output, os);
 						os.close();  // Leave open if exception occurs.
 					}
 				} else {
 					Writer w = res.getNegotiatedWriter();
-					session.serialize(w, output);
+					session.serialize(output, w);
 					w.close();  // Leave open if exception occurs.
 				}
 			} catch (SerializeException e) {

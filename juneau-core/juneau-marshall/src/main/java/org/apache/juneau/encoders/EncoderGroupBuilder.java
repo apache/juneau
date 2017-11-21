@@ -13,9 +13,10 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
+
+import org.apache.juneau.*;
 
 /**
  * Builder class for creating instances of {@link EncoderGroup}.
@@ -23,6 +24,7 @@ import java.util.*;
 public class EncoderGroupBuilder {
 
 	private final List<Encoder> encoders;
+	private BeanContext beanContext = BeanContext.DEFAULT;
 
 	/**
 	 * Create an empty encoder group builder.
@@ -49,7 +51,7 @@ public class EncoderGroupBuilder {
 	 */
 	public EncoderGroupBuilder append(Class<?>...e) {
 		for (int i = e.length-1; i >= 0; i--)
-			encoders.add(newInstance(Encoder.class, e[i]));
+			encoders.add(beanContext.newInstance(Encoder.class, e[i]));
 		return this;
 	}
 
@@ -97,7 +99,7 @@ public class EncoderGroupBuilder {
 	public EncoderGroup build() {
 		List<Encoder> l = new ArrayList<>();
 		for (Object e : encoders)
-			l.add(newInstance(Encoder.class, e));
+			l.add(beanContext.newInstance(Encoder.class, e));
 		Collections.reverse(l);
 		return new EncoderGroup(l.toArray(new Encoder[l.size()]));
 	}

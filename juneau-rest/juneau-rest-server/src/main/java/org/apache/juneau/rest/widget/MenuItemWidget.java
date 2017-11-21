@@ -92,7 +92,7 @@ public abstract class MenuItemWidget extends Widget {
 			SerializerSessionArgs args = new SerializerSessionArgs(req.getProperties(), null, req.getLocale(), null, null, req.getUriContext());
 			WriterSerializerSession session = HtmlSerializer.DEFAULT.createSession(args);
 			session.indent = 2;
-			session.serialize(sb, o);
+			session.serialize(o, sb);
 		}
 		sb.append(""
 			+ "\n\t</div>"

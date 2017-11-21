@@ -229,7 +229,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public final void serialize(Object out, Object o) throws SerializeException {
+	public final void serialize(Object o, Object out) throws SerializeException {
 		try (SerializerPipe pipe = createPipe(out)) {
 			doSerialize(pipe, o);
 		} catch (SerializeException e) {
