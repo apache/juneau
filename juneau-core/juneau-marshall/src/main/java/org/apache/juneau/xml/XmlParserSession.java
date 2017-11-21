@@ -682,7 +682,7 @@ public class XmlParserSession extends ReaderParserSession {
 			}
 			eventType = r.next();
 		}
-		String s = sb.toString();
+		String s = sb.toString().trim();
 		returnStringBuilder(sb);
 		s = decodeString(s);
 		if (m != null) {
