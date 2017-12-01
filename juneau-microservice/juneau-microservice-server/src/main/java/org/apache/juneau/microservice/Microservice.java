@@ -582,23 +582,25 @@ public abstract class Microservice {
 		// --------------------------------------------------------------------------------
 		// Add exit listeners.
 		// --------------------------------------------------------------------------------
-		new Thread() {
-			@Override /* Thread */
-			public void run() {
-				Console c = System.console();
-				if (c == null)
-					System.out.println("No available console.");
-				else {
-					while (true) {
-						String l = c.readLine("\nEnter 'exit' to exit.\n");
-						if (l == null || l.equals("exit")) {
-							Microservice.this.stop();
-							break;
+		if (cf.getBoolean("Console/enableIO", true)) {
+			new Thread() {
+				@Override /* Thread */
+				public void run() {
+					Console c = System.console();
+					if (c == null)
+						System.out.println("No available console.");
+					else {
+						while (true) {
+							String l = c.readLine("\nEnter 'exit' to exit.\n");
+							if (l == null || l.equals("exit")) {
+								Microservice.this.stop();
+								break;
+							}
 						}
 					}
 				}
-			}
-		}.start();
+			}.start();
+		}
 		Runtime.getRuntime().addShutdownHook(
 			new Thread() {
 				@Override /* Thread */
