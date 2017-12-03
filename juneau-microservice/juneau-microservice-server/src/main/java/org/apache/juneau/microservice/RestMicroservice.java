@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.handler.*;
@@ -69,6 +70,7 @@ public class RestMicroservice extends Microservice {
 	
 	Server server;
 	private Object jettyXml;
+	private final MessageBundle mb = MessageBundle.create(RestMicroservice.class, "Messages");
 	
 	private static volatile RestMicroservice INSTANCE;
 	
@@ -125,6 +127,7 @@ public class RestMicroservice extends Microservice {
 		super.start();
 		createServer();
 		startServer();
+		startConsole();
 		return this;
 	}
 
@@ -136,6 +139,7 @@ public class RestMicroservice extends Microservice {
 
 	@Override /* Microservice */
 	public RestMicroservice stop() {
+		final MessageBundle mb2 = mb;
 		Thread t = new Thread() {
 			@Override /* Thread */
 			public void run() {
@@ -144,9 +148,9 @@ public class RestMicroservice extends Microservice {
 					if (server.isStopping() || server.isStopped())
 						return;
 					onStopServer();
-					logger.warning("Stopping server.");
+					out(mb2, "StoppingServer");
 					server.stop();
-					logger.warning("Server stopped.");
+					out(mb2, "ServerStopped");
 					onPostStopServer();
 				} catch (Exception e) {
 					logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -392,7 +396,7 @@ public class RestMicroservice extends Microservice {
 	protected int startServer() throws Exception {
 		onStartServer();
 		server.start();
-		getLogger().warning("Server started on port " + getPort());
+		out(mb, "ServerStarted", getPort());
 		onPostStartServer();
 		return getPort();
 	}

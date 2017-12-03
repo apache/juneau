@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.net.*;
+import java.text.*;
 import java.util.*;
 import java.util.jar.*;
 import java.util.logging.*;
@@ -25,6 +26,7 @@ import java.util.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
@@ -107,12 +109,18 @@ public abstract class Microservice {
 
 	private static volatile Microservice INSTANCE;
 
+	private final MessageBundle mb = MessageBundle.create(Microservice.class, "Messages");
+	private final Scanner consoleReader;
+	private final PrintWriter consoleWriter;
+
 	private Logger logger;
 	private Args args;
 	private ConfigFile cf;
 	private ManifestFile mf;
 	private VarResolver vr;
-
+	private Map<String,ConsoleCommand> consoleCommands;
+	private boolean consoleEnabled = true;
+	
 	private String cfPath;
 
 	/**
@@ -137,6 +145,9 @@ public abstract class Microservice {
 	 */
 	protected Microservice(String...args) throws Exception {
 		setInstance(this);
+		Console c = System.console();
+		consoleReader = new Scanner(c == null ? new InputStreamReader(System.in) : c.reader());
+		consoleWriter = c == null ? new PrintWriter(System.out, true) : c.writer();
 		this.args = new Args(args);
 	}
 	
@@ -171,9 +182,9 @@ public abstract class Microservice {
 		File f = new File(cfPath);
 		if (! f.exists()) {
 			if (! create)
-				throw new FileNotFoundException("Could not locate config file at '"+f.getAbsolutePath()+"'");
+				throw new FileNotFoundException("Could not locate config file at '"+f.getAbsolutePath()+"'.");
 			if (! f.createNewFile())
-				throw new FileNotFoundException("Could not create config file at '"+f.getAbsolutePath()+"'");
+				throw new FileNotFoundException("Could not create config file at '"+f.getAbsolutePath()+"'.");
 		}
 		this.cfPath = cfPath;
 		return this;
@@ -491,8 +502,7 @@ public abstract class Microservice {
 				try (FileInputStream fis = new FileInputStream(f)) {
 					m.read(fis);
 				} catch (IOException e) {
-					System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f));
-					throw e;
+					throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n " + read(f), e);
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
@@ -502,8 +512,7 @@ public abstract class Microservice {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
-						System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + read(url.openStream()));
-						throw e;
+						throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n " + read(url.openStream()), e);
 					}
 				}
 			}
@@ -534,10 +543,8 @@ public abstract class Microservice {
 			}
 
 			if (cfPath == null) {
-				System.err.println("Running class ["+getClass().getSimpleName()+"] without a config file.");
 				cf = cfb.build();
 			} else {
-				System.out.println("Running class ["+getClass().getSimpleName()+"] using config file ["+cfPath+"]");
 				cf = cfb.build(cfPath).getResolving(createVarResolver().build());
 			}
 		}
@@ -579,26 +586,14 @@ public abstract class Microservice {
 			}
 		});
 
-		// --------------------------------------------------------------------------------
-		// Add exit listeners.
-		// --------------------------------------------------------------------------------
-		new Thread() {
-			@Override /* Thread */
-			public void run() {
-				Console c = System.console();
-				if (c == null)
-					System.out.println("No available console.");
-				else {
-					while (true) {
-						String l = c.readLine("\nEnter 'exit' to exit.\n");
-						if (l == null || l.equals("exit")) {
-							Microservice.this.stop();
-							break;
-						}
-					}
-				}
-			}
-		}.start();
+		consoleEnabled = cf.getBoolean("Console/enabled", true);
+
+		if (cfPath == null) {
+			err(mb, "RunningClassWithoutConfig", getClass().getSimpleName());
+		} else {
+			out(mb, "RunningClassWithConfig", getClass().getSimpleName(), cfPath);
+		}
+				
 		Runtime.getRuntime().addShutdownHook(
 			new Thread() {
 				@Override /* Thread */
@@ -611,6 +606,61 @@ public abstract class Microservice {
 		return this;
 	}
 
+	/**
+	 * Start the console for this application.
+	 * 
+	 * <p>
+	 * Note that this is typically started after all initialization has occurred so that the console output isn't polluted.
+	 *
+	 * @return This object (for method chaining).
+	 * @throws Exception
+	 */
+	protected Microservice startConsole() throws Exception {
+		consoleCommands = new LinkedHashMap<>();
+		for (ConsoleCommand cc : createConsoleCommands())
+			consoleCommands.put(cc.getName(), cc);
+		consoleCommands = Collections.unmodifiableMap(consoleCommands);
+		
+		final Map<String,ConsoleCommand> commands = consoleCommands;
+		final MessageBundle mb2 = mb;
+		if (! consoleCommands.isEmpty()) {
+			new Thread() {
+				@Override /* Thread */
+				@SuppressWarnings("resource")  // Must not close System.in!
+				public void run() {
+					Scanner in = getConsoleReader();
+					PrintWriter out = getConsoleWriter();
+					
+					out.println(mb2.getString("ListOfAvailableCommands"));
+					for (ConsoleCommand cc : commands.values()) 
+						out.append("\t").append(cc.getName()).append(" -- ").append(cc.getInfo()).println();
+					out.println();
+					
+					while (true) {
+						String line = null;
+						out.append("> ").flush();
+						line = in.nextLine();
+						Args args = new Args(line);
+						if (! args.isEmpty()) {
+							ConsoleCommand cc = commands.get(args.getArg(0));
+							if (cc == null) {
+								out.println(mb2.getString("UnknownCommand"));
+							} else {
+								try {
+									if (cc.execute(in, out, args))
+										break;
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				}
+			}.start();
+		}
+		return this;
+	}
+	
 	/**
 	 * Initialize the logging for this microservice.
 	 * 
@@ -794,4 +844,92 @@ public abstract class Microservice {
 	 * @param changes The list of keys in the config file being changed.
 	 */
 	protected void onConfigChange(ConfigFile cf, Set<String> changes) {}
+
+	
+	//--------------------------------------------------------------------------------
+	// Other methods.
+	//--------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the console commands associated with this microservice.
+	 * 
+	 * @return The console commands associated with this microservice as an unmodifiable map.
+	 */
+	public final Map<String,ConsoleCommand> getConsoleCommands() {
+		return consoleCommands;
+	}
+	
+ 	/**
+	 * Constructs the list of available console commands.
+	 * 
+	 * <p>
+	 * By default, uses the <js>"Console/commands"</js> list in the config file.
+	 * Subclasses can override this method and modify or augment this list to provide their own console commands.
+	 * 
+	 * <p>
+	 * The order of the commands returned by this method is the order they will be listed 
+	 * 
+	 * @return A mutable list of console command instances.
+	 * @throws Exception
+	 */
+	public List<ConsoleCommand> createConsoleCommands() throws Exception {
+		ArrayList<ConsoleCommand> l = new ArrayList<>();
+		for (String s : cf.getStringArray("Console/commands"))
+			l.add((ConsoleCommand)Class.forName(s).newInstance());
+		return l;
+	}
+	
+	/**
+	 * Returns the console reader.
+	 * 
+	 * <p>
+	 * Subclasses can override this method to provide their own console input.
+	 * 
+	 * @return The console reader.  Never <jk>null</jk>.
+	 */
+	public Scanner getConsoleReader() {
+		return consoleReader;
+	}
+	
+	/**
+	 * Returns the console writer.
+	 * 
+	 * <p>
+	 * Subclasses can override this method to provide their own console output.
+	 * 
+	 * @return The console writer.  Never <jk>null</jk>.
+	 */
+	public PrintWriter getConsoleWriter() {
+		return consoleWriter;
+	}
+	
+	/**
+	 * Prints a localized message to the console writer.
+	 * 
+	 * <p>
+	 * Ignored if <js>"Console/enabled"</js> is <jk>false</jk>.
+	 * 
+	 * @param mb The message bundle containing the message.
+	 * @param messageKey The message key.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	protected void out(MessageBundle mb, String messageKey, Object...args) {
+		if (consoleEnabled)
+			getConsoleWriter().println(mb.getString(messageKey, args));
+	}
+
+	/**
+	 * Prints a localized message to STDERR.
+	 * 
+	 * <p>
+	 * Ignored if <js>"Console/enabled"</js> is <jk>false</jk>.
+	 * 
+	 * @param mb The message bundle containing the message.
+	 * @param messageKey The message key.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	protected void err(MessageBundle mb, String messageKey, Object...args) {
+		if (consoleEnabled)
+			System.err.println(mb.getString(messageKey, args));
+	}
 }
