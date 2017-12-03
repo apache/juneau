@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a
@@ -139,6 +140,15 @@ public final class Args extends ObjectMap {
 		}
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param args Arguments passed in as a raw command line.
+	 */
+	public Args(String args) {
+		this(StringUtils.splitQuoted(args));
+	}
+	
 	/**
 	 * Returns main argument at the specified index, or <jk>null</jk> if the index is out of range.
 	 *
