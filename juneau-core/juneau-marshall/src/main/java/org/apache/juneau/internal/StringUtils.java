@@ -619,6 +619,116 @@ public final class StringUtils {
 
 		return m;
 	}
+	
+	/**
+	 * Returns <jk>true</jk> if the specified string contains any of the specified characters.
+	 * 
+	 * @param s The string to test.
+	 * @param chars The characters to look for.
+	 * @return 
+	 * 	<jk>true</jk> if the specified string contains any of the specified characters.
+	 * 	<br><jk>false</jk> if the string is <jk>null</jk>.
+	 */
+	public static boolean containsAny(String s, char...chars) {
+		if (s == null)
+			return false;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			for (char c2 : chars) 
+				if (c == c2)
+					return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Splits a space-delimited string with optionally quoted arguments.
+	 * 
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"foo"</js> =&gt; <code>["foo"]</code>
+	 * 	<li><js>" foo "</js> =&gt; <code>["foo"]</code>
+	 * 	<li><js>"foo bar baz"</js> =&gt; <code>["foo","bar","baz"]</code>
+	 * 	<li><js>"foo 'bar baz'"</js> =&gt; <code>["foo","bar baz"]</code>
+	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <code>["foo","bar baz"]</code>
+	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <code>["foo","bar'baz"]</code>
+	 * </ul>
+	 * 
+	 * @param s The input string.
+	 * @return 
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static String[] splitQuoted(String s) {
+		char[] unEscapeChars = new char[]{'\\', '\'', '"'};
+
+		if (s == null)
+			return null;
+		
+		s = s.trim();
+		
+		if (isEmpty(s))
+			return new String[0];
+		
+		if (! containsAny(s, ' ', '\t', '\'', '"'))
+			return new String[]{s};
+
+		int 
+			S1 = 1,  // Looking for start of token.
+			S2 = 2,  // Found ', looking for end '
+			S3 = 3,  // Found ", looking for end "
+			S4 = 4;  // Found non-whitespace, looking for end whitespace.
+		
+		int state = S1;
+		
+		boolean isInEscape = false, needsUnescape = false;
+		int mark = 0;
+			
+		List<String> l = new ArrayList<>();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			
+			if (state == S1) {
+				if (c == '\'') {
+					state = S2;
+					mark = i+1;
+				} else if (c == '"') {
+					state = S3;
+					mark = i+1;
+				} else if (c != ' ' && c != '\t') {
+					state = S4;
+					mark = i;
+				}
+			} else if (state == S2 || state == S3) {
+				if (c == '\\') {
+					isInEscape = ! isInEscape;
+					needsUnescape = true;
+				} else if (! isInEscape) {
+					if (c == (state == S2 ? '\'' : '"')) {
+						String s2 = s.substring(mark, i);
+						if (needsUnescape)
+							s2 = unEscapeChars(s2, unEscapeChars, '\\');
+						l.add(s2);
+						state = S1;
+						isInEscape = needsUnescape = false;
+					}
+				} else {
+					isInEscape = false;
+				}
+			} else if (state == S4) {
+				if (c == ' ' || c == '\t') {
+					l.add(s.substring(mark, i));
+					state = S1;
+				}
+			}
+		}
+		if (state == S4)
+			l.add(s.substring(mark));
+		else if (state == S2 || state == S3)
+			throw new RuntimeException("Unmatched string quotes: " + s);
+		return l.toArray(new String[l.size()]);
+	}
 
 	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.

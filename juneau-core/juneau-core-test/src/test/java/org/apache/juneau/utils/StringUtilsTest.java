@@ -745,4 +745,30 @@ public class StringUtilsTest {
 		assertEquals("http://foo:123", getAuthorityUri("http://foo:123/"));
 		assertEquals("http://foo:123", getAuthorityUri("http://foo:123/bar"));
 	}
+
+	//====================================================================================================
+	// splitQuoted(String)
+	//====================================================================================================
+	@Test
+	public void getSplitQuoted() {
+		assertObjectEquals("null", splitQuoted(null));
+		assertObjectEquals("[]", splitQuoted(""));
+		assertObjectEquals("[]", splitQuoted(" \t "));
+		assertObjectEquals("['foo']", splitQuoted("foo"));
+		assertObjectEquals("['foo','bar','baz']", splitQuoted("foo  bar baz"));
+		assertObjectEquals("['foo']", splitQuoted("'foo'"));
+		assertObjectEquals("[' foo ']", splitQuoted(" ' foo ' "));
+		assertObjectEquals("['foo','bar']", splitQuoted("'foo' 'bar'"));
+		assertObjectEquals("['foo']", splitQuoted("\"foo\""));
+		assertObjectEquals("[' foo ']", splitQuoted(" \" foo \" "));
+		assertObjectEquals("['foo','bar']", splitQuoted("\"foo\" \"bar\""));
+		assertObjectEquals("['foo\\'bar']", splitQuoted("'foo\\'bar'"));
+		assertObjectEquals("['foo\"bar']", splitQuoted("'foo\\\"bar'"));
+		assertObjectEquals("['\\'foo\\'bar\\'']", splitQuoted("'\\'foo\\'bar\\''"));
+		assertObjectEquals("['\"foo\"bar\"']", splitQuoted("'\\\"foo\\\"bar\\\"'"));
+		assertObjectEquals("['\\'foo\\'']", splitQuoted("'\\'foo\\''"));
+		assertObjectEquals("['\"foo\"']", splitQuoted("\"\\\"foo\\\"\""));
+		assertObjectEquals("['\"foo\"']", splitQuoted("'\"foo\"'"));
+		assertObjectEquals("['\\'foo\\'']", splitQuoted("\"'foo'\""));
+	}
 }
