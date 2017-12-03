@@ -84,6 +84,63 @@ public class MessageBundle extends ResourceBundle {
 
 	/**
 	 * Constructor.
+	 * 
+	 * <p>
+	 * When this method is used, the bundle path is determined by searching for the resource bundle
+	 * in the following locations:
+	 * <ul>
+	 * 	<li><code>[package].ForClass.properties</code>
+	 * 	<li><code>[package].nls.ForClass.properties</code>
+	 * 	<li><code>[package].i18n.ForClass.properties</code>
+	 * </ul>
+	 * 
+	 * @param forClass The class 
+	 * @return A new message bundle belonging to the class.
+	 */
+	public static final MessageBundle create(Class<?> forClass) {
+		return create(forClass, findBundlePath(forClass));
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * <p>
+	 * A shortcut for calling <code>new MessageBundle(forClass, bundlePath)</code>.
+	 * 
+	 * 
+	 * @param forClass The class 
+	 * @param bundlePath The location of the resource bundle.
+	 * @return A new message bundle belonging to the class.
+	 */
+	public static final MessageBundle create(Class<?> forClass, String bundlePath) {
+		return new MessageBundle(forClass, bundlePath);
+	}
+	
+	private static final String findBundlePath(Class<?> forClass) {
+		String path = forClass.getName();
+		if (tryBundlePath(forClass, path))
+			return path;
+		path = forClass.getPackage().getName() + ".nls." + forClass.getSimpleName(); 
+		if (tryBundlePath(forClass, path))
+			return path;
+		path = forClass.getPackage().getName() + ".i18n." + forClass.getSimpleName();
+		if (tryBundlePath(forClass, path))
+			return path;
+		return null;
+	}
+	
+	private static final boolean tryBundlePath(Class<?> c, String path) {
+		try {
+			path = c.getName();
+			ResourceBundle.getBundle(path, Locale.getDefault(), c.getClassLoader());
+			return true;
+		} catch (MissingResourceException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Constructor.
 	 *
 	 * @param forClass The class using this resource bundle.
 	 * @param bundlePath
