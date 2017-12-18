@@ -11,6 +11,20 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+
+Release Notes - Juneau - Version 7.0.1
+
+** Bug
+    * [JUNEAU-68] - Add BoundedReader to REST input
+    * [JUNEAU-69] - XML parser should ignore comments.
+    * [JUNEAU-71] - No git tag for release 7.0.0
+
+** Improvement
+    * [JUNEAU-72] - Offer an option to disable console IO from org.apache.juneau.microservice.Microservice.start()
+    * [JUNEAU-73] - Update Jetty from 9.4.7.v20170914 to 9.4.8.v20171121
+    * [JUNEAU-74] - Update Apache HttpClient from 4.5.3 to 4.5.4
+
+
 Release Notes - Juneau - Version 7.0.0
 
 ** Improvement
