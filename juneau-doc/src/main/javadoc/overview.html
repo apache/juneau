@@ -169,6 +169,7 @@
 			<li><p><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
 		</ol>
 	</ol>
+	<li><p><a class='doclink' href='#Security'>Security Best-Practices</a></p>
 	<li><p><a class='doclink' href='#ReleaseNotes'>Release Notes</a></p>
 </ol>
 
@@ -7381,8 +7382,168 @@
 </div>
 
 <!-- =============================================================================================================== -->
+<a id="Security"></a>
+<h2 class='topic' onclick='toggle(this)'>6 - Security Best-Practices</h2>
+<div class='topic'>
+	<p>
+		Security is always an ongoing concern in any library.  
+		If you discover any security vulnerabilities in this code, please refer to the instructions found here:
+	</p>
+	<ul class='spaced-list'>
+		<li><a class='doclink' href='http://www.apache.org/security'>SECURITY</a>
+	</ul>
+
+	<!-- =========================================================================================================== -->
+	<a id="Security.juneau-marshall"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.1 - juneau-marshall</h3>
+	<div class='topic'>
+
+		<h6 class='topic'>Demarshalling vulnerabilities</h6>
+		<p>
+			One common security vulnerability is the ability to create arbitrary Java object instances through crafted
+			user input.  For example, support for constructing POJOs based on an input attribute defining a 
+			fully-qualified class name like <js>"{class:'com.foo.MyBean',...}"</js>
+		</p>
+		<p>
+			Fortunately, Juneau does not support an open-ended <js>"class</js> attribute.  
+			As a rule, it should not be possible to create arbitrary POJOs by any of the parsers.
+			The demarshalled object types are inferred via reflection of the class objects passed in through the parser 
+			method (e.g. <code>JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean.<jk>class</jk>)</code>).
+			As long as the <code>Class</code> object passed into this method is not constructed from user-generated input,
+			it should be free from demarshalling vulnerabilities.   
+		</p> 
+		<p>
+			The following example shows a potential vector that circumvents the restriction above:
+		</p>
+		<p class='bcode'>
+	<jc>// Don't do this!</jc>
+	Class c = Class.<jsf>forName</jsf>(someUserInputString);
+	JsonParser.<jsf>DEFAULT</jsf>.parse(input, c);  <jc>// Oops!  Security hole!</jc>
+		</p>
+		<p>
+			Juneau does support something similar to a <js>"class"</js> attribute that allows you to define the
+			POJO type at runtime.
+			This is the <js>"type"</js> attribute.
+			The difference is that it's not possible to specify fully-qualified class names in <js>"type"</js> attributes,
+			and instead can only specify type keys defined through bean dictionaries. 
+			Instead of serializing the fully-qualified class names in the output, we instead serialize type
+			names that represent those POJO types.
+			<br>i.e. instead of <js>"class='com.foo.MyBean'"</js>, we instead serialize <js>"type='MyBeanIdentifier'"</js>.
+			<br>Since bean types are defined at compile time, it's impossible to instantiate arbitrary POJOs.
+		</p>
+		<p>
+			POJO types of generalized input are also inferred through swaps.
+			Again, since the POJO types are hardcoded at compile time, these should not be subject to demarshalling
+			vulnerabilities.  However, it is possible to circumvent this through your swap implementation as shown
+			below: 	
+		</p>
+		<p class='bcode'>
+	<jc>// Don't do this!</jc>
+	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> PojoSwap&lt;ObjectMap,Object&gt; {
+		<jk>public</jk> Object swap(BeanSession session, ObjectMap input) <jk>throws</jk> Exception {
+			<jc>// Security hole!</jc>
+			<jk>return</jk> Class.<jsf>forName</jsf>(input.getString(<js>"class"</js>)).newInstance();
+		}
+	}
+		</p>
+		<p>
+			Note that the {@link org.apache.juneau.jso.JsoParser}, a thin layer of the Juneau Parser API written on 
+			top of plain-old Java Object Serialization which itself is vulnerable to demarshalling issues.  
+			Due to this, the JSO parser is not included in any of the default REST servlet implementations. 
+			Be especially careful when using this parser, particularly if you want to use it for handing 
+			<code>application/x-java-serialized-object</code> input through REST servlets. 
+		</p>
+		<p>
+			All other parsers (JSON, URL-Encoding, MessagePack, etc...) work the same way in determining POJO types, so
+			should be safe from demarshalling vulnerabilities.  
+		</p>
+		
+		<h6 class='topic'>Dependent libraries</h6>
+		<p>
+			When accessing security vulnerabilities of any library, dependent libraries must also be taken into account:
+		</p>
+		<ul>
+			<li>The JSON, HTML, MsgPack, URL-Encoding, and UON parsers are written from scratch and do not rely on
+				any other parsing technologies.
+			<li>The XML and HTML parsers uses the built-in Java StAX parser.
+				This *should* be free from vulnerabilities.    
+			<li>The RDF parsers rely on Apache Jena 2.7.1.  
+				As of <code>7.0.1</code>, no known security vulnerabilities exist that affect Juneau at this time.
+		</ul>
+	</div>
+	
+	<!-- =========================================================================================================== -->
+	<a id="Security.juneau-svl"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.2 - juneau-svl</h3>
+	<div class='topic'>
+		<p>
+			Care must be used when defining new {@link org.apache.juneau.svl.Var Vars} using the SVL API since mistakes 
+			could potentially expose system properties, environment variables, or even file system files.
+		</p>
+		<p>
+			For recap, the SVL support allows you to embed variables of the form <js>"$X{key}"</js> inside strings that
+			get resolved to other strings.  The resolved strings themselves can also contain variables that also
+			get recursively resolved.  
+		</p>
+		<p>
+			An example of a potential security hole is shown below that could potentially expose any file on a file
+			system through a REST request:
+		</p>
+		<p class='bcode'>
+	<jk>public</jk> String doUnsafeGet(RestRequest req) {
+		<jc>// Security hole!</jc>
+		<jk>return</jk> req.getVarResolver().resolve(<js>"$R{Query.foo}"</js>);
+	}
+		</p>
+		<p>
+			This code is simply echoing the value of the <code>foo</code> query parameter.
+			Now say for example that a bad actor passes in the query string <js>"foo=$F{/some/file/on/file/system}"</js>.
+			The <code>$F</code> variable allows you to resolve the contents of files using SVL, and is provided
+			by default using the built-in variable resolver returned by the <code>RestRequest</code> object.
+			You've potentially just exposed the contents of that file through your REST interface.
+		</p>
+		<p>
+			In reality, the above security hole does not exist because of the following restrictions:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				<code>Vars</code> have two methods {@link org.apache.juneau.svl.Var#allowNested()} and 
+				{@link org.apache.juneau.svl.Var#allowRecurse()} that can be overridden to prevent recursive processing
+				of string variables.  These are both <jk>false</jk> for the <code>$R</code> variable, so the <code>$F</code>
+				variable in the result will never get processed and instead be treated as plain text. 
+			<li>
+				The <code>$F</code> variable only allows you to retrieve files within the JVM starting directory. 
+		</ul>
+		<p>
+			Even though the built-in Juneau variables are safe, special care is needed when defining your own custom
+			variables.  If your variable resolves user input in any way, it's HIGHLY recommended that you override the
+			{@link org.apache.juneau.svl.Var#allowNested()} and {@link org.apache.juneau.svl.Var#allowRecurse()} 
+			methods to prevent recursive handling of variables.
+		</p>
+	</div>
+	
+	<!-- =========================================================================================================== -->
+	<a id="Security.juneau-rest-server"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.3 - juneau-rest-server</h3>
+	<div class='topic'>
+		<p>
+			Denial of service attacks can be alleviated through the {@link org.apache.juneau.rest.annotation.RestResource#maxInput() maxInput()}
+			setting.  Arbitrarily-large input will trigger an exception before causing out-of-memory errors.
+			The default value for this setting is 100MB.  
+		</p>
+		<p>
+			Since the parsers do not use intermediate DOMs and instead parse directly into Java objects,  
+			deeply nested data structures will almost always trigger stack overflow errors long before memory consumption
+			becomes an issue.  However, this is NOT true of the RDF parsers that use an intermediate DOM.  If parsing 
+			RDF, you may want to consider lowering the max-input value above.
+		</p>
+	</div>
+
+</div>
+
+<!-- =============================================================================================================== -->
 <a id="ReleaseNotes"></a>
-<h2 class='topic' onclick='toggle(this)'>6 - Release Notes</h2>
+<h2 class='topic' onclick='toggle(this)'>7 - Release Notes</h2>
 <div class='topic'>
 	
 	<h5 class='toc'>What's new in each release</h5>
@@ -7462,6 +7623,14 @@
 	<a id="7.0.1"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.0.1 (TBD)</h3>
 	<div class='topic'>
+		<p>
+			This release is a minor update.
+			It includes the following prereq updates:
+		</p>
+		<ul class='spaced-list'>
+			<li>Apache HttpClient:  4.5.3 to 4.5.4
+			<li>Eclipse Jetty:  9.4.6.v20170531 to 9.4.8.v20171121
+		</ul>
 	
 		<h6 class='topic'>juneau-marshall</h6>
 		<ul class='spaced-list'>
@@ -7511,6 +7680,82 @@
 				potential DoS attacks.
 		</ul>
 
+		<h6 class='topic'>juneau-microservice-server</h6>
+		<ul class='spaced-list'>
+			<li>
+				New pluggable console commands.
+				<br>When you start up the microservice, you'll now see the following:
+				<p class='bcode'>
+	Running class 'RestMicroservice' using config file 'examples.cfg'.
+	Server started on port 10000
+
+	List of available commands:
+		exit -- Shut down service
+		restart -- Restarts service
+		help -- Commands help
+		echo -- Echo command
+
+	&gt; <span style='color:green'>help help</span>
+	NAME
+		help -- Commands help
+	
+	SYNOPSIS
+		help [command]
+	
+	DESCRIPTION
+		When called without arguments, prints the descriptions of all available commands.
+		Can also be called with one or more arguments to get detailed information on a command.
+	
+	EXAMPLES
+		List all commands:
+			&gt; help
+		
+		List help on the help command:
+			&gt; help help
+			
+	&gt; 
+				</p>
+				<p>
+				Commands are pluggable and extensible through the config file. 
+	<p class='bcode'>
+	<cc>#=======================================================================================================================
+	# Console settings
+	#=======================================================================================================================</cc>
+	<cs>[Console]</cs>
+	
+	<ck>enabled</ck> = <cv>true</cv>
+	
+	<cc># List of available console commands.
+	# These are classes that implements ConsoleCommand that allow you to submit commands to the microservice via
+	# the console.
+	# When listed here, the implementations must provide a no-arg constructor.
+	# They can also be provided dynamically by overriding the Microservice.createConsoleCommands() method.</cc>
+	<ck>commands</ck> = 
+		<cv>org.apache.juneau.microservice.console.ExitCommand,
+		org.apache.juneau.microservice.console.RestartCommand,
+		org.apache.juneau.microservice.console.HelpCommand</cv>
+	</p>
+				<ul>
+					<li>New classes:
+						<ul>
+							<li>{@link org.apache.juneau.microservice.console.ConsoleCommand}
+							<li>{@link org.apache.juneau.microservice.console.ExitCommand}
+							<li>{@link org.apache.juneau.microservice.console.RestartCommand}
+							<li>{@link org.apache.juneau.microservice.console.HelpCommand}
+						</ul>
+					<li>New methods on {@link org.apache.juneau.microservice.Microservice}
+						<ul>
+							<li>{@link org.apache.juneau.microservice.Microservice#startConsole() startConsole()}
+							<li>{@link org.apache.juneau.microservice.Microservice#createConsoleCommands() createConsoleCommands()}
+							<li>{@link org.apache.juneau.microservice.Microservice#getConsoleReader() getConsoleReader()}
+							<li>{@link org.apache.juneau.microservice.Microservice#getConsoleWriter() getConsoleWriter()}
+						</ul>	
+				</ul>
+			<li>
+				Console input reader and output writer can now be overridden.
+			<li>
+				Console strings are now internationalized.
+		</ul>
 	</div>
 	
 	<!-- =========================================================================================================== -->
