@@ -33,6 +33,8 @@ public class _TestSuite {
 
 	@BeforeClass
 	public static void setUp() {
+		double version = Double.parseDouble(System.getProperty("java.specification.version"));
+		Assume.assumeFalse("Java version " + version + " detected.  Tests will be skipped.", version < 1.8);
 		SamplesMicroservice.startMicroservice();
 	}
 
