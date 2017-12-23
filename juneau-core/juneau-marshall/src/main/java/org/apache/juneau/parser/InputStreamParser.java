@@ -22,7 +22,7 @@ import org.apache.juneau.*;
  * This class is typically the parent class of all byte-based parsers.
  * It has 1 abstract method to implement...
  * <ul>
- * 	<li><code>parse(InputStream, ClassMeta, ParserContext)</code>
+ * 	<li><code>parse(InputStream, ClassMeta, Parser)</code>
  * </ul>
   */
 public abstract class InputStreamParser extends Parser {

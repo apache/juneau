@@ -84,7 +84,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	}
 
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public PlainTextSerializerBuilder builder() {
 		return new PlainTextSerializerBuilder(getPropertyStore());
 	}

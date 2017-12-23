@@ -41,7 +41,7 @@ public class CsvParser extends ReaderParser {
 		super(ps, "text/csv");
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public CsvParserBuilder builder() {
 		return new CsvParserBuilder(getPropertyStore());
 	}

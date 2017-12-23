@@ -72,7 +72,7 @@ public class PlainTextParser extends ReaderParser {
 		super(ps, consumes);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public PlainTextParserBuilder builder() {
 		return new PlainTextParserBuilder(getPropertyStore());
 	}

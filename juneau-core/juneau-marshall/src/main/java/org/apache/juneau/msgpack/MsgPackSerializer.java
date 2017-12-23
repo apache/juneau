@@ -82,7 +82,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		this.addBeanTypeProperties = getProperty(MSGPACK_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public MsgPackSerializerBuilder builder() {
 		return new MsgPackSerializerBuilder(getPropertyStore());
 	}

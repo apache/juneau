@@ -273,7 +273,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		expandedParams = getProperty(URLENC_expandedParams, boolean.class, false);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public UrlEncodingSerializerBuilder builder() {
 		return new UrlEncodingSerializerBuilder(getPropertyStore());
 	}
@@ -309,10 +309,10 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	 * @param o The object to serialize.
 	 * @param urlEncode
 	 * 	URL-encode the string if necessary.
-	 * 	If <jk>null</jk>, then uses the value of the {@link UonSerializerContext#UON_encodeChars} setting.
+	 * 	If <jk>null</jk>, then uses the value of the {@link UonSerializer#UON_encodeChars} setting.
 	 * @param plainTextParams
 	 * 	Whether we're using plain-text params.
-	 * 	If <jk>null</jk>, then uses the value from the {@link UrlEncodingSerializerContext#URLENC_paramFormat} setting.
+	 * 	If <jk>null</jk>, then uses the value from the {@link UrlEncodingSerializer#URLENC_paramFormat} setting.
 	 * @return The serialized object.
 	 */
 	private String serializePart(Object o, Boolean urlEncode, Boolean plainTextParams) {

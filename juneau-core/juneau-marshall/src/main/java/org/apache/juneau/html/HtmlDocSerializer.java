@@ -141,7 +141,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_navlinks</jsf>,
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>,
 	 * 				value=<js>"['options: ?method=OPTIONS', 'doc: doc']"</js>)
 	 * 		}
 	 * 	)
@@ -349,7 +349,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_style</jsf>,
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_style</jsf>,
 	 * 				value=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>)
 	 * 		}
 	 * 	)
@@ -392,7 +392,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_script</jsf>,
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_script</jsf>,
 	 * 				value=<js>"alert('hello!');"</js>)
 	 * 		}
 	 * 	)
@@ -434,7 +434,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>,
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_links</jsf>,
 	 * 				value=<js>"['<link rel=\"icon\" href=\"htdocs/mypageicon.ico\">']"</js>)
 	 * 		}
 	 * 	)

@@ -279,7 +279,7 @@ public class UonSerializer extends WriterSerializer {
 		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public UonSerializerBuilder builder() {
 		return new UonSerializerBuilder(getPropertyStore());
 	}

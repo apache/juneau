@@ -52,7 +52,7 @@ public class HtmlParser extends XmlParser {
 		super(ps, "text/html", "text/html+stripped");
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public HtmlParserBuilder builder() {
 		return new HtmlParserBuilder(getPropertyStore());
 	}

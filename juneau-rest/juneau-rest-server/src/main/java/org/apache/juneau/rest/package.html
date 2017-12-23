@@ -1645,9 +1645,9 @@
 			serializers and parsers registered with the servlet.
 		</p>
 		<p class='bcode'>
-	<jk>import static</jk> org.apache.juneau.SerializerContext.*;
-	<jk>import static</jk> org.apache.juneau.xml.XmlSerializerContext.*;
-	<jk>import static</jk> org.apache.juneau.rest.serializers.HtmlSerializerContext.*;
+	<jk>import static</jk> org.apache.juneau.Serializer.*;
+	<jk>import static</jk> org.apache.juneau.xml.XmlSerializer.*;
+	<jk>import static</jk> org.apache.juneau.html.HtmlSerializer.*;
 
 	<jc>// Servlet with properties applied</jc>
 	<ja>@RestResource</ja>(

@@ -96,7 +96,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 		expandedParams = getProperty(URLENC_expandedParams, boolean.class, false);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public UrlEncodingParserBuilder builder() {
 		return new UrlEncodingParserBuilder(getPropertyStore());
 	}

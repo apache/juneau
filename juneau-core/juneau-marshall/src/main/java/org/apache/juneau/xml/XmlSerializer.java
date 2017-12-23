@@ -436,7 +436,7 @@ public class XmlSerializer extends WriterSerializer {
 		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, new Namespace[0]);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public XmlSerializerBuilder builder() {
 		return new XmlSerializerBuilder(getPropertyStore());
 	}

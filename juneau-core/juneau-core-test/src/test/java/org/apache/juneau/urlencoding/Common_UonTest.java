@@ -249,7 +249,7 @@ public class Common_UonTest {
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("It's recommended you use the SerializerContext.SERIALIZER_detectRecursions setting to help locate the loop."));
+			assertTrue(msg.contains("It's recommended you use the Serializer.SERIALIZER_detectRecursions setting to help locate the loop."));
 		}
 
 		// Recursion detection, no ignore

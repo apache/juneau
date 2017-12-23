@@ -328,7 +328,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	}
 	
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public RdfSerializerBuilder builder() {
 		return new RdfSerializerBuilder(getPropertyStore());
 	}

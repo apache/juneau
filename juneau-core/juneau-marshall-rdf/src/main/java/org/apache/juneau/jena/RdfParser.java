@@ -197,7 +197,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 		this(ps, "text/xml+rdf");
 	}	
 	
-	@Override /* CoreObject */
+	@Override /* Context */
 	public RdfParserBuilder builder() {
 		return new RdfParserBuilder(getPropertyStore());
 	}

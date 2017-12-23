@@ -181,7 +181,7 @@ public class XmlParser extends ReaderParser {
 		eventAllocator = getInstanceProperty(XML_eventAllocator, XMLEventAllocator.class, null);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public XmlParserBuilder builder() {
 		return new XmlParserBuilder(getPropertyStore());
 	}

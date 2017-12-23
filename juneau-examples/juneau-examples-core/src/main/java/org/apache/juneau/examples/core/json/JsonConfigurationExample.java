@@ -35,7 +35,7 @@ public class JsonConfigurationExample {
 	 */
 	public static void main(String[] args) throws Exception {
 		Pojo aPojo = new Pojo("a","</pojo>");
-		// Json Serializers can be configured using properties defined in JsonSerializerContext
+		// Json Serializers can be configured using properties defined in JsonSerializer
 		String withWhitespace = JsonSerializer.create().ws().build().serialize(aPojo);
 		// the output will be padded with spaces after format characters
 		System.out.println(withWhitespace);

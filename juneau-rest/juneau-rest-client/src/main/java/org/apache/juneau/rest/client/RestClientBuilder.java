@@ -909,7 +909,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 
 	//--------------------------------------------------------------------------------
-	// CoreObject properties
+	// Context properties
 	//--------------------------------------------------------------------------------
 
 	/**

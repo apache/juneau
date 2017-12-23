@@ -340,7 +340,7 @@ public class HtmlSerializer extends XmlSerializer {
 		addBeanTypeProperties = getProperty(HTML_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public HtmlSerializerBuilder builder() {
 		return new HtmlSerializerBuilder(getPropertyStore());
 	}

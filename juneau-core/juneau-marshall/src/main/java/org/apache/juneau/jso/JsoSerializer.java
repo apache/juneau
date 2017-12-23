@@ -50,7 +50,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 		super(ps, "application/x-java-serialized-object");
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public JsoSerializerBuilder builder() {
 		return new JsoSerializerBuilder(getPropertyStore());
 	}

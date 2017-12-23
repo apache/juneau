@@ -41,7 +41,7 @@ public final class CsvSerializer extends WriterSerializer {
 		super(ps, "text/csv");
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public CsvSerializerBuilder builder() {
 		return new CsvSerializerBuilder(getPropertyStore());
 	}

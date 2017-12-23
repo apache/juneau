@@ -111,7 +111,7 @@ public class UonParser extends ReaderParser {
 		this.decodeChars = getProperty(UON_decodeChars, boolean.class, false);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public UonParserBuilder builder() {
 		return new UonParserBuilder(getPropertyStore());
 	}

@@ -197,7 +197,7 @@ public class YamlSerializer extends WriterSerializer {
 		addBeanTypeProperties = getProperty(YAML_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public YamlSerializerBuilder builder() {
 		return new YamlSerializerBuilder(getPropertyStore());
 	}

@@ -247,7 +247,7 @@ public abstract class SerializerSession extends BeanSession {
 			throw e;
 		} catch (StackOverflowError e) {
 			throw new SerializeException(this,
-				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the SerializerContext.SERIALIZER_detectRecursions setting to help locate the loop.").initCause(e);
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the Serializer.SERIALIZER_detectRecursions setting to help locate the loop.").initCause(e);
 		} catch (Exception e) {
 			throw new SerializeException(this, e);
 		} finally {

@@ -45,7 +45,7 @@ public class MsgPackParser extends InputStreamParser {
 		super(ps, "octal/msgpack");
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public MsgPackParserBuilder builder() {
 		return new MsgPackParserBuilder(getPropertyStore());
 	}

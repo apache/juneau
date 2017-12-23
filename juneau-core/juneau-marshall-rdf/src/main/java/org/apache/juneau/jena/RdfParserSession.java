@@ -137,7 +137,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 	/*
 	 * Decodes the specified string.
-	 * If {@link RdfParserContext#RDF_trimWhitespace} is <jk>true</jk>, the resulting string is trimmed before decoding.
+	 * If {@link RdfParser#RDF_trimWhitespace} is <jk>true</jk>, the resulting string is trimmed before decoding.
 	 * If {@link #isTrimStrings()} is <jk>true</jk>, the resulting string is trimmed after decoding.
 	 */
 	private String decodeString(Object o) {
