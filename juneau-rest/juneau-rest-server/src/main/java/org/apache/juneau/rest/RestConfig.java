@@ -77,7 +77,7 @@ import org.apache.juneau.utils.*;
  * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)</code> before
  * you modify this config object, you won't see the changes!
  */
-public class RestConfig implements ServletConfig {
+public class RestConfig extends ContextBuilder implements ServletConfig {
 
 	final ServletConfig inner;
 
@@ -1429,5 +1429,11 @@ public class RestConfig implements ServletConfig {
 	@Override /* ServletConfig */
 	public String getServletName() {
 		return inner.getServletName();
+	}
+
+	@Override
+	public Context build() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
