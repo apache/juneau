@@ -51,72 +51,40 @@ import org.apache.juneau.uon.*;
 
 /**
  * Builder class for the {@link RestClient} class.
+ * 
+ * <p>
+ * Instances of this class are created by the following methods:
+ * <ul>
+ * 	<li>{@link RestClient#create()} - Create from scratch.
+ * 	<li>{@link RestClient#create(Serializer,Parser)} - Create from scratch using specified serializer/parser.
+ * 	<li>{@link RestClient#create(Class,Class)} - Create from scratch using specified serializer/parser classes.
+ * 	<li>{@link RestClient#builder()} - Copy settings from an existing client.
+ * </ul>
  */
 public class RestClientBuilder extends BeanContextBuilder {
 
 	private HttpClientConnectionManager httpClientConnectionManager;
-	private HttpClientBuilder httpClientBuilder = createHttpClientBuilder();
+	private HttpClientBuilder httpClientBuilder;
 	private CloseableHttpClient httpClient;
 	private SSLOpts sslOpts;
 	private boolean pooled;
 
 	/**
-	 * Constructor, default settings.
-	 */
-	public RestClientBuilder() {
-		super();
-	}
-
-	/**
-	 * Constructor, default settings.
-	 *
-	 * <p>
-	 * Shortcut for calling <code><jk>new</jk> RestClientBuilder().serializer(s).parser(p);</code>
-	 *
-	 * @param s The serializer to use for output.
-	 * @param p The parser to use for input.
-	 */
-	public RestClientBuilder(Serializer s, Parser p) {
-		super();
-		serializer(s);
-		parser(p);
-	}
-
-	/**
-	 * Constructor, default settings.
-	 *
-	 * <p>
-	 * Shortcut for calling <code><jk>new</jk> RestClientBuilder().serializer(s).parser(p);</code>
-	 *
-	 * @param s The serializer class to use for output.
-	 * @param p The parser class to use for input.
-	 */
-	public RestClientBuilder(Class<? extends Serializer> s, Class<? extends Parser> p) {
-		super();
-		serializer(s);
-		parser(p);
-	}
-
-	/**
 	 * Constructor.
-	 *
-	 * @param ps The initial configuration settings for this builder.
 	 */
-	public RestClientBuilder(PropertyStore ps) {
+	RestClientBuilder(PropertyStore ps, HttpClientBuilder httpClientBuilder) {
 		super(ps);
+		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : createHttpClientBuilder();
 	}
 
 	@SuppressWarnings("resource")
 	@Override /* ContextBuilder */
 	public RestClient build() {
 		try {
-			CloseableHttpClient httpClient = this.httpClient;
-			if (httpClient == null)
-				httpClient = createHttpClient();
-			
+			CloseableHttpClient c = httpClient != null ? httpClient : createHttpClient();
 			PropertyStore ps = psb.build();
 
-			return new RestClient(ps, httpClient);
+			return new RestClient(ps, httpClientBuilder, c);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

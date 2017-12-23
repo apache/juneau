@@ -59,7 +59,7 @@ public class DockerRegistryResource extends Resource {
 	public void initRegistry(RestConfig config) throws Exception {
 		ConfigFile cf = config.getConfigFile();
 		registryUrl = cf.getString("DockerRegistry/url");
-		rc = new RestClientBuilder().build();
+		rc = RestClient.create().build();
 	}
 
 	@Override /* Servlet */

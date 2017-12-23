@@ -86,9 +86,7 @@ public class SamplesMicroservice {
 	 */
 	public static RestClientBuilder client() {
 		try {
-			return new RestClientBuilder()
-				.rootUrl(microserviceURI)
-			;
+			return RestClient.create().rootUrl(microserviceURI);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

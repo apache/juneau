@@ -69,7 +69,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked" })
-public final class RestCall {
+public final class RestCall extends Session {
 
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
@@ -106,6 +106,7 @@ public final class RestCall {
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestCall(RestClient client, HttpRequestBase request, URI uri) throws RestCallException {
+		super(SessionArgs.DEFAULT);
 		this.client = client;
 		this.request = request;
 		for (RestCallInterceptor i : this.client.intercepters)

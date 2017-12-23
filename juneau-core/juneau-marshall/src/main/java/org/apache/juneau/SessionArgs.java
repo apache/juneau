@@ -17,6 +17,11 @@ package org.apache.juneau;
  */
 public class SessionArgs {
 
+	/**
+	 * Default empty session arguments.
+	 */
+	public static final SessionArgs DEFAULT = new SessionArgs(ObjectMap.EMPTY_MAP);
+	
 	final ObjectMap properties;
 
 	/**

@@ -30,8 +30,8 @@ public class ClientTest {
 			System.out.println("Running client test...");
 
 			// Create a client to handle XML requests and responses.
-			RestClient client = new RestClientBuilder().build();
-			RestClient xmlClient = new RestClientBuilder(XmlSerializer.DEFAULT_NS, XmlParser.DEFAULT).build();
+			RestClient client = RestClient.create().build();
+			RestClient xmlClient = RestClient.create(XmlSerializer.DEFAULT_NS, XmlParser.DEFAULT).build();
 			try {
 				String root = "http://localhost:10000/addressBook";
 

@@ -102,7 +102,7 @@ public class TestMicroservice {
 		try {
 			final RequestLine[] currentRequest = new RequestLine[1];
 			final StatusLine[] currentResponse = new StatusLine[1];
-			return new RestClientBuilder()
+			return RestClient.create()
 				.rootUrl(microserviceURI)
 				.setRetryHandler(
 					new HttpRequestRetryHandler() {

@@ -53,7 +53,7 @@ public class TumblrParserResource extends Resource {
 	@RestMethod(name=GET, path="/{blogName}", summary="Parse the specified blog")
 	public ObjectList parseBlog(@Path String blogName) throws Exception {
 		ObjectList l = new ObjectList();
-		RestClient rc = new RestClientBuilder().build();
+		RestClient rc = RestClient.create().build();
 		try {
 			String site = "http://" + blogName + ".tumblr.com/api/read/json";
 			ObjectMap m = rc.doGet(site).getResponse(ObjectMap.class);

@@ -275,6 +275,7 @@ public class RestClient extends BeanContext {
 	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<>();
 	
 	private final Map<String,String> headers;
+	private final HttpClientBuilder httpClientBuilder;
 	private final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen, debug;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
@@ -299,25 +300,53 @@ public class RestClient extends BeanContext {
 	/**
 	 * Instantiates a new clean-slate {@link RestClientBuilder} object.
 	 * 
-	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> RestClientBuilder()</code>.
-	 * 
 	 * @return A new {@link RestClientBuilder} object.
 	 */
 	public static RestClientBuilder create() {
-		return new RestClientBuilder();
+		return new RestClientBuilder(PropertyStore.DEFAULT, null);
 	}
+	
+	/**
+	 * Instantiates a new {@link RestClientBuilder} object using the specified serializer and parser.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>RestClient.<jsm>create</jsm>().serializer(s).parser(p);</code>
+	 * 
+	 * @param s The serializer to use for output.
+	 * @param p The parser to use for input.
+	 * @return A new {@link RestClientBuilder} object.
+	 */
+	public static RestClientBuilder create(Serializer s, Parser p) {
+		return create().serializer(s).parser(p);
+	}
+
+	/**
+	 * Instantiates a new {@link RestClientBuilder} object using the specified serializer and parser.
+	 * 
+	 *
+	 * <p>
+	 * Shortcut for calling <code><jk>new</jk> RestClientBuilder().serializer(s).parser(p);</code>
+	 *
+	 * @param s The serializer class to use for output.
+	 * @param p The parser class to use for input.
+	 * @return A new {@link RestClientBuilder} object.
+	 */
+	public static RestClientBuilder create(Class<? extends Serializer> s, Class<? extends Parser> p) {
+		return create().serializer(s).parser(p);
+	}	
 
 	@Override /* Context */
 	public RestClientBuilder builder() {
-		return new RestClientBuilder(getPropertyStore());
+		return new RestClientBuilder(getPropertyStore(), httpClientBuilder);
 	}
 
 	@SuppressWarnings("unchecked")
 	RestClient(
 			PropertyStore ps,
+			HttpClientBuilder httpClientBuilder,
 			CloseableHttpClient httpClient) {
 		super(ps);
+		this.httpClientBuilder = httpClientBuilder;
 		this.httpClient = httpClient;
 		this.keepHttpClientOpen = getProperty(RESTCLIENT_keepHttpClientOpen, boolean.class, false);
 		this.headers = getMapProperty(RESTCLIENT_headers, String.class);

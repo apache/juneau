@@ -933,7 +933,7 @@
 	String r = rc.doGet(<js>"/baz"</js>).getResponseAsString();  <jc>// Gets "http://localhost:9080/foobar/baz"</jc>
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.client.RestClientBuilder#property(String,Object)} method can be used to 
+			The {@link org.apache.juneau.rest.client.RestClientBuilder#set(String,Object)} method can be used to 
 			set serializer and parser properties.
 			For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
 			POJOs, you can use the {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
