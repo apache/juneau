@@ -319,8 +319,8 @@ public class BeanContext extends Context {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility.s"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b> <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 */
@@ -331,8 +331,8 @@ public class BeanContext extends Context {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility.s"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b> <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 *
@@ -348,8 +348,8 @@ public class BeanContext extends Context {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility.s"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b> <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 *
@@ -368,8 +368,8 @@ public class BeanContext extends Context {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility.s"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b> <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 *
@@ -791,8 +791,8 @@ public class BeanContext extends Context {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.locale.s"</js>
-	 * 	<li><b>Data type:</b> <code>Locale</code>
-	 * 	<li><b>Default:</b> <code>Locale.getDefault()</code>
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Locale})
+	 * 	<li><b>Default:</b> <jk>null</jk> (defaults to {@link Locale#getDefault()})
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -806,7 +806,7 @@ public class BeanContext extends Context {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.timeZone.s"</js>
-	 * 	<li><b>Data type:</b> <code>TimeZone</code>
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Locale})
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -821,7 +821,7 @@ public class BeanContext extends Context {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.mediaType.s"</js>
-	 * 	<li><b>Data type:</b> <code>MediaType</code>
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link MediaType})
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>

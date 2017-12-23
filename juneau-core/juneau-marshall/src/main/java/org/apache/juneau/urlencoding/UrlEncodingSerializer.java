@@ -123,7 +123,14 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	private static final String PREFIX = "UrlEncodingSerializer.";
 
 	/**
-	 * Serialize bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Serialize bean property collections/arrays as separate key/value pairs.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.expandedParams.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk> 
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.

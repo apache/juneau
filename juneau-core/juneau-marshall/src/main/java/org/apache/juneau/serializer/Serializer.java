@@ -189,8 +189,8 @@ public abstract class Serializer extends BeanContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.quoteChar.s"</js>
-	 * 	<li><b>Data type:</b> <code>Character</code>
-	 * 	<li><b>Default:</b> <js>'"'</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"\""</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -290,7 +290,7 @@ public abstract class Serializer extends BeanContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriContext.s"</js>
-	 * 	<li><b>Data type:</b> JSON {@link String}
+	 * 	<li><b>Data type:</b> <code>String</code> (JSON object representing a {@link UriContext})
 	 * 	<li><b>Default:</b> <js>"{}"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -310,8 +310,8 @@ public abstract class Serializer extends BeanContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution.s"</js>
-	 * 	<li><b>Data type:</b> {@link UriResolution}
-	 * 	<li><b>Default:</b> {@link UriResolution#NONE}
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link UriResolution})
+	 * 	<li><b>Default:</b> <js>"NONE"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -341,8 +341,8 @@ public abstract class Serializer extends BeanContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriRelativity.s"</js>
-	 * 	<li><b>Data type:</b> {@link UriRelativity}
-	 * 	<li><b>Default:</b> {@link UriRelativity#RESOURCE}
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link UriRelativity})
+	 * 	<li><b>Default:</b> <js>"RESOURCE"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *

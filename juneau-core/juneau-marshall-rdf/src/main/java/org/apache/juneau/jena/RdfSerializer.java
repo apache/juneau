@@ -107,7 +107,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
+	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code> (serialized {@link Namespace} objects)
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>

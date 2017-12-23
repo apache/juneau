@@ -135,8 +135,8 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText.s"</js>
-	 * 	<li><b>Data type:</b> <code>AnchorText</code>
-	 * 	<li><b>Default:</b> <jsf>TO_STRING</jsf>
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link AnchorText})
+	 * 	<li><b>Default:</b> <js>"TO_STRING"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *

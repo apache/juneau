@@ -188,7 +188,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlSerializer.defaultNamespace.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Namespace})
 	 * 	<li><b>Default:</b> <js>"juneau: http://www.apache.org/2013/Juneau"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -203,8 +203,8 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlSerializer.xsNamespace.s"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{name:<js>'xs'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema'</js>}</code>
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link Namespace})
+	 * 	<li><b>Default:</b> <js>"xs: http://www.w3.org/2001/XMLSchema"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -219,7 +219,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b> <code>Set&lt;{@link Namespace}&gt;</code>
+	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code> ({@link Namespace})
 	 * 	<li><b>Default:</b> empty set
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>

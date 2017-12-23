@@ -170,8 +170,8 @@ public class UonSerializer extends WriterSerializer {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat.s"</js>
-	 * 	<li><b>Data type:</b> <code>ParamFormat</code>
-	 * 	<li><b>Default:</b> <jsf>UON</jsf>
+	 * 	<li><b>Data type:</b> <code>String</code> ({@link ParamFormat})
+	 * 	<li><b>Default:</b> <js>"UON"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
