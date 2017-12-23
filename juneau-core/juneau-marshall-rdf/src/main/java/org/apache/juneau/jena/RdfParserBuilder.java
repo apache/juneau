@@ -41,7 +41,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public RdfParserBuilder(PropertyStore2 ps) {
+	public RdfParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -710,7 +710,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RdfParserBuilder apply(PropertyStore2 copyFrom) {
+	public RdfParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

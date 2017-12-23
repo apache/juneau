@@ -24,7 +24,7 @@ public class ConfigFileContext extends Context {
 	 *
 	 * @param ps
 	 */
-	public ConfigFileContext(PropertyStore2 ps) {
+	public ConfigFileContext(PropertyStore ps) {
 		super(ps);
 	}
 

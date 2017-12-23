@@ -35,7 +35,7 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public CsvSerializerBuilder(PropertyStore2 ps) {
+	public CsvSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -578,7 +578,7 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public CsvSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public CsvSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

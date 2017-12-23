@@ -52,7 +52,7 @@ import org.apache.juneau.utils.*;
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
  *
  * <p>
- * See {@link PropertyStore2} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  */
 public final class RestContext extends Context {
 
@@ -150,7 +150,7 @@ public final class RestContext extends Context {
 	 */
 	@SuppressWarnings("unchecked")
 	public RestContext(Object resource, ServletContext servletContext, RestConfig config) throws Exception {
-		super(PropertyStore2.DEFAULT);
+		super(PropertyStore.DEFAULT);
 		RestException _initException = null;
 		try {
 			this.resource = resource;

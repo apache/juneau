@@ -35,7 +35,7 @@ public class JsoParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public JsoParserBuilder(PropertyStore2 ps) {
+	public JsoParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -452,7 +452,7 @@ public class JsoParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsoParserBuilder apply(PropertyStore2 copyFrom) {
+	public JsoParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

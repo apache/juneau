@@ -35,7 +35,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public XmlSchemaSerializerBuilder(PropertyStore2 ps) {
+	public XmlSchemaSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -614,7 +614,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSchemaSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public XmlSchemaSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

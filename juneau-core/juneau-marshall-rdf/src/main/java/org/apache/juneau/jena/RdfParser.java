@@ -74,16 +74,16 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	//-------------------------------------------------------------------------------------------------------------------
 	
 	/** Default XML parser, all default settings.*/
-	public static final RdfParser DEFAULT_XML = new Xml(PropertyStore2.DEFAULT);
+	public static final RdfParser DEFAULT_XML = new Xml(PropertyStore.DEFAULT);
 
 	/** Default Turtle parser, all default settings.*/
-	public static final RdfParser DEFAULT_TURTLE = new Turtle(PropertyStore2.DEFAULT);
+	public static final RdfParser DEFAULT_TURTLE = new Turtle(PropertyStore.DEFAULT);
 
 	/** Default N-Triple parser, all default settings.*/
-	public static final RdfParser DEFAULT_NTRIPLE = new NTriple(PropertyStore2.DEFAULT);
+	public static final RdfParser DEFAULT_NTRIPLE = new NTriple(PropertyStore.DEFAULT);
 
 	/** Default N3 parser, all default settings.*/
-	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore2.DEFAULT);
+	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Xml(PropertyStore2 ps) {
+		public Xml(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_RDF_XML)
@@ -116,7 +116,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public NTriple(PropertyStore2 ps) {
+		public NTriple(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_NTRIPLE)
@@ -134,7 +134,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Turtle(PropertyStore2 ps) {
+		public Turtle(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_TURTLE)
@@ -152,7 +152,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public N3(PropertyStore2 ps) {
+		public N3(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_N3)
@@ -178,7 +178,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public RdfParser(PropertyStore2 ps, String...consumes) {
+	public RdfParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 		trimWhitespace = getProperty(RDF_trimWhitespace, boolean.class, false);
 		looseCollections = getProperty(RDF_looseCollections, boolean.class, false);
@@ -193,7 +193,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * 
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public RdfParser(PropertyStore2 ps) {
+	public RdfParser(PropertyStore ps) {
 		this(ps, "text/xml+rdf");
 	}	
 	

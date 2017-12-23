@@ -146,19 +146,19 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore2.DEFAULT);
+	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore.DEFAULT);
 
 	/** Default Abbreviated RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XMLABBREV = new XmlAbbrev(PropertyStore2.DEFAULT);
+	public static final RdfSerializer DEFAULT_XMLABBREV = new XmlAbbrev(PropertyStore.DEFAULT);
 
 	/** Default Turtle serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_TURTLE = new Turtle(PropertyStore2.DEFAULT);
+	public static final RdfSerializer DEFAULT_TURTLE = new Turtle(PropertyStore.DEFAULT);
 
 	/** Default N-Triple serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_NTRIPLE = new NTriple(PropertyStore2.DEFAULT);
+	public static final RdfSerializer DEFAULT_NTRIPLE = new NTriple(PropertyStore.DEFAULT);
 
 	/** Default N3 serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore2.DEFAULT);
+	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Xml(PropertyStore2 ps) {
+		public Xml(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_RDF_XML)
@@ -191,7 +191,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public XmlAbbrev(PropertyStore2 ps) {
+		public XmlAbbrev(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_RDF_XML_ABBREV)
@@ -210,7 +210,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public NTriple(PropertyStore2 ps) {
+		public NTriple(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_NTRIPLE)
@@ -228,7 +228,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Turtle(PropertyStore2 ps) {
+		public Turtle(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_TURTLE)
@@ -246,7 +246,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		 * 
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public N3(PropertyStore2 ps) {
+		public N3(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(RDF_language, LANG_N3)
@@ -296,7 +296,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public RdfSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public RdfSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		addLiteralTypes = getProperty(RDF_addLiteralTypes, boolean.class, false);
 		addRootProperty = getProperty(RDF_addRootProperty, boolean.class, false);
@@ -323,7 +323,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public RdfSerializer(PropertyStore2 ps) {
+	public RdfSerializer(PropertyStore ps) {
 		this(ps, "text/xml+rdf");
 	}
 	

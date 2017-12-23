@@ -123,7 +123,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public RestClientBuilder(PropertyStore2 ps) {
+	public RestClientBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -135,7 +135,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 			if (httpClient == null)
 				httpClient = createHttpClient();
 			
-			PropertyStore2 ps = psb.build();
+			PropertyStore ps = psb.build();
 
 			Serializer s =
 				this.serializer != null

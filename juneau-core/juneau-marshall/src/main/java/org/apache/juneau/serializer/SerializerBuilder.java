@@ -37,7 +37,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public SerializerBuilder(PropertyStore2 ps) {
+	public SerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -893,7 +893,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SerializerBuilder apply(PropertyStore2 copyFrom) {
+	public SerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

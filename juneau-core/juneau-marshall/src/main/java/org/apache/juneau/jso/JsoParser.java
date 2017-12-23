@@ -31,7 +31,7 @@ public final class JsoParser extends InputStreamParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final JsoParser DEFAULT = new JsoParser(PropertyStore2.DEFAULT);
+	public static final JsoParser DEFAULT = new JsoParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ public final class JsoParser extends InputStreamParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public JsoParser(PropertyStore2 ps) {
+	public JsoParser(PropertyStore ps) {
 		super(ps, "application/x-java-serialized-object");
 	}
 

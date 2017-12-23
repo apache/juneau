@@ -29,7 +29,7 @@ public class MsgPackParser extends InputStreamParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final MsgPackParser DEFAULT = new MsgPackParser(PropertyStore2.DEFAULT);
+	public static final MsgPackParser DEFAULT = new MsgPackParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ public class MsgPackParser extends InputStreamParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public MsgPackParser(PropertyStore2 ps) {
+	public MsgPackParser(PropertyStore ps) {
 		super(ps, "octal/msgpack");
 	}
 

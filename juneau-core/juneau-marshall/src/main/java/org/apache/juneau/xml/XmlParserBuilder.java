@@ -40,7 +40,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public XmlParserBuilder(PropertyStore2 ps) {
+	public XmlParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -589,7 +589,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlParserBuilder apply(PropertyStore2 copyFrom) {
+	public XmlParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

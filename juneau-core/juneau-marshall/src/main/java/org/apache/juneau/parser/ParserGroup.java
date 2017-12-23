@@ -78,7 +78,7 @@ public final class ParserGroup {
 	private final List<MediaType> mediaTypesList;
 	private final Parser[] mediaTypeParsers;
 	private final List<Parser> parsers;
-	private final PropertyStore2 propertyStore;
+	private final PropertyStore propertyStore;
 
 	/**
 	 * Instantiates a new clean-slate {@link ParserGroupBuilder} object.
@@ -112,7 +112,7 @@ public final class ParserGroup {
 	 * 	The order is important because they will be tried in reverse order (e.g. newer first) in which they will be
 	 * 	tried to match against media types.
 	 */
-	public ParserGroup(PropertyStore2 ps, Parser[] parsers) {
+	public ParserGroup(PropertyStore ps, Parser[] parsers) {
 		this.propertyStore = ps;
 		this.parsers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(parsers)));
 
@@ -207,7 +207,7 @@ public final class ParserGroup {
 	 *
 	 * @return A new copy of the property store passed in to the constructor.
 	 */
-	public PropertyStore2 getPropertyStore() {
+	public PropertyStore getPropertyStore() {
 		return propertyStore;
 	}
 

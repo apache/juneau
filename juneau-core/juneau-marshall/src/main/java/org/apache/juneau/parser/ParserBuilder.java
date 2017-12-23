@@ -37,7 +37,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public ParserBuilder(PropertyStore2 ps) {
+	public ParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -549,7 +549,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ParserBuilder apply(PropertyStore2 copyFrom) {
+	public ParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

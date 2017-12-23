@@ -38,7 +38,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public SoapXmlSerializerBuilder(PropertyStore2 ps) {
+	public SoapXmlSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -628,7 +628,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SoapXmlSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public SoapXmlSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

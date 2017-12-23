@@ -37,7 +37,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public UonSerializerBuilder(PropertyStore2 ps) {
+	public UonSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -633,7 +633,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public UonSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

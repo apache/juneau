@@ -32,7 +32,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testBasic() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 
 		b.set("B.f4.s", "4");
 		b.set("B.f3.s", "3");
@@ -48,7 +48,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testInvalidKeys() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		testError(b, "A.f1/add", "foo", "Cannot add value 'foo' (String) to property 'f1' (String).");
 		testError(b, "A.f1/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1' (String).");
 		testError(b, "A.f1/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1' (String).");
@@ -63,8 +63,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.s", "1");  
 		b.set("A.f2.s", 2);  
 		b.set("A.f3.s", true);  
@@ -109,8 +109,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testBoolean() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.b", "true");  
 		b.set("A.f2.b", "false");
 		b.set("A.f3.b", new StringBuilder("true"));
@@ -137,8 +137,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.i", 123);  
 		b.set("A.f2.i", "123");
 		b.set("A.f3.i", new StringBuilder("123"));
@@ -166,8 +166,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.c", String.class);  
 		b.set("A.f2.c", Integer.class);  
 		b.set("A.f3.c", null);
@@ -189,8 +189,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testObject() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.o", 123);  
 		b.set("A.f2.o", true);
 		b.set("A.f3.o", new StringBuilder("123"));
@@ -222,8 +222,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testSetString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.ss", new AList<String>().appendAll("foo", "bar", "bar", null));  
 		b.set("A.f2.ss", new AList<Object>().appendAll(123, true, TestEnum.ONE, TestEnum.ONE, null));  
 		b.set("A.f3.ss", new AList<StringBuilder>().appendAll(new StringBuilder("foo"), null));  
@@ -286,8 +286,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testSetInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.si", new AList<Integer>().appendAll(3, 2, 1, null));  
 		b.set("A.f2.si", new AList<Object>().appendAll(123, "456", null));  
 		b.set("A.f3.si", new AList<StringBuilder>().appendAll(new StringBuilder("123"), null));  
@@ -380,8 +380,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testSetClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.sc", new AList<Class<?>>().appendAll(String.class, Integer.class, null));  
 		b.set("A.f2.sc", new AList<Object>().appendAll(String.class, Integer.class, null));  
 		b.set("A.f3.sc", null);
@@ -446,8 +446,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testListString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.ls", new AList<String>().appendAll("foo", "bar", "bar", null));  
 		b.set("A.f2.ls", new AList<Object>().appendAll(123, true, TestEnum.ONE, TestEnum.ONE, null));  
 		b.set("A.f3.ls", new AList<StringBuilder>().appendAll(new StringBuilder("foo"), null));  
@@ -520,8 +520,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testListInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.li", new AList<Integer>().appendAll(1, 2, 3, null));  
 		b.set("A.f2.li", new AList<Object>().appendAll(123, "456", null));  
 		b.set("A.f3.li", new AList<StringBuilder>().appendAll(new StringBuilder("123"), null));  
@@ -624,8 +624,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testListClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.lc", new AList<Class<?>>().appendAll(String.class, Integer.class, null));  
 		b.set("A.f2.lc", new AList<Object>().appendAll(String.class, Integer.class, null));  
 		b.set("A.f3.lc", null);
@@ -697,8 +697,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testListObject() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.lo", new AList<Class<?>>().appendAll(StringBuilder.class, null));  
 		b.set("A.f2.lo", new AList<Object>().appendAll(123, true, new StringBuilder(123), StringBuilder.class, null));  
 		b.set("A.f3.lo", null);
@@ -770,8 +770,8 @@ public class PropertyStore2Test {
 		
 	@Test
 	public void testMapString() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.ms", new AMap<String,String>().append("foo", "bar").append("baz", "qux").append("quux", null).append(null, null));  
 		b.set("A.f2.ms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", TestEnum.ONE).append("qux", null));  
 		b.set("A.f3.ms", new AMap<String,StringBuilder>().append("foo", new StringBuilder("bar")).append("baz", null));  
@@ -811,8 +811,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testMapInteger() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.mi", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));  
 		b.set("A.f2.mi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null));  
 		b.set("A.f3.mi", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));  
@@ -852,8 +852,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testMapClass() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = null;
 		b.set("A.f1.mc", new AMap<String,Class<?>>().append("foo", String.class).append("baz", Integer.class).append("quux", null).append(null, null));  
 		b.set("A.f2.mc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null));  
 		b.set("A.f3.mc", null);
@@ -887,9 +887,9 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testMapObject() throws Exception {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		
-		PropertyStore2 ps = null;
+		PropertyStore ps = null;
 		b.set("A.f1.mo", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));  
 		b.set("A.f2.mo", new AMap<String,Object>().append("foo", 123).append("bar", StringBuilder.class).append("qux", null));  
 		b.set("A.f3.mo", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));  
@@ -933,8 +933,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testPropertyTypeStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1", "foo");
 		b2.set("A.f1", new StringBuilder("foo"));
@@ -960,8 +960,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testPropertyTypeBooleanHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.b", true);
 		b2.set("A.f1.b", new StringBuilder("true"));
@@ -987,8 +987,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testPropertyTypeIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.i", 1);
 		b2.set("A.f1.i", new StringBuilder("1"));
@@ -1016,8 +1016,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.c", String.class);
 		b2.set("A.f1.c", String.class);
@@ -1044,8 +1044,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testObjectHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.o", "foo");
 		b2.set("A.f1.o", "foo");
@@ -1071,8 +1071,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testSetStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.ss", new AList<String>().appendAll("foo", "bar"));
 		b2.set("A.f1.ss", new String[]{"foo","bar"});
@@ -1102,8 +1102,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testSetIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.si", new AList<String>().appendAll("1", "2"));
 		b2.set("A.f1.si", new String[]{"1","2"});
@@ -1133,8 +1133,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testSetClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.sc", new AList<Class<?>>().appendAll(String.class, Integer.class));
 		b2.set("A.f1.sc", new Class<?>[]{Integer.class,String.class});
@@ -1164,8 +1164,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testListStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.ls", new AList<String>().appendAll("foo", "bar"));
 		b2.set("A.f1.ls", new String[]{"foo","bar"});
@@ -1201,8 +1201,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testListIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.li", new AList<String>().appendAll("1", "2"));
 		b2.set("A.f1.li", new String[]{"1","2"});
@@ -1238,8 +1238,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testListClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.lc", new AList<Class<?>>().appendAll(String.class, Integer.class));
 		
@@ -1273,8 +1273,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testListObjectHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.lo", new AList<Object>().appendAll("foo", 123, true, TestEnum.ONE));
 		
@@ -1306,8 +1306,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testMapStringHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.ms", new AMap<String,String>().append("foo", "123").append("bar", "true").append("baz", null).append(null, null));
 		b2.set("A.f1.ms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", null).append(null, null));
@@ -1337,8 +1337,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testMapIntegerHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.mi", new AMap<String,Integer>().append("foo", 123).append("bar", 456).append("baz", null).append(null, null));
 		b2.set("A.f1.mi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null).append(null, null));
@@ -1368,8 +1368,8 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testMapClassHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.mc", new AMap<String,Class<?>>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
 		b2.set("A.f1.mc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
@@ -1400,8 +1400,8 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testMapObjectHash() throws Exception {
-		PropertyStoreBuilder b1 = PropertyStore2.create(), b2 = PropertyStore2.create();
-		PropertyStore2 ps = null;
+		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
+		PropertyStore ps = null;
 		
 		b1.set("A.f1.mo", new AMap<String,TestEnum>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
 		b2.set("A.f1.mo", new AMap<String,Object>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
@@ -1436,7 +1436,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testStringDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1", "foo");		
 		assertEquals("foo", ps.getProperty("A.f1"));
@@ -1445,7 +1445,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testIntegerDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.i", "1");		
 		assertEquals(1, ps.getProperty("A.f1.i"));
@@ -1455,7 +1455,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testObjectDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.o", "123");		
 		assertEquals("123", ps.getProperty("A.f1.o"));
@@ -1465,7 +1465,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testSetStringDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.ss", "['foo','bar']");		
 		assertObjectEquals("['bar','foo']", ps.getProperty("A.f1.ss"));
@@ -1474,7 +1474,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testSetIntegerDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.si", "['2','1']");		
 		assertObjectEquals("[1,2]", ps.getProperty("A.f1.si"));
@@ -1483,7 +1483,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testListStringDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.ls", "['foo','bar']");		
 		assertObjectEquals("['foo','bar']", ps.getProperty("A.f1.ls"));
@@ -1492,7 +1492,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testListIntegerDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.li", "['2','1']");		
 		assertObjectEquals("[2,1]", ps.getProperty("A.f1.li"));
@@ -1501,7 +1501,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testMapStringDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.ms", "{foo:'bar',baz:null}");		
 		assertObjectEquals("{foo:'bar'}", ps.getProperty("A.f1.ms"));
@@ -1510,7 +1510,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testMapIntegerDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.mi", "{foo:'123',baz:null}");		
 		assertObjectEquals("{foo:123}", ps.getProperty("A.f1.mi"));
@@ -1519,7 +1519,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testMapObjectDefault() {
-		PropertyStore2 ps = PropertyStore2.create().build();
+		PropertyStore ps = PropertyStore.create().build();
 		
 		System.setProperty("A.f1.mo", "{foo:123,bar:'baz',qux:true,quux:null}");		
 		assertObjectEquals("{bar:'baz',foo:123,qux:true}", ps.getProperty("A.f1.mo"));
@@ -1532,17 +1532,17 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testBuilderFromStore() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		
 		b.set("A.foo", "bar");
-		PropertyStore2 ps1 = b.build();
+		PropertyStore ps1 = b.build();
 		b = ps1.builder();
 		assertObjectEquals("{A:{foo:'bar'}}", b.build());
 	}
 	
 	@Test
 	public void testSet() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.set(new ObjectMap().append("A.foo", "bar"));
 		b.set(new ObjectMap().append("A.baz", "qux"));
 		b.add(null);
@@ -1551,7 +1551,7 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testAdd() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.add(new ObjectMap().append("A.foo", "bar"));
 		b.add(new ObjectMap().append("A.baz", "qux"));
 		b.add(new ObjectMap().append("A.quux", null));
@@ -1561,21 +1561,21 @@ public class PropertyStore2Test {
 	
 	@Test
 	public void testRemoveNotExisting() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.removeFrom("A.foo.ls", "bar");
 		assertObjectEquals("{}", b.build());
 	}
 	
 	@Test
 	public void testAddToNull() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.addTo("A.foo.ls", null);
 		assertObjectEquals("{}", b.build());
 	}
 
 	@Test
 	public void testRemoveNull() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.removeFrom("A.foo.ss", null);
 		assertObjectEquals("{}", b.build());
 		b.removeFrom("A.foo.ls", null);
@@ -1584,7 +1584,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testRemoveFromInvalidObjectList() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		try {
 			b.removeFrom("A.foo.ss", "[xxx]");
 			fail("Exception expected.");
@@ -1601,7 +1601,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testAddToInvalidObjectMap() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		try {
 			b.addTo("A.foo.ms", "{xxx}");
 			fail("Exception expected.");
@@ -1624,16 +1624,16 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testGetNonExistent() {
-		PropertyStore2 b = PropertyStore2.create().set("A.foo", "bar").build();
+		PropertyStore b = PropertyStore.create().set("A.foo", "bar").build();
 		assertNull(b.getProperty("A.baz"));
 		assertNull(b.getProperty("B.foo"));
 	}
 	
 	@Test
 	public void testHashCodes() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.set("A.foo", "bar").set("B.foo", "bar");
-		PropertyStore2 ps = b.build();
+		PropertyStore ps = b.build();
 		
 		assertEquals(ps.hashCode("A","B","C",null),ps.hashCode("A","B","C",null));
 		assertNotEquals(ps.hashCode("A"),ps.hashCode("B"));
@@ -1642,18 +1642,18 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testEquals() {
-		PropertyStoreBuilder b = PropertyStore2.create();
-		PropertyStore2 ps = b.build();
+		PropertyStoreBuilder b = PropertyStore.create();
+		PropertyStore ps = b.build();
 		assertFalse(ps.equals("foo"));
 	}
 
 	@Test
 	public void testEqualsByGroups() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.set("A.foo", "bar").set("B.foo", "bar").set("D.foo", "bar");
-		PropertyStore2 ps1 = b.build();
+		PropertyStore ps1 = b.build();
 		b.remove("A.foo").set("C.foo", "bar").set("D.foo", "baz");
-		PropertyStore2 ps2 = b.build();
+		PropertyStore ps2 = b.build();
 		
 		assertTrue(ps1.equals(ps1, null, null));
 		assertTrue(ps1.equals(ps2, null, null));
@@ -1668,9 +1668,9 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testKeySet() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.set("A.foo", "bar").set("B.foo", "bar").set("D.foo", "bar");
-		PropertyStore2 ps = b.build();
+		PropertyStore ps = b.build();
 		
 		assertObjectEquals("[]", ps.getPropertyKeys(null));
 		assertObjectEquals("['foo']", ps.getPropertyKeys("A"));
@@ -1679,7 +1679,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testToMutable() {
-		PropertyStoreBuilder b = PropertyStore2.create();
+		PropertyStoreBuilder b = PropertyStore.create();
 		b.set("A.foo.s", "bar");
 		b.set("A.foo.b", true);
 		b.set("A.foo.i", 123);
@@ -1696,7 +1696,7 @@ public class PropertyStore2Test {
 		b.set("A.foo.mi", "{foo:123}");
 		b.set("A.foo.mc/add.foo", String.class);
 		b.set("A.foo.mo/add.foo", StringBuilder.class);
-		PropertyStore2 ps = b.build();
+		PropertyStore ps = b.build();
 		
 		b = ps.builder();
 		ps = b.build();
@@ -1706,7 +1706,7 @@ public class PropertyStore2Test {
 
 	@Test
 	public void testToString() {
-		PropertyStore2 p = PropertyStore2.create().build();
+		PropertyStore p = PropertyStore.create().build();
 		assertEquals("{}", p.toString());
 	}
 
@@ -1730,7 +1730,7 @@ public class PropertyStore2Test {
 	}
 	
 	private void testNotEquals(PropertyStoreBuilder b1, PropertyStoreBuilder b2) {
-		PropertyStore2 p1 = b1.build(), p2 = b2.build();
+		PropertyStore p1 = b1.build(), p2 = b2.build();
 		assertTrue(p1 != p2);
 		assertTrue(p1.hashCode() != p2.hashCode());
 	}

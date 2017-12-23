@@ -36,7 +36,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	 *
 	 * @param ps Initialize with the specified config property store.
 	 */
-	public XmlSchemaSerializer(PropertyStore2 ps) {
+	public XmlSchemaSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
 				.set(XML_enableNamespaces, true)

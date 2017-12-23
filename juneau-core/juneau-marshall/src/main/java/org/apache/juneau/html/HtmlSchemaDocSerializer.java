@@ -44,7 +44,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * @param ps
 	 * 	The property store to use for creating the context for this serializer.
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore2 ps) {
+	public HtmlSchemaDocSerializer(PropertyStore ps) {
 		this(ps, "text/html", "text/html+schema");
 	}
 
@@ -69,7 +69,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String...accept) {
 		super(
 			ps.builder()
 				.set(SERIALIZER_detectRecursions, true)

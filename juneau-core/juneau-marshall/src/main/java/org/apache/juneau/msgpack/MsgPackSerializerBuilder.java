@@ -35,7 +35,7 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public MsgPackSerializerBuilder(PropertyStore2 ps) {
+	public MsgPackSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -578,7 +578,7 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public MsgPackSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public MsgPackSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

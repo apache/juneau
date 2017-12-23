@@ -1326,12 +1326,12 @@ public class RestConfig implements ServletConfig {
 	}
 
 	/**
-	 * Creates a new {@link PropertyStore2} object initialized with the properties defined in this config.
+	 * Creates a new {@link PropertyStore} object initialized with the properties defined in this config.
 	 *
 	 * @return A new property store.
 	 */
 	protected PropertyStoreBuilder createPropertyStore() {
-		return PropertyStore2.create().add(properties);
+		return PropertyStore.create().add(properties);
 	}
 
 

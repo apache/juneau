@@ -41,7 +41,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	protected WriterSerializer(PropertyStore2 ps, String produces, String...accept) {
+	protected WriterSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 	}
 

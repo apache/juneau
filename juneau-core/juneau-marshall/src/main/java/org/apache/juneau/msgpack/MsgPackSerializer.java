@@ -62,7 +62,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(PropertyStore2.DEFAULT);
+	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public MsgPackSerializer(PropertyStore2 ps) {
+	public MsgPackSerializer(PropertyStore ps) {
 		super(ps, "octal/msgpack");
 		this.addBeanTypeProperties = getProperty(MSGPACK_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}

@@ -57,10 +57,10 @@ public class UonParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonParser}, all default settings. */
-	public static final UonParser DEFAULT = new UonParser(PropertyStore2.DEFAULT);
+	public static final UonParser DEFAULT = new UonParser(PropertyStore.DEFAULT);
 
 	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
-	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(PropertyStore2.DEFAULT);
+	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ public class UonParser extends ReaderParser {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Decoding(PropertyStore2 ps) {
+		public Decoding(PropertyStore ps) {
 			super(ps.builder().set(UON_decodeChars, true).build());
 		}
 	}
@@ -94,7 +94,7 @@ public class UonParser extends ReaderParser {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UonParser(PropertyStore2 ps) {
+	public UonParser(PropertyStore ps) {
 		this(ps, "text/uon");
 	}
 
@@ -106,7 +106,7 @@ public class UonParser extends ReaderParser {
 	 * @param consumes
 	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	public UonParser(PropertyStore2 ps, String...consumes) {
+	public UonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 		this.decodeChars = getProperty(UON_decodeChars, boolean.class, false);
 	}

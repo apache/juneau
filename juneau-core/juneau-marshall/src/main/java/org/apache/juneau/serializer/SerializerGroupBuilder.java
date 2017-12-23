@@ -35,7 +35,7 @@ public class SerializerGroupBuilder {
 	 */
 	public SerializerGroupBuilder() {
 		this.serializers = new ArrayList<>();
-		this.propertyStore = PropertyStore2.create();
+		this.propertyStore = PropertyStore.create();
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class SerializerGroupBuilder {
 		List<Serializer> l = new ArrayList<>();
 		for (Object s : serializers) {
 			Class<? extends Serializer> c = null;
-			PropertyStore2 ps = propertyStore.build();
+			PropertyStore ps = propertyStore.build();
 			if (s instanceof Class) {
 				c = (Class<? extends Serializer>)s;
 			} else {

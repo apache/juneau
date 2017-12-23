@@ -35,7 +35,7 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public PlainTextSerializerBuilder(PropertyStore2 ps) {
+	public PlainTextSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -578,7 +578,7 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public PlainTextSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

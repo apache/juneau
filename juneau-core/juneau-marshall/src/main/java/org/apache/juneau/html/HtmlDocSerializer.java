@@ -493,7 +493,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(PropertyStore2.DEFAULT);
+	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -510,7 +510,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public HtmlDocSerializer(PropertyStore2 ps) {
+	public HtmlDocSerializer(PropertyStore ps) {
 		this(ps, "text/html");
 	}
 
@@ -535,7 +535,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlDocSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public HtmlDocSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		style = getArrayProperty(HTMLDOC_style, String.class);
 		stylesheet = getArrayProperty(HTMLDOC_stylesheet, String.class);

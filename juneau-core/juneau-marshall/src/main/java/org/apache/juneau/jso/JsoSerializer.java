@@ -34,7 +34,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore2.DEFAULT);
+	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ public class JsoSerializer extends OutputStreamSerializer {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public JsoSerializer(PropertyStore2 ps) {
+	public JsoSerializer(PropertyStore ps) {
 		super(ps, "application/x-java-serialized-object");
 	}
 

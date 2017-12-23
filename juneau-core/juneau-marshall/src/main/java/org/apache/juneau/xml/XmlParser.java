@@ -140,7 +140,7 @@ public class XmlParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final XmlParser DEFAULT = new XmlParser(PropertyStore2.DEFAULT);
+	public static final XmlParser DEFAULT = new XmlParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ public class XmlParser extends ReaderParser {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public XmlParser(PropertyStore2 ps) {
+	public XmlParser(PropertyStore ps) {
 		this(ps, "text/xml", "application/xml");
 	}
 
@@ -172,7 +172,7 @@ public class XmlParser extends ReaderParser {
 	 * @param consumes
 	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	public XmlParser(PropertyStore2 ps, String...consumes) {
+	public XmlParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 		validating = getProperty(XML_validating, boolean.class, false);
 		preserveRootElement = getProperty(XML_preserveRootElement, boolean.class, false);

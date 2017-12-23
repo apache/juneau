@@ -96,7 +96,7 @@ public class ContextCache {
 	 * @param ps The property store to use to create the class.
 	 * @return The 
 	 */
-	public <T extends Context> T create(Class<T> c, PropertyStore2 ps) {
+	public <T extends Context> T create(Class<T> c, PropertyStore ps) {
 		ConcurrentHashMap<Integer,CacheEntry> m = getContextCache(c);
 		String[] prefixes = getPrefixes(c);
 		
@@ -151,7 +151,7 @@ public class ContextCache {
 		Constructor<?> c = constructorCache.get(cc);
 		if (c == null) {
 			try {
-				c = cc.getConstructor(PropertyStore2.class);
+				c = cc.getConstructor(PropertyStore.class);
 			} catch (NoSuchMethodException e) {
 				throw new ContextRuntimeException(e, "Public constructor with PropertyStore argument not found on class ''{0}''", cc);
 			}
@@ -163,10 +163,10 @@ public class ContextCache {
 	}
 
 	private static class CacheEntry {
-		final PropertyStore2 ps;
+		final PropertyStore ps;
 		final Context context;
 		
-		CacheEntry(PropertyStore2 ps, Context context) {
+		CacheEntry(PropertyStore ps, Context context) {
 			this.ps = ps;
 			this.context = context;
 		}

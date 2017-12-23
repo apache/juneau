@@ -39,7 +39,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public UrlEncodingParserBuilder(PropertyStore2 ps) {
+	public UrlEncodingParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -505,7 +505,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder apply(PropertyStore2 copyFrom) {
+	public UrlEncodingParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

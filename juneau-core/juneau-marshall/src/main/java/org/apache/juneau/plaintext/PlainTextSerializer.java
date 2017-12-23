@@ -41,7 +41,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore2.DEFAULT);
+	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public PlainTextSerializer(PropertyStore2 ps) {
+	public PlainTextSerializer(PropertyStore ps) {
 		this(ps, "text/plain");
 	}
 
@@ -79,7 +79,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public PlainTextSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public PlainTextSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 	}
 

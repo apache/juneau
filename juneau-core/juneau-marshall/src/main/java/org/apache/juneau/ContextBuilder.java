@@ -27,7 +27,7 @@ public abstract class ContextBuilder {
 	 * Default settings.
 	 */
 	public ContextBuilder() {
-		this.psb = PropertyStore2.create();
+		this.psb = PropertyStore.create();
 	}
 
 	/**
@@ -35,7 +35,7 @@ public abstract class ContextBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public ContextBuilder(PropertyStore2 ps) {
+	public ContextBuilder(PropertyStore ps) {
 		this.psb = ps.builder();
 	}
 
@@ -53,7 +53,7 @@ public abstract class ContextBuilder {
 	 * @param copyFrom The factory whose settings are being copied.
 	 * @return This object (for method chaining).
 	 */
-	public ContextBuilder apply(PropertyStore2 copyFrom) {
+	public ContextBuilder apply(PropertyStore copyFrom) {
 		this.psb.apply(copyFrom);
 		return this;
 	}

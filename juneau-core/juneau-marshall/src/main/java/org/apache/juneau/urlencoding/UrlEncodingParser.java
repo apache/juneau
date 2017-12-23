@@ -71,7 +71,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UrlEncodingParser}. */
-	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore2.DEFAULT);
+	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public UrlEncodingParser(PropertyStore2 ps) {
+	public UrlEncodingParser(PropertyStore ps) {
 		super(
 			ps.builder()
 				.set(UON_decodeChars, true)

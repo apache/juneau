@@ -51,7 +51,7 @@ import org.apache.juneau.parser.*;
  * 		JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
- * 		See the <code>beanTypeName</code> setting on the {@link PropertyStore2} for more information about parsing
+ * 		See the <code>beanTypeName</code> setting on the {@link PropertyStore} for more information about parsing
  * 		beans from JSON.
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
@@ -105,10 +105,10 @@ public class YamlParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final YamlParser DEFAULT = new YamlParser(PropertyStore2.DEFAULT);
+	public static final YamlParser DEFAULT = new YamlParser(PropertyStore.DEFAULT);
 
 	/** Default parser, all default settings.*/
-	public static final YamlParser DEFAULT_STRICT = new YamlParser.Strict(PropertyStore2.DEFAULT);
+	public static final YamlParser DEFAULT_STRICT = new YamlParser.Strict(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public class YamlParser extends ReaderParser {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Strict(PropertyStore2 ps) {
+		public Strict(PropertyStore ps) {
 			super(ps.builder().set(PARSER_strict, true).build());
 		}
 	}
@@ -138,7 +138,7 @@ public class YamlParser extends ReaderParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public YamlParser(PropertyStore2 ps) {
+	public YamlParser(PropertyStore ps) {
 		this(ps, "application/json", "text/json");
 	}
 
@@ -148,7 +148,7 @@ public class YamlParser extends ReaderParser {
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public YamlParser(PropertyStore2 ps, String...consumes) {
+	public YamlParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 	}
 

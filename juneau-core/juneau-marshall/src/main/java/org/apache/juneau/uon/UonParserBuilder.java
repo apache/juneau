@@ -37,7 +37,7 @@ public class UonParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public UonParserBuilder(PropertyStore2 ps) {
+	public UonParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -483,7 +483,7 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder apply(PropertyStore2 copyFrom) {
+	public UonParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

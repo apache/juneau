@@ -35,7 +35,7 @@ public class JsonParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public JsonParserBuilder(PropertyStore2 ps) {
+	public JsonParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -452,7 +452,7 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder apply(PropertyStore2 copyFrom) {
+	public JsonParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

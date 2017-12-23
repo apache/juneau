@@ -35,7 +35,7 @@ public class CsvParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public CsvParserBuilder(PropertyStore2 ps) {
+	public CsvParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -451,7 +451,7 @@ public class CsvParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public CsvParserBuilder apply(PropertyStore2 copyFrom) {
+	public CsvParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

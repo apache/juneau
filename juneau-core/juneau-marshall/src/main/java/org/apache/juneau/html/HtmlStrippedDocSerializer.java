@@ -38,7 +38,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public HtmlStrippedDocSerializer(PropertyStore2 ps) {
+	public HtmlStrippedDocSerializer(PropertyStore ps) {
 		this(ps, "text/html", "text/html+stripped");
 	}
 
@@ -63,7 +63,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlStrippedDocSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public HtmlStrippedDocSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 	}
 

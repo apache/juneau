@@ -42,7 +42,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	protected OutputStreamSerializer(PropertyStore2 ps, String produces, String...accept) {
+	protected OutputStreamSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 	}
 

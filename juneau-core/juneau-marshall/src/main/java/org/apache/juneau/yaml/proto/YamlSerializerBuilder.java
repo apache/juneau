@@ -37,7 +37,7 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public YamlSerializerBuilder(PropertyStore2 ps) {
+	public YamlSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -631,7 +631,7 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public YamlSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public YamlSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

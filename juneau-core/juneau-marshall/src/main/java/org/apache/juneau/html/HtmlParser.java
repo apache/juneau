@@ -36,7 +36,7 @@ public class HtmlParser extends XmlParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final HtmlParser DEFAULT = new HtmlParser(PropertyStore2.DEFAULT);
+	public static final HtmlParser DEFAULT = new HtmlParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ public class HtmlParser extends XmlParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public HtmlParser(PropertyStore2 ps) {
+	public HtmlParser(PropertyStore ps) {
 		super(ps, "text/html", "text/html+stripped");
 	}
 

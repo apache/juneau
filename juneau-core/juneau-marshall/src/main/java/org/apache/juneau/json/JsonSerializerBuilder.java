@@ -37,7 +37,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public JsonSerializerBuilder(PropertyStore2 ps) {
+	public JsonSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -631,7 +631,7 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public JsonSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

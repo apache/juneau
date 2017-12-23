@@ -45,7 +45,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Ns(PropertyStore2 ps) {
+		public Ns(PropertyStore ps) {
 			super(ps.builder().set(XML_enableNamespaces, true).build());
 		}
 	}
@@ -60,7 +60,7 @@ public class XmlDocSerializer extends XmlSerializer {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public XmlDocSerializer(PropertyStore2 ps) {
+	public XmlDocSerializer(PropertyStore ps) {
 		super(ps);
 	}
 

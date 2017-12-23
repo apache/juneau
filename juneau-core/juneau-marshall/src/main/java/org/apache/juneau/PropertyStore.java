@@ -125,18 +125,18 @@ import org.apache.juneau.serializer.*;
  * are particularly good for use as hashmap keys.
  */
 @SuppressWarnings("unchecked")
-public final class PropertyStore2 {
+public final class PropertyStore {
 	
 	/**
 	 * A default empty property store.
 	 */
-	public static PropertyStore2 DEFAULT = PropertyStore2.create().build();
+	public static PropertyStore DEFAULT = PropertyStore.create().build();
 
 	final SortedMap<String,PropertyGroup> groups;
 	private final int hashCode;
 
 	// Created by PropertyStoreBuilder.build()
-	PropertyStore2(Map<String,PropertyGroupBuilder> propertyMaps) {
+	PropertyStore(Map<String,PropertyGroupBuilder> propertyMaps) {
 		TreeMap<String,PropertyGroup> m = new TreeMap<>();
 		for (Map.Entry<String,PropertyGroupBuilder> p : propertyMaps.entrySet()) 
 			m.put(p.getKey(), p.getValue().build());
@@ -460,8 +460,8 @@ public final class PropertyStore2 {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o instanceof PropertyStore2) 
-			return (this.groups.equals(((PropertyStore2)o).groups));
+		if (o instanceof PropertyStore) 
+			return (this.groups.equals(((PropertyStore)o).groups));
 		return false;
 	}
 
@@ -472,7 +472,7 @@ public final class PropertyStore2 {
 	 * @param groups The groups to compare.
 	 * @return <jk>true</jk> if the two property stores are equal in the specified groups.
 	 */
-	public boolean equals(PropertyStore2 ps, String...groups) {
+	public boolean equals(PropertyStore ps, String...groups) {
 		if (this == ps)
 			return true;
 		for (String p : groups) {

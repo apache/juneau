@@ -35,7 +35,7 @@ public class ParserGroupBuilder {
 	 */
 	public ParserGroupBuilder() {
 		this.parsers = new ArrayList<>();
-		this.propertyStore = PropertyStore2.create();
+		this.propertyStore = PropertyStore.create();
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class ParserGroupBuilder {
 		List<Parser> l = new ArrayList<>();
 		for (Object p : parsers) {
 			Class<? extends Parser> c = null;
-			PropertyStore2 ps = propertyStore.build();
+			PropertyStore ps = propertyStore.build();
 			if (p instanceof Class) {
 				c = (Class<? extends Parser>)p;
 			} else {

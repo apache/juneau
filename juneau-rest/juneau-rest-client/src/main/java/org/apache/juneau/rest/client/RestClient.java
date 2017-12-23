@@ -106,7 +106,7 @@ public class RestClient extends BeanContext {
 	}
 
 	RestClient(
-			PropertyStore2 ps,
+			PropertyStore ps,
 			CloseableHttpClient httpClient,
 			boolean keepHttpClientOpen,
 			Serializer serializer,

@@ -157,22 +157,22 @@ public class JsonSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT = new JsonSerializer(PropertyStore2.DEFAULT);
+	public static final JsonSerializer DEFAULT = new JsonSerializer(PropertyStore.DEFAULT);
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore2.DEFAULT);
+	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode. */
-	public static final JsonSerializer DEFAULT_LAX = new Simple(PropertyStore2.DEFAULT);
+	public static final JsonSerializer DEFAULT_LAX = new Simple(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final JsonSerializer DEFAULT_LAX_READABLE = new SimpleReadable(PropertyStore2.DEFAULT);
+	public static final JsonSerializer DEFAULT_LAX_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
 
 	/**
 	 * Default serializer, single quotes, simple mode, with whitespace and recursion detection.
 	 * Note that recursion detection introduces a small performance penalty.
 	 */
-	public static final JsonSerializer DEFAULT_LAX_READABLE_SAFE = new SimpleReadableSafe(PropertyStore2.DEFAULT);
+	public static final JsonSerializer DEFAULT_LAX_READABLE_SAFE = new SimpleReadableSafe(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -187,7 +187,7 @@ public class JsonSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore2 ps) {
+		public Readable(PropertyStore ps) {
 			super(
 				ps.builder().set(SERIALIZER_useWhitespace, true).build()
 			);
@@ -202,7 +202,7 @@ public class JsonSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Simple(PropertyStore2 ps) {
+		public Simple(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(JSON_simpleMode, true)
@@ -222,7 +222,7 @@ public class JsonSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SimpleReadable(PropertyStore2 ps) {
+		public SimpleReadable(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(JSON_simpleMode, true)
@@ -244,7 +244,7 @@ public class JsonSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SimpleReadableSafe(PropertyStore2 ps) {
+		public SimpleReadableSafe(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(JSON_simpleMode, true)
@@ -274,7 +274,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public JsonSerializer(PropertyStore2 ps) {
+	public JsonSerializer(PropertyStore ps) {
 		this(ps, "application/json", "application/json", "application/json+*", "text/json", "text/json+*");
 	}
 
@@ -299,7 +299,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public JsonSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public JsonSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		
 		simpleMode = getProperty(JSON_simpleMode, boolean.class, false);

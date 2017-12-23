@@ -431,7 +431,7 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_listener = PREFIX + "listener.c";
 
 	
-	static final Serializer DEFAULT = new Serializer(PropertyStore2.create().build(), "") {
+	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "") {
 		@Override
 		public SerializerSession createSession(SerializerSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -465,7 +465,7 @@ public abstract class Serializer extends BeanContext {
 	private final MediaType produces;
 
 	// Hidden constructors to force subclass from OuputStreamSerializer or WriterSerializer.
-	Serializer(PropertyStore2 ps, String produces, String...accept) {
+	Serializer(PropertyStore ps, String produces, String...accept) {
 		super(ps);
 		
 		maxDepth = getProperty(SERIALIZER_maxDepth, Integer.class, 100);

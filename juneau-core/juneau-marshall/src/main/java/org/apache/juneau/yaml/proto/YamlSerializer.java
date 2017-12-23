@@ -147,7 +147,7 @@ public class YamlSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final YamlSerializer DEFAULT = new YamlSerializer(PropertyStore2.DEFAULT);
+	public static final YamlSerializer DEFAULT = new YamlSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ public class YamlSerializer extends WriterSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public YamlSerializer(PropertyStore2 ps) {
+	public YamlSerializer(PropertyStore ps) {
 		this(ps, "application/yaml", "application/yaml", "application/yaml+*", "text/yaml", "text/yaml+*");
 	}
 
@@ -190,7 +190,7 @@ public class YamlSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public YamlSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public YamlSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		simpleMode = getProperty(YAML_simpleMode, boolean.class, false);
 		escapeSolidus = getProperty(YAML_escapeSolidus, boolean.class, false);

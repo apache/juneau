@@ -43,7 +43,7 @@ public class PlainTextParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore2.DEFAULT);
+	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public class PlainTextParser extends ReaderParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public PlainTextParser(PropertyStore2 ps) {
+	public PlainTextParser(PropertyStore ps) {
 		this(ps, "text/plain");
 	}
 
@@ -68,7 +68,7 @@ public class PlainTextParser extends ReaderParser {
 	 * 	Can contain meta-characters per the <code>media-type</code> specification of
 	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
 	 */
-	public PlainTextParser(PropertyStore2 ps, String...consumes) {
+	public PlainTextParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 	}
 

@@ -258,22 +258,22 @@ public class XmlSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer without namespaces. */
-	public static final XmlSerializer DEFAULT = new XmlSerializer(PropertyStore2.DEFAULT);
+	public static final XmlSerializer DEFAULT = new XmlSerializer(PropertyStore.DEFAULT);
 
 	/** Default serializer without namespaces, with single quotes. */
-	public static final XmlSerializer DEFAULT_SQ = new Sq(PropertyStore2.DEFAULT);
+	public static final XmlSerializer DEFAULT_SQ = new Sq(PropertyStore.DEFAULT);
 
 	/** Default serializer without namespaces, with single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_SQ_READABLE = new SqReadable(PropertyStore2.DEFAULT);
+	public static final XmlSerializer DEFAULT_SQ_READABLE = new SqReadable(PropertyStore.DEFAULT);
 
 	/** Default serializer, all default settings. */
-	public static final XmlSerializer DEFAULT_NS = new Ns(PropertyStore2.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS = new Ns(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes. */
-	public static final XmlSerializer DEFAULT_NS_SQ = new NsSq(PropertyStore2.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS_SQ = new NsSq(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(PropertyStore2.DEFAULT);
+	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ public class XmlSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Sq(PropertyStore2 ps) {
+		public Sq(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(SERIALIZER_quoteChar, '\'')
@@ -305,7 +305,7 @@ public class XmlSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SqReadable(PropertyStore2 ps) {
+		public SqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(SERIALIZER_quoteChar, '\'')
@@ -323,7 +323,7 @@ public class XmlSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Ns(PropertyStore2 ps) {
+		public Ns(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(XML_enableNamespaces, true)
@@ -342,7 +342,7 @@ public class XmlSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public NsSq(PropertyStore2 ps) {
+		public NsSq(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(XML_enableNamespaces, true)
@@ -360,7 +360,7 @@ public class XmlSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public NsSqReadable(PropertyStore2 ps) {
+		public NsSqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(XML_enableNamespaces, true)
@@ -400,7 +400,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public XmlSerializer(PropertyStore2 ps) {
+	public XmlSerializer(PropertyStore ps) {
 		this(ps, "text/xml");
 	}
 
@@ -425,7 +425,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public XmlSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public XmlSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		autoDetectNamespaces = getProperty(XML_autoDetectNamespaces, boolean.class, true);
 		enableNamespaces = getProperty(XML_enableNamespaces, boolean.class, false);

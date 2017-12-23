@@ -25,7 +25,7 @@ public class CsvParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final CsvParser DEFAULT = new CsvParser(PropertyStore2.DEFAULT);
+	public static final CsvParser DEFAULT = new CsvParser(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ public class CsvParser extends ReaderParser {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public CsvParser(PropertyStore2 ps) {
+	public CsvParser(PropertyStore ps) {
 		super(ps, "text/csv");
 	}
 

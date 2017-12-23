@@ -35,7 +35,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	 *
 	 * @param ps Initialize with the specified config property store.
 	 */
-	public JsonSchemaSerializer(PropertyStore2 ps) {
+	public JsonSchemaSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
 				.set(SERIALIZER_detectRecursions, true)

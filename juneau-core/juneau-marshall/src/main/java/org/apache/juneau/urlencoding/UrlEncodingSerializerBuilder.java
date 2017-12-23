@@ -38,7 +38,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public UrlEncodingSerializerBuilder(PropertyStore2 ps) {
+	public UrlEncodingSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -671,7 +671,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public UrlEncodingSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

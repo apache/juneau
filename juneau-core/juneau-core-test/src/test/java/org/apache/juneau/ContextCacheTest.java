@@ -29,8 +29,8 @@ public class ContextCacheTest {
 	@Test
 	public void testBasic() {
 		
-		PropertyStoreBuilder psb = PropertyStore2.create();
-		PropertyStore2 ps = psb.build();
+		PropertyStoreBuilder psb = PropertyStore.create();
+		PropertyStore ps = psb.build();
 		
 		A a = ContextCache.INSTANCE.create(A.class, ps);
 		B b = ContextCache.INSTANCE.create(B.class, ps);
@@ -126,7 +126,7 @@ public class ContextCacheTest {
 	public static class A extends Context {
 		public final String f1;
 
-		public A(PropertyStore2 ps) {
+		public A(PropertyStore ps) {
 			super(ps);
 			f1 = getProperty("A.f1", String.class, "xxx");
 		}
@@ -145,7 +145,7 @@ public class ContextCacheTest {
 	public static class B extends A {
 		public int f2;
 
-		public B(PropertyStore2 ps) {
+		public B(PropertyStore ps) {
 			super(ps);
 			f2 = getProperty("B.f2.i", Integer.class, -1);
 			
@@ -154,7 +154,7 @@ public class ContextCacheTest {
 	
 	public static class C extends B {
 		public boolean f3;
-		public C(PropertyStore2 ps) {
+		public C(PropertyStore ps) {
 			super(ps);
 			f3 = getProperty("C.f3.b", boolean.class, false);
 		}
@@ -162,8 +162,8 @@ public class ContextCacheTest {
 	
 	@Test
 	public void testBadConstructor() {
-		PropertyStoreBuilder psb = PropertyStore2.create();
-		PropertyStore2 ps = psb.build();		
+		PropertyStoreBuilder psb = PropertyStore.create();
+		PropertyStore ps = psb.build();		
 	
 		try {
 			ContextCache.INSTANCE.create(D1.class, ps);
@@ -180,13 +180,13 @@ public class ContextCacheTest {
 	}
 	
 	public static class D1 extends A {
-		protected D1(PropertyStore2 ps) {
+		protected D1(PropertyStore ps) {
 			super(ps);
 		}
 	}
 
 	public static class D2 extends A {
-		public D2(PropertyStore2 ps) {
+		public D2(PropertyStore ps) {
 			super(ps);
 			throw new RuntimeException("Error!");
 		}

@@ -251,7 +251,7 @@ public abstract class Parser extends BeanContext {
 	 */
 	public static final String PARSER_listener = PREFIX + "listener.c";
 
-	static Parser DEFAULT = new Parser(PropertyStore2.create().build()) {
+	static Parser DEFAULT = new Parser(PropertyStore.create().build()) {
 		@Override
 		public ParserSession createSession(ParserSessionArgs args) {
 			throw new NoSuchMethodError();
@@ -270,7 +270,7 @@ public abstract class Parser extends BeanContext {
 	private final MediaType[] consumes;
 
 	// Hidden constructor to force subclass from InputStreamParser or ReaderParser.
-	Parser(PropertyStore2 ps, String...consumes) {
+	Parser(PropertyStore ps, String...consumes) {
 		super(ps);
 
 		trimStrings = getProperty(PARSER_trimStrings, boolean.class, false);

@@ -35,7 +35,7 @@ public class YamlParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public YamlParserBuilder(PropertyStore2 ps) {
+	public YamlParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -452,7 +452,7 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public YamlParserBuilder apply(PropertyStore2 copyFrom) {
+	public YamlParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

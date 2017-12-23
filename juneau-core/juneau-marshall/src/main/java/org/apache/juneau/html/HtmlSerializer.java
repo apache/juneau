@@ -236,13 +236,13 @@ public class HtmlSerializer extends XmlSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlSerializer DEFAULT = new HtmlSerializer(PropertyStore2.DEFAULT);
+	public static final HtmlSerializer DEFAULT = new HtmlSerializer(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes. */
-	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(PropertyStore2.DEFAULT);
+	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(PropertyStore2.DEFAULT);
+	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ public class HtmlSerializer extends XmlSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Sq(PropertyStore2 ps) {
+		public Sq(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(SERIALIZER_quoteChar, '\'')
@@ -274,7 +274,7 @@ public class HtmlSerializer extends XmlSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SqReadable(PropertyStore2 ps) {
+		public SqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(SERIALIZER_quoteChar, '\'')
@@ -305,7 +305,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public HtmlSerializer(PropertyStore2 ps) {
+	public HtmlSerializer(PropertyStore ps) {
 		this(ps, "text/html");
 	}
 
@@ -330,7 +330,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public HtmlSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		uriAnchorText = getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
 		lookForLabelParameters = getProperty(HTML_lookForLabelParameters, boolean.class, true);

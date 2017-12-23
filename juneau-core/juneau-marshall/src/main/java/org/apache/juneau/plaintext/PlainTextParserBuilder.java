@@ -35,7 +35,7 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public PlainTextParserBuilder(PropertyStore2 ps) {
+	public PlainTextParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -452,7 +452,7 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder apply(PropertyStore2 copyFrom) {
+	public PlainTextParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

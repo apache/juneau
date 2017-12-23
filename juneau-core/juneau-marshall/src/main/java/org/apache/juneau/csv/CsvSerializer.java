@@ -25,7 +25,7 @@ public final class CsvSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final CsvSerializer DEFAULT = new CsvSerializer(PropertyStore2.DEFAULT);
+	public static final CsvSerializer DEFAULT = new CsvSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ public final class CsvSerializer extends WriterSerializer {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public CsvSerializer(PropertyStore2 ps) {
+	public CsvSerializer(PropertyStore ps) {
 		super(ps, "text/csv");
 	}
 

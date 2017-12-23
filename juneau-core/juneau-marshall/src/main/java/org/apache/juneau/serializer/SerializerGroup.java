@@ -70,7 +70,7 @@ public final class SerializerGroup {
 	private final List<MediaType> mediaTypesList;
 	private final Serializer[] mediaTypeSerializers;
 	private final List<Serializer> serializers;
-	private final PropertyStore2 propertyStore;
+	private final PropertyStore propertyStore;
 
 	/**
 	 * Instantiates a new clean-slate {@link SerializerGroupBuilder} object.
@@ -104,7 +104,7 @@ public final class SerializerGroup {
 	 * 	The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
 	 * 	to match against media types.
 	 */
-	public SerializerGroup(PropertyStore2 ps, Serializer[] serializers) {
+	public SerializerGroup(PropertyStore ps, Serializer[] serializers) {
 		this.propertyStore = ps;
 		this.serializers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(serializers)));
 
@@ -253,7 +253,7 @@ public final class SerializerGroup {
 	 *
 	 * @return A new copy of the property store passed in to the constructor.
 	 */
-	public PropertyStore2 getPropertyStore() {
+	public PropertyStore getPropertyStore() {
 		return propertyStore;
 	}
 

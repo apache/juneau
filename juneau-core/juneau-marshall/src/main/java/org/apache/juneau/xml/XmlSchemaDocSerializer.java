@@ -41,7 +41,7 @@ public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public XmlSchemaDocSerializer(PropertyStore2 ps) {
+	public XmlSchemaDocSerializer(PropertyStore ps) {
 		super(ps);
 	}
 

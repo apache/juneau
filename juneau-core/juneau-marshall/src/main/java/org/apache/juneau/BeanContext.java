@@ -955,7 +955,7 @@ public class BeanContext extends Context {
 	 *
 	 * @param ps The property store containing the unmodifiable configuration for this bean context.
 	 */
-	public BeanContext(PropertyStore2 ps) {
+	public BeanContext(PropertyStore ps) {
 		super(ps);
 
 		hashCode = ps.hashCode("BeanContext");

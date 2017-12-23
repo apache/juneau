@@ -35,7 +35,7 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public MsgPackParserBuilder(PropertyStore2 ps) {
+	public MsgPackParserBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -452,7 +452,7 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public MsgPackParserBuilder apply(PropertyStore2 copyFrom) {
+	public MsgPackParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

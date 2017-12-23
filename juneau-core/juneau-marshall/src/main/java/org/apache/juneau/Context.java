@@ -26,16 +26,16 @@ import org.apache.juneau.serializer.*;
  * Contexts are created through the {@link ContextBuilder#build()} method.
  *
  * <p>
- * Subclasses MUST implement a constructor method that takes in a {@link PropertyStore2} parameter.
+ * Subclasses MUST implement a constructor method that takes in a {@link PropertyStore} parameter.
  * Besides that restriction, a context object can do anything you desire.
  * However, it MUST be thread-safe and all fields should be declared final to prevent modification.
  * It should NOT be used for storing temporary or state information.
  *
- * @see PropertyStore2
+ * @see PropertyStore
  */
 public abstract class Context {
 
-	private final PropertyStore2 propertyStore;
+	private final PropertyStore propertyStore;
 
 	/**
 	 * Constructor for this class.
@@ -45,8 +45,8 @@ public abstract class Context {
 	 *
 	 * @param ps The read-only configuration for this context object.
 	 */
-	public Context(PropertyStore2 ps) {
-		this.propertyStore = ps == null ? PropertyStore2.DEFAULT : ps;
+	public Context(PropertyStore ps) {
+		this.propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
 	}
 
 	/**
@@ -279,7 +279,7 @@ public abstract class Context {
 	 * @return The property store associated with this context.
 	 */
 	@BeanIgnore
-	public final PropertyStore2 getPropertyStore() {
+	public final PropertyStore getPropertyStore() {
 		return propertyStore;
 	}
 	

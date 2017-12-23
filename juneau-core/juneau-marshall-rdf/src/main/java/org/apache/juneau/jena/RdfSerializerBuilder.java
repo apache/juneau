@@ -41,7 +41,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public RdfSerializerBuilder(PropertyStore2 ps) {
+	public RdfSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
@@ -902,7 +902,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RdfSerializerBuilder apply(PropertyStore2 copyFrom) {
+	public RdfSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

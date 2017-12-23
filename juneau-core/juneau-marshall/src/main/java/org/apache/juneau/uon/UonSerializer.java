@@ -186,13 +186,13 @@ public class UonSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonSerializer}, all default settings. */
-	public static final UonSerializer DEFAULT = new UonSerializer(PropertyStore2.DEFAULT);
+	public static final UonSerializer DEFAULT = new UonSerializer(PropertyStore.DEFAULT);
 
 	/** Reusable instance of {@link UonSerializer.Readable}. */
-	public static final UonSerializer DEFAULT_READABLE = new Readable(PropertyStore2.DEFAULT);
+	public static final UonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
 
 	/** Reusable instance of {@link UonSerializer.Encoding}. */
-	public static final UonSerializer DEFAULT_ENCODING = new Encoding(PropertyStore2.DEFAULT);
+	public static final UonSerializer DEFAULT_ENCODING = new Encoding(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ public class UonSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore2 ps) {
+		public Readable(PropertyStore ps) {
 			super(ps.builder().set(SERIALIZER_useWhitespace, true).build());
 		}
 	}
@@ -224,7 +224,7 @@ public class UonSerializer extends WriterSerializer {
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Encoding(PropertyStore2 ps) {
+		public Encoding(PropertyStore ps) {
 			super(ps.builder().set(UON_encodeChars, true).build());
 		}
 	}
@@ -247,7 +247,7 @@ public class UonSerializer extends WriterSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UonSerializer(PropertyStore2 ps) {
+	public UonSerializer(PropertyStore ps) {
 		this(ps, "text/uon");
 	}
 
@@ -272,7 +272,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public UonSerializer(PropertyStore2 ps, String produces, String...accept) {
+	public UonSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
 		encodeChars = getProperty(UON_encodeChars, boolean.class, false);
 		addBeanTypeProperties = getProperty(UON_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));

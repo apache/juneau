@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.PropertyStore2.*;
+import static org.apache.juneau.PropertyStore.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -23,13 +23,13 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
- * A builder for {@link PropertyStore2} objects.
+ * A builder for {@link PropertyStore} objects.
  */
 public class PropertyStoreBuilder {
 	
 	// Contains a cache of all created PropertyStore objects keyed by hashcode.
 	// Used to minimize memory consumption by reusing identical PropertyStores.
-	private static final Map<Integer,PropertyStore2> CACHE = new ConcurrentHashMap<>();
+	private static final Map<Integer,PropertyStore> CACHE = new ConcurrentHashMap<>();
 
 	// Maps property suffixes (e.g. "lc") to PropertyType (e.g. LIST_CLASS)
 	static final Map<String,PropertyType> SUFFIX_MAP = new ConcurrentHashMap<>();
@@ -41,10 +41,10 @@ public class PropertyStoreBuilder {
 	private final Map<String,PropertyGroupBuilder> groups = new ConcurrentSkipListMap<>();
 	
 	// Previously-created property store.
-	private volatile PropertyStore2 propertyStore;
+	private volatile PropertyStore propertyStore;
 	
 	// Called by PropertyStore.builder()
-	PropertyStoreBuilder(PropertyStore2 ps) {
+	PropertyStoreBuilder(PropertyStore ps) {
 		apply(ps);
 	}
 
@@ -52,17 +52,17 @@ public class PropertyStoreBuilder {
 	PropertyStoreBuilder() {}
 	
 	/**
-	 * Creates a new {@link PropertyStore2} based on the values in this builder.
+	 * Creates a new {@link PropertyStore} based on the values in this builder.
 	 * 
-	 * @return A new {@link PropertyStore2} based on the values in this builder.
+	 * @return A new {@link PropertyStore} based on the values in this builder.
 	 */
-	public synchronized PropertyStore2 build() {
+	public synchronized PropertyStore build() {
 		
 		// Reused the last one if we haven't change this builder.
 		if (propertyStore == null)
-			propertyStore = new PropertyStore2(groups);
+			propertyStore = new PropertyStore(groups);
 		
-		PropertyStore2 ps = CACHE.get(propertyStore.hashCode());
+		PropertyStore ps = CACHE.get(propertyStore.hashCode());
 		if (ps == null)
 			CACHE.put(propertyStore.hashCode(), propertyStore);
 		else if (! ps.equals(propertyStore)) 
@@ -79,7 +79,7 @@ public class PropertyStoreBuilder {
 	 * @param copyFrom The property store to copy the values from. 
 	 * @return This object (for method chaining).
 	 */
-	public synchronized PropertyStoreBuilder apply(PropertyStore2 copyFrom) {
+	public synchronized PropertyStoreBuilder apply(PropertyStore copyFrom) {
 		if (copyFrom != null)
 			for (Map.Entry<String,PropertyGroup> e : copyFrom.groups.entrySet()) {
 				String gName = e.getKey();
