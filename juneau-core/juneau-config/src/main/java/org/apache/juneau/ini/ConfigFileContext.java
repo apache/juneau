@@ -22,10 +22,10 @@ public class ConfigFileContext extends Context {
 	/**
 	 * TODO
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 */
-	public ConfigFileContext(PropertyStore propertyStore) {
-		super(propertyStore);
+	public ConfigFileContext(PropertyStore2 ps) {
+		super(ps);
 	}
 
 	/**
@@ -57,4 +57,19 @@ public class ConfigFileContext extends Context {
 	 * TODO
 	 */
 	public static final String CONFIGFILE_wsDepth = "ConfigFile.wsDepth";
+
+	@Override
+	public ContextBuilder builder() {
+		throw new NoSuchMethodError();
+	}
+
+	@Override
+	public Session createSession(SessionArgs args) {
+		throw new NoSuchMethodError();
+	}
+
+	@Override
+	public SessionArgs createDefaultSessionArgs() {
+		throw new NoSuchMethodError();
+	}
 }

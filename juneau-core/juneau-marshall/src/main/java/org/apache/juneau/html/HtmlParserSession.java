@@ -51,7 +51,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected HtmlParserSession(HtmlParserContext ctx, ParserSessionArgs args) {
+	protected HtmlParserSession(HtmlParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 	}
 

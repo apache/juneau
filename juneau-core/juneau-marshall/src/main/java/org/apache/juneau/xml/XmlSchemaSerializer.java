@@ -34,14 +34,20 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore Initialize with the specified config property store.
+	 * @param ps Initialize with the specified config property store.
 	 */
-	public XmlSchemaSerializer(PropertyStore propertyStore) {
-		super(propertyStore.copy().append(XML_enableNamespaces, true), "text/xml", "text/xml+schema");
+	public XmlSchemaSerializer(PropertyStore2 ps) {
+		super(
+			ps.builder()
+				.set(XML_enableNamespaces, true)
+				.build(), 
+			"text/xml", 
+			"text/xml+schema"
+		);
 	}
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new XmlSchemaSerializerSession(ctx, args);
+		return new XmlSchemaSerializerSession(this, args);
 	}
 }

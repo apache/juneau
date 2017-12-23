@@ -33,15 +33,15 @@ public class JsoParserBuilder extends ParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The initial configuration settings for this builder.
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	public JsoParserBuilder(PropertyStore propertyStore) {
-		super(propertyStore);
+	public JsoParserBuilder(PropertyStore2 ps) {
+		super(ps);
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParser build() {
-		return new JsoParser(propertyStore);
+		return build(JsoParser.class);
 	}
 
 
@@ -85,380 +85,374 @@ public class JsoParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setNotBeanPackages(String...values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setNotBeanPackages(Collection<String> values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeNotBeanPackages(String...values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeNotBeanPackages(Collection<String> values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setNotBeanClasses(Class<?>...values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setNotBeanClasses(Collection<Class<?>> values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeNotBeanClasses(Class<?>...values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeNotBeanClasses(Collection<Class<?>> values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setBeanFilters(Class<?>...values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setBeanFilters(Collection<Class<?>> values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeBeanFilters(Class<?>...values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeBeanFilters(Collection<Class<?>> values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setPojoSwaps(Class<?>...values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setPojoSwaps(Collection<Class<?>> values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removePojoSwaps(Class<?>...values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removePojoSwaps(Collection<Class<?>> values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder implClasses(Map<Class<?>,Class<?>> values) {
+	@Override /* ContextBuilder */
+	public JsoParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public <T> CoreObjectBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	@Override /* ContextBuilder */
+	public <T> JsoParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setBeanDictionary(Class<?>...values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder setBeanDictionary(Collection<Class<?>> values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeFromBeanDictionary(Class<?>...values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public JsoParserBuilder debug() {
 		super.debug();
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder property(String name, Object value) {
-		super.property(name, value);
+	@Override /* ContextBuilder */
+	public JsoParserBuilder set(String name, Object value) {
+		super.set(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder properties(Map<String,Object> properties) {
-		super.properties(properties);
+	@Override /* ContextBuilder */
+	public JsoParserBuilder set(Map<String,Object> properties) {
+		super.set(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder addToProperty(String name, Object value) {
-		super.addToProperty(name, value);
+	@Override /* ContextBuilder */
+	public JsoParserBuilder add(Map<String,Object> properties) {
+		super.add(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder putToProperty(String name, Object key, Object value) {
-		super.putToProperty(name, key, value);
+	@Override /* ContextBuilder */
+	public JsoParserBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder putToProperty(String name, Object value) {
-		super.putToProperty(name, value);
+	@Override /* ContextBuilder */
+	public JsoParserBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder removeFromProperty(String name, Object value) {
-		super.removeFromProperty(name, value);
+	@Override /* ContextBuilder */
+	public JsoParserBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder classLoader(ClassLoader classLoader) {
-		super.classLoader(classLoader);
-		return this;
-	}
-
-	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder apply(PropertyStore copyFrom) {
+	@Override /* ContextBuilder */
+	public JsoParserBuilder apply(PropertyStore2 copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

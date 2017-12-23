@@ -23,9 +23,6 @@ import org.apache.juneau.transform.*;
  * Context object that lives for the duration of a single serialization of {@link HtmlSchemaDocSerializer} and its subclasses.
  *
  * <p>
- * See {@link SerializerContext} for details.
- *
- * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
 public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
@@ -39,7 +36,7 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 	 * @param args
 	 * 	Runtime arguments.
 	 */
-	protected HtmlSchemaDocSerializerSession(HtmlDocSerializerContext ctx, SerializerSessionArgs args) {
+	protected HtmlSchemaDocSerializerSession(HtmlSchemaDocSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 

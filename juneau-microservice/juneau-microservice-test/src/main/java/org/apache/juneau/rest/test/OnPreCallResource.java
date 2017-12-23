@@ -41,8 +41,8 @@ public class OnPreCallResource extends RestServlet {
 
 	public static class TestParserA extends ReaderParser {
 
-		public TestParserA(PropertyStore propertyStore) {
-			super(propertyStore, "text/a1", "text/a2", "text/a3");
+		public TestParserA(PropertyStore2 ps) {
+			super(ps, "text/a1", "text/a2", "text/a3");
 		}
 
 		@Override /* Parser */
@@ -52,8 +52,8 @@ public class OnPreCallResource extends RestServlet {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
 				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-					String matchingContentType = getStringProperty("mediaType");
-					return (T)("p1="+getStringProperty("p1")+",p2="+getStringProperty("p2")+",p3="+getStringProperty("p3")+",p4="+getStringProperty("p4")+",p5="+getStringProperty("p5")+",contentType="+matchingContentType);
+					String matchingContentType = getProperty("mediaType", String.class);
+					return (T)("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class)+",contentType="+matchingContentType);
 				}
 			};
 		}

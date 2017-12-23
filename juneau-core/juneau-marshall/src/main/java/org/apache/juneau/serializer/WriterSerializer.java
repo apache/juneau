@@ -23,7 +23,7 @@ public abstract class WriterSerializer extends Serializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -41,8 +41,8 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	protected WriterSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
+	protected WriterSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
 	}
 
 

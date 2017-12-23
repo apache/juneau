@@ -173,14 +173,14 @@ public class HeadersResource extends RestServlet {
 	}
 
 	public static class PlainTextAnythingSerializer extends PlainTextSerializer {
-		public PlainTextAnythingSerializer(PropertyStore propertyStore) {
-			super(propertyStore, "text/plain", "*/*");
+		public PlainTextAnythingSerializer(PropertyStore2 ps) {
+			super(ps, "text/plain", "*/*");
 		}
 	}
 
 	public static class PlainTextAnythingParser extends PlainTextParser {
-		public PlainTextAnythingParser(PropertyStore propertyStore) {
-			super(propertyStore, "*/*");
+		public PlainTextAnythingParser(PropertyStore2 ps) {
+			super(ps, "*/*");
 		}
 	}
 

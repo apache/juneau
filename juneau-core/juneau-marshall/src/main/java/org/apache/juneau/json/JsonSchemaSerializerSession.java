@@ -41,7 +41,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected JsonSchemaSerializerSession(JsonSerializerContext ctx, SerializerSessionArgs args) {
+	protected JsonSchemaSerializerSession(JsonSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 

@@ -33,10 +33,10 @@ public class BeanMapTest {
 
 	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX;
 
-	BeanContext bc = PropertyStore.create()
+	BeanContext bc = BeanContext.create()
 			.setBeanDictionary(MyBeanDictionaryMap.class)
 			.setPojoSwaps(CalendarSwap.ISO8601DTZ.class)
-			.getBeanContext();
+			.build();
 	BeanSession session = bc.createSession();
 
 	public static class MyBeanDictionaryMap extends BeanDictionaryMap {
@@ -1719,7 +1719,7 @@ public class BeanMapTest {
 	@Test
 	public void testHiddenProperties() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
-		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
+		BeanMeta bm = s.getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
 		assertNull(bm.getPropertyMeta("c"));

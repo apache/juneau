@@ -1813,7 +1813,7 @@ public final class RestCall {
 	 * @throws IOException If a connection error occurred.
 	 */
 	public <T> T getResponse(Class<T> type) throws IOException, ParseException {
-		BeanContext bc = getParser().getBeanContext();
+		BeanContext bc = getParser();
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return getResponse(bc.getClassMeta(type));
@@ -1904,7 +1904,7 @@ public final class RestCall {
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	public <T> T getResponse(Type type, Type...args) throws IOException, ParseException {
-		BeanContext bc = getParser().getBeanContext();
+		BeanContext bc = getParser();
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return (T)getResponse(bc.getClassMeta(type, args));
@@ -1997,7 +1997,7 @@ public final class RestCall {
 	}
 
 	BeanContext getBeanContext() throws RestCallException {
-		BeanContext bc = getParser().getBeanContext();
+		BeanContext bc = getParser();
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return bc;

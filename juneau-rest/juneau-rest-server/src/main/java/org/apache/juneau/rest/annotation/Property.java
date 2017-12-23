@@ -17,25 +17,11 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.xml.*;
-
 /**
  * Property name/value pair used in the {@link RestResource#properties()} annotation.
  *
  * <p>
- * Any of the following property names can be specified:
- * <ul>
- * 	<li>{@link BeanContext}
- * 	<li>{@link SerializerContext}
- * 	<li>{@link ParserContext}
- * 	<li>{@link JsonSerializerContext}
- * 	<li>{@link XmlSerializerContext}
- * 	<li>{@link XmlParserContext}
- * </ul>
+ * Any of the properties defined on any of the serializers or parsers can be defined.
  *
  * <p>
  * Property values types that are not <code>Strings</code> will automatically be converted to the correct type

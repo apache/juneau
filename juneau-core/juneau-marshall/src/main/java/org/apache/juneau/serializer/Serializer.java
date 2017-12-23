@@ -28,7 +28,7 @@ import org.apache.juneau.http.*;
  * <p>
  * The purpose of this class is:
  * <ul>
- * 	<li>Maintain a read-only configuration state of a serializer (i.e. {@link SerializerContext}).
+ * 	<li>Maintain a read-only configuration state of a serializer.
  * 	<li>Create session objects used for serializing POJOs (i.e. {@link SerializerSession}).
  * 	<li>Provide convenience methods for serializing POJOs without having to construct session objects.
  * </ul>
@@ -37,7 +37,7 @@ import org.apache.juneau.http.*;
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
  */
-public abstract class Serializer extends CoreObject {
+public abstract class Serializer extends BeanContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -49,7 +49,7 @@ public abstract class Serializer extends CoreObject {
 	 * <b>Configuration property:</b>  Max serialization depth.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.maxDepth"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.maxDepth.i"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>100</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -60,13 +60,13 @@ public abstract class Serializer extends CoreObject {
 	 * If this depth is exceeded, an exception is thrown.
 	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
 	 */
-	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth";
+	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth.i";
 
 	/**
 	 * <b>Configuration property:</b>  Initial depth.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.initialDepth"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.initialDepth.i"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>0</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -76,13 +76,13 @@ public abstract class Serializer extends CoreObject {
 	 * The initial indentation level at the root.
 	 * Useful when constructing document fragments that need to be indented at a certain level.
 	 */
-	public static final String SERIALIZER_initialDepth = PREFIX + "initialDepth";
+	public static final String SERIALIZER_initialDepth = PREFIX + "initialDepth.i";
 
 	/**
 	 * <b>Configuration property:</b>  Automatically detect POJO recursions.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.detectRecursions"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.detectRecursions.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -107,13 +107,13 @@ public abstract class Serializer extends CoreObject {
 	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_detectRecursions = PREFIX + "detectRecursions";
+	public static final String SERIALIZER_detectRecursions = PREFIX + "detectRecursions.b";
 
 	/**
 	 * <b>Configuration property:</b>  Ignore recursion errors.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.ignoreRecursions"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.ignoreRecursions.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -127,13 +127,13 @@ public abstract class Serializer extends CoreObject {
 	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * Otherwise, an exception is thrown.
 	 */
-	public static final String SERIALIZER_ignoreRecursions = PREFIX + "ignoreRecursions";
+	public static final String SERIALIZER_ignoreRecursions = PREFIX + "ignoreRecursions.b";
 
 	/**
 	 * <b>Configuration property:</b>  Use whitespace.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.useWhitespace"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.useWhitespace.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -145,13 +145,13 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * This setting does not apply to the MessagePack serializer.
 	 */
-	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace";
+	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
 
 	/**
 	 * <b>Configuration property:</b>  Maximum indentation.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.maxIndent"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.maxIndent.i"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
 	 * 	<li><b>Default:</b> <code>100</code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -163,13 +163,13 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * This setting does not apply to the MessagePack or RDF serializers.
 	 */
-	public static final String SERIALIZER_maxIndent = PREFIX + "maxIndent";
+	public static final String SERIALIZER_maxIndent = PREFIX + "maxIndent.i";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -182,13 +182,13 @@ public abstract class Serializer extends CoreObject {
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
 	 * the value type.
 	 */
-	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 	/**
 	 * <b>Configuration property:</b>  Quote character.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.quoteChar"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.quoteChar.s"</js>
 	 * 	<li><b>Data type:</b> <code>Character</code>
 	 * 	<li><b>Default:</b> <js>'"'</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -200,13 +200,13 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * This setting does not apply to the MessagePack or RDF serializers.
 	 */
-	public static final String SERIALIZER_quoteChar = PREFIX + "quoteChar";
+	public static final String SERIALIZER_quoteChar = PREFIX + "quoteChar.s";
 
 	/**
 	 * <b>Configuration property:</b>  Trim null bean property values.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.trimNullProperties"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimNullProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -222,13 +222,13 @@ public abstract class Serializer extends CoreObject {
 	 * 		Map entries with <jk>null</jk> values will be lost.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_trimNullProperties = PREFIX + "trimNullProperties";
+	public static final String SERIALIZER_trimNullProperties = PREFIX + "trimNullProperties.b";
 
 	/**
 	 * <b>Configuration property:</b>  Trim empty lists and arrays.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyLists"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyLists.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -246,13 +246,13 @@ public abstract class Serializer extends CoreObject {
 	 * 		Bean properties with empty list values will not be set.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_trimEmptyCollections = PREFIX + "trimEmptyLists";
+	public static final String SERIALIZER_trimEmptyCollections = PREFIX + "trimEmptyLists.b";
 
 	/**
 	 * <b>Configuration property:</b>  Trim empty maps.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyMaps"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyMaps.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -268,13 +268,13 @@ public abstract class Serializer extends CoreObject {
 	 * 		Bean properties with empty map values will not be set.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_trimEmptyMaps = PREFIX + "trimEmptyMaps";
+	public static final String SERIALIZER_trimEmptyMaps = PREFIX + "trimEmptyMaps.b";
 
 	/**
 	 * <b>Configuration property:</b>  Trim strings.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.trimStrings"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -283,15 +283,15 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
-	public static final String SERIALIZER_trimStrings = PREFIX + "trimStrings";
+	public static final String SERIALIZER_trimStrings = PREFIX + "trimStrings.b";
 
 	/**
 	 * <b>Configuration property:</b>  URI context bean.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.uriContext"</js>
-	 * 	<li><b>Data type:</b> {@link UriContext}
-	 * 	<li><b>Default:</b> {@link UriContext#DEFAULT}
+	 * 	<li><b>Name:</b> <js>"Serializer.uriContext.s"</js>
+	 * 	<li><b>Data type:</b> JSON {@link String}
+	 * 	<li><b>Default:</b> <js>"{}"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
@@ -303,13 +303,13 @@ public abstract class Serializer extends CoreObject {
 	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>
 	 * </p>
 	 */
-	public static final String SERIALIZER_uriContext = PREFIX + "uriContext";
+	public static final String SERIALIZER_uriContext = PREFIX + "uriContext.s";
 
 	/**
 	 * <b>Configuration property:</b>  URI resolution.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution.s"</js>
 	 * 	<li><b>Data type:</b> {@link UriResolution}
 	 * 	<li><b>Default:</b> {@link UriResolution#NONE}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -334,13 +334,13 @@ public abstract class Serializer extends CoreObject {
 	 * 		- Don't do any URL resolution.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution";
+	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";
 
 	/**
 	 * <b>Configuration property:</b>  URI relativity.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.uriRelativity"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriRelativity.s"</js>
 	 * 	<li><b>Data type:</b> {@link UriRelativity}
 	 * 	<li><b>Default:</b> {@link UriRelativity#RESOURCE}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -363,13 +363,13 @@ public abstract class Serializer extends CoreObject {
 	 * 		- Relative URIs should be considered relative to the request URI.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity";
+	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity.s";
 
 	/**
 	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.sortCollections"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.sortCollections.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -378,13 +378,13 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
-	public static final String SERIALIZER_sortCollections = PREFIX + "sortCollections";
+	public static final String SERIALIZER_sortCollections = PREFIX + "sortCollections.b";
 
 	/**
 	 * <b>Configuration property:</b>  Sort maps alphabetically.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.sortMaps"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.sortMaps.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -393,13 +393,13 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
-	public static final String SERIALIZER_sortMaps = PREFIX + "sortMaps";
+	public static final String SERIALIZER_sortMaps = PREFIX + "sortMaps.b";
 
 	/**
 	 * <b>Configuration property:</b>  Abridged output.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.abridged"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.abridged.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -413,13 +413,13 @@ public abstract class Serializer extends CoreObject {
 	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
 	 * this setting is disabled, but not added when it is enabled.
 	 */
-	public static final String SERIALIZER_abridged = PREFIX + "abridged";
+	public static final String SERIALIZER_abridged = PREFIX + "abridged.b";
 
 	/**
 	 * <b>Configuration property:</b>  Serializer listener.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.listener"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.listener.c"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? extends SerializerListener&gt;</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -428,19 +428,65 @@ public abstract class Serializer extends CoreObject {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 */
-	public static final String SERIALIZER_listener = PREFIX + "listener";
+	public static final String SERIALIZER_listener = PREFIX + "listener.c";
 
+	
+	static final Serializer DEFAULT = new Serializer(PropertyStore2.create().build(), "") {
+		@Override
+		public SerializerSession createSession(SerializerSessionArgs args) {
+			throw new NoSuchMethodError();
+		}
+	};
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	final int maxDepth, initialDepth, maxIndent;
+	final boolean
+		detectRecursions,
+		ignoreRecursions,
+		useWhitespace,
+		addBeanTypeProperties,
+		trimNulls,
+		trimEmptyCollections,
+		trimEmptyMaps,
+		trimStrings,
+		sortCollections,
+		sortMaps,
+		abridged;
+	final char quoteChar;
+	final UriContext uriContext;
+	final UriResolution uriResolution;
+	final UriRelativity uriRelativity;
+	final Class<? extends SerializerListener> listener;
+
 	private final MediaType[] accept;
 	private final MediaType produces;
 
 	// Hidden constructors to force subclass from OuputStreamSerializer or WriterSerializer.
-	Serializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore);
+	Serializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps);
+		
+		maxDepth = getProperty(SERIALIZER_maxDepth, Integer.class, 100);
+		initialDepth = getProperty(SERIALIZER_initialDepth, Integer.class, 0);
+		detectRecursions = getProperty(SERIALIZER_detectRecursions, boolean.class, false);
+		ignoreRecursions = getProperty(SERIALIZER_ignoreRecursions, boolean.class, false);
+		useWhitespace = getProperty(SERIALIZER_useWhitespace, boolean.class, false);
+		maxIndent = getProperty(SERIALIZER_maxIndent, Integer.class, 100);
+		addBeanTypeProperties = getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true);
+		trimNulls = getProperty(SERIALIZER_trimNullProperties, boolean.class, true);
+		trimEmptyCollections = getProperty(SERIALIZER_trimEmptyCollections, boolean.class, false);
+		trimEmptyMaps = getProperty(SERIALIZER_trimEmptyMaps, boolean.class, false);
+		trimStrings = getProperty(SERIALIZER_trimStrings, boolean.class, false);
+		sortCollections = getProperty(SERIALIZER_sortCollections, boolean.class, false);
+		sortMaps = getProperty(SERIALIZER_sortMaps, boolean.class, false);
+		abridged = getProperty(SERIALIZER_abridged, boolean.class, false);
+		quoteChar = getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
+		uriContext = getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
+		uriResolution = getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
+		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
+		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class, null);
 
 		this.produces = MediaType.forString(produces);
 		if (accept.length == 0) {
@@ -453,9 +499,9 @@ public abstract class Serializer extends CoreObject {
 		}
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public SerializerBuilder builder() {
-		return new SerializerBuilder(propertyStore);
+		return null;
 	}
 
 	//--------------------------------------------------------------------------------
@@ -467,7 +513,9 @@ public abstract class Serializer extends CoreObject {
 	 *
 	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 */
-	public abstract boolean isWriterSerializer();
+	public boolean isWriterSerializer() {
+		return true;
+	}
 
 	/**
 	 * Create the session object used for actual serialization of objects.
@@ -487,23 +535,12 @@ public abstract class Serializer extends CoreObject {
 	// Convenience methods
 	//--------------------------------------------------------------------------------
 
-	/**
-	 * Shortcut for calling <code>createSession(<jk>null</jk>)</code>.
-	 *
-	 * @return
-	 * 	The new session object.
-	 */
+	@Override /* Context */
 	public final SerializerSession createSession() {
 		return createSession(createDefaultSessionArgs());
 	}
 
-	/**
-	 * Creates the session arguments object that gets passed to the {@link #createSession(SerializerSessionArgs)} method.
-	 *
-	 * @return
-	 * 	A new default session arguments object.
-	 * 	<p>The arguments can be modified before passing to the {@link #createSession(SerializerSessionArgs)}.
-	 */
+	@Override /* Context */
 	public final SerializerSessionArgs createDefaultSessionArgs() {
 		return new SerializerSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, getResponseContentType(), null);
 	}
@@ -581,5 +618,31 @@ public abstract class Serializer extends CoreObject {
 	 */
 	public final MediaType getResponseContentType() {
 		return produces;
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("Serializer", new ObjectMap()
+				.append("maxDepth", maxDepth)
+				.append("initialDepth", initialDepth)
+				.append("detectRecursions", detectRecursions)
+				.append("ignoreRecursions", ignoreRecursions)
+				.append("useWhitespace", useWhitespace)
+				.append("maxIndent", maxIndent)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("trimNulls", trimNulls)
+				.append("trimEmptyCollections", trimEmptyCollections)
+				.append("trimEmptyMaps", trimEmptyMaps)
+				.append("trimStrings", trimStrings)
+				.append("sortCollections", sortCollections)
+				.append("sortMaps", sortMaps)
+				.append("parserKnowsRootTypes", abridged)
+				.append("quoteChar", quoteChar)
+				.append("uriContext", uriContext)
+				.append("uriResolution", uriResolution)
+				.append("uriRelativity", uriRelativity)
+				.append("listener", listener)
+			);
 	}
 }

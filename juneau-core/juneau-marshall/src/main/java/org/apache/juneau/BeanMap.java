@@ -333,7 +333,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 */
 	public BeanMap<T> load(String input) throws ParseException {
-		putAll(new ObjectMap(input, this.meta.ctx.defaultParser));
+		putAll(new ObjectMap(input));
 		return this;
 	}
 

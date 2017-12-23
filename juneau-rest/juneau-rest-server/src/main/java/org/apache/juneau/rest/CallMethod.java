@@ -181,13 +181,15 @@ class CallMethod implements Comparable<CallMethod>  {
 				SerializerGroupBuilder sgb = null;
 				ParserGroupBuilder pgb = null;
 				UrlEncodingParserBuilder uepb = null;
+				BeanContextBuilder bcb = null;
 
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
 						|| m.bpx().length > 0) {
 					sgb = SerializerGroup.create();
 					pgb = ParserGroup.create();
-					uepb = new UrlEncodingParserBuilder(urlEncodingParser.createPropertyStore());
+					uepb = urlEncodingParser.builder();
+					bcb = beanContext.builder();
 
 					if (si.contains(SERIALIZERS) || m.serializers().length == 0)
 						sgb.append(serializers.getSerializers());
@@ -235,17 +237,17 @@ class CallMethod implements Comparable<CallMethod>  {
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
 				Class<?>[] beanFilters = context.getBeanFilters(), pojoSwaps = context.getPojoSwaps();
-
+				
 				if (sgb != null) {
 					sgb.append(m.serializers());
 					if (si.contains(TRANSFORMS))
 						sgb.beanFilters(beanFilters).pojoSwaps(pojoSwaps);
 					if (si.contains(PROPERTIES))
-						sgb.properties(properties);
+						sgb.add(properties);
 					for (Property p1 : m.properties())
-						sgb.property(p1.name(), p1.value());
+						sgb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
-						sgb.property(p1, true);
+						sgb.set(p1, true);
 					if (m.bpi().length > 0) {
 						Map<String,String> bpiMap = new LinkedHashMap<>();
 						for (String s : m.bpi()) {
@@ -281,24 +283,33 @@ class CallMethod implements Comparable<CallMethod>  {
 					if (pi.contains(TRANSFORMS))
 						pgb.beanFilters(beanFilters).pojoSwaps(pojoSwaps);
 					if (pi.contains(PROPERTIES))
-						pgb.properties(properties);
+						pgb.add(properties);
 					for (Property p1 : m.properties())
-						pgb.property(p1.name(), p1.value());
+						pgb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
-						pgb.property(p1, true);
+						pgb.set(p1, true);
 					pgb.beanFilters(m.beanFilters());
 					pgb.pojoSwaps(m.pojoSwaps());
 				}
 
 				if (uepb != null) {
 					for (Property p1 : m.properties())
-						uepb.property(p1.name(), p1.value());
+						uepb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
-						uepb.property(p1, true);
+						uepb.set(p1, true);
 					uepb.beanFilters(m.beanFilters());
 					uepb.pojoSwaps(m.pojoSwaps());
 				}
-
+				
+				if (bcb != null) {
+					for (Property p1 : m.properties())
+						bcb.set(p1.name(), p1.value());
+					for (String p1 : m.flags())
+						bcb.set(p1, true);
+					bcb.beanFilters(m.beanFilters());
+					bcb.pojoSwaps(m.pojoSwaps());
+				}
+				
 				if (m.properties().length > 0 || m.flags().length > 0) {
 					properties = new ObjectMap().setInner(properties);
 					for (Property p1 : m.properties())
@@ -378,14 +389,14 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				params = context.findParams(method, plainParams, pathPattern, false);
 
-				if (sgb != null) {
+				if (sgb != null) 
 					serializers = sgb.build();
-					beanContext = serializers.getBeanContext();
-				}
 				if (pgb != null)
 					parsers = pgb.build();
 				if (uepb != null)
 					urlEncodingParser = uepb.build();
+				if (bcb != null)
+					beanContext = bcb.build();
 
 				// Need this to access methods in anonymous inner classes.
 				method.setAccessible(true);

@@ -29,7 +29,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected InputStreamParserSession(ParserContext ctx, ParserSessionArgs args) {
+	protected InputStreamParserSession(Parser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 	}
 
@@ -40,7 +40,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 * 	Runtime session arguments.
 	 */
 	protected InputStreamParserSession(ParserSessionArgs args) {
-		this(null, args);
+		super(args);
 	}
 
 	@Override /* ParserSession */

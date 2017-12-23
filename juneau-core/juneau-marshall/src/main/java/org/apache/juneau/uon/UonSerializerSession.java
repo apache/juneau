@@ -46,12 +46,11 @@ public class UonSerializerSession extends WriterSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	public UonSerializerSession(UonSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
+	public UonSerializerSession(UonSerializer ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-		encodeChars = encode == null ? p.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
-		addBeanTypeProperties = p.getBoolean(UON_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		plainTextParams = p.getWithDefault(UON_paramFormat, ctx.paramFormat, ParamFormat.class) == ParamFormat.PLAINTEXT;
+		encodeChars = encode == null ? getProperty(UON_encodeChars, boolean.class, ctx.encodeChars) : encode;
+		addBeanTypeProperties = getProperty(UON_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		plainTextParams = getProperty(UON_paramFormat, ParamFormat.class, ctx.paramFormat) == ParamFormat.PLAINTEXT;
 	}
 
 	@Override /* Session */

@@ -54,22 +54,12 @@ public class BeanSession extends Session {
 	 * 	Runtime session arguments.
 	 */
 	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
-		super(ctx, args);
+		super(args);
 		this.ctx = ctx;
-		Locale _locale = null;
-		ObjectMap p = getProperties();
-		if (p == null) {
-			_locale = (args.locale != null ? args.locale : ctx.locale);
-			this.timeZone = (args.timeZone != null ? args.timeZone : ctx.timeZone);
-			this.debug = ctx.debug;
-			this.mediaType = args.mediaType != null ? args.mediaType : ctx.mediaType;
-		} else {
-			_locale = (args.locale != null ? args.locale : getPropertyWithDefault(BEAN_locale, ctx.locale, Locale.class));
-			this.timeZone = (args.timeZone != null ? args.timeZone : getPropertyWithDefault(BEAN_timeZone, ctx.timeZone, TimeZone.class));
-			this.debug = getPropertyWithDefault(BEAN_debug, false, boolean.class);
-			this.mediaType = (args.mediaType != null ? args.mediaType : getPropertyWithDefault(BEAN_mediaType, ctx.mediaType, MediaType.class));
-		}
-		this.locale = _locale == null ? Locale.getDefault() : _locale;
+		locale = getProperty(BEAN_locale, Locale.class, args.locale, ctx.locale, Locale.getDefault());
+		timeZone = getProperty(BEAN_timeZone, TimeZone.class, args.timeZone, ctx.timeZone);
+		debug = getProperty(BEAN_debug, boolean.class, ctx.debug);
+		mediaType = getProperty(BEAN_mediaType, MediaType.class, args.mediaType, ctx.mediaType);
 	}
 
 	@Override /* Session */
@@ -366,9 +356,6 @@ public class BeanSession extends Session {
 				if (! ((type.isMap() && type.getValueType().isNotObject()) || (type.isCollection() && type.getElementType().isNotObject())))
 					return (T)value;
 
-			if (tc == Class.class)
-				return (T)(ctx.classLoader.loadClass(value.toString()));
-
 			PojoSwap swap = type.getPojoSwap(this);
 			if (swap != null) {
 				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
@@ -546,7 +533,7 @@ public class BeanSession extends Session {
 						}
 						return (T)m;
 					} else if (!type.canCreateNewInstanceFromString(outer)) {
-						ObjectMap m = new ObjectMap(value.toString(), ctx.defaultParser);
+						ObjectMap m = new ObjectMap(value.toString());
 						return convertToMemberType(outer, m, type);
 					}
 				} catch (Exception e) {
@@ -589,7 +576,7 @@ public class BeanSession extends Session {
 					if (JsonSerializer.DEFAULT_LAX != null)
 						return (T)JsonSerializer.DEFAULT_LAX.serialize(value);
 				} else if (vt.isClass()) {
-					return (T)getReadableClassName((Class<?>)value);
+					return (T)((Class<?>)value).getName();
 				}
 				return (T)value.toString();
 			}
@@ -1100,15 +1087,6 @@ public class BeanSession extends Session {
 	 */
 	public final ClassMeta<Class> _class() {
 		return ctx.cmClass;
-	}
-
-	/**
-	 * Returns the classloader associated with this bean context.
-	 *
-	 * @return The classloader associated with this bean context.
-	 */
-	public final ClassLoader getClassLoader() {
-		return ctx.classLoader;
 	}
 
 	/**

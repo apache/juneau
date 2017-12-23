@@ -116,7 +116,7 @@ public class ClassMetaTest {
 		ClassMeta<?> ooo, hi1, hc1, hi2, hc2;
 		BeanSession bs;
 
-		bc = PropertyStore.create().getBeanContext();
+		bc = BeanContext.DEFAULT;
 		bs = bc.createSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
@@ -139,7 +139,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), HI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), HC2.class);
 
-		bc = PropertyStore.create().setPojoSwaps(HI1Swap.class).getBeanContext();
+		bc = BeanContext.create().setPojoSwaps(HI1Swap.class).build();
 		bs = bc.createSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
@@ -162,7 +162,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = PropertyStore.create().setPojoSwaps(HC1Swap.class).getBeanContext();
+		bc = BeanContext.create().setPojoSwaps(HC1Swap.class).build();
 		bs = bc.createSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
@@ -185,7 +185,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), HI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = PropertyStore.create().setPojoSwaps(HI2Swap.class).getBeanContext();
+		bc = BeanContext.create().setPojoSwaps(HI2Swap.class).build();
 		bs = bc.createSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
@@ -208,7 +208,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = PropertyStore.create().setPojoSwaps(HC2Swap.class).getBeanContext();
+		bc = BeanContext.create().setPojoSwaps(HC2Swap.class).build();
 		bs = bc.createSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
@@ -231,7 +231,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), HI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = PropertyStore.create().setPojoSwaps(HI1Swap.class,HC1Swap.class,HI2Swap.class,HC2Swap.class).getBeanContext();
+		bc = BeanContext.create().setPojoSwaps(HI1Swap.class,HC1Swap.class,HI2Swap.class,HC2Swap.class).build();
 		bs = bc.createSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
@@ -254,7 +254,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = PropertyStore.create().setPojoSwaps(HC2Swap.class,HI2Swap.class,HC1Swap.class,HI1Swap.class).getBeanContext();
+		bc = BeanContext.create().setPojoSwaps(HC2Swap.class,HI2Swap.class,HC1Swap.class,HI1Swap.class).build();
 		bs = bc.createSession();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);

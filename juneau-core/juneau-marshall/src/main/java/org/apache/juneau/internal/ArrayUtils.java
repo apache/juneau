@@ -102,12 +102,31 @@ public final class ArrayUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T[] reverse(T[] array) {
-		assertFieldNotNull(array, "array");
+		if (array == null)
+			return null;
 		Class<T> c = (Class<T>)array.getClass().getComponentType();
 		T[] a2 = (T[])Array.newInstance(c, array.length);
 		for (int i = 0; i < array.length; i++)
 			a2[a2.length-i-1] = array[i];
 		return a2;
+	}
+	
+	/**
+	 * Sorts the elements in an array without creating a new array.
+	 * 
+	 * @param array The array to sort.
+	 * @return The same array.
+	 */
+	public static <T> T[] reverseInline(T[] array) {
+		if (array == null)
+			return null;
+		T t;
+		for (int i = 0, j = array.length-1; i < j; i++, j--) {
+			t = array[i];
+			array[i] = array[j];
+			array[j] = t;
+		}
+		return array;
 	}
 
 	/**
@@ -431,5 +450,27 @@ public final class ArrayUtils {
 			if (! StringUtils.isEquals(a1[i], a2[i]))
 				return false;
 		return true;
+	}
+	
+	/**
+	 * Converts a collection to an array containing the elements in reversed order.
+	 * 
+	 * @param c The component type of the array.
+	 * @param l 
+	 * 	The collection to convert.
+	 * 	<br>The collection is not modified.
+	 * @return
+	 * 	A new array, or <jk>null</jk> if the collection was <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] toReverseArray(Class<T> c, Collection<T> l) {
+		if (l == null)
+			return null;
+		Object a = Array.newInstance(c, l.size());
+		Iterator<T> i = l.iterator();
+		int j = l.size();
+		while (i.hasNext())
+			Array.set(a, --j, i.next());
+		return (T[])a;
 	}
 }

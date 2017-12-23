@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Builder class for creating instances of {@link ParserGroup}.
@@ -27,14 +28,14 @@ import org.apache.juneau.http.*;
 public class ParserGroupBuilder {
 
 	private final List<Object> parsers;
-	private final PropertyStore propertyStore;
+	private final PropertyStoreBuilder propertyStore;
 
 	/**
 	 * Create an empty parser group builder.
 	 */
 	public ParserGroupBuilder() {
 		this.parsers = new ArrayList<>();
-		this.propertyStore = PropertyStore.create();
+		this.propertyStore = PropertyStore2.create();
 	}
 
 	/**
@@ -45,7 +46,7 @@ public class ParserGroupBuilder {
 	 *
 	 * @param propertyStore The property store containing all settings common to all parsers in this group.
 	 */
-	public ParserGroupBuilder(PropertyStore propertyStore) {
+	public ParserGroupBuilder(PropertyStoreBuilder propertyStore) {
 		this.parsers = new ArrayList<>();
 		this.propertyStore = propertyStore;
 	}
@@ -58,7 +59,7 @@ public class ParserGroupBuilder {
 	public ParserGroupBuilder(ParserGroup copyFrom) {
 		this.parsers = new ArrayList<>();
 		addReverse(parsers, copyFrom.getParsers());
-		this.propertyStore = copyFrom.createPropertyStore();
+		this.propertyStore = copyFrom.getPropertyStore().builder();
 	}
 
 	/**
@@ -102,24 +103,24 @@ public class ParserGroupBuilder {
 	 *
 	 * @return A new {@link ParserGroup} object.
 	 */
+	@SuppressWarnings("unchecked")
 	public ParserGroup build() {
 		List<Parser> l = new ArrayList<>();
 		for (Object p : parsers) {
-			Class<?> c = null;
-			PropertyStore ps = propertyStore;
+			Class<? extends Parser> c = null;
+			PropertyStore2 ps = propertyStore.build();
 			if (p instanceof Class) {
-				c = (Class<?>)p;
+				c = (Class<? extends Parser>)p;
 			} else {
 				// Note that if we added a serializer instance, we want a new instance with this builder's properties
 				// on top of the previous serializer's properties.
 				Parser p2 = (Parser)p;
-				ps = p2.createPropertyStore().copyFrom(propertyStore);
+				ps = p2.getPropertyStore().builder().apply(ps).build();
 				c = p2.getClass();
 			}
-			l.add(propertyStore.getBeanContext().newInstance(Parser.class, c, ps));
+			l.add(ContextCache.INSTANCE.create(c, ps));
 		}
-		Collections.reverse(l);
-		return new ParserGroup(propertyStore, l.toArray(new Parser[l.size()]));
+		return new ParserGroup(propertyStore.build(), ArrayUtils.toReverseArray(Parser.class, l));
 	}
 
 
@@ -133,10 +134,10 @@ public class ParserGroupBuilder {
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
-	 * @see PropertyStore#setProperty(String, Object)
+	 * @see PropertyStoreBuilder#set(String, Object)
 	 */
-	public ParserGroupBuilder property(String name, Object value) {
-		propertyStore.setProperty(name, value);
+	public ParserGroupBuilder set(String name, Object value) {
+		propertyStore.set(name, value);
 		return this;
 	}
 
@@ -145,23 +146,35 @@ public class ParserGroupBuilder {
 	 *
 	 * @param properties The properties to set on this class.
 	 * @return This object (for method chaining).
-	 * @see PropertyStore#setProperties(java.util.Map)
+	 * @see PropertyStoreBuilder#set(java.util.Map)
 	 */
-	public ParserGroupBuilder properties(ObjectMap properties) {
-		propertyStore.setProperties(properties);
+	public ParserGroupBuilder set(ObjectMap properties) {
+		propertyStore.set(properties);
 		return this;
 	}
 
 	/**
-	 * Adds a value to a SET property on all parsers in this group.
+	 * Appends a set of properties on all parsers in this group.
+	 *
+	 * @param properties The properties to append on this class.
+	 * @return This object (for method chaining).
+	 * @see PropertyStoreBuilder#add(java.util.Map)
+	 */
+	public ParserGroupBuilder add(ObjectMap properties) {
+		propertyStore.add(properties);
+		return this;
+	}
+
+	/**
+	 * Adds a value to a SET/LIST/MAP property on all parsers in this group.
 	 *
 	 * @param name The property name.
 	 * @param value The new value to add to the SET property.
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property.
 	 */
-	public ParserGroupBuilder addToProperty(String name, Object value) {
-		propertyStore.addToProperty(name, value);
+	public ParserGroupBuilder addTo(String name, Object value) {
+		propertyStore.addTo(name, value);
 		return this;
 	}
 
@@ -174,21 +187,8 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a MAP property.
 	 */
-	public ParserGroupBuilder putToProperty(String name, Object key, Object value) {
-		propertyStore.putToProperty(name, key, value);
-		return this;
-	}
-
-	/**
-	 * Adds or overwrites a value to a MAP property on all parsers in this group.
-	 *
-	 * @param name The property value.
-	 * @param value The property value map value.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a MAP property.
-	 */
-	public ParserGroupBuilder putToProperty(String name, Object value) {
-		propertyStore.putToProperty(name, value);
+	public ParserGroupBuilder addTo(String name, String key, Object value) {
+		propertyStore.addTo(name, key, value);
 		return this;
 	}
 
@@ -200,8 +200,8 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property.
 	 */
-	public ParserGroupBuilder removeFromProperty(String name, Object value) {
-		propertyStore.removeFromProperty(name, value);
+	public ParserGroupBuilder removeFrom(String name, Object value) {
+		propertyStore.removeFrom(name, value);
 		return this;
 	}
 
@@ -213,7 +213,7 @@ public class ParserGroupBuilder {
 	 * @see Parser#PARSER_trimStrings
 	 */
 	public ParserGroupBuilder trimStrings(boolean value) {
-		return property(PARSER_trimStrings, value);
+		return set(PARSER_trimStrings, value);
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class ParserGroupBuilder {
 	 * @see Parser#PARSER_strict
 	 */
 	public ParserGroupBuilder strict(boolean value) {
-		return property(PARSER_strict, value);
+		return set(PARSER_strict, value);
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class ParserGroupBuilder {
 	 * @see Parser#PARSER_inputStreamCharset
 	 */
 	public ParserGroupBuilder inputStreamCharset(String value) {
-		return property(PARSER_inputStreamCharset, value);
+		return set(PARSER_inputStreamCharset, value);
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class ParserGroupBuilder {
 	 * @see Parser#PARSER_fileCharset
 	 */
 	public ParserGroupBuilder fileCharset(String value) {
-		return property(PARSER_fileCharset, value);
+		return set(PARSER_fileCharset, value);
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class ParserGroupBuilder {
 	 * @see Parser#PARSER_listener
 	 */
 	public ParserGroupBuilder listener(Class<? extends ParserListener> value) {
-		return property(PARSER_listener, value);
+		return set(PARSER_listener, value);
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
 	 */
 	public ParserGroupBuilder beansRequireDefaultConstructor(boolean value) {
-		return property(BEAN_beansRequireDefaultConstructor, value);
+		return set(BEAN_beansRequireDefaultConstructor, value);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireSerializable
 	 */
 	public ParserGroupBuilder beansRequireSerializable(boolean value) {
-		return property(BEAN_beansRequireSerializable, value);
+		return set(BEAN_beansRequireSerializable, value);
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireSettersForGetters
 	 */
 	public ParserGroupBuilder beansRequireSettersForGetters(boolean value) {
-		return property(BEAN_beansRequireSettersForGetters, value);
+		return set(BEAN_beansRequireSettersForGetters, value);
 	}
 
 	/**
@@ -301,7 +301,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireSomeProperties
 	 */
 	public ParserGroupBuilder beansRequireSomeProperties(boolean value) {
-		return property(BEAN_beansRequireSomeProperties, value);
+		return set(BEAN_beansRequireSomeProperties, value);
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
 	 */
 	public ParserGroupBuilder beanMapPutReturnsOldValue(boolean value) {
-		return property(BEAN_beanMapPutReturnsOldValue, value);
+		return set(BEAN_beanMapPutReturnsOldValue, value);
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanConstructorVisibility
 	 */
 	public ParserGroupBuilder beanConstructorVisibility(Visibility value) {
-		return property(BEAN_beanConstructorVisibility, value);
+		return set(BEAN_beanConstructorVisibility, value);
 	}
 
 	/**
@@ -334,7 +334,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanClassVisibility
 	 */
 	public ParserGroupBuilder beanClassVisibility(Visibility value) {
-		return property(BEAN_beanClassVisibility, value);
+		return set(BEAN_beanClassVisibility, value);
 	}
 
 	/**
@@ -345,7 +345,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanFieldVisibility
 	 */
 	public ParserGroupBuilder beanFieldVisibility(Visibility value) {
-		return property(BEAN_beanFieldVisibility, value);
+		return set(BEAN_beanFieldVisibility, value);
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_methodVisibility
 	 */
 	public ParserGroupBuilder methodVisibility(Visibility value) {
-		return property(BEAN_methodVisibility, value);
+		return set(BEAN_methodVisibility, value);
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_useJavaBeanIntrospector
 	 */
 	public ParserGroupBuilder useJavaBeanIntrospector(boolean value) {
-		return property(BEAN_useJavaBeanIntrospector, value);
+		return set(BEAN_useJavaBeanIntrospector, value);
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_useInterfaceProxies
 	 */
 	public ParserGroupBuilder useInterfaceProxies(boolean value) {
-		return property(BEAN_useInterfaceProxies, value);
+		return set(BEAN_useInterfaceProxies, value);
 	}
 
 	/**
@@ -389,7 +389,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreUnknownBeanProperties
 	 */
 	public ParserGroupBuilder ignoreUnknownBeanProperties(boolean value) {
-		return property(BEAN_ignoreUnknownBeanProperties, value);
+		return set(BEAN_ignoreUnknownBeanProperties, value);
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreUnknownNullBeanProperties
 	 */
 	public ParserGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		return property(BEAN_ignoreUnknownNullBeanProperties, value);
+		return set(BEAN_ignoreUnknownNullBeanProperties, value);
 	}
 
 	/**
@@ -411,7 +411,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
 	 */
 	public ParserGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
-		return property(BEAN_ignorePropertiesWithoutSetters, value);
+		return set(BEAN_ignorePropertiesWithoutSetters, value);
 	}
 
 	/**
@@ -422,7 +422,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
 	 */
 	public ParserGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		return property(BEAN_ignoreInvocationExceptionsOnGetters, value);
+		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
 	}
 
 	/**
@@ -433,7 +433,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
 	 */
 	public ParserGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		return property(BEAN_ignoreInvocationExceptionsOnSetters, value);
+		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
 	}
 
 	/**
@@ -444,7 +444,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_sortProperties
 	 */
 	public ParserGroupBuilder sortProperties(boolean value) {
-		return property(BEAN_sortProperties, value);
+		return set(BEAN_sortProperties, value);
 	}
 
 	/**
@@ -455,7 +455,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public ParserGroupBuilder notBeanPackages(String...values) {
-		return property(BEAN_notBeanPackages_add, values);
+		return set(BEAN_notBeanPackages_add, values);
 	}
 
 	/**
@@ -466,7 +466,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public ParserGroupBuilder notBeanPackages(Collection<String> value) {
-		return property(BEAN_notBeanPackages_add, value);
+		return set(BEAN_notBeanPackages_add, value);
 	}
 
 	/**
@@ -477,7 +477,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
 	public ParserGroupBuilder setNotBeanPackages(String...values) {
-		return property(BEAN_notBeanPackages, values);
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -488,7 +488,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
 	public ParserGroupBuilder setNotBeanPackages(Collection<String> values) {
-		return property(BEAN_notBeanPackages, values);
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -500,7 +500,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
 	public ParserGroupBuilder removeNotBeanPackages(String...values) {
-		return property(BEAN_notBeanPackages_remove, values);
+		return set(BEAN_notBeanPackages_remove, values);
 	}
 
 	/**
@@ -512,7 +512,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
 	public ParserGroupBuilder removeNotBeanPackages(Collection<String> values) {
-		return property(BEAN_notBeanPackages_remove, values);
+		return set(BEAN_notBeanPackages_remove, values);
 	}
 
 	/**
@@ -523,7 +523,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
 	public ParserGroupBuilder notBeanClasses(Class<?>...values) {
-		return property(BEAN_notBeanClasses_add, values);
+		return set(BEAN_notBeanClasses_add, values);
 	}
 
 	/**
@@ -534,7 +534,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public ParserGroupBuilder notBeanClasses(Collection<Class<?>> values) {
-		return property(BEAN_notBeanClasses_add, values);
+		return set(BEAN_notBeanClasses_add, values);
 	}
 
 	/**
@@ -545,7 +545,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 */
 	public ParserGroupBuilder setNotBeanClasses(Class<?>...values) {
-		return property(BEAN_notBeanClasses, values);
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -556,7 +556,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 */
 	public ParserGroupBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		return property(BEAN_notBeanClasses, values);
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -567,7 +567,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
 	public ParserGroupBuilder removeNotBeanClasses(Class<?>...values) {
-		return property(BEAN_notBeanClasses_remove, values);
+		return set(BEAN_notBeanClasses_remove, values);
 	}
 
 	/**
@@ -578,7 +578,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
 	public ParserGroupBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		return property(BEAN_notBeanClasses_remove, values);
+		return set(BEAN_notBeanClasses_remove, values);
 	}
 
 	/**
@@ -589,7 +589,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
 	public ParserGroupBuilder beanFilters(Class<?>...values) {
-		return property(BEAN_beanFilters_add, values);
+		return set(BEAN_beanFilters_add, values);
 	}
 
 	/**
@@ -600,7 +600,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
 	public ParserGroupBuilder beanFilters(Collection<Class<?>> values) {
-		return property(BEAN_beanFilters_add, values);
+		return set(BEAN_beanFilters_add, values);
 	}
 
 	/**
@@ -611,7 +611,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 */
 	public ParserGroupBuilder setBeanFilters(Class<?>...values) {
-		return property(BEAN_beanFilters, values);
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -622,7 +622,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 */
 	public ParserGroupBuilder setBeanFilters(Collection<Class<?>> values) {
-		return property(BEAN_beanFilters, values);
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -633,7 +633,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
 	public ParserGroupBuilder removeBeanFilters(Class<?>...values) {
-		return property(BEAN_beanFilters_remove, values);
+		return set(BEAN_beanFilters_remove, values);
 	}
 
 	/**
@@ -644,7 +644,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
 	public ParserGroupBuilder removeBeanFilters(Collection<Class<?>> values) {
-		return property(BEAN_beanFilters_remove, values);
+		return set(BEAN_beanFilters_remove, values);
 	}
 
 	/**
@@ -655,7 +655,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
 	public ParserGroupBuilder pojoSwaps(Class<?>...values) {
-		return property(BEAN_pojoSwaps_add, values);
+		return set(BEAN_pojoSwaps_add, values);
 	}
 
 	/**
@@ -666,7 +666,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
 	public ParserGroupBuilder pojoSwaps(Collection<Class<?>> values) {
-		return property(BEAN_pojoSwaps_add, values);
+		return set(BEAN_pojoSwaps_add, values);
 	}
 
 	/**
@@ -677,7 +677,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 */
 	public ParserGroupBuilder setPojoSwaps(Class<?>...values) {
-		return property(BEAN_pojoSwaps, values);
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -688,7 +688,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 */
 	public ParserGroupBuilder setPojoSwaps(Collection<Class<?>> values) {
-		return property(BEAN_pojoSwaps, values);
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -699,7 +699,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
 	public ParserGroupBuilder removePojoSwaps(Class<?>...values) {
-		return property(BEAN_pojoSwaps_remove, values);
+		return set(BEAN_pojoSwaps_remove, values);
 	}
 
 	/**
@@ -710,7 +710,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
 	public ParserGroupBuilder removePojoSwaps(Collection<Class<?>> values) {
-		return property(BEAN_pojoSwaps_remove, values);
+		return set(BEAN_pojoSwaps_remove, values);
 	}
 
 	/**
@@ -720,22 +720,21 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_implClasses
 	 */
-	public ParserGroupBuilder implClasses(Map<Class<?>,Class<?>> values) {
-		return property(BEAN_implClasses, values);
+	public ParserGroupBuilder implClasses(Map<String,Class<?>> values) {
+		return set(BEAN_implClasses, values);
 	}
 
 	/**
-	 * Sets the {@link BeanContext#BEAN_implClasses_put} property on all parsers in this group.
+	 * Sets the {@link BeanContext#BEAN_implClasses} property on all parsers in this group.
 	 *
 	 * @param interfaceClass The interface class.
 	 * @param implClass The implementation class.
 	 * @param <T> The class type of the interface.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_implClasses
-	 * @see BeanContext#BEAN_implClasses_put
 	 */
 	public <T> ParserGroupBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		return putToProperty(BEAN_implClasses, interfaceClass, implClass);
+		return addTo(BEAN_implClasses, interfaceClass.getName(), implClass);
 	}
 
 	/**
@@ -746,7 +745,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
 	public ParserGroupBuilder beanDictionary(Class<?>...values) {
-		return property(BEAN_beanDictionary_add, values);
+		return set(BEAN_beanDictionary_add, values);
 	}
 
 	/**
@@ -757,7 +756,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
 	public ParserGroupBuilder beanDictionary(Collection<Class<?>> values) {
-		return property(BEAN_beanDictionary_add, values);
+		return set(BEAN_beanDictionary_add, values);
 	}
 
 	/**
@@ -768,7 +767,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
 	public ParserGroupBuilder setBeanDictionary(Class<?>...values) {
-		return property(BEAN_beanDictionary, values);
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -779,7 +778,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
 	public ParserGroupBuilder setBeanDictionary(Collection<Class<?>> values) {
-		return property(BEAN_beanDictionary, values);
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -790,7 +789,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
 	public ParserGroupBuilder removeFromBeanDictionary(Class<?>...values) {
-		return property(BEAN_beanDictionary_remove, values);
+		return set(BEAN_beanDictionary_remove, values);
 	}
 
 	/**
@@ -801,7 +800,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
 	public ParserGroupBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		return property(BEAN_beanDictionary_remove, values);
+		return set(BEAN_beanDictionary_remove, values);
 	}
 
 	/**
@@ -812,7 +811,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_beanTypePropertyName
 	 */
 	public ParserGroupBuilder beanTypePropertyName(String value) {
-		return property(BEAN_beanTypePropertyName, value);
+		return set(BEAN_beanTypePropertyName, value);
 	}
 
 	/**
@@ -823,7 +822,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_defaultParser
 	 */
 	public ParserGroupBuilder defaultParser(Class<?> value) {
-		return property(BEAN_defaultParser, value);
+		return set(BEAN_defaultParser, value);
 	}
 
 	/**
@@ -834,7 +833,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_locale
 	 */
 	public ParserGroupBuilder locale(Locale value) {
-		return property(BEAN_locale, value);
+		return set(BEAN_locale, value);
 	}
 
 	/**
@@ -845,7 +844,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_timeZone
 	 */
 	public ParserGroupBuilder timeZone(TimeZone value) {
-		return property(BEAN_timeZone, value);
+		return set(BEAN_timeZone, value);
 	}
 
 	/**
@@ -856,7 +855,7 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_mediaType
 	 */
 	public ParserGroupBuilder mediaType(MediaType value) {
-		return property(BEAN_mediaType, value);
+		return set(BEAN_mediaType, value);
 	}
 
 	/**
@@ -866,25 +865,6 @@ public class ParserGroupBuilder {
 	 * @see BeanContext#BEAN_debug
 	 */
 	public ParserGroupBuilder debug() {
-		return property(BEAN_debug, true);
-	}
-
-	/**
-	 * Specifies the classloader to use when resolving classes from strings for all parsers in this group.
-	 *
-	 * <p>
-	 * Can be used for resolving class names when the classes being created are in a different classloader from the
-	 * Juneau code.
-	 *
-	 * <p>
-	 * If <jk>null</jk>, the system classloader will be used to resolve classes.
-	 *
-	 * @param classLoader The new classloader.
-	 * @return This object (for method chaining).
-	 * @see PropertyStore#setClassLoader(ClassLoader)
-	 */
-	public ParserGroupBuilder classLoader(ClassLoader classLoader) {
-		propertyStore.setClassLoader(classLoader);
-		return this;
+		return set(BEAN_debug, true);
 	}
 }

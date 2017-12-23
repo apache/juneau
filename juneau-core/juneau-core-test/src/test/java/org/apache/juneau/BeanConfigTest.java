@@ -458,7 +458,7 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testProxyHandler() throws Exception {
-		BeanSession session = PropertyStore.create().getBeanContext().createSession();
+		BeanSession session = BeanContext.DEFAULT.createBeanSession();
 
 		A f1 = (A) Proxy.newProxyInstance(this.getClass()
 				.getClassLoader(), new Class[] { A.class },
@@ -760,14 +760,14 @@ public class BeanConfigTest {
 
 	private void assertSameCache(ParserBuilder p1b, ParserBuilder p2b) {
 		Parser p1 = p1b.build(), p2 = p2b.build();
-		assertTrue(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
-		assertTrue(p1.getBeanContext().hashCode() == p2.getBeanContext().hashCode());
+		assertTrue(p1.hasSameCache(p2));
+		assertTrue(p1.hashCode() == p2.hashCode());
 	}
 
 	private void assertDifferentCache(ParserBuilder p1b, ParserBuilder p2b) {
 		Parser p1 = p1b.build(), p2 = p2b.build();
-		assertFalse(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
-		assertFalse(p1.getBeanContext().hashCode() == p2.getBeanContext().hashCode());
+		assertFalse(p1.hasSameCache(p2));
+		assertFalse(p1.hashCode() == p2.hashCode());
 	}
 
 	//====================================================================================================

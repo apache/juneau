@@ -19,16 +19,13 @@ import java.lang.annotation.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
@@ -192,16 +189,7 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
 	 * <p>
-	 * Any of the following property names can be specified:
-	 * <ul>
-	 * 	<li>{@link RestContext}
-	 * 	<li>{@link BeanContext}
-	 * 	<li>{@link SerializerContext}
-	 * 	<li>{@link ParserContext}
-	 * 	<li>{@link JsonSerializerContext}
-	 * 	<li>{@link XmlSerializerContext}
-	 * 	<li>{@link XmlParserContext}
-	 * </ul>
+	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
 	 *
 	 * <p>
 	 * Property values will be converted to the appropriate type.

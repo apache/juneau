@@ -57,14 +57,13 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected XmlParserSession(XmlParserContext ctx, ParserSessionArgs args) {
+	protected XmlParserSession(XmlParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-		validating = p.getBoolean(XML_validating, ctx.validating);
-		reporter = p.getWithDefault(XML_reporter, ctx.reporter, XMLReporter.class);
-		resolver = p.getWithDefault(XML_resolver, ctx.resolver, XMLResolver.class);
-		eventAllocator = p.getWithDefault(XML_eventAllocator, ctx.eventAllocator, XMLEventAllocator.class);
-		preserveRootElement = p.getBoolean(XML_preserveRootElement, ctx.preserveRootElement);
+		validating = getProperty(XML_validating, boolean.class, ctx.validating);
+		reporter = getInstanceProperty(XML_reporter, XMLReporter.class, ctx.reporter);
+		resolver = getInstanceProperty(XML_resolver, XMLResolver.class, ctx.resolver);
+		eventAllocator = getInstanceProperty(XML_eventAllocator, XMLEventAllocator.class, ctx.eventAllocator);
+		preserveRootElement = getProperty(XML_preserveRootElement, boolean.class, ctx.preserveRootElement);
 	}
 
 	@Override /* Session */

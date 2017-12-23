@@ -164,7 +164,7 @@ public final class PojoRest {
 		if (parser == null)
 			parser = JsonParser.DEFAULT;
 		this.parser = parser;
-		this.session = parser.getBeanContext().createSession();
+		this.session = parser.createBeanSession();
 		this.root = new JsonNode(null, null, o, session.object());
 	}
 

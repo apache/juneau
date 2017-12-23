@@ -63,36 +63,27 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected RdfSerializerSession(RdfSerializerContext ctx, SerializerSessionArgs args) {
+	protected RdfSerializerSession(RdfSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		ObjectMap jenaSettings = new ObjectMap();
-		jenaSettings.put("rdfXml.tab", isUseWhitespace() ? 2 : 0);
-		jenaSettings.put("rdfXml.attributeQuoteChar", Character.toString(getQuoteChar()));
-		jenaSettings.putAll(ctx.jenaSettings);
-		ObjectMap p = getProperties();
-		this.rdfLanguage = p.getString(RDF_language, ctx.rdfLanguage);
-		this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
-		this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
-		this.addLiteralTypes = p.getBoolean(RDF_addLiteralTypes, ctx.addLiteralTypes);
-		this.addRootProperty = p.getBoolean(RDF_addRootProperty, ctx.addRootProperty);
-		for (Map.Entry<String,Object> e : p.entrySet()) {
-			String key = e.getKey();
-			if (key.startsWith("Rdf.jena."))
-				jenaSettings.put(key.substring(9), e.getValue());
-		}
-		this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
-		this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
-		this.useXmlNamespaces = p.getBoolean(RDF_useXmlNamespaces, ctx.useXmlNamespaces);
-		this.autoDetectNamespaces = p.getBoolean(RDF_autoDetectNamespaces, ctx.autoDetectNamespaces);
-		this.namespaces = p.getWithDefault(RDF_namespaces, ctx.namespaces, Namespace[].class);
-		addBeanTypeProperties = p.getBoolean(RDF_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		this.model = ModelFactory.createDefaultModel();
+				
+		rdfLanguage = getProperty(RDF_language, String.class, ctx.rdfLanguage);
+		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, ctx.juneauNs);
+		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, ctx.juneauBpNs);
+		addLiteralTypes = getProperty(RDF_addLiteralTypes, boolean.class, ctx.addLiteralTypes);
+		addRootProperty = getProperty(RDF_addRootProperty, boolean.class, ctx.addRootProperty);
+		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, ctx.collectionFormat);
+		looseCollections = getProperty(RDF_looseCollections, boolean.class, ctx.looseCollections);
+		useXmlNamespaces = getProperty(RDF_useXmlNamespaces, boolean.class, ctx.useXmlNamespaces);
+		autoDetectNamespaces = getProperty(RDF_autoDetectNamespaces, boolean.class, ctx.autoDetectNamespaces);
+		namespaces = getInstanceArrayProperty(RDF_namespaces, Namespace.class, ctx.namespaces);
+		addBeanTypeProperties = getProperty(RDF_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		model = ModelFactory.createDefaultModel();
 		addModelPrefix(juneauNs);
 		addModelPrefix(juneauBpNs);
 		for (Namespace ns : this.namespaces)
 			addModelPrefix(ns);
-		this.pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
-		this.pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
+		pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
+		pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
 		writer = model.getWriter(rdfLanguage);
 
 		// Only apply properties with this prefix!
@@ -100,9 +91,19 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		if (propPrefix == null)
 			throw new FormattedRuntimeException("Unknown RDF language encountered: ''{0}''", rdfLanguage);
 
-		for (Map.Entry<String,Object> e : jenaSettings.entrySet())
-			if (e.getKey().startsWith(propPrefix))
-				writer.setProperty(e.getKey().substring(propPrefix.length()), e.getValue());
+		// RDF/XML specific properties.
+		if (propPrefix.equals("rdfXml.")) {
+			writer.setProperty("tab", isUseWhitespace() ? 2 : 0);
+			writer.setProperty("attributeQuoteChar", Character.toString(getQuoteChar()));
+		}
+		
+		for (Map.Entry<String,Object> e : ctx.jenaSettings.entrySet())
+			if (e.getKey().startsWith(propPrefix, 5))
+				writer.setProperty(e.getKey().substring(5 + propPrefix.length()), e.getValue());
+		
+		for (String k : getPropertyKeys()) 
+			if (k.startsWith("RdfCommon.jena.") && k.startsWith(propPrefix, 15))
+				writer.setProperty(k.substring(15 + propPrefix.length()), getProperty(k));
 	}
 
 	@Override /* Session */

@@ -80,7 +80,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <b>Configuration property:</b>  Header section contents.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.header"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -101,13 +101,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_header = PREFIX + "header.list";
+	public static final String HTMLDOC_header = PREFIX + "header.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Page navigation links.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.navlinks.list"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.navlinks.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -166,18 +166,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
 	 */
-	public static final String HTMLDOC_navlinks = PREFIX + "navlinks.list";
+	public static final String HTMLDOC_navlinks = PREFIX + "navlinks.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_navlinks} property.
 	 */
-	public static final String HTMLDOC_navlinks_add = PREFIX + "navlinks.list.add";
+	public static final String HTMLDOC_navlinks_add = PREFIX + "navlinks.ls/add";
 
 	/**
 	 * <b>Configuration property:</b>  Nav section contents.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nav"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nav.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -201,13 +201,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
 	 */
-	public static final String HTMLDOC_nav = PREFIX + "nav.list";
+	public static final String HTMLDOC_nav = PREFIX + "nav.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Aside section contents.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.aside"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.aside.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -236,13 +236,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_aside = PREFIX + "aside.list";
+	public static final String HTMLDOC_aside = PREFIX + "aside.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Footer section contents.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.footer"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.footer.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -265,13 +265,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_footer = PREFIX + "footer.list";
+	public static final String HTMLDOC_footer = PREFIX + "footer.ls";
 
 	/**
 	 * <b>Configuration property:</b>  No-results message.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.noResultsMessage"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.noResultsMessage.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"&lt;p&gt;no results&lt;/p&gt;"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -292,13 +292,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_noResultsMessage = PREFIX + "noResultsMessage";
+	public static final String HTMLDOC_noResultsMessage = PREFIX + "noResultsMessage.s";
 
 	/**
 	 * <b>Configuration property:</b>  Prevent word wrap on page.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -307,13 +307,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 	 */
-	public static final String HTMLDOC_nowrap = PREFIX + "nowrap";
+	public static final String HTMLDOC_nowrap = PREFIX + "nowrap.b";
 
 	/**
 	 * <b>Configuration property:</b>  Stylesheet import URLs.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.stylesheet"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.stylesheet.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -325,18 +325,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 */
-	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet.list";
+	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_stylesheet} property.
 	 */
-	public static final String HTMLDOC_stylesheet_add = PREFIX + "stylesheet.list.add";
+	public static final String HTMLDOC_stylesheet_add = PREFIX + "stylesheet.ls/add";
 
 	/**
 	 * <b>Configuration property:</b>  CSS style code.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.style.list"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.style.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -368,18 +368,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_style = PREFIX + "style.list";
+	public static final String HTMLDOC_style = PREFIX + "style.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_style} property.
 	 */
-	public static final String HTMLDOC_style_add = PREFIX + "style.list.add";
+	public static final String HTMLDOC_style_add = PREFIX + "style.ls/add";
 
 	/**
 	 * <b>Configuration property:</b>  Javascript code.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.script.list"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.script.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -410,18 +410,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_script = PREFIX + "script.list";
+	public static final String HTMLDOC_script = PREFIX + "script.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_script} property.
 	 */
-	public static final String HTMLDOC_script_add = PREFIX + "script.list.add";
+	public static final String HTMLDOC_script_add = PREFIX + "script.ls/add";
 
 	/**
 	 * <b>Configuration property:</b>  Additional head section content.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.head.list"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.head.ls"</js>
 	 * 	<li><b>Data type:</b> <code>String[]</code>
 	 * 	<li><b>Default:</b> empty array
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -452,18 +452,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_head = PREFIX + "head.list";
+	public static final String HTMLDOC_head = PREFIX + "head.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_head} property.
 	 */
-	public static final String HTMLDOC_links_add = PREFIX + "head.list.add";
+	public static final String HTMLDOC_links_add = PREFIX + "head.ls./add";
 
 	/**
 	 * <b>Configuration property:</b>  HTML document template.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.template"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.template.c"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> HtmlDocTemplate&gt;</code> or {@link HtmlDocTemplate}
 	 * 	<li><b>Default:</b> <code>HtmlDocTemplateBasic.<jk>class</jk></code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -485,7 +485,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_template = PREFIX + "template";
+	public static final String HTMLDOC_template = PREFIX + "template.c";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -493,28 +493,31 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(PropertyStore.create());
+	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final HtmlDocSerializerContext ctx;
+	final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
+	final String noResultsMessage;
+	final boolean nowrap;
+	final HtmlDocTemplate template;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public HtmlDocSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "text/html");
+	public HtmlDocSerializer(PropertyStore2 ps) {
+		this(ps, "text/html");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -532,13 +535,42 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlDocSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
-		this.ctx = createContext(HtmlDocSerializerContext.class);
+	public HtmlDocSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
+		style = getArrayProperty(HTMLDOC_style, String.class);
+		stylesheet = getArrayProperty(HTMLDOC_stylesheet, String.class);
+		script = getArrayProperty(HTMLDOC_script, String.class);
+		head = getArrayProperty(HTMLDOC_head, String.class);
+		header = getArrayProperty(HTMLDOC_header, String.class);
+		nav = getArrayProperty(HTMLDOC_nav, String.class);
+		aside = getArrayProperty(HTMLDOC_aside, String.class);
+		footer = getArrayProperty(HTMLDOC_footer, String.class);
+		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, false);
+		navlinks = getArrayProperty(HTMLDOC_navlinks, String.class);
+		noResultsMessage = getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");
+		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, HtmlDocTemplateBasic.class);
 	}
 
 	@Override /* Serializer */
 	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlDocSerializerSession(ctx, args);
+		return new HtmlDocSerializerSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlDocSerializer", new ObjectMap()
+				.append("header", header)
+				.append("nav", nav)
+				.append("navlinks", navlinks)
+				.append("aside", aside)
+				.append("footer", footer)
+				.append("style", style)
+				.append("head", head)
+				.append("stylesheet", stylesheet)
+				.append("nowrap", nowrap)
+				.append("template", template)
+				.append("noResultsMessage", noResultsMessage)
+			);
 	}
 }

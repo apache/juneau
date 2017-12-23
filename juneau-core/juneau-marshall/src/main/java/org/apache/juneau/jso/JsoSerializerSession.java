@@ -37,7 +37,7 @@ public class JsoSerializerSession extends OutputStreamSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected JsoSerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
+	protected JsoSerializerSession(JsoSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 

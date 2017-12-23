@@ -25,28 +25,25 @@ public final class CsvSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final CsvSerializer DEFAULT = new CsvSerializer(PropertyStore.create());
+	public static final CsvSerializer DEFAULT = new CsvSerializer(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final CsvSerializerContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public CsvSerializer(PropertyStore propertyStore) {
-		super(propertyStore, "text/csv");
-		this.ctx = createContext(CsvSerializerContext.class);
+	public CsvSerializer(PropertyStore2 ps) {
+		super(ps, "text/csv");
 	}
 
 	@Override /* CoreObject */
 	public CsvSerializerBuilder builder() {
-		return new CsvSerializerBuilder(propertyStore);
+		return new CsvSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -67,6 +64,12 @@ public final class CsvSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new CsvSerializerSession(ctx, args);
+		return new CsvSerializerSession(this, args);
+	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("CsvSerializer", new ObjectMap());
 	}
 }

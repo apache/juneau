@@ -134,7 +134,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <b>Configuration property:</b>  Anchor text source.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText.s"</js>
 	 * 	<li><b>Data type:</b> <code>AnchorText</code>
 	 * 	<li><b>Default:</b> <jsf>TO_STRING</jsf>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -147,13 +147,13 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <p>
 	 * See the {@link AnchorText} enum for possible values.
 	 */
-	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText";
+	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText.s";
 
 	/**
 	 * <b>Configuration property:</b>  Look for URLs in {@link String Strings}.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -163,13 +163,13 @@ public class HtmlSerializer extends XmlSerializer {
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
 	 */
-	public static final String HTML_detectLinksInStrings = PREFIX + "detectLinksInStrings";
+	public static final String HTML_detectLinksInStrings = PREFIX + "detectLinksInStrings.b";
 
 	/**
 	 * <b>Configuration property:</b>  Look for link labels in the <js>"label"</js> parameter of the URL.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -181,37 +181,37 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <p>
 	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
 	 */
-	public static final String HTML_lookForLabelParameters = PREFIX + "lookForLabelParameters";
+	public static final String HTML_lookForLabelParameters = PREFIX + "lookForLabelParameters.b";
 
 	/**
 	 * <b>Configuration property:</b>  The parameter name to use when using {@link #HTML_lookForLabelParameters}.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"label"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 */
-	public static final String HTML_labelParameter = PREFIX + "labelParameter";
+	public static final String HTML_labelParameter = PREFIX + "labelParameter.s";
 
 	/**
 	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 */
-	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders";
+	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders.b";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -228,7 +228,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String HTML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+	public static final String HTML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -236,13 +236,13 @@ public class HtmlSerializer extends XmlSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings. */
-	public static final HtmlSerializer DEFAULT = new HtmlSerializer(PropertyStore.create());
+	public static final HtmlSerializer DEFAULT = new HtmlSerializer(PropertyStore2.DEFAULT);
 
 	/** Default serializer, single quotes. */
-	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(PropertyStore.create());
+	public static final HtmlSerializer DEFAULT_SQ = new HtmlSerializer.Sq(PropertyStore2.DEFAULT);
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(PropertyStore.create());
+	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -255,10 +255,14 @@ public class HtmlSerializer extends XmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Sq(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(SERIALIZER_quoteChar, '\''));
+		public Sq(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(SERIALIZER_quoteChar, '\'')
+					.build()
+			);
 		}
 	}
 
@@ -268,10 +272,15 @@ public class HtmlSerializer extends XmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SqReadable(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(SERIALIZER_quoteChar, '\'').append(SERIALIZER_useWhitespace, true));
+		public SqReadable(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(SERIALIZER_quoteChar, '\'')
+					.set(SERIALIZER_useWhitespace, true)
+					.build()
+			);
 		}
 	}
 
@@ -280,23 +289,30 @@ public class HtmlSerializer extends XmlSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final HtmlSerializerContext ctx;
+	final AnchorText uriAnchorText;
+	final boolean
+		lookForLabelParameters,
+		detectLinksInStrings,
+		addKeyValueTableHeaders,
+		addBeanTypeProperties;
+	final String labelParameter;
+
 	private volatile HtmlSchemaDocSerializer schemaSerializer;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public HtmlSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "text/html");
+	public HtmlSerializer(PropertyStore2 ps) {
+		this(ps, "text/html");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -314,14 +330,19 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
-		this.ctx = createContext(HtmlSerializerContext.class);
+	public HtmlSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
+		uriAnchorText = getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
+		lookForLabelParameters = getProperty(HTML_lookForLabelParameters, boolean.class, true);
+		detectLinksInStrings = getProperty(HTML_detectLinksInStrings, boolean.class, true);
+		labelParameter = getProperty(HTML_labelParameter, String.class, "label");
+		addKeyValueTableHeaders = getProperty(HTML_addKeyValueTableHeaders, boolean.class, false);
+		addBeanTypeProperties = getProperty(HTML_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* CoreObject */
 	public HtmlSerializerBuilder builder() {
-		return new HtmlSerializerBuilder(propertyStore);
+		return new HtmlSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -343,12 +364,25 @@ public class HtmlSerializer extends XmlSerializer {
 	@Override /* XmlSerializer */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = new HtmlSchemaDocSerializer(propertyStore);
+			schemaSerializer = builder().build(HtmlSchemaDocSerializer.class);
 		return schemaSerializer;
 	}
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlSerializerSession(ctx, args);
+		return new HtmlSerializerSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlSerializer", new ObjectMap()
+				.append("uriAnchorText", uriAnchorText)
+				.append("lookForLabelParameters", lookForLabelParameters)
+				.append("detectLinksInStrings", detectLinksInStrings)
+				.append("labelParameter", labelParameter)
+				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+			);
 	}
 }

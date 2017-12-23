@@ -39,14 +39,14 @@ public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public XmlSchemaDocSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+	public XmlSchemaDocSerializer(PropertyStore2 ps) {
+		super(ps);
 	}
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new XmlSchemaSerializerSession(ctx, args);
+		return new XmlSchemaSerializerSession(this, args);
 	}
 }

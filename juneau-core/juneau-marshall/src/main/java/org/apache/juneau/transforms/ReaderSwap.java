@@ -21,6 +21,8 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -81,6 +83,22 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 		}
 	}
 
+	/** Reader transform for reading plain text. */
+	public static class Uon extends ReaderSwap {
+		/** Constructor */
+		public Uon() {
+			super(UonParser.DEFAULT);
+		}
+	}
+
+	/** Reader transform for reading plain text. */
+	public static class UrlEncoding extends ReaderSwap {
+		/** Constructor */
+		public UrlEncoding() {
+			super(UrlEncodingParser.DEFAULT);
+		}
+	}
+	
 	/** The parser to use to parse the contents of the Reader. */
 	private ReaderParser parser;
 

@@ -42,32 +42,32 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	 * <b>Configuration property:</b>  The <code>SOAPAction</code> HTTP header value to set on responses.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"SoapXmlSerializer.SOAPAction"</js>
+	 * 	<li><b>Name:</b> <js>"SoapXmlSerializer.SOAPAction.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2003/05/soap-envelope"</js>
 	 * </ul>
 	 */
-	public static final String SOAPXML_SOAPAction = PREFIX + "SOAPAction";
+	public static final String SOAPXML_SOAPAction = PREFIX + "SOAPAction.s";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final SoapXmlSerializerContext ctx;
-
+	final String soapAction;
+	
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public SoapXmlSerializer(PropertyStore propertyStore) {
-		super(propertyStore, "text/xml", "text/xml+soap");
-		this.ctx = createContext(SoapXmlSerializerContext.class);
+	public SoapXmlSerializer(PropertyStore2 ps) {
+		super(ps, "text/xml", "text/xml+soap");
+		soapAction = getProperty(SOAPXML_SOAPAction, String.class, "http://www.w3.org/2003/05/soap-envelope");
 	}
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new SoapXmlSerializerSession(ctx, args);
+		return new SoapXmlSerializerSession(this, args);
 	}
 }

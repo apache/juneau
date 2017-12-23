@@ -319,6 +319,7 @@ import org.apache.juneau.serializer.*;
  * @param <S> The swapped form of the class.
  */
 @SuppressWarnings({"unchecked","rawtypes"})
+@BeanIgnore
 public abstract class PojoSwap<T,S> {
 
 	/**

@@ -30,11 +30,11 @@ public abstract class ReaderParser extends Parser {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	protected ReaderParser(PropertyStore propertyStore, String...consumes) {
-		super(propertyStore, consumes);
+	protected ReaderParser(PropertyStore2 ps, String...consumes) {
+		super(ps, consumes);
 	}
 
 	@Override /* Parser */

@@ -39,7 +39,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected OutputStreamSerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
+	protected OutputStreamSerializerSession(Serializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 
@@ -50,7 +50,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	 * 	Runtime session arguments.
 	 */
 	protected OutputStreamSerializerSession(SerializerSessionArgs args) {
-		this(null, args);
+		super(args);
 	}
 
 	@Override /* SerializerSession */

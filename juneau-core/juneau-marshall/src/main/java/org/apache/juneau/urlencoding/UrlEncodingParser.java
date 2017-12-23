@@ -63,7 +63,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	 * 		is added to it.
 	 * </ul>
 	 */
-	public static final String URLENC_expandedParams = PREFIX + "expandedParams";
+	public static final String URLENC_expandedParams = PREFIX + "expandedParams.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -71,28 +71,34 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UrlEncodingParser}. */
-	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore.create());
+	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final UrlEncodingParserContext ctx;
+	final boolean
+		expandedParams;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public UrlEncodingParser(PropertyStore propertyStore) {
-		super(propertyStore.copy().append(UON_decodeChars, true), "application/x-www-form-urlencoded");
-		this.ctx = createContext(UrlEncodingParserContext.class);
+	public UrlEncodingParser(PropertyStore2 ps) {
+		super(
+			ps.builder()
+				.set(UON_decodeChars, true)
+				.build(), 
+			"application/x-www-form-urlencoded"
+		);
+		expandedParams = getProperty(URLENC_expandedParams, boolean.class, false);
 	}
 
 	@Override /* CoreObject */
 	public UrlEncodingParserBuilder builder() {
-		return new UrlEncodingParserBuilder(propertyStore);
+		return new UrlEncodingParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -230,6 +236,14 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 
 	@Override /* Parser */
 	public UrlEncodingParserSession createSession(ParserSessionArgs args) {
-		return new UrlEncodingParserSession(ctx, args);
+		return new UrlEncodingParserSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingParser", new ObjectMap()
+				.append("expandedParams", expandedParams)
+			);
 	}
 }

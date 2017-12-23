@@ -133,10 +133,10 @@ public class PhotosResource extends Resource {
 
 		/**
 		 * Constructor.
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public ImageSerializer(PropertyStore propertyStore) {
-			super(propertyStore, null, "image/png", "image/jpeg");
+		public ImageSerializer(PropertyStore2 ps) {
+			super(ps, null, "image/png", "image/jpeg");
 		}
 
 		@Override /* Serializer */ 
@@ -146,7 +146,7 @@ public class PhotosResource extends Resource {
 				@Override /* SerializerSession */ 
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 					RenderedImage image = (RenderedImage)o;
-					String mediaType = getStringProperty("mediaType");
+					String mediaType = getProperty("mediaType", String.class, (String)null);
 					ImageIO.write(image, mediaType.substring(mediaType.indexOf('/')+1), out.getOutputStream());
 				}
 			};
@@ -158,10 +158,10 @@ public class PhotosResource extends Resource {
 
 		/**
 		 * Constructor.
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public ImageParser(PropertyStore propertyStore) {
-			super(propertyStore, "image/png", "image/jpeg");
+		public ImageParser(PropertyStore2 ps) {
+			super(ps, "image/png", "image/jpeg");
 		}
 
 		@Override /* Parser */

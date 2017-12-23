@@ -7548,6 +7548,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
+		<li><p><a class='doclink' href='#7.0.1'>7.0.2 (TBD)</a></p>
 		<li><p><a class='doclink' href='#7.0.1'>7.0.1 (TBD)</a></p>
 		<li><p><a class='doclink' href='#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.4.0'>6.4.0 (Oct 5, 2017)</a></p>
@@ -7618,6 +7619,106 @@
 		<li><p><a class='doclink' href='#5.0.0.1'>5.0.0.1 (Jun 14, 2012)</a></p>
 		<li><p><a class='doclink' href='#5.0.0.0'>5.0.0.0 (Jun 11, 2012)</a></p>
 	</ul>
+
+	<!-- =========================================================================================================== -->
+	<a id="7.0.2"></a>
+	<h3 class='topic' onclick='toggle(this)'>7.0.2 (TBD)</h3>
+	<div class='topic'>
+		<p>
+		</p>
+	
+		<h6 class='topic'>juneau-marshall</h6>
+		<ul class='spaced-list'>
+			<li>
+				Significant improvements made to the internals of the Serializer and Parser classes.
+				<ul>
+					<li>
+						Caching improvements on serializers and parsers have reduced execution time of the core
+						JUnits by approximately 1/3.
+						<br>The 17000+ JUnit tests now execute in less than 10 seconds and have a cache-reuse hit rate
+						of 98% (164104 serializers/parsers/bean-contexts retrieved, but only 1801 created from scratch).
+					<li>
+						All the various separate <code>Context</code> classes (e.g. <code>JsonSerializerContext</code>) have been folded into
+						their respective serializer or parser classes (e.g. <code>JsonSerializer</code>).
+						<br>Additionally, these classes are their own bean contexts.
+						<br>For example, the class hierarchy of <code>JsonSerializer</code> is now:
+						<ul class='doctree'>
+							<li class='jaa'>{@link org.apache.juneau.Context}
+							<ul>
+								<li class='jac'>{@link org.apache.juneau.BeanContext}
+								<ul>
+									<li class='jaa'>{@link org.apache.juneau.serializer.Serializer}
+									<ul>
+										<li class='jaa'>{@link org.apache.juneau.serializer.WriterSerializer}
+										<ul>
+											<li class='jac'>{@link org.apache.juneau.json.JsonSerializer}
+										</ul>
+									</ul>
+								</ul>
+							</ul>
+						</ul>
+						All <code>Context</code> objects are thread-safe and read-only.
+					<li>
+						Session objects also now have a consistent class hierarchy.
+						<br>For example, the class hierarchy of <code>JsonSerializerSession</code> is now:
+						<ul class='doctree'>
+							<li class='jaa'>{@link org.apache.juneau.Session}
+							<ul>
+								<li class='jac'>{@link org.apache.juneau.BeanSession}
+								<ul>
+									<li class='jaa'>{@link org.apache.juneau.serializer.SerializerSession}
+									<ul>
+										<li class='jaa'>{@link org.apache.juneau.serializer.WriterSerializerSession}
+										<ul>
+											<li class='jac'>{@link org.apache.juneau.json.JsonSerializerSession}
+										</ul>
+									</ul>
+								</ul>
+							</ul>
+						</ul>
+						Session objects are transient objects that live for the duration of a single parse.
+					<li>
+						Builder objects also now have a consistent class hierarchy.
+						<br>For example, the class hierarchy of <code>JsonSerializerBuilder</code> is now:
+						<ul class='doctree'>
+							<li class='jaa'>{@link org.apache.juneau.ContextBuilder}
+							<ul>
+								<li class='jac'>{@link org.apache.juneau.BeanContextBuilder}
+								<ul>
+									<li class='jaa'>{@link org.apache.juneau.serializer.SerializerBuider}
+									<ul>
+										<li class='jac'>{@link org.apache.juneau.serializer.JsonSerializerBuilder}
+									</ul>
+								</ul>
+							</ul>
+						</ul>
+						Builder objects are used for building up and creating <code>Context</code> objects.
+					<li>
+						The {@link org.apache.juneau.PropertyStore2} class has been completely rewritten.
+						It is now a read-only configuration store build using the {@link org.apache.juneau.PropertyStoreBuilder}
+						class.
+						<br>The previous <code>PropertyStore</code> class was overly-complicated with many read/write
+						locks to ensure thread-safety. 
+						<br>The new design shifts to a builder-based model with read-only <code>PropertyStore</code> objects.
+				</ul>
+		</ul>
+
+		<h6 class='topic'>juneau-marshall-rdf</h6>
+		<ul class='spaced-list'>
+		</ul>
+
+		<h6 class='topic'>juneau-svl</h6>
+		<ul class='spaced-list'>
+		</ul>
+
+		<h6 class='topic'>juneau-rest-server</h6>
+		<ul class='spaced-list'>
+		</ul>
+
+		<h6 class='topic'>juneau-microservice-server</h6>
+		<ul class='spaced-list'>
+		</ul>
+	</div>
 
 	<!-- =========================================================================================================== -->
 	<a id="7.0.1"></a>

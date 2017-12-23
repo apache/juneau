@@ -34,8 +34,8 @@ public class CharsetEncodingsResource extends RestServlet {
 
 	public static class CtParser extends ReaderParser {
 
-		public CtParser(PropertyStore propertyStore) {
-			super(propertyStore, "text/p");
+		public CtParser(PropertyStore2 ps) {
+			super(ps, "text/p");
 		}
 
 		@Override /* Parser */
@@ -53,8 +53,8 @@ public class CharsetEncodingsResource extends RestServlet {
 
 	public static class ASerializer extends WriterSerializer {
 
-		public ASerializer(PropertyStore propertyStore) {
-			super(propertyStore, "text/s");
+		public ASerializer(PropertyStore2 ps) {
+			super(ps, "text/s");
 		}
 
 		@Override /* Serializer */

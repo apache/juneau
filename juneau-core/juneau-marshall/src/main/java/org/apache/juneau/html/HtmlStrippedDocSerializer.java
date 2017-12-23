@@ -36,16 +36,16 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public HtmlStrippedDocSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "text/html", "text/html+stripped");
+	public HtmlStrippedDocSerializer(PropertyStore2 ps) {
+		this(ps, "text/html", "text/html+stripped");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -63,12 +63,12 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlStrippedDocSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
+	public HtmlStrippedDocSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
 	}
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlStrippedDocSerializerSession(ctx, args);
+		return new HtmlStrippedDocSerializerSession(this, args);
 	}
 }

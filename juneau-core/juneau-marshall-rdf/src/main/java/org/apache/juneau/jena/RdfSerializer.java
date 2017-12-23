@@ -13,7 +13,8 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfCommon.*;
+
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
@@ -37,7 +38,11 @@ import org.apache.juneau.xml.*;
  * 
  * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
-public class RdfSerializer extends WriterSerializer {
+public class RdfSerializer extends WriterSerializer implements RdfCommon {
+
+	private static final Namespace 
+		DEFAULT_JUNEAU_NS = Namespace.create("j", "http://www.apache.org/juneau/"),
+		DEFAULT_JUNEAUBP_NS = Namespace.create("jp", "http://www.apache.org/juneaubp/");
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -49,19 +54,19 @@ public class RdfSerializer extends WriterSerializer {
 	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
 	 * 
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes"</js>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 */
-	public static final String RDF_addLiteralTypes = PREFIX + "addLiteralTypes";
+	public static final String RDF_addLiteralTypes = PREFIX + "addLiteralTypes.b";
 
 	/**
 	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
 	 * 
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty"</js>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -76,13 +81,13 @@ public class RdfSerializer extends WriterSerializer {
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 */
-	public static final String RDF_addRootProperty = PREFIX + "addRootProperty";
+	public static final String RDF_addRootProperty = PREFIX + "addRootProperty.b";
 
 	/**
 	 * <b>Configuration property:</b>  Auto-detect namespace usage.
 	 * 
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces"</js>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -95,13 +100,13 @@ public class RdfSerializer extends WriterSerializer {
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
 	 * the root element is serialized.
 	 */
-	public static final String RDF_autoDetectNamespaces = PREFIX + "autoDetectNamespaces";
+	public static final String RDF_autoDetectNamespaces = PREFIX + "autoDetectNamespaces.b";
 
 	/**
 	 * <b>Configuration property:</b>  Default namespaces.
 	 * 
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.list"</js>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -110,13 +115,13 @@ public class RdfSerializer extends WriterSerializer {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */
-	public static final String RDF_namespaces = PREFIX + "namespaces.list";
+	public static final String RDF_namespaces = PREFIX + "namespaces.ls";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 * 
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -133,7 +138,7 @@ public class RdfSerializer extends WriterSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String RDF_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+	public static final String RDF_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -141,19 +146,19 @@ public class RdfSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore.create());
+	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore2.DEFAULT);
 
 	/** Default Abbreviated RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XMLABBREV = new XmlAbbrev(PropertyStore.create());
+	public static final RdfSerializer DEFAULT_XMLABBREV = new XmlAbbrev(PropertyStore2.DEFAULT);
 
 	/** Default Turtle serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_TURTLE = new Turtle(PropertyStore.create());
+	public static final RdfSerializer DEFAULT_TURTLE = new Turtle(PropertyStore2.DEFAULT);
 
 	/** Default N-Triple serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_NTRIPLE = new NTriple(PropertyStore.create());
+	public static final RdfSerializer DEFAULT_NTRIPLE = new NTriple(PropertyStore2.DEFAULT);
 
 	/** Default N3 serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore.create());
+	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -166,10 +171,15 @@ public class RdfSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Xml(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML), "text/xml+rdf");
+		public Xml(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_RDF_XML)
+					.build(), 
+				"text/xml+rdf"
+			);
 		}
 	}
 
@@ -179,10 +189,16 @@ public class RdfSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public XmlAbbrev(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML_ABBREV), "text/xml+rdf", "text/xml+rdf+abbrev");
+		public XmlAbbrev(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_RDF_XML_ABBREV)
+					.build(), 
+				"text/xml+rdf", 
+				"text/xml+rdf+abbrev"
+			);
 		}
 	}
 
@@ -192,10 +208,15 @@ public class RdfSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public NTriple(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_NTRIPLE), "text/n-triple");
+		public NTriple(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_NTRIPLE)
+					.build(), 
+				"text/n-triple"
+			);
 		}
 	}
 
@@ -205,10 +226,15 @@ public class RdfSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Turtle(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_TURTLE), "text/turtle");
+		public Turtle(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_TURTLE)
+					.build(), 
+				"text/turtle"
+			);
 		}
 	}
 
@@ -218,10 +244,15 @@ public class RdfSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public N3(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_N3), "text/n3");
+		public N3(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_N3)
+					.build(), 
+				"text/n3"
+			);
 		}
 	}
 
@@ -230,12 +261,24 @@ public class RdfSerializer extends WriterSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final RdfSerializerContext ctx;
+	final boolean
+		addLiteralTypes,
+		addRootProperty,
+		useXmlNamespaces,
+		looseCollections,
+		autoDetectNamespaces,
+		addBeanTypeProperties;
+	final String rdfLanguage;
+	final Namespace juneauNs;
+	final Namespace juneauBpNs;
+	final RdfCollectionFormat collectionFormat;
+	final Map<String,Object> jenaSettings;
+	final Namespace[] namespaces;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -253,14 +296,41 @@ public class RdfSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public RdfSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
-		this.ctx = createContext(RdfSerializerContext.class);
+	public RdfSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
+		addLiteralTypes = getProperty(RDF_addLiteralTypes, boolean.class, false);
+		addRootProperty = getProperty(RDF_addRootProperty, boolean.class, false);
+		useXmlNamespaces = getProperty(RDF_useXmlNamespaces, boolean.class, true);
+		looseCollections = getProperty(RDF_looseCollections, boolean.class, false);
+		autoDetectNamespaces = getProperty(RDF_autoDetectNamespaces, boolean.class, true);
+		rdfLanguage = getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		juneauNs = ps.getProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
+		juneauBpNs = ps.getProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
+		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
+		namespaces = ps.getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
+		addBeanTypeProperties = getProperty(RDF_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		
+		Map<String,Object> m = new LinkedHashMap<>();
+		for (String k : getPropertyKeys("RdfCommon")) 
+			if (k.startsWith("jena."))
+				m.put(k.substring(5), getProperty(k));
+		jenaSettings = Collections.unmodifiableMap(m);
 	}
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param ps
+	 * 	The property store containing all the settings for this object.
+	 */
+	public RdfSerializer(PropertyStore2 ps) {
+		this(ps, "text/xml+rdf");
+	}
+	
 
 	@Override /* CoreObject */
 	public RdfSerializerBuilder builder() {
-		return new RdfSerializerBuilder(propertyStore);
+		return new RdfSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -281,6 +351,24 @@ public class RdfSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new RdfSerializerSession(ctx, args);
+		return new RdfSerializerSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RdfSerializer", new ObjectMap()
+				.append("addLiteralTypes", addLiteralTypes)
+				.append("addRootProperty", addRootProperty)
+				.append("useXmlNamespaces", useXmlNamespaces)
+				.append("looseCollections", looseCollections)
+				.append("autoDetectNamespaces", autoDetectNamespaces)
+				.append("rdfLanguage", rdfLanguage)
+				.append("juneauNs", juneauNs)
+				.append("juneauBpNs", juneauBpNs)
+				.append("collectionFormat", collectionFormat)
+				.append("namespaces", namespaces)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+			);
 	}
 }

@@ -39,7 +39,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected MsgPackParserSession(MsgPackParserContext ctx, ParserSessionArgs args) {
+	protected MsgPackParserSession(MsgPackParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 	}
 

@@ -58,16 +58,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected HtmlSerializerSession(HtmlSerializerContext ctx, SerializerSessionArgs args) {
+	protected HtmlSerializerSession(HtmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		String labelParameter;
-		ObjectMap p = getProperties();
-		anchorText = p.getWithDefault(HTML_uriAnchorText, ctx.uriAnchorText, AnchorText.class);
-		detectLinksInStrings = p.getBoolean(HTML_detectLinksInStrings, ctx.detectLinksInStrings);
-		lookForLabelParameters = p.getBoolean(HTML_lookForLabelParameters, ctx.lookForLabelParameters);
-		labelParameter = p.getString(HTML_labelParameter, ctx.labelParameter);
-		addKeyValueTableHeaders = p.getBoolean(HTML_addKeyValueTableHeaders, ctx.addKeyValueTableHeaders);
-		addBeanTypeProperties = p.getBoolean(HTML_addBeanTypeProperties, ctx.addBeanTypeProperties);
+		anchorText = getProperty(HTML_uriAnchorText, AnchorText.class, ctx.uriAnchorText);
+		detectLinksInStrings = getProperty(HTML_detectLinksInStrings, boolean.class, ctx.detectLinksInStrings);
+		lookForLabelParameters = getProperty(HTML_lookForLabelParameters, boolean.class, ctx.lookForLabelParameters);
+		addKeyValueTableHeaders = getProperty(HTML_addKeyValueTableHeaders, boolean.class, ctx.addKeyValueTableHeaders);
+		addBeanTypeProperties = getProperty(HTML_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		String labelParameter = getProperty(HTML_labelParameter, String.class, ctx.labelParameter);
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
 	}
 

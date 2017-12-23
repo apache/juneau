@@ -39,27 +39,27 @@ public class AddressBookResourceTest extends RestTestcase {
 		clients = new RestClient[] {
 			SamplesMicroservice.client()
 				.pojoSwaps(CalendarSwap.DateMedium.class)
-				.property(XML_autoDetectNamespaces, true)
+				.set(XML_autoDetectNamespaces, true)
 				.build(),
 			SamplesMicroservice.client()
 				.serializer(XmlSerializer.class)
 				.parser(XmlParser.class)
 				.pojoSwaps(CalendarSwap.DateMedium.class)
-				.property(XML_autoDetectNamespaces, true)
+				.set(XML_autoDetectNamespaces, true)
 				.build(),
 			SamplesMicroservice.client()
 				.serializer(HtmlSerializer.class)
 				.parser(HtmlParser.class)
 				.accept("text/html+stripped")
 				.pojoSwaps(CalendarSwap.DateMedium.class)
-				.property(XML_autoDetectNamespaces, true)
+				.set(XML_autoDetectNamespaces, true)
 				.build(),
 			SamplesMicroservice.client()
 				.serializer(XmlSerializer.class)
 				.parser(HtmlParser.class)
 				.accept("text/html+stripped")
 				.pojoSwaps(CalendarSwap.DateMedium.class)
-				.property(XML_autoDetectNamespaces, true)
+				.set(XML_autoDetectNamespaces, true)
 				.build(),
 		};
 	}

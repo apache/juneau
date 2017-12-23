@@ -29,28 +29,25 @@ public class MsgPackParser extends InputStreamParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final MsgPackParser DEFAULT = new MsgPackParser(PropertyStore.create());
+	public static final MsgPackParser DEFAULT = new MsgPackParser(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final MsgPackParserContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public MsgPackParser(PropertyStore propertyStore) {
-		super(propertyStore, "octal/msgpack");
-		this.ctx = createContext(MsgPackParserContext.class);
+	public MsgPackParser(PropertyStore2 ps) {
+		super(ps, "octal/msgpack");
 	}
 
 	@Override /* CoreObject */
 	public MsgPackParserBuilder builder() {
-		return new MsgPackParserBuilder(propertyStore);
+		return new MsgPackParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -71,6 +68,12 @@ public class MsgPackParser extends InputStreamParser {
 
 	@Override /* Parser */
 	public MsgPackParserSession createSession(ParserSessionArgs args) {
-		return new MsgPackParserSession(ctx, args);
+		return new MsgPackParserSession(this, args);
+	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("MsgPackParser", new ObjectMap());
 	}
 }

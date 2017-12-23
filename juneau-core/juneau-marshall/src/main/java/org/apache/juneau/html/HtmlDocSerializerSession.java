@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
  * Context object that lives for the duration of a single serialization of {@link HtmlSerializer} and its subclasses.
  *
  * <p>
- * See {@link SerializerContext} for details.
+ * See {@link Serializer} for details.
  *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
@@ -42,22 +42,20 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @param args
 	 * 	Runtime arguments.
 	 */
-	protected HtmlDocSerializerSession(HtmlDocSerializerContext ctx, SerializerSessionArgs args) {
+	protected HtmlDocSerializerSession(HtmlDocSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-
-		header = p.getStringArray(HTMLDOC_header, ctx.nav);
-		nav = p.getStringArray(HTMLDOC_nav, ctx.nav);
-		aside = p.getStringArray(HTMLDOC_aside, ctx.aside);
-		footer = p.getStringArray(HTMLDOC_footer, ctx.footer);
-		navlinks = p.getStringArray(HTMLDOC_navlinks, ctx.navlinks);
-		style = p.getStringArray(HTMLDOC_style, ctx.style);
-		stylesheet = p.getStringArray(HTMLDOC_stylesheet, ctx.stylesheet);
-		script = p.getStringArray(HTMLDOC_script, ctx.script);
-		head = p.getStringArray(HTMLDOC_head, ctx.head);
-		nowrap = p.getBoolean(HTMLDOC_nowrap, ctx.nowrap);
-		noResultsMessage = p.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
-		template = ctx.newInstance(HtmlDocTemplate.class, p.getWithDefault(HTMLDOC_template, ctx.template));
+		header = getProperty(HTMLDOC_header, String[].class, ctx.nav);
+		nav = getProperty(HTMLDOC_nav, String[].class, ctx.nav);
+		aside = getProperty(HTMLDOC_aside, String[].class, ctx.aside);
+		footer = getProperty(HTMLDOC_footer, String[].class, ctx.footer);
+		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.navlinks);
+		style = getProperty(HTMLDOC_style, String[].class, ctx.style);
+		stylesheet = getProperty(HTMLDOC_stylesheet, String[].class, ctx.stylesheet);
+		script = getProperty(HTMLDOC_script, String[].class, ctx.script);
+		head = getProperty(HTMLDOC_head, String[].class, ctx.head);
+		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.nowrap);
+		noResultsMessage = getProperty(HTMLDOC_noResultsMessage, String.class, ctx.noResultsMessage);
+		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, ctx.template);
 	}
 
 	@Override /* Session */

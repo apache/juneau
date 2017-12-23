@@ -26,7 +26,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntry() throws Exception {
-		BeanSession session = PropertyStore.create().setPojoSwaps(ByteArrayBase64Swap.class).getBeanContext().createSession();
+		BeanSession session = BeanContext.create().setPojoSwaps(ByteArrayBase64Swap.class).build().createSession();
 		BeanMap<A> m = session.toBeanMap(new A());
 
 		assertEquals("AQID", m.get("f1"));
@@ -48,12 +48,12 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntryWithMultipleMatchingFilters() throws Exception {
-		BeanSession session = PropertyStore.create().setPojoSwaps(B2Swap.class,B1Swap.class).getBeanContext().createSession();
+		BeanSession session = BeanContext.create().setPojoSwaps(B2Swap.class,B1Swap.class).build().createSession();
 		BeanMap<B> bm = session.toBeanMap(B.create());
 		ObjectMap om = (ObjectMap)bm.get("b1");
 		assertEquals("b2", om.getString("type"));
 
-		session = PropertyStore.create().setPojoSwaps(B1Swap.class,B2Swap.class).getBeanContext().createSession();
+		session = BeanContext.create().setPojoSwaps(B1Swap.class,B2Swap.class).build().createSession();
 		bm = session.toBeanMap(B.create());
 		om = (ObjectMap)bm.get("b1");
 		assertEquals("b1", om.getString("type"));

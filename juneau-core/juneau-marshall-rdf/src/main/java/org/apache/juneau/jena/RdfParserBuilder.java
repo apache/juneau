@@ -39,15 +39,15 @@ public class RdfParserBuilder extends ParserBuilder {
 	/**
 	 * Constructor.
 	 * 
-	 * @param propertyStore The initial configuration settings for this builder.
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	public RdfParserBuilder(PropertyStore propertyStore) {
-		super(propertyStore);
+	public RdfParserBuilder(PropertyStore2 ps) {
+		super(ps);
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParser build() {
-		return new RdfParser(propertyStore, "text/xml+rdf");
+		return build(RdfParser.class);
 	}
 
 
@@ -57,13 +57,6 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  Trim whitespace from text elements.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
@@ -78,17 +71,11 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * @see RdfParser#RDF_trimWhitespace
 	 */
 	public RdfParserBuilder trimWhitespace(boolean value) {
-		return property(RDF_trimWhitespace, value);
+		return set(RDF_trimWhitespace, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  RDF language.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.language"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
-	 * </ul>
 	 * 
 	 * <p>
 	 * Can be any of the following:
@@ -130,7 +117,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * @see RdfCommon#RDF_language
 	 */
 	public RdfParserBuilder language(String value) {
-		return property(RDF_language, value);
+		return set(RDF_language, value);
 	}
 
 	/**
@@ -181,12 +168,6 @@ public class RdfParserBuilder extends ParserBuilder {
 	/**
 	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
 	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
-	 * </ul>
-	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauNs</jsf>, value)</code>.
@@ -197,17 +178,11 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * @see RdfCommon#RDF_juneauNs
 	 */
 	public RdfParserBuilder juneauNs(Namespace value) {
-		return property(RDF_juneauNs, value);
+		return set(RDF_juneauNs, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
-	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -219,17 +194,11 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * @see RdfCommon#RDF_juneauBpNs
 	 */
 	public RdfParserBuilder juneauBpNs(Namespace value) {
-		return property(RDF_juneauBpNs, value);
+		return set(RDF_juneauBpNs, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
@@ -246,17 +215,11 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * @see RdfCommon#RDF_useXmlNamespaces
 	 */
 	public RdfParserBuilder useXmlNamespaces(boolean value) {
-		return property(RDF_useXmlNamespaces, value);
+		return set(RDF_useXmlNamespaces, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat"</js>
-	 * 	<li><b>Data type:</b> <code>RdfCollectionFormat</code>
-	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
-	 * </ul>
 	 * 
 	 * <p>
 	 * Possible values:
@@ -290,17 +253,11 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * @see RdfCommon#RDF_collectionFormat
 	 */
 	public RdfParserBuilder collectionFormat(RdfCollectionFormat value) {
-		return property(RDF_collectionFormat, value);
+		return set(RDF_collectionFormat, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
@@ -347,7 +304,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * @see RdfCommon#RDF_looseCollections
 	 */
 	public RdfParserBuilder looseCollections(boolean value) {
-		return property(RDF_looseCollections, value);
+		return set(RDF_looseCollections, value);
 	}
 
 	@Override /* ParserBuilder */
@@ -386,380 +343,374 @@ public class RdfParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setNotBeanPackages(String...values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setNotBeanPackages(Collection<String> values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeNotBeanPackages(String...values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeNotBeanPackages(Collection<String> values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setNotBeanClasses(Class<?>...values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setNotBeanClasses(Collection<Class<?>> values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeNotBeanClasses(Class<?>...values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeNotBeanClasses(Collection<Class<?>> values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setBeanFilters(Class<?>...values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setBeanFilters(Collection<Class<?>> values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeBeanFilters(Class<?>...values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeBeanFilters(Collection<Class<?>> values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setPojoSwaps(Class<?>...values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setPojoSwaps(Collection<Class<?>> values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removePojoSwaps(Class<?>...values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removePojoSwaps(Collection<Class<?>> values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder implClasses(Map<Class<?>,Class<?>> values) {
+	@Override /* ContextBuilder */
+	public RdfParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public <T> RdfParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setBeanDictionary(Class<?>...values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder setBeanDictionary(Collection<Class<?>> values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeFromBeanDictionary(Class<?>...values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfParserBuilder debug() {
 		super.debug();
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder property(String name, Object value) {
-		super.property(name, value);
+	@Override /* ContextBuilder */
+	public RdfParserBuilder set(String name, Object value) {
+		super.set(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder properties(Map<String,Object> properties) {
-		super.properties(properties);
+	@Override /* ContextBuilder */
+	public RdfParserBuilder set(Map<String,Object> properties) {
+		super.set(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder addToProperty(String name, Object value) {
-		super.addToProperty(name, value);
+	@Override /* ContextBuilder */
+	public RdfParserBuilder add(Map<String,Object> properties) {
+		super.add(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder putToProperty(String name, Object key, Object value) {
-		super.putToProperty(name, key, value);
+	@Override /* ContextBuilder */
+	public RdfParserBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder putToProperty(String name, Object value) {
-		super.putToProperty(name, value);
+	@Override /* ContextBuilder */
+	public RdfParserBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder removeFromProperty(String name, Object value) {
-		super.removeFromProperty(name, value);
+	@Override /* ContextBuilder */
+	public RdfParserBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder classLoader(ClassLoader classLoader) {
-		super.classLoader(classLoader);
-		return this;
-	}
-
-	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder apply(PropertyStore copyFrom) {
+	@Override /* ContextBuilder */
+	public RdfParserBuilder apply(PropertyStore2 copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

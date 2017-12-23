@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -62,7 +61,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  */
 @SuppressWarnings("rawtypes")
-public class RestClient extends CoreObject {
+public class RestClient extends BeanContext {
 
 	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<>();
 
@@ -101,8 +100,13 @@ public class RestClient extends CoreObject {
 		return new RestClientBuilder();
 	}
 
+	@Override /* Context */
+	public RestClientBuilder builder() {
+		return new RestClientBuilder(getPropertyStore());
+	}
+
 	RestClient(
-			PropertyStore propertyStore,
+			PropertyStore2 ps,
 			CloseableHttpClient httpClient,
 			boolean keepHttpClientOpen,
 			Serializer serializer,
@@ -118,7 +122,7 @@ public class RestClient extends CoreObject {
 			boolean debug,
 			ExecutorService executorService,
 			boolean executorServiceShutdownOnClose) {
-		super(propertyStore);
+		super(ps);
 		this.httpClient = httpClient;
 		this.keepHttpClientOpen = keepHttpClientOpen;
 		this.serializer = serializer;
@@ -678,7 +682,7 @@ public class RestClient extends CoreObject {
 								rc.input(args[rmm.getBodyArg()]);
 
 							if (rmm.getRequestBeanArgs().length > 0) {
-								BeanSession bs = getBeanContext().createSession();
+								BeanSession bs = createBeanSession();
 								for (RemoteMethodArg rma : rmm.getRequestBeanArgs()) {
 									BeanMap<?> bm = bs.toBeanMap(args[rma.index]); 
 
@@ -767,7 +771,7 @@ public class RestClient extends CoreObject {
 		return n;
 	}
 
-	static final PartSerializer getPartSerializer(Class c, PartSerializer c2) {
+	final PartSerializer getPartSerializer(Class c, PartSerializer c2) {
 		if (c2 != null)
 			return c2;
 		if (c == PartSerializer.class)

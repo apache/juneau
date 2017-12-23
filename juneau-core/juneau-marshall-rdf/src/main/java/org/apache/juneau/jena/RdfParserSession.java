@@ -55,29 +55,26 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected RdfParserSession(RdfParserContext ctx, ParserSessionArgs args) {
+	protected RdfParserSession(RdfParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		ObjectMap jenaSettings = new ObjectMap();
-		jenaSettings.putAll(ctx.jenaSettings);
-		ObjectMap p = getProperties();
-		this.rdfLanguage = p.getString(RDF_language, ctx.rdfLanguage);
-		this.juneauNs = (p.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauNs)) : ctx.juneauNs);
-		this.juneauBpNs = (p.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(p.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
-		this.trimWhitespace = p.getBoolean(RDF_trimWhitespace, ctx.trimWhitespace);
-		this.collectionFormat = p.getWithDefault(RDF_collectionFormat, ctx.collectionFormat, RdfCollectionFormat.class);
-		this.looseCollections = p.getBoolean(RDF_looseCollections, ctx.looseCollections);
-		this.model = ModelFactory.createDefaultModel();
+		rdfLanguage = getProperty(RDF_language, String.class, ctx.rdfLanguage);
+		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, ctx.juneauNs);
+		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, ctx.juneauBpNs);
+		trimWhitespace = getProperty(RDF_trimWhitespace, boolean.class, ctx.trimWhitespace);
+		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, ctx.collectionFormat);
+		looseCollections = getProperty(RDF_looseCollections, boolean.class, ctx.looseCollections);
+		model = ModelFactory.createDefaultModel();
 		addModelPrefix(juneauNs);
 		addModelPrefix(juneauBpNs);
-		this.pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
-		this.pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
-		this.pType = model.createProperty(juneauBpNs.getUri(), RDF_juneauNs_TYPE);
-		this.pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+		pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
+		pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
+		pType = model.createProperty(juneauBpNs.getUri(), RDF_juneauNs_TYPE);
+		pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
 		rdfReader = model.getReader(rdfLanguage);
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
 		if (! rdfLanguage.equals(LANG_NTRIPLE)) {
-			for (Map.Entry<String,Object> e : jenaSettings.entrySet())
+			for (Map.Entry<String,Object> e : ctx.jenaSettings.entrySet())
 				rdfReader.setProperty(e.getKey(), e.getValue());
 		}
 	}

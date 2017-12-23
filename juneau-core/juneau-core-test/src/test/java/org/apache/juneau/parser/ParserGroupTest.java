@@ -46,20 +46,20 @@ public class ParserGroupTest {
 
 
 	public static class Parser1 extends JsonParser {
-		public Parser1(PropertyStore propertyStore) {
-			super(propertyStore, "text/foo", "text/foo_a");
+		public Parser1(PropertyStore2 ps) {
+			super(ps, "text/foo", "text/foo_a");
 		}
 	}
 
 	public static class Parser2 extends JsonParser {
-		public Parser2(PropertyStore propertyStore) {
-			super(propertyStore, "text/foo+bar", "text/foo+bar_a");
+		public Parser2(PropertyStore2 ps) {
+			super(ps, "text/foo+bar", "text/foo+bar_a");
 		}
 	}
 
 	public static class Parser3 extends JsonParser {
-		public Parser3(PropertyStore propertyStore) {
-			super(propertyStore, "text/baz", "text/baz_a");
+		public Parser3(PropertyStore2 ps) {
+			super(ps, "text/baz", "text/baz_a");
 		}
 	}
 
@@ -85,32 +85,32 @@ public class ParserGroupTest {
 	}
 
 	public static class P1 extends JsonParser {
-		public P1(PropertyStore propertyStore) {
-			super(propertyStore, "text/1");
+		public P1(PropertyStore2 ps) {
+			super(ps, "text/1");
 		}
 	}
 
 	public static class P2 extends JsonParser {
-		public P2(PropertyStore propertyStore) {
-			super(propertyStore, "text/2", "text/2a");
+		public P2(PropertyStore2 ps) {
+			super(ps, "text/2", "text/2a");
 		}
 	}
 
 	public static class P3 extends JsonParser {
-		public P3(PropertyStore propertyStore) {
-			super(propertyStore, "text/3");
+		public P3(PropertyStore2 ps) {
+			super(ps, "text/3");
 		}
 	}
 
 	public static class P4 extends JsonParser {
-		public P4(PropertyStore propertyStore) {
-			super(propertyStore, "text/4", "text/4a");
+		public P4(PropertyStore2 ps) {
+			super(ps, "text/4", "text/4a");
 		}
 	}
 
 	public static class P5 extends JsonParser {
-		public P5(PropertyStore propertyStore) {
-			super(propertyStore, "text/5");
+		public P5(PropertyStore2 ps) {
+			super(ps, "text/5");
 		}
 	}
 }

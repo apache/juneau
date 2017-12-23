@@ -38,22 +38,20 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
-	final HtmlDocSerializerContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store to use for creating the context for this serializer.
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "text/html", "text/html+schema");
+	public HtmlSchemaDocSerializer(PropertyStore2 ps) {
+		this(ps, "text/html", "text/html+schema");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -71,13 +69,19 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore.copy().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true), produces, accept);
-		this.ctx = createContext(HtmlDocSerializerContext.class);
+	public HtmlSchemaDocSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(
+			ps.builder()
+				.set(SERIALIZER_detectRecursions, true)
+				.set(SERIALIZER_ignoreRecursions, true)
+				.build(), 
+			produces, 
+			accept
+		);
 	}
 
 	@Override /* Serializer */
 	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlDocSerializerSession(ctx, args);
+		return new HtmlDocSerializerSession(this, args);
 	}
 }

@@ -35,7 +35,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected XmlDocSerializerSession(XmlSerializerContext ctx, SerializerSessionArgs args) {
+	protected XmlDocSerializerSession(XmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 

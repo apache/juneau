@@ -203,8 +203,8 @@ public abstract class RoundTripTest {
 					p.implClass(e.getKey(), e.getValue());
 			}
 		}
-		this.s = s.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).beanDictionary(getDictionary()).properties(getProperties()).build();
-		this.p = p == null ? null : p.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).beanDictionary(getDictionary()).properties(getProperties()).build();
+		this.s = s.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).beanDictionary(getDictionary()).add(getProperties()).build();
+		this.p = p == null ? null : p.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).beanDictionary(getDictionary()).add(getProperties()).build();
 		this.validateXmlWhitespace = (flags & CHECK_XML_WHITESPACE) > 0;
 		this.validateXml = (flags & VALIDATE_XML) > 0;
 		this.returnOriginalObject = (flags & RETURN_ORIGINAL_OBJECT) > 0;

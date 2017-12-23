@@ -15,6 +15,8 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
 
 /**
  * Represents a URL broken into authority/context-root/servlet-path/path-info parts.
@@ -84,6 +86,29 @@ public class UriContext {
 	 */
 	public UriContext() {
 		this(null, null, null, null);
+	}
+	
+	/**
+	 * String constructor.
+	 * 
+	 * <p>
+	 * Input string is a JSON object with the following format:
+	 * <js>{authority:'xxx',contextRoot:'xxx',servletPath:'xxx',pathInfo:'xxx'}</js>
+	 *
+	 * @param s 
+	 * 	The input string.
+	 * 	<br>Example: <js>{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}</js>
+	 * @throws ParseException 
+	 * 	If input string is not a valid JSON object.
+	 */
+	public UriContext(String s) throws ParseException {
+		ObjectMap m = new ObjectMap(s);
+		this.authority = nullIfEmpty(trimSlashes(m.getString("authority")));
+		this.contextRoot = nullIfEmpty(trimSlashes(m.getString("contextRoot")));
+		this.servletPath = nullIfEmpty(trimSlashes(m.getString("servletPath")));
+		this.pathInfo = nullIfEmpty(trimSlashes(m.getString("pathInfo")));
+		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null
+			: this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 
 	/**
@@ -333,5 +358,10 @@ public class UriContext {
 		if (i <= 1)
 			return "/";
 		return uri.substring(0, i);
+	}
+	
+	@Override /* Object */
+	public String toString() {
+		return JsonSerializer.DEFAULT_LAX.toString(this);
 	}
 }

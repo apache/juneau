@@ -61,8 +61,8 @@ public class PropertiesResource extends RestServletDefault {
 
 	public static class PropertySerializer1 extends WriterSerializer {
 
-		public PropertySerializer1(PropertyStore propertyStore) {
-			super(propertyStore, "application/json", "*/json");
+		public PropertySerializer1(PropertyStore2 ps) {
+			super(ps, "application/json", "*/json");
 		}
 
 		@Override /* Serializer */
@@ -72,8 +72,8 @@ public class PropertiesResource extends RestServletDefault {
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 					out.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
-						getStringProperty("A1"), getStringProperty("A2"), getStringProperty("B1"), getStringProperty("B2"), getStringProperty("C"),
-						getStringProperty("R1a"), getStringProperty("R1b"), getStringProperty("R2"), getStringProperty("R3"), getStringProperty("R4"), getStringProperty("R5"), getStringProperty("R6")));
+						getProperty("A1"), getProperty("A2"), getProperty("B1"), getProperty("B2"), getProperty("C"),
+						getProperty("R1a"), getProperty("R1b"), getProperty("R2"), getProperty("R3"), getProperty("R4"), getProperty("R5"), getProperty("R6")));
 				}
 			};
 		}
@@ -89,8 +89,8 @@ public class PropertiesResource extends RestServletDefault {
 
 	public static class PropertySerializer2 extends WriterSerializer {
 
-		public PropertySerializer2(PropertyStore propertyStore) {
-			super(propertyStore, "application/json", "*/json");
+		public PropertySerializer2(PropertyStore2 ps) {
+			super(ps, "application/json", "*/json");
 		}
 
 		@Override /* Serializer */
@@ -99,7 +99,7 @@ public class PropertiesResource extends RestServletDefault {
 
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-					out.getWriter().write(format("A=%s,P=%s,H=%s", getStringProperty("A"), getStringProperty("P"), getStringProperty("h")));
+					out.getWriter().write(format("A=%s,P=%s,H=%s", getProperty("A"), getProperty("P"), getProperty("h")));
 				}
 			};
 		}

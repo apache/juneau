@@ -34,28 +34,25 @@ public class JsoSerializer extends OutputStreamSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore.create());
+	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final SerializerContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public JsoSerializer(PropertyStore propertyStore) {
-		super(propertyStore, "application/x-java-serialized-object");
-		this.ctx = createContext(SerializerContext.class);
+	public JsoSerializer(PropertyStore2 ps) {
+		super(ps, "application/x-java-serialized-object");
 	}
 
 	@Override /* CoreObject */
 	public JsoSerializerBuilder builder() {
-		return new JsoSerializerBuilder(propertyStore);
+		return new JsoSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -76,6 +73,6 @@ public class JsoSerializer extends OutputStreamSerializer {
 
 	@Override /* Serializer */
 	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
-		return new JsoSerializerSession(ctx, args);
+		return new JsoSerializerSession(this, args);
 	}
 }

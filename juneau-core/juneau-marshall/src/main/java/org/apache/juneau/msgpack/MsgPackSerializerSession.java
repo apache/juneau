@@ -45,10 +45,9 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, SerializerSessionArgs args) {
+	protected MsgPackSerializerSession(MsgPackSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-		addBeanTypeProperties = p.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
+		addBeanTypeProperties = getProperty(MSGPACK_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
 	}
 
 	@Override /* Session */

@@ -92,33 +92,31 @@ public abstract class SerializerSession extends BeanSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected SerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
-		super(ctx != null ? ctx : SerializerContext.DEFAULT, args);
-		if (ctx == null)
-			ctx = SerializerContext.DEFAULT;
+	protected SerializerSession(Serializer ctx, SerializerSessionArgs args) {
+		super(ctx, args);
 		this.javaMethod = args.javaMethod;
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
-		ObjectMap p = getProperties();
-		maxDepth = p.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
-		initialDepth = p.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
-		detectRecursions = p.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
-		ignoreRecursions = p.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
-		useWhitespace = p.getBoolean(SERIALIZER_useWhitespace, ctx.useWhitespace);
-		maxIndent = p.getInt(SERIALIZER_maxIndent, ctx.maxIndent);
-		addBeanTypeProperties = p.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		trimNulls = p.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
-		trimEmptyCollections = p.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
-		trimEmptyMaps = p.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
-		trimStrings = p.getBoolean(SERIALIZER_trimStrings, ctx.trimStrings);
-		quoteChar = p.getString(SERIALIZER_quoteChar, ""+ctx.quoteChar).charAt(0);
-		sortCollections = p.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
-		sortMaps = p.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
-		abridged = p.getBoolean(SERIALIZER_abridged, ctx.abridged);
-		uriResolution = p.getWithDefault(SERIALIZER_uriResolution, ctx.uriResolution, UriResolution.class);
-		uriRelativity = p.getWithDefault(SERIALIZER_uriRelativity, ctx.uriRelativity, UriRelativity.class);
-		listenerClass = p.getWithDefault(SERIALIZER_listener, ctx.listener, Class.class);
+		
+		maxDepth = getProperty(SERIALIZER_maxDepth, int.class, ctx.maxDepth);
+		initialDepth = getProperty(SERIALIZER_initialDepth, int.class, ctx.initialDepth);
+		detectRecursions = getProperty(SERIALIZER_detectRecursions, boolean.class, ctx.detectRecursions);
+		ignoreRecursions = getProperty(SERIALIZER_ignoreRecursions, boolean.class, ctx.ignoreRecursions);
+		useWhitespace = getProperty(SERIALIZER_useWhitespace, boolean.class, ctx.useWhitespace);
+		maxIndent = getProperty(SERIALIZER_maxIndent, int.class, ctx.maxIndent);
+		addBeanTypeProperties = getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
+		trimNulls = getProperty(SERIALIZER_trimNullProperties, boolean.class, ctx.trimNulls);
+		trimEmptyCollections = getProperty(SERIALIZER_trimEmptyCollections, boolean.class, ctx.trimEmptyCollections);
+		trimEmptyMaps = getProperty(SERIALIZER_trimEmptyMaps, boolean.class, ctx.trimEmptyMaps);
+		trimStrings = getProperty(SERIALIZER_trimStrings, boolean.class, ctx.trimStrings);
+		quoteChar = getProperty(SERIALIZER_quoteChar, String.class, ""+ctx.quoteChar).charAt(0);
+		sortCollections = getProperty(SERIALIZER_sortCollections, boolean.class, ctx.sortMaps);
+		sortMaps = getProperty(SERIALIZER_sortMaps, boolean.class, ctx.sortMaps);
+		abridged = getProperty(SERIALIZER_abridged, boolean.class, ctx.abridged);
+		uriResolution = getInstanceProperty(SERIALIZER_uriResolution, UriResolution.class, ctx.uriResolution);
+		uriRelativity = getInstanceProperty(SERIALIZER_uriRelativity, UriRelativity.class, ctx.uriRelativity);
+		listenerClass = getProperty(SERIALIZER_listener, Class.class, ctx.listener);
 
 		uriResolver = new UriResolver(uriResolution, uriRelativity, args.uriContext == null ? ctx.uriContext : args.uriContext);
 
@@ -132,6 +130,19 @@ public abstract class SerializerSession extends BeanSession {
 		}
 	}
 
+	/**
+	 * Default constructor.
+	 * 
+	 * @param args
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
+	 */
+	protected SerializerSession(SerializerSessionArgs args) {
+		this(Serializer.DEFAULT, args);
+	}
+	
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()

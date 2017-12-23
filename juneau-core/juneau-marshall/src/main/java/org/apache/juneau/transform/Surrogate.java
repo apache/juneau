@@ -67,7 +67,7 @@ import org.apache.juneau.*;
  * </ul>
  *
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link CoreObjectBuilder#pojoSwaps(Class...)}
+ * Surrogate classes are associated with serializers and parsers using the {@link BeanContextBuilder#pojoSwaps(Class...)}
  * method.
  * <p class='bcode'>
  * 	<ja>@Test</ja>

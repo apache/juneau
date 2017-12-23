@@ -28,12 +28,15 @@ public class PlainTextParserSession extends ReaderParserSession {
 
 	/**
 	 * Create a new session using properties specified in the context.
-	 *
+	 * 
+	 * @param ctx
+	 * 	The parser creating this session object.
+	 * 	The parser contains all the configuration settings for this object.
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected PlainTextParserSession(ParserSessionArgs args) {
-		super(null, args);
+	protected PlainTextParserSession(PlainTextParser ctx, ParserSessionArgs args) {
+		super(ctx, args);
 	}
 
 	@Override /* ParserSession */

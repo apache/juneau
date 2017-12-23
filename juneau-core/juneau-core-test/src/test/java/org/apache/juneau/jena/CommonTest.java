@@ -33,9 +33,9 @@ public class CommonTest {
 		return RdfSerializer.create()
 			.sq()
 			.useWhitespace(false)
-			.property(RDF_rdfxml_allowBadUris, true)
-			.property(RDF_rdfxml_showDoctypeDeclaration, false)
-			.property(RDF_rdfxml_showXmlDeclaration, false);
+			.set(RDF_rdfxml_allowBadUris, true)
+			.set(RDF_rdfxml_showDoctypeDeclaration, false)
+			.set(RDF_rdfxml_showXmlDeclaration, false);
 	}
 
 	private String strip(String s) {

@@ -70,8 +70,7 @@ public final class SerializerGroup {
 	private final List<MediaType> mediaTypesList;
 	private final Serializer[] mediaTypeSerializers;
 	private final List<Serializer> serializers;
-	private final PropertyStore propertyStore;
-	private final BeanContext beanContext;
+	private final PropertyStore2 propertyStore;
 
 	/**
 	 * Instantiates a new clean-slate {@link SerializerGroupBuilder} object.
@@ -97,7 +96,7 @@ public final class SerializerGroup {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The modifiable properties that were used to initialize the serializers.
 	 * 	A snapshot of these will be made so that we can clone and modify this group.
 	 * @param serializers
@@ -105,9 +104,8 @@ public final class SerializerGroup {
 	 * 	The order is important because they will be tried in reverse order (e.g.newer first) in which they will be tried
 	 * 	to match against media types.
 	 */
-	public SerializerGroup(PropertyStore propertyStore, Serializer[] serializers) {
-		this.propertyStore = propertyStore.copy();
-		this.beanContext = propertyStore.getBeanContext();
+	public SerializerGroup(PropertyStore2 ps, Serializer[] serializers) {
+		this.propertyStore = ps;
 		this.serializers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(serializers)));
 
 		List<MediaType> lmt = new ArrayList<>();
@@ -255,8 +253,8 @@ public final class SerializerGroup {
 	 *
 	 * @return A new copy of the property store passed in to the constructor.
 	 */
-	public PropertyStore createPropertyStore() {
-		return propertyStore.copy();
+	public PropertyStore2 getPropertyStore() {
+		return propertyStore;
 	}
 
 	/**
@@ -266,14 +264,5 @@ public final class SerializerGroup {
 	 */
 	public List<Serializer> getSerializers() {
 		return serializers;
-	}
-
-	/**
-	 * Returns a bean context with the same properties as this group.
-	 *
-	 * @return The bean context.
-	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
 	}
 }

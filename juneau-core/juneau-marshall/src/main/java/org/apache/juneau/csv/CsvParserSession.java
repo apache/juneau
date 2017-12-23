@@ -33,7 +33,7 @@ public final class CsvParserSession extends ReaderParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected CsvParserSession(CsvParserContext ctx, ParserSessionArgs args) {
+	protected CsvParserSession(CsvParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 	}
 

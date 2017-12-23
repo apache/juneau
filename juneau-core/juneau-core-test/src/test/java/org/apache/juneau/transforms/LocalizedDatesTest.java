@@ -621,7 +621,7 @@ public class LocalizedDatesTest {
 	@SuppressWarnings("unused")
 	private String label, expected;
 	private Object calendar;
-	private PropertyStore ps;
+	private BeanContext bc;
 	private Locale sessionLocale;
 	private TimeZone sessionTimeZone;
 
@@ -631,16 +631,18 @@ public class LocalizedDatesTest {
 		this.calendar = calendar;
 		this.sessionLocale = sessionLocale;
 		this.sessionTimeZone = sessionTimeZone;
-		ps = PropertyStore.create().setPojoSwaps(swap);
+		BeanContextBuilder bcb = BeanContext.create();
+		bcb.setPojoSwaps(swap);
 		if (contextLocale != null)
-			ps.setProperty(BEAN_locale, contextLocale);
+			bcb.set(BEAN_locale, contextLocale);
 		if (contextTimeZone != null)
-			ps.setProperty(BEAN_timeZone, contextTimeZone);
+			bcb.set(BEAN_timeZone, contextTimeZone);
+		bc = bcb.build();
 	}
 
 	@Test
 	public void test() {
-		BeanSession session = ps.getBeanContext().createSession(new BeanSessionArgs(null, sessionLocale, sessionTimeZone, null));
+		BeanSession session = bc.createSession(new BeanSessionArgs(null, sessionLocale, sessionTimeZone, null));
 		String actual = session.convertToType(calendar, String.class);
 		String actual2 = actual;
 		if (expected.indexOf('(') == -1)

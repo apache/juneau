@@ -22,11 +22,9 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Represents an HTTP response for a REST resource.
@@ -191,12 +189,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Add a serializer property to send to the serializers to override a default value.
 	 *
 	 * <p>
-	 * Can be any value specified in the following classes:
-	 * <ul>
-	 * 	<li>{@link SerializerContext}
-	 * 	<li>{@link JsonSerializerContext}
-	 * 	<li>{@link XmlSerializerContext}
-	 * </ul>
+	 * Can be any value specified on any of the serializers or parsers.
 	 *
 	 * @param key The setting name.
 	 * @param value The setting value.

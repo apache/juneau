@@ -44,10 +44,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected UrlEncodingParserSession(UrlEncodingParserContext ctx, ParserSessionArgs args) {
+	protected UrlEncodingParserSession(UrlEncodingParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-		expandedParams = p.getBoolean(URLENC_expandedParams, ctx.expandedParams);
+		expandedParams = getProperty(URLENC_expandedParams, boolean.class, ctx.expandedParams);
 	}
 
 	@Override /* Session */

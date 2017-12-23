@@ -28,6 +28,8 @@ import org.apache.juneau.xml.*;
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
 public class SoapXmlSerializerSession extends XmlSerializerSession {
+	
+	private final String soapAction; 
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -41,8 +43,10 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	public SoapXmlSerializerSession(SoapXmlSerializerContext ctx, SerializerSessionArgs args) {
+	public SoapXmlSerializerSession(SoapXmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
+		
+		soapAction = getProperty(SOAPXML_SOAPAction, String.class, ctx.soapAction);
 	}
 
 	//--------------------------------------------------------------------------------
@@ -57,7 +61,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 				.attr("encoding", "UTF-8")
 				.appendln("?>");
 			w.oTag("soap", "Envelope")
-				.attr("xmlns", "soap", getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
+				.attr("xmlns", "soap", soapAction)
 				.appendln(">");
 			w.sTag(1, "soap", "Body").nl(1);
 			indent += 2;
@@ -70,6 +74,6 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	@Override /* Serializer */
 	public Map<String,String> getResponseHeaders() {
-		return new AMap<String,String>().append("SOAPAction", getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"));
+		return new AMap<String,String>().append("SOAPAction", soapAction);
 	}
 }

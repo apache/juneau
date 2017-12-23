@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
@@ -28,15 +29,12 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Serializers and parsers use session objects to retrieve config properties and to use it as a scratchpad during
  * serialize and parse actions.
- *
- * @see PropertyStore
  */
 public abstract class Session {
 
 	private JuneauLogger logger;
 
 	private final ObjectMap properties;
-	private final Context ctx;
 	private Map<String,Object> cache;
 	private List<String> warnings;                 // Any warnings encountered.
 
@@ -44,88 +42,157 @@ public abstract class Session {
 	/**
 	 * Default constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for the session.
 	 * @param args
 	 * 	Runtime arguments.
 	 */
-	protected Session(final Context ctx, SessionArgs args) {
-		this.ctx = ctx;
-		this.properties = args.properties != null ? args.properties : ObjectMap.EMPTY_MAP;
-	}
-
-	/**
-	 * Returns the session-level properties.
-	 *
-	 * @return The session-level properties.
-	 */
-	protected final ObjectMap getProperties() {
-		return properties;
+	protected Session(SessionArgs args) {
+		this.properties = args.properties;
 	}
 
 	/**
 	 * Returns the session property with the specified key.
-	 *
+	 * 
 	 * <p>
-	 * The order of lookup for the property is as follows:
-	 * <ul>
-	 * 	<li>Override property passed in through the constructor.
-	 * 	<li>Property defined on the context object.
-	 * 	<li>System.property.
-	 * </ul>
-	 *
+	 * The returned type is the raw value of the property.
+	 * 
 	 * @param key The property key.
-	 * @return The property value, or <jk>null</jk> if it doesn't exist.
+	 * @return The session property, or <jk>null</jk> if the property does not exist.
 	 */
-	public final String getStringProperty(String key) {
-		return getStringProperty(key, null);
+	public final Object getProperty(String key) {
+		if (properties == null)
+			return null;
+		return properties.get(key);
 	}
 
 	/**
-	 * Same as {@link #getStringProperty(String)} but with a default value.
-	 *
+	 * Returns the session property with the specified key and type.
+	 * 
 	 * @param key The property key.
-	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
-	 * @return The property value.
+	 * @param type The type to convert the property to.
+	 * @param def The default value if the session property does not exist or is <jk>null</jk>.
+	 * @return The session property.
 	 */
-	public final String getStringProperty(String key, String def) {
-		Object v = properties.get(key);
-		if (v == null)
-			v = ctx.getPropertyStore().getProperty(key, String.class, null);
-		if (v == null)
-			v = def;
-		return StringUtils.toString(v);
-	}
-
-	/**
-	 * Same as {@link #getStringProperty(String)} but transforms the value to the specified type.
-	 *
-	 * @param key The property key.
-	 * @param type The class type of the value.
-	 *
-	 * @return The property value.
-	 */
-	public final <T> T getProperty(String key, Class<T> type) {
-		return getPropertyWithDefault(key, null, type);
-	}
-
-	/**
-	 * Same as {@link #getProperty(String,Class)} but with a default value.
-	 *
-	 * @param key The property key.
-	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
-	 * @param type The class type of the value.
-	 *
-	 * @return The property value.
-	 */
-	public final <T> T getPropertyWithDefault(String key, T def, Class<T> type) {
+	@SuppressWarnings("unchecked")
+	public final <T> T getProperty(String key, Class<T> type, T def) {
+		if (properties == null)
+			return def;
+		type = (Class<T>)ClassUtils.getWrapperIfPrimitive(type);
 		T t = properties.get(key, type);
-		if (t == null)
-			t = ctx.getPropertyStore().getProperty(key, type, def);
-		return t;
+		return t == null ? def : t;
+	}
+	
+	/**
+	 * Same as {@link #getProperty(String, Class, Object)} but allows for more than one default value.
+	 * 
+	 * @param key The property key.
+	 * @param type The type to convert the property to.
+	 * @param def 
+	 * 	The default values if the session property does not exist or is <jk>null</jk>.
+	 * 	The first non-null value is returned.
+	 * @return The session property.
+	 */
+	@SafeVarargs
+	public final <T> T getProperty(String key, Class<T> type, T...def) {
+		return getProperty(key, type, ObjectUtils.firstNonNull(def));
 	}
 
+	/**
+	 * Returns the session class property with the specified name.
+	 * 
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	@SuppressWarnings("unchecked")
+	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type, Class<? extends T> def) {
+		return getProperty(key, Class.class, def);
+	}
+
+	/**
+	 * Returns an instantiation of the specified class property.
+	 * 
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def 
+	 * 	The default instance or class to instantiate if the property doesn't exist.
+	 * @return A new property instance.
+	 */
+	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
+		return newInstance(type, getProperty(key), def);
+	}
+
+	/**
+	 * Returns the specified property as an array of instantiated objects.
+	 * 
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def The default object to return if the property doesn't exist.
+	 * @return A new property instance.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
+		Object o = getProperty(key);
+		T[] t = null;
+		if (o == null)
+			t = def;
+		else if (o.getClass().isArray()) {
+			if (o.getClass().getComponentType() == type)
+				t = (T[])o;
+			else {
+				t = (T[])Array.newInstance(type, Array.getLength(o));
+				for (int i = 0; i < Array.getLength(o); i++) 
+					t[i] = newInstance(type, Array.get(o, i), null);
+			}
+		} else if (o instanceof Collection) {
+			Collection<?> c = (Collection<?>)o;
+			t = (T[])Array.newInstance(type, c.size());
+			int i = 0;
+			for (Object o2 : c) 
+				t[i++] = newInstance(type, o2, null);
+		}
+		if (t != null)
+			return t;
+		throw new ConfigException("Could not instantiate property ''{0}'' as type {1}", key, type);
+	}
+	
+	/**
+	 * Returns the session properties.
+	 * 
+	 * @return The session properties passed in through the constructor.
+	 */
+	protected ObjectMap getProperties() {
+		return properties;
+	}
+	
+	/**
+	 * Returns the session property keys.
+	 * 
+	 * @return The session property keys passed in through the constructor.
+	 */
+	public Set<String> getPropertyKeys() {
+		return properties.keySet();
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T newInstance(Class<T> type, Object o, Object def) {
+		T t = null;
+		if (o == null) {
+			if (def == null)
+				return null;
+			t = ClassUtils.newInstance(type, def);
+		}
+		else if (type.isInstance(o))
+			t = (T)o;
+		else if (o.getClass() == Class.class)
+			t = ClassUtils.newInstance(type, o);
+		else if (o.getClass() == String.class)
+			t = ClassUtils.fromString(type, o.toString());
+		if (t != null)
+			return t;
+		throw new ConfigException("Could not instantiate type ''{0}'' as type {1}", o, type);
+	}
+	
 	/**
 	 * Adds an arbitrary object to this session's cache.
 	 *

@@ -36,28 +36,25 @@ public class HtmlParser extends XmlParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final HtmlParser DEFAULT = new HtmlParser(PropertyStore.create());
+	public static final HtmlParser DEFAULT = new HtmlParser(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final HtmlParserContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public HtmlParser(PropertyStore propertyStore) {
-		super(propertyStore, "text/html", "text/html+stripped");
-		this.ctx = createContext(HtmlParserContext.class);
+	public HtmlParser(PropertyStore2 ps) {
+		super(ps, "text/html", "text/html+stripped");
 	}
 
 	@Override /* CoreObject */
 	public HtmlParserBuilder builder() {
-		return new HtmlParserBuilder(propertyStore);
+		return new HtmlParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -78,6 +75,12 @@ public class HtmlParser extends XmlParser {
 
 	@Override /* Parser */
 	public HtmlParserSession createSession(ParserSessionArgs args) {
-		return new HtmlParserSession(ctx, args);
+		return new HtmlParserSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlParser", new ObjectMap());
 	}
 }

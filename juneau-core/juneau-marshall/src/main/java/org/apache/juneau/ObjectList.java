@@ -140,7 +140,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 */
 	public ObjectList(CharSequence s, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		try {
@@ -173,7 +173,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectList(Reader r, Parser p) throws ParseException, IOException {
-		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
 		parseReader(r, p);
 	}
 

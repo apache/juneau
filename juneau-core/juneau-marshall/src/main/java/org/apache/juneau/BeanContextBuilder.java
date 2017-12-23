@@ -21,200 +21,79 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Builder class for building instances of serializers and parsers.
+ * Builder class for building instances of serializers, parsers, and bean contexts.
  */
-public abstract class CoreObjectBuilder {
-
-	/** Contains all the modifiable settings for the implementation class. */
-	protected final PropertyStore propertyStore;
+public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Constructor.
-	 * Default settings.
+	 * 
+	 * All default settings.
 	 */
-	public CoreObjectBuilder() {
-		this.propertyStore = PropertyStore.create();
+	public BeanContextBuilder() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The initial configuration settings for this builder.
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	public CoreObjectBuilder(PropertyStore propertyStore) {
-		this.propertyStore = propertyStore.copy();
+	public BeanContextBuilder(PropertyStore2 ps) {
+		super(ps);
 	}
 
-	/**
-	 * Build the object.
-	 *
-	 * @return The built object.
-	 * Subsequent calls to this method will create new instances.
-	 */
-	public abstract CoreObject build();
-
-	/**
-	 * Copies the settings from the specified property store into this builder.
-	 *
-	 * @param copyFrom The factory whose settings are being copied.
-	 * @return This object (for method chaining).
-	 */
-	public CoreObjectBuilder apply(PropertyStore copyFrom) {
-		this.propertyStore.copyFrom(propertyStore);
-		return this;
-	}
-
-	/**
-	 * Build a new instance of the specified object.
-	 *
-	 * @param c The subclass of {@link CoreObject} to instantiate.
-	 * @return A new object using the settings defined in this builder.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends CoreObject> T build(Class<T> c) {
-		return (T)propertyStore.getBeanContext().newInstance(CoreObject.class, c, propertyStore);
+	@Override /* ContextBuilder */
+	public BeanContext build() {
+		return build(BeanContext.class);
 	}
 
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
 
-	/**
-	 * Sets a configuration property on this object.
-	 *
-	 * @param name The property name.
-	 * @param value The property value.
-	 * @return This object (for method chaining).
-	 * @see PropertyStore#setProperty(String, Object)
-	 */
-	public CoreObjectBuilder property(String name, Object value) {
-		propertyStore.setProperty(name, value);
+	@Override /* ContextBuilder */
+	public BeanContextBuilder set(String name, Object value) {
+		super.set(name, value);
 		return this;
 	}
 
-	/**
-	 * Adds multiple configuration properties on this object.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling {@link PropertyStore#addProperties(Map)}.
-	 * 	<li>Any previous properties are kept if they're not overwritten.
-	 * </ul>
-	 *
-	 * @param properties The properties to set on this class.
-	 * @return This object (for method chaining).
-	 * @see PropertyStore#addProperties(java.util.Map)
-	 */
-	public CoreObjectBuilder properties(Map<String,Object> properties) {
-		propertyStore.addProperties(properties);
+	@Override /* ContextBuilder */
+	public BeanContextBuilder set(Map<String,Object> properties) {
+		super.set(properties);
 		return this;
 	}
 
-	/**
-	 * Sets multiple configuration properties on this object.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling {@link PropertyStore#setProperties(Map)}.
-	 * 	<li>Any previous properties are discarded.
-	 * </ul>
-	 *
-	 * @param properties The properties to set on this class.
-	 * @return This object (for method chaining).
-	 * @see PropertyStore#setProperties(java.util.Map)
-	 */
-	public CoreObjectBuilder setProperties(Map<String,Object> properties) {
-		propertyStore.setProperties(properties);
+	@Override /* ContextBuilder */
+	public BeanContextBuilder add(Map<String,Object> properties) {
+		super.add(properties);
 		return this;
 	}
 
-	/**
-	 * Adds a value to a SET property.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>PropertyStore.addToProperty(name, value);</code>.
-	 * </ul>
-	 *
-	 * @param name The property name.
-	 * @param value The new value to add to the SET property.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET property.
-	 */
-	public CoreObjectBuilder addToProperty(String name, Object value) {
-		propertyStore.addToProperty(name, value);
+	@Override /* ContextBuilder */
+	public BeanContextBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
 		return this;
 	}
 
-	/**
-	 * Adds or overwrites a value to a MAP property.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>PropertyStore.putToProperty(name, key, value);</code>.
-	 * </ul>
-	 *
-	 * @param name The property name.
-	 * @param key The property value map key.
-	 * @param value The property value map value.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a MAP property.
-	 */
-	public CoreObjectBuilder putToProperty(String name, Object key, Object value) {
-		propertyStore.putToProperty(name, key, value);
+	@Override /* ContextBuilder */
+	public BeanContextBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 
-	/**
-	 * Adds or overwrites a value to a MAP property.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>PropertyStore.putToProperty(name, value);</code>.
-	 * </ul>
-	 *
-	 * @param name The property value.
-	 * @param value The property value map value.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a MAP property.
-	 */
-	public CoreObjectBuilder putToProperty(String name, Object value) {
-		propertyStore.putToProperty(name, value);
-		return this;
-	}
-
-	/**
-	 * Removes a value from a SET property.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>PropertyStore.removeFromProperty(name, value);</code>.
-	 * </ul>
-	 *
-	 * @param name The property name.
-	 * @param value The property value in the SET property.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET property.
-	 */
-	public CoreObjectBuilder removeFromProperty(String name, Object value) {
-		propertyStore.removeFromProperty(name, value);
+	@Override /* ContextBuilder */
+	public BeanContextBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
 		return this;
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Beans require no-arg constructors.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireDefaultConstructor"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
@@ -232,19 +111,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
 	 */
-	public CoreObjectBuilder beansRequireDefaultConstructor(boolean value) {
-		return property(BEAN_beansRequireDefaultConstructor, value);
+	public BeanContextBuilder beansRequireDefaultConstructor(boolean value) {
+		return set(BEAN_beansRequireDefaultConstructor, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Beans require {@link Serializable} interface.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSerializable"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
@@ -262,19 +134,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beansRequireSerializable
 	 */
-	public CoreObjectBuilder beansRequireSerializable(boolean value) {
-		return property(BEAN_beansRequireSerializable, value);
+	public BeanContextBuilder beansRequireSerializable(boolean value) {
+		return set(BEAN_beansRequireSerializable, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Beans require setters for getters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSettersForGetters"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
@@ -289,19 +154,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beansRequireSettersForGetters
 	 */
-	public CoreObjectBuilder beansRequireSettersForGetters(boolean value) {
-		return property(BEAN_beansRequireSettersForGetters, value);
+	public BeanContextBuilder beansRequireSettersForGetters(boolean value) {
+		return set(BEAN_beansRequireSettersForGetters, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Beans require at least one property.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSomeProperties"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
@@ -319,20 +177,13 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beansRequireSomeProperties
 	 */
-	public CoreObjectBuilder beansRequireSomeProperties(boolean value) {
-		return property(BEAN_beansRequireSomeProperties, value);
+	public BeanContextBuilder beansRequireSomeProperties(boolean value) {
+		return set(BEAN_beansRequireSomeProperties, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * value.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
@@ -351,19 +202,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
 	 */
-	public CoreObjectBuilder beanMapPutReturnsOldValue(boolean value) {
-		return property(BEAN_beanMapPutReturnsOldValue, value);
+	public BeanContextBuilder beanMapPutReturnsOldValue(boolean value) {
+		return set(BEAN_beanMapPutReturnsOldValue, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean constructors with the specified minimum visibility.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Constructors not meeting this minimum visibility will be ignored.
@@ -379,19 +223,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanConstructorVisibility
 	 */
-	public CoreObjectBuilder beanConstructorVisibility(Visibility value) {
-		return property(BEAN_beanConstructorVisibility, value);
+	public BeanContextBuilder beanConstructorVisibility(Visibility value) {
+		return set(BEAN_beanConstructorVisibility, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean classes with the specified minimum visibility.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
@@ -407,19 +244,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanClassVisibility
 	 */
-	public CoreObjectBuilder beanClassVisibility(Visibility value) {
-		return property(BEAN_beanClassVisibility, value);
+	public BeanContextBuilder beanClassVisibility(Visibility value) {
+		return set(BEAN_beanClassVisibility, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean fields with the specified minimum visibility.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
@@ -436,19 +266,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFieldVisibility
 	 */
-	public CoreObjectBuilder beanFieldVisibility(Visibility value) {
-		return property(BEAN_beanFieldVisibility, value);
+	public BeanContextBuilder beanFieldVisibility(Visibility value) {
+		return set(BEAN_beanFieldVisibility, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Look for bean methods with the specified minimum visibility.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility"</js>
-	 * 	<li><b>Data type:</b> {@link Visibility}
-	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
@@ -465,19 +288,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_methodVisibility
 	 */
-	public CoreObjectBuilder methodVisibility(Visibility value) {
-		return property(BEAN_methodVisibility, value);
+	public BeanContextBuilder methodVisibility(Visibility value) {
+		return set(BEAN_methodVisibility, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Use Java {@link Introspector} for determining bean properties.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.useJavaBeanIntrospector"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
@@ -492,19 +308,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_useJavaBeanIntrospector
 	 */
-	public CoreObjectBuilder useJavaBeanIntrospector(boolean value) {
-		return property(BEAN_useJavaBeanIntrospector, value);
+	public BeanContextBuilder useJavaBeanIntrospector(boolean value) {
+		return set(BEAN_useJavaBeanIntrospector, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Use interface proxies.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.useInterfaceProxies"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
@@ -519,19 +328,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_useInterfaceProxies
 	 */
-	public CoreObjectBuilder useInterfaceProxies(boolean value) {
-		return property(BEAN_useInterfaceProxies, value);
+	public BeanContextBuilder useInterfaceProxies(boolean value) {
+		return set(BEAN_useInterfaceProxies, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownBeanProperties"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
@@ -546,19 +348,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_ignoreUnknownBeanProperties
 	 */
-	public CoreObjectBuilder ignoreUnknownBeanProperties(boolean value) {
-		return property(BEAN_ignoreUnknownBeanProperties, value);
+	public BeanContextBuilder ignoreUnknownBeanProperties(boolean value) {
+		return set(BEAN_ignoreUnknownBeanProperties, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Ignore unknown properties with null values.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownNullBeanProperties"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
@@ -573,19 +368,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_ignoreUnknownNullBeanProperties
 	 */
-	public CoreObjectBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		return property(BEAN_ignoreUnknownNullBeanProperties, value);
+	public BeanContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		return set(BEAN_ignoreUnknownNullBeanProperties, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Ignore properties without setters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignorePropertiesWithoutSetters"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
@@ -600,19 +388,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
 	 */
-	public CoreObjectBuilder ignorePropertiesWithoutSetters(boolean value) {
-		return property(BEAN_ignorePropertiesWithoutSetters, value);
+	public BeanContextBuilder ignorePropertiesWithoutSetters(boolean value) {
+		return set(BEAN_ignorePropertiesWithoutSetters, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on getters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnGetters"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
@@ -627,19 +408,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
 	 */
-	public CoreObjectBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		return property(BEAN_ignoreInvocationExceptionsOnGetters, value);
+	public BeanContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Ignore invocation errors on setters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnSetters"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
@@ -654,19 +428,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
 	 */
-	public CoreObjectBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		return property(BEAN_ignoreInvocationExceptionsOnSetters, value);
+	public BeanContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Sort bean properties in alphabetical order.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.sortProperties"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
@@ -688,29 +455,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_sortProperties
 	 */
-	public CoreObjectBuilder sortProperties(boolean value) {
-		return property(BEAN_sortProperties, value);
+	public BeanContextBuilder sortProperties(boolean value) {
+		return set(BEAN_sortProperties, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanPackages.set"</js>
-	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
-	 * 	<li><b>Default:</b>
-	 * 	<ul>
-	 * 		<li><code>java.lang</code>
-	 * 		<li><code>java.lang.annotation</code>
-	 * 		<li><code>java.lang.ref</code>
-	 * 		<li><code>java.lang.reflect</code>
-	 * 		<li><code>java.io</code>
-	 * 		<li><code>java.net</code>
-	 * 		<li><code>java.nio.*</code>
-	 * 		<li><code>java.util.*</code>
-	 * 	</ul>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
@@ -730,8 +480,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
-	public CoreObjectBuilder setNotBeanPackages(String...values) {
-		return property(BEAN_notBeanPackages, values);
+	public BeanContextBuilder setNotBeanPackages(String...values) {
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -743,8 +493,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
-	public CoreObjectBuilder setNotBeanPackages(Collection<String> values) {
-		return property(BEAN_notBeanPackages, values);
+	public BeanContextBuilder setNotBeanPackages(Collection<String> values) {
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -760,8 +510,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
-	public CoreObjectBuilder notBeanPackages(String...values) {
-		return addToProperty(BEAN_notBeanPackages, values);
+	public BeanContextBuilder notBeanPackages(String...values) {
+		return addTo(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -774,8 +524,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
-	public CoreObjectBuilder notBeanPackages(Collection<String> values) {
-		return addToProperty(BEAN_notBeanPackages, values);
+	public BeanContextBuilder notBeanPackages(Collection<String> values) {
+		return addTo(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -792,8 +542,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages
 	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
-	public CoreObjectBuilder removeNotBeanPackages(String...values) {
-		return removeFromProperty(BEAN_notBeanPackages, values);
+	public BeanContextBuilder removeNotBeanPackages(String...values) {
+		return removeFrom(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -807,19 +557,12 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages
 	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
-	public CoreObjectBuilder removeNotBeanPackages(Collection<String> values) {
-		return removeFromProperty(BEAN_notBeanPackages, values);
+	public BeanContextBuilder removeNotBeanPackages(Collection<String> values) {
+		return removeFrom(BEAN_notBeanPackages, values);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanClasses.set"</js>
-	 * 	<li><b>Data type:</b> <code>Set&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b> empty set
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
@@ -834,8 +577,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanClasses
 	 */
-	public CoreObjectBuilder setNotBeanClasses(Class<?>...values) {
-		return property(BEAN_notBeanClasses, values);
+	public BeanContextBuilder setNotBeanClasses(Class<?>...values) {
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -848,8 +591,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
-	public CoreObjectBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		return property(BEAN_notBeanClasses, values);
+	public BeanContextBuilder setNotBeanClasses(Collection<Class<?>> values) {
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -866,8 +609,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
-	public CoreObjectBuilder notBeanClasses(Class<?>...values) {
-		return addToProperty(BEAN_notBeanClasses, values);
+	public BeanContextBuilder notBeanClasses(Class<?>...values) {
+		return addTo(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -881,8 +624,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
-	public CoreObjectBuilder notBeanClasses(Collection<Class<?>> values) {
-		return addToProperty(BEAN_notBeanClasses, values);
+	public BeanContextBuilder notBeanClasses(Collection<Class<?>> values) {
+		return addTo(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -899,8 +642,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
-	public CoreObjectBuilder removeNotBeanClasses(Class<?>...values) {
-		return removeFromProperty(BEAN_notBeanClasses, values);
+	public BeanContextBuilder removeNotBeanClasses(Class<?>...values) {
+		return removeFrom(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -914,19 +657,12 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
-	public CoreObjectBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		return removeFromProperty(BEAN_notBeanClasses, values);
+	public BeanContextBuilder removeNotBeanClasses(Collection<Class<?>> values) {
+		return removeFrom(BEAN_notBeanClasses, values);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Bean filters to apply to beans.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanFilters.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
@@ -955,8 +691,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters
 	 */
-	public CoreObjectBuilder setBeanFilters(Class<?>...values) {
-		return property(BEAN_beanFilters, values);
+	public BeanContextBuilder setBeanFilters(Class<?>...values) {
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -969,8 +705,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters
 	 */
-	public CoreObjectBuilder setBeanFilters(Collection<Class<?>> values) {
-		return property(BEAN_beanFilters, values);
+	public BeanContextBuilder setBeanFilters(Collection<Class<?>> values) {
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -987,8 +723,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public CoreObjectBuilder beanFilters(Class<?>...values) {
-		return addToProperty(BEAN_beanFilters, values);
+	public BeanContextBuilder beanFilters(Class<?>...values) {
+		return addTo(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -1002,8 +738,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public CoreObjectBuilder beanFilters(Collection<Class<?>> values) {
-		return addToProperty(BEAN_beanFilters, values);
+	public BeanContextBuilder beanFilters(Collection<Class<?>> values) {
+		return addTo(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -1020,8 +756,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
-	public CoreObjectBuilder removeBeanFilters(Class<?>...values) {
-		return removeFromProperty(BEAN_beanFilters, values);
+	public BeanContextBuilder removeBeanFilters(Class<?>...values) {
+		return removeFrom(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -1035,19 +771,12 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
-	public CoreObjectBuilder removeBeanFilters(Collection<Class<?>> values) {
-		return removeFromProperty(BEAN_beanFilters, values);
+	public BeanContextBuilder removeBeanFilters(Collection<Class<?>> values) {
+		return removeFrom(BEAN_beanFilters, values);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.pojoSwaps.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
@@ -1065,8 +794,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps
 	 */
-	public CoreObjectBuilder setPojoSwaps(Class<?>...values) {
-		return property(BEAN_pojoSwaps, values);
+	public BeanContextBuilder setPojoSwaps(Class<?>...values) {
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1079,8 +808,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps
 	 */
-	public CoreObjectBuilder setPojoSwaps(Collection<Class<?>> values) {
-		return property(BEAN_pojoSwaps, values);
+	public BeanContextBuilder setPojoSwaps(Collection<Class<?>> values) {
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1097,8 +826,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public CoreObjectBuilder pojoSwaps(Class<?>...values) {
-		return addToProperty(BEAN_pojoSwaps, values);
+	public BeanContextBuilder pojoSwaps(Class<?>...values) {
+		return addTo(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1112,8 +841,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public CoreObjectBuilder pojoSwaps(Collection<Class<?>> values) {
-		return addToProperty(BEAN_pojoSwaps, values);
+	public BeanContextBuilder pojoSwaps(Collection<Class<?>> values) {
+		return addTo(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1130,8 +859,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
-	public CoreObjectBuilder removePojoSwaps(Class<?>...values) {
-		return removeFromProperty(BEAN_pojoSwaps, values);
+	public BeanContextBuilder removePojoSwaps(Class<?>...values) {
+		return removeFrom(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1145,19 +874,12 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
-	public CoreObjectBuilder removePojoSwaps(Collection<Class<?>> values) {
-		return removeFromProperty(BEAN_pojoSwaps, values);
+	public BeanContextBuilder removePojoSwaps(Collection<Class<?>> values) {
+		return removeFrom(BEAN_pojoSwaps, values);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.map"</js>
-	 * 	<li><b>Data type:</b> <code>Map&lt;Class,Class&gt;</code>
-	 * 	<li><b>Default:</b> empty map
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
@@ -1173,8 +895,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_implClasses
 	 */
-	public CoreObjectBuilder implClasses(Map<Class<?>,Class<?>> values) {
-		return property(BEAN_implClasses, values);
+	public BeanContextBuilder implClasses(Map<String,Class<?>> values) {
+		return set(BEAN_implClasses, values);
 	}
 
 	/**
@@ -1191,21 +913,13 @@ public abstract class CoreObjectBuilder {
 	 * @param <I> The class type of the interface.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_implClasses
-	 * @see BeanContext#BEAN_implClasses_put
 	 */
-	public <I> CoreObjectBuilder implClass(Class<I> interfaceClass, Class<? extends I> implClass) {
-		return putToProperty(BEAN_implClasses, interfaceClass, implClass);
+	public <I> BeanContextBuilder implClass(Class<I> interfaceClass, Class<? extends I> implClass) {
+		return addTo(BEAN_implClasses, interfaceClass.getName(), implClass);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties"</js>
-	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b> <code>{}</code>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Specifies to only include the specified list of properties for the specified bean classes.
@@ -1228,8 +942,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_includeProperties
 	 */
-	public CoreObjectBuilder includeProperties(Map<String,String> values) {
-		return property(BEAN_includeProperties, values);
+	public BeanContextBuilder includeProperties(Map<String,String> values) {
+		return set(BEAN_includeProperties, values);
 	}
 
 	/**
@@ -1245,10 +959,9 @@ public abstract class CoreObjectBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_includeProperties
-	 * @see BeanContext#BEAN_includeProperties_put
 	 */
-	public CoreObjectBuilder includeProperties(String beanClassName, String properties) {
-		return putToProperty(BEAN_includeProperties, beanClassName, properties);
+	public BeanContextBuilder includeProperties(String beanClassName, String properties) {
+		return addTo(BEAN_includeProperties, beanClassName, properties);
 	}
 
 	/**
@@ -1264,21 +977,13 @@ public abstract class CoreObjectBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_includeProperties
-	 * @see BeanContext#BEAN_includeProperties_put
 	 */
-	public CoreObjectBuilder includeProperties(Class<?> beanClass, String properties) {
-		return putToProperty(BEAN_includeProperties, beanClass.getName(), properties);
+	public BeanContextBuilder includeProperties(Class<?> beanClass, String properties) {
+		return addTo(BEAN_includeProperties, beanClass.getName(), properties);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties"</js>
-	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b> <code>{}</code>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
@@ -1301,8 +1006,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_excludeProperties
 	 */
-	public CoreObjectBuilder excludeProperties(Map<String,String> values) {
-		return property(BEAN_excludeProperties, values);
+	public BeanContextBuilder excludeProperties(Map<String,String> values) {
+		return set(BEAN_excludeProperties, values);
 	}
 
 	/**
@@ -1318,10 +1023,9 @@ public abstract class CoreObjectBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_excludeProperties
-	 * @see BeanContext#BEAN_excludeProperties_put
 	 */
-	public CoreObjectBuilder excludeProperties(String beanClassName, String properties) {
-		return putToProperty(BEAN_excludeProperties, beanClassName, properties);
+	public BeanContextBuilder excludeProperties(String beanClassName, String properties) {
+		return addTo(BEAN_excludeProperties, beanClassName, properties);
 	}
 
 	/**
@@ -1337,21 +1041,13 @@ public abstract class CoreObjectBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_excludeProperties
-	 * @see BeanContext#BEAN_excludeProperties_put
 	 */
-	public CoreObjectBuilder excludeProperties(Class<?> beanClass, String properties) {
-		return putToProperty(BEAN_excludeProperties, beanClass.getName(), properties);
+	public BeanContextBuilder excludeProperties(Class<?> beanClass, String properties) {
+		return addTo(BEAN_excludeProperties, beanClass.getName(), properties);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * This list can consist of the following class types:
@@ -1372,8 +1068,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
-	public CoreObjectBuilder setBeanDictionary(Class<?>...values) {
-		return property(BEAN_beanDictionary, values);
+	public BeanContextBuilder setBeanDictionary(Class<?>...values) {
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1386,8 +1082,8 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
-	public CoreObjectBuilder setBeanDictionary(Collection<Class<?>> values) {
-		return property(BEAN_beanDictionary, values);
+	public BeanContextBuilder setBeanDictionary(Collection<Class<?>> values) {
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1404,8 +1100,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
-	public CoreObjectBuilder beanDictionary(Class<?>...values) {
-		return addToProperty(BEAN_beanDictionary, values);
+	public BeanContextBuilder beanDictionary(Class<?>...values) {
+		return addTo(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1419,8 +1115,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
-	public CoreObjectBuilder beanDictionary(Collection<Class<?>> values) {
-		return addToProperty(BEAN_beanDictionary, values);
+	public BeanContextBuilder beanDictionary(Collection<Class<?>> values) {
+		return addTo(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1437,8 +1133,8 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
-	public CoreObjectBuilder removeFromBeanDictionary(Class<?>...values) {
-		return removeFromProperty(BEAN_beanDictionary, values);
+	public BeanContextBuilder removeFromBeanDictionary(Class<?>...values) {
+		return removeFrom(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1452,19 +1148,12 @@ public abstract class CoreObjectBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
-	public CoreObjectBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		return removeFromProperty(BEAN_beanDictionary, values);
+	public BeanContextBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
+		return removeFrom(BEAN_beanDictionary, values);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Name to use for the bean type properties used to represent a bean type.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.beanTypePropertyName"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"_type"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1475,19 +1164,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanTypePropertyName
 	 */
-	public CoreObjectBuilder beanTypePropertyName(String value) {
-		return property(BEAN_beanTypePropertyName, value);
+	public BeanContextBuilder beanTypePropertyName(String value) {
+		return set(BEAN_beanTypePropertyName, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Default parser to use when converting <code>Strings</code> to POJOs.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.defaultParser"</js>
-	 * 	<li><b>Data type:</b> <code>Class</code>
-	 * 	<li><b>Default:</b> {@link JsonSerializer}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
@@ -1501,19 +1183,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_defaultParser
 	 */
-	public CoreObjectBuilder defaultParser(Class<?> value) {
-		return property(BEAN_defaultParser, value);
+	public BeanContextBuilder defaultParser(Class<?> value) {
+		return set(BEAN_defaultParser, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Locale.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.locale"</js>
-	 * 	<li><b>Data type:</b> <code>Locale</code>
-	 * 	<li><b>Default:</b> <code>Locale.getDefault()</code>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1524,19 +1199,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_locale
 	 */
-	public CoreObjectBuilder locale(Locale value) {
-		return property(BEAN_locale, value);
+	public BeanContextBuilder locale(Locale value) {
+		return set(BEAN_locale, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  TimeZone.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.timeZone"</js>
-	 * 	<li><b>Data type:</b> <code>TimeZone</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1547,19 +1215,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_timeZone
 	 */
-	public CoreObjectBuilder timeZone(TimeZone value) {
-		return property(BEAN_timeZone, value);
+	public BeanContextBuilder timeZone(TimeZone value) {
+		return set(BEAN_timeZone, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Media type.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.mediaType"</js>
-	 * 	<li><b>Data type:</b> <code>MediaType</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
@@ -1573,19 +1234,12 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_mediaType
 	 */
-	public CoreObjectBuilder mediaType(MediaType value) {
-		return property(BEAN_mediaType, value);
+	public BeanContextBuilder mediaType(MediaType value) {
+		return set(BEAN_mediaType, value);
 	}
 	
 	/**
 	 * <b>Configuration property:</b>  Debug mode.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.debug"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Enables the following additional information during serialization:
@@ -1613,19 +1267,13 @@ public abstract class CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_debug
 	 */
-	public CoreObjectBuilder debug() {
-		return property(BEAN_debug, true);
+	public BeanContextBuilder debug() {
+		return set(BEAN_debug, true);
 	}
 
-	/**
-	 * Sets the classloader used for created classes from class strings.
-	 *
-	 * @param classLoader The new classloader.
-	 * @return This object (for method chaining).
-	 * @see PropertyStore#setClassLoader(ClassLoader)
-	 */
-	public CoreObjectBuilder classLoader(ClassLoader classLoader) {
-		propertyStore.setClassLoader(classLoader);
+	@Override /* ContextBuilder */
+	public BeanContextBuilder apply(PropertyStore2 copyFrom) {
+		super.apply(copyFrom);
 		return this;
 	}
 }

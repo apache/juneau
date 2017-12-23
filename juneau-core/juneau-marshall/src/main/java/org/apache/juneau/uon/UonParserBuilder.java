@@ -19,7 +19,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Builder class for building instances of UON parsers.
@@ -36,15 +35,15 @@ public class UonParserBuilder extends ParserBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The initial configuration settings for this builder.
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	public UonParserBuilder(PropertyStore propertyStore) {
-		super(propertyStore);
+	public UonParserBuilder(PropertyStore2 ps) {
+		super(ps);
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParser build() {
-		return new UonParser(propertyStore);
+		return build(UonParser.class);
 	}
 
 
@@ -54,13 +53,6 @@ public class UonParserBuilder extends ParserBuilder {
 
 	/**
 	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 *
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
@@ -76,7 +68,7 @@ public class UonParserBuilder extends ParserBuilder {
 	 * @see UonParser#UON_decodeChars
 	 */
 	public UonParserBuilder decodeChars(boolean value) {
-		return property(UON_decodeChars, value);
+		return set(UON_decodeChars, value);
 	}
 
 	/**
@@ -124,380 +116,374 @@ public class UonParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setNotBeanPackages(String...values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setNotBeanPackages(Collection<String> values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeNotBeanPackages(String...values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeNotBeanPackages(Collection<String> values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setNotBeanClasses(Class<?>...values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setNotBeanClasses(Collection<Class<?>> values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeNotBeanClasses(Class<?>...values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeNotBeanClasses(Collection<Class<?>> values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setBeanFilters(Class<?>...values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setBeanFilters(Collection<Class<?>> values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeBeanFilters(Class<?>...values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeBeanFilters(Collection<Class<?>> values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setPojoSwaps(Class<?>...values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setPojoSwaps(Collection<Class<?>> values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removePojoSwaps(Class<?>...values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removePojoSwaps(Collection<Class<?>> values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder implClasses(Map<Class<?>,Class<?>> values) {
+	@Override /* ContextBuilder */
+	public UonParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public <T> UonParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setBeanDictionary(Class<?>...values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder setBeanDictionary(Collection<Class<?>> values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeFromBeanDictionary(Class<?>...values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public UonParserBuilder debug() {
 		super.debug();
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder property(String name, Object value) {
-		super.property(name, value);
+	@Override /* ContextBuilder */
+	public UonParserBuilder set(String name, Object value) {
+		super.set(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder properties(Map<String,Object> properties) {
-		super.properties(properties);
+	@Override /* ContextBuilder */
+	public UonParserBuilder set(Map<String,Object> properties) {
+		super.set(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder addToProperty(String name, Object value) {
-		super.addToProperty(name, value);
+	@Override /* ContextBuilder */
+	public UonParserBuilder add(Map<String,Object> properties) {
+		super.add(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder putToProperty(String name, Object key, Object value) {
-		super.putToProperty(name, key, value);
+	@Override /* ContextBuilder */
+	public UonParserBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder putToProperty(String name, Object value) {
-		super.putToProperty(name, value);
+	@Override /* ContextBuilder */
+	public UonParserBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder removeFromProperty(String name, Object value) {
-		super.removeFromProperty(name, value);
+	@Override /* ContextBuilder */
+	public UonParserBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder classLoader(ClassLoader classLoader) {
-		super.classLoader(classLoader);
-		return this;
-	}
-
-	@Override /* CoreObjectBuilder */
-	public UonParserBuilder apply(PropertyStore copyFrom) {
+	@Override /* ContextBuilder */
+	public UonParserBuilder apply(PropertyStore2 copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

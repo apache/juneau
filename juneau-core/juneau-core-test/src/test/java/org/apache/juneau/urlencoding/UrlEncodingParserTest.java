@@ -25,7 +25,7 @@ import org.junit.*;
 public class UrlEncodingParserTest {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;
-	static BeanSession bs = p.getBeanContext().createSession();
+	static BeanSession bs = p.createBeanSession();
 
 	//====================================================================================================
 	// Basic test

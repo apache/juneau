@@ -17,18 +17,23 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.plaintext.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
 public class ReaderFilterTest {
 
 	//====================================================================================================
-	// test
+	// testJson
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
-		JsonSerializerBuilder s = JsonSerializer.create().simple().pojoSwaps(ReaderSwap.Json.class);
+	public void testJson() throws Exception {
+		JsonSerializer s = JsonSerializer.create().simple().pojoSwaps(ReaderSwap.Json.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -36,12 +41,86 @@ public class ReaderFilterTest {
 		r = new StringReader("{foo:'bar',baz:'quz'}");
 		m = new HashMap<String,Object>();
 		m.put("X", r);
-		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.build().serialize(m));
+		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
+	}
 
-		s.pojoSwaps(ReaderSwap.Xml.class);
+	//====================================================================================================
+	// testXml
+	//====================================================================================================
+	@Test
+	public void testXml() throws Exception {
+		XmlSerializer s = XmlSerializer.create().sq().pojoSwaps(ReaderSwap.Xml.class).build();
+
+		Reader r;
+		Map<String,Object> m;
+
 		r = new StringReader("<object><foo _type='string'>bar</foo><baz _type='string'>quz</baz></object>");
 		m = new HashMap<String,Object>();
 		m.put("X", r);
-		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.build().serialize(m));
+		assertEquals("<object><X _type='object'><foo>bar</foo><baz>quz</baz></X></object>", s.serialize(m));
+	}
+	
+	//====================================================================================================
+	// testHtml
+	//====================================================================================================
+	@Test
+	public void testHtml() throws Exception {
+		HtmlSerializer s = HtmlSerializer.create().sq().pojoSwaps(ReaderSwap.Html.class).build();
+
+		Reader r;
+		Map<String,Object> m;
+		
+		r = new StringReader("<table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table>");
+		m = new HashMap<String,Object>();
+		m.put("X", r);
+		assertEquals("<table><tr><td>X</td><td><table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table></td></tr></table>", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testPlainText
+	//====================================================================================================
+	@Test
+	public void testPlainText() throws Exception {
+		PlainTextSerializer s = PlainTextSerializer.create().pojoSwaps(ReaderSwap.PlainText.class).build();
+
+		Reader r;
+		Map<String,Object> m;
+		
+		r = new StringReader("{foo:'bar',baz:'quz'}");
+		m = new HashMap<String,Object>();
+		m.put("X", r);
+		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testUon
+	//====================================================================================================
+	@Test
+	public void testUon() throws Exception {
+		UonSerializer s = UonSerializer.create().pojoSwaps(ReaderSwap.Uon.class).build();
+
+		Reader r;
+		Map<String,Object> m;
+		
+		r = new StringReader("(foo=bar,baz=quz)");
+		m = new HashMap<String,Object>();
+		m.put("X", r);
+		assertEquals("(X=(foo=bar,baz=quz))", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testUrlEncoding
+	//====================================================================================================
+	@Test
+	public void testUrlEncoding() throws Exception {
+		UrlEncodingSerializer s = UrlEncodingSerializer.create().pojoSwaps(ReaderSwap.PlainText.class).build();
+
+		Reader r;
+		Map<String,Object> m;
+		
+		r = new StringReader("foo=bar&baz=quz");
+		m = new HashMap<String,Object>();
+		m.put("X", r);
+		assertEquals("X='foo=bar%26baz=quz'", s.serialize(m));
 	}
 }

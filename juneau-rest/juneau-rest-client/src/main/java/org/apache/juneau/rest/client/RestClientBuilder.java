@@ -53,7 +53,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Builder class for the {@link RestClient} class.
  */
-public class RestClientBuilder extends CoreObjectBuilder {
+public class RestClientBuilder extends BeanContextBuilder {
 
 	private HttpClientConnectionManager httpClientConnectionManager;
 	private HttpClientBuilder httpClientBuilder = createHttpClientBuilder();
@@ -121,31 +121,33 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The initial configuration settings for this builder.
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	public RestClientBuilder(PropertyStore propertyStore) {
-		super(propertyStore);
+	public RestClientBuilder(PropertyStore2 ps) {
+		super(ps);
 	}
 
 	@SuppressWarnings("resource")
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClient build() {
 		try {
 			CloseableHttpClient httpClient = this.httpClient;
 			if (httpClient == null)
 				httpClient = createHttpClient();
+			
+			PropertyStore2 ps = psb.build();
 
 			Serializer s =
 				this.serializer != null
-				? this.serializer.builder().apply(propertyStore).build()
-				: new SerializerBuilder(propertyStore).build(this.serializerClass);
+				? this.serializer.builder().apply(ps).build()
+				: new SerializerBuilder(ps).build(this.serializerClass);
 
 			Parser p =
 				this.parser != null
-				? this.parser.builder().apply(propertyStore).build()
-				: new ParserBuilder(propertyStore).build(this.parserClass);
+				? this.parser.builder().apply(ps).build()
+				: new ParserBuilder(ps).build(this.parserClass);
 
-			UrlEncodingSerializer us = new SerializerBuilder(propertyStore).build(UrlEncodingSerializer.class);
+			UrlEncodingSerializer us = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
 
 			PartSerializer pf = null;
 			if (partSerializer != null)
@@ -157,7 +159,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 					pf = partSerializerClass.newInstance();
 			}
 
-			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, pf, headers, intercepters, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
+			return new RestClient(ps, httpClient, keepHttpClientOpen, s, p, us, pf, headers, intercepters, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -918,7 +920,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public RestClientBuilder maxDepth(int value) {
-		return property(SERIALIZER_maxDepth, value);
+		return set(SERIALIZER_maxDepth, value);
 	}
 
 	/**
@@ -929,7 +931,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_initialDepth
 	 */
 	public RestClientBuilder initialDepth(int value) {
-		return property(SERIALIZER_initialDepth, value);
+		return set(SERIALIZER_initialDepth, value);
 	}
 
 	/**
@@ -940,7 +942,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
 	public RestClientBuilder detectRecursions(boolean value) {
-		return property(SERIALIZER_detectRecursions, value);
+		return set(SERIALIZER_detectRecursions, value);
 	}
 
 	/**
@@ -951,7 +953,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 */
 	public RestClientBuilder ignoreRecursions(boolean value) {
-		return property(SERIALIZER_ignoreRecursions, value);
+		return set(SERIALIZER_ignoreRecursions, value);
 	}
 
 	/**
@@ -962,7 +964,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
 	public RestClientBuilder useWhitespace(boolean value) {
-		return property(SERIALIZER_useWhitespace, value);
+		return set(SERIALIZER_useWhitespace, value);
 	}
 
 	/**
@@ -973,7 +975,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public RestClientBuilder maxIndent(boolean value) {
-		return property(SERIALIZER_maxIndent, value);
+		return set(SERIALIZER_maxIndent, value);
 	}
 
 	/**
@@ -984,7 +986,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
 	public RestClientBuilder addBeanTypeProperties(boolean value) {
-		return property(SERIALIZER_addBeanTypeProperties, value);
+		return set(SERIALIZER_addBeanTypeProperties, value);
 	}
 
 	/**
@@ -995,7 +997,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_quoteChar
 	 */
 	public RestClientBuilder quoteChar(char value) {
-		return property(SERIALIZER_quoteChar, value);
+		return set(SERIALIZER_quoteChar, value);
 	}
 
 	/**
@@ -1006,7 +1008,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_trimNullProperties
 	 */
 	public RestClientBuilder trimNullProperties(boolean value) {
-		return property(SERIALIZER_trimNullProperties, value);
+		return set(SERIALIZER_trimNullProperties, value);
 	}
 
 	/**
@@ -1017,7 +1019,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 */
 	public RestClientBuilder trimEmptyCollections(boolean value) {
-		return property(SERIALIZER_trimEmptyCollections, value);
+		return set(SERIALIZER_trimEmptyCollections, value);
 	}
 
 	/**
@@ -1028,7 +1030,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 */
 	public RestClientBuilder trimEmptyMaps(boolean value) {
-		return property(SERIALIZER_trimEmptyMaps, value);
+		return set(SERIALIZER_trimEmptyMaps, value);
 	}
 
 	/**
@@ -1039,7 +1041,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_trimStrings
 	 */
 	public RestClientBuilder trimStrings(boolean value) {
-		return property(SERIALIZER_trimStrings, value);
+		return set(SERIALIZER_trimStrings, value);
 	}
 
 	/**
@@ -1050,7 +1052,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_uriContext
 	 */
 	public RestClientBuilder uriContext(UriContext value) {
-		return property(SERIALIZER_uriContext, value);
+		return set(SERIALIZER_uriContext, value);
 	}
 
 	/**
@@ -1061,7 +1063,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_uriResolution
 	 */
 	public RestClientBuilder uriResolution(UriResolution value) {
-		return property(SERIALIZER_uriResolution, value);
+		return set(SERIALIZER_uriResolution, value);
 	}
 
 	/**
@@ -1072,7 +1074,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_uriRelativity
 	 */
 	public RestClientBuilder uriRelativity(UriRelativity value) {
-		return property(SERIALIZER_uriRelativity, value);
+		return set(SERIALIZER_uriRelativity, value);
 	}
 
 	/**
@@ -1083,7 +1085,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_sortCollections
 	 */
 	public RestClientBuilder sortCollections(boolean value) {
-		return property(SERIALIZER_sortCollections, value);
+		return set(SERIALIZER_sortCollections, value);
 	}
 
 	/**
@@ -1094,7 +1096,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public RestClientBuilder sortMaps(boolean value) {
-		return property(SERIALIZER_sortMaps, value);
+		return set(SERIALIZER_sortMaps, value);
 	}
 
 	/**
@@ -1105,7 +1107,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_abridged
 	 */
 	public RestClientBuilder abridged(boolean value) {
-		return property(SERIALIZER_abridged, value);
+		return set(SERIALIZER_abridged, value);
 	}
 
 	/**
@@ -1118,8 +1120,8 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Serializer#SERIALIZER_abridged
 	 */
 	public RestClientBuilder listeners(Class<? extends SerializerListener> sl, Class<? extends ParserListener> pl) {
-		property(SERIALIZER_listener, sl);
-		property(PARSER_listener, pl);
+		set(SERIALIZER_listener, sl);
+		set(PARSER_listener, pl);
 		return this;
 	}
 
@@ -1131,7 +1133,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Parser#PARSER_trimStrings
 	 */
 	public RestClientBuilder trimStringsP(boolean value) {
-		return property(PARSER_trimStrings, value);
+		return set(PARSER_trimStrings, value);
 	}
 
 	/**
@@ -1142,7 +1144,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Parser#PARSER_strict
 	 */
 	public RestClientBuilder strict(boolean value) {
-		return property(PARSER_strict, value);
+		return set(PARSER_strict, value);
 	}
 
 	/**
@@ -1153,7 +1155,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Parser#PARSER_inputStreamCharset
 	 */
 	public RestClientBuilder inputStreamCharset(String value) {
-		return property(PARSER_inputStreamCharset, value);
+		return set(PARSER_inputStreamCharset, value);
 	}
 
 	/**
@@ -1164,7 +1166,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see Parser#PARSER_fileCharset
 	 */
 	public RestClientBuilder fileCharset(String value) {
-		return property(PARSER_fileCharset, value);
+		return set(PARSER_fileCharset, value);
 	}
 
 	/**
@@ -1193,7 +1195,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @see UonSerializer#UON_paramFormat
 	 */
 	public RestClientBuilder paramFormat(String value) {
-		super.property(UON_paramFormat, value);
+		super.set(UON_paramFormat, value);
 		return this;
 	}
 
@@ -1220,371 +1222,371 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder plainTextParts() {
-		super.property(UON_paramFormat, "PLAINTEXT");
+		super.set(UON_paramFormat, "PLAINTEXT");
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setNotBeanPackages(String...values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setNotBeanPackages(Collection<String> values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeNotBeanPackages(String...values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeNotBeanPackages(Collection<String> values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setNotBeanClasses(Class<?>...values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setNotBeanClasses(Collection<Class<?>> values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeNotBeanClasses(Class<?>...values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeNotBeanClasses(Collection<Class<?>> values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setBeanFilters(Class<?>...values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setBeanFilters(Collection<Class<?>> values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeBeanFilters(Class<?>...values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeBeanFilters(Collection<Class<?>> values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setPojoSwaps(Class<?>...values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setPojoSwaps(Collection<Class<?>> values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removePojoSwaps(Class<?>...values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removePojoSwaps(Collection<Class<?>> values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder implClasses(Map<Class<?>,Class<?>> values) {
+	@Override /* ContextBuilder */
+	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public <T> RestClientBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder includeProperties(String beanClassName, String properties) {
 		super.includeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder includeProperties(Class<?> beanClass, String properties) {
 		super.includeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder excludeProperties(String beanClassName, String properties) {
 		super.excludeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setBeanDictionary(Class<?>...values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder setBeanDictionary(Collection<Class<?>> values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeFromBeanDictionary(Class<?>...values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RestClientBuilder debug() {
 		super.debug();
 		this.debug = true;
@@ -1592,51 +1594,39 @@ public class RestClientBuilder extends CoreObjectBuilder {
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder property(String name, Object value) {
-		super.property(name, value);
+	@Override /* ContextBuilder */
+	public RestClientBuilder set(String name, Object value) {
+		super.set(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder properties(Map<String,Object> properties) {
-		super.properties(properties);
+	@Override /* ContextBuilder */
+	public RestClientBuilder set(Map<String,Object> properties) {
+		super.set(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder addToProperty(String name, Object value) {
-		super.addToProperty(name, value);
+	@Override /* ContextBuilder */
+	public RestClientBuilder add(Map<String,Object> properties) {
+		super.add(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder putToProperty(String name, Object key, Object value) {
-		super.putToProperty(name, key, value);
+	@Override /* ContextBuilder */
+	public RestClientBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder putToProperty(String name, Object value) {
-		super.putToProperty(name, value);
+	@Override /* ContextBuilder */
+	public RestClientBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder removeFromProperty(String name, Object value) {
-		super.removeFromProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder classLoader(ClassLoader classLoader) {
-		super.classLoader(classLoader);
-		return this;
-	}
-
-	@Override /* CoreObjectBuilder */
-	public RestClientBuilder apply(PropertyStore copyFrom) {
-		super.apply(copyFrom);
+	@Override /* ContextBuilder */
+	public RestClientBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
 		return this;
 	}
 

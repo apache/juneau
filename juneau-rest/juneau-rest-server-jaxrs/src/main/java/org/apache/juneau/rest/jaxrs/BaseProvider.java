@@ -57,14 +57,14 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 				.append(jp.serializers())
 				.beanFilters(jp.beanFilters())
 				.pojoSwaps(jp.pojoSwaps())
-				.properties(properties)
+				.set(properties)
 				.build();
 
 			parsers = ParserGroup.create()
 				.append(jp.parsers())
 				.beanFilters(jp.beanFilters())
 				.pojoSwaps(jp.pojoSwaps())
-				.properties(properties)
+				.set(properties)
 				.build();
 
 		} catch (Exception e) {
@@ -146,7 +146,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			TimeZone timeZone = getTimeZone(headers);
 			ParserSession session = p.createSession(new ParserSessionArgs(mp, null, locale, timeZone, pm.getMediaType(), null));
 			Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
-			return session.parse(in2, p.getBeanContext().getClassMeta(gType));
+			return session.parse(in2, p.getClassMeta(gType));
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}

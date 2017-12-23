@@ -24,12 +24,12 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
+	 * 	The parser creating this session object.
+	 * 	The parser contains all the configuration settings for this object.
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected ReaderParserSession(ParserContext ctx, ParserSessionArgs args) {
+	protected ReaderParserSession(Parser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 	}
 
@@ -40,7 +40,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * 	Runtime session arguments.
 	 */
 	protected ReaderParserSession(ParserSessionArgs args) {
-		this(null, args);
+		super(args);
 	}
 
 

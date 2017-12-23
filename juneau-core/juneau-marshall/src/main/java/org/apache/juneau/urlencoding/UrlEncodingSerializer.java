@@ -154,7 +154,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	 * 		is added to it.
 	 * </ul>
 	 */
-	public static final String URLENC_expandedParams = PREFIX + "expandedParams";
+	public static final String URLENC_expandedParams = PREFIX + "expandedParams.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -162,16 +162,16 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
-	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(PropertyStore.create());
+	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(PropertyStore2.DEFAULT);
 
 	/** Reusable instance of {@link UrlEncodingSerializer.PlainText}. */
-	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(PropertyStore.create());
+	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(PropertyStore2.DEFAULT);
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Expanded}. */
-	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(PropertyStore.create());
+	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(PropertyStore2.DEFAULT);
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
-	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(PropertyStore.create());
+	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -186,10 +186,10 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Expanded(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(URLENC_expandedParams, true));
+		public Expanded(PropertyStore2 ps) {
+			super(ps.builder().set(URLENC_expandedParams, true).build());
 		}
 	}
 
@@ -201,10 +201,10 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(SERIALIZER_useWhitespace, true));
+		public Readable(PropertyStore2 ps) {
+			super(ps.builder().set(SERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -216,10 +216,10 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public PlainText(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(UON_paramFormat, "PLAINTEXT"));
+		public PlainText(PropertyStore2 ps) {
+			super(ps.builder().set(UON_paramFormat, "PLAINTEXT").build());
 		}
 	}
 
@@ -228,22 +228,23 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final UrlEncodingSerializerContext ctx;
+	final boolean
+		expandedParams;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UrlEncodingSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "application/x-www-form-urlencoded");
+	public UrlEncodingSerializer(PropertyStore2 ps) {
+		this(ps, "application/x-www-form-urlencoded");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -261,14 +262,20 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public UrlEncodingSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore.copy().append(UON_encodeChars, true), produces, accept);
-		this.ctx = createContext(UrlEncodingSerializerContext.class);
+	public UrlEncodingSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(
+			ps.builder()
+				.set(UON_encodeChars, true)
+				.build(), 
+			produces, 
+			accept
+		);
+		expandedParams = getProperty(URLENC_expandedParams, boolean.class, false);
 	}
 
 	@Override /* CoreObject */
 	public UrlEncodingSerializerBuilder builder() {
-		return new UrlEncodingSerializerBuilder(propertyStore);
+		return new UrlEncodingSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -311,20 +318,20 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	private String serializePart(Object o, Boolean urlEncode, Boolean plainTextParams) {
 		try {
 			// Shortcut for simple types.
-			ClassMeta<?> cm = getBeanContext().getClassMetaForObject(o);
+			ClassMeta<?> cm = getClassMetaForObject(o);
 			if (cm != null) {
 				if (cm.isNumber() || cm.isBoolean())
 					return o.toString();
 				if (cm.isCharSequence()) {
 					String s = o.toString();
-					boolean ptt = (plainTextParams != null ? plainTextParams : ctx.getParamFormat() == ParamFormat.PLAINTEXT);
+					boolean ptt = (plainTextParams != null ? plainTextParams : getParamFormat() == ParamFormat.PLAINTEXT);
 					if (ptt || s.isEmpty() || ! UonUtils.needsQuotes(s))
 						return (urlEncode ? urlEncode(s) : s);
 				}
 			}
 
 			StringWriter w = new StringWriter();
-			UonSerializerSession s = new UonSerializerSession(ctx, urlEncode, createDefaultSessionArgs());
+			UonSerializerSession s = new UonSerializerSession(this, urlEncode, createDefaultSessionArgs());
 			s.serialize(o, w);
 			return w.toString();
 		} catch (Exception e) {
@@ -339,7 +346,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new UrlEncodingSerializerSession(ctx, null, args);
+		return new UrlEncodingSerializerSession(this, null, args);
 	}
 
 	@Override /* PartSerializer */
@@ -351,5 +358,13 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			case QUERY: return serializePart(value, false, null);
 			default: return toString(value);
 		}
+	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingSerializer", new ObjectMap()
+				.append("expandedParams", expandedParams)
+			);
 	}
 }

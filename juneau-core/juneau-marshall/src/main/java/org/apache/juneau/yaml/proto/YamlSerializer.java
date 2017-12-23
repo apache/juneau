@@ -53,7 +53,7 @@ import org.apache.juneau.serializer.*;
  * The types above are considered "JSON-primitive" object types.
  * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
  * {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the
- * {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
+ * {@link BeanContextBuilder#pojoSwaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *
  * <p>
@@ -88,7 +88,7 @@ public class YamlSerializer extends WriterSerializer {
 	 * <b>Configuration property:</b>  Simple JSON mode.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode"</js>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -98,13 +98,13 @@ public class YamlSerializer extends WriterSerializer {
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
 	 */
-	public static final String YAML_simpleMode = PREFIX + "simpleMode";
+	public static final String YAML_simpleMode = PREFIX + "simpleMode.b";
 
 	/**
 	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus"</js>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -116,13 +116,13 @@ public class YamlSerializer extends WriterSerializer {
 	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
 	 * <xt>&lt;\/script&gt;</xt>.
 	 */
-	public static final String YAML_escapeSolidus = PREFIX + "escapeSolidus";
+	public static final String YAML_escapeSolidus = PREFIX + "escapeSolidus.b";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -139,7 +139,7 @@ public class YamlSerializer extends WriterSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String YAML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+	public static final String YAML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -147,29 +147,32 @@ public class YamlSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final YamlSerializer DEFAULT = new YamlSerializer(PropertyStore.create());
+	public static final YamlSerializer DEFAULT = new YamlSerializer(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final YamlSerializerContext ctx;
+	final boolean
+		simpleMode,
+		escapeSolidus,
+		addBeanTypeProperties;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public YamlSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "application/yaml", "application/yaml", "application/yaml+*", "text/yaml", "text/yaml+*");
+	public YamlSerializer(PropertyStore2 ps) {
+		this(ps, "application/yaml", "application/yaml", "application/yaml+*", "text/yaml", "text/yaml+*");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -187,14 +190,16 @@ public class YamlSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public YamlSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
-		this.ctx = createContext(YamlSerializerContext.class);
+	public YamlSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
+		simpleMode = getProperty(YAML_simpleMode, boolean.class, false);
+		escapeSolidus = getProperty(YAML_escapeSolidus, boolean.class, false);
+		addBeanTypeProperties = getProperty(YAML_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* CoreObject */
 	public YamlSerializerBuilder builder() {
-		return new YamlSerializerBuilder(propertyStore);
+		return new YamlSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -220,6 +225,16 @@ public class YamlSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new YamlSerializerSession(ctx, args);
+		return new YamlSerializerSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("YamlSerializer", new ObjectMap()
+				.append("simpleMode", simpleMode)
+				.append("escapeSolidus", escapeSolidus)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+			);
 	}
 }

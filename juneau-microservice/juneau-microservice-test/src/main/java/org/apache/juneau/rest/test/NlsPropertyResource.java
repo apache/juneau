@@ -55,8 +55,8 @@ public class NlsPropertyResource extends RestServlet {
 
 	public static class TestSerializer extends WriterSerializer {
 
-		public TestSerializer(PropertyStore propertyStore) {
-			super(propertyStore, "text/plain");
+		public TestSerializer(PropertyStore2 ps) {
+			super(ps, "text/plain");
 		}
 
 		@Override /* Serializer */
@@ -65,7 +65,7 @@ public class NlsPropertyResource extends RestServlet {
 
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-					out.getWriter().write(getStringProperty("TestProperty"));
+					out.getWriter().write(getProperty("TestProperty", String.class));
 				}
 			};
 		}

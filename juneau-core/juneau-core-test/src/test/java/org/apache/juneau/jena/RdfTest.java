@@ -33,7 +33,7 @@ public class RdfTest {
 		String expected;
 
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
-			.property(RDF_rdfxml_tab, 3)
+			.set(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty(true);
 		RdfParser p = RdfParser.create().xml().build();
@@ -193,7 +193,7 @@ public class RdfTest {
 		B b = new B().init(), b2;
 		String rdfXml, expected;
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
-			.property(RDF_rdfxml_tab, 3)
+			.set(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty(true);
 		RdfParser p = RdfParser.DEFAULT_XML;
@@ -426,7 +426,7 @@ public class RdfTest {
 		C c = new C().init(), c2;
 		String rdfXml, expected;
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
-			.property(RDF_rdfxml_tab, 3)
+			.set(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty(true);
 		RdfParser p = RdfParser.DEFAULT_XML;

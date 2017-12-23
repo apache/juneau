@@ -49,10 +49,9 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, SerializerSessionArgs args) {
+	protected UrlEncodingSerializerSession(UrlEncodingSerializer ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, encode, args);
-		ObjectMap p = getProperties();
-		expandedParams = p.getBoolean(URLENC_expandedParams, ctx.expandedParams);
+		expandedParams = getProperty(URLENC_expandedParams, boolean.class, ctx.expandedParams);
 	}
 
 	@Override /* Session */

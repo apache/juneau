@@ -25,28 +25,25 @@ public class CsvParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final CsvParser DEFAULT = new CsvParser(PropertyStore.create());
+	public static final CsvParser DEFAULT = new CsvParser(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final CsvParserContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public CsvParser(PropertyStore propertyStore) {
-		super(propertyStore, "text/csv");
-		this.ctx = createContext(CsvParserContext.class);
+	public CsvParser(PropertyStore2 ps) {
+		super(ps, "text/csv");
 	}
 
 	@Override /* CoreObject */
 	public CsvParserBuilder builder() {
-		return new CsvParserBuilder(propertyStore);
+		return new CsvParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -67,6 +64,12 @@ public class CsvParser extends ReaderParser {
 
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
-		return new CsvParserSession(ctx, args);
+		return new CsvParserSession(this, args);
+	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("CsvParser", new ObjectMap());
 	}
 }

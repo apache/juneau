@@ -44,7 +44,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected JsonParserSession(JsonParserContext ctx, ParserSessionArgs args) {
+	protected JsonParserSession(JsonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 	}
 

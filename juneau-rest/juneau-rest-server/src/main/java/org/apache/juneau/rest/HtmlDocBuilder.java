@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * Basically just a convenience wrapper around the servlet or method level properties for setting properties defined
- * by the {@link HtmlDocSerializerContext} class.
+ * by the {@link HtmlDocSerializer} class.
  *
  * <p>
  * This class is instantiated through the following methods.

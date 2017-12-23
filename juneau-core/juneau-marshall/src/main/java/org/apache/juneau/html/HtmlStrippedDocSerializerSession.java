@@ -34,7 +34,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	 * @param args
 	 * 	Runtime arguments.
 	 */
-	protected HtmlStrippedDocSerializerSession(HtmlSerializerContext ctx, SerializerSessionArgs args) {
+	protected HtmlStrippedDocSerializerSession(HtmlStrippedDocSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 

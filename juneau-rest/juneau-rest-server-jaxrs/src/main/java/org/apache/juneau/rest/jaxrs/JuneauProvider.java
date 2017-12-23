@@ -72,11 +72,11 @@ public @interface JuneauProvider {
 	 * <ul>
 	 * 	<li>{@link RestContext}
 	 * 	<li>{@link BeanContext}
-	 * 	<li>{@link SerializerContext}
-	 * 	<li>{@link ParserContext}
-	 * 	<li>{@link JsonSerializerContext}
-	 * 	<li>{@link XmlSerializerContext}
-	 * 	<li>{@link XmlParserContext}
+	 * 	<li>{@link Serializer}
+	 * 	<li>{@link Parser}
+	 * 	<li>{@link JsonSerializer}
+	 * 	<li>{@link XmlSerializer}
+	 * 	<li>{@link XmlParser}
 	 * </ul>
 	 * 
 	 * <p>

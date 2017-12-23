@@ -53,8 +53,8 @@ public class AcceptCharsetResource extends RestServlet {
 
 	public static class TestParser extends InputStreamParser {
 
-		public TestParser(PropertyStore propertyStore) {
-			super(propertyStore, "text/plain");
+		public TestParser(PropertyStore2 ps) {
+			super(ps, "text/plain");
 		}
 
 		@Override /* Parser */
@@ -64,7 +64,7 @@ public class AcceptCharsetResource extends RestServlet {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
 				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-					return (T)getStringProperty("characterEncoding");
+					return (T)getProperty("characterEncoding", String.class);
 				}
 			};
 		}
@@ -72,8 +72,8 @@ public class AcceptCharsetResource extends RestServlet {
 
 	public static class TestSerializer extends OutputStreamSerializer {
 
-		public TestSerializer(PropertyStore propertyStore) {
-			super(propertyStore, "text/plain");
+		public TestSerializer(PropertyStore2 ps) {
+			super(ps, "text/plain");
 		}
 
 		@Override /* Serializer */
@@ -83,7 +83,7 @@ public class AcceptCharsetResource extends RestServlet {
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 					try (Writer w = new OutputStreamWriter(out.getOutputStream())) {
-						w.append(o.toString()).append('/').append(getStringProperty("characterEncoding"));
+						w.append(o.toString()).append('/').append(getProperty("characterEncoding", String.class));
 					}
 				}
 			};

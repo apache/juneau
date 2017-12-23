@@ -47,12 +47,11 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected JsonSerializerSession(JsonSerializerContext ctx, SerializerSessionArgs args) {
+	protected JsonSerializerSession(JsonSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-		simpleMode = p.getBoolean(JSON_simpleMode, ctx.simpleMode);
-		escapeSolidus = p.getBoolean(JSON_escapeSolidus, ctx.escapeSolidus);
-		addBeanTypeProperties = p.getBoolean(JSON_addBeanTypeProperties, ctx.addBeanTypeProperties);
+		simpleMode = getProperty(JSON_simpleMode, boolean.class, ctx.simpleMode);
+		escapeSolidus = getProperty(JSON_escapeSolidus, boolean.class, ctx.escapeSolidus);
+		addBeanTypeProperties = getProperty(JSON_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
 	}
 
 	@Override /* Session */

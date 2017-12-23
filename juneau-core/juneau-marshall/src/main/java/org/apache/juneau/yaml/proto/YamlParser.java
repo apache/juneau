@@ -51,7 +51,7 @@ import org.apache.juneau.parser.*;
  * 		JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
- * 		See the <code>beanTypeName</code> setting on the {@link PropertyStore} for more information about parsing
+ * 		See the <code>beanTypeName</code> setting on the {@link PropertyStore2} for more information about parsing
  * 		beans from JSON.
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
@@ -105,10 +105,10 @@ public class YamlParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final YamlParser DEFAULT = new YamlParser(PropertyStore.create());
+	public static final YamlParser DEFAULT = new YamlParser(PropertyStore2.DEFAULT);
 
 	/** Default parser, all default settings.*/
-	public static final YamlParser DEFAULT_STRICT = new YamlParser.Strict(PropertyStore.create());
+	public static final YamlParser DEFAULT_STRICT = new YamlParser.Strict(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -121,10 +121,10 @@ public class YamlParser extends ReaderParser {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Strict(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(PARSER_strict, true));
+		public Strict(PropertyStore2 ps) {
+			super(ps.builder().set(PARSER_strict, true).build());
 		}
 	}
 
@@ -133,31 +133,28 @@ public class YamlParser extends ReaderParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final YamlParserContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public YamlParser(PropertyStore propertyStore) {
-		this(propertyStore, "application/json", "text/json");
+	public YamlParser(PropertyStore2 ps) {
+		this(ps, "application/json", "text/json");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public YamlParser(PropertyStore propertyStore, String...consumes) {
-		super(propertyStore, consumes);
-		this.ctx = createContext(YamlParserContext.class);
+	public YamlParser(PropertyStore2 ps, String...consumes) {
+		super(ps, consumes);
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public YamlParserBuilder builder() {
-		return new YamlParserBuilder(propertyStore);
+		return new YamlParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -178,6 +175,12 @@ public class YamlParser extends ReaderParser {
 
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
-		return new YamlParserSession(ctx, args);
+		return new YamlParserSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("YamlParser", new ObjectMap());
 	}
 }

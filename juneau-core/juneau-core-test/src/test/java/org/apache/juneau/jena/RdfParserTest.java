@@ -46,7 +46,7 @@ public class RdfParserTest {
 
 		// Create a new serializer with readable output.
 		RdfSerializer s = RdfSerializer.create().xmlabbrev()
-			.property(RDF_rdfxml_tab, 3)
+			.set(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty(true)
 			.build();

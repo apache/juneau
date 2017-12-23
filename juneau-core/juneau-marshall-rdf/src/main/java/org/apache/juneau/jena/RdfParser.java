@@ -13,10 +13,12 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfCommon.*;
+
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Parses RDF into POJOs.
@@ -39,7 +41,11 @@ import org.apache.juneau.parser.*;
  * 
  * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
-public class RdfParser extends ReaderParser {
+public class RdfParser extends ReaderParser implements RdfCommon {
+
+	private static final Namespace 
+		DEFAULT_JUNEAU_NS = Namespace.create("j", "http://www.apache.org/juneau/"),
+		DEFAULT_JUNEAUBP_NS = Namespace.create("jp", "http://www.apache.org/juneaubp/");
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -51,7 +57,7 @@ public class RdfParser extends ReaderParser {
 	 * <b>Configuration property:</b>  Trim whitespace from text elements.
 	 * 
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
+	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -60,7 +66,7 @@ public class RdfParser extends ReaderParser {
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 */
-	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace";
+	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace.b";
 
 	
 	//-------------------------------------------------------------------------------------------------------------------
@@ -68,16 +74,16 @@ public class RdfParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 	
 	/** Default XML parser, all default settings.*/
-	public static final RdfParser DEFAULT_XML = new Xml(PropertyStore.create());
+	public static final RdfParser DEFAULT_XML = new Xml(PropertyStore2.DEFAULT);
 
 	/** Default Turtle parser, all default settings.*/
-	public static final RdfParser DEFAULT_TURTLE = new Turtle(PropertyStore.create());
+	public static final RdfParser DEFAULT_TURTLE = new Turtle(PropertyStore2.DEFAULT);
 
 	/** Default N-Triple parser, all default settings.*/
-	public static final RdfParser DEFAULT_NTRIPLE = new NTriple(PropertyStore.create());
+	public static final RdfParser DEFAULT_NTRIPLE = new NTriple(PropertyStore2.DEFAULT);
 
 	/** Default N3 parser, all default settings.*/
-	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore.create());
+	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -90,10 +96,15 @@ public class RdfParser extends ReaderParser {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Xml(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_RDF_XML), "text/xml+rdf");
+		public Xml(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_RDF_XML)
+					.build(), 
+				"text/xml+rdf"
+			);
 		}
 	}
 
@@ -103,10 +114,15 @@ public class RdfParser extends ReaderParser {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public NTriple(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_NTRIPLE), "text/n-triple");
+		public NTriple(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_NTRIPLE)
+					.build(), 
+				"text/n-triple"
+			);
 		}
 	}
 
@@ -116,10 +132,15 @@ public class RdfParser extends ReaderParser {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Turtle(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_TURTLE), "text/turtle");
+		public Turtle(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_TURTLE)
+					.build(), 
+				"text/turtle"
+			);
 		}
 	}
 
@@ -129,34 +150,56 @@ public class RdfParser extends ReaderParser {
 		/**
 		 * Constructor.
 		 * 
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public N3(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(RDF_language, LANG_N3), "text/n3");
+		public N3(PropertyStore2 ps) {
+			super(
+				ps.builder()
+					.set(RDF_language, LANG_N3)
+					.build(), 
+				"text/n3"
+			);
 		}
 	}
-
-
+	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final RdfParserContext ctx;
+	final boolean trimWhitespace, looseCollections;
+	final String rdfLanguage;
+	final Namespace juneauNs, juneauBpNs;
+	final RdfCollectionFormat collectionFormat;
+	final Map<String,Object> jenaSettings = new HashMap<>();
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The list of media types that this parser consumes (e.g. <js>"application/json"</js>).
 	 */
-	public RdfParser(PropertyStore propertyStore, String...consumes) {
-		super(propertyStore, consumes);
-		this.ctx = createContext(RdfParserContext.class);
+	public RdfParser(PropertyStore2 ps, String...consumes) {
+		super(ps, consumes);
+		trimWhitespace = getProperty(RDF_trimWhitespace, boolean.class, false);
+		looseCollections = getProperty(RDF_looseCollections, boolean.class, false);
+		rdfLanguage = getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
+		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
+		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param ps The property store containing all the settings for this object.
+	 */
+	public RdfParser(PropertyStore2 ps) {
+		this(ps, "text/xml+rdf");
+	}	
 	
 	@Override /* CoreObject */
 	public RdfParserBuilder builder() {
-		return new RdfParserBuilder(propertyStore);
+		return new RdfParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -177,6 +220,19 @@ public class RdfParser extends ReaderParser {
 
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
-		return new RdfParserSession(ctx, args);
+		return new RdfParserSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RdfParser", new ObjectMap()
+				.append("trimWhitespace", trimWhitespace)
+				.append("looseCollections", looseCollections)
+				.append("rdfLanguage", rdfLanguage)
+				.append("juneauNs", juneauNs)
+				.append("juneauBpNs", juneauBpNs)
+				.append("collectionFormat", collectionFormat)
+			);
 	}
 }

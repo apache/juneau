@@ -126,7 +126,7 @@ public class UonSerializer extends WriterSerializer {
 	 * <b>Configuration property:</b>  Encode non-valid URI characters.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.encodeChars"</js>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.encodeChars.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -140,13 +140,13 @@ public class UonSerializer extends WriterSerializer {
 	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
 	 * URL-encoding of non-valid URI characters.
 	 */
-	public static final String UON_encodeChars = PREFIX + "encodeChars";
+	public static final String UON_encodeChars = PREFIX + "encodeChars.b";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -163,13 +163,13 @@ public class UonSerializer extends WriterSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String UON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+	public static final String UON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 	/**
 	 * <b>Configuration property:</b>  Format to use for query/form-data/header values.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat"</js>
+	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat.s"</js>
 	 * 	<li><b>Data type:</b> <code>ParamFormat</code>
 	 * 	<li><b>Default:</b> <jsf>UON</jsf>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -178,7 +178,7 @@ public class UonSerializer extends WriterSerializer {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 */
-	public static final String UON_paramFormat = PREFIX + "paramFormat";
+	public static final String UON_paramFormat = PREFIX + "paramFormat.s";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -186,13 +186,13 @@ public class UonSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonSerializer}, all default settings. */
-	public static final UonSerializer DEFAULT = new UonSerializer(PropertyStore.create());
+	public static final UonSerializer DEFAULT = new UonSerializer(PropertyStore2.DEFAULT);
 
 	/** Reusable instance of {@link UonSerializer.Readable}. */
-	public static final UonSerializer DEFAULT_READABLE = new Readable(PropertyStore.create());
+	public static final UonSerializer DEFAULT_READABLE = new Readable(PropertyStore2.DEFAULT);
 
 	/** Reusable instance of {@link UonSerializer.Encoding}. */
-	public static final UonSerializer DEFAULT_ENCODING = new Encoding(PropertyStore.create());
+	public static final UonSerializer DEFAULT_ENCODING = new Encoding(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -207,10 +207,10 @@ public class UonSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(SERIALIZER_useWhitespace, true));
+		public Readable(PropertyStore2 ps) {
+			super(ps.builder().set(SERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -222,10 +222,10 @@ public class UonSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Encoding(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(UON_encodeChars, true));
+		public Encoding(PropertyStore2 ps) {
+			super(ps.builder().set(UON_encodeChars, true).build());
 		}
 	}
 
@@ -234,22 +234,27 @@ public class UonSerializer extends WriterSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final UonSerializerContext ctx;
+	final boolean
+		encodeChars,
+		addBeanTypeProperties;
+	
+	final ParamFormat
+		paramFormat;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UonSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "text/uon");
+	public UonSerializer(PropertyStore2 ps) {
+		this(ps, "text/uon");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -267,14 +272,16 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public UonSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
-		this.ctx = createContext(UonSerializerContext.class);
+	public UonSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
+		encodeChars = getProperty(UON_encodeChars, boolean.class, false);
+		addBeanTypeProperties = getProperty(UON_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
 	}
 
 	@Override /* CoreObject */
 	public UonSerializerBuilder builder() {
-		return new UonSerializerBuilder(propertyStore);
+		return new UonSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -300,6 +307,25 @@ public class UonSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new UonSerializerSession(ctx, null, args);
+		return new UonSerializerSession(this, null, args);
+	}
+	
+	/**
+	 * Returns the value of the {@link UonSerializer#UON_paramFormat} setting.
+	 *
+	 * @return The value of the {@link UonSerializer#UON_paramFormat} setting.
+	 */
+	public ParamFormat getParamFormat() {
+		return paramFormat;
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonSerializer", new ObjectMap()
+				.append("encodeChars", encodeChars)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("paramFormat", paramFormat)
+			);
 	}
 }

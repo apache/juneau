@@ -41,29 +41,27 @@ public class PlainTextSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore.create());
+	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final SerializerContext ctx;
-
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public PlainTextSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "text/plain");
+	public PlainTextSerializer(PropertyStore2 ps) {
+		this(ps, "text/plain");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -81,15 +79,14 @@ public class PlainTextSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public PlainTextSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
-		this.ctx = createContext(SerializerContext.class);
+	public PlainTextSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
 	}
 
 
 	@Override /* CoreObject */
 	public PlainTextSerializerBuilder builder() {
-		return new PlainTextSerializerBuilder(propertyStore);
+		return new PlainTextSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -110,6 +107,6 @@ public class PlainTextSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new PlainTextSerializerSession(ctx, args);
+		return new PlainTextSerializerSession(this, args);
 	}
 }

@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * These objects are created when you pass in non-<code>BeanFilterBuilder</code> classes to
- * {@link PropertyStore#addToProperty(String,Object)}, and are equivalent to adding a
+ * {@link BeanContextBuilder#beanFilters(Class...)}, and are equivalent to adding a
  * <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
  */
 public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {

@@ -88,7 +88,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
- * {@link #getBeanContext() beanContext} can also be passed in.
+ * bean context can also be passed in.
  *
  * <p>
  * For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String}
@@ -131,7 +131,7 @@ import org.apache.juneau.utils.*;
  * Passing in <jk>null</jk> or <code>Object.<jk>class</jk></code> typically signifies that it's up to the parser
  * to determine what object type is being parsed parsed based on the rules above.
  */
-public abstract class Parser extends CoreObject {
+public abstract class Parser extends BeanContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -143,7 +143,7 @@ public abstract class Parser extends CoreObject {
 	 * <b>Configuration property:</b>  Trim parsed strings.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.trimStrings"</js>
+	 * 	<li><b>Name:</b> <js>"Parser.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -153,13 +153,13 @@ public abstract class Parser extends CoreObject {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 */
-	public static final String PARSER_trimStrings = PREFIX + "trimStrings";
+	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
 
 	/**
 	 * <b>Configuration property:</b>  Strict mode.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.strict"</js>
+	 * 	<li><b>Name:</b> <js>"Parser.strict.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -195,13 +195,13 @@ public abstract class Parser extends CoreObject {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String PARSER_strict = PREFIX + "strict";
+	public static final String PARSER_strict = PREFIX + "strict.b";
 
 	/**
 	 * <b>Configuration property:</b>  Input stream charset.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset"</js>
+	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"UTF-8"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -213,13 +213,13 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 	 */
-	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset";
+	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
 
 	/**
 	 * <b>Configuration property:</b>  File charset.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.fileCharset"</js>
+	 * 	<li><b>Name:</b> <js>"Parser.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"default"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -234,13 +234,13 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
 	 */
-	public static final String PARSER_fileCharset = PREFIX + "fileCharset";
+	public static final String PARSER_fileCharset = PREFIX + "fileCharset.s";
 
 	/**
 	 * <b>Configuration property:</b>  Parser listener.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.listener"</js>
+	 * 	<li><b>Name:</b> <js>"Parser.listener.c"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? extends ParserListener&gt;</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -249,20 +249,35 @@ public abstract class Parser extends CoreObject {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 */
-	public static final String PARSER_listener = PREFIX + "listener";
+	public static final String PARSER_listener = PREFIX + "listener.c";
 
+	static Parser DEFAULT = new Parser(PropertyStore2.create().build()) {
+		@Override
+		public ParserSession createSession(ParserSessionArgs args) {
+			throw new NoSuchMethodError();
+		}
+	};
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	final boolean trimStrings, strict;
+	final String inputStreamCharset, fileCharset;
+	final Class<? extends ParserListener> listener;
+
 	/** General parser properties currently set on this parser. */
 	private final MediaType[] consumes;
 
 	// Hidden constructor to force subclass from InputStreamParser or ReaderParser.
-	Parser(PropertyStore propertyStore, String...consumes) {
-		super(propertyStore);
+	Parser(PropertyStore2 ps, String...consumes) {
+		super(ps);
 
+		trimStrings = getProperty(PARSER_trimStrings, boolean.class, false);
+		strict = getProperty(PARSER_strict, boolean.class, false);
+		inputStreamCharset = getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
+		fileCharset = getProperty(PARSER_fileCharset, String.class, "default");
+		listener = getClassProperty(PARSER_listener, ParserListener.class, null);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
 			this.consumes[i] = MediaType.forString(consumes[i]);
@@ -271,7 +286,7 @@ public abstract class Parser extends CoreObject {
 
 	@Override /* CoreObject */
 	public ParserBuilder builder() {
-		return new ParserBuilder(propertyStore);
+		return null;
 	}
 
 
@@ -284,7 +299,9 @@ public abstract class Parser extends CoreObject {
 	 *
 	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 */
-	public abstract boolean isReaderParser();
+	public boolean isReaderParser() {
+		return true;
+	}
 
 	/**
 	 * Create the session object that will be passed in to the parse method.
@@ -443,26 +460,13 @@ public abstract class Parser extends CoreObject {
 		return createSession().parse(input, type);
 	}
 
-	/**
-	 * Create a basic session object without overriding properties or specifying <code>javaMethod</code>.
-	 *
-	 * <p>
-	 * Equivalent to calling <code>createSession(<jk>null</jk>, <jk>null</jk>)</code>.
-	 *
-	 * @return The new context.
-	 */
+	@Override /* Context */
 	public final ParserSession createSession() {
 		return createSession(createDefaultSessionArgs());
 	}
 
-	/**
-	 * Creates the session arguments object that gets passed to the {@link #createSession(ParserSessionArgs)} method.
-	 *
-	 * @return
-	 * 	A new default session arguments object.
-	 * 	<p>The arguments can be modified before passing to the {@link #createSession(ParserSessionArgs)}.
-	 */
-	protected final ParserSessionArgs createDefaultSessionArgs() {
+	@Override /* Context */
+	public final ParserSessionArgs createDefaultSessionArgs() {
 		return new ParserSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, getPrimaryMediaType(), null);
 	}
 
@@ -570,5 +574,17 @@ public abstract class Parser extends CoreObject {
 	 */
 	public final MediaType getPrimaryMediaType() {
 		return consumes == null || consumes.length == 0 ? null : consumes[0];
+	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("Parser", new ObjectMap()
+				.append("trimStrings", trimStrings)
+				.append("strict", strict)
+				.append("inputStreamCharset", inputStreamCharset)
+				.append("fileCharset", fileCharset)
+				.append("listener", listener)
+			);
 	}
 }

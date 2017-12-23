@@ -10,46 +10,65 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.yaml.proto;
-
-import static org.apache.juneau.yaml.proto.YamlSerializer.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.serializer.*;
+package org.apache.juneau;
 
 /**
- * Contains a snapshot-in-time read-only copy of the settings on the {@link YamlSerializer} class.
+ * General runtime operation exception that can occur in any of the context classes.
  */
-public final class YamlSerializerContext extends SerializerContext {
+public final class ContextRuntimeException extends FormattedRuntimeException {
 
-	final boolean
-		simpleMode,
-		escapeSolidus,
-		addBeanTypeProperties;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * Typically only called from {@link PropertyStore#getContext(Class)}.
-	 *
-	 * @param ps The property store that created this context.
+	 * @param message The error message.
 	 */
-	public YamlSerializerContext(PropertyStore ps) {
-		super(ps);
-		simpleMode = ps.getProperty(YAML_simpleMode, boolean.class, false);
-		escapeSolidus = ps.getProperty(YAML_escapeSolidus, boolean.class, false);
-		addBeanTypeProperties = ps.getProperty(YAML_addBeanTypeProperties, boolean.class,
-			ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+	public ContextRuntimeException(String message) {
+		super(message);
 	}
 
-	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("YamlSerializerContext", new ObjectMap()
-				.append("simpleMode", simpleMode)
-				.append("escapeSolidus", escapeSolidus)
-				.append("addBeanTypeProperties", addBeanTypeProperties)
-			);
+	/**
+	 * Constructor.
+	 *
+	 * @param message The error message.
+	 * @param args Arguments passed in to the {@code String.format()} method.
+	 */
+	public ContextRuntimeException(String message, Object...args) {
+		super(message, args);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The initial cause of the exception.
+	 * @param message The error message.
+	 * @param args Arguments passed in to the {@code String.format()} method.
+	 */
+	public ContextRuntimeException(Throwable cause, String message, Object...args) {
+		super(message, args);
+		initCause(cause);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The initial cause of the exception.
+	 */
+	public ContextRuntimeException(Throwable cause) {
+		super(cause == null ? null : cause.getLocalizedMessage());
+		initCause(cause);
+	}
+
+	/**
+	 * Sets the inner cause for this exception.
+	 *
+	 * @param cause The inner cause.
+	 * @return This object (for method chaining).
+	 */
+	@Override /* Throwable */
+	public synchronized ContextRuntimeException initCause(Throwable cause) {
+		super.initCause(cause);
+		return this;
 	}
 }

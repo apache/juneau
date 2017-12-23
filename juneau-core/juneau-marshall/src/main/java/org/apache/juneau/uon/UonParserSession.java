@@ -51,10 +51,9 @@ public class UonParserSession extends ReaderParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected UonParserSession(UonParserContext ctx, ParserSessionArgs args) {
+	protected UonParserSession(UonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-		decodeChars = p.getBoolean(UON_decodeChars, ctx.decodeChars);
+		decodeChars = getProperty(UON_decodeChars, boolean.class, ctx.decodeChars);
 	}
 
 	@Override /* Session */
@@ -80,7 +79,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * @param decodeChars
 	 * 	Whether to decode characters.
 	 */
-	protected UonParserSession(UonParserContext ctx, ParserSessionArgs args, boolean decodeChars) {
+	protected UonParserSession(UonParser ctx, ParserSessionArgs args, boolean decodeChars) {
 		super(ctx, args);
 		this.decodeChars = decodeChars;
 	}

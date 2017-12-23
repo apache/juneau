@@ -41,7 +41,7 @@ public class XmlParser extends ReaderParser {
 	 * <b>Configuration property:</b>  Enable validation.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.validating"</js>
+	 * 	<li><b>Name:</b> <js>"XmlParser.validating.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -51,14 +51,14 @@ public class XmlParser extends ReaderParser {
 	 * If <jk>true</jk>, XML document will be validated.
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 */
-	public static final String XML_validating = PREFIX + "validating";
+	public static final String XML_validating = PREFIX + "validating.b";
 
 	/**
 	 * <b>Configuration property:</b>  XML reporter.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.reporter"</js>
-	 * 	<li><b>Data type:</b> {@link XMLReporter}
+	 * 	<li><b>Name:</b> <js>"XmlParser.reporter.c"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -71,14 +71,14 @@ public class XmlParser extends ReaderParser {
 	 * 	<li>Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 */
-	public static final String XML_reporter = PREFIX + "reporter";
+	public static final String XML_reporter = PREFIX + "reporter.c";
 
 	/**
 	 * <b>Configuration property:</b>  XML resolver.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.resolver"</js>
-	 * 	<li><b>Data type:</b> {@link XMLResolver}
+	 * 	<li><b>Name:</b> <js>"XmlParser.resolver.c"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -86,14 +86,14 @@ public class XmlParser extends ReaderParser {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 */
-	public static final String XML_resolver = PREFIX + "resolver";
+	public static final String XML_resolver = PREFIX + "resolver.c";
 
 	/**
 	 * <b>Configuration property:</b>  XML event allocator.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.eventAllocator"</js>
-	 * 	<li><b>Data type:</b> {@link XMLEventAllocator}
+	 * 	<li><b>Name:</b> <js>"XmlParser.eventAllocator.c"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> {@link XMLEventAllocator}&gt;</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
@@ -101,13 +101,13 @@ public class XmlParser extends ReaderParser {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 */
-	public static final String XML_eventAllocator = PREFIX + "eventAllocator";
+	public static final String XML_eventAllocator = PREFIX + "eventAllocator.c";
 
 	/**
 	 * <b>Configuration property:</b>  Preserve root element during generalized parsing.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.preserveRootElement"</js>
+	 * 	<li><b>Name:</b> <js>"XmlParser.preserveRootElement.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -132,7 +132,7 @@ public class XmlParser extends ReaderParser {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String XML_preserveRootElement = PREFIX + "preserveRootElement";
+	public static final String XML_preserveRootElement = PREFIX + "preserveRootElement.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -140,41 +140,50 @@ public class XmlParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final XmlParser DEFAULT = new XmlParser(PropertyStore.create());
+	public static final XmlParser DEFAULT = new XmlParser(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final XmlParserContext ctx;
+	final boolean
+		validating,
+		preserveRootElement;
+	final XMLReporter reporter;
+	final XMLResolver resolver;
+	final XMLEventAllocator eventAllocator;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public XmlParser(PropertyStore propertyStore) {
-		this(propertyStore, "text/xml", "application/xml");
+	public XmlParser(PropertyStore2 ps) {
+		this(ps, "text/xml", "application/xml");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param consumes
 	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	public XmlParser(PropertyStore propertyStore, String...consumes) {
-		super(propertyStore, consumes);
-		this.ctx = createContext(XmlParserContext.class);
+	public XmlParser(PropertyStore2 ps, String...consumes) {
+		super(ps, consumes);
+		validating = getProperty(XML_validating, boolean.class, false);
+		preserveRootElement = getProperty(XML_preserveRootElement, boolean.class, false);
+		reporter = getInstanceProperty(XML_reporter, XMLReporter.class, null);
+		resolver = getInstanceProperty(XML_resolver, XMLResolver.class, null);
+		eventAllocator = getInstanceProperty(XML_eventAllocator, XMLEventAllocator.class, null);
 	}
 
 	@Override /* CoreObject */
 	public XmlParserBuilder builder() {
-		return new XmlParserBuilder(propertyStore);
+		return new XmlParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -195,6 +204,18 @@ public class XmlParser extends ReaderParser {
 
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
-		return new XmlParserSession(ctx, args);
+		return new XmlParserSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlParser", new ObjectMap()
+				.append("validating", validating)
+				.append("preserveRootElement", preserveRootElement)
+				.append("reporter", reporter)
+				.append("resolver", resolver)
+				.append("eventAllocator", eventAllocator)
+			);
 	}
 }

@@ -52,20 +52,25 @@ public abstract class ParserSession extends BeanSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected ParserSession(ParserContext ctx, ParserSessionArgs args) {
-		super(ctx != null ? ctx : ParserContext.DEFAULT, args);
-		if (ctx == null)
-			ctx = ParserContext.DEFAULT;
-		Class<?> listenerClass;
-		ObjectMap p = getProperties();
-		trimStrings = p.getBoolean(PARSER_trimStrings, ctx.trimStrings);
-		strict = p.getBoolean(PARSER_strict, ctx.strict);
-		inputStreamCharset = p.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
-		fileCharset = p.getString(PARSER_fileCharset, ctx.fileCharset);
-		listenerClass = p.getWithDefault(PARSER_listener, ctx.listener, Class.class);
-		this.javaMethod = args.javaMethod;
-		this.outer = args.outer;
-		this.listener = newInstance(ParserListener.class, listenerClass);
+	protected ParserSession(Parser ctx, ParserSessionArgs args) {
+		super(ctx, args);
+		trimStrings = getProperty(PARSER_trimStrings, boolean.class, ctx.trimStrings);
+		strict = getProperty(PARSER_strict, boolean.class, ctx.strict);
+		inputStreamCharset = getProperty(PARSER_inputStreamCharset, String.class, ctx.inputStreamCharset);
+		fileCharset = getProperty(PARSER_fileCharset, String.class, ctx.fileCharset);
+		javaMethod = args.javaMethod;
+		outer = args.outer;
+		listener = getInstanceProperty(PARSER_listener, ParserListener.class, ctx.listener);
+	}
+
+	/**
+	 * Default constructor.
+	 * 
+	 * @param args
+	 * 	Runtime session arguments.
+	 */
+	protected ParserSession(ParserSessionArgs args) {
+		this(Parser.DEFAULT, args);
 	}
 
 	@Override /* Session */

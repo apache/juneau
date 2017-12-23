@@ -83,15 +83,65 @@ public class ArrayUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testReverse() throws Exception {
-		String[] s = new String[0];
+		String[] s = null;
+
+		assertNull(reverse(s));
+
+		s = new String[]{};
+		assertObjectEquals("[]", reverse(s));
+
+		s = new String[]{"a"};
+		assertObjectEquals("['a']", reverse(s));
 
 		s = new String[]{"a","b"};
 		assertObjectEquals("['b','a']", reverse(s));
 
-		try {
-			reverse((Object[])null);
-			fail();
-		} catch (IllegalArgumentException e) {}
+		s = new String[]{"a","b","c"};
+		assertObjectEquals("['c','b','a']", reverse(s));
+}
+
+	//====================================================================================================
+	// reverseInline(T[] array)
+	//====================================================================================================
+	@Test
+	public void testReverseInline() throws Exception {
+		String[] s = null;
+
+		assertNull(reverseInline(s));
+
+		s = new String[]{};
+		assertObjectEquals("[]", reverseInline(s));
+
+		s = new String[]{"a"};
+		assertObjectEquals("['a']", reverseInline(s));
+
+		s = new String[]{"a","b"};
+		assertObjectEquals("['b','a']", reverseInline(s));
+
+		s = new String[]{"a","b","c"};
+		assertObjectEquals("['c','b','a']", reverseInline(s));
+	}
+
+	//====================================================================================================
+	// reverseInline(T[] array)
+	//====================================================================================================
+	@Test
+	public void testToReverseArray() throws Exception {
+		String[] s = null;
+
+		assertNull(toReverseArray(String.class, null));
+
+		s = new String[]{};
+		assertObjectEquals("[]", toReverseArray(String.class, Arrays.asList(s)));
+
+		s = new String[]{"a"};
+		assertObjectEquals("['a']", toReverseArray(String.class, Arrays.asList(s)));
+
+		s = new String[]{"a","b"};
+		assertObjectEquals("['b','a']", toReverseArray(String.class, Arrays.asList(s)));
+
+		s = new String[]{"a","b","c"};
+		assertObjectEquals("['c','b','a']", toReverseArray(String.class, Arrays.asList(s)));
 	}
 
 	//====================================================================================================

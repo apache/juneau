@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Utility methods for collections.
  */
-public class CollectionUtils {
+public final class CollectionUtils {
 
 	/**
 	 * Reverses the order of a {@link LinkedHashMap}.
@@ -85,5 +85,35 @@ public class CollectionUtils {
 		for (int i = append.length - 1; i >= 0; i--)
 			list.add(append[i]);
 		return list;
+	}
+	
+	/**
+	 * Returns a reverse iterable of the specified collection.
+	 * 
+	 * @param c The collection to iterate over.
+	 * @return An iterable over the collection in reverse order.
+	 */
+	public static <T> Iterable<T> reverseIterable(final Collection<T> c) {
+		return new Iterable<T>() {
+			@Override
+			public Iterator<T> iterator() {
+				if (c == null)
+					return Collections.EMPTY_LIST.iterator();
+				ArrayList<T> l = new ArrayList<>(c);
+				Collections.reverse(l);
+				return l.iterator();
+			}
+		};
+	}
+
+	/**
+	 * Same as {@link Collections#reverse(List)}, but returns the list.
+	 * 
+	 * @param l The list being reversed
+	 * @return The same list.
+	 */
+	public static <T> List<T> reverse(List<T> l) {
+		Collections.reverse(l);
+		return l;
 	}
 }

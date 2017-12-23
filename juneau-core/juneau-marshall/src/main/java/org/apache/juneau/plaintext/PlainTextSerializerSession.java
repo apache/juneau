@@ -35,7 +35,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected PlainTextSerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
+	protected PlainTextSerializerSession(PlainTextSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 

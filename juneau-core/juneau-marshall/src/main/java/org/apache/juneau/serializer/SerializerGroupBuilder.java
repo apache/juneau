@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
@@ -27,14 +28,14 @@ import org.apache.juneau.http.*;
 public class SerializerGroupBuilder {
 
 	private final List<Object> serializers;
-	private final PropertyStore propertyStore;
+	private final PropertyStoreBuilder propertyStore;
 
 	/**
 	 * Create an empty serializer group builder.
 	 */
 	public SerializerGroupBuilder() {
 		this.serializers = new ArrayList<>();
-		this.propertyStore = PropertyStore.create();
+		this.propertyStore = PropertyStore2.create();
 	}
 
 	/**
@@ -45,7 +46,7 @@ public class SerializerGroupBuilder {
 	 *
 	 * @param propertyStore The property store containing all settings common to all serializers in this group.
 	 */
-	public SerializerGroupBuilder(PropertyStore propertyStore) {
+	public SerializerGroupBuilder(PropertyStoreBuilder propertyStore) {
 		this.serializers = new ArrayList<>();
 		this.propertyStore = propertyStore;
 	}
@@ -58,7 +59,7 @@ public class SerializerGroupBuilder {
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
 		this.serializers = new ArrayList<>();
 		addReverse(serializers, copyFrom.getSerializers());
-		this.propertyStore = copyFrom.createPropertyStore();
+		this.propertyStore = copyFrom.getPropertyStore().builder();
 	}
 
 	/**
@@ -102,24 +103,24 @@ public class SerializerGroupBuilder {
 	 *
 	 * @return A new {@link SerializerGroup} object.
 	 */
+	@SuppressWarnings("unchecked")
 	public SerializerGroup build() {
 		List<Serializer> l = new ArrayList<>();
 		for (Object s : serializers) {
-			Class<?> c = null;
-			PropertyStore ps = propertyStore;
+			Class<? extends Serializer> c = null;
+			PropertyStore2 ps = propertyStore.build();
 			if (s instanceof Class) {
-				c = (Class<?>)s;
+				c = (Class<? extends Serializer>)s;
 			} else {
 				// Note that if we added a serializer instance, we want a new instance with this builder's properties
 				// on top of the previous serializer's properties.
 				Serializer s2 = (Serializer)s;
-				ps = s2.createPropertyStore().copyFrom(propertyStore);
+				ps = s2.getPropertyStore().builder().apply(ps).build();
 				c = s2.getClass();
 			}
-			l.add(propertyStore.getBeanContext().newInstance(Serializer.class, c, ps));
+			l.add(ContextCache.INSTANCE.create(c, ps));
 		}
-		Collections.reverse(l);
-		return new SerializerGroup(propertyStore, l.toArray(new Serializer[l.size()]));
+		return new SerializerGroup(propertyStore.build(), ArrayUtils.toReverseArray(Serializer.class, l));
 	}
 
 
@@ -133,10 +134,10 @@ public class SerializerGroupBuilder {
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
-	 * @see PropertyStore#setProperty(String, Object)
+	 * @see PropertyStoreBuilder#set(String, Object)
 	 */
-	public SerializerGroupBuilder property(String name, Object value) {
-		propertyStore.setProperty(name, value);
+	public SerializerGroupBuilder set(String name, Object value) {
+		propertyStore.set(name, value);
 		return this;
 	}
 
@@ -145,28 +146,40 @@ public class SerializerGroupBuilder {
 	 *
 	 * @param properties The properties to set on this class.
 	 * @return This object (for method chaining).
-	 * @see PropertyStore#setProperties(java.util.Map)
+	 * @see PropertyStoreBuilder#set(java.util.Map)
 	 */
-	public SerializerGroupBuilder properties(ObjectMap properties) {
-		propertyStore.setProperties(properties);
+	public SerializerGroupBuilder set(ObjectMap properties) {
+		propertyStore.set(properties);
 		return this;
 	}
 
 	/**
-	 * Adds a value to a SET property on all serializers in this group.
+	 * Appends a set of properties on all serializers in this group.
+	 *
+	 * @param properties The properties to append on this class.
+	 * @return This object (for method chaining).
+	 * @see PropertyStoreBuilder#add(java.util.Map)
+	 */
+	public SerializerGroupBuilder add(ObjectMap properties) {
+		propertyStore.add(properties);
+		return this;
+	}
+
+	/**
+	 * Adds a value to a SET/LIST property on all serializers in this group.
 	 *
 	 * @param name The property name.
 	 * @param value The new value to add to the SET property.
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property.
 	 */
-	public SerializerGroupBuilder addToProperty(String name, Object value) {
-		propertyStore.addToProperty(name, value);
+	public SerializerGroupBuilder addTo(String name, Object value) {
+		propertyStore.addTo(name, value);
 		return this;
 	}
 
 	/**
-	 * Adds or overwrites a value to a MAP property on all serializers in this group.
+	 * Adds or overwrites a value to a SET/LIST/MAP property on all serializers in this group.
 	 *
 	 * @param name The property name.
 	 * @param key The property value map key.
@@ -174,21 +187,8 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a MAP property.
 	 */
-	public SerializerGroupBuilder putToProperty(String name, Object key, Object value) {
-		propertyStore.putToProperty(name, key, value);
-		return this;
-	}
-
-	/**
-	 * Adds or overwrites a value to a MAP property on all serializers in this group.
-	 *
-	 * @param name The property value.
-	 * @param value The property value map value.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a MAP property.
-	 */
-	public SerializerGroupBuilder putToProperty(String name, Object value) {
-		propertyStore.putToProperty(name, value);
+	public SerializerGroupBuilder addTo(String name, String key, Object value) {
+		propertyStore.addTo(name, key, value);
 		return this;
 	}
 
@@ -200,8 +200,8 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property.
 	 */
-	public SerializerGroupBuilder removeFromProperty(String name, Object value) {
-		propertyStore.removeFromProperty(name, value);
+	public SerializerGroupBuilder removeFrom(String name, Object value) {
+		propertyStore.removeFrom(name, value);
 		return this;
 	}
 
@@ -213,7 +213,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public SerializerGroupBuilder maxDepth(int value) {
-		return property(SERIALIZER_maxDepth, value);
+		return set(SERIALIZER_maxDepth, value);
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_initialDepth
 	 */
 	public SerializerGroupBuilder initialDepth(int value) {
-		return property(SERIALIZER_initialDepth, value);
+		return set(SERIALIZER_initialDepth, value);
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
 	public SerializerGroupBuilder detectRecursions(boolean value) {
-		return property(SERIALIZER_detectRecursions, value);
+		return set(SERIALIZER_detectRecursions, value);
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 */
 	public SerializerGroupBuilder ignoreRecursions(boolean value) {
-		return property(SERIALIZER_ignoreRecursions, value);
+		return set(SERIALIZER_ignoreRecursions, value);
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
 	public SerializerGroupBuilder useWhitespace(boolean value) {
-		return property(SERIALIZER_useWhitespace, value);
+		return set(SERIALIZER_useWhitespace, value);
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public SerializerGroupBuilder maxIndent(boolean value) {
-		return property(SERIALIZER_maxIndent, value);
+		return set(SERIALIZER_maxIndent, value);
 	}
 
 	/**
@@ -288,7 +288,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
 	public SerializerGroupBuilder addBeanTypeProperties(boolean value) {
-		return property(SERIALIZER_addBeanTypeProperties, value);
+		return set(SERIALIZER_addBeanTypeProperties, value);
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_quoteChar
 	 */
 	public SerializerGroupBuilder quoteChar(char value) {
-		return property(SERIALIZER_quoteChar, value);
+		return set(SERIALIZER_quoteChar, value);
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_trimNullProperties
 	 */
 	public SerializerGroupBuilder trimNullProperties(boolean value) {
-		return property(SERIALIZER_trimNullProperties, value);
+		return set(SERIALIZER_trimNullProperties, value);
 	}
 
 	/**
@@ -330,7 +330,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 */
 	public SerializerGroupBuilder trimEmptyCollections(boolean value) {
-		return property(SERIALIZER_trimEmptyCollections, value);
+		return set(SERIALIZER_trimEmptyCollections, value);
 	}
 
 	/**
@@ -341,7 +341,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 */
 	public SerializerGroupBuilder trimEmptyMaps(boolean value) {
-		return property(SERIALIZER_trimEmptyMaps, value);
+		return set(SERIALIZER_trimEmptyMaps, value);
 	}
 
 	/**
@@ -352,7 +352,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_trimStrings
 	 */
 	public SerializerGroupBuilder trimStrings(boolean value) {
-		return property(SERIALIZER_trimStrings, value);
+		return set(SERIALIZER_trimStrings, value);
 	}
 
 	/**
@@ -363,7 +363,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_uriContext
 	 */
 	public SerializerGroupBuilder uriContext(UriContext value) {
-		return property(SERIALIZER_uriContext, value);
+		return set(SERIALIZER_uriContext, value);
 	}
 
 	/**
@@ -374,7 +374,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_uriResolution
 	 */
 	public SerializerGroupBuilder uriResolution(UriResolution value) {
-		return property(SERIALIZER_uriResolution, value);
+		return set(SERIALIZER_uriResolution, value);
 	}
 
 	/**
@@ -385,7 +385,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_uriRelativity
 	 */
 	public SerializerGroupBuilder uriRelativity(UriRelativity value) {
-		return property(SERIALIZER_uriRelativity, value);
+		return set(SERIALIZER_uriRelativity, value);
 	}
 
 	/**
@@ -396,7 +396,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_sortCollections
 	 */
 	public SerializerGroupBuilder sortCollections(boolean value) {
-		return property(SERIALIZER_sortCollections, value);
+		return set(SERIALIZER_sortCollections, value);
 	}
 
 	/**
@@ -407,7 +407,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public SerializerGroupBuilder sortMaps(boolean value) {
-		return property(SERIALIZER_sortMaps, value);
+		return set(SERIALIZER_sortMaps, value);
 	}
 
 	/**
@@ -418,7 +418,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_abridged
 	 */
 	public SerializerGroupBuilder abridged(boolean value) {
-		return property(SERIALIZER_abridged, value);
+		return set(SERIALIZER_abridged, value);
 	}
 
 	/**
@@ -429,7 +429,7 @@ public class SerializerGroupBuilder {
 	 * @see Serializer#SERIALIZER_listener
 	 */
 	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
-		return property(SERIALIZER_listener, value);
+		return set(SERIALIZER_listener, value);
 	}
 
 	/**
@@ -440,7 +440,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
 	 */
 	public SerializerGroupBuilder beansRequireDefaultConstructor(boolean value) {
-		return property(BEAN_beansRequireDefaultConstructor, value);
+		return set(BEAN_beansRequireDefaultConstructor, value);
 	}
 
 	/**
@@ -451,7 +451,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireSerializable
 	 */
 	public SerializerGroupBuilder beansRequireSerializable(boolean value) {
-		return property(BEAN_beansRequireSerializable, value);
+		return set(BEAN_beansRequireSerializable, value);
 	}
 
 	/**
@@ -462,7 +462,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireSettersForGetters
 	 */
 	public SerializerGroupBuilder beansRequireSettersForGetters(boolean value) {
-		return property(BEAN_beansRequireSettersForGetters, value);
+		return set(BEAN_beansRequireSettersForGetters, value);
 	}
 
 	/**
@@ -473,7 +473,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beansRequireSomeProperties
 	 */
 	public SerializerGroupBuilder beansRequireSomeProperties(boolean value) {
-		return property(BEAN_beansRequireSomeProperties, value);
+		return set(BEAN_beansRequireSomeProperties, value);
 	}
 
 	/**
@@ -484,7 +484,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
 	 */
 	public SerializerGroupBuilder beanMapPutReturnsOldValue(boolean value) {
-		return property(BEAN_beanMapPutReturnsOldValue, value);
+		return set(BEAN_beanMapPutReturnsOldValue, value);
 	}
 
 	/**
@@ -495,7 +495,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanConstructorVisibility
 	 */
 	public SerializerGroupBuilder beanConstructorVisibility(Visibility value) {
-		return property(BEAN_beanConstructorVisibility, value);
+		return set(BEAN_beanConstructorVisibility, value);
 	}
 
 	/**
@@ -506,7 +506,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanClassVisibility
 	 */
 	public SerializerGroupBuilder beanClassVisibility(Visibility value) {
-		return property(BEAN_beanClassVisibility, value);
+		return set(BEAN_beanClassVisibility, value);
 	}
 
 	/**
@@ -517,7 +517,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanFieldVisibility
 	 */
 	public SerializerGroupBuilder beanFieldVisibility(Visibility value) {
-		return property(BEAN_beanFieldVisibility, value);
+		return set(BEAN_beanFieldVisibility, value);
 	}
 
 	/**
@@ -528,7 +528,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_methodVisibility
 	 */
 	public SerializerGroupBuilder methodVisibility(Visibility value) {
-		return property(BEAN_methodVisibility, value);
+		return set(BEAN_methodVisibility, value);
 	}
 
 	/**
@@ -539,7 +539,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_useJavaBeanIntrospector
 	 */
 	public SerializerGroupBuilder useJavaBeanIntrospector(boolean value) {
-		return property(BEAN_useJavaBeanIntrospector, value);
+		return set(BEAN_useJavaBeanIntrospector, value);
 	}
 
 	/**
@@ -550,7 +550,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_useInterfaceProxies
 	 */
 	public SerializerGroupBuilder useInterfaceProxies(boolean value) {
-		return property(BEAN_useInterfaceProxies, value);
+		return set(BEAN_useInterfaceProxies, value);
 	}
 
 	/**
@@ -561,7 +561,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreUnknownBeanProperties
 	 */
 	public SerializerGroupBuilder ignoreUnknownBeanProperties(boolean value) {
-		return property(BEAN_ignoreUnknownBeanProperties, value);
+		return set(BEAN_ignoreUnknownBeanProperties, value);
 	}
 
 	/**
@@ -572,7 +572,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreUnknownNullBeanProperties
 	 */
 	public SerializerGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		return property(BEAN_ignoreUnknownNullBeanProperties, value);
+		return set(BEAN_ignoreUnknownNullBeanProperties, value);
 	}
 
 	/**
@@ -583,7 +583,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
 	 */
 	public SerializerGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
-		return property(BEAN_ignorePropertiesWithoutSetters, value);
+		return set(BEAN_ignorePropertiesWithoutSetters, value);
 	}
 
 	/**
@@ -594,7 +594,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
 	 */
 	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		return property(BEAN_ignoreInvocationExceptionsOnGetters, value);
+		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
 	}
 
 	/**
@@ -605,7 +605,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
 	 */
 	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		return property(BEAN_ignoreInvocationExceptionsOnSetters, value);
+		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
 	}
 
 	/**
@@ -616,7 +616,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_sortProperties
 	 */
 	public SerializerGroupBuilder sortProperties(boolean value) {
-		return property(BEAN_sortProperties, value);
+		return set(BEAN_sortProperties, value);
 	}
 
 	/**
@@ -627,7 +627,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public SerializerGroupBuilder notBeanPackages(String...values) {
-		return property(BEAN_notBeanPackages_add, values);
+		return set(BEAN_notBeanPackages_add, values);
 	}
 
 	/**
@@ -638,7 +638,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public SerializerGroupBuilder notBeanPackages(Collection<String> value) {
-		return property(BEAN_notBeanPackages_add, value);
+		return set(BEAN_notBeanPackages_add, value);
 	}
 
 	/**
@@ -649,7 +649,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
 	public SerializerGroupBuilder setNotBeanPackages(String...values) {
-		return property(BEAN_notBeanPackages, values);
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -660,7 +660,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
 	public SerializerGroupBuilder setNotBeanPackages(Collection<String> values) {
-		return property(BEAN_notBeanPackages, values);
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -671,7 +671,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
 	public SerializerGroupBuilder removeNotBeanPackages(String...values) {
-		return property(BEAN_notBeanPackages_remove, values);
+		return set(BEAN_notBeanPackages_remove, values);
 	}
 
 	/**
@@ -682,7 +682,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
 	public SerializerGroupBuilder removeNotBeanPackages(Collection<String> values) {
-		return property(BEAN_notBeanPackages_remove, values);
+		return set(BEAN_notBeanPackages_remove, values);
 	}
 
 	/**
@@ -693,7 +693,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
 	public SerializerGroupBuilder notBeanClasses(Class<?>...values) {
-		return property(BEAN_notBeanClasses_add, values);
+		return set(BEAN_notBeanClasses_add, values);
 	}
 
 	/**
@@ -704,7 +704,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public SerializerGroupBuilder notBeanClasses(Collection<Class<?>> values) {
-		return property(BEAN_notBeanClasses_add, values);
+		return set(BEAN_notBeanClasses_add, values);
 	}
 
 	/**
@@ -715,7 +715,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 */
 	public SerializerGroupBuilder setNotBeanClasses(Class<?>...values) {
-		return property(BEAN_notBeanClasses, values);
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -726,7 +726,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 */
 	public SerializerGroupBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		return property(BEAN_notBeanClasses, values);
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -737,7 +737,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
 	public SerializerGroupBuilder removeNotBeanClasses(Class<?>...values) {
-		return property(BEAN_notBeanClasses_remove, values);
+		return set(BEAN_notBeanClasses_remove, values);
 	}
 
 	/**
@@ -748,7 +748,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
 	public SerializerGroupBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		return property(BEAN_notBeanClasses_remove, values);
+		return set(BEAN_notBeanClasses_remove, values);
 	}
 
 	/**
@@ -759,7 +759,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
 	public SerializerGroupBuilder beanFilters(Class<?>...values) {
-		return property(BEAN_beanFilters_add, values);
+		return set(BEAN_beanFilters_add, values);
 	}
 
 	/**
@@ -770,7 +770,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
 	public SerializerGroupBuilder beanFilters(Collection<Class<?>> values) {
-		return property(BEAN_beanFilters_add, values);
+		return set(BEAN_beanFilters_add, values);
 	}
 
 	/**
@@ -781,7 +781,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 */
 	public SerializerGroupBuilder setBeanFilters(Class<?>...values) {
-		return property(BEAN_beanFilters, values);
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -792,7 +792,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 */
 	public SerializerGroupBuilder setBeanFilters(Collection<Class<?>> values) {
-		return property(BEAN_beanFilters, values);
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -803,7 +803,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
 	public SerializerGroupBuilder removeBeanFilters(Class<?>...values) {
-		return property(BEAN_beanFilters_remove, values);
+		return set(BEAN_beanFilters_remove, values);
 	}
 
 	/**
@@ -814,7 +814,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
 	public SerializerGroupBuilder removeBeanFilters(Collection<Class<?>> values) {
-		return property(BEAN_beanFilters_remove, values);
+		return set(BEAN_beanFilters_remove, values);
 	}
 
 	/**
@@ -825,7 +825,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
 	public SerializerGroupBuilder pojoSwaps(Class<?>...values) {
-		return property(BEAN_pojoSwaps_add, values);
+		return set(BEAN_pojoSwaps_add, values);
 	}
 
 	/**
@@ -836,7 +836,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
 	public SerializerGroupBuilder pojoSwaps(Collection<Class<?>> values) {
-		return property(BEAN_pojoSwaps_add, values);
+		return set(BEAN_pojoSwaps_add, values);
 	}
 
 	/**
@@ -847,7 +847,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 */
 	public SerializerGroupBuilder setPojoSwaps(Class<?>...values) {
-		return property(BEAN_pojoSwaps, values);
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -858,7 +858,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 */
 	public SerializerGroupBuilder setPojoSwaps(Collection<Class<?>> values) {
-		return property(BEAN_pojoSwaps, values);
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -869,7 +869,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
 	public SerializerGroupBuilder removePojoSwaps(Class<?>...values) {
-		return property(BEAN_pojoSwaps_remove, values);
+		return set(BEAN_pojoSwaps_remove, values);
 	}
 
 	/**
@@ -880,7 +880,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
 	public SerializerGroupBuilder removePojoSwaps(Collection<Class<?>> values) {
-		return property(BEAN_pojoSwaps_remove, values);
+		return set(BEAN_pojoSwaps_remove, values);
 	}
 
 	/**
@@ -890,22 +890,21 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_implClasses
 	 */
-	public SerializerGroupBuilder implClasses(Map<Class<?>,Class<?>> values) {
-		return property(BEAN_implClasses, values);
+	public SerializerGroupBuilder implClasses(Map<String,Class<?>> values) {
+		return set(BEAN_implClasses, values);
 	}
 
 	/**
-	 * Sets the {@link BeanContext#BEAN_implClasses_put} property on all serializers in this group.
+	 * Sets the {@link BeanContext#BEAN_implClasses} property on all serializers in this group.
 	 *
 	 * @param interfaceClass The interface class.
 	 * @param implClass The implementation class.
 	 * @param <T> The class type of the interface.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_implClasses
-	 * @see BeanContext#BEAN_implClasses_put
 	 */
 	public <T> SerializerGroupBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		return putToProperty(BEAN_implClasses, interfaceClass, implClass);
+		return addTo(BEAN_implClasses, interfaceClass.getName(), implClass);
 	}
 
 	/**
@@ -916,33 +915,31 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_includeProperties
 	 */
 	public SerializerGroupBuilder includeProperties(Map<String,String> values) {
-		return property(BEAN_includeProperties, values);
+		return set(BEAN_includeProperties, values);
 	}
 
 	/**
-	 * Sets the {@link BeanContext#BEAN_includeProperties_put} property on all serializers in this group.
+	 * Sets the {@link BeanContext#BEAN_includeProperties} property on all serializers in this group.
 	 *
 	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_includeProperties
-	 * @see BeanContext#BEAN_includeProperties_put
 	 */
 	public SerializerGroupBuilder includeProperties(String beanClassName, String properties) {
-		return putToProperty(BEAN_includeProperties, beanClassName, properties);
+		return addTo(BEAN_includeProperties, beanClassName, properties);
 	}
 
 	/**
-	 * Sets the {@link BeanContext#BEAN_includeProperties_put} property on all serializers in this group.
+	 * Sets the {@link BeanContext#BEAN_includeProperties} property on all serializers in this group.
 	 *
 	 * @param beanClass The bean class.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_includeProperties
-	 * @see BeanContext#BEAN_includeProperties_put
 	 */
 	public SerializerGroupBuilder includeProperties(Class<?> beanClass, String properties) {
-		return putToProperty(BEAN_includeProperties, beanClass.getName(), properties);
+		return addTo(BEAN_includeProperties, beanClass.getName(), properties);
 	}
 
 	/**
@@ -953,33 +950,31 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_excludeProperties
 	 */
 	public SerializerGroupBuilder excludeProperties(Map<String,String> values) {
-		return property(BEAN_excludeProperties, values);
+		return set(BEAN_excludeProperties, values);
 	}
 
 	/**
-	 * Sets the {@link BeanContext#BEAN_excludeProperties_put} property on all serializers in this group.
+	 * Sets the {@link BeanContext#BEAN_excludeProperties} property on all serializers in this group.
 	 *
 	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_excludeProperties
-	 * @see BeanContext#BEAN_excludeProperties_put
 	 */
 	public SerializerGroupBuilder excludeProperties(String beanClassName, String properties) {
-		return putToProperty(BEAN_excludeProperties, beanClassName, properties);
+		return addTo(BEAN_excludeProperties, beanClassName, properties);
 	}
 
 	/**
-	 * Sets the {@link BeanContext#BEAN_excludeProperties_put} property on all serializers in this group.
+	 * Sets the {@link BeanContext#BEAN_excludeProperties} property on all serializers in this group.
 	 *
 	 * @param beanClass The bean class.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_excludeProperties
-	 * @see BeanContext#BEAN_excludeProperties_put
 	 */
 	public SerializerGroupBuilder excludeProperties(Class<?> beanClass, String properties) {
-		return putToProperty(BEAN_excludeProperties, beanClass.getName(), properties);
+		return addTo(BEAN_excludeProperties, beanClass.getName(), properties);
 	}
 
 	/**
@@ -990,7 +985,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
 	public SerializerGroupBuilder beanDictionary(Class<?>...values) {
-		return property(BEAN_beanDictionary_add, values);
+		return set(BEAN_beanDictionary_add, values);
 	}
 
 	/**
@@ -1001,7 +996,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
 	public SerializerGroupBuilder beanDictionary(Collection<Class<?>> values) {
-		return property(BEAN_beanDictionary_add, values);
+		return set(BEAN_beanDictionary_add, values);
 	}
 
 	/**
@@ -1012,7 +1007,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
 	public SerializerGroupBuilder setBeanDictionary(Class<?>...values) {
-		return property(BEAN_beanDictionary, values);
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1023,7 +1018,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
 	public SerializerGroupBuilder setBeanDictionary(Collection<Class<?>> values) {
-		return property(BEAN_beanDictionary, values);
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1034,7 +1029,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
 	public SerializerGroupBuilder removeFromBeanDictionary(Class<?>...values) {
-		return property(BEAN_beanDictionary_remove, values);
+		return set(BEAN_beanDictionary_remove, values);
 	}
 
 	/**
@@ -1045,7 +1040,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
 	public SerializerGroupBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		return property(BEAN_beanDictionary_remove, values);
+		return set(BEAN_beanDictionary_remove, values);
 	}
 
 	/**
@@ -1056,7 +1051,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_beanTypePropertyName
 	 */
 	public SerializerGroupBuilder beanTypePropertyName(String value) {
-		return property(BEAN_beanTypePropertyName, value);
+		return set(BEAN_beanTypePropertyName, value);
 	}
 
 	/**
@@ -1067,7 +1062,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_defaultParser
 	 */
 	public SerializerGroupBuilder defaultParser(Class<?> value) {
-		return property(BEAN_defaultParser, value);
+		return set(BEAN_defaultParser, value);
 	}
 
 	/**
@@ -1078,7 +1073,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_locale
 	 */
 	public SerializerGroupBuilder locale(Locale value) {
-		return property(BEAN_locale, value);
+		return set(BEAN_locale, value);
 	}
 
 	/**
@@ -1089,7 +1084,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_timeZone
 	 */
 	public SerializerGroupBuilder timeZone(TimeZone value) {
-		return property(BEAN_timeZone, value);
+		return set(BEAN_timeZone, value);
 	}
 
 	/**
@@ -1100,7 +1095,7 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_mediaType
 	 */
 	public SerializerGroupBuilder mediaType(MediaType value) {
-		return property(BEAN_mediaType, value);
+		return set(BEAN_mediaType, value);
 	}
 
 	/**
@@ -1110,25 +1105,6 @@ public class SerializerGroupBuilder {
 	 * @see BeanContext#BEAN_debug
 	 */
 	public SerializerGroupBuilder debug() {
-		return property(BEAN_debug, true);
-	}
-
-	/**
-	 * Specifies the classloader to use when resolving classes from strings for all serializers in this group.
-	 *
-	 * <p>
-	 * Can be used for resolving class names when the classes being created are in a different classloader from the
-	 * Juneau code.
-	 *
-	 * <p>
-	 * If <jk>null</jk>, the system classloader will be used to resolve classes.
-	 *
-	 * @param classLoader The new classloader.
-	 * @return This object (for method chaining).
-	 * @see PropertyStore#setClassLoader(ClassLoader)
-	 */
-	public SerializerGroupBuilder classLoader(ClassLoader classLoader) {
-		propertyStore.setClassLoader(classLoader);
-		return this;
+		return set(BEAN_debug, true);
 	}
 }

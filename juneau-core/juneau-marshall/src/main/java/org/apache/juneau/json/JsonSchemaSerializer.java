@@ -33,13 +33,14 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore Initialize with the specified config property store.
+	 * @param ps Initialize with the specified config property store.
 	 */
-	public JsonSchemaSerializer(PropertyStore propertyStore) {
+	public JsonSchemaSerializer(PropertyStore2 ps) {
 		super(
-			propertyStore.copy()
-				.append(SERIALIZER_detectRecursions, true)
-				.append(SERIALIZER_ignoreRecursions, true),
+			ps.builder()
+				.set(SERIALIZER_detectRecursions, true)
+				.set(SERIALIZER_ignoreRecursions, true)
+				.build(),
 			"application/json",
 			"application/json+schema", "text/json+schema"
 		);
@@ -47,6 +48,6 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new JsonSchemaSerializerSession(ctx, args);
+		return new JsonSchemaSerializerSession(this, args);
 	}
 }

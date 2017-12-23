@@ -510,20 +510,20 @@ public final class XmlUtils {
 
 		// If both prefix and namespace specified, use that Namespace mapping.
 		if (! (prefix.isEmpty() || ns.isEmpty()))
-			return NamespaceFactory.get(prefix, ns);
+			return Namespace.create(prefix, ns);
 
 		// If only prefix specified, need to search for namespaceURI.
 		if (! prefix.isEmpty()) {
 			if (xmls != null)
 				for (Xml xml2 : xmls)
 					if (xml2.prefix().equals(prefix) && ! xml2.namespace().isEmpty())
-						return NamespaceFactory.get(prefix, xml2.namespace());
+						return Namespace.create(prefix, xml2.namespace());
 			for (XmlSchema schema : schemas) {
 				if (schema.prefix().equals(prefix) && ! schema.namespace().isEmpty())
-					return NamespaceFactory.get(prefix, schema.namespace());
+					return Namespace.create(prefix, schema.namespace());
 				for (XmlNs xmlNs : schema.xmlNs())
 					if (xmlNs.prefix().equals(prefix))
-						return NamespaceFactory.get(prefix, xmlNs.namespaceURI());
+						return Namespace.create(prefix, xmlNs.namespaceURI());
 			}
 			throw new BeanRuntimeException("Found @Xml.prefix annotation with no matching URI.  prefix='"+prefix+"'");
 		}
@@ -533,13 +533,13 @@ public final class XmlUtils {
 			if (xmls != null)
 				for (Xml xml2 : xmls)
 					if (xml2.namespace().equals(ns) && ! xml2.prefix().isEmpty())
-						return NamespaceFactory.get(xml2.prefix(), ns);
+						return Namespace.create(xml2.prefix(), ns);
 			for (XmlSchema schema : schemas) {
 				if (schema.namespace().equals(ns) && ! schema.prefix().isEmpty())
-					return NamespaceFactory.get(schema.prefix(), ns);
+					return Namespace.create(schema.prefix(), ns);
 				for (XmlNs xmlNs : schema.xmlNs())
 					if (xmlNs.namespaceURI().equals(ns))
-						return NamespaceFactory.get(xmlNs.prefix(), ns);
+						return Namespace.create(xmlNs.prefix(), ns);
 			}
 		}
 

@@ -43,8 +43,8 @@ public class OnPostCallResource extends RestServlet {
 
 	public static class TestSerializer extends WriterSerializer {
 
-		public TestSerializer(PropertyStore propertyStore) {
-			super(propertyStore, "test/s1", "text/s1", "text/s2", "text/s3");
+		public TestSerializer(PropertyStore2 ps) {
+			super(ps, "test/s1", "text/s1", "text/s2", "text/s3");
 		}
 
 		@Override /* Serializer */
@@ -53,7 +53,7 @@ public class OnPostCallResource extends RestServlet {
 
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-					out.getWriter().write("p1="+getStringProperty("p1")+",p2="+getStringProperty("p2")+",p3="+getStringProperty("p3")+",p4="+getStringProperty("p4")+",p5="+getStringProperty("p5")+",contentType="+getStringProperty("mediaType"));
+					out.getWriter().write("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class)+",contentType="+getProperty("mediaType", String.class));
 				}
 
 				@Override /* SerializerSession */

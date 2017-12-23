@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Builder class for creating instances of {@link EncoderGroup}.
@@ -100,7 +101,6 @@ public class EncoderGroupBuilder {
 		List<Encoder> l = new ArrayList<>();
 		for (Object e : encoders)
 			l.add(beanContext.newInstance(Encoder.class, e));
-		Collections.reverse(l);
-		return new EncoderGroup(l.toArray(new Encoder[l.size()]));
+		return new EncoderGroup(ArrayUtils.toReverseArray(Encoder.class, l));
 	}
 }

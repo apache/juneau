@@ -39,15 +39,15 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Constructor.
 	 * 
-	 * @param propertyStore The initial configuration settings for this builder.
+	 * @param ps The initial configuration settings for this builder.
 	 */
-	public RdfSerializerBuilder(PropertyStore propertyStore) {
-		super(propertyStore);
+	public RdfSerializerBuilder(PropertyStore2 ps) {
+		super(ps);
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializer build() {
-		return new RdfSerializer(propertyStore, "text/xml+rdf");
+		return build(RdfSerializer.class);
 	}
 
 
@@ -57,12 +57,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * <b>Configuration property:</b>  RDF language.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.language"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
-	 * </ul>
 	 * 
 	 * <p>
 	 * Can be any of the following:
@@ -105,7 +99,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfCommon#RDF_language
 	 */
 	public RdfSerializerBuilder language(String value) {
-		return property(RDF_language, value);
+		return set(RDF_language, value);
 	}
 
 	/**
@@ -156,12 +150,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	/**
 	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
 	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
-	 * </ul>
-	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauNs</jsf>, value)</code>.
@@ -173,17 +161,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfCommon#RDF_juneauNs
 	 */
 	public RdfSerializerBuilder juneauNs(Namespace value) {
-		return property(RDF_juneauNs, value);
+		return set(RDF_juneauNs, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
-	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -196,17 +178,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfCommon#RDF_juneauBpNs
 	 */
 	public RdfSerializerBuilder juneauBpNs(Namespace value) {
-		return property(RDF_juneauBpNs, value);
+		return set(RDF_juneauBpNs, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
@@ -224,18 +200,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfCommon#RDF_useXmlNamespaces
 	 */
 	public RdfSerializerBuilder useXmlNamespaces(boolean value) {
-		return property(RDF_useXmlNamespaces, value);
+		return set(RDF_useXmlNamespaces, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -248,18 +217,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfSerializer#RDF_addLiteralTypes
 	 */
 	public RdfSerializerBuilder addLiteralTypes(boolean value) {
-		return property(RDF_addLiteralTypes, value);
+		return set(RDF_addLiteralTypes, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of 
@@ -281,18 +243,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfSerializer#RDF_addRootProperty
 	 */
 	public RdfSerializerBuilder addRootProperty(boolean value) {
-		return property(RDF_addRootProperty, value);
+		return set(RDF_addRootProperty, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Auto-detect namespace usage.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * Detect namespace usage before serialization.
@@ -312,18 +267,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfSerializer#RDF_autoDetectNamespaces
 	 */
 	public RdfSerializerBuilder autoDetectNamespaces(boolean value) {
-		return property(RDF_autoDetectNamespaces, value);
+		return set(RDF_autoDetectNamespaces, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Default namespaces.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -339,17 +287,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfSerializer#RDF_namespaces
 	 */
 	public RdfSerializerBuilder namespaces(Namespace...values) {
-		return property(RDF_namespaces, values);
+		return set(RDF_namespaces, values);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat"</js>
-	 * 	<li><b>Data type:</b> <code>RdfCollectionFormat</code>
-	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
-	 * </ul>
 	 * 
 	 * <p>
 	 * Possible values:
@@ -383,17 +325,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfCommon#RDF_collectionFormat
 	 */
 	public RdfSerializerBuilder collectionFormat(RdfCollectionFormat value) {
-		return property(RDF_collectionFormat, value);
+		return set(RDF_collectionFormat, value);
 	}
 
 	/**
 	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * </ul>
 	 * 
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
@@ -440,7 +376,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * @see RdfCommon#RDF_looseCollections
 	 */
 	public RdfSerializerBuilder looseCollections(boolean value) {
-		return property(RDF_looseCollections, value);
+		return set(RDF_looseCollections, value);
 	}
 
 	@Override /* SerializerBuilder */
@@ -563,416 +499,410 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setNotBeanPackages(String...values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setNotBeanPackages(Collection<String> values) {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeNotBeanPackages(String...values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeNotBeanPackages(Collection<String> values) {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setNotBeanClasses(Class<?>...values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setNotBeanClasses(Collection<Class<?>> values) {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeNotBeanClasses(Class<?>...values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeNotBeanClasses(Collection<Class<?>> values) {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setBeanFilters(Class<?>...values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setBeanFilters(Collection<Class<?>> values) {
 		super.setBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeBeanFilters(Class<?>...values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeBeanFilters(Collection<Class<?>> values) {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setPojoSwaps(Class<?>...values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setPojoSwaps(Collection<Class<?>> values) {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removePojoSwaps(Class<?>...values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removePojoSwaps(Collection<Class<?>> values) {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder implClasses(Map<Class<?>,Class<?>> values) {
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public <T> RdfSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder includeProperties(String beanClassName, String properties) {
 		super.includeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
 		super.includeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder excludeProperties(String beanClassName, String properties) {
 		super.excludeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setBeanDictionary(Class<?>...values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder setBeanDictionary(Collection<Class<?>> values) {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeFromBeanDictionary(Class<?>...values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder debug() {
 		super.debug();
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder property(String name, Object value) {
-		super.property(name, value);
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder set(String name, Object value) {
+		super.set(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder properties(Map<String,Object> properties) {
-		super.properties(properties);
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder set(Map<String,Object> properties) {
+		super.set(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder addToProperty(String name, Object value) {
-		super.addToProperty(name, value);
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder add(Map<String,Object> properties) {
+		super.add(properties);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder putToProperty(String name, Object key, Object value) {
-		super.putToProperty(name, key, value);
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder putToProperty(String name, Object value) {
-		super.putToProperty(name, value);
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder removeFromProperty(String name, Object value) {
-		super.removeFromProperty(name, value);
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
 		return this;
 	}
 
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder classLoader(ClassLoader classLoader) {
-		super.classLoader(classLoader);
-		return this;
-	}
-
-	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder apply(PropertyStore copyFrom) {
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder apply(PropertyStore2 copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

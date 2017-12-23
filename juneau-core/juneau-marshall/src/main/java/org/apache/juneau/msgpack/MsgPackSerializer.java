@@ -37,7 +37,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"MsgPackSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"MsgPackSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -54,7 +54,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String MSGPACK_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+	public static final String MSGPACK_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -62,28 +62,29 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(PropertyStore.create());
+	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final MsgPackSerializerContext ctx;
+	final boolean
+		addBeanTypeProperties;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public MsgPackSerializer(PropertyStore propertyStore) {
-		super(propertyStore, "octal/msgpack");
-		this.ctx = createContext(MsgPackSerializerContext.class);
+	public MsgPackSerializer(PropertyStore2 ps) {
+		super(ps, "octal/msgpack");
+		this.addBeanTypeProperties = getProperty(MSGPACK_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* CoreObject */
 	public MsgPackSerializerBuilder builder() {
-		return new MsgPackSerializerBuilder(propertyStore);
+		return new MsgPackSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -104,6 +105,14 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	
 	@Override /* Serializer */
 	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
-		return new MsgPackSerializerSession(ctx, args);
+		return new MsgPackSerializerSession(this, args);
+	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("MsgPackSerializer", new ObjectMap()
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+			);
 	}
 }

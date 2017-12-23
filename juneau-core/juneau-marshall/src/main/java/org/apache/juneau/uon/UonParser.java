@@ -39,7 +39,7 @@ public class UonParser extends ReaderParser {
 	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
+	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -49,7 +49,7 @@ public class UonParser extends ReaderParser {
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * before being passed to this parser.
 	 */
-	public static final String UON_decodeChars = PREFIX + "decodeChars";
+	public static final String UON_decodeChars = PREFIX + "decodeChars.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -57,10 +57,10 @@ public class UonParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Reusable instance of {@link UonParser}, all default settings. */
-	public static final UonParser DEFAULT = new UonParser(PropertyStore.create());
+	public static final UonParser DEFAULT = new UonParser(PropertyStore2.DEFAULT);
 
 	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
-	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(PropertyStore.create());
+	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -73,10 +73,10 @@ public class UonParser extends ReaderParser {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Decoding(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(UON_decodeChars, true));
+		public Decoding(PropertyStore2 ps) {
+			super(ps.builder().set(UON_decodeChars, true).build());
 		}
 	}
 
@@ -85,34 +85,35 @@ public class UonParser extends ReaderParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final UonParserContext ctx;
+	final boolean
+		decodeChars;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public UonParser(PropertyStore propertyStore) {
-		this(propertyStore, "text/uon");
+	public UonParser(PropertyStore2 ps) {
+		this(ps, "text/uon");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param consumes
 	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
 	 */
-	public UonParser(PropertyStore propertyStore, String...consumes) {
-		super(propertyStore, consumes);
-		this.ctx = createContext(UonParserContext.class);
+	public UonParser(PropertyStore2 ps, String...consumes) {
+		super(ps, consumes);
+		this.decodeChars = getProperty(UON_decodeChars, boolean.class, false);
 	}
 
 	@Override /* CoreObject */
 	public UonParserBuilder builder() {
-		return new UonParserBuilder(propertyStore);
+		return new UonParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -137,11 +138,19 @@ public class UonParser extends ReaderParser {
 	 * @return A new parser session.
 	 */
 	protected final UonParserSession createParameterSession() {
-		return new UonParserSession(ctx, createDefaultSessionArgs(), false);
+		return new UonParserSession(this, createDefaultSessionArgs(), false);
 	}
 
 	@Override /* Parser */
 	public UonParserSession createSession(ParserSessionArgs args) {
-		return new UonParserSession(ctx, args);
+		return new UonParserSession(this, args);
+	}
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonParser", new ObjectMap()
+				.append("decodeChars", decodeChars)
+			);
 	}
 }

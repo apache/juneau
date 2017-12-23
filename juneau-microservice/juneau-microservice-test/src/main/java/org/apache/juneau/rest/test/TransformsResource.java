@@ -35,7 +35,7 @@ public class TransformsResource extends TransformsParentResource {
 	// Should return "A2-1".
 	//====================================================================================================
 	@RestMethod(name=GET, path="/testClassTransformOverridesParentClassTransform")
-	public A testClassTransformOverridesParentClassTransform() {
+	public A test1a() {
 		return new A();
 	}
 	@RestMethod(name=PUT, path="/testClassTransformOverridesParentClassTransform")

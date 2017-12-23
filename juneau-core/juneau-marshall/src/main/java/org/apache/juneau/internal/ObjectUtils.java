@@ -147,7 +147,7 @@ import org.apache.juneau.transform.*;
  * 	</tr>
  * </table>
  */
-public class ObjectUtils {
+public final class ObjectUtils {
 
 	// Session objects are usually not thread safe, but we're not using any feature
 	// of bean sessions that would cause thread safety issues.
@@ -228,5 +228,19 @@ public class ObjectUtils {
 		if (o.getClass().isArray())
 			return (Array.getLength(o) == 0);
 		return o.toString().isEmpty();
+	}
+	
+	/**
+	 * Returns the first non-null value in the specified array
+	 * 
+	 * @param t
+	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
+	 */
+	public static <T> T firstNonNull(T[] t) {
+		if (t != null)
+			for (T tt : t)
+				if (tt != null)
+					return tt;
+		return null;
 	}
 }

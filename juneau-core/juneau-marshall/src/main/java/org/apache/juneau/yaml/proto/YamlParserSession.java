@@ -44,7 +44,7 @@ public final class YamlParserSession extends ReaderParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected YamlParserSession(YamlParserContext ctx, ParserSessionArgs args) {
+	protected YamlParserSession(YamlParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 	}
 

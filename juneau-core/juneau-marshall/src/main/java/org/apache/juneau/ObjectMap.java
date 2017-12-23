@@ -149,7 +149,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 */
 	public ObjectMap(CharSequence s, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		try {
@@ -180,7 +180,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectMap(Reader r, Parser p) throws ParseException, IOException {
-		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.createBeanSession());
 		parseReader(r, p);
 	}
 

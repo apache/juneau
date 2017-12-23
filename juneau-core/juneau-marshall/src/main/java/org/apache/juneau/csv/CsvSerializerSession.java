@@ -39,7 +39,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected CsvSerializerSession(CsvSerializerContext ctx, SerializerSessionArgs args) {
+	protected CsvSerializerSession(CsvSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 

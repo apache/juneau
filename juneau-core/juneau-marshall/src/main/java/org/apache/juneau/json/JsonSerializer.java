@@ -53,7 +53,7 @@ import org.apache.juneau.serializer.*;
  * The types above are considered "JSON-primitive" object types.
  * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
  * {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the
- * {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
+ * {@link BeanContextBuilder#pojoSwaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *
  * <p>
@@ -98,7 +98,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * <b>Configuration property:</b>  Simple JSON mode.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode"</js>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -108,13 +108,13 @@ public class JsonSerializer extends WriterSerializer {
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
 	 */
-	public static final String JSON_simpleMode = PREFIX + "simpleMode";
+	public static final String JSON_simpleMode = PREFIX + "simpleMode.b";
 
 	/**
 	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus"</js>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -126,13 +126,13 @@ public class JsonSerializer extends WriterSerializer {
 	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
 	 * <xt>&lt;\/script&gt;</xt>.
 	 */
-	public static final String JSON_escapeSolidus = PREFIX + "escapeSolidus";
+	public static final String JSON_escapeSolidus = PREFIX + "escapeSolidus.b";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -149,7 +149,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String JSON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties";
+	public static final String JSON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -157,22 +157,22 @@ public class JsonSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT = new JsonSerializer(PropertyStore.create());
+	public static final JsonSerializer DEFAULT = new JsonSerializer(PropertyStore2.DEFAULT);
 
 	/** Default serializer, all default settings.*/
-	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.create());
+	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore2.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode. */
-	public static final JsonSerializer DEFAULT_LAX = new Simple(PropertyStore.create());
+	public static final JsonSerializer DEFAULT_LAX = new Simple(PropertyStore2.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final JsonSerializer DEFAULT_LAX_READABLE = new SimpleReadable(PropertyStore.create());
+	public static final JsonSerializer DEFAULT_LAX_READABLE = new SimpleReadable(PropertyStore2.DEFAULT);
 
 	/**
 	 * Default serializer, single quotes, simple mode, with whitespace and recursion detection.
 	 * Note that recursion detection introduces a small performance penalty.
 	 */
-	public static final JsonSerializer DEFAULT_LAX_READABLE_SAFE = new SimpleReadableSafe(PropertyStore.create());
+	public static final JsonSerializer DEFAULT_LAX_READABLE_SAFE = new SimpleReadableSafe(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -185,12 +185,11 @@ public class JsonSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Readable(PropertyStore propertyStore) {
+		public Readable(PropertyStore2 ps) {
 			super(
-				propertyStore.copy()
-				.append(SERIALIZER_useWhitespace, true)
+				ps.builder().set(SERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -201,13 +200,14 @@ public class JsonSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Simple(PropertyStore propertyStore) {
+		public Simple(PropertyStore2 ps) {
 			super(
-				propertyStore.copy()
-					.append(JSON_simpleMode, true)
-					.append(SERIALIZER_quoteChar, '\''),
+				ps.builder()
+					.set(JSON_simpleMode, true)
+					.set(SERIALIZER_quoteChar, '\'')
+					.build(),
 				"application/json",
 				"application/json+simple", "application/json+simple+*", "text/json+simple", "text/json+simple+*"
 			);
@@ -220,14 +220,15 @@ public class JsonSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SimpleReadable(PropertyStore propertyStore) {
+		public SimpleReadable(PropertyStore2 ps) {
 			super(
-				propertyStore.copy()
-				.append(JSON_simpleMode, true)
-				.append(SERIALIZER_quoteChar, '\'')
-				.append(SERIALIZER_useWhitespace, true)
+				ps.builder()
+					.set(JSON_simpleMode, true)
+					.set(SERIALIZER_quoteChar, '\'')
+					.set(SERIALIZER_useWhitespace, true)
+					.build()
 			);
 		}
 	}
@@ -241,15 +242,16 @@ public class JsonSerializer extends WriterSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SimpleReadableSafe(PropertyStore propertyStore) {
+		public SimpleReadableSafe(PropertyStore2 ps) {
 			super(
-				propertyStore.copy()
-				.append(JSON_simpleMode, true)
-				.append(SERIALIZER_quoteChar, '\'')
-				.append(SERIALIZER_useWhitespace, true)
-				.append(SERIALIZER_detectRecursions, true)
+				ps.builder()
+					.set(JSON_simpleMode, true)
+					.set(SERIALIZER_quoteChar, '\'')
+					.set(SERIALIZER_useWhitespace, true)
+					.set(SERIALIZER_detectRecursions, true)
+					.build()
 			);
 		}
 	}
@@ -259,23 +261,27 @@ public class JsonSerializer extends WriterSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final JsonSerializerContext ctx;
+	final boolean
+		simpleMode,
+		escapeSolidus,
+		addBeanTypeProperties;
+
 	private volatile JsonSchemaSerializer schemaSerializer;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public JsonSerializer(PropertyStore propertyStore) {
-		this(propertyStore, "application/json", "application/json", "application/json+*", "text/json", "text/json+*");
+	public JsonSerializer(PropertyStore2 ps) {
+		this(ps, "application/json", "application/json", "application/json+*", "text/json", "text/json+*");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore
+	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 * @param produces
 	 * 	The media type that this serializer produces.
@@ -293,14 +299,17 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<br>...or...
 	 * 	<br><code><jk>super</jk>(propertyStore, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);</code>
 	 */
-	public JsonSerializer(PropertyStore propertyStore, String produces, String...accept) {
-		super(propertyStore, produces, accept);
-		this.ctx = createContext(JsonSerializerContext.class);
+	public JsonSerializer(PropertyStore2 ps, String produces, String...accept) {
+		super(ps, produces, accept);
+		
+		simpleMode = getProperty(JSON_simpleMode, boolean.class, false);
+		escapeSolidus = getProperty(JSON_escapeSolidus, boolean.class, false);
+		addBeanTypeProperties = getProperty(JSON_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
-	@Override /* CoreObject */
+	@Override /* Context */
 	public JsonSerializerBuilder builder() {
-		return new JsonSerializerBuilder(propertyStore);
+		return new JsonSerializerBuilder(getPropertyStore());
 	}
 	
 	/**
@@ -326,7 +335,7 @@ public class JsonSerializer extends WriterSerializer {
 	 */
 	public JsonSchemaSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
-			schemaSerializer = new JsonSchemaSerializer(propertyStore);
+			schemaSerializer = builder().build(JsonSchemaSerializer.class);
 		return schemaSerializer;
 	}
 
@@ -336,6 +345,16 @@ public class JsonSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new JsonSerializerSession(ctx, args);
+		return new JsonSerializerSession(this, args);
+	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSerializer", new ObjectMap()
+				.append("simpleMode", simpleMode)
+				.append("escapeSolidus", escapeSolidus)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+			);
 	}
 }

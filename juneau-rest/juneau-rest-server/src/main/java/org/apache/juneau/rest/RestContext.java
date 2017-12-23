@@ -52,7 +52,7 @@ import org.apache.juneau.utils.*;
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
  *
  * <p>
- * See {@link PropertyStore} for more information about context properties.
+ * See {@link PropertyStore2} for more information about context properties.
  */
 public final class RestContext extends Context {
 
@@ -150,7 +150,7 @@ public final class RestContext extends Context {
 	 */
 	@SuppressWarnings("unchecked")
 	public RestContext(Object resource, ServletContext servletContext, RestConfig config) throws Exception {
-		super(null);
+		super(PropertyStore2.DEFAULT);
 		RestException _initException = null;
 		try {
 			this.resource = resource;
@@ -485,8 +485,6 @@ public final class RestContext extends Context {
 		@SuppressWarnings("unchecked")
 		Builder(Object resource, RestConfig sc) throws Exception {
 
-			PropertyStore ps = sc.createPropertyStore();
-
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
 
 			allowHeaderParams = getBoolean(sc.allowHeaderParams, "juneau.allowHeaderParams", true);
@@ -509,12 +507,12 @@ public final class RestContext extends Context {
 				.vars(FileVar.class, LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
 				.build()
 			;
+			
 			configFile = sc.configFile.getResolving(this.varResolver);
 			properties = sc.properties;
-			Collections.reverse(sc.beanFilters);
-			Collections.reverse(sc.pojoSwaps);
-			beanFilters = toObjectArray(sc.beanFilters, Class.class);
-			pojoSwaps = toObjectArray(sc.pojoSwaps, Class.class);
+			
+			beanFilters = ArrayUtils.reverseInline(toObjectArray(sc.beanFilters, Class.class));
+			pojoSwaps = ArrayUtils.reverseInline(toObjectArray(sc.pojoSwaps, Class.class));
 
 			for (Class<?> c : sc.paramResolvers) {
 				RestParam rp = newInstanceFromOuter(resource, RestParam.class, c);
@@ -538,18 +536,16 @@ public final class RestContext extends Context {
 			if (messageBundle == null)
 				messageBundle = new MessageBundle(resource.getClass(), "");
 
-			ps.addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps).setProperties(properties);
-
-			serializers = sc.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).listener(sc.serializerListener).build();
-			parsers = sc.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).listener(sc.parserListener).build();
-			urlEncodingSerializer = new UrlEncodingSerializer(ps);
-			urlEncodingParser = new UrlEncodingParser(ps);
+			serializers = sc.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(sc.serializerListener).build();
+			parsers = sc.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(sc.parserListener).build();
+			urlEncodingSerializer = UrlEncodingSerializer.create().beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).build();
+			urlEncodingParser = UrlEncodingParser.create().beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).build();
 			encoders = sc.encoders.build();
 			supportedContentTypes = sc.supportedContentTypes != null ? sc.supportedContentTypes : serializers.getSupportedMediaTypes();
 			supportedAcceptTypes = sc.supportedAcceptTypes != null ? sc.supportedAcceptTypes : parsers.getSupportedMediaTypes();
 			defaultRequestHeaders.putAll(sc.defaultRequestHeaders);
 			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(sc.defaultResponseHeaders));
-			beanContext = ps.getBeanContext();
+			beanContext = BeanContext.create().beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).build();
 			contextPath = sc.contextPath;
 
 			for (Object o : sc.converters)
@@ -1688,5 +1684,15 @@ public final class RestContext extends Context {
 		} catch (Exception e) {
 			throw new RestServletException("Exception occurred while constructing class ''{0}''", c).initCause(e);
 		}
+	}
+
+	@Override
+	public Session createSession(SessionArgs args) {
+		throw new NoSuchMethodError();
+	}
+
+	@Override
+	public SessionArgs createDefaultSessionArgs() {
+		throw new NoSuchMethodError();
 	}
 }

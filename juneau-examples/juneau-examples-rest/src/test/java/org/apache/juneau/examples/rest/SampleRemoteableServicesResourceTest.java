@@ -38,7 +38,7 @@ public class SampleRemoteableServicesResourceTest extends RestTestcase {
 				.build(),
 			SamplesMicroservice.client(XmlSerializer.class, XmlParser.class)
 				.pojoSwaps(CalendarSwap.DateMedium.class)
-				.property(XML_autoDetectNamespaces, true)
+				.set(XML_autoDetectNamespaces, true)
 				.build(),
 			SamplesMicroservice.client(UonSerializer.class, UonParser.class)
 				.pojoSwaps(CalendarSwap.DateMedium.class)

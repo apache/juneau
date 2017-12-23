@@ -44,7 +44,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected WriterSerializerSession(SerializerContext ctx, SerializerSessionArgs args) {
+	protected WriterSerializerSession(Serializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 	}
 
@@ -55,7 +55,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 * 	Runtime session arguments.
 	 */
 	protected WriterSerializerSession(SerializerSessionArgs args) {
-		this(null, args);
+		super(args);
 	}
 
 	@Override /* SerializerSession */

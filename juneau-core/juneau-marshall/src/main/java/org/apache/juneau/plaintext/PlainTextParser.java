@@ -43,7 +43,7 @@ public class PlainTextParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore.create());
+	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore2.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -53,28 +53,28 @@ public class PlainTextParser extends ReaderParser {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public PlainTextParser(PropertyStore propertyStore) {
-		this(propertyStore, "text/plain");
+	public PlainTextParser(PropertyStore2 ps) {
+		this(ps, "text/plain");
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The media types that this parser consumes.
 	 * 	<p>
 	 * 	Can contain meta-characters per the <code>media-type</code> specification of
 	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
 	 */
-	public PlainTextParser(PropertyStore propertyStore, String...consumes) {
-		super(propertyStore, consumes);
+	public PlainTextParser(PropertyStore2 ps, String...consumes) {
+		super(ps, consumes);
 	}
 
 	@Override /* CoreObject */
 	public PlainTextParserBuilder builder() {
-		return new PlainTextParserBuilder(propertyStore);
+		return new PlainTextParserBuilder(getPropertyStore());
 	}
 
 	/**
@@ -95,6 +95,6 @@ public class PlainTextParser extends ReaderParser {
 
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
-		return new PlainTextParserSession(args);
+		return new PlainTextParserSession(this, args);
 	}
 }

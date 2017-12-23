@@ -43,10 +43,10 @@ public class XmlDocSerializer extends XmlSerializer {
 		/**
 		 * Constructor.
 		 *
-		 * @param propertyStore The property store containing all the settings for this object.
+		 * @param ps The property store containing all the settings for this object.
 		 */
-		public Ns(PropertyStore propertyStore) {
-			super(propertyStore.copy().append(XML_enableNamespaces, true));
+		public Ns(PropertyStore2 ps) {
+			super(ps.builder().set(XML_enableNamespaces, true).build());
 		}
 	}
 
@@ -58,14 +58,14 @@ public class XmlDocSerializer extends XmlSerializer {
 	/**
 	 * Constructor.
 	 *
-	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param ps The property store containing all the settings for this object.
 	 */
-	public XmlDocSerializer(PropertyStore propertyStore) {
-		super(propertyStore);
+	public XmlDocSerializer(PropertyStore2 ps) {
+		super(ps);
 	}
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
-		return new XmlDocSerializerSession(ctx, args);
+		return new XmlDocSerializerSession(this, args);
 	}
 }

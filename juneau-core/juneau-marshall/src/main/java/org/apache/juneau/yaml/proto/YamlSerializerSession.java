@@ -45,14 +45,9 @@ public class YamlSerializerSession extends WriterSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected YamlSerializerSession(YamlSerializerContext ctx, SerializerSessionArgs args) {
+	protected YamlSerializerSession(YamlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		ObjectMap p = getProperties();
-		if (p.isEmpty()) {
-			addBeanTypeProperties = ctx.addBeanTypeProperties;
-		} else {
-			addBeanTypeProperties = p.getBoolean(YAML_addBeanTypeProperties, ctx.addBeanTypeProperties);
-		}
+		addBeanTypeProperties = getProperty(YAML_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
 	}
 
 	@Override /* Session */

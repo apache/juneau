@@ -36,8 +36,8 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserA extends ReaderParser {
 
-		public TestParserA(PropertyStore propertyStore) {
-			super(propertyStore, "text/a");
+		public TestParserA(PropertyStore2 ps) {
+			super(ps, "text/a");
 		}
 
 		@Override /* Parser */
@@ -71,8 +71,8 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserB extends ReaderParser {
 
-		public TestParserB(PropertyStore propertyStore) {
-			super(propertyStore, "text/b");
+		public TestParserB(PropertyStore2 ps) {
+			super(ps, "text/b");
 		}
 
 		@Override /* Parser */
@@ -98,8 +98,8 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserC extends ReaderParser {
 
-		public TestParserC(PropertyStore propertyStore) {
-			super(propertyStore, "text/c");
+		public TestParserC(PropertyStore2 ps) {
+			super(ps, "text/c");
 		}
 
 		@Override /* Parser */
@@ -125,8 +125,8 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserD extends ReaderParser {
 
-		public TestParserD(PropertyStore propertyStore) {
-			super(propertyStore, "text/d");
+		public TestParserD(PropertyStore2 ps) {
+			super(ps, "text/d");
 		}
 
 		@Override /* Parser */
