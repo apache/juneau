@@ -56,7 +56,7 @@ import org.apache.juneau.http.*;
  * 	b.append(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
  *
  * 	<jc>// Change settings on parsers simultaneously</jc>
- * 	b.property(BeanContext.<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
+ * 	b.set(BeanContext.<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
  * 		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>);
  *
  * 	ParserGroup g = b.build();

@@ -61,7 +61,7 @@ public class PropertiesResource extends RestServletDefault {
 
 	public static class PropertySerializer1 extends WriterSerializer {
 
-		public PropertySerializer1(PropertyStore2 ps) {
+		public PropertySerializer1(PropertyStore ps) {
 			super(ps, "application/json", "*/json");
 		}
 
@@ -89,7 +89,7 @@ public class PropertiesResource extends RestServletDefault {
 
 	public static class PropertySerializer2 extends WriterSerializer {
 
-		public PropertySerializer2(PropertyStore2 ps) {
+		public PropertySerializer2(PropertyStore ps) {
 			super(ps, "application/json", "*/json");
 		}
 

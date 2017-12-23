@@ -33,17 +33,17 @@ import org.apache.juneau.serializer.*;
 public class DefaultContentTypesResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	public static class P1 extends DummyParser { public P1(PropertyStore2 ps) {super(ps, "p1", "text/p1");}}
+	public static class P1 extends DummyParser { public P1(PropertyStore ps) {super(ps, "p1", "text/p1");}}
 
-	public static class P2 extends DummyParser { public P2(PropertyStore2 ps) {super(ps, "p2", "text/p2");}}
+	public static class P2 extends DummyParser { public P2(PropertyStore ps) {super(ps, "p2", "text/p2");}}
 
-	public static class P3 extends DummyParser { public P3(PropertyStore2 ps) {super(ps, "p3", "text/p3");}}
+	public static class P3 extends DummyParser { public P3(PropertyStore ps) {super(ps, "p3", "text/p3");}}
 
-	public static class S1 extends DummySerializer { public S1(PropertyStore2 ps) {super(ps, "s1", "text/s1");}}
+	public static class S1 extends DummySerializer { public S1(PropertyStore ps) {super(ps, "s1", "text/s1");}}
 
-	public static class S2 extends DummySerializer { public S2(PropertyStore2 ps) {super(ps, "s2", "text/s2");}}
+	public static class S2 extends DummySerializer { public S2(PropertyStore ps) {super(ps, "s2", "text/s2");}}
 
-	public static class S3 extends DummySerializer { public S3(PropertyStore2 ps) {super(ps, "s3", "text/s3");}}
+	public static class S3 extends DummySerializer { public S3(PropertyStore ps) {super(ps, "s3", "text/s3");}}
 
 	/**
 	 * Test that default Accept and Content-Type headers on servlet annotation are picked up.
@@ -101,7 +101,7 @@ public class DefaultContentTypesResource extends RestServlet {
 
 		private String name;
 
-		private DummyParser(PropertyStore2 ps, String name, String...consumes) {
+		private DummyParser(PropertyStore ps, String name, String...consumes) {
 			super(ps, consumes);
 			this.name = name;
 		}
@@ -123,7 +123,7 @@ public class DefaultContentTypesResource extends RestServlet {
 
 		private String name;
 
-		private DummySerializer(PropertyStore2 ps, String name, String produces) {
+		private DummySerializer(PropertyStore ps, String name, String produces) {
 			super(ps, produces);
 			this.name = name;
 		}

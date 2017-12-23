@@ -13,7 +13,6 @@
 
 Create tests that ensure serializers don't close output but parsers do close input.
 
-Remove references to ObjectMap/ObjectList that passes in a parser.
 Fix docs referencing .property(
 Remove property info from builders.
 Review property info in all contexts.

@@ -941,7 +941,7 @@
 		<p class='bcode'>
 	<jc>// Create a rest client that ignores unknown fields in the response</jc>
 	RestClient rc = RestClient.<jsm>create</jsm>()
-		.property(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
+		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
 		<jc>// or .ignoreUnknownBeanProperties(true)</jc>
 		.build();
 	MyPojo myPojo = rc.doGet(<jsf>URL</jsf>).getResponse(MyPojo.<jk>class</jk>);

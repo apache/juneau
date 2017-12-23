@@ -53,7 +53,7 @@ public class AcceptCharsetResource extends RestServlet {
 
 	public static class TestParser extends InputStreamParser {
 
-		public TestParser(PropertyStore2 ps) {
+		public TestParser(PropertyStore ps) {
 			super(ps, "text/plain");
 		}
 
@@ -72,7 +72,7 @@ public class AcceptCharsetResource extends RestServlet {
 
 	public static class TestSerializer extends OutputStreamSerializer {
 
-		public TestSerializer(PropertyStore2 ps) {
+		public TestSerializer(PropertyStore ps) {
 			super(ps, "text/plain");
 		}
 

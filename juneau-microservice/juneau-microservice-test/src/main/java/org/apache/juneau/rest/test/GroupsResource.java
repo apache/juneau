@@ -38,7 +38,7 @@ public class GroupsResource extends RestServlet {
 
 	public static class SSerializer extends WriterSerializer {
 
-		public SSerializer(PropertyStore2 ps) {
+		public SSerializer(PropertyStore ps) {
 			super(ps, "text/s1", "text/s1", "text/s2");
 		}
 
@@ -56,7 +56,7 @@ public class GroupsResource extends RestServlet {
 
 	public static class PParser extends ReaderParser {
 
-		public PParser(PropertyStore2 ps) {
+		public PParser(PropertyStore ps) {
 			super(ps, "text/p1", "text/p2");
 		}
 

@@ -36,7 +36,7 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserA extends ReaderParser {
 
-		public TestParserA(PropertyStore2 ps) {
+		public TestParserA(PropertyStore ps) {
 			super(ps, "text/a");
 		}
 
@@ -71,7 +71,7 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserB extends ReaderParser {
 
-		public TestParserB(PropertyStore2 ps) {
+		public TestParserB(PropertyStore ps) {
 			super(ps, "text/b");
 		}
 
@@ -98,7 +98,7 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserC extends ReaderParser {
 
-		public TestParserC(PropertyStore2 ps) {
+		public TestParserC(PropertyStore ps) {
 			super(ps, "text/c");
 		}
 
@@ -125,7 +125,7 @@ public class ParsersResource extends RestServletDefault {
 
 	public static class TestParserD extends ReaderParser {
 
-		public TestParserD(PropertyStore2 ps) {
+		public TestParserD(PropertyStore ps) {
 			super(ps, "text/d");
 		}
 

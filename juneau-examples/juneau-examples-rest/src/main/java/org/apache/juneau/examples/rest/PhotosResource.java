@@ -135,7 +135,7 @@ public class PhotosResource extends Resource {
 		 * Constructor.
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public ImageSerializer(PropertyStore2 ps) {
+		public ImageSerializer(PropertyStore ps) {
 			super(ps, null, "image/png", "image/jpeg");
 		}
 
@@ -160,7 +160,7 @@ public class PhotosResource extends Resource {
 		 * Constructor.
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public ImageParser(PropertyStore2 ps) {
+		public ImageParser(PropertyStore ps) {
 			super(ps, "image/png", "image/jpeg");
 		}
 

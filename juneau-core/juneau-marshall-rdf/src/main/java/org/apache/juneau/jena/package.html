@@ -242,7 +242,7 @@
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev()
-		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
@@ -256,7 +256,7 @@
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output by cloning an existing serializer.</jc>
 	RdfSerializer s = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.builder()
-		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 	</p>
 	<p>
 		This code produces the following output:
@@ -352,7 +352,7 @@
 	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
 		.autoDetectNamespaces(<jk>false</jk>)
 		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
 		.build();
@@ -457,7 +457,7 @@
 	<jc>// Create a new serializer with readable output.</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
 		.relativeUriBase(<js>"http://myhost/sample"</js>);
 		.absolutePathUriBase(<js>"http://myhost"</js>)
 		.build();
@@ -586,7 +586,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
-	RdfSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev().property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
+	RdfSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev().set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
@@ -669,7 +669,7 @@
 	<jc>// Create a new serializer.</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
 		.addRootProperty(<jk>true</jk>)
 		.build();
 		</p>	
@@ -725,7 +725,7 @@
 	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
 		.addLiteralTypes(<jk>true</jk>)
 		.build();
 		</p>	
@@ -854,7 +854,7 @@
 	<jc>// Create a new serializer with readable output.</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
-		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+		.set(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
 		.addRootProperty(<jk>true</jk>)
 		.build();
 

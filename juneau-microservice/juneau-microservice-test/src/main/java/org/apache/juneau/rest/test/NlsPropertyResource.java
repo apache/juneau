@@ -55,7 +55,7 @@ public class NlsPropertyResource extends RestServlet {
 
 	public static class TestSerializer extends WriterSerializer {
 
-		public TestSerializer(PropertyStore2 ps) {
+		public TestSerializer(PropertyStore ps) {
 			super(ps, "text/plain");
 		}
 

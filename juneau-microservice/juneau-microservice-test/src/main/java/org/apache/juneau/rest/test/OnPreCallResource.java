@@ -41,7 +41,7 @@ public class OnPreCallResource extends RestServlet {
 
 	public static class TestParserA extends ReaderParser {
 
-		public TestParserA(PropertyStore2 ps) {
+		public TestParserA(PropertyStore ps) {
 			super(ps, "text/a1", "text/a2", "text/a3");
 		}
 
