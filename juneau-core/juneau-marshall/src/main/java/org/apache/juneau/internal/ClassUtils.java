@@ -1071,7 +1071,7 @@ public final class ClassUtils {
 	 * <ul>
 	 * 	<li>Have a public constructor that takes in a single <code>String</code> argument.
 	 * 	<li>Have a static <code>fromString(String)</code> (or related) method.
-	 * 		<br>See {@findPublicFromStringMethod(Class)} for the list of possible static method names.
+	 * 		<br>See {@link #findPublicFromStringMethod(Class)} for the list of possible static method names.
 	 * 	<li>Be an <code>enum</code>.
 	 * </ul>
 	 * 

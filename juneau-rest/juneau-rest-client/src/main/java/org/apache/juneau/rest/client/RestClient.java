@@ -291,7 +291,7 @@ public class RestClient extends BeanContext {
 	final RetryOn retryOn;
 	final int retries;
 	final long retryInterval;
-	final RestCallInterceptor[] intercepters;
+	final RestCallInterceptor[] interceptors;
 
 	// This is lazy-created.
 	private volatile ExecutorService executorService;
@@ -382,7 +382,7 @@ public class RestClient extends BeanContext {
 		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
 		if (debug)
 			rci = ArrayUtils.append(rci, RestCallLogger.DEFAULT);
-		this.intercepters = rci;
+		this.interceptors = rci;
 
 		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
 			creationStack = Thread.currentThread().getStackTrace();

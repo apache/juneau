@@ -22,7 +22,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.util.*;
 
 /**
- * Specialized intercepter for logging calls to a log file.
+ * Specialized interceptor for logging calls to a log file.
  *
  * <p>
  * Causes a log entry to be created that shows all the request and response headers and content at the end of the

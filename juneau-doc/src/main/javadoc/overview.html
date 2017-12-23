@@ -907,11 +907,11 @@
 									</ul>
 								</li>
 								<li class='jic'>
-									{@link org.apache.juneau.rdf.RdfCommon} 
+									{@link org.apache.juneau.jena.RdfCommon} 
 									- Configurable properties common to the RDF serializers and parsers.
 									<ul>
 										<li class='jc'>
-											{@link org.apache.juneau.rdf.RdfSerializer}
+											{@link org.apache.juneau.jena.RdfSerializer}
 											- Configurable properties on the RDF serializers.
 									</ul>
 								</li>
@@ -919,7 +919,7 @@
 									{@link org.apache.juneau.json.JsonSerializer} 
 									- Configurable properties on the JSON serializer.
 								<li class='jc'>
-									{@link org.apache.juneau.msgpack.MessagePackSerializer} 
+									{@link org.apache.juneau.msgpack.MsgPackSerializer} 
 									- Configurable properties on the MessagePack serializer.
 								<li class='jc'>
 									{@link org.apache.juneau.soap.SoapXmlSerializer} 
@@ -940,7 +940,7 @@
 									{@link org.apache.juneau.html.HtmlParser} 
 									- Configurable properties on the HTML parser.
 								<li class='jic'>
-									{@link org.apache.juneau.rdf.RdfCommon} 
+									{@link org.apache.juneau.jena.RdfCommon} 
 									- Configurable properties common to the RDF serializers and parsers.
 									<ul>
 										<li class='jc'>
@@ -965,7 +965,7 @@
 					</ul>
 				</li>
 				<li class='jc'>
-					{@link org.apache.juneau.rest.server.RestContext} 
+					{@link org.apache.juneau.rest.RestContext} 
 					- Configurable properties on the REST servlet.
 				</li>
 			</ul>
@@ -1830,7 +1830,7 @@
 					<td>
 						No equivalent annotation, but can be controlled via various settings:
 						<br>{@link org.apache.juneau.BeanContext}
-						<br>{@link org.apache.juneau.serializer.SerializerContext}
+						<br>{@link org.apache.juneau.serializer.Serializer}
 						<br>Future annotation support planned.
 					</td>
 				</tr>
@@ -7686,16 +7686,16 @@
 							<ul>
 								<li class='jac'>{@link org.apache.juneau.BeanContextBuilder}
 								<ul>
-									<li class='jaa'>{@link org.apache.juneau.serializer.SerializerBuider}
+									<li class='jaa'>{@link org.apache.juneau.serializer.SerializerBuilder}
 									<ul>
-										<li class='jac'>{@link org.apache.juneau.serializer.JsonSerializerBuilder}
+										<li class='jac'>{@link org.apache.juneau.json.JsonSerializerBuilder}
 									</ul>
 								</ul>
 							</ul>
 						</ul>
 						Builder objects are used for building up and creating <code>Context</code> objects.
 					<li>
-						The {@link org.apache.juneau.PropertyStore2} class has been completely rewritten.
+						The {@link org.apache.juneau.PropertyStore} class has been completely rewritten.
 						It is now a read-only configuration store build using the {@link org.apache.juneau.PropertyStoreBuilder}
 						class.
 						<br>The previous <code>PropertyStore</code> class was overly-complicated with many read/write
@@ -8414,7 +8414,7 @@
 			<li>
 				Fixed bugs with {@link org.apache.juneau.BeanContext#BEAN_includeProperties} and {@link org.apache.juneau.BeanContext#BEAN_excludeProperties} settings.
 			<li>
-				New/modified settings in {@link org.apache.juneau.html.HtmlDocSerializerContext}:
+				New/modified settings in <code><del>HtmlDocSerializerContext</del></code>:
 				<ul>
 					<li><code><del>HTMLDOC_script</del></code>
 					<li><code><del>HTMLDOC_style</del></code> - Was <jsf>HTMLDOC_css</jsf>.
@@ -8425,7 +8425,7 @@
 				Allows you to search for resources up the parent hierarchy chain.
 				Also allows you to search for localized resources.
 			<li>
-				Eliminated the following properties from {@link org.apache.juneau.html.HtmlDocSerializerContext}:
+				Eliminated the following properties from <code><del>HtmlDocSerializerContext</del></code>:
 				<jsf>HTMLDOC_title</jsf>, <jsf>HTMLDOC_description</jsf>, <jsf>HTMLDOC_description</jsf>
 				<br>See below on changes to simplify HTML headers.
 			<li>
@@ -9374,7 +9374,7 @@
 			<ul>
 				<li>Session object meant to be single-use that can be discarded after use and contains session-level object cache and overridable Locale and TimeZone.
 			</ul>  
-			<li>{@link org.apache.juneau.serializer.SerializerContext} and {@link org.apache.juneau.parser.ParserContext}
+			<li><code><del>SerializerContext</del></code> and <code><del>ParserContext</del></code>
 				now extend directly from {@link org.apache.juneau.BeanContext}.
 			<li>{@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
 				now extend directly from {@link org.apache.juneau.BeanSession}.
@@ -9569,7 +9569,7 @@
 				<ul>
 					<li>Several fixes to handle obscure edge cases.
 				</ul>
-			<li>New properties in {@link org.apache.juneau.parser.ParserContext}.
+			<li>New properties in <code><del>ParserContext</del></code>.
 				<ul>
 					<li><code><del>ParserContext.PARSER_strict</del></code>
 					<li><code><del>ParserContext.PARSER_inputStreamCharset</del></code>
@@ -10567,7 +10567,7 @@
 		
 		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
-			<li>New properties in {@link org.apache.juneau.serializer.SerializerContext}:
+			<li>New properties in <code><del>SerializerContext</del></code>:
 				<ol>
 					<li><code><del>SerializerContext.SERIALIZER_relativeUriBase</del></code>
 					<li><code><del>SerializerContext.SERIALIZER_absolutePathUriBase</del></code>
@@ -10953,7 +10953,7 @@
 			<li>Bug fixes in {@link org.apache.juneau.dto.ResultSetList} for Oracle and SQL Server.
 			<li>Serializers and parsers can now access HTTP request attributes, parameters, and headers through <code>SerializerContext.getProperties()</code> and
 				<code>ParserContext.getProperties()</code>.		
-			<li>Removed media-type and encoding attributes from {@link org.apache.juneau.serializer.SerializerContext} and {@link org.apache.juneau.parser.ParserContext}	
+			<li>Removed media-type and encoding attributes from <code><del>SerializerContext</del></code> and <code><del>ParserContext</del></code>	
 				since these are now available through context properties, and are typically not used.
 			<li>{@link org.apache.juneau.xml.XmlParser} now accepts <code>application/xml</code>.		
 			<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
@@ -11028,7 +11028,7 @@
 			<li>Better behavior on overriding of filters in <code>BeanContext.addTransforms(Class[])</code>.
 				Previously, adding multiple conflicting filters resulted in random behavior.  
 				Now filters are overridden when multiple matching filters are applied.
-			<li>Allow {@link org.apache.juneau.html.HtmlDocSerializerContext} properties to be set via <code><del>Serializer.setProperty(String,Object)</del></code>.
+			<li>Allow <code><del>HtmlDocSerializerContext</del></code> properties to be set via <code><del>Serializer.setProperty(String,Object)</del></code>.
 				Previously, these could only be defined through override properties (e.g. through REST class and method annotations).
 			<li>Fixed memory leak in XML parser.	
 		</ul>
@@ -11701,7 +11701,7 @@
 				New <code><del>HtmlDocSerializerContext.HTMLDOC_navlinks</del></code> annotation for addint links to HTML page views.
 			</li>
 			<li>
-				Renamed the properties in {@link org.apache.juneau.html.HtmlDocSerializerContext} for clarity.
+				Renamed the properties in <code><del>HtmlDocSerializerContext</del></code> for clarity.
 			</li>
 		</ul>		
 		<h6 class='topic'>Servlet API changes</h6>
@@ -12244,8 +12244,8 @@
 				New configurable property classes for everything are now structured better and easier to locate and identify through the following new classes:
 				<ul>
 					<li>{@link org.apache.juneau.BeanContext}</li>
-					<li>{@link org.apache.juneau.serializer.SerializerContext}</li>
-					<li>{@link org.apache.juneau.parser.ParserContext}</li>
+					<li><code><del>SerializerContext</del></code></li>
+					<li><code><del>ParserContext</del></code></li>
 				</ul>		
 			</li>
 			<li>

@@ -74,7 +74,7 @@ public final class RestCall extends Session {
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
 	private HttpResponse response;                         // The response.
-	private List<RestCallInterceptor> intercepters = new ArrayList<>();               // Used for intercepting and altering requests.
+	private List<RestCallInterceptor> interceptors = new ArrayList<>();               // Used for intercepting and altering requests.
 
 	private boolean isConnected = false;                   // connect() has been called.
 	private boolean allowRedirectsOnPosts;
@@ -109,8 +109,8 @@ public final class RestCall extends Session {
 		super(SessionArgs.DEFAULT);
 		this.client = client;
 		this.request = request;
-		for (RestCallInterceptor i : this.client.intercepters)
-			intercepter(i);
+		for (RestCallInterceptor i : this.client.interceptors)
+			interceptor(i);
 		this.retryOn = client.retryOn;
 		this.retries = client.retries;
 		this.retryInterval = client.retryInterval;
@@ -1118,14 +1118,14 @@ public final class RestCall extends Session {
 	}
 
 	/**
-	 * Add an intercepter for this call only.
+	 * Add an interceptor for this call only.
 	 *
-	 * @param intercepter The intercepter to add to this call.
+	 * @param interceptor The interceptor to add to this call.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall intercepter(RestCallInterceptor intercepter) {
-		intercepters.add(intercepter);
-		intercepter.onInit(this);
+	public RestCall interceptor(RestCallInterceptor interceptor) {
+		interceptors.add(interceptor);
+		interceptor.onInit(this);
 		return this;
 	}
 
@@ -1361,7 +1361,7 @@ public final class RestCall extends Session {
 	 */
 	public RestCall responsePattern(final ResponsePattern responsePattern) {
 		captureResponse();
-		intercepter(
+		interceptor(
 			new RestCallInterceptor() {
 				@Override
 				public void onClose(RestCall restCall) throws RestCallException {
@@ -1521,7 +1521,7 @@ public final class RestCall extends Session {
 				if (! retryOn.onResponse(response))
 					retries = 0;
 				if (retries > 0) {
-					for (RestCallInterceptor rci : intercepters)
+					for (RestCallInterceptor rci : interceptors)
 						rci.onRetry(this, sc, request, response, ex);
 					request.reset();
 					long w = retryInterval;
@@ -1532,13 +1532,13 @@ public final class RestCall extends Session {
 					throw ex;
 				}
 			}
-			for (RestCallInterceptor rci : intercepters)
+			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(this, sc, request, response);
 			if (response == null)
 				throw new RestCallException("HttpClient returned a null response");
 			StatusLine sl = response.getStatusLine();
 			String method = request.getMethod();
-			sc = sl.getStatusCode(); // Read it again in case it was changed by one of the intercepters.
+			sc = sl.getStatusCode(); // Read it again in case it was changed by one of the interceptors.
 			if (sc >= 400 && ! ignoreErrors)
 				throw new RestCallException(sc, sl.getReasonPhrase(), method, request.getURI(), getResponseAsString())
 					.setServerException(response.getFirstHeader("Exception-Name"), response.getFirstHeader("Exception-Message"), response.getFirstHeader("Exception-Trace"))
@@ -2056,20 +2056,20 @@ public final class RestCall extends Session {
 			EntityUtils.consumeQuietly(response.getEntity());
 		isClosed = true;
 		if (! isFailed)
-			for (RestCallInterceptor r : intercepters)
+			for (RestCallInterceptor r : interceptors)
 				r.onClose(this);
 		return this;
 	}
 
 	/**
-	 * Adds a {@link RestCallLogger} to the list of intercepters on this class.
+	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
 	 *
 	 * @param level The log level to log events at.
 	 * @param log The logger.
 	 * @return This object (for method chaining).
 	 */
 	public RestCall logTo(Level level, Logger log) {
-		intercepter(new RestCallLogger(level, log));
+		interceptor(new RestCallLogger(level, log));
 		return this;
 	}
 

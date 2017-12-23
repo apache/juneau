@@ -241,9 +241,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds an intercepter that gets called immediately after a connection is made.
+	 * Adds an interceptor that gets called immediately after a connection is made.
 	 *
-	 * @param interceptor The intercepter.
+	 * @param interceptor The interceptor.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder interceptor(RestCallInterceptor interceptor) {
@@ -251,7 +251,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds a {@link RestCallLogger} to the list of intercepters on this class.
+	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
 	 *
 	 * @param level The log level to log messages at.
 	 * @param log The logger to log messages to.
