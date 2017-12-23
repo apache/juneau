@@ -945,7 +945,7 @@ public class BeanContext extends Context {
 
 	final String beanTypePropertyName;
 
-	final int hashCode;
+	final int beanHashCode;
 
 	/**
 	 * Constructor.
@@ -958,7 +958,7 @@ public class BeanContext extends Context {
 	public BeanContext(PropertyStore ps) {
 		super(ps);
 
-		hashCode = ps.hashCode("BeanContext");
+		beanHashCode = ps.hashCode("BeanContext");
 
 		beansRequireDefaultConstructor = getProperty(BEAN_beansRequireDefaultConstructor, boolean.class, false);
 		beansRequireSerializable = getProperty(BEAN_beansRequireSerializable, boolean.class, false);
@@ -1032,13 +1032,13 @@ public class BeanContext extends Context {
 		timeZone = getInstanceProperty(BEAN_timeZone, TimeZone.class, null);
 		mediaType = getInstanceProperty(BEAN_mediaType, MediaType.class, null);
 		
-		if (! cmCacheCache.containsKey(hashCode)) {
+		if (! cmCacheCache.containsKey(beanHashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
 			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
 			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
-			cmCacheCache.putIfAbsent(hashCode, cm);
+			cmCacheCache.putIfAbsent(beanHashCode, cm);
 		}
-		cmCache = cmCacheCache.get(hashCode);
+		cmCache = cmCacheCache.get(beanHashCode);
 		cmString = cmCache.get(String.class);
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
@@ -1795,20 +1795,6 @@ public class BeanContext extends Context {
 	 */
 	protected final ClassMeta<Class> _class() {
 		return cmClass;
-	}
-
-	@Override /* Object */
-	public int hashCode() {
-		return hashCode;
-	}
-
-	@Override /* Object */
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o instanceof BeanContext)
-			return ((BeanContext)o).hashCode == hashCode;
-		return false;
 	}
 
 	@Override /* Context */

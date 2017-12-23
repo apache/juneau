@@ -197,11 +197,11 @@ public class PropertyStore2Test {
 		b.set("A.f4.o", StringBuilder.class);
 		b.set("A.f5.o", null);  
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.o':123,'f2.o':true,'f3.o':'123','f4.o':''}}", ps);
+		assertObjectEquals("{A:{'f1.o':123,'f2.o':true,'f3.o':'123','f4.o':'java.lang.StringBuilder'}}", ps);
 		assertType(Integer.class, ps.getProperty("A.f1.o"));
 		assertType(Boolean.class, ps.getProperty("A.f2.o"));
 		assertType(StringBuilder.class, ps.getProperty("A.f3.o"));
-		assertType(StringBuilder.class, ps.getProperty("A.f4.o"));
+		assertType(Class.class, ps.getProperty("A.f4.o"));
 
 		// Test nulls
 		b.set("A.f2.o", null);
@@ -213,13 +213,8 @@ public class PropertyStore2Test {
 		testError(b, "A.f1.o/add", "foo", "Cannot add value 'foo' (String) to property 'f1.o' (Object).");
 		testError(b, "A.f1.o/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.o' (Object).");
 		testError(b, "A.f1.o/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.o' (Object).");
-		testError(b, "A.f1.o", ObjectWithNoNoArgConstructor.class, "Value 'org.apache.juneau.PropertyStore2Test$ObjectWithNoNoArgConstructor' (Class) cannot be converted to an Object on property 'f1.o' (Object).");
 	}
 	
-	public static class ObjectWithNoNoArgConstructor {
-		private ObjectWithNoNoArgConstructor() {}
-	}
-
 	@Test
 	public void testSetString() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
@@ -703,14 +698,14 @@ public class PropertyStore2Test {
 		b.set("A.f2.lo", new AList<Object>().appendAll(123, true, new StringBuilder(123), StringBuilder.class, null));  
 		b.set("A.f3.lo", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.lo':[''],'f2.lo':[123,true,'','']}}", ps);
+		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder'],'f2.lo':[123,true,'','java.lang.StringBuilder']}}", ps);
 		assertType(List.class, ps.getProperty("A.f1.lo"));
 		assertType(List.class, ps.getProperty("A.f2.lo"));
-		assertType(StringBuilder.class, ((List<?>)ps.getProperty("A.f1.lo")).get(0));
+		assertType(Class.class, ((List<?>)ps.getProperty("A.f1.lo")).get(0));
 		assertType(Integer.class, ((List<?>)ps.getProperty("A.f2.lo")).get(0));
 		assertType(Boolean.class, ((List<?>)ps.getProperty("A.f2.lo")).get(1));
 		assertType(StringBuilder.class, ((List<?>)ps.getProperty("A.f2.lo")).get(2));
-		assertType(StringBuilder.class, ((List<?>)ps.getProperty("A.f2.lo")).get(3));
+		assertType(Class.class, ((List<?>)ps.getProperty("A.f2.lo")).get(3));
 	
 		b.clear();
 		b.set("A.f1.lo/add", 1);  
@@ -723,31 +718,31 @@ public class PropertyStore2Test {
 		b.set("A.f1.lo/add", new AList<Class<?>>().appendAll(StringBuilder.class));  
 		b.set("A.f1.lo/add", new AList<Class<?>>().appendAll(HashMap.class));
 		b.addTo("A.f1.lo", new AList<Class<?>>().appendAll(LinkedList.class));
-		assertObjectEquals("{A:{'f1.lo':[[],{},'']}}", b.build());
+		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
 		b.set("A.f1.lo/remove", new AList<Class<?>>().appendAll(HashMap.class));  
 		b.removeFrom("A.f1.lo", new AList<Class<?>>().appendAll());  
 		b.removeFrom("A.f1.lo", new AList<Class<?>>().appendAll(LinkedList.class));  
-		assertObjectEquals("{A:{'f1.lo':['']}}", b.build());
+		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
 
 		b.clear();
 		b.set("A.f1.lo/add", new AList<Object>().appendAll(StringBuilder.class));  
 		b.set("A.f1.lo/add", new AList<Object>().appendAll(HashMap.class));
 		b.addTo("A.f1.lo", new AList<Object>().appendAll(LinkedList.class));
-		assertObjectEquals("{A:{'f1.lo':[[],{},'']}}", b.build());
+		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
 		b.set("A.f1.lo/remove", new AList<Object>().appendAll(HashMap.class));  
 		b.set("A.f1.lo/remove", new AList<Object>().appendAll());  
 		b.removeFrom("A.f1.lo", new AList<Object>().appendAll(LinkedList.class));  
-		assertObjectEquals("{A:{'f1.lo':['']}}", b.build());
+		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
 
 		b.clear();
 		b.set("A.f1.lo/add", new Class<?>[]{StringBuilder.class});  
 		b.set("A.f1.lo/add", new Class<?>[]{HashMap.class});
 		b.addTo("A.f1.lo", new Class<?>[]{LinkedList.class});
-		assertObjectEquals("{A:{'f1.lo':[[],{},'']}}", b.build());
+		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
 		b.set("A.f1.lo/remove", new Class<?>[]{HashMap.class});  
 		b.set("A.f1.lo/remove", new Class<?>[]{});  
 		b.removeFrom("A.f1.lo", new Class<?>[]{LinkedList.class});  
-		assertObjectEquals("{A:{'f1.lo':['']}}", b.build());
+		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
 		
 		b.set("A.f1.lo", null);
 		assertObjectEquals("{}", b.build());
@@ -758,7 +753,7 @@ public class PropertyStore2Test {
 		b.set("A.f1.lo/add.1", LinkedList.class);
 		b.set("A.f1.lo/add.0", TestEnum.ONE);
 		b.set("A.f1.lo/add.-10", TestEnum.TWO);
-		assertObjectEquals("{A:{'f1.lo':['TWO','ONE','',[],{}]}}", b.build());
+		assertObjectEquals("{A:{'f1.lo':['TWO','ONE','java.lang.StringBuilder','java.util.LinkedList','java.util.HashMap']}}", b.build());
 
 		try {
 			b.addTo("A.f1.lo", "foo", "bar");
@@ -896,7 +891,7 @@ public class PropertyStore2Test {
 		b.set("A.f4.mo", "{foo:'123',baz:456,qux:null}");  
 		b.set("A.f5.mo", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.mo':{baz:'2',foo:'1'},'f2.mo':{bar:'',foo:123},'f3.mo':{foo:'123'},'f4.mo':{baz:456,foo:'123'}}}", ps);
+		assertObjectEquals("{A:{'f1.mo':{baz:'2',foo:'1'},'f2.mo':{bar:'java.lang.StringBuilder',foo:123},'f3.mo':{foo:'123'},'f4.mo':{baz:456,foo:'123'}}}", ps);
 		assertType(Map.class, ps.getProperty("A.f1.mo"));
 		assertType(Map.class, ps.getProperty("A.f2.mo"));
 		assertType(Map.class, ps.getProperty("A.f3.mo"));
@@ -1288,7 +1283,7 @@ public class PropertyStore2Test {
 		testEquals(b1, b2);
 		
 		b1.set("A.f1.lo", new Object[]{StringBuilder.class});
-		b2.set("A.f1.lo", new Object[]{StringBuilder.class});
+		b2.set("A.f1.lo", new Object[]{StringBuffer.class});
 		testNotEquals(b1, b2);
 
 		b1.set("A.f1.lo", "foo");
@@ -1701,7 +1696,7 @@ public class PropertyStore2Test {
 		b = ps.builder();
 		ps = b.build();
 		
-		assertObjectEquals("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':[''],'foo.ls':['bar'],'foo.mc':{foo:'java.lang.String'},'foo.mi':{foo:123},'foo.mo':{foo:''},'foo.ms':{foo:'bar'},'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.ss':['bar']}}", ps);
+		assertObjectEquals("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.mc':{foo:'java.lang.String'},'foo.mi':{foo:123},'foo.mo':{foo:'java.lang.StringBuilder'},'foo.ms':{foo:'bar'},'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.ss':['bar']}}", ps);
 	}
 
 	@Test

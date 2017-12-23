@@ -63,11 +63,220 @@ import org.apache.juneau.urlencoding.*;
 @SuppressWarnings("rawtypes")
 public class RestClient extends BeanContext {
 
-	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<>();
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
 
+	private static final String PREFIX = "RestClient.";
+
+	/**
+	 * <b>Configuration property:</b>  Keep HttpClient open.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.keepHttpClientOpen.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 */
+	public static final String RESTCLIENT_keepHttpClientOpen = PREFIX + "keepHttpClientOpen.b";
+	
+	/**
+	 * <b>Configuration property:  Shut down executor service on close.</b>  
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.executorServiceShutdownOnClose.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
+	 */
+	public static final String RESTCLIENT_executorServiceShutdownOnClose = PREFIX + "executorServiceShutdownOnClose.b";
+	
+	/**
+	 * <b>Configuration property:</b>  Number of retries to attempt.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.retries.i"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>1</code>
+	 * </ul>
+	 *
+	 * <p>
+	 * The number of retries to attempt when the connection cannot be made or a <code>&gt;400</code> response is received.
+	 */
+	public static final String RESTCLIENT_retries = PREFIX + "retries.i";
+	
+	/**
+	 * <b>Configuration property:</b>  The time in milliseconds between retry attempts.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.retryInterval.i"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>-1</code>
+	 * </ul>
+	 *
+	 * <p>
+	 * The time in milliseconds between retry attempts.
+	 * <code>-1</code> means retry immediately.
+	 */
+	public static final String RESTCLIENT_retryInterval = PREFIX + "retryInterval.i";
+	
+	/**
+	 * <b>Configuration property:</b>  Retry-on determination object.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.retryOn.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? extends {@link RetryOn}</code> or {@link RetryOn}
+	 * 	<li><b>Default:</b> {@link RetryOn#DEFAULT}
+	 * </ul>
+	 *
+	 * <p>
+	 * Object used for determining whether a retry should be attempted.
+	 */
+	public static final String RESTCLIENT_retryOn = PREFIX + "retryOn.o";
+	
+	/**
+	 * <b>Configuration property:</b>  Root URI.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.rootUri.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
+	 * will be prefixed with the specified root.
+	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
+	 * Trailing slashes are trimmed.
+	 */
+	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
+	
+	/**
+	 * <b>Configuration property:</b>  Request headers.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.requestHeader.ms"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> empty map
+	 * </ul>
+	 *
+	 * <p>
+	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 */
+	public static final String RESTCLIENT_headers = PREFIX + "headers.ms";
+
+	/**
+	 * <b>Configuration property:</b>  Serializer.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.serializer.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> Serializer&gt;</code> or {@link Serializer}.
+	 * 	<li><b>Default:</b> {@link JsonSerializer};
+	 * </ul>
+	 * 
+	 * <p>
+	 * The serializer to use for serializing POJOs in request bodies.
+	 */
+	public static final String RESTCLIENT_serializer = PREFIX + "serializer.o";
+
+	/**
+	 * <b>Configuration property:</b>  Parser.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.parser.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
+	 * 	<li><b>Default:</b> {@link JsonParser};
+	 * </ul>
+	 * 
+	 * <p>
+	 * The parser to use for parsing POJOs in response bodies.
+	 */
+	public static final String RESTCLIENT_parser = PREFIX + "parser.o";
+
+	/**
+	 * <b>Configuration property:</b>  Part serializer.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.urlEncodingSerializer.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>implements</jk> PartSerializer&gt;</code> or {@link PartSerializer}.
+	 * 	<li><b>Default:</b> {@link UrlEncodingSerializer};
+	 * </ul>
+	 * 
+	 * <p>
+	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+	 */
+	public static final String RESTCLIENT_partSerializer = PREFIX + "partSerializer.o";
+	
+	/**
+	 * <b>Configuration property:</b>  Executor service.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.executorService.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
+	 * 	<li><b>Default:</b> <jk>null</jk>.
+	 * </ul>
+	 * 
+	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
+	 *
+	 * <p>
+	 * This executor service is used to create {@link Future} objects on the following methods:
+	 * <ul>
+	 * 	<li>{@link RestCall#runFuture()}
+	 * 	<li>{@link RestCall#getResponseFuture(Class)}
+	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
+	 * 	<li>{@link RestCall#getResponseAsString()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
+	 * and a queue size of 10.
+	 */
+	public static final String RESTCLIENT_executorService = PREFIX + "executorService.o";
+
+	/**
+	 * <b>Configuration property:</b>  Call interceptors.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.interceptors.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor | RestCallInterceptor</code>&gt.</code>
+	 * 	<li><b>Default:</b> empty list.
+	 * </ul>
+	 * 
+	 * Interceptors that get called immediately after a connection is made.
+	 */
+	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.lo";
+
+	/**
+	 * Add to the Call interceptors property.
+	 */
+	public static final String RESTCLIENT_interceptors_add = PREFIX + "interceptors.lo/add";
+
+	/**
+	 * <b>Configuration property:</b>  Debug.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.debug.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Enable debug mode.
+	 */
+	public static final String RESTCLIENT_debug = PREFIX + "debug.b";
+	
+
+	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<>();
+	
 	private final Map<String,String> headers;
 	private final CloseableHttpClient httpClient;
-	private final boolean keepHttpClientOpen;
+	private final boolean keepHttpClientOpen, debug;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	private final PartSerializer partSerializer;
 	private final String rootUrl;
@@ -81,12 +290,11 @@ public class RestClient extends BeanContext {
 	final RetryOn retryOn;
 	final int retries;
 	final long retryInterval;
-	final boolean debug;
 	final RestCallInterceptor[] intercepters;
 
 	// This is lazy-created.
 	private volatile ExecutorService executorService;
-	boolean executorServiceShutdownOnClose = true;
+	private final boolean executorServiceShutdownOnClose;
 
 	/**
 	 * Instantiates a new clean-slate {@link RestClientBuilder} object.
@@ -105,53 +313,52 @@ public class RestClient extends BeanContext {
 		return new RestClientBuilder(getPropertyStore());
 	}
 
+	@SuppressWarnings("unchecked")
 	RestClient(
 			PropertyStore ps,
-			CloseableHttpClient httpClient,
-			boolean keepHttpClientOpen,
-			Serializer serializer,
-			Parser parser,
-			UrlEncodingSerializer urlEncodingSerializer,
-			PartSerializer partSerializer,
-			Map<String,String> headers,
-			List<RestCallInterceptor> intercepters,
-			String rootUri,
-			RetryOn retryOn,
-			int retries,
-			long retryInterval,
-			boolean debug,
-			ExecutorService executorService,
-			boolean executorServiceShutdownOnClose) {
+			CloseableHttpClient httpClient) {
 		super(ps);
 		this.httpClient = httpClient;
-		this.keepHttpClientOpen = keepHttpClientOpen;
-		this.serializer = serializer;
-		this.parser = parser;
-		this.urlEncodingSerializer = urlEncodingSerializer;
-		this.partSerializer = partSerializer;
+		this.keepHttpClientOpen = getProperty(RESTCLIENT_keepHttpClientOpen, boolean.class, false);
+		this.headers = getMapProperty(RESTCLIENT_headers, String.class);
+		this.retries = getProperty(RESTCLIENT_retries, int.class, 1);
+		this.retryInterval = getProperty(RESTCLIENT_retryInterval, int.class, -1);
+		this.retryOn = getInstanceProperty(RESTCLIENT_retryOn, RetryOn.class, RetryOn.DEFAULT);
+		this.debug = getProperty(RESTCLIENT_debug, boolean.class, false);
+		this.executorServiceShutdownOnClose = getProperty(RESTCLIENT_executorServiceShutdownOnClose, boolean.class, false);
+		this.rootUrl = StringUtils.nullIfEmpty(getProperty(RESTCLIENT_rootUri, String.class, "").replaceAll("\\/$", ""));
+		
+		Object o = getProperty(RESTCLIENT_serializer, Object.class, JsonSerializer.class);
+		if (o instanceof Serializer) {
+			this.serializer = ((Serializer)o).builder().apply(ps).build();
+		} else if (o instanceof Class) {
+			this.serializer = ContextCache.INSTANCE.create((Class<? extends Serializer>)o, ps);
+		} else {
+			throw new ContextRuntimeException("Invalid object type found for property ''{0}'':  ''{1}''", RESTCLIENT_serializer, o.getClass());
+		}
+		
+		o = getProperty(RESTCLIENT_parser, Object.class, JsonParser.class);
+		if (o instanceof Parser) {
+			this.parser = ((Parser)o).builder().apply(ps).build();
+		} else if (o instanceof Class) {
+			this.parser = ContextCache.INSTANCE.create((Class<? extends Parser>)o, ps);
+		} else {
+			throw new ContextRuntimeException("Invalid object type found for property ''{0}'':  ''{1}''", RESTCLIENT_parser, o.getClass());
+		}
 
-		Map<String,String> h2 = new ConcurrentHashMap<>(headers);
-
-		this.headers = Collections.unmodifiableMap(h2);
-		this.rootUrl = rootUri;
-		this.retryOn = retryOn;
-		this.retries = retries;
-		this.retryInterval = retryInterval;
-		this.debug = debug;
-
-		List<RestCallInterceptor> l = new ArrayList<>(intercepters);
+		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
+		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, PartSerializer.class, urlEncodingSerializer);
+		this.executorService = getInstanceProperty(RESTCLIENT_executorService, ExecutorService.class, null);
+		
+		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
 		if (debug)
-			l.add(RestCallLogger.DEFAULT);
-
-		this.intercepters = l.toArray(new RestCallInterceptor[l.size()]);
+			rci = ArrayUtils.append(rci, RestCallLogger.DEFAULT);
+		this.intercepters = rci;
 
 		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
 			creationStack = Thread.currentThread().getStackTrace();
 		else
 			creationStack = null;
-
-		this.executorService = executorService;
-		this.executorServiceShutdownOnClose = executorServiceShutdownOnClose;
 	}
 
 	/**
@@ -168,7 +375,7 @@ public class RestClient extends BeanContext {
 			httpClient.close();
 		if (executorService != null && executorServiceShutdownOnClose)
 			executorService.shutdown();
-		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
+		if (creationStack != null)
 			closedStack = Thread.currentThread().getStackTrace();
 	}
 
@@ -183,7 +390,7 @@ public class RestClient extends BeanContext {
 			if (executorService != null && executorServiceShutdownOnClose)
 				executorService.shutdown();
 		} catch (Throwable t) {}
-		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
+		if (creationStack != null)
 			closedStack = Thread.currentThread().getStackTrace();
 	}
 

@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
-public class Html5BasicTests {
+public class Html5BasicTest {
 
 	@Test
 	public void testToString() {

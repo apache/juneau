@@ -13,9 +13,10 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.json.JsonSerializer.*;
 import static org.apache.juneau.parser.Parser.*;
-import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.uon.UonSerializer.*;
+import static org.apache.juneau.rest.client.RestClient.*;
 
 import java.lang.reflect.*;
 import java.net.*;
@@ -44,11 +45,9 @@ import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Builder class for the {@link RestClient} class.
@@ -58,28 +57,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	private HttpClientConnectionManager httpClientConnectionManager;
 	private HttpClientBuilder httpClientBuilder = createHttpClientBuilder();
 	private CloseableHttpClient httpClient;
-	private boolean keepHttpClientOpen;
-
-	private Class<? extends Serializer> serializerClass = JsonSerializer.class;
-	private Class<? extends Parser> parserClass = JsonParser.class;
-	private Class<? extends PartSerializer> partSerializerClass = UrlEncodingSerializer.class;
-	private Serializer serializer;
-	private Parser parser;
-	private PartSerializer partSerializer;
-
-	private Map<String,String> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-	private List<RestCallInterceptor> intercepters = new ArrayList<>();
-
-	private String rootUrl;
 	private SSLOpts sslOpts;
 	private boolean pooled;
-
-	private int retries = 1;
-	private long retryInterval = -1;
-	private RetryOn retryOn = RetryOn.DEFAULT;
-	private boolean debug, executorServiceShutdownOnClose;
-	private ExecutorService executorService;
 
 	/**
 	 * Constructor, default settings.
@@ -137,29 +116,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 			
 			PropertyStore ps = psb.build();
 
-			Serializer s =
-				this.serializer != null
-				? this.serializer.builder().apply(ps).build()
-				: new SerializerBuilder(ps).build(this.serializerClass);
-
-			Parser p =
-				this.parser != null
-				? this.parser.builder().apply(ps).build()
-				: new ParserBuilder(ps).build(this.parserClass);
-
-			UrlEncodingSerializer us = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
-
-			PartSerializer pf = null;
-			if (partSerializer != null)
-				pf = partSerializer;
-			else if (partSerializerClass != null) {
-				if (partSerializerClass == UrlEncodingSerializer.class)
-					pf = us;
-				else
-					pf = partSerializerClass.newInstance();
-			}
-
-			return new RestClient(ps, httpClient, keepHttpClientOpen, s, p, us, pf, headers, intercepters, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
+			return new RestClient(ps, httpClient);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -271,10 +228,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder rootUrl(Object rootUrl) {
-		String s = rootUrl.toString();
-		if (s.endsWith("/"))
-			s = s.replaceAll("\\/$", "");
-		this.rootUrl = s;
+		set(RESTCLIENT_rootUri, rootUrl);
 		return this;
 	}
 
@@ -321,12 +275,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Adds an intercepter that gets called immediately after a connection is made.
 	 *
-	 * @param intercepter The intercepter.
+	 * @param interceptor The intercepter.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder intercepter(RestCallInterceptor intercepter) {
-		intercepters.add(intercepter);
-		return this;
+	public RestClientBuilder interceptor(RestCallInterceptor interceptor) {
+		return addTo(RESTCLIENT_interceptors, interceptor);
 	}
 
 	/**
@@ -337,8 +290,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder logTo(Level level, Logger log) {
-		intercepter(new RestCallLogger(level, log));
-		return this;
+		return interceptor(new RestCallLogger(level, log));
 	}
 
 	/**
@@ -351,10 +303,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder retryable(int retries, long interval, RetryOn retryOn) {
-		this.retries = retries;
-		this.retryInterval = interval;
-		this.retryOn = retryOn;
+	public RestClientBuilder retryable(int retries, int interval, RetryOn retryOn) {
+		set(RESTCLIENT_retries, retries);
+		set(RESTCLIENT_retryInterval, interval);
+		set(RESTCLIENT_retryOn, retryOn);
 		return this;
 	}
 
@@ -376,8 +328,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder serializer(Serializer serializer) {
-		this.serializer = serializer;
-		return this;
+		return set(RESTCLIENT_serializer, serializer);
 	}
 
 	/**
@@ -388,8 +339,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder serializer(Class<? extends Serializer> serializerClass) {
-		this.serializerClass = serializerClass;
-		return this;
+		return set(RESTCLIENT_serializer, serializerClass);
 	}
 
 	/**
@@ -398,8 +348,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param parser The parser.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder parser(Parser parser) {
-		this.parser = parser;
+	public RestClientBuilder parser(Parser parser) {		
+		set(RESTCLIENT_parser, parser);
 		return this;
 	}
 
@@ -411,8 +361,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder parser(Class<? extends Parser> parserClass) {
-		this.parserClass = parserClass;
-		return this;
+		return set(RESTCLIENT_parser, parserClass);
 	}
 
 	/**
@@ -423,8 +372,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partSerializer(PartSerializer partSerializer) {
-		this.partSerializer = partSerializer;
-		return this;
+		return set(RESTCLIENT_partSerializer, partSerializer);
 	}
 
 	/**
@@ -437,8 +385,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partSerializer(Class<? extends PartSerializer> partSerializerClass) {
-		this.partSerializerClass = partSerializerClass;
-		return this;
+		return set(RESTCLIENT_partSerializer, partSerializerClass);
 	}
 
 	/**
@@ -468,7 +415,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder httpClient(CloseableHttpClient httpClient, boolean keepHttpClientOpen) {
 		this.httpClient = httpClient;
-		this.keepHttpClientOpen = keepHttpClientOpen;
+		set(RESTCLIENT_keepHttpClientOpen, keepHttpClientOpen);
 		return this;
 	}
 
@@ -493,8 +440,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
-		this.executorService = executorService;
-		this.executorServiceShutdownOnClose = shutdownOnClose;
+		set(RESTCLIENT_executorService, executorService);
+		set(RESTCLIENT_executorServiceShutdownOnClose, shutdownOnClose);
 		return this;
 	}
 
@@ -502,18 +449,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 	// HTTP headers
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * Specifies a request header property to add to all requests created by this client.
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder header(String name, Object value) {
-		this.headers.put(name, value == null ? null : value.toString());
-		return this;
-	}
 
 	/**
 	 * Sets the value for the <code>Accept</code> request header.
@@ -909,8 +844,39 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 
 	//--------------------------------------------------------------------------------
-	// Context properties
+	// Properties
 	//--------------------------------------------------------------------------------
+
+	/**
+	 * <b>Configuration property:</b>  Keep HttpClient open.
+	 *
+	 * <p>
+	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>set(<jsf>RESTCLIENT_keepHttpClientOpen</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see RestClient#RESTCLIENT_keepHttpClientOpen
+	 */
+	public RestClientBuilder keepHttpClientOpen(boolean value) {
+		return set(RESTCLIENT_keepHttpClientOpen, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Request headers.
+	 *
+	 * @param key The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 * @see RestClient#RESTCLIENT_headers
+	 */
+	public RestClientBuilder header(String key, Object value) {
+		return addTo(RESTCLIENT_headers, key, value);
+	}
 
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
@@ -1589,7 +1555,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* ContextBuilder */
 	public RestClientBuilder debug() {
 		super.debug();
-		this.debug = true;
+		set(RESTCLIENT_debug, true);
 		header("Debug", true);
 		return this;
 	}

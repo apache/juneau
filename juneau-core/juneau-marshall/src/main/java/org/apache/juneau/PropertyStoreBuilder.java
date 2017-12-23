@@ -80,6 +80,8 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized PropertyStoreBuilder apply(PropertyStore copyFrom) {
+		propertyStore = null;
+		
 		if (copyFrom != null)
 			for (Map.Entry<String,PropertyGroup> e : copyFrom.groups.entrySet()) {
 				String gName = e.getKey();
@@ -163,6 +165,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized PropertyStoreBuilder remove(String key) {
+		propertyStore = null;
 		return set(key, null);
 	}
 
@@ -176,6 +179,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized PropertyStoreBuilder set(Map<String,Object> newProperties) {
+		propertyStore = null;
 		clear();
 		add(newProperties);
 		return this;
@@ -191,6 +195,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized PropertyStoreBuilder add(Map<String,Object> newProperties) {
+		propertyStore = null;
 		
 		if (newProperties != null)
 			for (Map.Entry<String,Object> e : newProperties.entrySet()) 
@@ -220,9 +225,9 @@ public class PropertyStoreBuilder {
 	 * @throws ConfigException If property is not a SET/LIST/MAP property, or the argument is invalid.
 	 */
 	public synchronized PropertyStoreBuilder addTo(String key, String arg, Object value) {
+		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
-		propertyStore = null;
 		
 		PropertyGroupBuilder gb = groups.get(g);
 		if (gb == null) {
@@ -254,6 +259,7 @@ public class PropertyStoreBuilder {
 	 * @throws ConfigException If property is not a SET/LIST/MAP property, or the argument is invalid.
 	 */
 	public synchronized PropertyStoreBuilder addTo(String key, Object value) {
+		propertyStore = null;
 		return addTo(key, null, value);
 	}
 
@@ -266,9 +272,9 @@ public class PropertyStoreBuilder {
 	 * @throws ConfigException If property is not a SET or LIST property.
 	 */
 	public synchronized PropertyStoreBuilder removeFrom(String key, Object value) {
+		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
-		propertyStore = null;
 		
 		PropertyGroupBuilder gb = groups.get(g);
 
@@ -284,6 +290,32 @@ public class PropertyStoreBuilder {
 		return this;
 	}
 	
+	/**
+	 * Peeks at a property value.
+	 * 
+	 * <p>
+	 * Used for debugging purposes.
+	 * 
+	 * @param key The property key.
+	 * @return The property value, or <jk>null</jk> if it doesn't exist.
+	 */
+	public Object peek(String key) {
+		String g = group(key);
+		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+		
+		PropertyGroupBuilder gb = groups.get(g);
+
+		// Create property group anyway to generate a good error message.
+		if (gb == null) 
+			return null;
+		
+		MutableProperty bp = gb.properties.get(n);
+		if (bp == null)
+			return null;
+		
+		return bp.peek();
+	}
+
 	/**
 	 * Clears all entries in this property store.
 	 */
@@ -424,6 +456,8 @@ public class PropertyStoreBuilder {
 		abstract void set(Object value);
 
 		abstract void apply(Object value);
+		
+		abstract Object peek();
 
 		void add(String arg, Object value) {
 			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).",
@@ -470,6 +504,11 @@ public class PropertyStoreBuilder {
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
 			return this.value == null;
+		}
+
+		@Override /* MutableProperty */
+		synchronized Object peek() {
+			return value;
 		}
 	}
 	
@@ -559,6 +598,11 @@ public class PropertyStoreBuilder {
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
 			return this.value.isEmpty();
+		}
+
+		@Override /* MutableProperty */
+		synchronized Object peek() {
+			return value;
 		}
 	}
 	
@@ -673,6 +717,11 @@ public class PropertyStoreBuilder {
 		synchronized boolean isEmpty() {
 			return this.value.isEmpty();
 		}
+
+		@Override /* MutableProperty */
+		synchronized Object peek() {
+			return value;
+		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------
@@ -742,6 +791,11 @@ public class PropertyStoreBuilder {
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
 			return this.value.isEmpty();
+		}
+
+		@Override /* MutableProperty */
+		synchronized Object peek() {
+			return value;
 		}
 	}
 	

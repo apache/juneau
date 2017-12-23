@@ -15,6 +15,7 @@ package org.apache.juneau;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -36,6 +37,7 @@ import org.apache.juneau.serializer.*;
 public abstract class Context {
 
 	private final PropertyStore propertyStore;
+	private final int hashCode;
 
 	/**
 	 * Constructor for this class.
@@ -47,6 +49,7 @@ public abstract class Context {
 	 */
 	public Context(PropertyStore ps) {
 		this.propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
+		this.hashCode = new HashCode().add(getClass().getName()).add(ps).get();
 	}
 
 	/**
@@ -337,6 +340,22 @@ public abstract class Context {
 	@Overrideable
 	public ObjectMap asMap() {
 		return new ObjectMap();
+	}
+	
+	@Override /* Object */
+	public final int hashCode() {
+		return hashCode;
+	}
+	
+	@Override /* Object */
+	public final boolean equals(Object o) {
+		// Context objects are considered equal if they're the same class and have the same set of properties.
+		if (o == null)
+			return false;
+		if (o.getClass() != this.getClass()) 
+			return false;
+		Context c = (Context)o;
+		return (c.propertyStore.equals(propertyStore));
 	}
 
 	@Override /* Object */

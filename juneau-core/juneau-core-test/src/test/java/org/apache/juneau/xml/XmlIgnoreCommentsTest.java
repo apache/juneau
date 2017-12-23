@@ -27,7 +27,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings("serial")
-public class XmlTestIgnoreComments {
+public class XmlIgnoreCommentsTest {
 	
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
@@ -678,7 +678,7 @@ public class XmlTestIgnoreComments {
 	private String input;
 	private boolean skipWsTests;
 
-	public XmlTestIgnoreComments(String label, Class<?> type, Object expected, String input, boolean skipWsTests) throws Exception {
+	public XmlIgnoreCommentsTest(String label, Class<?> type, Object expected, String input, boolean skipWsTests) throws Exception {
 		this.label = label;
 		this.type = type;
 		this.expected = expected;

@@ -66,13 +66,7 @@ interface PropertyConverter<T> {
 	static final PropertyConverter<Object> OBJECT_CONVERTER = new PropertyConverter<Object>() {
 		@Override
 		public Object convert(Object o, MutableProperty p) {
-			try {
-				if (o instanceof Class)
-					return ((Class<?>)o).newInstance();
-				return o;
-			} catch (Exception e) {
-				throw new ConfigException("Value ''{0}'' ({1}) cannot be converted to an Object on property ''{2}'' ({3}).", o, o.getClass().getSimpleName(), p.name, p.type);
-			}
+			return o;
 		}
 	};
 }
