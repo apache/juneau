@@ -61,7 +61,7 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	title="File System Explorer",
-	description="Contents of $R{attribute.path}",
+	description="Contents of $RA{path}",
 	messages="nls/DirectoryResource",
 	htmldoc=@HtmlDoc(
 		navlinks={

@@ -18,7 +18,7 @@
 		<tr>
 			<th>Search:</th>
 			<td>
-				<input name="s" size="50" value='$R{query.s}'>
+				<input name="s" size="50" value='$RQ{s}'>
 			</td>
 			<td>
 				<div class="tooltip">
@@ -65,7 +65,7 @@
 		<tr>
 			<th>View:</th>
 			<td>
-				<input name="v" size="50" value='$R{query.v}'>
+				<input name="v" size="50" value='$RQ{v}'>
 			</td>
 			<td>
 				<div class="tooltip">
@@ -81,7 +81,7 @@
 		<tr>
 			<th>Sort:</th>
 			<td>
-				<input name="o" size="50" value='$R{query.o}'>
+				<input name="o" size="50" value='$RQ{o}'>
 			</td>
 			<td>
 				<div class="tooltip">
@@ -101,8 +101,8 @@
 		<tr>
 			<th>Page:</th>
 			<td>
-				Position: <input name='p' type='number' style='width:50px' step=20 min=0 value='$R{query.p}'>
-				Limit: <input name='l' type='number' style='width:50px' step=20 min=0 value='$R{query.l}'>
+				Position: <input name='p' type='number' style='width:50px' step=20 min=0 value='$RQ{p}'>
+				Limit: <input name='l' type='number' style='width:50px' step=20 min=0 value='$RQ{l}'>
 				<span style='float:right'>Ignore-case: <input name='i' type='checkbox' value='true'></span>
 			</td>
 			<td>

@@ -650,7 +650,7 @@ public final class RestContext extends Context {
 	 * 			<ja>@Property</ja>(name=<js>"foo"</js>,value=<js>"bar"</js>),
 	 * 			<ja>@Property</ja>(name=<js>"bar"</js>,value=<js>"baz"</js>),
 	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo}"</js>),  <jc>// Request variable.  value="bar"</jc>
-	 * 			<ja>@Property</ja>(name=<js>"v2"</js>,value=<js>"$R{$R{foo}}"</js>)  <jc>// Nested request variable. value="baz"</jc>
+	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo,bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
 	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> RestServletDefault {
@@ -686,7 +686,12 @@ public final class RestContext extends Context {
 	 * 	<li><code>$F{path[,defaultValue]}</code> - File resource. See {@link FileVar}.
 	 * 	<li><code>$I{name[,defaultValue]}</code> - Servlet init parameter. See {@link ServletInitParamVar}.
 	 * 	<li><code>$L{key[,args...]}</code> - Localized message. See {@link LocalizationVar}.
-	 * 	<li><code>$R{key[,args...]}</code> - Request variable. See {@link RequestVar}.
+	 * 	<li><code>$RA{key1[,key2...]}</code> - Request attribute variable. See {@link RequestAttributeVar}.
+	 * 	<li><code>$RF{key1[,key2...]}</code> - Request form-data variable. See {@link RequestFormDataVar}.
+	 * 	<li><code>$RH{key1[,key2...]}</code> - Request header variable. See {@link RequestHeaderVar}.
+	 * 	<li><code>$RP{key1[,key2...]}</code> - Request path variable. See {@link RequestPathVar}.
+	 * 	<li><code>$RQ{key1[,key2...]}</code> - Request query parameter variable. See {@link RequestQueryVar}.
+	 * 	<li><code>$R{key1[,key2...]}</code> - Request object variable. See {@link RequestVar}.
 	 * 	<li><code>$S{systemProperty[,defaultValue]}</code> - System property. See {@link SystemPropertiesVar}.
 	 * 	<li><code>$SA{contentType,key[,defaultValue]}</code> - Serialized request attribute. See {@link SerializedRequestAttrVar}.
 	 * 	<li><code>$U{uri}</code> - URI resolver. See {@link UrlVar}.
@@ -697,6 +702,8 @@ public final class RestContext extends Context {
 	 * <p>
 	 * The following syntax variables are also provided:
 	 * <ul>
+	 * 	<li><code>$CO{string1[,string2...]}</code> - Coalesce variable. See {@link CoalesceVar}.
+	 * 	<li><code>$CR{string1[,string2...]}</code> - Coalesce-and-recurse variable. See {@link CoalesceAndRecurseVar}.
 	 * 	<li><code>$IF{booleanArg,thenValue[,elseValue]}</code> - If/else variable. See {@link IfVar}.
 	 * 	<li><code>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</code> - Switch variable. See {@link SwitchVar}.
 	 * </ul>

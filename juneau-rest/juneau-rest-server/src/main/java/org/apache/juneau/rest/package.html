@@ -2330,21 +2330,63 @@
 				</td>
 			</tr>
 			<tr>
-				<td><ck>$R{key}</ck></td>
+				<td><ck>$RA{key1[,key2]}</ck></td>
 				<td>
-					Request-specific variables.
+					Request attribute variables.
+					<br>Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
+					<br>First non-null value is returned.
+					<br>For security reasons, embedded or returned variables are not recursively resolved.
+				</td>
+			</tr>
+			<tr>
+				<td><ck>$RF{key1[,key2]}</ck></td>
+				<td>
+					Request form-data variables.
+					<br>Value returned by {@link org.apache.juneau.rest.RestRequest#getFormData(String)} converted to a string.
+					<br>First non-null value is returned.
+					<br>For security reasons, embedded or returned variables are not recursively resolved.
+				</td>
+			</tr>
+			<tr>
+				<td><ck>$RH{key1[,key2]}</ck></td>
+				<td>
+					Request header variables.
+					<br>Value returned by {@link org.apache.juneau.rest.RestRequest#getHeader(String)} converted to a string.
+					<br>First non-null value is returned.
+					<br>For security reasons, embedded or returned variables are not recursively resolved.
+				</td>
+			</tr>
+			<tr>
+				<td><ck>$RP{key1[,key2]}</ck></td>
+				<td>
+					Request path variables.
+					<br>Value returned by {@link org.apache.juneau.rest.RestRequest#getPath(String)} converted to a string.
+					<br>First non-null value is returned.
+					<br>For security reasons, embedded or returned variables are not recursively resolved.
+				</td>
+			</tr>
+			<tr>
+				<td><ck>$RQ{key1[,key2]}</ck></td>
+				<td>
+					Request query parameter variables.
+					<br>Value returned by {@link org.apache.juneau.rest.RestRequest#getQuery(String)} converted to a string.
+					<br>First non-null value is returned.
+					<br>For security reasons, embedded or returned variables are not recursively resolved.
+				</td>
+			</tr>
+			<tr>
+				<td><ck>$RQ{key1[,key2]}</ck></td>
+				<td>
+					Request object variables.
+					<br>This variable allows access to values found on the {@link org.apache.junuea.rest.RestRequest} object.
+					<br>First non-null value is returned.
+					<br>For security reasons, embedded or returned variables are not recursively resolved.
 					<br>Possible values:
 					<ul>
-						<li><ck>$R{attribute.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
-						<li><ck>$R{contextPath}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getContextPath()}.
-						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestFormData#getString(String)}.
-						<li><ck>$R{header.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestHeaders#getString(String)}.
 						<li><ck>$R{method}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}.
 						<li><ck>$R{methodSummary}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}.
 						<li><ck>$R{methodDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}.
-						<li><ck>$R{path.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}.
 						<li><ck>$R{pathInfo}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
-						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestQuery#getString(String)}.
 						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}.
 						<li><ck>$R{requestURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
 						<li><ck>$R{servletDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
@@ -2776,8 +2818,7 @@
 	<cc># Contents of config_dir/myconfig.cfg </cc>
 	<cc>#-------------------------------------</cc>
 	<cs>[HelloWorldResource]</cs>
-	<ck>defaultPerson</ck> = you
-	<ck>message</ck> = <cv>Hello $R{query.person,$C{HelloWorldResource/defaultPerson}}!</cv>
+	<ck>message</ck> = <cv>Hello $RQ{person}!</cv>
 		</p>
 		<p class='bcode'>
 	<jd>/** 
@@ -2807,8 +2848,7 @@
 	<cc># Contents of config_dir/myconfig.cfg </cc>
 	<cc>#-------------------------------------</cc>
 	<cs>[HelloWorldResource]</cs>
-	<ck>defaultPerson</ck> = you
-	<ck>message</ck> = <cv>$L{localizedMessage,$R{query.person,$C{HelloWorldResource/defaultPerson}}}</cv>
+	<ck>message</ck> = <cv>$L{localizedMessage,$RQ{person}}</cv>
 		</p>
 		<p class='bcode'>
 	<cc>#-------------------------------------------</cc>

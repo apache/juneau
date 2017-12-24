@@ -191,7 +191,7 @@ import org.apache.juneau.xml.*;
 	htmldoc=@HtmlDoc(
 		header={
 			"<h1>$R{servletTitle}</h1>",
-			"<h2>$R{methodSummary,$R{servletDescription}}</h2>",
+			"<h2>$R{methodSummary,servletDescription}</h2>",
 			"<a href='http://juneau.apache.org'><img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/></a>"
 		},
 		stylesheet="servlet:/styles/light.css",

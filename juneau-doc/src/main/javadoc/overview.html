@@ -7493,7 +7493,7 @@
 		<p class='bcode'>
 	<jk>public</jk> String doUnsafeGet(RestRequest req) {
 		<jc>// Security hole!</jc>
-		<jk>return</jk> req.getVarResolver().resolve(<js>"$R{Query.foo}"</js>);
+		<jk>return</jk> req.getVarResolver().resolve(<js>"$RQ{foo}"</js>);
 	}
 		</p>
 		<p>
@@ -7550,7 +7550,7 @@
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
 		<li><p><a class='doclink' href='#7.0.1'>7.0.2 (TBD)</a></p>
-		<li><p><a class='doclink' href='#7.0.1'>7.0.1 (TBD)</a></p>
+		<li><p><a class='doclink' href='#7.0.1'>7.0.1 (Dec 24, 2017)</a></p>
 		<li><p><a class='doclink' href='#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.4.0'>6.4.0 (Oct 5, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.3.1'>6.3.1 (Aug 1, 2017)</a></p>
@@ -7700,7 +7700,14 @@
 						class.
 						<br>The previous <code>PropertyStore</code> class was overly-complicated with many read/write
 						locks to ensure thread-safety. 
-						<br>The new design shifts to a builder-based model with read-only <code>PropertyStore</code> objects.
+						<br>The new design shifts to a builder-based model with read-only <code>PropertyStore</code> objects
+						that can be used as hash keys.
+				</ul>
+			<li>
+				New SVL variables:
+				<ul>
+					<li>{@link org.apache.juneau.svl.vars.CoalesceVar}
+					<li>{@link org.apache.juneau.svl.vars.CoalesceAndRecurseVar}
 				</ul>
 		</ul>
 
@@ -7714,6 +7721,16 @@
 
 		<h6 class='topic'>juneau-rest-server</h6>
 		<ul class='spaced-list'>
+			<li>
+				The <js>"$R{...}"</js> variable has been split into the following:
+				<ul>
+					<li><js>"$RA{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestAttributeVar}
+					<li><js>"$RF{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestFormDataVar}
+					<li><js>"$RH{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestHeaderVar}
+					<li><js>"$RP{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestPathVar}
+					<li><js>"$RQ{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestQueryVar}
+					<li><js>"$R{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestVar}
+				</ul>
 		</ul>
 
 		<h6 class='topic'>juneau-microservice-server</h6>
@@ -8571,7 +8588,7 @@
 	htmldoc=<ja>@HtmlDoc</ja>(
 		header={
 			<js>"&lt;h1&gt;$R{servletTitle}&lt;/h1&gt;"</js>,
-			<js>"&lt;h2&gt;$R{methodSummary,$R{servletDescription}}&lt;/h2&gt;"</js>,
+			<js>"&lt;h2&gt;$R{methodSummary,servletDescription}&lt;/h2&gt;"</js>,
 			<js>"&lt;a href='http://juneau.apache.org'&gt;&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;"</js>
 		}
 	)

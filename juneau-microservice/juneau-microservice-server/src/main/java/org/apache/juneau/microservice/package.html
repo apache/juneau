@@ -702,26 +702,12 @@
 				<ul>
 					<li><l>$L{key}, $L{key,args}</l> - Localized variables pulled from 
 						{@link org.apache.juneau.rest.RestRequest#getMessage(String, Object...)}.
-					<li><l>$R{key}</l> - Request variables.
-					<ul>
-			 			<li><l>$R{attribute.X}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
-			 			<li><l>$R{contextPath}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getContextPath()}.
-			 			<li><l>$R{formData.X}</l> - Value returned by {@link org.apache.juneau.rest.RequestFormData#getString(String)}.
-			 			<li><l>$R{header.X}</l> - Value returned by {@link org.apache.juneau.rest.RequestHeaders#getString(String)}.
-			 			<li><l>$R{method}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}.
-			 			<li><l>$R{methodSummary}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}.
-			 			<li><l>$R{methodDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}.
-			 			<li><l>$R{path.X}</l> - Value returned by {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}.
-			 			<li><l>$R{pathInfo}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
-			 			<li><l>$R{query.X}</l> - Value returned by {@link org.apache.juneau.rest.RequestQuery#getString(String)}.
-			 			<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}.
-			 			<li><l>$R{requestURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
-			 			<li><l>$R{servletDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
-			 			<li><l>$R{servletTitle}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletTitle()}.
-			 			<li><l>$R{servletParentURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}.
-			 			<li><l>$R{servletPath}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletPath()}.
-			 			<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}.
-					</ul>
+					<li><l>$RA{key1,[key2...]}</l> - Request attribute variables.
+					<li><l>$RF{key1,[key2...]}</l> - Request form data variables.
+					<li><l>$RH{key1,[key2...]}</l> - Request header variables.
+					<li><l>$RP{key1,[key2...]}</l> - Request path variables.
+					<li><l>$RQ{key1,[key2...]}</l> - Request query parameter variables.
+					<li><l>$R{key1,[key2...]}</l> - Other request variables.
 					<li><l>$SA{key,mediaType}</l> - Object returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string using the serializer registered to handle the specified media type.
 					<li><l>$UE{...}</l> - URL-Encode the specified value.
 				</ul>
@@ -732,8 +718,8 @@
 	<cc># Contents of microservice.cfg </cc>
 	<cc>#-----------------------------</cc>
 	<cs>[MyHelloResource]</cs>
-	<ck>greeting</ck> = <cv>Hello $R{path.person}!</cv> 
-	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$R{path.person}}</cv> 
+	<ck>greeting</ck> = <cv>Hello $RP{person}!</cv> 
+	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$RP{person}}</cv> 
 				</p>
 				<p class='bcode'>
 	<cc>#---------------------------------</cc>
@@ -782,7 +768,7 @@
 				The request attribute <l>person</l> gets assigned the value <l>"Bob"</l>.
 			<li>
 				The call to <l>req.getConfig().getString("MyHelloResource/localizedGreeting")</l> 
-				finds the value <l>"$L{HelloMessage,$R{path.person}}"</l>.
+				finds the value <l>"$L{HelloMessage,$RP{person}}"</l>.
 			<li>
 				The arguments in the <l>$L{}</l> variable get resolved, resulting in <l>"$L{HelloMessage,Bob}"</l>.
 			<li>

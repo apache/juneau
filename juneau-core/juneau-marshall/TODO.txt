@@ -15,3 +15,4 @@ Create tests that ensure serializers don't close output but parsers do close inp
 
 $R{servletDescription} tags showing up in REST examples.
 Examples should use dark LAF.
+Content tests on examples rest.

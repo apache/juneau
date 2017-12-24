@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import javax.servlet.http.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -22,7 +21,7 @@ import org.apache.juneau.svl.*;
  * Request attribute variable resolver.
  *
  * <p>
- * The format for this var is <js>"$R{key[,defaultValue]}"</js>.
+ * The format for this var is <js>"$R{key1[,key2...]}"</js>.
  *
  * <p>
  * The possible values are:
@@ -40,23 +39,15 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"servletTitle"</js> - See {@link RestRequest#getServletTitle()}
  * 	<li><js>"servletURI"</js> - See {@link UriContext#getRootRelativeServletPath()}
  * 	<li><js>"siteName"</js> - See {@link RestRequest#getSiteName()}
- * 	<li><js>"Attribute.x"</js> - Value returned by {@link HttpServletRequest#getAttribute(String)}.
- * 	<li><js>"FormData.x"</js> - Value returned by {@link RestRequest#getFormData(String)}.
- * 	<li><js>"Header.x"</js> - Value returned by {@link RestRequest#getHeader(String)}.
- * 	<li><js>"Path.x"</js> - Value returned by {@link RestRequest#getPath(String)}.
- * 	<li><js>"Query.x"</js> = Value returned by {@link RestRequest#getQuery(String)}.
  * </ul>
+ * 
  * <p>
  * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
  * session object on the resolver session.
  *
- * <p>
- * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
- * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
- *
  * @see org.apache.juneau.svl
  */
-public class RequestVar extends DefaultingVar {
+public class RequestVar extends MultipartResolvingVar {
 
 	/**
 	 * The name of the session or context object that identifies the {@link RestRequest} object.
@@ -87,25 +78,43 @@ public class RequestVar extends DefaultingVar {
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
-		if (key.length() > 0) {
-				String k = key.toString();
-				int i = k.indexOf('.');
-				if (i != -1) {
-					String prefix = k.substring(0, i);
-					String remainder = k.substring(i+1);
-					Object o = req.resolveProperty(null, prefix, remainder);
-					if (o != null)
-						return o.toString();
-				} else {
-					Object o = req.resolveProperty(null, "Request", key);
-					if (o != null)
-						return o.toString();
-				}
-				Object o = req.getProperties().get(key);
-				if (o != null)
-					return o.toString();
-				return req.getPathMatch().get(key);
-			}
-		return null;
+		char c = StringUtils.charAt(key, 0);
+		if (c == 'c') {
+			if ("contextPath".equals(key))
+				return req.getContextPath();
+		} else if (c == 'm') {
+			if ("method".equals(key))
+				return req.getMethod();
+			if ("methodDescription".equals(key))
+				return req.getMethodDescription();
+			if ("methodSummary".equals(key))
+				return req.getMethodSummary();
+		} else if (c == 'p') {
+			if ("pathInfo".equals(key))
+				return req.getPathInfo();
+		} else if (c == 'r') {
+			if ("requestParentURI".equals(key))
+				return req.getUriContext().getRootRelativePathInfoParent();
+			if ("requestURI".equals(key))
+				return req.getRequestURI();
+		} else if (c == 's') {
+			if ("servletClass".equals(key))
+				return req.getContext().getResource().getClass().getName();
+			if ("servletClassSimple".equals(key))
+				return req.getContext().getResource().getClass().getSimpleName();
+			if ("servletDescription".equals(key))
+				return req.getServletDescription();
+			if ("servletParentURI".equals(key))
+				return req.getUriContext().getRootRelativeServletPathParent();
+			if ("servletPath".equals(key))
+				return req.getServletPath();
+			if ("servletTitle".equals(key))
+				return req.getServletTitle();
+			if ("servletURI".equals(key))
+				return req.getUriContext().getRootRelativeServletPath();
+			if ("siteName".equals(key))
+				return req.getSiteName();
+		}
+		return req.getProperties().getString(key);
 	}
 }
