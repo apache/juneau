@@ -605,6 +605,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 
 	/**
+	 * Returns the info provider on the servlet.
+	 * 
+	 * @return The info provider on the servlet.
+	 */
+	public RestInfoProvider getInfoProvider() {
+		return context.getInfoProvider();
+	}
+	
+	/**
 	 * Returns the localized site name.
 	 *
 	 * <p>

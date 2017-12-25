@@ -214,6 +214,29 @@ public class RestInfoProvider {
 	}
 
 	/**
+	 * Returns the localized summary of the java method invoked on the specified request.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own summary.
+	 *
+	 * <p>
+	 * The default implementation returns the summary from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation on the method.
+	 * 	<li><ck>[ClassName].[javaMethodName].summary</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>[javaMethodName].summary</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized summary of the method, or a blank string if no summary was found.
+	 */
+	public String getMethodSummary(RestRequest req) {
+		return getMethodSummary(req.getJavaMethod().getName(), req);
+	}
+
+	/**
 	 * Returns the localized description of the specified java method on this servlet.
 	 *
 	 * <p>
@@ -233,11 +256,34 @@ public class RestInfoProvider {
 	 * @param req The current request.
 	 * @return The localized description of the method, or a blank string if no description was found.
 	 */
-	protected String getMethodDescription(String javaMethodName, RestRequest req) {
+	public String getMethodDescription(String javaMethodName, RestRequest req) {
 		CallMethod m = context.getCallMethods().get(javaMethodName);
 		if (m != null)
 			return m.getDescription(req);
 		return "";
+	}
+
+	/**
+	 * Returns the localized description of the invoked java method on the specified request.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own description.
+	 *
+	 * <p>
+	 * The default implementation returns the description from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation on the method.
+	 * 	<li><ck>[ClassName].[javaMethodName].description</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * 	<li><ck>[javaMethodName].description</ck> property in resource bundle identified by
+	 * 		{@link RestResource#messages() @RestResource.messages()} annotation for this class, then any parent classes.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized description of the method, or a blank string if no description was found.
+	 */
+	public String getMethodDescription(RestRequest req) {
+		return getMethodDescription(req.getJavaMethod().getName(), req);
 	}
 
 	/**

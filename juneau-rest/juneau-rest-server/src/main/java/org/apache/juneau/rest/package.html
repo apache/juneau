@@ -2357,6 +2357,29 @@
 				</td>
 			</tr>
 			<tr>
+				<td><ck>$RI{key1[,key2]}</ck></td>
+				<td>
+					Rest info variables.
+					<br>Values returned by {@link org.apache.juneau.rest.RestRequest#getInfoProvider()} converted to a string.
+					<br>First non-null value is returned.
+					<br>For security reasons, embedded or returned variables are not recursively resolved.
+					<br>Possible values:
+					<ul>
+						<li><ck>$RI{contact}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getContact(RestRequest)}.
+						<li><ck>$RI{description}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}.
+						<li><ck>$RI{externalDocs}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}.
+						<li><ck>$RI{license}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}.
+						<li><ck>$RI{methodDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(RestRequest)}.
+						<li><ck>$RI{methodSummary}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(RestRequest)}.
+						<li><ck>$RI{siteName}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest)}.
+						<li><ck>$RI{tags}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}.
+						<li><ck>$RI{termsOfService}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}.
+						<li><ck>$RI{title}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}.
+						<li><ck>$RI{version}</ck> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}.
+					</ul>
+				</td>
+			</tr>
+			<tr>
 				<td><ck>$RP{key1[,key2]}</ck></td>
 				<td>
 					Request path variables.
