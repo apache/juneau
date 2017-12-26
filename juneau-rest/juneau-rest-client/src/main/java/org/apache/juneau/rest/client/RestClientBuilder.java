@@ -847,6 +847,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * <b>Configuration property:</b>  Request query parameters.
+	 *
+	 * @param key The query parameter name.
+	 * @param value The query parameter value value.
+	 * @return This object (for method chaining).
+	 * @see RestClient#RESTCLIENT_query
+	 */
+	public RestClientBuilder query(String key, Object value) {
+		return addTo(RESTCLIENT_query, key, value);
+	}
+
+	/**
 	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.

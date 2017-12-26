@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.serializer.Serializer.*;
+
 import org.apache.juneau.examples.rest.addressbook.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.resources.*;
@@ -49,6 +51,12 @@ import org.apache.juneau.rest.widget.*;
 		},
 		footer="$W{PoweredByApache}"
 	),
+	properties={
+		// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+		// String comparisons.
+		// You can apply any of the Serializer/Parser/BeanContext settings this way.
+		@Property(name=SERIALIZER_quoteChar, value="'")
+	},
 	children={
 		HelloWorldResource.class,
 		PetStoreResource.class,
@@ -73,5 +81,8 @@ import org.apache.juneau.rest.widget.*;
 	}
 )
 public class RootResources extends ResourceJenaGroup {
+	// IMPORTANT!  If you don't need RDF support, change the parent class to ResourceGroup.
+	// It allows you to remove the Jena prerequisite.
+
 	private static final long serialVersionUID = 1L;
 }

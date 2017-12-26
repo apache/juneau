@@ -167,9 +167,23 @@ public class RestClient extends BeanContext {
 	 * </ul>
 	 *
 	 * <p>
-	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 * Headers to add to every request.
 	 */
 	public static final String RESTCLIENT_headers = PREFIX + "headers.ms";
+
+	/**
+	 * <b>Configuration property:</b>  Request query parameters.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestClient.query.ms"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> empty map
+	 * </ul>
+	 *
+	 * <p>
+	 * Query parameters to add to every request.
+	 */
+	public static final String RESTCLIENT_query = PREFIX + "query.ms";
 
 	/**
 	 * <b>Configuration property:</b>  Serializer.
@@ -274,7 +288,7 @@ public class RestClient extends BeanContext {
 
 	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<>();
 	
-	private final Map<String,String> headers;
+	private final Map<String,String> headers, query;
 	private final HttpClientBuilder httpClientBuilder;
 	private final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen, debug;
@@ -350,6 +364,7 @@ public class RestClient extends BeanContext {
 		this.httpClient = httpClient;
 		this.keepHttpClientOpen = getProperty(RESTCLIENT_keepHttpClientOpen, boolean.class, false);
 		this.headers = getMapProperty(RESTCLIENT_headers, String.class);
+		this.query = getMapProperty(RESTCLIENT_query, String.class);
 		this.retries = getProperty(RESTCLIENT_retries, int.class, 1);
 		this.retryInterval = getProperty(RESTCLIENT_retryInterval, int.class, -1);
 		this.retryOn = getInstanceProperty(RESTCLIENT_retryOn, RetryOn.class, RetryOn.DEFAULT);
@@ -754,9 +769,13 @@ public class RestClient extends BeanContext {
 		} catch (URISyntaxException e1) {
 			throw new RestCallException(e1);
 		}
-		for (Map.Entry<String,? extends Object> e : headers.entrySet())
-			restCall.header(e.getKey(), e.getValue());
+		
+		for (Map.Entry<String,String> e : query.entrySet())
+			restCall.query(e.getKey(), e.getValue());
 
+		for (Map.Entry<String,String> e : headers.entrySet())
+			restCall.header(e.getKey(), e.getValue());
+		
 		if (parser != null && ! req.containsHeader("Accept"))
 			req.setHeader("Accept", parser.getPrimaryMediaType().toString());
 
