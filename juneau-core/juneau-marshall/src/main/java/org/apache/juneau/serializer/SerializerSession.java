@@ -22,7 +22,7 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.ClassUtils;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.transform.*;

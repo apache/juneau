@@ -453,6 +453,12 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public UonParserBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public UonParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

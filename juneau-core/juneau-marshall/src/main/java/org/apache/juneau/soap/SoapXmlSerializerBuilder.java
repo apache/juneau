@@ -598,6 +598,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public SoapXmlSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public SoapXmlSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

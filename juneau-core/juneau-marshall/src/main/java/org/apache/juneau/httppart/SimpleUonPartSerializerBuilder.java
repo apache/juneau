@@ -566,6 +566,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public SimpleUonPartSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public SimpleUonPartSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

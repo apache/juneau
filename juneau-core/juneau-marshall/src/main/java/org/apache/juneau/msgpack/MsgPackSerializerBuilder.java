@@ -548,6 +548,12 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public MsgPackSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public MsgPackSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

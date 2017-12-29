@@ -13,9 +13,9 @@
 package org.apache.juneau.xml;
 
 import static javax.xml.stream.XMLStreamConstants.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.XmlParser.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

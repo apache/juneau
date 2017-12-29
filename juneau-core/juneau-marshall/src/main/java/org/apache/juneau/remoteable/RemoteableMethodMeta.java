@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.remoteable;
 
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.uon.UonSerializer.*;
 import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
 
 import java.util.*;
@@ -637,6 +638,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* ContextBuilder */
 	public UrlEncodingSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UrlEncodingSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
 		return this;
 	}
 

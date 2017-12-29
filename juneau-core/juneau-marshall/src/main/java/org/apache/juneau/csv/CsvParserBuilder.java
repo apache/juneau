@@ -421,6 +421,12 @@ public class CsvParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public CsvParserBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public CsvParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

@@ -548,6 +548,12 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public PlainTextSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public PlainTextSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

@@ -96,6 +96,24 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Sets or adds to a SET or LIST property.
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
+	 * @param name The property name.
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 * @see PropertyStoreBuilder#set(String, Object)
+	 */
+	public ContextBuilder set(boolean append, String name, Object value) {
+		if (append)
+			psb.addTo(name, value);
+		else
+			psb.set(name, value);
+		return this;
+	}
+
+	/**
 	 * Sets multiple configuration properties on this object.
 	 *
 	 * @param properties The properties to set on this class.

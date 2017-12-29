@@ -519,6 +519,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public ParserBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public ParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

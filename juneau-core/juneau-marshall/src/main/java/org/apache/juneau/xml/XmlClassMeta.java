@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
-
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 

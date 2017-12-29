@@ -701,6 +701,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public XmlSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public XmlSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

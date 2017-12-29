@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import java.text.*;
-
 import static org.apache.juneau.internal.StringUtils.*;
+
+import java.text.*;
 
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.

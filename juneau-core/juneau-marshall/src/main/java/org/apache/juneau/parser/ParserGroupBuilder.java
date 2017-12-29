@@ -142,6 +142,24 @@ public class ParserGroupBuilder {
 	}
 
 	/**
+	 * Sets or appends to a property on all parsers in this group.
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
+	 * @param name The property name.
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 * @see PropertyStoreBuilder#set(String, Object)
+	 */
+	public ParserGroupBuilder set(boolean append, String name, Object value) {
+		if (append)
+			propertyStore.addTo(name, value);
+		else
+			propertyStore.set(name, value);
+		return this;
+	}
+
+	/**
 	 * Sets a set of properties on all parsers in this group.
 	 *
 	 * @param properties The properties to set on this class.

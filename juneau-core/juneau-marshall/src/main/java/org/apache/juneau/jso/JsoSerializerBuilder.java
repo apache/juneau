@@ -548,6 +548,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public JsoSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public JsoSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

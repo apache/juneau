@@ -422,6 +422,12 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public MsgPackParserBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public MsgPackParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

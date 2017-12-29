@@ -450,6 +450,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public HtmlParserBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public HtmlParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

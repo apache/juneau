@@ -863,6 +863,12 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public SerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public SerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

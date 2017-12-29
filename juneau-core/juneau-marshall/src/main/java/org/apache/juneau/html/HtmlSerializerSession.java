@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.html.HtmlSerializer.*;
+import static org.apache.juneau.html.HtmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlUtils.*;
 
 import java.io.*;

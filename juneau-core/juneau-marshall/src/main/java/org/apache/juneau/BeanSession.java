@@ -14,8 +14,8 @@ package org.apache.juneau;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

@@ -422,6 +422,12 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public JsonParserBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public JsonParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

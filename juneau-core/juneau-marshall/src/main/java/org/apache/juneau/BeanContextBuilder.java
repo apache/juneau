@@ -63,6 +63,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public BeanContextBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public BeanContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

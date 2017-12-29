@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.parser.Parser.*;
 
 import java.io.*;
 import java.lang.reflect.*;

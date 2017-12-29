@@ -13,11 +13,11 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;

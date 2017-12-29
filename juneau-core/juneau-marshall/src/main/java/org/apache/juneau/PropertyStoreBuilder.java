@@ -13,12 +13,12 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.PropertyStore.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.PropertyStore.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 

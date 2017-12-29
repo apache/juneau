@@ -548,6 +548,12 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
+	public CsvSerializerBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
 	public CsvSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
