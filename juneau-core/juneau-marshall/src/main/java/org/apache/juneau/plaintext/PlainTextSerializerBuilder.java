@@ -290,26 +290,26 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public PlainTextSerializerBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public PlainTextSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public PlainTextSerializerBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public PlainTextSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -326,26 +326,26 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public PlainTextSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public PlainTextSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public PlainTextSerializerBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public PlainTextSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -362,26 +362,26 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public PlainTextSerializerBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public PlainTextSerializerBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public PlainTextSerializerBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public PlainTextSerializerBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -398,26 +398,26 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public PlainTextSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public PlainTextSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public PlainTextSerializerBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public PlainTextSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -482,26 +482,26 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public PlainTextSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public PlainTextSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public PlainTextSerializerBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public PlainTextSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 

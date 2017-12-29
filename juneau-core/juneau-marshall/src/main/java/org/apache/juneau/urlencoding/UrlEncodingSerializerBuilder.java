@@ -384,26 +384,26 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public UrlEncodingSerializerBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public UrlEncodingSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public UrlEncodingSerializerBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public UrlEncodingSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -420,26 +420,26 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public UrlEncodingSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public UrlEncodingSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public UrlEncodingSerializerBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public UrlEncodingSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -456,26 +456,26 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public UrlEncodingSerializerBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public UrlEncodingSerializerBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public UrlEncodingSerializerBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public UrlEncodingSerializerBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -492,26 +492,26 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public UrlEncodingSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public UrlEncodingSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public UrlEncodingSerializerBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public UrlEncodingSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -576,26 +576,26 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public UrlEncodingSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public UrlEncodingSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public UrlEncodingSerializerBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public UrlEncodingSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 

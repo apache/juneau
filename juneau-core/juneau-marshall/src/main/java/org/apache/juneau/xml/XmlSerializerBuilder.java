@@ -443,26 +443,26 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public XmlSerializerBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public XmlSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public XmlSerializerBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public XmlSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -479,26 +479,26 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public XmlSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public XmlSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public XmlSerializerBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public XmlSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -515,26 +515,26 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public XmlSerializerBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public XmlSerializerBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public XmlSerializerBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public XmlSerializerBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -551,26 +551,26 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public XmlSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public XmlSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public XmlSerializerBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public XmlSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -635,26 +635,26 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public XmlSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public XmlSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public XmlSerializerBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public XmlSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 

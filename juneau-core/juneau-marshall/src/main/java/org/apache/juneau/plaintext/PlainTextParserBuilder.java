@@ -200,26 +200,26 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public PlainTextParserBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public PlainTextParserBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public PlainTextParserBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public PlainTextParserBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -236,26 +236,26 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public PlainTextParserBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public PlainTextParserBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public PlainTextParserBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public PlainTextParserBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -272,26 +272,26 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public PlainTextParserBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public PlainTextParserBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public PlainTextParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public PlainTextParserBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -308,26 +308,26 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public PlainTextParserBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public PlainTextParserBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public PlainTextParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public PlainTextParserBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -356,26 +356,26 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public PlainTextParserBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public PlainTextParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public PlainTextParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextParserBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public PlainTextParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 

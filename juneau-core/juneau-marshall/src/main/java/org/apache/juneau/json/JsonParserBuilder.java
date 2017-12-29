@@ -200,26 +200,26 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public JsonParserBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public JsonParserBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public JsonParserBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public JsonParserBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -236,26 +236,26 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public JsonParserBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public JsonParserBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public JsonParserBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public JsonParserBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -272,26 +272,26 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public JsonParserBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public JsonParserBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public JsonParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public JsonParserBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -308,26 +308,26 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public JsonParserBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public JsonParserBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public JsonParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public JsonParserBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -356,26 +356,26 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public JsonParserBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public JsonParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public JsonParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public JsonParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 

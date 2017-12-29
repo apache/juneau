@@ -231,26 +231,26 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public UonParserBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public UonParserBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public UonParserBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public UonParserBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -267,26 +267,26 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public UonParserBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public UonParserBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public UonParserBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public UonParserBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -303,26 +303,26 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public UonParserBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public UonParserBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public UonParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public UonParserBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -339,26 +339,26 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public UonParserBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public UonParserBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public UonParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public UonParserBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -387,26 +387,26 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public UonParserBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public UonParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public UonParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UonParserBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public UonParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 

@@ -34,8 +34,8 @@ public class BeanMapTest {
 	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX;
 
 	BeanContext bc = BeanContext.create()
-			.setBeanDictionary(MyBeanDictionaryMap.class)
-			.setPojoSwaps(CalendarSwap.ISO8601DTZ.class)
+			.beanDictionary(MyBeanDictionaryMap.class)
+			.pojoSwaps(CalendarSwap.ISO8601DTZ.class)
 			.build();
 	BeanSession session = bc.createSession();
 

@@ -1288,26 +1288,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public RestClientBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public RestClientBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public RestClientBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public RestClientBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -1324,26 +1324,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public RestClientBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public RestClientBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public RestClientBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public RestClientBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -1360,26 +1360,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public RestClientBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public RestClientBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public RestClientBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public RestClientBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -1396,26 +1396,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public RestClientBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public RestClientBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public RestClientBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public RestClientBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -1480,26 +1480,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public RestClientBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public RestClientBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public RestClientBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public RestClientBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 

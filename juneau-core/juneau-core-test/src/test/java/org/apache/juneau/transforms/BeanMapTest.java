@@ -26,7 +26,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntry() throws Exception {
-		BeanSession session = BeanContext.create().setPojoSwaps(ByteArrayBase64Swap.class).build().createSession();
+		BeanSession session = BeanContext.create().pojoSwaps(ByteArrayBase64Swap.class).build().createSession();
 		BeanMap<A> m = session.toBeanMap(new A());
 
 		assertEquals("AQID", m.get("f1"));
@@ -48,12 +48,12 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntryWithMultipleMatchingFilters() throws Exception {
-		BeanSession session = BeanContext.create().setPojoSwaps(B2Swap.class,B1Swap.class).build().createSession();
+		BeanSession session = BeanContext.create().pojoSwaps(B2Swap.class, B1Swap.class).build().createSession();
 		BeanMap<B> bm = session.toBeanMap(B.create());
 		ObjectMap om = (ObjectMap)bm.get("b1");
 		assertEquals("b2", om.getString("type"));
 
-		session = BeanContext.create().setPojoSwaps(B1Swap.class,B2Swap.class).build().createSession();
+		session = BeanContext.create().pojoSwaps(B1Swap.class, B2Swap.class).build().createSession();
 		bm = session.toBeanMap(B.create());
 		om = (ObjectMap)bm.get("b1");
 		assertEquals("b1", om.getString("type"));

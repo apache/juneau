@@ -253,26 +253,26 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setNotBeanPackages(String...values) {
-		super.setNotBeanPackages(values);
+	public UrlEncodingParserBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setNotBeanPackages(Collection<String> values) {
-		super.setNotBeanPackages(values);
+	public UrlEncodingParserBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeNotBeanPackages(String...values) {
-		super.removeNotBeanPackages(values);
+	public UrlEncodingParserBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeNotBeanPackages(Collection<String> values) {
-		super.removeNotBeanPackages(values);
+	public UrlEncodingParserBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -289,26 +289,26 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setNotBeanClasses(Class<?>...values) {
-		super.setNotBeanClasses(values);
+	public UrlEncodingParserBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		super.setNotBeanClasses(values);
+	public UrlEncodingParserBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeNotBeanClasses(Class<?>...values) {
-		super.removeNotBeanClasses(values);
+	public UrlEncodingParserBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		super.removeNotBeanClasses(values);
+	public UrlEncodingParserBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -325,26 +325,26 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setBeanFilters(Class<?>...values) {
-		super.setBeanFilters(values);
+	public UrlEncodingParserBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setBeanFilters(Collection<Class<?>> values) {
-		super.setBeanFilters(values);
+	public UrlEncodingParserBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeBeanFilters(Class<?>...values) {
-		super.removeBeanFilters(values);
+	public UrlEncodingParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeBeanFilters(Collection<Class<?>> values) {
-		super.removeBeanFilters(values);
+	public UrlEncodingParserBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -361,26 +361,26 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setPojoSwaps(Class<?>...values) {
-		super.setPojoSwaps(values);
+	public UrlEncodingParserBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setPojoSwaps(Collection<Class<?>> values) {
-		super.setPojoSwaps(values);
+	public UrlEncodingParserBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removePojoSwaps(Class<?>...values) {
-		super.removePojoSwaps(values);
+	public UrlEncodingParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removePojoSwaps(Collection<Class<?>> values) {
-		super.removePojoSwaps(values);
+	public UrlEncodingParserBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -409,26 +409,26 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setBeanDictionary(Class<?>...values) {
-		super.setBeanDictionary(values);
+	public UrlEncodingParserBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder setBeanDictionary(Collection<Class<?>> values) {
-		super.setBeanDictionary(values);
+	public UrlEncodingParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeFromBeanDictionary(Class<?>...values) {
-		super.removeFromBeanDictionary(values);
+	public UrlEncodingParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
-		super.removeFromBeanDictionary(values);
+	public UrlEncodingParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
