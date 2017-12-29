@@ -21,10 +21,10 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Represents the headers in an HTTP request.
@@ -35,7 +35,7 @@ import org.apache.juneau.urlencoding.*;
 public class RequestHeaders extends TreeMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
-	private UrlEncodingParser parser;
+	private HttpPartParser parser;
 	private BeanSession beanSession;
 	private RequestQuery queryParams;
 
@@ -43,7 +43,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		super(String.CASE_INSENSITIVE_ORDER);
 	}
 
-	RequestHeaders setParser(UrlEncodingParser parser) {
+	RequestHeaders setParser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
@@ -261,7 +261,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	@SuppressWarnings("unchecked")
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
 		String h = getString(name);
-		return (T)parser.parse(PartType.HEADER, h, beanSession.getClassMeta(type, args));
+		return (T)parser.parse(HttpPartType.HEADER, h, beanSession.getClassMeta(type, args));
 	}
 
 	/**

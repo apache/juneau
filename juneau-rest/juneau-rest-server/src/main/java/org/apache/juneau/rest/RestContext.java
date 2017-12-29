@@ -34,6 +34,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -45,7 +46,6 @@ import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -84,8 +84,8 @@ public final class RestContext extends Context {
 	private final Map<Class<?>,RestParam> paramResolvers;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
-	private final UrlEncodingSerializer urlEncodingSerializer;
-	private final UrlEncodingParser urlEncodingParser;
+	private final HttpPartSerializer partSerializer;
+	private final HttpPartParser partParser;
 	private final EncoderGroup encoders;
 	private final MediaType[]
 		supportedContentTypes,
@@ -175,8 +175,8 @@ public final class RestContext extends Context {
 			this.paramResolvers = Collections.unmodifiableMap(b.paramResolvers);
 			this.serializers = b.serializers;
 			this.parsers = b.parsers;
-			this.urlEncodingSerializer = b.urlEncodingSerializer;
-			this.urlEncodingParser = b.urlEncodingParser;
+			this.partSerializer = b.partSerializer;
+			this.partParser = b.partParser;
 			this.encoders = b.encoders;
 			this.supportedContentTypes = toObjectArray(b.supportedContentTypes, MediaType.class);
 			this.supportedAcceptTypes = toObjectArray(b.supportedAcceptTypes, MediaType.class);
@@ -458,8 +458,8 @@ public final class RestContext extends Context {
 		Map<Class<?>,RestParam> paramResolvers = new HashMap<>();
 		SerializerGroup serializers;
 		ParserGroup parsers;
-		UrlEncodingSerializer urlEncodingSerializer;
-		UrlEncodingParser urlEncodingParser;
+		HttpPartSerializer partSerializer;
+		HttpPartParser partParser;
 		EncoderGroup encoders;
 		String clientVersionHeader = "", defaultCharset, paramFormat;
 		long maxInput;
@@ -515,7 +515,7 @@ public final class RestContext extends Context {
 			pojoSwaps = ArrayUtils.reverseInline(toObjectArray(sc.pojoSwaps, Class.class));
 
 			for (Class<?> c : sc.paramResolvers) {
-				RestParam rp = newInstanceFromOuter(resource, RestParam.class, c);
+				RestParam rp = newInstanceFromOuter(resource, RestParam.class, c, true);
 				paramResolvers.put(rp.forClass(), rp);
 			}
 
@@ -538,8 +538,8 @@ public final class RestContext extends Context {
 
 			serializers = sc.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(sc.serializerListener).build();
 			parsers = sc.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(sc.parserListener).build();
-			urlEncodingSerializer = UrlEncodingSerializer.create().beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).build();
-			urlEncodingParser = UrlEncodingParser.create().beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).build();
+			partSerializer = resolve(resource, HttpPartSerializer.class, sc.partSerializer, serializers.getPropertyStore());
+			partParser = resolve(resource, HttpPartParser.class, sc.partParser, parsers.getPropertyStore());
 			encoders = sc.encoders.build();
 			supportedContentTypes = sc.supportedContentTypes != null ? sc.supportedContentTypes : serializers.getSupportedMediaTypes();
 			supportedAcceptTypes = sc.supportedAcceptTypes != null ? sc.supportedAcceptTypes : parsers.getSupportedMediaTypes();
@@ -1418,21 +1418,21 @@ public final class RestContext extends Context {
 
 
 	/**
-	 * Returns the URL-encoding parser associated with this resource.
+	 * Returns the HTTP-part parser associated with this resource.
 	 *
-	 * @return The URL-encoding parser associated with this resource.  Never <jk>null</jk>.
+	 * @return The HTTP-part parser associated with this resource.  Never <jk>null</jk>.
 	 */
-	protected UrlEncodingParser getUrlEncodingParser() {
-		return urlEncodingParser;
+	protected HttpPartParser getPartParser() {
+		return partParser;
 	}
 
 	/**
-	 * Returns the URL-encoding serializer associated with this resource.
+	 * Returns the HTTP-part serializer associated with this resource.
 	 *
-	 * @return The URL-encoding serializer associated with this resource.  Never <jk>null</jk>.
+	 * @return The HTTP-part serializer associated with this resource.  Never <jk>null</jk>.
 	 */
-	protected UrlEncodingSerializer getUrlEncodingSerializer() {
-		return urlEncodingSerializer;
+	protected HttpPartSerializer getPartSerializer() {
+		return partSerializer;
 	}
 
 	/**
@@ -1687,7 +1687,7 @@ public final class RestContext extends Context {
 	 */
 	static final <T> T resolve(Object outer, Class<T> c, Object o, Object...cArgs) throws RestServletException {
 		try {
-			return ClassUtils.newInstanceFromOuter(outer, c, o, cArgs);
+			return ClassUtils.newInstanceFromOuter(outer, c, o, true, cArgs);
 		} catch (Exception e) {
 			throw new RestServletException("Exception occurred while constructing class ''{0}''", c).initCause(e);
 		}

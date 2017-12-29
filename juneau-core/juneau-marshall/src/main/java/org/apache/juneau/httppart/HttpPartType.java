@@ -10,33 +10,22 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.parser;
-
-import org.apache.juneau.*;
-import org.apache.juneau.urlencoding.*;
+package org.apache.juneau.httppart;
 
 /**
- * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
- *
- * <p>
- * By default, the {@link UrlEncodingParser} class implements this interface so that it can be used to parse these HTTP
- * parts.
- * However, the interface is provided to allow custom parsing of these objects by providing your own implementation
- * class.
- *
- * <p>
- * Implementations must include a no-arg constructor.
+ * Represents possible enum values that can be passed to the {@link HttpPartSerializer#serialize(HttpPartType, Object)}.
  */
-public interface PartParser {
+public enum HttpPartType {
 
-	/**
-	 * Converts the specified input to the specified class type.
-	 *
-	 * @param partType The part type being parsed.
-	 * @param in The input being parsed.
-	 * @param type The category of value being parsed.
-	 * @return The parsed value.
-	 * @throws ParseException
-	 */
-	public <T> T parse(PartType partType, String in, ClassMeta<T> type) throws ParseException;
+	/** A URI path variable */
+	PATH,
+
+	/** A URI query parameter */
+	QUERY,
+
+	/** A form-data parameter */
+	FORM_DATA,
+
+	/** An HTTP header */
+	HEADER
 }

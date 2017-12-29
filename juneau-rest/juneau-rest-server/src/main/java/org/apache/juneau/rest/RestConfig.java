@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -99,6 +100,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	Class<? extends ParserListener> parserListener;
 	SerializerGroupBuilder serializers = SerializerGroup.create();
 	ParserGroupBuilder parsers = ParserGroup.create();
+	Object partSerializer = SimpleUonPartSerializer.class, partParser = UonPartParser.class;
 	EncoderGroupBuilder encoders = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
 	List<Object> converters = new ArrayList<>();
 	List<Object> guards = new ArrayList<>();
@@ -592,6 +594,62 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 */
 	public RestConfig addParsers(Parser...parsers) {
 		this.parsers.append(parsers);
+		return this;
+	}
+
+	/**
+	 * Specifies the class-level {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#partSerializer() @RestResource.partSerializer()} annotation.
+	 *
+	 * @param partSerializer The serializer class.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setPartSerializer(Class<? extends HttpPartSerializer> partSerializer) {
+		this.partSerializer = partSerializer;
+		return this;
+	}
+
+	/**
+	 * Specifies the class-level {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#partSerializer() @RestResource.partSerializer()} annotation.
+	 *
+	 * @param partSerializer The serializer instance.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setPartSerializer(HttpPartSerializer partSerializer) {
+		this.partSerializer = partSerializer;
+		return this;
+	}
+
+	/**
+	 * Specifies the class-level {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#partParser() @RestResource.partParser()} annotation.
+	 *
+	 * @param partParser The parser class.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setPartParser(Class<? extends HttpPartParser> partParser) {
+		this.partParser = partParser;
+		return this;
+	}
+
+	/**
+	 * Specifies the class-level {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#partParser() @RestResource.partParser()} annotation.
+	 *
+	 * @param partParser The parser instance.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setPartParser(HttpPartParser partParser) {
+		this.partParser = partParser;
 		return this;
 	}
 

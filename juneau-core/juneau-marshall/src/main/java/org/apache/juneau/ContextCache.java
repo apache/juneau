@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -40,7 +39,6 @@ public class ContextCache {
 	
 	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<Integer,CacheEntry>> contextCache = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Class<?>,String[]> prefixCache = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Class<?>,Constructor<?>> constructorCache = new ConcurrentHashMap<>();
 
 	// When enabled, this will spit out cache-hit metrics to the console on shutdown.
 	private static final boolean TRACK_CACHE_HITS = true;
@@ -110,7 +108,7 @@ public class ContextCache {
 		
 		if (ce == null) {
 			try {
-				ce = new CacheEntry(ps, getConstructor(c).newInstance(ps));
+				ce = new CacheEntry(ps, newInstance(c, ps));
 			} catch (ContextRuntimeException e) {
 				throw e;
 			} catch (Exception e) {
@@ -147,19 +145,8 @@ public class ContextCache {
 		return prefixes;
 	}
 	
-	private <T> Constructor<T> getConstructor(Class<T> cc) {
-		Constructor<?> c = constructorCache.get(cc);
-		if (c == null) {
-			try {
-				c = cc.getConstructor(PropertyStore.class);
-			} catch (NoSuchMethodException e) {
-				throw new ContextRuntimeException(e, "Public constructor with PropertyStore argument not found on class ''{0}''", cc);
-			}
-			Constructor<?> c2 = constructorCache.putIfAbsent(cc, c);
-			if (c2 != null)
-				c = c2;
-		}
-		return (Constructor<T>)c;
+	private <T> T newInstance(Class<T> cc, PropertyStore ps) throws Exception {
+		return (T)ClassUtils.newInstance(Context.class, cc, true, ps);
 	}
 
 	private static class CacheEntry {

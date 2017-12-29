@@ -35,6 +35,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -81,7 +82,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private SerializerGroup serializerGroup;
 	private ParserGroup parserGroup;
 	private final boolean debug;
-	private UrlEncodingParser urlEncodingParser;   // The parser used to parse URL attributes and parameters (beanContext also used to parse headers)
+	private HttpPartParser partParser;
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
@@ -109,8 +110,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			// If this is a POST, we want to parse the query parameters ourselves to prevent
 			// the servlet code from processing the HTTP body as URL-Encoded parameters.
 			queryParams = new RequestQuery();
-			if (isPost)
-				context.getUrlEncodingParser().parseIntoSimpleMap(getQueryString(), queryParams);
+			if (isPost) 
+				RestUtils.parseQuery(getQueryString(), queryParams);
 			else
 				queryParams.putAll(req.getParameterMap());
 
@@ -160,30 +161,29 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
 			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset, long maxInput,
-			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,
+			SerializerGroup mSerializers, ParserGroup mParsers, HttpPartParser mUrlEncodingParser,
 			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets) {
 		this.javaMethod = javaMethod;
 		this.properties = properties;
-		this.urlEncodingParser = mUrlEncodingParser;
+		this.partParser = mUrlEncodingParser;
 		this.beanSession = beanContext.createSession();
 		this.pathParams
-			.setParser(urlEncodingParser)
+			.setParser(partParser)
 			.setBeanSession(beanSession);
 		this.queryParams
 			.addDefault(defQuery)
-			.setParser(urlEncodingParser)
+			.setParser(partParser)
 			.setBeanSession(beanSession);
 		this.headers
 			.addDefault(defHeader)
 			.addDefault(context.getDefaultRequestHeaders())
-			.setParser(urlEncodingParser)
+			.setParser(partParser)
 			.setBeanSession(beanSession);
 		this.body
 			.setEncoders(encoders)
 			.setParsers(mParsers)
 			.setHeaders(headers)
 			.setBeanSession(beanSession)
-			.setUrlEncodingParser(mUrlEncodingParser)
 			.setMaxInput(maxInput);
 		this.serializerGroup = mSerializers;
 		this.parserGroup = mParsers;
@@ -411,13 +411,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		try {
 			if (formData == null) {
 				formData = new RequestFormData();
-				formData.setParser(urlEncodingParser).setBeanSession(beanSession);
+				formData.setParser(partParser).setBeanSession(beanSession);
 				if (! body.isLoaded()) {
 					formData.putAll(getParameterMap());
 				} else {
-					Map<String,String> m = urlEncodingParser.parse(body.getReader(), Map.class, String.class, String.class);
-					for (Map.Entry<String,String> e : m.entrySet()) {
-						formData.put(e.getKey(), e.getValue());
+					Map<String,String[]> m = RestUtils.parseQuery(body.getReader());
+					for (Map.Entry<String,String[]> e : m.entrySet()) {
+						for (String v : e.getValue())
+							formData.put(e.getKey(), v);
 					}
 				}
 			}

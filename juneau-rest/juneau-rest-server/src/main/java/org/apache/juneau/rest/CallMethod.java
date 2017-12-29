@@ -28,6 +28,8 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.HttpPartParser;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -35,7 +37,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
@@ -52,8 +53,8 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
 	private final EncoderGroup encoders;
-	private final UrlEncodingParser urlEncodingParser;
-	private final UrlEncodingSerializer urlEncodingSerializer;
+	private final HttpPartParser partParser;
+	private final HttpPartSerializer partSerializer;
 	private final ObjectMap properties;
 	private final Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
 	private final String defaultCharset;
@@ -81,8 +82,8 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.serializers = b.serializers;
 		this.parsers = b.parsers;
 		this.encoders = b.encoders;
-		this.urlEncodingParser = b.urlEncodingParser;
-		this.urlEncodingSerializer = b.urlEncodingSerializer;
+		this.partParser = b.partParser;
+		this.partSerializer = b.partSerializer;
 		this.beanContext = b.beanContext;
 		this.properties = b.properties;
 		this.defaultRequestHeaders = b.defaultRequestHeaders;
@@ -111,8 +112,8 @@ class CallMethod implements Comparable<CallMethod>  {
 		SerializerGroup serializers;
 		ParserGroup parsers;
 		EncoderGroup encoders;
-		UrlEncodingParser urlEncodingParser;
-		UrlEncodingSerializer urlEncodingSerializer;
+		HttpPartParser partParser;
+		HttpPartSerializer partSerializer;
 		BeanContext beanContext;
 		ObjectMap properties;
 		Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
@@ -146,8 +147,8 @@ class CallMethod implements Comparable<CallMethod>  {
 				responses = sm.responses();
 				serializers = context.getSerializers();
 				parsers = context.getParsers();
-				urlEncodingSerializer = context.getUrlEncodingSerializer();
-				urlEncodingParser = context.getUrlEncodingParser();
+				partSerializer = context.getPartSerializer();
+				partParser = context.getPartParser();
 				beanContext = context.getBeanContext();
 				encoders = context.getEncoders();
 				properties = new ObjectMap().setInner(context.getProperties());
@@ -180,7 +181,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				SerializerGroupBuilder sgb = null;
 				ParserGroupBuilder pgb = null;
-				UrlEncodingParserBuilder uepb = null;
+				ParserBuilder uepb = null;
 				BeanContextBuilder bcb = null;
 
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
@@ -188,7 +189,7 @@ class CallMethod implements Comparable<CallMethod>  {
 						|| m.bpx().length > 0) {
 					sgb = SerializerGroup.create();
 					pgb = ParserGroup.create();
-					uepb = urlEncodingParser.builder();
+					uepb = Parser.create();
 					bcb = beanContext.builder();
 
 					if (si.contains(SERIALIZERS) || m.serializers().length == 0)
@@ -220,11 +221,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
 				for (int i = 0; i < m.matchers().length; i++) {
 					Class<? extends RestMatcher> c = m.matchers()[i];
-					RestMatcher matcher = null;
-					if (isParentClass(RestMatcherReflecting.class, c))
-						matcher = beanContext.newInstance(RestMatcherReflecting.class, c, servlet, method);
-					else
-						matcher = beanContext.newInstance(RestMatcher.class, c);
+					RestMatcher matcher = beanContext.newInstance(RestMatcher.class, c, true, servlet, method);
 					if (matcher.mustMatch())
 						requiredMatchers.add(matcher);
 					else
@@ -393,8 +390,10 @@ class CallMethod implements Comparable<CallMethod>  {
 					serializers = sgb.build();
 				if (pgb != null)
 					parsers = pgb.build();
-				if (uepb != null)
-					urlEncodingParser = uepb.build();
+				if (uepb != null && partParser instanceof Parser) {
+					Parser pp = (Parser)partParser;
+					partParser = (HttpPartParser)pp.builder().apply(uepb.getPropertyStore()).build();
+				}
 				if (bcb != null)
 					beanContext = bcb.build();
 
@@ -779,8 +778,8 @@ class CallMethod implements Comparable<CallMethod>  {
 		ObjectMap requestProperties = new ResolvingObjectMap(req.getVarResolverSession()).setInner(properties);
 
 		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
-			maxInput, serializers, parsers, urlEncodingParser, beanContext, encoders, widgets);
-		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
+			maxInput, serializers, parsers, partParser, beanContext, encoders, widgets);
+		res.init(requestProperties, defaultCharset, serializers, partSerializer, encoders);
 
 		// Class-level guards
 		for (RestGuard guard : context.getGuards())

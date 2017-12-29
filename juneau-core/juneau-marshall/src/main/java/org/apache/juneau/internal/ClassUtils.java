@@ -694,36 +694,65 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Creates an instance of the specified class without throwing exceptions.
+	 * Creates an instance of the specified class.
 	 *
-	 * @param c The class to cast to.
+	 * @param c 
+	 * 	The class to cast to.
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param args The arguments to pass to the constructor.
-	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws RuntimeException if constructor could not be found or called.
+	 * @return 
+	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws 
+	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public static <T> T newInstance(Class<T> c, Object c2, Object...args) {
-		return newInstanceFromOuter(null, c, c2, args);
+	public static <T> T newInstance(Class<T> c, Object c2) {
+		return newInstanceFromOuter(null, c, c2, false);
+	}
+
+	/**
+	 * Creates an instance of the specified class.
+	 *
+	 * @param c 
+	 * 	The class to cast to.
+	 * @param c2
+	 * 	The class to instantiate.
+	 * 	Can also be an instance of the class.
+	 * @param allowNoArgs 
+	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param args 
+	 * 	The arguments to pass to the constructor.
+	 * @return 
+	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws 
+	 * 	RuntimeException if constructor could not be found or called.
+	 */
+	public static <T> T newInstance(Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
+		return newInstanceFromOuter(null, c, c2, allowNoArgs, args);
 	}
 
 	/**
 	 * Creates an instance of the specified class from within the context of another object.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer object.
 	 * 	Can be <jk>null</jk>.
-	 * @param c The class to cast to.
+	 * @param c 
+	 * 	The class to cast to.
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param args The arguments to pass to the constructor.
-	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws RuntimeException if constructor could not be found or called.
+	 * @param allowNoArgs 
+	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param args 
+	 * 	The arguments to pass to the constructor.
+	 * @return 
+	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws 
+	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, Object...args) {
+	public static <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
 		if (c2 == null)
 			return null;
 		if (c2 instanceof Class) {
@@ -734,13 +763,21 @@ public final class ClassUtils {
 				Constructor<?> con = findPublicConstructor(c3, args);
 				if (con != null)
 					return (T)con.newInstance(args);
+				if (allowNoArgs && args.length != 0)
+					con = findPublicConstructor(c3);
+				if (con != null)
+					return (T)con.newInstance();
 				if (outer != null) {
 					Object[] args2 = new AList<>().append(outer).appendAll(args).toArray();
 					con = findPublicConstructor(c3, args2);
 					if (con != null)
 						return (T)con.newInstance(args2);
+					if (allowNoArgs && args.length != 0)
+						con = findPublicConstructor(c3);
+					if (con != null)
+						return (T)con.newInstance();
 				}
-				return (T)c3.getConstructor(getClasses(args)).newInstance(args);
+				throw new FormattedRuntimeException("Could not instantiate class {0}.  Constructor not found.", c.getName());
 			} catch (Exception e) {
 				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());
 			}
@@ -1040,7 +1077,6 @@ public final class ClassUtils {
 	 * 	<li><code>parseString</code>
 	 * 	<li><code>forName</code>
 	 * 	<li><code>forString</code>
-	 * 	<li><code>getTimeZone</code>
 	 * </ul>
 	 * 
 	 * @param c The class to find the method on.

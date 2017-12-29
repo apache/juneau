@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.encoders.Encoder;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -217,9 +218,6 @@ public @interface RestResource {
 	 * Specifies a list of {@link Serializer} classes to add to the list of serializers available for this servlet.
 	 *
 	 * <p>
-	 * This annotation can only be used on {@link Serializer} classes that have no-arg constructors.
-	 *
-	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#addSerializers(Class...)}/
 	 * {@link RestConfig#addSerializers(Serializer...)} methods.
 	 */
@@ -229,13 +227,28 @@ public @interface RestResource {
 	 * Specifies a list of {@link Parser} classes to add to the list of parsers available for this servlet.
 	 *
 	 * <p>
-	 * This annotation can only be used on {@link Parser} classes that have no-arg constructors.
-	 *
-	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#addParsers(Class...)}/
 	 * {@link RestConfig#addParsers(Parser...)} methods.
 	 */
 	Class<? extends Parser>[] parsers() default {};
+
+	/**
+	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPartSerializer(Class)}/
+	 * {@link RestConfig#setPartSerializer(HttpPartSerializer)} methods.
+	 */
+	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
+	
+	/**
+	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPartParser(Class)}/
+	 * {@link RestConfig#setPartParser(HttpPartParser)} methods.
+	 */
+	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
 
 	/**
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
@@ -864,6 +877,14 @@ public @interface RestResource {
 	 * 	<li>Defaults to <js>"100M"</js>.
 	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
 	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/myPath"</js>,
+	 * 		maxInput=<js>"100M"</js>
+	 * 	)
+	 * </p>
 	 */
 	String maxInput() default "";
 }

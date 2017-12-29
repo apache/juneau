@@ -10,21 +10,26 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.serializer;
+package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
 import org.apache.juneau.remoteable.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Interface used to convert POJOs to simple strings in HTTP headers, query parameters, form-data parameters, and URI
  * path variables.
  *
  * <p>
- * By default, the {@link UrlEncodingSerializer} class implements this interface so that it can be used to serialize
- * these HTTP parts.
- * However, the interface is provided to allow custom serialization of these objects by providing your own implementation
- * class and using it in any of the following locations:
+ * The following default implementations are provided:
+ * <ul class='doctree'>
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer} - Parts encoded in UON notation.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer} - Parts encoded in UON notation, but
+ * 		strings are treated as plain-text and arrays/collections are serialized as comma-delimited lists.
+ * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Parts encoded in plain text.
+ * </ul>
+ * 
+ * <p>
+ * This class is used in the following locations:
  * <ul>
  * 	<li>{@link FormData#serializer()}
  * 	<li>{@link FormDataIfNE#serializer()}
@@ -38,20 +43,29 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  *
  * <p>
- * Implementations must include a no-arg constructor.
+ * Implementations must include either a public no-args constructor or a public constructor that takes in a single
+ * {@link PropertyStore} object.
  */
-public interface PartSerializer {
+public interface HttpPartSerializer {
+
+	/**
+	 * Represent "no" part part serializer.
+	 * 
+	 * <li>
+	 * Used to represent the absence of a part serializer in annotations.
+	 */
+	public static interface Null extends HttpPartSerializer {}
 
 	/**
 	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
 	 * form-data parameter, or URI path variable.
 	 *
 	 * <p>
-	 * Returned values should NOT be URL-encoded.  This will happen automatically.
+	 * Returned values should NOT be URL-encoded.
 	 *
 	 * @param type The category of value being serialized.
 	 * @param value The value being serialized.
 	 * @return The serialized value.
 	 */
-	public String serialize(PartType type, Object value);
+	public String serialize(HttpPartType type, Object value);
 }

@@ -169,7 +169,7 @@ public class ContextCacheTest {
 			ContextCache.INSTANCE.create(D1.class, ps);
 			fail("Exception expected");
 		} catch (Exception e) {
-			assertEquals("Public constructor with PropertyStore argument not found on class 'org.apache.juneau.ContextCacheTest$D1'", e.getLocalizedMessage());
+			assertEquals("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'", e.getLocalizedMessage());
 		}
 		try {
 			ContextCache.INSTANCE.create(D2.class, ps);

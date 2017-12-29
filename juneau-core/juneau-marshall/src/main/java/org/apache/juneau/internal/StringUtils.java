@@ -1867,4 +1867,15 @@ public final class StringUtils {
 		}
 		return Long.parseLong(s) * m;
 	}
+	
+	/**
+	 * Same as {@link String#contains(CharSequence)} except returns <jk>null</jk> if the value is null.
+	 * 
+	 * @param value The string to check.
+	 * @param substring The value to check for.
+	 * @return <jk>true</jk> if the value contains the specified substring.
+	 */
+	public static boolean contains(String value, CharSequence substring) {
+		return value == null ? false : value.contains(substring);
+	}
 }

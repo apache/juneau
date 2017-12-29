@@ -286,7 +286,23 @@ public abstract class Parser extends BeanContext {
 
 	@Override /* Context */
 	public ParserBuilder builder() {
-		return null;
+		return new ParserBuilder(getPropertyStore());
+	}
+
+	/**
+	 * Instantiates a new clean-slate {@link ParserBuilder} object.
+	 * 
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> ParserBuilder()</code>.
+	 * 
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies 
+	 * the settings of the object called on.
+	 * 
+	 * @return A new {@link ParserBuilder} object.
+	 */
+	public static ParserBuilder create() {
+		return new ParserBuilder(PropertyStore.DEFAULT);
 	}
 
 

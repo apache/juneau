@@ -17,8 +17,8 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.message.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -78,7 +78,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @param partSerializer The serializer to use for converting values to simple strings.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairs append(String name, Object value, PartSerializer partSerializer) {
+	public NameValuePairs append(String name, Object value, HttpPartSerializer partSerializer) {
 		super.add(new SerializedNameValuePair(name, value, partSerializer));
 		return this;
 	}

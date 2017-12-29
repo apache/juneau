@@ -16,9 +16,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -116,7 +115,7 @@ public class LinkString implements Comparable<LinkString> {
 	 */
 	public LinkString setHref(String href, Object...args) {
 		for (int i = 0; i < args.length; i++)
-			args[i] = UrlEncodingSerializer.DEFAULT.serialize(PartType.PATH, args[i]);
+			args[i] = SimpleUonPartSerializer.DEFAULT.serialize(HttpPartType.PATH, args[i]);
 		this.href = format(href, args);
 		return this;
 	}

@@ -18,8 +18,8 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Contains information about the matched path on the HTTP request.
@@ -31,7 +31,7 @@ import org.apache.juneau.urlencoding.*;
 public class RequestPathMatch extends TreeMap<String,String> {
 	private static final long serialVersionUID = 1L;
 
-	private UrlEncodingParser parser;
+	private HttpPartParser parser;
 	private BeanSession beanSession;
 	private String remainder;
 
@@ -39,7 +39,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 		super(String.CASE_INSENSITIVE_ORDER);
 	}
 
-	RequestPathMatch setParser(UrlEncodingParser parser) {
+	RequestPathMatch setParser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
@@ -147,7 +147,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 		Object attr = get(name);
 		T t = null;
 		if (attr != null)
-			t = parser.parse(PartType.PATH, attr.toString(), cm);
+			t = parser.parse(HttpPartType.PATH, attr.toString(), cm);
 		if (t == null && cm.isPrimitive())
 			return cm.getPrimitiveDefault();
 		return t;

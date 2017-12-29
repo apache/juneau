@@ -1717,36 +1717,65 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Creates an instance of the specified class without throwing exceptions.
+	 * Creates an instance of the specified class.
 	 *
-	 * @param c The class to cast to.
+	 * @param c 
+	 * 	The class to cast to.
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param args The arguments to pass to the constructor.
-	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws RuntimeException if constructor could not be found or called.
+	 * @return 
+	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws 
+	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public <T> T newInstance(Class<T> c, Object c2, Object...args) {
-		return newInstanceFromOuter(null, c, c2, args);
+	public <T> T newInstance(Class<T> c, Object c2) {
+		return ClassUtils.newInstance(c, c2);
+	}
+
+	/**
+	 * Creates an instance of the specified class.
+	 *
+	 * @param c 
+	 * 	The class to cast to.
+	 * @param c2
+	 * 	The class to instantiate.
+	 * 	Can also be an instance of the class.
+	 * @param allowNoArgs 
+	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param args 
+	 * 	The arguments to pass to the constructor.
+	 * @return 
+	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws 
+	 * 	RuntimeException if constructor could not be found or called.
+	 */
+	public <T> T newInstance(Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
+		return ClassUtils.newInstance(c, c2, allowNoArgs, args);
 	}
 
 	/**
 	 * Creates an instance of the specified class from within the context of another object.
-	 *
+	 * 
 	 * @param outer
 	 * 	The outer object.
 	 * 	Can be <jk>null</jk>.
-	 * @param c The class to cast to.
+	 * @param c 
+	 * 	The class to cast to.
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param args The arguments to pass to the constructor.
-	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws RuntimeException if constructor could not be found or called.
+	 * @param allowNoArgs 
+	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param args 
+	 * 	The arguments to pass to the constructor.
+	 * @return 
+	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
+	 * @throws 
+	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, Object...args) {
-		return ClassUtils.newInstanceFromOuter(outer, c, c2, args);
+	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
+		return ClassUtils.newInstanceFromOuter(outer, c, c2, allowNoArgs, args);
 	}
 	
 	/**

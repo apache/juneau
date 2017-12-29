@@ -3810,10 +3810,10 @@
 					<br>The argument can be any of the following types:
 					<ul>
 						<li>Any serializable POJO 
-							- Converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+							- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
 						<li><code>Map&lt;String,Object&gt;</code> 
 							- Individual name-value pairs.
-							<br>Values are converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+							<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
 						<li><code>String</code> 
 							- Treated as a query string.
 					</ul>
@@ -3827,12 +3827,12 @@
 					<br>The argument can be any of the following types:
 					<ul>
 						<li>Any serializable POJO 
-							- Converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+							- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
 						<li>{@link org.apache.juneau.rest.client.NameValuePairs} 
 							- Individual name-value pairs.
 						<li><code>Map&lt;String,Object&gt;</code> 
 							- Individual name-value pairs.
-							<br>Values are converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+							<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
 					</ul>
 				<li>
 					{@link org.apache.juneau.remoteable.FormDataIfNE @FormDataIfNE} 
@@ -3843,10 +3843,10 @@
 					<br>The argument can be any of the following types:
 					<ul>
 						<li>Any serializable POJO 
-							- Converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+							- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
 						<li><code>Map&lt;String,Object&gt;</code> 
 							- Individual name-value pairs.
-							<br>Values are converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+							<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
 					</ul>
 				<li>
 					{@link org.apache.juneau.remoteable.HeaderIfNE @HeaderIfNE} 
@@ -7644,15 +7644,15 @@
 						<br>Additionally, these classes are their own bean contexts.
 						<br>For example, the class hierarchy of <code>JsonSerializer</code> is now:
 						<ul class='doctree'>
-							<li class='jaa'>{@link org.apache.juneau.Context}
+							<li class='jac'>{@link org.apache.juneau.Context}
 							<ul>
-								<li class='jac'>{@link org.apache.juneau.BeanContext}
+								<li class='jc'>{@link org.apache.juneau.BeanContext}
 								<ul>
-									<li class='jaa'>{@link org.apache.juneau.serializer.Serializer}
+									<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
 									<ul>
-										<li class='jaa'>{@link org.apache.juneau.serializer.WriterSerializer}
+										<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
 										<ul>
-											<li class='jac'>{@link org.apache.juneau.json.JsonSerializer}
+											<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 										</ul>
 									</ul>
 								</ul>
@@ -7663,15 +7663,15 @@
 						Session objects also now have a consistent class hierarchy.
 						<br>For example, the class hierarchy of <code>JsonSerializerSession</code> is now:
 						<ul class='doctree'>
-							<li class='jaa'>{@link org.apache.juneau.Session}
+							<li class='jac'>{@link org.apache.juneau.Session}
 							<ul>
-								<li class='jac'>{@link org.apache.juneau.BeanSession}
+								<li class='jc'>{@link org.apache.juneau.BeanSession}
 								<ul>
-									<li class='jaa'>{@link org.apache.juneau.serializer.SerializerSession}
+									<li class='jac'>{@link org.apache.juneau.serializer.SerializerSession}
 									<ul>
-										<li class='jaa'>{@link org.apache.juneau.serializer.WriterSerializerSession}
+										<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializerSession}
 										<ul>
-											<li class='jac'>{@link org.apache.juneau.json.JsonSerializerSession}
+											<li class='jc'>{@link org.apache.juneau.json.JsonSerializerSession}
 										</ul>
 									</ul>
 								</ul>
@@ -7682,13 +7682,13 @@
 						Builder objects also now have a consistent class hierarchy.
 						<br>For example, the class hierarchy of <code>JsonSerializerBuilder</code> is now:
 						<ul class='doctree'>
-							<li class='jaa'>{@link org.apache.juneau.ContextBuilder}
+							<li class='jac'>{@link org.apache.juneau.ContextBuilder}
 							<ul>
-								<li class='jac'>{@link org.apache.juneau.BeanContextBuilder}
+								<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
 								<ul>
-									<li class='jaa'>{@link org.apache.juneau.serializer.SerializerBuilder}
+									<li class='jac'>{@link org.apache.juneau.serializer.SerializerBuilder}
 									<ul>
-										<li class='jac'>{@link org.apache.juneau.json.JsonSerializerBuilder}
+										<li class='jc'>{@link org.apache.juneau.json.JsonSerializerBuilder}
 									</ul>
 								</ul>
 							</ul>
@@ -7709,14 +7709,31 @@
 					<li>{@link org.apache.juneau.svl.vars.CoalesceVar}
 					<li>{@link org.apache.juneau.svl.vars.CoalesceAndRecurseVar}
 				</ul>
-		</ul>
-
-		<h6 class='topic'>juneau-marshall-rdf</h6>
-		<ul class='spaced-list'>
-		</ul>
-
-		<h6 class='topic'>juneau-svl</h6>
-		<ul class='spaced-list'>
+			<li>
+				Improvements to the HTTP-Part APIs.
+				<br>The existing <code>PartSerializer</code>/<code>PartParser</code> classes
+				have been replaced with the following all located in the new <code>org.apache.juneau.httppart</code> package:
+				<ul class='doctree'>
+					<li class='jp'>{@link org.apache.juneau.httppart}
+					<ul>
+						<li class='je'>{@link org.apache.juneau.httppart.HttpPartType}
+						<li class='ji'>{@link org.apache.juneau.httppart.HttpPartSerializer}
+						<ul>
+							<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer}
+							<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer}
+							<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer}
+						</ul>
+						<li class='ji'>{@link org.apache.juneau.httppart.HttpPartParser}
+						<ul>
+							<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser}
+							<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser}
+						</ul>
+					</ul>
+				</ul>
+				Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
+			<li>	
+				<code>ContexBuilder.property(String,Object)</code> renamed to {@link org.apache.juneau.ContextBuilder#set(String,Object)}.
+			
 		</ul>
 
 		<h6 class='topic'>juneau-rest-server</h6>
@@ -7732,6 +7749,10 @@
 					<li><js>"$RQ{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestQueryVar}
 					<li><js>"$R{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestVar}
 				</ul>
+			<li>
+				Eliminated the <code>RestMatcherReflecting</code> class.
+				<br>You can now simply create a {@link org.apache.juneau.rest.RestMatcher} that has a public constructor that 
+				takes in the server and method arguments.
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -7739,17 +7760,18 @@
 			<li>
 				New configuration property {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query} and
 				builder method {@link org.apache.juneau.rest.client.RestClientBuilder#query(String,Object)}.
+			<li>
+				API changes to replace <code>PartSerializer</code> with {@link org.apache.juneau.httppart.HttpPartSerializer}.
+				<br>The default value is now {@link org.apache.juneau.httppart.SimpleUonPartSerializer} which will
+				serialize strings as plain-text and collections/arrays as comma-delimited lists.
+				<br>We decided to change the default behavior in favor of practicality over purity.
 		</ul>
-		
-		
-		<h6 class='topic'>juneau-microservice-server</h6>
-		<ul class='spaced-list'>
-		</ul>
+
 	</div>
 
 	<!-- =========================================================================================================== -->
 	<a id="7.0.1"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.0.1 (TBD)</h3>
+	<h3 class='topic' onclick='toggle(this)'>7.0.1 (Dec 24, 2017)</h3>
 	<div class='topic'>
 		<p>
 			This release is a minor update.
@@ -7784,10 +7806,6 @@
 				has been change to match {@link org.apache.juneau.serializer.Serializer#serialize(Object,Object)}.	
 			<li>
 				Fixed some bugs in the XML parser related to whitespace and comments.
-		</ul>
-
-		<h6 class='topic'>juneau-marshall-rdf</h6>
-		<ul class='spaced-list'>
 		</ul>
 
 		<h6 class='topic'>juneau-svl</h6>
@@ -8690,7 +8708,7 @@
 					<li><code><del>Session.getProperty(Class,String)</del></code>
 					<li><code><del>Session.getProperty(Class,String,Object)</del></code>
 				</ul>	
-			<li>New {@link org.apache.juneau.serializer.PartSerializer} interface particularly tailored to HTTP
+			<li>New <code><del>org.apache.juneau.serializer.PartSerializer</del></code> interface particularly tailored to HTTP
 				headers, query parameters, form-data parameters, and path variables.  
 				<br>Allows easy user-defined serialization of these objects.
 				<br>The interface can be used in the following locations:
@@ -9275,18 +9293,18 @@
 			<li>New methods on {@link org.apache.juneau.rest.client.RestCall}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.client.RestCall#uri(Object) uri(Object)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#query(String,Object,boolean,PartSerializer) query(String,Object,boolean,PartSerializer)}
+					<li><code><del>query(String,Object,boolean,PartSerializer)</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestCall#query(String,Object) query(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#queryIfNE(String,Object) queryIfNE(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#query(Map) query(Map)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#queryIfNE(Map) queryIfNE(Map)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#query(String) query(String)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#formData(String,Object,boolean,PartSerializer) formData(String,Object,boolean,PartSerializer)}
+					<li><code><del>formData(String,Object,boolean,PartSerializer)</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestCall#formData(String,Object) formData(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#formDataIfNE(String,Object) formDataIfNE(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#formData(Map) formData(Map)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#formDataIfNE(Map) formDataIfNE(Map)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#header(String,Object,boolean,PartSerializer) header(String,Object,boolean,PartSerializer)}
+					<li><code><del>header(String,Object,boolean,PartSerializer)</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestCall#header(String,Object) header(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#headerIfNE(String,Object) headerIfNE(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#headers(Map) headers(Map)}
@@ -9326,7 +9344,7 @@
 			<li>New methods added to {@link org.apache.juneau.rest.client.NameValuePairs}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.client.NameValuePairs#append(String,Object) append(String,Object)}
-					<li>{@link org.apache.juneau.rest.client.NameValuePairs#append(String,Object,PartSerializer) append(String,Object,PartSerializer)}
+					<li><code><del>append(String,Object,PartSerializer)</del></code>
 				</ul>
 			<li>{@link org.apache.juneau.rest.client.RetryOn} is now an abstract class with an additional method:
 				<ul>

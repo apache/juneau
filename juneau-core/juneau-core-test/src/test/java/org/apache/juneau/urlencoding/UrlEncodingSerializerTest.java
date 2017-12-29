@@ -18,7 +18,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -446,15 +445,6 @@ public class UrlEncodingSerializerTest {
 		r = s.serialize(t);
 		String e = "f1=bar&f2=bar&f2=baz";
 		assertEquals(e, r);
-	}
-
-	@Test
-	public void testParseParameterObjectMap() throws Exception {
-		String in = "(name='foo bar')";
-
-		ObjectMap r =  UrlEncodingParser.DEFAULT.parse(PartType.QUERY, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
-
-		assertEquals("{name:'foo bar'}", JsonSerializer.DEFAULT_LAX.toString(r));
 	}
 
 	//====================================================================================================

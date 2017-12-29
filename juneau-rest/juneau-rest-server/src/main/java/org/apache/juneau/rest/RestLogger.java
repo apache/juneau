@@ -207,11 +207,11 @@ public abstract class RestLogger {
 	}
 
 	private static boolean isNoTrace(HttpServletRequest req) {
-		return "true".equals(req.getHeader("No-Trace")) || (req.getQueryString() != null && req.getQueryString().contains("noTrace=true"));
+		return contains(req.getHeader("No-Trace"), "true") || contains(req.getQueryString(), "noTrace=true");
 	}
 
 	private static boolean isDebug(HttpServletRequest req) {
-		return "true".equals(req.getHeader("Debug"));
+		return contains(req.getHeader("Debug"), "true");
 	}
 
 	/**

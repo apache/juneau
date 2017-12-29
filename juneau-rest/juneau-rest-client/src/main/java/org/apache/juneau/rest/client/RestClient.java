@@ -29,6 +29,7 @@ import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -218,8 +219,8 @@ public class RestClient extends BeanContext {
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestClient.urlEncodingSerializer.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>implements</jk> PartSerializer&gt;</code> or {@link PartSerializer}.
-	 * 	<li><b>Default:</b> {@link UrlEncodingSerializer};
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
+	 * 	<li><b>Default:</b> {@link SimpleUonPartSerializer};
 	 * </ul>
 	 * 
 	 * <p>
@@ -286,14 +287,14 @@ public class RestClient extends BeanContext {
 	public static final String RESTCLIENT_debug = PREFIX + "debug.b";
 	
 
-	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<Class,HttpPartSerializer> partSerializerCache = new ConcurrentHashMap<>();
 	
 	private final Map<String,String> headers, query;
 	private final HttpClientBuilder httpClientBuilder;
 	private final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen, debug;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
-	private final PartSerializer partSerializer;
+	private final HttpPartSerializer partSerializer;
 	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
@@ -391,7 +392,7 @@ public class RestClient extends BeanContext {
 		}
 
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
-		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, PartSerializer.class, urlEncodingSerializer);
+		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, SimpleUonPartSerializer.class, true, ps);
 		this.executorService = getInstanceProperty(RESTCLIENT_executorService, ExecutorService.class, null);
 		
 		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
@@ -1026,14 +1027,14 @@ public class RestClient extends BeanContext {
 		return n;
 	}
 
-	final PartSerializer getPartSerializer(Class c, PartSerializer c2) {
+	final HttpPartSerializer getPartSerializer(Class c, HttpPartSerializer c2) {
 		if (c2 != null)
 			return c2;
-		if (c == PartSerializer.class)
+		if (c == HttpPartSerializer.Null.class)
 			return null;
-		PartSerializer pf = partSerializerCache.get(c);
+		HttpPartSerializer pf = partSerializerCache.get(c);
 		if (pf == null) {
-			partSerializerCache.putIfAbsent(c, newInstance(PartSerializer.class, c));
+			partSerializerCache.putIfAbsent(c, newInstance(HttpPartSerializer.class, c, true, getPropertyStore()));
 			pf = partSerializerCache.get(c);
 		}
 		return pf;
@@ -1041,7 +1042,7 @@ public class RestClient extends BeanContext {
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
-	PartSerializer getPartSerializer() {
+	HttpPartSerializer getPartSerializer() {
 		return partSerializer;
 	}
 

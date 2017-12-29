@@ -20,10 +20,10 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
@@ -34,10 +34,10 @@ import org.apache.juneau.xml.*;
 public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
-	private UrlEncodingParser parser;
+	private HttpPartParser parser;
 	private BeanSession beanSession;
 
-	RequestQuery setParser(UrlEncodingParser parser) {
+	RequestQuery setParser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
@@ -460,7 +460,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	private <T> T parseValue(String val, ClassMeta<T> c) throws ParseException {
-		return parser.parse(PartType.QUERY, val, c);
+		return parser.parse(HttpPartType.QUERY, val, c);
 	}
 
 	/**

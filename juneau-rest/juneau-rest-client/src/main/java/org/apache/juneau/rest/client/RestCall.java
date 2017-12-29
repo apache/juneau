@@ -35,11 +35,11 @@ import org.apache.http.impl.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -200,15 +200,15 @@ public final class RestCall extends Session {
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall query(String name, Object value, boolean skipIfEmpty, PartSerializer partSerializer) throws RestCallException {
+	public RestCall query(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
 		if (partSerializer == null)
 			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
-				uriBuilder.addParameter(name, partSerializer.serialize(PartType.QUERY, value));
+				uriBuilder.addParameter(name, partSerializer.serialize(HttpPartType.QUERY, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				query(p.getName(), p.getValue(), skipIfEmpty, UrlEncodingSerializer.DEFAULT_PLAINTEXT);
+				query(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				query(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
@@ -309,7 +309,7 @@ public final class RestCall extends Session {
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall formData(String name, Object value, boolean skipIfEmpty, PartSerializer partSerializer) throws RestCallException {
+	public RestCall formData(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
 		if (formData == null)
 			formData = new NameValuePairs();
 		if (partSerializer == null)
@@ -418,7 +418,7 @@ public final class RestCall extends Session {
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If variable could not be found in path.
 	 */
-	public RestCall path(String name, Object value, PartSerializer partSerializer) throws RestCallException {
+	public RestCall path(String name, Object value, HttpPartSerializer partSerializer) throws RestCallException {
 		String path = uriBuilder.getPath();
 		if (partSerializer == null)
 			partSerializer = client.getPartSerializer();
@@ -426,7 +426,7 @@ public final class RestCall extends Session {
 			String var = "{" + name + "}";
 			if (path.indexOf(var) == -1)
 				throw new RestCallException("Path variable {"+name+"} was not found in path.");
-			String newPath = path.replace(var, partSerializer.serialize(PartType.PATH, value));
+			String newPath = path.replace(var, partSerializer.serialize(HttpPartType.PATH, value));
 			uriBuilder.setPath(newPath);
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
@@ -553,15 +553,15 @@ public final class RestCall extends Session {
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall header(String name, Object value, boolean skipIfEmpty, PartSerializer partSerializer) throws RestCallException {
+	public RestCall header(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
 		if (partSerializer == null)
 			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
-				request.setHeader(name, partSerializer.serialize(PartType.HEADER, value));
+				request.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				header(p.getName(), p.getValue(), skipIfEmpty, UrlEncodingSerializer.DEFAULT_PLAINTEXT);
+				header(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				header(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);

@@ -16,6 +16,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestUtils.*;
 import static org.junit.Assert.*;
 
+import java.util.*;
+
+import org.apache.juneau.urlencoding.*;
 import org.junit.*;
 
 public class RestUtilsTest extends RestTestcase {
@@ -186,4 +189,60 @@ public class RestUtilsTest extends RestTestcase {
 		assertEquals("/foo/bar", trimTrailingSlashes(new StringBuffer("/foo/bar//")).toString());
 		assertEquals("//foo/bar", trimTrailingSlashes(new StringBuffer("//foo/bar//")).toString());
 	}
+	
+	//====================================================================================================
+	// Test URL-encoded strings parsed into plain-text values using UrlEncodingParser.parseIntoSimpleMap().
+	//====================================================================================================
+	@Test
+	public void testParseIntoSimpleMap() throws Exception {
+		Map<String,String[]> m;
+
+		String s = "?f1=,()=&f2a=$b(true)&f2b=true&f3a=$n(123)&f3b=123&f4=$s(foo)";
+		m = parseQuery(s);
+		assertEquals(",()=", m.get("f1")[0]);
+		assertEquals("$b(true)", m.get("f2a")[0]);
+		assertEquals("true", m.get("f2b")[0]);
+		assertEquals("$n(123)", m.get("f3a")[0]);
+		assertEquals("123", m.get("f3b")[0]);
+		assertEquals("$s(foo)", m.get("f4")[0]);
+
+		s = "f1=v1&=";
+		m = parseQuery(s);
+		assertEquals("v1", m.get("f1")[0]);
+		assertEquals("", m.get("")[0]);
+
+		s = "f1=v1&f2&f3";
+		m = parseQuery(s);
+		assertEquals("v1", m.get("f1")[0]);
+		assertTrue(m.containsKey("f2"));
+		assertTrue(m.containsKey("f3"));
+		assertNull(m.get("f2"));
+		assertNull(m.get("f3"));
+	}
+
+	//====================================================================================================
+	// Test parsing URL-encoded strings with multiple values.
+	//====================================================================================================
+	@Test
+	public void testParseIntoSimpleMapMultiValues() throws Exception {
+		Map<String,String[]> m;
+
+		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
+		m = parseQuery(s);
+		TestUtils.assertObjectEquals("{f1:null,f2:['abc','def']}", m);
+	}
+
+	@Test
+	public void testEmptyString() throws Exception {
+		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+
+		String s = "";
+		B b = p.parse(s, B.class);
+		assertEquals("f1", b.f1);
+	}
+
+	public static class B {
+		public String f1 = "f1";
+	}
+
 }

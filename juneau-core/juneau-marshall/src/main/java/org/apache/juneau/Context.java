@@ -238,17 +238,40 @@ public abstract class Context {
 	}
 
 	/**
-	 * Returns an instance of the specified class property.
+	 * Returns an instance of the specified class, string, or object property.
+	 * 
+	 * <p>
+	 * If instantiating a class, assumes the class has a no-arg constructor.
+	 * Otherwise, throws a runtime exception.
+	 * 
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def 
+	 * 	The default value if the property doesn't exist.
+	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>, or <jk>null</jk>.
+	 * @return A new property instance.
+	 */
+	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
+		return propertyStore.getInstanceProperty(key, type, def);
+	}
+
+	/**
+	 * Returns an instance of the specified class, string, or object property.
 	 * 
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def 
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
+	 * @param allowNoArgs 
+	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param args 
+	 * 	Arguments to pass to the constructor.
+	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
-		return propertyStore.getInstanceProperty(key, type, def);
+	public <T> T getInstanceProperty(String key, Class<T> type, Object def, boolean allowNoArgs, Object...args) {
+		return propertyStore.getInstanceProperty(key, type, def, allowNoArgs, args);
 	}
 
 	/**
@@ -261,6 +284,23 @@ public abstract class Context {
 	 */
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
 		return propertyStore.getInstanceArrayProperty(key, type, def);
+	}
+
+	/**
+	 * Returns the specified property as an array of instantiated objects.
+	 * 
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @param def The default object to return if the property doesn't exist.
+	 * @param allowNoArgs 
+	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param args 
+	 * 	Arguments to pass to the constructor.
+	 * 	Constructors matching the arguments are always used before no-arg constructors.
+	 * @return A new property instance.
+	 */
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, boolean allowNoArgs, Object...args) {
+		return propertyStore.getInstanceArrayProperty(key, type, def, allowNoArgs, args);
 	}
 
 	/**

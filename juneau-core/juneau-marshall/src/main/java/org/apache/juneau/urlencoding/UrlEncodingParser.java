@@ -12,11 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
-
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
@@ -38,8 +33,7 @@ import org.apache.juneau.uon.*;
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  */
-@SuppressWarnings({ "unchecked" })
-public class UrlEncodingParser extends UonParser implements PartParser {
+public class UrlEncodingParser extends UonParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -117,119 +111,7 @@ public class UrlEncodingParser extends UonParser implements PartParser {
 		return new UrlEncodingParserBuilder();
 	}
 
-	/**
-	 * Parse a URL query string into a simple map of key/value pairs.
-	 *
-	 * @param qs The query string to parse.
-	 * @param map The map to parse into.  If <jk>null</jk>, then a new {@link TreeMap} will be used.
-	 * @return A sorted {@link TreeMap} of query string entries.
-	 * @throws Exception
-	 */
-	public Map<String,String[]> parseIntoSimpleMap(String qs, Map<String,String[]> map) throws Exception {
-
-		Map<String,String[]> m = map == null ? new TreeMap<String,String[]>() : map;
-
-		if (isEmpty(qs))
-			return m;
-
-		try (ParserPipe p = new ParserPipe(qs, false, false, null, null)) {
-			
-			final int S1=1; // Looking for attrName start.
-			final int S2=2; // Found attrName start, looking for = or & or end.
-			final int S3=3; // Found =, looking for valStart.
-			final int S4=4; // Found valStart, looking for & or end.
-
-			try (UonReader r = new UonReader(p, true)) {
-				int c = r.peekSkipWs();
-				if (c == '?')
-					r.read();
-
-				int state = S1;
-				String currAttr = null;
-				while (c != -1) {
-					c = r.read();
-					if (state == S1) {
-						if (c != -1) {
-							r.unread();
-							r.mark();
-							state = S2;
-						}
-					} else if (state == S2) {
-						if (c == -1) {
-							add(m, r.getMarked(), null);
-						} else if (c == '\u0001') {
-							m.put(r.getMarked(0,-1), null);
-							state = S1;
-						} else if (c == '\u0002') {
-							currAttr = r.getMarked(0,-1);
-							state = S3;
-						}
-					} else if (state == S3) {
-						if (c == -1 || c == '\u0001') {
-							add(m, currAttr, "");
-						} else {
-							if (c == '\u0002')
-								r.replace('=');
-							r.unread();
-							r.mark();
-							state = S4;
-						}
-					} else if (state == S4) {
-						if (c == -1) {
-							add(m, currAttr, r.getMarked());
-						} else if (c == '\u0001') {
-							add(m, currAttr, r.getMarked(0,-1));
-							state = S1;
-						} else if (c == '\u0002') {
-							r.replace('=');
-						}
-					}
-				}
-			}
-
-			return m;
-		}
-	}
-
-	private static void add(Map<String,String[]> m, String key, String val) {
-		boolean b = m.containsKey(key);
-		if (val == null) {
-			if (! b)
-				m.put(key, null);
-		} else if (b && m.get(key) != null) {
-			m.put(key, append(m.get(key), val));
-		} else {
-			m.put(key, new String[]{val});
-		}
-	}
-
-	@Override /* PartParser */
-	public <T> T parse(PartType partType, String in, ClassMeta<T> type) throws ParseException {
-		if (in == null)
-			return null;
-		if (type.isString() && in.length() > 0) {
-			// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
-			// just return the string since it's a plain value.
-			// This allows us to bypass the creation of a UonParserSession object.
-			char x = firstNonWhitespaceChar(in);
-			if (x != '\'' && x != 'n' && in.indexOf('~') == -1)
-				return (T)in;
-			if (x == 'n' && "null".equals(in))
-				return null;
-		}
-		UonParserSession session = createParameterSession();
-		try (ParserPipe pipe = session.createPipe(in)) {
-			try (UonReader r = session.getUonReader(pipe, false)) {
-				return session.parseAnything(type, r, null, true, null);
-			}
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
-	}
-
-
+	
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------

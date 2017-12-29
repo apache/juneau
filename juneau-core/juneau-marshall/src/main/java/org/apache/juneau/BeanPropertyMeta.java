@@ -270,7 +270,7 @@ public final class BeanPropertyMeta {
 
 		private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
 			if (! p.format().isEmpty())
-				return beanContext.newInstance(PojoSwap.class, StringFormatSwap.class, p.format());
+				return beanContext.newInstance(PojoSwap.class, StringFormatSwap.class, false, p.format());
 			return null;
 		}
 

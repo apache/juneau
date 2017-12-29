@@ -696,6 +696,13 @@ public @interface RestMethod {
 	 * 	<li>Defaults to <js>"100M"</js>.
 	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
 	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		maxInput=<js>"100M"</js>
+	 * 	)
+	 * </p>
 	 */
 	String maxInput() default "";
 }

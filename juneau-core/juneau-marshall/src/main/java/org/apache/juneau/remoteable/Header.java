@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -195,7 +195,7 @@ public @interface Header {
 	boolean skipIfEmpty() default false;
 
 	/**
-	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
 	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
@@ -204,5 +204,5 @@ public @interface Header {
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */
-	Class<? extends PartSerializer> serializer() default PartSerializer.class;
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 }

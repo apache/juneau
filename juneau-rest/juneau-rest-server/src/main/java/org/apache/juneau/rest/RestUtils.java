@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -20,6 +21,8 @@ import java.util.regex.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -239,5 +242,102 @@ public final class RestUtils {
 			}
 		}
 		return list.toArray(new String[list.size()]);
+	}
+
+	/**
+	 * Parses a URL query string or form-data body.
+	 * 
+	 * @param qs A reader or string containing the query string to parse.
+	 * @return A new map containing the parsed query.
+	 * @throws Exception
+	 */
+	public static Map<String,String[]> parseQuery(Object qs) throws Exception {
+		return parseQuery(qs, null);
+	}
+
+	/**
+	 * Same as {@link #parseQuery(Object)} but allows you to specify the map to insert values into.
+	 * 
+	 * @param qs A reader containing the query string to parse.
+	 * @param map The map to pass the values into.
+	 * @return The same map passed in, or a new map if it was <jk>null</jk>.
+	 * @throws Exception
+	 */
+	public static Map<String,String[]> parseQuery(Object qs, Map<String,String[]> map) throws Exception {
+
+		Map<String,String[]> m = map == null ? new TreeMap<String,String[]>() : map;
+
+		if (qs == null || ((qs instanceof CharSequence) && isEmpty(qs)))
+			return m;
+
+		try (ParserPipe p = new ParserPipe(qs, false, false, null, null)) {
+			
+			final int S1=1; // Looking for attrName start.
+			final int S2=2; // Found attrName start, looking for = or & or end.
+			final int S3=3; // Found =, looking for valStart.
+			final int S4=4; // Found valStart, looking for & or end.
+
+			try (UonReader r = new UonReader(p, true)) {
+				int c = r.peekSkipWs();
+				if (c == '?')
+					r.read();
+
+				int state = S1;
+				String currAttr = null;
+				while (c != -1) {
+					c = r.read();
+					if (state == S1) {
+						if (c != -1) {
+							r.unread();
+							r.mark();
+							state = S2;
+						}
+					} else if (state == S2) {
+						if (c == -1) {
+							add(m, r.getMarked(), null);
+						} else if (c == '\u0001') {
+							m.put(r.getMarked(0,-1), null);
+							state = S1;
+						} else if (c == '\u0002') {
+							currAttr = r.getMarked(0,-1);
+							state = S3;
+						}
+					} else if (state == S3) {
+						if (c == -1 || c == '\u0001') {
+							add(m, currAttr, "");
+						} else {
+							if (c == '\u0002')
+								r.replace('=');
+							r.unread();
+							r.mark();
+							state = S4;
+						}
+					} else if (state == S4) {
+						if (c == -1) {
+							add(m, currAttr, r.getMarked());
+						} else if (c == '\u0001') {
+							add(m, currAttr, r.getMarked(0,-1));
+							state = S1;
+						} else if (c == '\u0002') {
+							r.replace('=');
+						}
+					}
+				}
+			}
+
+			return m;
+		}
+	}
+
+	private static void add(Map<String,String[]> m, String key, String val) {
+		boolean b = m.containsKey(key);
+		if (val == null) {
+			if (! b)
+				m.put(key, null);
+		} else if (b && m.get(key) != null) {
+			m.put(key, append(m.get(key), val));
+		} else {
+			m.put(key, new String[]{val});
+		}
 	}
 }

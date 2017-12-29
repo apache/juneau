@@ -14,7 +14,7 @@ package org.apache.juneau.remoteable;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -40,7 +40,7 @@ public class RemoteMethodArg {
 	public final boolean skipIfNE;
 
 	/** The serializer used for converting objects to strings. */
-	public final PartSerializer serializer;
+	public final HttpPartSerializer serializer;
 
 	/**
 	 * Constructor.
@@ -53,10 +53,10 @@ public class RemoteMethodArg {
 	 * 	The class to use for serializing headers, query parameters, form-data parameters, and path variables.
 	 * 	If {@link UrlEncodingSerializer}, then the url-encoding serializer defined on the client will be used.
 	 */
-	protected RemoteMethodArg(String name, String name2, int index, boolean skipIfNE, Class<? extends PartSerializer> serializer) {
+	protected RemoteMethodArg(String name, String name2, int index, boolean skipIfNE, Class<? extends HttpPartSerializer> serializer) {
 		this.name = name.isEmpty() ? name2 : name;
 		this.index = index;
 		this.skipIfNE = skipIfNE;
-		this.serializer = newInstance(PartSerializer.class, serializer);
+		this.serializer = newInstance(HttpPartSerializer.class, serializer);
 	}
 }

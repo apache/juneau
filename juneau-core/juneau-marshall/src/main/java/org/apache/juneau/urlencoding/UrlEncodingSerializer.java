@@ -12,11 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
-import java.io.*;
-import java.net.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -114,7 +109,7 @@ import org.apache.juneau.uon.*;
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
-public class UrlEncodingSerializer extends UonSerializer implements PartSerializer {
+public class UrlEncodingSerializer extends UonSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -162,7 +157,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 	 * </ul>
 	 */
 	public static final String URLENC_expandedParams = PREFIX + "expandedParams.b";
-
+	
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -303,68 +298,12 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 
 
 	//--------------------------------------------------------------------------------
-	// Methods for constructing individual parameter values.
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * Converts the specified object to a string using this serializers {@link BeanSession#convertToType(Object, Class)}
-	 * method and runs {@link URLEncoder#encode(String,String)} against the results.
-	 *
-	 * <p>
-	 * Useful for constructing URL parts.
-	 *
-	 * @param o The object to serialize.
-	 * @param urlEncode
-	 * 	URL-encode the string if necessary.
-	 * 	If <jk>null</jk>, then uses the value of the {@link UonSerializer#UON_encodeChars} setting.
-	 * @param plainTextParams
-	 * 	Whether we're using plain-text params.
-	 * 	If <jk>null</jk>, then uses the value from the {@link UrlEncodingSerializer#URLENC_paramFormat} setting.
-	 * @return The serialized object.
-	 */
-	private String serializePart(Object o, Boolean urlEncode, Boolean plainTextParams) {
-		try {
-			// Shortcut for simple types.
-			ClassMeta<?> cm = getClassMetaForObject(o);
-			if (cm != null) {
-				if (cm.isNumber() || cm.isBoolean())
-					return o.toString();
-				if (cm.isCharSequence()) {
-					String s = o.toString();
-					boolean ptt = (plainTextParams != null ? plainTextParams : getParamFormat() == ParamFormat.PLAINTEXT);
-					if (ptt || s.isEmpty() || ! UonUtils.needsQuotes(s))
-						return (urlEncode ? urlEncode(s) : s);
-				}
-			}
-
-			StringWriter w = new StringWriter();
-			UonSerializerSession s = new UonSerializerSession(this, urlEncode, createDefaultSessionArgs());
-			s.serialize(o, w);
-			return w.toString();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-
-	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new UrlEncodingSerializerSession(this, null, args);
-	}
-
-	@Override /* PartSerializer */
-	public String serialize(PartType type, Object value) {
-		switch(type) {
-			case HEADER: return serializePart(value, false, true);
-			case FORM_DATA: return serializePart(value, false, null);
-			case PATH: return serializePart(value, false, null);
-			case QUERY: return serializePart(value, false, null);
-			default: return toString(value);
-		}
 	}
 
 	@Override /* Context */

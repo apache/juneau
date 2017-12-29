@@ -66,9 +66,18 @@ public abstract class ContextBuilder {
 	 */
 
 	public <T extends Context> T build(Class<T> c) {
-		return ContextCache.INSTANCE.create(c, psb.build());
+		return ContextCache.INSTANCE.create(c, getPropertyStore());
 	}
 
+	/**
+	 * Returns a read-only snapshot of the current property store on this builder.
+	 * 
+	 * @return A property store object.
+	 */
+	public PropertyStore getPropertyStore() {
+		return psb.build();
+	}
+	
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------

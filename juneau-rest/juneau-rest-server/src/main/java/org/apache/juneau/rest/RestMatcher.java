@@ -54,6 +54,14 @@ import org.apache.juneau.rest.annotation.*;
  * 		}
  * 	}
  * </p>
+ * 
+ * <p>
+ * Instances must provide one of the following public constructors:
+ * <ul>
+ * 	<li>No-args.
+ * 	<li>The following args: <code>Object resource, Method javaMethod</code>.
+ * 		<br>This gives access to the servlet/resource and Java method it's applied to.
+ * </ul>
  */
 public abstract class RestMatcher {
 

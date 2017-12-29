@@ -22,9 +22,8 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Represents an HTTP response for a REST resource.
@@ -57,7 +56,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private ObjectMap properties;                // Response properties
 	SerializerGroup serializerGroup;
-	UrlEncodingSerializer urlEncodingSerializer; // The serializer used to convert arguments passed into Redirect objects.
+	HttpPartSerializer partSerializer;
 	private EncoderGroup encoders;
 	private ServletOutputStream os;
 	private PrintWriter w;
@@ -76,8 +75,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		try {
 			String passThroughHeaders = req.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
-				PartParser p = context.getUrlEncodingParser();
-				ObjectMap m = p.parse(PartType.HEADER, passThroughHeaders, context.getBeanContext().getClassMeta(ObjectMap.class));
+				HttpPartParser p = context.getPartParser();
+				ObjectMap m = p.parse(HttpPartType.HEADER, passThroughHeaders, context.getBeanContext().getClassMeta(ObjectMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					setHeader(e.getKey(), e.getValue().toString());
 			}
@@ -89,10 +88,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(ObjectMap properties, String defaultCharset, SerializerGroup mSerializers, UrlEncodingSerializer mUrlEncodingSerializer, EncoderGroup encoders) {
+	final void init(ObjectMap properties, String defaultCharset, SerializerGroup mSerializers, HttpPartSerializer partSerializer, EncoderGroup encoders) {
 		this.properties = properties;
 		this.serializerGroup = mSerializers;
-		this.urlEncodingSerializer = mUrlEncodingSerializer;
+		this.partSerializer = partSerializer;
 		this.encoders = encoders;
 
 		// Find acceptable charset
@@ -427,12 +426,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns the URL-encoding serializer associated with this response.
+	 * Returns the HTTP-part serializer associated with this response.
 	 *
-	 * @return The URL-encoding serializer associated with this response.
+	 * @return The HTTP-part serializer associated with this response.
 	 */
-	public UrlEncodingSerializer getUrlEncodingSerializer() {
-		return urlEncodingSerializer;
+	public HttpPartSerializer getPartSerializer() {
+		return partSerializer;
 	}
 
 	@Override /* ServletResponse */

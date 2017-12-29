@@ -45,6 +45,7 @@ import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -339,7 +340,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param partSerializer The part serializer instance.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder partSerializer(PartSerializer partSerializer) {
+	public RestClientBuilder partSerializer(HttpPartSerializer partSerializer) {
 		return set(RESTCLIENT_partSerializer, partSerializer);
 	}
 
@@ -352,7 +353,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	The class must have a no-arg constructor.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder partSerializer(Class<? extends PartSerializer> partSerializerClass) {
+	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> partSerializerClass) {
 		return set(RESTCLIENT_partSerializer, partSerializerClass);
 	}
 

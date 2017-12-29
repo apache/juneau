@@ -19,12 +19,11 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -33,13 +32,13 @@ import org.junit.runners.*;
 public class RequestBeanProxyTest extends RestTestcase {
 
 	private <T> T getProxyPlainText(Class<T> t) {
-		RestClient rc = TestMicroservice.client(PlainTextSerializer.class, PlainTextParser.class).plainTextParts().build();
+		RestClient rc = TestMicroservice.client(PlainTextSerializer.class, PlainTextParser.class).partSerializer(SimpleUonPartSerializer.class).build();
 		addClientToLifecycle(rc);
 		return rc.getRemoteableProxy(t, null);
 	}
 
 	private <T> T getProxyUon(Class<T> t) {
-		RestClient rc = TestMicroservice.client(PlainTextSerializer.class, PlainTextParser.class).build();
+		RestClient rc = TestMicroservice.client(PlainTextSerializer.class, PlainTextParser.class).partSerializer(UonPartSerializer.class).build();
 		addClientToLifecycle(rc);
 		return rc.getRemoteableProxy(t, null);
 	}
@@ -1236,7 +1235,7 @@ public class RequestBeanProxyTest extends RestTestcase {
 	@Test
 	public void e02_headerSimpleValsUon() throws Exception {
 		String r = getProxyUon(RequestBeanProxy_Header.class).headerSimpleValsUon(new RequestBean_HeaderSimpleVals());
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'true',h:'123'}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'\\'true\\'',h:'\\'123\\''}", r);
 	}
 
 	@Test
@@ -1254,7 +1253,7 @@ public class RequestBeanProxyTest extends RestTestcase {
 	@Test
 	public void e05_headerMapsUon() throws Exception {
 		String r = getProxyUon(RequestBeanProxy_Header.class).headerMapsUon(new RequestBean_HeaderMaps());
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'\\'true\\'',b2:'\\'123\\'',b3:'\\'null\\'',c1:'v1',c2:'123',c4:''}", r);
 	}
 
 	@Test
@@ -1490,7 +1489,7 @@ public class RequestBeanProxyTest extends RestTestcase {
 	@Test
 	public void f02_headerIfNESimpleValsUon() throws Exception {
 		String r = getProxyUon(RequestBeanProxy_HeaderIfNE.class).headerSimpleValsUon(new RequestBean_HeaderIfNESimpleVals());
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',g:'true',h:'123'}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',g:'\\'true\\'',h:'\\'123\\''}", r);
 	}
 
 	@Test
@@ -1508,7 +1507,7 @@ public class RequestBeanProxyTest extends RestTestcase {
 	@Test
 	public void f05_headerIfNEMapsUon() throws Exception {
 		String r = getProxyUon(RequestBeanProxy_HeaderIfNE.class).headerMapsUon(new RequestBean_HeaderIfNEMaps());
-		assertEquals("{a1:'v1',a2:'123',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123'}", r);
+		assertEquals("{a1:'v1',a2:'123',b1:'\\'true\\'',b2:'\\'123\\'',b3:'\\'null\\'',c1:'v1',c2:'123'}", r);
 	}
 
 	@Test
@@ -1989,9 +1988,9 @@ public class RequestBeanProxyTest extends RestTestcase {
 	// Support classes
 	//-------------------------------------------------------------------------------------------------------------------
 
-	public static class XSerializer implements PartSerializer {
+	public static class XSerializer implements HttpPartSerializer {
 		@Override
-		public String serialize(PartType type, Object value) {
+		public String serialize(HttpPartType type, Object value) {
 			if (value == null)
 				return "NULL";
 			if (value instanceof Collection)
@@ -2002,9 +2001,9 @@ public class RequestBeanProxyTest extends RestTestcase {
 		}
 	}
 
-	public static class ListSerializer implements PartSerializer {
+	public static class ListSerializer implements HttpPartSerializer {
 		@Override
-		public String serialize(PartType type, Object value) {
+		public String serialize(HttpPartType type, Object value) {
 			if (value == null)
 				return "NULL";
 			if (value instanceof Collection)

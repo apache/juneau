@@ -106,7 +106,7 @@ public abstract class Var {
 	 * Returns whether variables in the resolved contents of this variable should also be resolved.
 	 * 
 	 * <p>
-	 * For example, if <js>"$X{xxx}"</js> resolves to <js>"$Y{xxx}"<js>, then the $Y variable will be recursively
+	 * For example, if <js>"$X{xxx}"</js> resolves to <js>"$Y{xxx}"</js>, then the $Y variable will be recursively
 	 * resolved if this method returns <jk>true</jk>.
 	 * 
 	 * <p>

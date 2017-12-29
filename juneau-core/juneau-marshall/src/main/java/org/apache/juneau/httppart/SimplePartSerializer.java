@@ -10,56 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remoteable;
+package org.apache.juneau.httppart;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
-
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.internal.*;
 
 /**
- * Identical to {@link FormData @FormData} except skips values if they're null/blank.
- *
- * <h6 class='topic'>Additional Information</h6>
- * <ul class='doctree'>
- * 	<li class='link'>
- * 		<a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
- * 	<li class='jp'>
- * 		<a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
- * </ul>
+ * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
+ * 
+ * <p>
+ * More precisely, uses the {@link ClassUtils#toString(Object)} method to stringify objects.
  */
-@Documented
-@Target({PARAMETER,FIELD,METHOD})
-@Retention(RUNTIME)
-@Inherited
-public @interface FormDataIfNE {
+public class SimplePartSerializer implements HttpPartSerializer {
 
-	/**
-	 * The form post parameter name.
-	 *
-	 * @see FormData#name()
-	 */
-	String name() default "";
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * @see FormData#value()
-	 */
-	String value() default "";
+	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
+	public static final SimplePartSerializer DEFAULT = new SimplePartSerializer();
 
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
-	 * <p>
-	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
-	 * then on the client which by default is {@link UrlEncodingSerializer}.
-	 *
-	 * <p>
-	 * This annotation is provided to allow values to be custom serialized.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	@Override /* PartSerializer */
+	public String serialize(HttpPartType type, Object value) {
+		return ClassUtils.toString(value);
+	}
 }

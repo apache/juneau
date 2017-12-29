@@ -18,10 +18,10 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Represents the parsed form data parameters in an HTTP request.
@@ -30,10 +30,10 @@ import org.apache.juneau.urlencoding.*;
 public class RequestFormData extends LinkedHashMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
-	private UrlEncodingParser parser;
+	private HttpPartParser parser;
 	private BeanSession beanSession;
 
-	RequestFormData setParser(UrlEncodingParser parser) {
+	RequestFormData setParser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
@@ -169,7 +169,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified form data parameter value converted to a POJO using the {@link UrlEncodingParser}
+	 * Returns the specified form data parameter value converted to a POJO using the {@link HttpPartParser}
 	 * registered with this servlet.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -237,7 +237,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified form data parameter value converted to a POJO using the {@link UrlEncodingParser}
+	 * Returns the specified form data parameter value converted to a POJO using the {@link HttpPartParser}
 	 * registered with this servlet.
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -347,7 +347,11 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	private <T> T parseValue(String val, ClassMeta<T> c) throws ParseException {
-		return parser.parse(PartType.FORM_DATA, val, c);
+		try {
+			return parser.parse(HttpPartType.FORM_DATA, val, c);
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
 	}
 
 	/**

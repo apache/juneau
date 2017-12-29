@@ -75,7 +75,7 @@ import org.apache.juneau.utils.*;
  * 
  * <p class='bcode'>
  * 	<jc>// mycommand</jc>
- * 	args.get("0");  <jc>// "mycommand"
+ * 	args.get("0");  <jc>// "mycommand"</jc>
  * 
  * 	<jc>// mycommand arg1 arg2</jc>
  * 	args.get("0");  <jc>// "mycommand"</jc>

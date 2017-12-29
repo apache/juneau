@@ -27,7 +27,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Contains the body of the HTTP request.
@@ -40,7 +39,6 @@ public class RequestBody {
 	private EncoderGroup encoders;
 	private Encoder encoder;
 	private ParserGroup parsers;
-	private UrlEncodingParser urlEncodingParser;
 	private long maxInput;
 	private RequestHeaders headers;
 	private BeanSession beanSession;
@@ -62,11 +60,6 @@ public class RequestBody {
 
 	RequestBody setHeaders(RequestHeaders headers) {
 		this.headers = headers;
-		return this;
-	}
-
-	RequestBody setUrlEncodingParser(UrlEncodingParser urlEncodingParser) {
-		this.urlEncodingParser = urlEncodingParser;
 		return this;
 	}
 
@@ -319,13 +312,7 @@ public class RequestBody {
 			else
 				mediaType = MediaType.JSON;
 		}
-		ParserMatch pm = parsers.getParserMatch(mediaType);
-
-		// If no patching parser for URL-encoding, use the one defined on the servlet.
-		if (pm == null && mediaType.equals(MediaType.URLENCODING))
-			pm = new ParserMatch(MediaType.URLENCODING, urlEncodingParser);
-
-		return pm;
+		return parsers.getParserMatch(mediaType);
 	}
 
 	/**
