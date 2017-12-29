@@ -22,6 +22,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * The format for this var is <js>"$R{key1[,key2...]}"</js>.
+ * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <p>
  * The possible values are:
@@ -42,8 +43,20 @@ import org.apache.juneau.svl.*;
  * </ul>
  * 
  * <p>
- * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * session object on the resolver session.
+ * <h6 class='figure'>Example:</h6>
+ * <p class='bcode'>
+ * 	String servletTitle = restRequest.resolveVars(<js>"$R{servletTitle}"</js>); 
+ * 	String servletTitleOrDescription = restRequest.resolveVars(<js>"$R{servletTitle,servletDescription}"</js>); 
+ * </p>
+ * 
+ * <h6 class='topic'>Notes:</h6>
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
+ * 		or a session object on the resolver session.
+ * 	<li>
+ * 		For security reasons, nested and recursive variables are not resolved.
+ * </ul>
  *
  * @see org.apache.juneau.svl
  */

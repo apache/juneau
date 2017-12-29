@@ -23,10 +23,23 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * Used to resolve values returned by {@link RestRequest#getQuery(String)}.
+ * <br>When multiple keys are used, returns the first non-null/empty value.
  * 
- * <p>
- * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
- * session object on the resolver session.
+ * <h6 class='figure'>Example:</h6>
+ * <p class='bcode'>
+ * 	<jc>// URI = "...?foo=X&bar=Y"</jc>
+ * 	String foo = restRequest.resolveVars(<js>"$RQ{foo}"</js>); 
+ * 	String fooOrBar = restRequest.resolveVars(<js>"$RQ{foo,bar}"</js>); 
+ * </p>
+ * 
+ * <h6 class='topic'>Notes:</h6>
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 
+ * 		or a session object on the resolver session.
+ * 	<li>
+ * 		For security reasons, nested and recursive variables are not resolved.
+ * </ul>
  *
  * @see org.apache.juneau.svl
  */
