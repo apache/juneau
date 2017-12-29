@@ -13,8 +13,6 @@
 
 Create tests that ensure serializers don't close output but parsers do close input.
 
-$R{servletDescription} tags showing up in REST examples.
-Examples should use dark LAF.
 Content tests on examples rest.
 HTML root resources page lists .menu_item style twice in header.
 REST example showing how to use NLS.

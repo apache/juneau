@@ -49,7 +49,7 @@ public class RootContentTest extends ContentComboTestcase {
 					"<a href='/?method=OPTIONS'>options</a>",
 					"<a class='link' onclick='menuClick(this)'>content-type</a>",
 					"<a class='link' onclick='menuClick(this)'>styles</a>",
-					"<a href='https://github.com/apache/juneau/blob/master/juneau-examples-rest/src/main/java/org/apache/juneau/examples/rest/RootResources.java'>source</a>"
+					"<a href='https://github.com/apache/juneau/blob/master/juneau-examples/juneau-examples-rest/src/main/java/org/apache/juneau/examples/rest/RootResources.java'>source</a>"
 				)
 			},
 			{ 	/* 4 */
