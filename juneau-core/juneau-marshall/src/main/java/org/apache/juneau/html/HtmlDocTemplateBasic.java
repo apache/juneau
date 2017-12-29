@@ -44,23 +44,22 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 	@Override /* HtmlDocTemplate */
 	public void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
-		String[] stylesheet = session.getStylesheet();
-		for (int i = 0; i < stylesheet.length; i++)
-			w.sIf(i > 0).append(3, "@import ").q().append(session.resolveUri(stylesheet[i])).q().appendln(";");
+		int i = 0;
+		for (String s : session.getStylesheet())
+			w.sIf(i++ > 0).append(3, "@import ").q().append(session.resolveUri(s)).q().appendln(";");
 
 		if (session.isNoWrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 
-		String[] style = session.getStyle();
-		for (int i = 0; i < style.length; i++)
-			w.sIf(i > 0 || stylesheet.length > 0).appendln(3, style[i]);
+		for (String s : session.getStyle())
+			w.sIf(i > 0).appendln(3, s);
 	}
 
 	@Override /* HtmlDocTemplate */
 	public void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String[] script = session.getScript();
-		for (int i = 0; i < script.length; i++)
-			w.sIf(i > 0).appendln(3, script[i]);
+		int i = 0;
+		for (String s : session.getScript())
+			w.sIf(i++ > 0).appendln(3, s);
 	}
 
 	@Override /* HtmlDocTemplate */

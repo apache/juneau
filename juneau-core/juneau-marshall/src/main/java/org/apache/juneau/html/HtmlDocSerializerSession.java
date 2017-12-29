@@ -14,6 +14,8 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
@@ -29,7 +31,8 @@ import org.apache.juneau.serializer.*;
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	private final String noResultsMessage;
-	private final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
+	private final String[] navlinks, head, header, nav, aside, footer;
+	private final Set<String> style, stylesheet, script;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
 
@@ -49,9 +52,12 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		aside = getProperty(HTMLDOC_aside, String[].class, ctx.aside);
 		footer = getProperty(HTMLDOC_footer, String[].class, ctx.footer);
 		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.navlinks);
-		style = getProperty(HTMLDOC_style, String[].class, ctx.style);
-		stylesheet = getProperty(HTMLDOC_stylesheet, String[].class, ctx.stylesheet);
-		script = getProperty(HTMLDOC_script, String[].class, ctx.script);
+		
+		// These can contain dups after variable resolution, so de-dup them with hashsets. 
+		style = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_style, String[].class, ctx.style)));
+		stylesheet = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_stylesheet, String[].class, ctx.stylesheet)));
+		script = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_script, String[].class, ctx.script)));
+		
 		head = getProperty(HTMLDOC_head, String[].class, ctx.head);
 		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.nowrap);
 		noResultsMessage = getProperty(HTMLDOC_noResultsMessage, String.class, ctx.noResultsMessage);
@@ -85,7 +91,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
-	public final String[] getStyle() {
+	public final Set<String> getStyle() {
 		return style;
 	}
 
@@ -97,7 +103,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
-	public final String[] getStylesheet() {
+	public final Set<String> getStylesheet() {
 		return stylesheet;
 	}
 
@@ -109,7 +115,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	An empty array if not specified.
 	 * 	Never <jk>null</jk>.
 	 */
-	public final String[] getScript() {
+	public final Set<String> getScript() {
 		return script;
 	}
 

@@ -487,7 +487,7 @@ public class HtmlDocBuilder {
 	}
 
 	private static String[] resolveList(Object[] value, String[] prev) {
-		List<String> set = new LinkedList<>();
+		Set<String> set = new LinkedHashSet<>();
 		for (Object v : value) {
 			String s = StringUtils.toString(v);
 			if ("INHERIT".equals(s)) {
