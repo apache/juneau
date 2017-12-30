@@ -1145,7 +1145,7 @@
 		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
 
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> initMyDatabase(RestConfig config) <jk>throws</jk> Exception {
+		<jk>public void</jk> initMyDatabase(RestContextBuilder builder) <jk>throws</jk> Exception {
 			<jf>myDatabase</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
 		}
 	}
@@ -1516,7 +1516,7 @@
 				{@link org.apache.juneau.rest.annotation.RestMethod#serializers() @RestMethod.serializers()} 
 				- Annotation on individual servlet methods.
 			<li class='jm'>
-				{@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} 
+				{@link org.apache.juneau.rest.RestContextBuilder#serializers(Class[])} 
 				- Override method to set the serializers programmatically.
 		</ul>
 		<p>
@@ -1585,7 +1585,7 @@
 				{@link org.apache.juneau.rest.annotation.RestMethod#parsers() @RestMethod.parsers()} 
 				- Annotation on individual servlet methods.
 			<li class='jm'>
-				{@link org.apache.juneau.rest.RestConfig#addParsers(Class[])} 
+				{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class[])} 
 				- Override method to set the parsers programmatically.
 		</ul>
 		<p>
@@ -1708,10 +1708,10 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				By overriding the {@link org.apache.juneau.rest.RestConfig#setProperties(Map)} method.
+				By overriding the {@link org.apache.juneau.rest.RestContextBuilder#setProperties(Map)} method.
 			<li>
-				By overriding the {@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} and 
-				{@link org.apache.juneau.rest.RestConfig#addParsers(Class[])} methods and setting properties on the 
+				By overriding the {@link org.apache.juneau.rest.RestContextBuilder#serializers(Class[])} and 
+				{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class[])} methods and setting properties on the 
 				serializers and parsers directly.
 			
 		</ul>
@@ -1774,11 +1774,11 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				By overriding the {@link org.apache.juneau.rest.RestConfig#addBeanFilters(Class[])} and 
-				{@link org.apache.juneau.rest.RestConfig#addPojoSwaps(Class[])} methods.
+				By overriding the {@link org.apache.juneau.rest.RestContextBuilder#beanFilters(Class[])} and 
+				{@link org.apache.juneau.rest.RestContextBuilder#pojoSwaps(Class[])} methods.
 			<li>
-				By overriding the {@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} and 
-				{@link org.apache.juneau.rest.RestConfig#addParsers(Class[])} methods and setting transforms on the 
+				By overriding the {@link org.apache.juneau.rest.RestContextBuilder#serializers(Class[])} and 
+				{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class[])} methods and setting transforms on the 
 				serializers and parsers directly.
 			
 		</ul>
@@ -1853,7 +1853,7 @@
 		</p>
 		<p>
 			Class-level guards can also be created programmatically by overriding the 
-			{@link org.apache.juneau.rest.RestConfig#addGuards(Class[])} method.
+			{@link org.apache.juneau.rest.RestContextBuilder#guards(Class[])} method.
 		</p>
 		
 		<h6 class='topic'>Additional Information</h6>
@@ -1956,7 +1956,7 @@
 		</ul>
 		<p>
 			Class-level converters can be created programmatically by overriding the 
-			{@link org.apache.juneau.rest.RestConfig#addConverters(Class[])} method.
+			{@link org.apache.juneau.rest.RestContextBuilder#converters(Class[])} method.
 		</p>
 		<p>
 			Note that from the example above, you can specify more than one converter.
@@ -2075,14 +2075,14 @@
 		</p>
 		<ul class='doctree'>
 			<li class='jac'>
-			{@link org.apache.juneau.rest.RestConfig}
+			{@link org.apache.juneau.rest.RestContextBuilder}
 			<ul>
 				<li class='jm'>
-					{@link org.apache.juneau.rest.RestConfig#addChildResource(String,Object)}
+					{@link org.apache.juneau.rest.RestContextBuilder#childResource(String,Object)}
 				<li class='jm'>
-					{@link org.apache.juneau.rest.RestConfig#addChildResources(Class[])}
+					{@link org.apache.juneau.rest.RestContextBuilder#childResources(Class[])}
 				<li class='jm'>
-					{@link org.apache.juneau.rest.RestConfig#addChildResources(Object[])}
+					{@link org.apache.juneau.rest.RestContextBuilder#childResources(Object[])}
 			</ul> 
 		</ul>
 	</div>
@@ -2235,7 +2235,7 @@
 						{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 						<br>Returns the <l>VarResolver</l> associated with a servlet.
 					<li class='jm'>
-						{@link org.apache.juneau.rest.RestConfig#addVars(Class[])}
+						{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])}
 						<br>The method used to create the servlet <l>VarResolver</l>.
 						<br>Subclasses can override this method to provide their own resolver.
 					<li class='jm'>
@@ -2650,12 +2650,12 @@
 		</p>
 		<ul class='doctree'>
 			<li class='jac'>
-				{@link org.apache.juneau.rest.RestConfig}
+				{@link org.apache.juneau.rest.RestContextBuilder}
 				<ul>
 					<li class='jm'>
-						{@link org.apache.juneau.rest.RestConfig#addDefaultRequestHeaders(String[])}
+						{@link org.apache.juneau.rest.RestContextBuilder#defaultRequestHeaders(String[])}
 					<li class='jm'>
-						{@link org.apache.juneau.rest.RestConfig#addDefaultResponseHeaders(String[])}
+						{@link org.apache.juneau.rest.RestContextBuilder#defaultResponseHeaders(String[])}
 				</ul>
 			</li>
 		</ul>
@@ -3374,7 +3374,7 @@
 				{@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} 
 				annotation.
 			<li>
-				Overriding and extending the {@link org.apache.juneau.rest.RestConfig#addResponseHandlers(Class[])} 
+				Overriding and extending the {@link org.apache.juneau.rest.RestContextBuilder#responseHandlers(Class[])} 
 				method.
 		</ul>
 		<p>

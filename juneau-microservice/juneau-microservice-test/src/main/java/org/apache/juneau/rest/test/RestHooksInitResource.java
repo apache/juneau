@@ -46,7 +46,7 @@ public class RestHooksInitResource extends RestServletDefault {
 		protected List<String> postInitChildFirst = new ArrayList<String>();
 
 		@RestHook(INIT)
-		public void init1c(RestConfig config) {
+		public void init1c(RestContextBuilder builder) {
 			init.add("super-1c");
 		}
 
@@ -135,7 +135,7 @@ public class RestHooksInitResource extends RestServletDefault {
 
 		@Override
 		@RestHook(INIT)
-		public void init1c(RestConfig config) {
+		public void init1c(RestContextBuilder builder) {
 			init.add("sub-1c");
 		}
 
@@ -231,7 +231,7 @@ public class RestHooksInitResource extends RestServletDefault {
 
 		@Override
 		@RestHook(INIT)
-		public void init1c(RestConfig config) {
+		public void init1c(RestContextBuilder builder) {
 			init.add("child-1c");
 		}
 

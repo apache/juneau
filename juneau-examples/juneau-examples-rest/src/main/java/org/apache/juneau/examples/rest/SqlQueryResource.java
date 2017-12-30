@@ -65,12 +65,12 @@ public class SqlQueryResource extends Resource {
 	/**
 	 * Initializes the registry URL and rest client.
 	 * 
-	 * @param config The resource config.
+	 * @param builder The resource config.
 	 * @throws Exception
 	 */
 	@RestHook(INIT) 
-	public void initConnection(RestConfig config) throws Exception {
-		ConfigFile cf = config.getConfigFile();
+	public void initConnection(RestContextBuilder builder) throws Exception {
+		ConfigFile cf = builder.getConfigFile();
 
 		driver = cf.getString("SqlQueryResource/driver");
 		connectionUrl = cf.getString("SqlQueryResource/connectionUrl");

@@ -33,7 +33,7 @@ import org.apache.juneau.rest.response.*;
  * 	<li>
  * 		Through the {@link RestResource#responseHandlers @RestResource.responseHandlers} annotation.
  * 	<li>
- * 		By calling the {@link RestConfig#addResponseHandlers(Class...)} and augmenting or creating your
+ * 		By calling the {@link RestContextBuilder#responseHandlers(Class...)} and augmenting or creating your
  * 		own list of handlers.
  * </ul>
  *

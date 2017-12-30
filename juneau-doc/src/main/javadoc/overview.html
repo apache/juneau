@@ -3761,12 +3761,12 @@
 		}
 		
 		<jk>@Override</jk> <jc>/* RestResourceResolverSimple */</jc>
-		<jk>public</jk> Object resolve(Class&lt;?&gt; resourceType, RestConfig config) <jk>throws</jk> Exception {
+		<jk>public</jk> Object resolve(Class&lt;?&gt; resourceType, RestContextBuilder builder) <jk>throws</jk> Exception {
 			Object resource = <jf>appContext.</jf>getBean(type);
 			
 			<jc>// If Spring can't resolve it, use default resolution (just look for no-arg constructor).</jc>
 			<jk>if</jk> (resource == <jk>null</jk>) {
-				resource = <jk>super</jk>.resolve(resourceType, config);
+				resource = <jk>super</jk>.resolve(resourceType, builder);
 			}
 			<jk>return</jk> resource;
 		}
@@ -3816,8 +3816,8 @@
 		}
 		
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> initSpring(RestConfig config) <jk>throws</jk> Exception {
-			config.setResourceResolver(<jf>resolver</jf>);
+		<jk>public void</jk> initSpring(RestContextBuilder builder) <jk>throws</jk> Exception {
+			builder.setResourceResolver(<jf>resolver</jf>);
 		}
 	}
 			</p>
@@ -4493,7 +4493,7 @@
 				The <l>children</l> annotation approach simply makes it easier to define them without having to touch the 
 				<l>web.xml</l> file again.
 				Child resources can also be defined programmatically by using the 
-				{@link org.apache.juneau.rest.RestConfig#addChildResources(Class[])} method.
+				{@link org.apache.juneau.rest.RestContextBuilder#childResources(Class[])} method.
 			</p>
 			<p>
 				Note that these router pages can be arbitrarily nested deep.  
@@ -5101,7 +5101,7 @@
 			<h6 class='toc'>Additional Information</h6>
 			<ul class='toc'>
 				<li class='jm'>
-					{@link org.apache.juneau.rest.RestConfig#addVars(Class[])} 
+					{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])} 
 					- Servlet and request variables.
 				<li class='jm'>
 					{@link org.apache.juneau.rest.RestCallHandler#getSessionObjects(RestRequest)} 
@@ -5192,7 +5192,7 @@
 					annotations are used to set behavior properties on the resource's underlying bean context, serializers, 
 					and parsers.  
 				You're using them here to modify the behavior of serialization for all content types.  
-				The annotations are functionally equivalent to using the {@link org.apache.juneau.rest.RestConfig} class, 
+				The annotations are functionally equivalent to using the {@link org.apache.juneau.rest.RestContextBuilder} class, 
 				as follows:
 			</p>
 			
@@ -5200,18 +5200,18 @@
 			<p class='bcode'>
 	<jd>/** Override the default rest serializers to add some transforms through an INIT hook*/</jd>
 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	<jk>public void</jk> init(RestConfig config) throws Exception {
+	<jk>public void</jk> init(RestContextBuilder builder) throws Exception {
 		<jc>// Add bean filters for the HttpServletRequest, HttpSession, and ServletContext objects
 		//		so that you don't show vendor-specific properties on subclasses.
 		// Add Enumeration POJO swap to be able to render the contents of Enumeration properties.
 		// The max depth and detect recursion options prevent any possible runaway serializations.  
 		// This shouldn't happen, but future JEE APIs may introduce deep hierarchies or loops.</jc>
-		config
-			.addBeanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
-			.addPojoSwaps(EnumerationSwap.<jk>class</jk>)
+		builder
+			.beanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
+			.pojoSwaps(EnumerationSwap.<jk>class</jk>)
 			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 10)
 			.setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>)
-			.setPageLinks(<js>"{...}"</js>);
+			.pageLinks(<js>"{...}"</js>);
 	}
 			</p>
 			<p>
@@ -8980,11 +8980,11 @@
 					<li>{@link org.apache.juneau.serializer.SerializerListener}
 					<li>{@link org.apache.juneau.serializer.SerializerBuilder#listener(Class)}
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener()}
-					<li>{@link org.apache.juneau.rest.RestConfig#serializerListener(Class)}
+					<li><code><del>RestConfig.serializerListener(Class)</del></code>
 					<li>{@link org.apache.juneau.parser.ParserListener}
 					<li>{@link org.apache.juneau.parser.ParserBuilder#listener(Class)}
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener()}
-					<li>{@link org.apache.juneau.rest.RestConfig#parserListener(Class)}
+					<li><code><del>RestConfig.parserListener(Class)</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#listeners(Class,Class)}
 				</ul>
 			<li>The {@link org.apache.juneau.BeanContext#BEAN_debug} flag will now capture parser input and make it
@@ -9179,7 +9179,7 @@
 					<li>{@link org.apache.juneau.rest.vars.WidgetVar} - Resolve <js>"$W{...}"</js> variables to widget contents.
 				</ul>
 			<li>
-				New methods on {@link org.apache.juneau.rest.RestConfig}:
+				New methods on <code><del>RestConfig</del></code>:
 				<ul>
 					<li><code><del>setHtmlTitle(String)</del></code>
 					<li><code><del>setHtmlDescription(String)</del></code>
@@ -9383,7 +9383,7 @@
 				<br><br>
 				The majority of code has been split up into two separate classes:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestConfig} - A modifiable configuration of a resource.  Subclasses from {@link javax.servlet.ServletConfig}.
+					<li><code><del>RestConfig</del></code> - A modifiable configuration of a resource.  Subclasses from {@link javax.servlet.ServletConfig}.
 					<li>{@link org.apache.juneau.rest.RestContext} - A read-only configuration that's the result of a snapshot of the config.
 				</ul>
 				<br><br>

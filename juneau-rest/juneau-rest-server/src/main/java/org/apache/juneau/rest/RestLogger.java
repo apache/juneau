@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  * RestLoggers are associated with servlets/resources in one of the following ways:
  * <ul>
  * 	<li>The {@link RestResource#logger @RestResource.logger()} annotation.
- * 	<li>The {@link RestConfig#setLogger(Class)}/{@link RestConfig#setLogger(RestLogger)} methods.
+ * 	<li>The {@link RestContextBuilder#logger(Class)}/{@link RestContextBuilder#logger(RestLogger)} methods.
  * </ul>
  */
 public abstract class RestLogger {

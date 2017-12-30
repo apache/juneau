@@ -67,12 +67,12 @@ public class LogsResource extends Resource {
 	/**
 	 * Initializes the log directory and formatter.
 	 * 
-	 * @param config The resource config.
+	 * @param builder The resource config.
 	 * @throws Exception
 	 */
 	@RestHook(INIT) 
-	public void init(RestConfig config) throws Exception {
-		ConfigFile cf = config.getConfigFile();
+	public void init(RestContextBuilder builder) throws Exception {
+		ConfigFile cf = builder.getConfigFile();
 
 		logDir = new File(cf.getString("Logging/logDir", "."));
 		leFormatter = new LogEntryFormatter(

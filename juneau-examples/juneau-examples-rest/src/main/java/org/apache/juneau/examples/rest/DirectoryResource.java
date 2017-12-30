@@ -70,8 +70,8 @@ public class DirectoryResource extends Resource {
 	private static Logger logger = Logger.getLogger(DirectoryResource.class.getName());
 
 	@RestHook(INIT)
-	public void init(RestConfig config) throws Exception {
-		ObjectMap p = config.getProperties();
+	public void init(RestContextBuilder builder) throws Exception {
+		ObjectMap p = builder.getProperties();
 		rootDir = new File(p.getString("rootDir"));
 		allowViews = p.getBoolean("allowViews", false);
 		allowDeletes = p.getBoolean("allowDeletes", false);

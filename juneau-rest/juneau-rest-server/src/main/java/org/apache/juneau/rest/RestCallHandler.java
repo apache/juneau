@@ -37,7 +37,7 @@ import org.apache.juneau.rest.vars.*;
  * RestCallHandlers are associated with servlets/resources in one of the following ways:
  * <ul>
  * 	<li>The {@link RestResource#callHandler @RestResource.callHandler()} annotation.
- * 	<li>The {@link RestConfig#setCallHandler(Class)} method.
+ * 	<li>The {@link RestContextBuilder#callHandler(Class)} method.
  * </ul>
  */
 public class RestCallHandler {

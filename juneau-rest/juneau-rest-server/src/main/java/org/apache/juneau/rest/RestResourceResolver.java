@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  * These can be associated with REST resources in one of the following ways:
  * <ul>
  * 	<li>{@link RestResource#resourceResolver() @RestResource.resourceResolver()} annotation.
- * 	<li>{@link RestConfig#setResourceResolver(Class)}/{@link RestConfig#setResourceResolver(RestResourceResolver)}
+ * 	<li>{@link RestContextBuilder#resourceResolver(Class)}/{@link RestContextBuilder#resourceResolver(RestResourceResolver)}
  * 		methods.
  * </ul>
  *
@@ -45,9 +45,9 @@ public interface RestResourceResolver {
 	 * The default implementation simply creates a new class instance using {@link Class#newInstance()}.
 	 *
 	 * @param c The class to resolve.
-	 * @param config The initialization configuration for the resource.
+	 * @param builder The initialization configuration for the resource.
 	 * @return The instance of that class.
 	 * @throws Exception If class could not be resolved.
 	 */
-	Object resolve(Class<?> c, RestConfig config) throws Exception;
+	Object resolve(Class<?> c, RestContextBuilder builder) throws Exception;
 }

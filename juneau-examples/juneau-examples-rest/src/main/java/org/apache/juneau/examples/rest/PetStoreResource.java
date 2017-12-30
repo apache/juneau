@@ -76,11 +76,11 @@ public class PetStoreResource extends ResourceJena {
 	/**
 	 * Initializes the pet store database.
 	 * 
-	 * @param config config The resource config.
+	 * @param builder The resource config.
 	 * @throws Exception
 	 */
 	@RestHook(INIT) 
-	public void initDatabase(RestConfig config) throws Exception {
+	public void initDatabase(RestContextBuilder builder) throws Exception {
 		// Load our database from a local JSON file.
 		petDB = JsonParser.DEFAULT.parse(getClass().getResourceAsStream("PetStore.json"), LinkedHashMap.class, Integer.class, Pet.class);
 	}

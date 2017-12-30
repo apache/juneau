@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
  * RestInfoProviders are associated with servlets/resources in one of the following ways:
  * <ul>
  * 	<li>The {@link RestResource#infoProvider @RestResource.infoProvider()} annotation.
- * 	<li>The {@link RestConfig#setInfoProvider(Class)}/{@link RestConfig#setInfoProvider(RestInfoProvider)} methods.
+ * 	<li>The {@link RestContextBuilder#infoProvider(Class)}/{@link RestContextBuilder#infoProvider(RestInfoProvider)} methods.
  * </ul>
  */
 public class RestInfoProvider {

@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * This class is instantiated through the following methods.
  * <ul>
- * 	<li>{@link RestConfig#getHtmlDocBuilder()} - Set values programmatically during servlet initialization.
+ * 	<li>{@link RestContextBuilder#getHtmlDocBuilder()} - Set values programmatically during servlet initialization.
  * 	<li>{@link RestResponse#getHtmlDocBuilder()} - Set values programmatically during a REST request.
  * </ul>
  */

@@ -294,12 +294,12 @@ public enum HookEvent {
 	 * Identifies a method that gets called during servlet initialization.
 	 *
 	 * <p>
-	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestConfig}
+	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContextBuilder}
 	 * object has been created and initialized with the annotations defined on the class, but before the
 	 * {@link RestContext} object has been created.
 	 *
 	 * <p>
-	 * The only valid parameter type for this method is {@link RestConfig} which can be used to configure the servlet.
+	 * The only valid parameter type for this method is {@link RestContextBuilder} which can be used to configure the servlet.
 	 *
 	 * <p>
 	 * An example of this is the <code>PetStoreResource</code> class that uses an init method to perform initialization

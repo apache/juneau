@@ -55,9 +55,9 @@ import org.apache.juneau.utils.*;
  * See {@link PropertyStore} for more information about context properties.
  */
 public final class RestContext extends Context {
-
+	
 	private final Object resource;
-	final RestConfig config;
+	final RestContextBuilder builder;
 	private final boolean
 		allowHeaderParams,
 		allowBodyParam,
@@ -145,20 +145,20 @@ public final class RestContext extends Context {
 	 * @param servletContext
 	 * 	The servlet context object.
 	 * 	Can be <jk>null</jk> if this isn't a
-	 * @param config The servlet configuration object.
+	 * @param builder The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestContext(Object resource, ServletContext servletContext, RestConfig config) throws Exception {
+	public RestContext(Object resource, ServletContext servletContext, RestContextBuilder builder) throws Exception {
 		super(PropertyStore.DEFAULT);
 		RestException _initException = null;
 		try {
 			this.resource = resource;
-			this.config = config;
+			this.builder = builder;
 			this.resourceFinder = new ResourceFinder(resource.getClass());
-			this.parentContext = config.parentContext;
+			this.parentContext = builder.parentContext;
 
-			Builder b = new Builder(resource, config);
+			Builder b = new Builder(resource, builder);
 			this.allowHeaderParams = b.allowHeaderParams;
 			this.allowBodyParam = b.allowBodyParam;
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
@@ -389,7 +389,7 @@ public final class RestContext extends Context {
 
 			// Initialize our child resources.
 			resourceResolver = resolve(resource, RestResourceResolver.class, b.resourceResolver);
-			for (Object o : config.childResources) {
+			for (Object o : builder.childResources) {
 				String path = null;
 				Object r = null;
 				if (o instanceof Pair) {
@@ -399,22 +399,22 @@ public final class RestContext extends Context {
 				} else if (o instanceof Class<?>) {
 					Class<?> c = (Class<?>)o;
 					// Don't allow specifying yourself as a child.  Causes an infinite loop.
-					if (c == config.resourceClass)
+					if (c == builder.resourceClass)
 						continue;
 					r = c;
 				} else {
 					r = o;
 				}
 
-				RestConfig childConfig = null;
+				RestContextBuilder childConfig = null;
 
 				if (o instanceof Class) {
 					Class<?> oc = (Class<?>)o;
-					childConfig = new RestConfig(config.inner, oc, this);
+					childConfig = new RestContextBuilder(builder.inner, oc, this);
 					r = resourceResolver.resolve(oc, childConfig);
 				} else {
 					r = o;
-					childConfig = new RestConfig(config.inner, o.getClass(), this);
+					childConfig = new RestContextBuilder(builder.inner, o.getClass(), this);
 				}
 
 				childConfig.init(r);
@@ -427,8 +427,8 @@ public final class RestContext extends Context {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = config.callHandler == null ? new RestCallHandler(this) : resolve(resource, RestCallHandler.class, config.callHandler, this);
-			infoProvider = config.infoProvider == null ? new RestInfoProvider(this) : resolve(resource, RestInfoProvider.class, config.infoProvider, this);
+			callHandler = builder.callHandler == null ? new RestCallHandler(this) : resolve(resource, RestCallHandler.class, builder.callHandler, this);
+			infoProvider = builder.infoProvider == null ? new RestInfoProvider(this) : resolve(resource, RestInfoProvider.class, builder.infoProvider, this);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -483,7 +483,7 @@ public final class RestContext extends Context {
 		String contextPath;
 
 		@SuppressWarnings("unchecked")
-		Builder(Object resource, RestConfig sc) throws Exception {
+		Builder(Object resource, RestContextBuilder sc) throws Exception {
 
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
 
@@ -621,7 +621,7 @@ public final class RestContext extends Context {
 	 * The resource resolver is used for instantiating child resource classes.
 	 *
 	 * <p>
-	 * Unless overridden via the {@link RestResource#resourceResolver()} annotation or the {@link RestConfig#setResourceResolver(Class)}
+	 * Unless overridden via the {@link RestResource#resourceResolver()} annotation or the {@link RestContextBuilder#resourceResolver(Class)}
 	 * method, this value is always inherited from parent to child.
 	 * This allows a single resource resolver to be passed in to the top-level servlet to handle instantiation of all
 	 * child resources.
@@ -709,7 +709,7 @@ public final class RestContext extends Context {
 	 * </ul>
 	 *
 	 * <p>
-	 * The list of variables can be extended using the {@link RestConfig#addVars(Class...)} method.
+	 * The list of variables can be extended using the {@link RestContextBuilder#vars(Class...)} method.
 	 * For example, this is used to add support for the Args and Manifest-File variables in the microservice
 	 * <code>Resource</code> class.
 	 *
@@ -726,7 +726,7 @@ public final class RestContext extends Context {
 	 * The config file is identified via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#config() @RestResource.config()} annotation.
-	 * 	<li>{@link RestConfig#setConfigFile(ConfigFile)} method.
+	 * 	<li>{@link RestContextBuilder#configFile(ConfigFile)} method.
 	 * </ul>
 	 *
 	 * @return The resolving config file associated with this servlet.  Never <jk>null</jk>.
@@ -742,7 +742,7 @@ public final class RestContext extends Context {
 	 * The location of static resources are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#staticFiles() @RestResource.staticFiles()} annotation.
-	 * 	<li>{@link RestConfig#addStaticFiles(Class, String)} method.
+	 * 	<li>{@link RestContextBuilder#staticFiles(Class, String)} method.
 	 * </ul>
 	 *
 	 * @param pathInfo The unencoded path info.
@@ -853,7 +853,7 @@ public final class RestContext extends Context {
 
 	/**
 	 * Returns the path for this resource as defined by the {@link RestResource#path()} annotation or
-	 * {@link RestConfig#setPath(String)} method concatenated with those on all parent classes.
+	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
 	 *
 	 * <p>
 	 * If path is not specified, returns <js>"/"</js>.
@@ -871,7 +871,7 @@ public final class RestContext extends Context {
 	 * The widgets used for resolving <js>"$W{...}"<js> variables.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestConfig#addWidget(Class)} method.
+	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestContextBuilder#widget(Class)} method.
 	 *
 	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
 	 */
@@ -886,7 +886,7 @@ public final class RestContext extends Context {
 	 * The logger for a resource is defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#logger() @RestResource.logger()} annotation.
-	 * 	<li>{@link RestConfig#setLogger(Class)}/{@link RestConfig#setLogger(RestLogger)} methods.
+	 * 	<li>{@link RestContextBuilder#logger(Class)}/{@link RestContextBuilder#logger(RestLogger)} methods.
 	 * </ul>
 	 *
 	 * @return The logger to use for this resource.  Never <jk>null</jk>.
@@ -917,7 +917,7 @@ public final class RestContext extends Context {
 	 * The information provider is defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#infoProvider() @RestResource.infoProvider()} annotation.
-	 * 	<li>{@link RestConfig#setInfoProvider(Class)}/{@link RestConfig#setInfoProvider(RestInfoProvider)} methods.
+	 * 	<li>{@link RestContextBuilder#infoProvider(Class)}/{@link RestContextBuilder#infoProvider(RestInfoProvider)} methods.
 	 * </ul>
 	 *
 	 * @return The information provider for this resource.  Never <jk>null</jk>.
@@ -933,7 +933,7 @@ public final class RestContext extends Context {
 	 * The call handler is defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#callHandler() @RestResource.callHandler()} annotation.
-	 * 	<li>{@link RestConfig#setCallHandler(Class)}/{@link RestConfig#setCallHandler(RestCallHandler)} methods.
+	 * 	<li>{@link RestContextBuilder#callHandler(Class)}/{@link RestContextBuilder#callHandler(RestCallHandler)} methods.
 	 * </ul>
 	 *
 	 * @return The call handler for this resource.  Never <jk>null</jk>.
@@ -1014,7 +1014,7 @@ public final class RestContext extends Context {
 	 * Properties at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#properties() @RestResource.properties()} annotation.
-	 * 	<li>{@link RestConfig#setProperty(String, Object)}/{@link RestConfig#setProperties(Map)} methods.
+	 * 	<li>{@link RestContextBuilder#setProperty(String, Object)}/{@link RestContextBuilder#setProperties(Map)} methods.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -1036,7 +1036,7 @@ public final class RestContext extends Context {
 	 * Serializers at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#serializers() @RestResource.serializers()} annotation.
-	 * 	<li>{@link RestConfig#addSerializers(Class...)}/{@link RestConfig#addSerializers(Serializer...)} methods.
+	 * 	<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Serializer...)} methods.
 	 * </ul>
 	 *
 	 * @return The serializers registered with this resource.
@@ -1052,7 +1052,7 @@ public final class RestContext extends Context {
 	 * Parsers at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#parsers() @RestResource.parsers()} annotation.
-	 * 	<li>{@link RestConfig#addParsers(Class...)}/{@link RestConfig#addParsers(Parser...)} methods.
+	 * 	<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Parser...)} methods.
 	 * </ul>
 	 *
 	 * @return The parsers registered with this resource.
@@ -1068,7 +1068,7 @@ public final class RestContext extends Context {
 	 * @return The servlet init parameter, or <jk>null</jk> if not found.
 	 */
 	public String getServletInitParameter(String name) {
-		return config.getInitParameter(name);
+		return builder.getInitParameter(name);
 	}
 
 	/**
@@ -1188,7 +1188,7 @@ public final class RestContext extends Context {
 	 * Bean filters at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#beanFilters() @RestResource.beanFilters()} annotation.
-	 * 	<li>{@link RestConfig#addBeanFilters(Class...)} method.
+	 * 	<li>{@link RestContextBuilder#beanFilters(Class...)} method.
 	 * </ul>
 	 *
 	 * @return The bean filters associated with this resource.  Never <jk>null</jk>.
@@ -1204,7 +1204,7 @@ public final class RestContext extends Context {
 	 * POJO swaps at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#pojoSwaps() @RestResource.pojoSwaps()} annotation.
-	 * 	<li>{@link RestConfig#addPojoSwaps(Class...)} method.
+	 * 	<li>{@link RestContextBuilder#pojoSwaps(Class...)} method.
 	 * </ul>
 	 *
 	 * @return The POJO swaps associated with this resource.  Never <jk>null</jk>.
@@ -1401,10 +1401,10 @@ public final class RestContext extends Context {
 			for (int i = 0; i < p.length; i++) {
 				if (p[i] == RestContext.class)
 					args[i] = this;
-				else if (p[i] == RestConfig.class)
-					args[i] = this.config;
+				else if (p[i] == RestContextBuilder.class)
+					args[i] = this.builder;
 				else if (p[i] == ServletConfig.class)
-					args[i] = this.config.inner;
+					args[i] = this.builder.inner;
 			}
 			try {
 				m.invoke(r, args);
@@ -1445,7 +1445,7 @@ public final class RestContext extends Context {
 	 * Encoders at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#encoders() @RestResource.encoders()} annotation.
-	 * 	<li>{@link RestConfig#addEncoders(Class...)}/{@link RestConfig#addEncoders(org.apache.juneau.encoders.Encoder...)}
+	 * 	<li>{@link RestContextBuilder#encoders(Class...)}/{@link RestContextBuilder#encoders(org.apache.juneau.encoders.Encoder...)}
 	 * 		methods.
 	 * </ul>
 	 *
@@ -1460,7 +1460,7 @@ public final class RestContext extends Context {
 	 *
 	 * <p>
 	 * By default, this is simply the list of accept types supported by the registered parsers, but
-	 * can be overridden via the {@link RestConfig#setSupportedAcceptTypes(MediaType...)}/{@link RestConfig#setSupportedAcceptTypes(String...)}
+	 * can be overridden via the {@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}/{@link RestContextBuilder#supportedAcceptTypes(boolean,String...)}
 	 * methods.
 	 *
 	 * @return The supported <code>Accept</code> header values for this resource.  Never <jk>null</jk>.
@@ -1474,7 +1474,7 @@ public final class RestContext extends Context {
 	 *
 	 * <p>
 	 * By default, this is simply the list of content types supported by the registered serializers, but can be
-	 * overridden via the {@link RestConfig#setSupportedContentTypes(MediaType...)}/{@link RestConfig#setSupportedContentTypes(String...)}
+	 * overridden via the {@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}/{@link RestContextBuilder#supportedContentTypes(boolean,String...)}
 	 * methods.
 	 *
 	 * @return The supported <code>Content-Type</code> header values for this resource.  Never <jk>null</jk>.
@@ -1493,7 +1493,7 @@ public final class RestContext extends Context {
 	 * Default request headers are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
-	 * 	<li>{@link RestConfig#addDefaultRequestHeader(String, Object)}/{@link RestConfig#addDefaultRequestHeaders(String...)} methods.
+	 * 	<li>{@link RestContextBuilder#defaultRequestHeader(String, Object)}/{@link RestContextBuilder#defaultRequestHeaders(String...)} methods.
 	 * </ul>
 	 *
 	 * @return The default request headers for this resource.  Never <jk>null</jk>.
@@ -1512,7 +1512,7 @@ public final class RestContext extends Context {
 	 * Default response headers are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
-	 * 	<li>{@link RestConfig#addDefaultResponseHeader(String, Object)}/{@link RestConfig#addDefaultResponseHeaders(String...)}
+	 * 	<li>{@link RestContextBuilder#defaultResponseHeader(String, Object)}/{@link RestContextBuilder#defaultResponseHeaders(String...)}
 	 * 		methods.
 	 * </ul>
 	 *
@@ -1532,7 +1532,7 @@ public final class RestContext extends Context {
 	 * Converters at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#converters() @RestResource.converters()} annotation.
-	 * 	<li>{@link RestConfig#addConverters(Class...)}/{@link RestConfig#addConverters(RestConverter...)} methods.
+	 * 	<li>{@link RestContextBuilder#converters(Class...)}/{@link RestContextBuilder#converters(RestConverter...)} methods.
 	 * </ul>
 	 *
 	 * @return The converters associated with this resource.  Never <jk>null</jk>.
@@ -1551,7 +1551,7 @@ public final class RestContext extends Context {
 	 * Guards at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#guards() @RestResource.guards()} annotation.
-	 * 	<li>{@link RestConfig#addGuards(Class...)}/{@link RestConfig#addGuards(RestGuard...)} methods.
+	 * 	<li>{@link RestContextBuilder#guards(Class...)}/{@link RestContextBuilder#guards(RestGuard...)} methods.
 	 * </ul>
 	 *
 	 * @return The guards associated with this resource.  Never <jk>null</jk>.
@@ -1570,7 +1570,7 @@ public final class RestContext extends Context {
 	 * Response handlers are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#responseHandlers() @RestResource.responseHandlers()} annotation.
-	 * 	<li>{@link RestConfig#addResponseHandlers(Class...)}/{@link RestConfig#addResponseHandlers(ResponseHandler...)}
+	 * 	<li>{@link RestContextBuilder#responseHandlers(Class...)}/{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
 	 * 		methods.
 	 * </ul>
 	 *
@@ -1584,7 +1584,7 @@ public final class RestContext extends Context {
 	 * Returns the media type for the specified file name.
 	 *
 	 * <p>
-	 * The list of MIME-type mappings can be augmented through the {@link RestConfig#addMimeTypes(String...)} method.
+	 * The list of MIME-type mappings can be augmented through the {@link RestContextBuilder#mimeTypes(String...)} method.
 	 * See that method for a description of predefined MIME-type mappings.
 	 *
 	 * @param name The file name.
@@ -1604,7 +1604,7 @@ public final class RestContext extends Context {
 	 * Static files are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#staticFiles() @RestResource.staticFiles()} annotation.
-	 * 	<li>{@link RestConfig#addStaticFiles(Class, String)} method.
+	 * 	<li>{@link RestContextBuilder#staticFiles(Class, String)} method.
 	 * </ul>
 	 *
 	 * @param p The URL path remainder after the servlet match.

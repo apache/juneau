@@ -660,7 +660,7 @@
 				</ul>
 				Additional user-defined variables can be defined by overriding the 
 				{@link org.apache.juneau.microservice.Microservice#createVarResolver()} method
-				and using the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
+				and using the {@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
 			<li class='jm'>
 				{@link org.apache.juneau.rest.RestContext#getConfigFile()} 
 				- An instance method to access it from inside a REST servlet.
@@ -693,7 +693,7 @@
 				<p>
 					Additional user-defined variables can be defined at this level by adding a  
 					{@link org.apache.juneau.rest.annotation.HookEvent#INIT} hook method
-					and using the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
+					and using the {@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
 				</p>
 			<li class='jm'>
 				{@link org.apache.juneau.rest.RestRequest#getConfigFile()} 
@@ -752,7 +752,7 @@
 				</p>
 				<p>
 					Additional user-defined variables can be defined at this level by overriding the 
-					{@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
+					{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
 				</p>
 		</ul>
 		<p>

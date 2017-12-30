@@ -27,13 +27,13 @@ import java.lang.reflect.*;
  * </ul>
  *
  * <p>
- * The former constructor can be used to get access to the {@link RestConfig} object to get access to the
+ * The former constructor can be used to get access to the {@link RestContextBuilder} object to get access to the
  * config file and initialization information or make programmatic modifications to the resource before
  * full initialization.
  *
  * <p>
  * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
- * {@link RestConfig} and {@link RestContext} objects:
+ * {@link RestContextBuilder} and {@link RestContext} objects:
  * <ul>
  * 	<li><code><jk>public void</jk> init(RestConfig);</code>
  * 	<li><code><jk>public void</jk> init(RestContext);</code>
@@ -43,11 +43,11 @@ import java.lang.reflect.*;
 public class RestResourceResolverSimple implements RestResourceResolver {
 
 	@Override /* RestResourceResolver */
-	public Object resolve(Class<?> c, RestConfig config) throws Exception {
+	public Object resolve(Class<?> c, RestContextBuilder builder) throws Exception {
 		try {
-			Constructor<?> c1 = findPublicConstructor(c, RestConfig.class);
+			Constructor<?> c1 = findPublicConstructor(c, RestContextBuilder.class);
 			if (c1 != null)
-				return c1.newInstance(config);
+				return c1.newInstance(builder);
 			c1 = findPublicConstructor(c);
 			if (c1 != null)
 				return c1.newInstance();

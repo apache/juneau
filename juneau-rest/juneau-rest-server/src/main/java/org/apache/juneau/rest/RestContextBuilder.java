@@ -78,7 +78,7 @@ import org.apache.juneau.utils.*;
  * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)</code> before
  * you modify this config object, you won't see the changes!
  */
-public class RestConfig extends ContextBuilder implements ServletConfig {
+public class RestContextBuilder extends ContextBuilder implements ServletConfig {
 
 	final ServletConfig inner;
 
@@ -138,7 +138,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * 	The class annotated with the {@link RestResource @RestResource} annotation.
 	 * @throws ServletException
 	 */
-	public RestConfig(ServletConfig config, Class<?> resourceClass) throws ServletException {
+	public RestContextBuilder(ServletConfig config, Class<?> resourceClass) throws ServletException {
 		this(config, resourceClass, null);
 	}
 
@@ -149,7 +149,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param resource The class annotated with <ja>@RestResource</ja>.
 	 * @throws ServletException Something bad happened.
 	 */
-	RestConfig(ServletConfig config, Class<?> resourceClass, RestContext parentContext) throws ServletException {
+	RestContextBuilder(ServletConfig config, Class<?> resourceClass, RestContext parentContext) throws ServletException {
 		this.inner = config;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
@@ -204,52 +204,52 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 					properties.append(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
 					properties.append(p, true);
-				addSerializers(r.serializers());
-				addParsers(r.parsers());
-				addEncoders(r.encoders());
-				addDefaultRequestHeaders(r.defaultRequestHeaders());
-				addDefaultResponseHeaders(r.defaultResponseHeaders());
-				addResponseHandlers(r.responseHandlers());
-				addConverters(r.converters());
-				addGuards(reverse(r.guards()));
-				addChildResources(r.children());
-				addBeanFilters(r.beanFilters());
-				addPojoSwaps(r.pojoSwaps());
-				addParamResolvers(r.paramResolvers());
+				serializers(r.serializers());
+				parsers(r.parsers());
+				encoders(r.encoders());
+				defaultRequestHeaders(r.defaultRequestHeaders());
+				defaultResponseHeaders(r.defaultResponseHeaders());
+				responseHandlers(r.responseHandlers());
+				converters(r.converters());
+				guards(reverse(r.guards()));
+				childResources(r.children());
+				beanFilters(r.beanFilters());
+				pojoSwaps(r.pojoSwaps());
+				paramResolvers(r.paramResolvers());
 				serializerListener(r.serializerListener());
 				parserListener(r.parserListener());
 				contextPath(r.contextPath());
 				if (! r.staticFiles().isEmpty())
-					addStaticFiles(c, r.staticFiles());
+					staticFiles(c, r.staticFiles());
 				if (! r.path().isEmpty())
-					setPath(r.path());
+					path(r.path());
 				if (! r.clientVersionHeader().isEmpty())
-					setClientVersionHeader(r.clientVersionHeader());
+					clientVersionHeader(r.clientVersionHeader());
 
 				if (r.resourceResolver() != RestResourceResolver.class)
-					setResourceResolver(r.resourceResolver());
+					resourceResolver(r.resourceResolver());
 				if (r.logger() != RestLogger.Normal.class)
-					setLogger(r.logger());
+					logger(r.logger());
 				if (r.callHandler() != RestCallHandler.class)
-					setCallHandler(r.callHandler());
+					callHandler(r.callHandler());
 				if (r.infoProvider() != RestInfoProvider.class)
-					setInfoProvider(r.infoProvider());
+					infoProvider(r.infoProvider());
 				if (! r.allowHeaderParams().isEmpty())
-					setAllowHeaderParams(Boolean.valueOf(vr.resolve(r.allowHeaderParams())));
+					allowHeaderParams(Boolean.valueOf(vr.resolve(r.allowHeaderParams())));
 				if (! r.allowMethodParam().isEmpty())
-					setAllowMethodParam(vr.resolve(r.allowMethodParam()));
+					allowMethodParam(vr.resolve(r.allowMethodParam()));
 				if (! r.allowBodyParam().isEmpty())
-					setAllowBodyParam(Boolean.valueOf(vr.resolve(r.allowBodyParam())));
+					allowBodyParam(Boolean.valueOf(vr.resolve(r.allowBodyParam())));
 				if (! r.renderResponseStackTraces().isEmpty())
-					setRenderResponseStackTraces(Boolean.valueOf(vr.resolve(r.renderResponseStackTraces())));
+					renderResponseStackTraces(Boolean.valueOf(vr.resolve(r.renderResponseStackTraces())));
 				if (! r.useStackTraceHashes().isEmpty())
-					setUseStackTraceHashes(Boolean.valueOf(vr.resolve(r.useStackTraceHashes())));
+					useStackTraceHashes(Boolean.valueOf(vr.resolve(r.useStackTraceHashes())));
 				if (! r.defaultCharset().isEmpty())
-					setDefaultCharset(vr.resolve(r.defaultCharset()));
+					defaultCharset(vr.resolve(r.defaultCharset()));
 				if (! r.paramFormat().isEmpty())
-					setParamFormat(vr.resolve(r.paramFormat()));
+					paramFormat(vr.resolve(r.paramFormat()));
 				if (! r.maxInput().isEmpty())
-					setMaxInput(vr.resolve(r.maxInput()));
+					maxInput(vr.resolve(r.maxInput()));
 
 				HtmlDoc hd = r.htmldoc();
 				for (Class<? extends Widget> cw : hd.widgets())
@@ -258,7 +258,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 				htmlDocBuilder.process(hd);
 			}
 
-			addResponseHandlers(
+			responseHandlers(
 				StreamableHandler.class,
 				WritableHandler.class,
 				ReaderHandler.class,
@@ -286,11 +286,11 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 			}
 		}
 		for (Method m : map.values()) {
-			ClassUtils.assertArgsOfType(m, RestConfig.class, ServletConfig.class);
+			ClassUtils.assertArgsOfType(m, RestContextBuilder.class, ServletConfig.class);
 			Class<?>[] argTypes = m.getParameterTypes();
 			Object[] args = new Object[argTypes.length];
 			for (int i = 0; i < args.length; i++) {
-				if (argTypes[i] == RestConfig.class)
+				if (argTypes[i] == RestContextBuilder.class)
 					args[i] = this;
 				else
 					args[i] = this.inner;
@@ -335,7 +335,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param vars The {@link Var} classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addVars(Class<?>...vars) {
+	public RestContextBuilder vars(Class<?>...vars) {
 		this.varResolverBuilder.vars(vars);
 		return this;
 	}
@@ -360,7 +360,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param object The context object.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addVarContextObject(String name, Object object) {
+	public RestContextBuilder varContextObject(String name, Object object) {
 		this.varResolverBuilder.contextObject(name, object);
 		return this;
 	}
@@ -376,7 +376,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param configFile The new config file.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setConfigFile(ConfigFile configFile) {
+	public RestContextBuilder configFile(ConfigFile configFile) {
 		this.configFile = configFile;
 		return this;
 	}
@@ -391,7 +391,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The property value.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setProperty(String key, Object value) {
+	public RestContextBuilder setProperty(String key, Object value) {
 		this.properties.put(key, value);
 		return this;
 	}
@@ -408,7 +408,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param properties The new properties to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setProperties(Map<String,Object> properties) {
+	public RestContextBuilder setProperties(Map<String,Object> properties) {
 		this.properties.putAll(properties);
 		return this;
 	}
@@ -427,7 +427,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param beanFilters The bean filters to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addBeanFilters(Class<?>...beanFilters) {
+	public RestContextBuilder beanFilters(Class<?>...beanFilters) {
 		this.beanFilters.addAll(Arrays.asList(beanFilters));
 		return this;
 	}
@@ -445,7 +445,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param pojoSwaps The pojo swaps to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addPojoSwaps(Class<?>...pojoSwaps) {
+	public RestContextBuilder pojoSwaps(Class<?>...pojoSwaps) {
 		this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 		return this;
 	}
@@ -460,7 +460,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param listener The listener to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig serializerListener(Class<? extends SerializerListener> listener) {
+	public RestContextBuilder serializerListener(Class<? extends SerializerListener> listener) {
 		if (listener != SerializerListener.class)
 			this.serializerListener = listener;
 		return this;
@@ -476,7 +476,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param listener The listener to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig parserListener(Class<? extends ParserListener> listener) {
+	public RestContextBuilder parserListener(Class<? extends ParserListener> listener) {
 		if (listener != ParserListener.class)
 			this.parserListener = listener;
 		return this;
@@ -492,7 +492,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param contextPath The context path for this resource and any child resources.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig contextPath(String contextPath) {
+	public RestContextBuilder contextPath(String contextPath) {
 		if (! contextPath.isEmpty())
 			this.contextPath = contextPath;
 		return this;
@@ -509,7 +509,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	public RestConfig addParamResolvers(Class<? extends RestParam>...paramResolvers) {
+	public RestContextBuilder paramResolvers(Class<? extends RestParam>...paramResolvers) {
 		this.paramResolvers.addAll(Arrays.asList(paramResolvers));
 		return this;
 	}
@@ -528,7 +528,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param serializers The serializer classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addSerializers(Class<?>...serializers) {
+	public RestContextBuilder serializers(Class<?>...serializers) {
 		this.serializers.append(serializers);
 		return this;
 	}
@@ -537,7 +537,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Adds class-level serializers to this resource.
 	 *
 	 * <p>
-	 * Same as {@link #addSerializers(Class...)} except allows you to pass in serializer instances.
+	 * Same as {@link #serializers(Class...)} except allows you to pass in serializer instances.
 	 * The actual serializer ends up being the result of this operation using the bean filters, pojo swaps, and
 	 * properties on this config:
 	 * <p class='bcode'>
@@ -551,7 +551,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param serializers The serializers to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addSerializers(Serializer...serializers) {
+	public RestContextBuilder serializers(Serializer...serializers) {
 		this.serializers.append(serializers);
 		return this;
 	}
@@ -569,7 +569,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param parsers The parser classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addParsers(Class<?>...parsers) {
+	public RestContextBuilder parsers(Class<?>...parsers) {
 		this.parsers.append(parsers);
 		return this;
 	}
@@ -578,7 +578,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Adds class-level parsers to this resource.
 	 *
 	 * <p>
-	 * Same as {@link #addParsers(Class...)} except allows you to pass in parser instances.
+	 * Same as {@link #parsers(Class...)} except allows you to pass in parser instances.
 	 * The actual parser ends up being the result of this operation using the bean filters, pojo swaps, and properties
 	 * on this config:
 	 * <p class='bcode'>
@@ -592,7 +592,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param parsers The parsers to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addParsers(Parser...parsers) {
+	public RestContextBuilder parsers(Parser...parsers) {
 		this.parsers.append(parsers);
 		return this;
 	}
@@ -606,7 +606,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param partSerializer The serializer class.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setPartSerializer(Class<? extends HttpPartSerializer> partSerializer) {
+	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> partSerializer) {
 		this.partSerializer = partSerializer;
 		return this;
 	}
@@ -620,7 +620,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param partSerializer The serializer instance.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setPartSerializer(HttpPartSerializer partSerializer) {
+	public RestContextBuilder partSerializer(HttpPartSerializer partSerializer) {
 		this.partSerializer = partSerializer;
 		return this;
 	}
@@ -634,7 +634,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param partParser The parser class.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setPartParser(Class<? extends HttpPartParser> partParser) {
+	public RestContextBuilder partParser(Class<? extends HttpPartParser> partParser) {
 		this.partParser = partParser;
 		return this;
 	}
@@ -648,7 +648,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param partParser The parser instance.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setPartParser(HttpPartParser partParser) {
+	public RestContextBuilder partParser(HttpPartParser partParser) {
 		this.partParser = partParser;
 		return this;
 	}
@@ -669,7 +669,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param encoders The parser classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addEncoders(Class<?>...encoders) {
+	public RestContextBuilder encoders(Class<?>...encoders) {
 		this.encoders.append(encoders);
 		return this;
 	}
@@ -678,12 +678,12 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Adds class-level encoders to this resource.
 	 *
 	 * <p>
-	 * Same as {@link #addEncoders(Class...)} except allows you to pass in encoder instances.
+	 * Same as {@link #encoders(Class...)} except allows you to pass in encoder instances.
 	 *
 	 * @param encoders The encoders to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addEncoders(Encoder...encoders) {
+	public RestContextBuilder encoders(Encoder...encoders) {
 		this.encoders.append(encoders);
 		return this;
 	}
@@ -713,7 +713,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param converters The converter classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addConverters(Class<?>...converters) {
+	public RestContextBuilder converters(Class<?>...converters) {
 		this.converters.addAll(Arrays.asList(converters));
 		return this;
 	}
@@ -722,12 +722,12 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Adds class-level encoders to this resource.
 	 *
 	 * <p>
-	 * Same as {@link #addConverters(Class...)} except allows you to pass in converter instances.
+	 * Same as {@link #converters(Class...)} except allows you to pass in converter instances.
 	 *
 	 * @param converters The converters to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addConverters(RestConverter...converters) {
+	public RestContextBuilder converters(RestConverter...converters) {
 		this.converters.addAll(Arrays.asList(converters));
 		return this;
 	}
@@ -745,7 +745,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param guards The guard classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addGuards(Class<?>...guards) {
+	public RestContextBuilder guards(Class<?>...guards) {
 		this.guards.addAll(Arrays.asList(guards));
 		return this;
 	}
@@ -754,12 +754,12 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Adds class-level guards to this resource.
 	 *
 	 * <p>
-	 * Same as {@link #addGuards(Class...)} except allows you to pass in guard instances.
+	 * Same as {@link #guards(Class...)} except allows you to pass in guard instances.
 	 *
 	 * @param guards The guards to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addGuards(RestGuard...guards) {
+	public RestContextBuilder guards(RestGuard...guards) {
 		this.guards.addAll(Arrays.asList(guards));
 		return this;
 	}
@@ -780,7 +780,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param mimeTypes The MIME-types to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addMimeTypes(String...mimeTypes) {
+	public RestContextBuilder mimeTypes(String...mimeTypes) {
 		if (this.mimeTypes == ExtendedMimetypesFileTypeMap.DEFAULT)
 			this.mimeTypes = new ExtendedMimetypesFileTypeMap();
 		for (String mimeType : mimeTypes)
@@ -804,7 +804,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The HTTP header value.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addDefaultRequestHeader(String name, Object value) {
+	public RestContextBuilder defaultRequestHeader(String name, Object value) {
 		this.defaultRequestHeaders.put(name, StringUtils.toString(value));
 		return this;
 	}
@@ -825,12 +825,12 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @return This object (for method chaining).
 	 * @throws RestServletException If header string is not correctly formatted.
 	 */
-	public RestConfig addDefaultRequestHeaders(String...headers) throws RestServletException {
+	public RestContextBuilder defaultRequestHeaders(String...headers) throws RestServletException {
 		for (String header : headers) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
 				throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			addDefaultRequestHeader(h[0], h[1]);
+			defaultRequestHeader(h[0], h[1]);
 		}
 		return this;
 	}
@@ -854,7 +854,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The HTTP header value.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addDefaultResponseHeader(String name, Object value) {
+	public RestContextBuilder defaultResponseHeader(String name, Object value) {
 		this.defaultResponseHeaders.put(name, value);
 		return this;
 	}
@@ -874,12 +874,12 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @return This object (for method chaining).
 	 * @throws RestServletException If header string is not correctly formatted.
 	 */
-	public RestConfig addDefaultResponseHeaders(String...headers) throws RestServletException {
+	public RestContextBuilder defaultResponseHeaders(String...headers) throws RestServletException {
 		for (String header : headers) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
 				throw new RestServletException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			addDefaultResponseHeader(h[0], h[1]);
+			defaultResponseHeader(h[0], h[1]);
 		}
 		return this;
 	}
@@ -908,7 +908,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param responseHandlers The response handlers to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addResponseHandlers(Class<?>...responseHandlers) {
+	public RestContextBuilder responseHandlers(Class<?>...responseHandlers) {
 		this.responseHandlers.addAll(Arrays.asList(responseHandlers));
 		return this;
 	}
@@ -917,12 +917,12 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Adds class-level response handlers to this resource.
 	 *
 	 * <p>
-	 * Same as {@link #addResponseHandlers(Class...)} except allows you to pass in response handler instances.
+	 * Same as {@link #responseHandlers(Class...)} except allows you to pass in response handler instances.
 	 *
 	 * @param responseHandlers The response handlers to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addResponseHandlers(ResponseHandler...responseHandlers) {
+	public RestContextBuilder responseHandlers(ResponseHandler...responseHandlers) {
 		this.responseHandlers.addAll(Arrays.asList(responseHandlers));
 		return this;
 	}
@@ -940,7 +940,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param child The child resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addChildResource(String path, Object child) {
+	public RestContextBuilder childResource(String path, Object child) {
 		this.childResources.add(new Pair<>(path, child));
 		return this;
 	}
@@ -958,7 +958,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Children must be annotated with {@link RestResource#path()} to identify the child path.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addChildResources(Object...children) {
+	public RestContextBuilder childResources(Object...children) {
 		this.childResources.addAll(Arrays.asList(children));
 		return this;
 	}
@@ -976,7 +976,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Children must be annotated with {@link RestResource#path()} to identify the child path.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addChildResources(Class<?>...children) {
+	public RestContextBuilder childResources(Class<?>...children) {
 		this.childResources.addAll(Arrays.asList(children));
 		return this;
 	}
@@ -989,12 +989,14 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 *
 	 * <p>
 	 * There is no annotation equivalent to this method call.
-	 *
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param mediaTypes The new list of media types supported by this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setSupportedAcceptTypes(String...mediaTypes) {
-		supportedAcceptTypes = new ArrayList<>();
+	public RestContextBuilder supportedAcceptTypes(boolean append, String...mediaTypes) {
+		supportedAcceptTypes = append || supportedAcceptTypes == null ? new ArrayList<MediaType>() : supportedAcceptTypes;
 		for (String mediaType : mediaTypes)
 			supportedAcceptTypes.add(MediaType.forString(mediaType));
 		return this;
@@ -1009,11 +1011,14 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * <p>
 	 * There is no annotation equivalent to this method call.
 	 *
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param mediaTypes The new list of media types supported by this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setSupportedAcceptTypes(MediaType...mediaTypes) {
-		supportedAcceptTypes = Arrays.asList(mediaTypes);
+	public RestContextBuilder supportedAcceptTypes(boolean append, MediaType...mediaTypes) {
+		supportedAcceptTypes = append || supportedAcceptTypes == null ? new ArrayList<MediaType>() : supportedAcceptTypes;
+		supportedAcceptTypes.addAll(Arrays.asList(mediaTypes));
 		return this;
 	}
 
@@ -1026,10 +1031,13 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * <p>
 	 * There is no annotation equivalent to this method call.
 	 *
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param mediaTypes The new list of media types supported by this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setSupportedContentTypes(String...mediaTypes) {
+	public RestContextBuilder supportedContentTypes(boolean append, String...mediaTypes) {
+		supportedContentTypes = append || supportedContentTypes == null ? new ArrayList<MediaType>() : supportedContentTypes;
 		supportedContentTypes = new ArrayList<>();
 		for (String mediaType : mediaTypes)
 			supportedContentTypes.add(MediaType.forString(mediaType));
@@ -1045,11 +1053,14 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * <p>
 	 * There is no annotation equivalent to this method call.
 	 *
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param mediaTypes The new list of media types supported by this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setSupportedContentTypes(MediaType...mediaTypes) {
-		supportedContentTypes = Arrays.asList(mediaTypes);
+	public RestContextBuilder supportedContentTypes(boolean append, MediaType...mediaTypes) {
+		supportedContentTypes = append || supportedContentTypes == null ? new ArrayList<MediaType>() : supportedContentTypes;
+		supportedContentTypes.addAll(Arrays.asList(mediaTypes));
 		return this;
 	}
 
@@ -1071,7 +1082,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * 	<code>com.foo.docs</code> package.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addStaticFiles(Class<?> resourceClass, String staticFilesString) {
+	public RestContextBuilder staticFiles(Class<?> resourceClass, String staticFilesString) {
 		if (staticFiles == null)
 			staticFiles = new ArrayList<>();
 		staticFiles.add(new Pair<Class<?>,Object>(resourceClass, staticFilesString));
@@ -1093,7 +1104,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param resourceResolver The new resource resolver.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setResourceResolver(Class<? extends RestResourceResolver> resourceResolver) {
+	public RestContextBuilder resourceResolver(Class<? extends RestResourceResolver> resourceResolver) {
 		this.resourceResolver = resourceResolver;
 		return this;
 	}
@@ -1102,12 +1113,12 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * Overrides the default REST resource resolver.
 	 *
 	 * <p>
-	 * Same as {@link #setResourceResolver(Class)} except allows you to specify an instance instead of a class.
+	 * Same as {@link #resourceResolver(Class)} except allows you to specify an instance instead of a class.
 	 *
 	 * @param resourceResolver The new resource resolver.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setResourceResolver(RestResourceResolver resourceResolver) {
+	public RestContextBuilder resourceResolver(RestResourceResolver resourceResolver) {
 		this.resourceResolver = resourceResolver;
 		return this;
 	}
@@ -1121,7 +1132,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setAllowHeaderParams(boolean value) {
+	public RestContextBuilder allowHeaderParams(boolean value) {
 		this.allowHeaderParams = value;
 		return this;
 	}
@@ -1135,7 +1146,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setAllowMethodParam(String...value) {
+	public RestContextBuilder allowMethodParam(String...value) {
 		this.allowMethodParam = StringUtils.join(value, ',');
 		return this;
 	}
@@ -1149,7 +1160,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setAllowBodyParam(boolean value) {
+	public RestContextBuilder allowBodyParam(boolean value) {
 		this.allowBodyParam = value;
 		return this;
 	}
@@ -1163,7 +1174,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setRenderResponseStackTraces(boolean value) {
+	public RestContextBuilder renderResponseStackTraces(boolean value) {
 		this.renderResponseStackTraces = value;
 		return this;
 	}
@@ -1177,7 +1188,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setUseStackTraceHashes(boolean value) {
+	public RestContextBuilder useStackTraceHashes(boolean value) {
 		this.useStackTraceHashes = value;
 		return this;
 	}
@@ -1191,7 +1202,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setDefaultCharset(String value) {
+	public RestContextBuilder defaultCharset(String value) {
 		this.defaultCharset = value;
 		return this;
 	}
@@ -1205,7 +1216,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setParamFormat(String value) {
+	public RestContextBuilder paramFormat(String value) {
 		this.paramFormat = value;
 		return this;
 	}
@@ -1219,7 +1230,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setMaxInput(String value) {
+	public RestContextBuilder maxInput(String value) {
 		this.maxInput = value;
 		return this;
 	}
@@ -1233,7 +1244,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param path The URL path of this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setPath(String path) {
+	public RestContextBuilder path(String path) {
 		if (startsWith(path, '/'))
 			path = path.substring(1);
 		this.path = path;
@@ -1250,7 +1261,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param clientVersionHeader The name of the HTTP header that denotes the client version.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setClientVersionHeader(String clientVersionHeader) {
+	public RestContextBuilder clientVersionHeader(String clientVersionHeader) {
 		this.clientVersionHeader = clientVersionHeader;
 		return this;
 	}
@@ -1265,7 +1276,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param value The widget class to add.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig addWidget(Class<? extends Widget> value) {
+	public RestContextBuilder widget(Class<? extends Widget> value) {
 		this.widgets.add(value);
 		return this;
 	}
@@ -1288,7 +1299,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param logger The new logger for this resource.  Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setLogger(Class<? extends RestLogger> logger) {
+	public RestContextBuilder logger(Class<? extends RestLogger> logger) {
 		this.logger = logger;
 		return this;
 	}
@@ -1302,7 +1313,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param logger The new logger for this resource.  Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setLogger(RestLogger logger) {
+	public RestContextBuilder logger(RestLogger logger) {
 		this.logger = logger;
 		return this;
 	}
@@ -1321,7 +1332,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param restHandler The new call handler for this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setCallHandler(Class<? extends RestCallHandler> restHandler) {
+	public RestContextBuilder callHandler(Class<? extends RestCallHandler> restHandler) {
 		this.callHandler = restHandler;
 		return this;
 	}
@@ -1340,7 +1351,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param restHandler The new call handler for this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setCallHandler(RestCallHandler restHandler) {
+	public RestContextBuilder callHandler(RestCallHandler restHandler) {
 		this.callHandler = restHandler;
 		return this;
 	}
@@ -1359,7 +1370,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param infoProvider The new info provider for this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setInfoProvider(Class<? extends RestInfoProvider> infoProvider) {
+	public RestContextBuilder infoProvider(Class<? extends RestInfoProvider> infoProvider) {
 		this.infoProvider = infoProvider;
 		return this;
 	}
@@ -1378,7 +1389,7 @@ public class RestConfig extends ContextBuilder implements ServletConfig {
 	 * @param infoProvider The new info provider for this resource.
 	 * @return This object (for method chaining).
 	 */
-	public RestConfig setInfoProvider(RestInfoProvider infoProvider) {
+	public RestContextBuilder infoProvider(RestInfoProvider infoProvider) {
 		this.infoProvider = infoProvider;
 		return this;
 	}

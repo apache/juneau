@@ -882,7 +882,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getReaderResource(String, boolean, MediaType)} except uses the resource mime-type map
-	 * constructed using {@link RestConfig#addMimeTypes(String...)} to determine the media type.
+	 * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars

@@ -73,17 +73,17 @@ public abstract class ResourceJenaGroup extends RestServletGroupDefault {
 	/**
 	 * Add <code>$ARGS</code> and <code>$MF</code> variable resolvers.
 	 * 
-	 * @param config The resource config.
+	 * @param builder The resource config.
 	 * @throws Exception
 	 */
 	@RestHook(INIT) 
-	public void addConfigVars(RestConfig config) throws Exception {
+	public void addConfigVars(RestContextBuilder builder) throws Exception {
 		Microservice m = Microservice.getInstance();
 		if (m != null) {
-			config
-			.addVars(ArgsVar.class, ManifestFileVar.class)
-			.addVarContextObject(ArgsVar.SESSION_args, m.getArgs())
-			.addVarContextObject(ManifestFileVar.SESSION_manifest, m.getManifest());
+			builder
+				.vars(ArgsVar.class, ManifestFileVar.class)
+				.varContextObject(ArgsVar.SESSION_args, m.getArgs())
+				.varContextObject(ManifestFileVar.SESSION_manifest, m.getManifest());
 		}
 	}
 }

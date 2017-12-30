@@ -52,12 +52,12 @@ public class DockerRegistryResource extends Resource {
 	/**
 	 * Initializes the registry URL and rest client.
 	 * 
-	 * @param config The resource config.
+	 * @param builder The resource config.
 	 * @throws Exception
 	 */
 	@RestHook(INIT) 
-	public void initRegistry(RestConfig config) throws Exception {
-		ConfigFile cf = config.getConfigFile();
+	public void initRegistry(RestContextBuilder builder) throws Exception {
+		ConfigFile cf = builder.getConfigFile();
 		registryUrl = cf.getString("DockerRegistry/url");
 		rc = RestClient.create().build();
 	}

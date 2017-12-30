@@ -68,7 +68,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <p>
  * This class is handled by {@link org.apache.juneau.rest.response.RedirectHandler}, a built-in default response
- * handler created in {@link RestConfig}.
+ * handler created in {@link RestContextBuilder}.
  */
 public final class Redirect {
 

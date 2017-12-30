@@ -76,8 +76,8 @@ public @interface RestResource {
 	 * for other purposes like pre-call validation of a request.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addGuards(Class...)}/
-	 * {@link RestConfig#addGuards(RestGuard...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#guards(Class...)}/
+	 * {@link RestContextBuilder#guards(RestGuard...)} methods.
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
@@ -97,8 +97,8 @@ public @interface RestResource {
 	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addConverters(Class...)}/
-	 * {@link RestConfig#addConverters(RestConverter...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#converters(Class...)}/
+	 * {@link RestContextBuilder#converters(RestConverter...)} methods.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -119,7 +119,7 @@ public @interface RestResource {
 	 * treated as the specified class type.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestConfig#addBeanFilters(Class...)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#beanFilters(Class...)} method.
 	 */
 	Class<?>[] beanFilters() default {};
 
@@ -139,7 +139,7 @@ public @interface RestResource {
 	 * Any other classes are wrapped in a {@link SurrogateSwap}.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestConfig#addPojoSwaps(Class...)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#pojoSwaps(Class...)} method.
 	 */
 	Class<?>[] pojoSwaps() default {};
 
@@ -175,7 +175,7 @@ public @interface RestResource {
 	 * <b>Note:</b>{@link RestParam} classes must have no-arg constructors.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestConfig#addParamResolvers(Class...)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#paramResolvers(Class...)} method.
 	 */
 	Class<? extends RestParam>[] paramResolvers() default {};
 
@@ -201,8 +201,8 @@ public @interface RestResource {
 	 * method parameter.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setProperty(String, Object)}/
-	 * {@link RestConfig#setProperties(java.util.Map)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#setProperty(String, Object)}/
+	 * {@link RestContextBuilder#setProperties(java.util.Map)} methods.
 	 */
 	Property[] properties() default {};
 
@@ -218,8 +218,8 @@ public @interface RestResource {
 	 * Specifies a list of {@link Serializer} classes to add to the list of serializers available for this servlet.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addSerializers(Class...)}/
-	 * {@link RestConfig#addSerializers(Serializer...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#serializers(Class...)}/
+	 * {@link RestContextBuilder#serializers(Serializer...)} methods.
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -227,8 +227,8 @@ public @interface RestResource {
 	 * Specifies a list of {@link Parser} classes to add to the list of parsers available for this servlet.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addParsers(Class...)}/
-	 * {@link RestConfig#addParsers(Parser...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#parsers(Class...)}/
+	 * {@link RestContextBuilder#parsers(Parser...)} methods.
 	 */
 	Class<? extends Parser>[] parsers() default {};
 
@@ -236,8 +236,8 @@ public @interface RestResource {
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPartSerializer(Class)}/
-	 * {@link RestConfig#setPartSerializer(HttpPartSerializer)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#partSerializer(Class)}/
+	 * {@link RestContextBuilder#partSerializer(HttpPartSerializer)} methods.
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
 	
@@ -245,8 +245,8 @@ public @interface RestResource {
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPartParser(Class)}/
-	 * {@link RestConfig#setPartParser(HttpPartParser)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#partParser(Class)}/
+	 * {@link RestContextBuilder#partParser(HttpPartParser)} methods.
 	 */
 	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
 
@@ -258,8 +258,8 @@ public @interface RestResource {
 	 * See {@link ResponseHandler} for details.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addResponseHandlers(Class...)}/
-	 * {@link RestConfig#addResponseHandlers(ResponseHandler...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#responseHandlers(Class...)}/
+	 * {@link RestContextBuilder#responseHandlers(ResponseHandler...)} methods.
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
 
@@ -282,8 +282,8 @@ public @interface RestResource {
 	 * </p>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addEncoders(Class...)}/
-	 * {@link RestConfig#addEncoders(Encoder...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#encoders(Class...)}/
+	 * {@link RestContextBuilder#encoders(Encoder...)} methods.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -313,8 +313,8 @@ public @interface RestResource {
 	 * </p>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultRequestHeader(String, Object)}/
-	 * {@link RestConfig#addDefaultRequestHeaders(String...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#defaultRequestHeader(String, Object)}/
+	 * {@link RestContextBuilder#defaultRequestHeaders(String...)} methods.
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -344,8 +344,8 @@ public @interface RestResource {
 	 * </p>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultResponseHeader(String, Object)}/
-	 * {@link RestConfig#addDefaultResponseHeaders(String...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#defaultResponseHeader(String, Object)}/
+	 * {@link RestContextBuilder#defaultResponseHeaders(String...)} methods.
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -393,8 +393,8 @@ public @interface RestResource {
 	 * </dl>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#addChildResource(String, Object)}/
-	 * {@link RestConfig#addChildResources(Class...)}/{@link RestConfig#addChildResources(Object...)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#childResource(String, Object)}/
+	 * {@link RestContextBuilder#childResources(Class...)}/{@link RestContextBuilder#childResources(Object...)} methods.
 	 */
 	Class<?>[] children() default {};
 
@@ -411,7 +411,7 @@ public @interface RestResource {
 	 * Therefore, implementers can optionally specify a path value for documentation purposes.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestConfig#setPath(String)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#path(String)} method.
 	 */
 	String path() default "";
 
@@ -502,7 +502,7 @@ public @interface RestResource {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestConfig#setConfigFile(ConfigFile)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#configFile(ConfigFile)} method.
 	 */
 	String config() default "";
 
@@ -541,7 +541,7 @@ public @interface RestResource {
 	 * </ol>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestConfig#addStaticFiles(Class, String)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#staticFiles(Class, String)} method.
 	 */
 	String staticFiles() default "";
 
@@ -556,7 +556,7 @@ public @interface RestResource {
 	 * If not specified, uses <js>"X-Client-Version"</js>.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestConfig#setClientVersionHeader(String)} method.
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#clientVersionHeader(String)} method.
 	 */
 	String clientVersionHeader() default "";
 
@@ -571,12 +571,12 @@ public @interface RestResource {
 	 * </ul>
 	 *
 	 * <p>
-	 * The former constructor can be used to get access to the {@link RestConfig} object to get access to the config
+	 * The former constructor can be used to get access to the {@link RestContextBuilder} object to get access to the config
 	 * file and initialization information or make programmatic modifications to the resource before full initialization.
 	 *
 	 * <p>
 	 * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
-	 * {@link RestConfig} and {@link RestContext} objects:
+	 * {@link RestContextBuilder} and {@link RestContext} objects:
 	 * <ul>
 	 * 	<li><code><jk>public void</jk> init(RestConfig);</code>
 	 * 	<li><code><jk>public void</jk> init(RestContext);</code>
@@ -589,8 +589,8 @@ public @interface RestResource {
 	 * If not specified on a child resource, the resource resolver is inherited from the parent resource context.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/
-	 * {@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#resourceResolver(Class)}/
+	 * {@link RestContextBuilder#resourceResolver(RestResourceResolver)} methods.
 	 */
 	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
 
@@ -603,7 +603,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setLogger(Class)}/{@link RestConfig#setLogger(RestLogger)} methods.
+	 * {@link RestContextBuilder#logger(Class)}/{@link RestContextBuilder#logger(RestLogger)} methods.
 	 */
 	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
 
@@ -616,7 +616,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setCallHandler(Class)}/{@link RestConfig#setCallHandler(RestCallHandler)} methods.
+	 * {@link RestContextBuilder#callHandler(Class)}/{@link RestContextBuilder#callHandler(RestCallHandler)} methods.
 	 */
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
 
@@ -628,7 +628,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation are the
-	 * {@link RestConfig#setInfoProvider(Class)}/{@link RestConfig#setInfoProvider(RestInfoProvider)} methods.
+	 * {@link RestContextBuilder#infoProvider(Class)}/{@link RestContextBuilder#infoProvider(RestInfoProvider)} methods.
 	 */
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
 

@@ -37,7 +37,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private RestConfig config;
+	private RestContextBuilder builder;
 	private RestContext context;
 	private volatile boolean isInitialized = false;
 	private Exception initException;
@@ -46,7 +46,7 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
-			RestConfig rsc = new RestConfig(servletConfig, this.getClass(), null);
+			RestContextBuilder rsc = new RestContextBuilder(servletConfig, this.getClass(), null);
 			rsc.init(this);
 			RestContext context = createContext(rsc);
 			super.init(servletConfig);
@@ -86,7 +86,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Used when subclasses of RestServlet are attached as child resources.
 	 */
 	void setContext(RestContext context) {
-		this.config = context.config;
+		this.builder = context.builder;
 		this.context = context;
 	}
 
@@ -106,10 +106,10 @@ public abstract class RestServlet extends HttpServlet {
 	public synchronized void init(RestContext context) throws Exception {}
 
 
-	private synchronized RestContext createContext(RestConfig config) throws Exception {
+	private synchronized RestContext createContext(RestContextBuilder builder) throws Exception {
 		if (! isInitialized) {
-			this.config = config;
-			this.context = new RestContext(this, this.getServletContext(), config);
+			this.builder = builder;
+			this.context = new RestContext(this, this.getServletContext(), builder);
 			this.isInitialized = true;
 		}
 		return context;
@@ -200,8 +200,8 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	@Override /* GenericServlet */
-	public RestConfig getServletConfig() {
-		return config;
+	public RestContextBuilder getServletConfig() {
+		return builder;
 	}
 
 	@Override /* GenericServlet */

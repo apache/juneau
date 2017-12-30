@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * This class is associated with REST classes via the {@link RestResource#paramResolvers()} annotation and
- * {@link RestConfig#addParamResolvers(Class...)} method.
+ * {@link RestContextBuilder#paramResolvers(Class...)} method.
  */
 public abstract class RestParam {
 

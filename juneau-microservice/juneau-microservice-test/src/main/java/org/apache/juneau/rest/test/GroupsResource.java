@@ -32,8 +32,8 @@ public class GroupsResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestHook(INIT)
-	public void init(RestConfig config) throws Exception {
-		config.addSerializers(SSerializer.class).addParsers(PParser.class);
+	public void init(RestContextBuilder builder) throws Exception {
+		builder.serializers(SSerializer.class).parsers(PParser.class);
 	}
 
 	public static class SSerializer extends WriterSerializer {
