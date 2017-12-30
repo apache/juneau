@@ -141,16 +141,14 @@ public final class RestContext extends Context {
 	/**
 	 * Constructor.
 	 *
-	 * @param servletContext
-	 * 	The servlet context object.
-	 * 	Can be <jk>null</jk> if this isn't a
 	 * @param builder The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestContext(ServletContext servletContext, RestContextBuilder builder) throws Exception {
+	public RestContext(RestContextBuilder builder) throws Exception {
 		super(PropertyStore.DEFAULT);
 		RestException _initException = null;
+		ServletContext servletContext = builder.servletContext;
 		try {
 			this.resource = builder.resource;
 			this.builder = builder;
@@ -419,7 +417,8 @@ public final class RestContext extends Context {
 				childBuilder.init(r);
 				if (r instanceof RestServlet)
 					((RestServlet)r).innerInit(childBuilder);
-				RestContext rc2 = new RestContext(servletContext, childBuilder);
+				childBuilder.servletContext(servletContext);
+				RestContext rc2 = new RestContext(childBuilder);
 				if (r instanceof RestServlet)
 					((RestServlet)r).setContext(rc2);
 				path = childBuilder.path;

@@ -83,6 +83,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	final ServletConfig inner;
 	
 	Object resource;
+	ServletContext servletContext;
 
 	//---------------------------------------------------------------------------
 	// The following fields are meant to be modifiable.
@@ -305,6 +306,11 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 				throw new RestServletException("Exception thrown from @RestHook(INIT) method {0}.", m).initCause(e);
 			}
 		}
+	}
+	
+	RestContextBuilder servletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+		return this;
 	}
 
 	/**

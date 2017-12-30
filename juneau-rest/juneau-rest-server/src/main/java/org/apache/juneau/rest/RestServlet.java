@@ -48,8 +48,8 @@ public abstract class RestServlet extends HttpServlet {
 		try {
 			RestContextBuilder rsc = new RestContextBuilder(servletConfig, this.getClass(), null);
 			rsc.init(this);
-			RestContext context = createContext(rsc);
 			super.init(servletConfig);
+			RestContext context = createContext(rsc);
 			context.postInit();
 			context.postInitChildFirst();
 		} catch (RestException e) {
@@ -109,7 +109,8 @@ public abstract class RestServlet extends HttpServlet {
 	private synchronized RestContext createContext(RestContextBuilder builder) throws Exception {
 		if (! isInitialized) {
 			this.builder = builder;
-			this.context = new RestContext(this.getServletContext(), builder);
+			this.builder.servletContext(this.getServletContext());
+			this.context = new RestContext(builder);
 			this.isInitialized = true;
 		}
 		return context;
