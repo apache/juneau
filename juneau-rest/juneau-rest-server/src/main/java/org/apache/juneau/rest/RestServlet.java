@@ -109,7 +109,7 @@ public abstract class RestServlet extends HttpServlet {
 	private synchronized RestContext createContext(RestContextBuilder builder) throws Exception {
 		if (! isInitialized) {
 			this.builder = builder;
-			this.context = new RestContext(this, this.getServletContext(), builder);
+			this.context = new RestContext(this.getServletContext(), builder);
 			this.isInitialized = true;
 		}
 		return context;

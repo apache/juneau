@@ -141,7 +141,6 @@ public final class RestContext extends Context {
 	/**
 	 * Constructor.
 	 *
-	 * @param resource The resource class (a class annotated with {@link RestResource @RestResource}).
 	 * @param servletContext
 	 * 	The servlet context object.
 	 * 	Can be <jk>null</jk> if this isn't a
@@ -149,11 +148,11 @@ public final class RestContext extends Context {
 	 * @throws Exception If any initialization problems were encountered.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestContext(Object resource, ServletContext servletContext, RestContextBuilder builder) throws Exception {
+	public RestContext(ServletContext servletContext, RestContextBuilder builder) throws Exception {
 		super(PropertyStore.DEFAULT);
 		RestException _initException = null;
 		try {
-			this.resource = resource;
+			this.resource = builder.resource;
 			this.builder = builder;
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 			this.parentContext = builder.parentContext;
@@ -406,24 +405,24 @@ public final class RestContext extends Context {
 					r = o;
 				}
 
-				RestContextBuilder childConfig = null;
+				RestContextBuilder childBuilder = null;
 
 				if (o instanceof Class) {
 					Class<?> oc = (Class<?>)o;
-					childConfig = new RestContextBuilder(builder.inner, oc, this);
-					r = resourceResolver.resolve(oc, childConfig);
+					childBuilder = new RestContextBuilder(builder.inner, oc, this);
+					r = resourceResolver.resolve(oc, childBuilder);
 				} else {
 					r = o;
-					childConfig = new RestContextBuilder(builder.inner, o.getClass(), this);
+					childBuilder = new RestContextBuilder(builder.inner, o.getClass(), this);
 				}
 
-				childConfig.init(r);
+				childBuilder.init(r);
 				if (r instanceof RestServlet)
-					((RestServlet)r).innerInit(childConfig);
-				RestContext rc2 = new RestContext(r, servletContext, childConfig);
+					((RestServlet)r).innerInit(childBuilder);
+				RestContext rc2 = new RestContext(servletContext, childBuilder);
 				if (r instanceof RestServlet)
 					((RestServlet)r).setContext(rc2);
-				path = childConfig.path;
+				path = childBuilder.path;
 				childResources.put(path, rc2);
 			}
 

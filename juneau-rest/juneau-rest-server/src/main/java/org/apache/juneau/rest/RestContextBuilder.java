@@ -81,6 +81,8 @@ import org.apache.juneau.utils.*;
 public class RestContextBuilder extends ContextBuilder implements ServletConfig {
 
 	final ServletConfig inner;
+	
+	Object resource;
 
 	//---------------------------------------------------------------------------
 	// The following fields are meant to be modifiable.
@@ -276,6 +278,8 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
 	 */
 	void init(Object resource) throws ServletException {
+		this.resource = resource;
+		
 		Map<String,Method> map = new LinkedHashMap<>();
 		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
 			if (m.isAnnotationPresent(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
