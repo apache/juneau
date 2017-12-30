@@ -37,7 +37,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private RestContextBuilder builder;
+	private volatile RestContextBuilder builder;
 	private RestContext context;
 	private volatile boolean isInitialized = false;
 	private Exception initException;
@@ -46,10 +46,10 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
-			RestContextBuilder rsc = new RestContextBuilder(servletConfig, this.getClass(), null);
-			rsc.init(this);
+			builder = new RestContextBuilder(servletConfig, this.getClass(), null);
+			builder.init(this);
 			super.init(servletConfig);
-			RestContext context = createContext(rsc);
+			RestContext context = createContext(builder);
 			context.postInit();
 			context.postInitChildFirst();
 		} catch (RestException e) {
