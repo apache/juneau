@@ -37,9 +37,9 @@ public abstract class RestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private volatile RestContextBuilder builder;
-	private RestContext context;
-	private volatile boolean isInitialized = false;
+	private RestContextBuilder builder;
+	private volatile RestContext context;
+	private boolean isInitialized = false;
 	private Exception initException;
 
 
@@ -49,7 +49,11 @@ public abstract class RestServlet extends HttpServlet {
 			builder = new RestContextBuilder(servletConfig, this.getClass(), null);
 			builder.init(this);
 			super.init(servletConfig);
-			RestContext context = createContext(builder);
+			if (! isInitialized) {
+				builder.servletContext(this.getServletContext());
+				context = new RestContext(builder);
+				isInitialized = true;
+			}
 			context.postInit();
 			context.postInitChildFirst();
 		} catch (RestException e) {
@@ -77,7 +81,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Bypasses the init(ServletConfig) method and just calls the super.init(ServletConfig) method directly.
 	 * Used when subclasses of RestServlet are attached as child resources.
 	 */
-	void innerInit(ServletConfig servletConfig) throws ServletException {
+	synchronized void innerInit(ServletConfig servletConfig) throws ServletException {
 		super.init(servletConfig);
 	}
 
@@ -85,9 +89,34 @@ public abstract class RestServlet extends HttpServlet {
 	 * Sets the context object for this servlet.
 	 * Used when subclasses of RestServlet are attached as child resources.
 	 */
-	void setContext(RestContext context) {
+	synchronized void setContext(RestContext context) {
 		this.builder = context.builder;
 		this.context = context;
+	}
+
+	@Override /* GenericServlet */
+	public synchronized RestContextBuilder getServletConfig() {
+		return builder;
+	}
+
+	/**
+	 * Returns the read-only context object that contains all the configuration information about this resource.
+	 *
+	 * <p>
+	 * This object is <jk>null</jk> during the call to {@link #init(ServletConfig)} but is populated by the time
+	 * {@link #init()} is called.
+	 *
+	 * <p>
+	 * Resource classes that don't extend from {@link RestServlet} can add the following method to their class to get
+	 * access to this context object:
+	 * <p class='bcode'>
+	 * 	<jk>public void</jk> init(RestServletContext context) <jk>throws</jk> Exception;
+	 * </p>
+	 *
+	 * @return The context information on this servlet.
+	 */
+	protected synchronized RestContext getContext() {
+		return context;
 	}
 
 	/**
@@ -104,17 +133,6 @@ public abstract class RestServlet extends HttpServlet {
 	 * @throws Exception Any exception can be thrown to signal an initialization failure.
 	 */
 	public synchronized void init(RestContext context) throws Exception {}
-
-
-	private synchronized RestContext createContext(RestContextBuilder builder) throws Exception {
-		if (! isInitialized) {
-			this.builder = builder;
-			this.builder.servletContext(this.getServletContext());
-			this.context = new RestContext(builder);
-			this.isInitialized = true;
-		}
-		return context;
-	}
 
 
 	//--------------------------------------------------------------------------------
@@ -150,26 +168,6 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the read-only context object that contains all the configuration information about this resource.
-	 *
-	 * <p>
-	 * This object is <jk>null</jk> during the call to {@link #init(ServletConfig)} but is populated by the time
-	 * {@link #init()} is called.
-	 *
-	 * <p>
-	 * Resource classes that don't extend from {@link RestServlet} can add the following method to their class to get
-	 * access to this context object:
-	 * <p class='bcode'>
-	 * 	<jk>public void</jk> init(RestServletContext context) <jk>throws</jk> Exception;
-	 * </p>
-	 *
-	 * @return The context information on this servlet.
-	 */
-	protected RestContext getContext() {
-		return context;
-	}
-
-	/**
 	 * Convenience method for calling <code>getContext().getLogger().log(level, msg, args);</code>
 	 *
 	 * @param level The log level.
@@ -201,12 +199,7 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	@Override /* GenericServlet */
-	public RestContextBuilder getServletConfig() {
-		return builder;
-	}
-
-	@Override /* GenericServlet */
-	public void destroy() {
+	public synchronized void destroy() {
 		if (context != null)
 			context.destroy();
 		super.destroy();
