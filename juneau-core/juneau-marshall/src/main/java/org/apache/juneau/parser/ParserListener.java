@@ -22,6 +22,11 @@ import org.apache.juneau.*;
 public class ParserListener {
 
 	/**
+	 * Represents no parser listener.
+	 */
+	public static final class Null extends ParserListener {}
+
+	/**
 	 * Gets called when an unknown bean property is detected in a document.
 	 *
 	 * <p>

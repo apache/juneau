@@ -635,12 +635,12 @@ public @interface RestResource {
 	/**
 	 * Specifies the serializer listener class to use for listening for non-fatal errors.
 	 */
-	Class<? extends SerializerListener> serializerListener() default SerializerListener.class;
+	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
 
 	/**
 	 * Specifies the parser listener class to use for listening for non-fatal errors.
 	 */
-	Class<? extends ParserListener> parserListener() default ParserListener.class;
+	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 
 	/**
 	 * Provides swagger-specific metadata on this resource.

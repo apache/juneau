@@ -705,8 +705,8 @@ public final class RestContext extends BeanContext {
 			if (messageBundle == null)
 				messageBundle = new MessageBundle(resource.getClass(), "");
 			
-			serializers = rcb.serializers.apply(ps).add(properties).listener(rcb.serializerListener).build();
-			parsers = rcb.parsers.apply(ps).add(properties).listener(rcb.parserListener).build();
+			serializers = rcb.serializers.apply(ps).add(properties).build();
+			parsers = rcb.parsers.apply(ps).add(properties).build();
 			partSerializer = resolve(resource, HttpPartSerializer.class, rcb.partSerializer, serializers.getPropertyStore());
 			partParser = resolve(resource, HttpPartParser.class, rcb.partParser, parsers.getPropertyStore());
 			encoders = rcb.encoders.build();

@@ -20,6 +20,11 @@ import org.apache.juneau.*;
  * Class for listening for serialize events during a serialization.
  */
 public class SerializerListener {
+	
+	/**
+	 * Represents no serializer listener.
+	 */
+	public static final class Null extends SerializerListener {}
 
 	/**
 	 * Called when an exception is thrown when trying to call a bean getter method.

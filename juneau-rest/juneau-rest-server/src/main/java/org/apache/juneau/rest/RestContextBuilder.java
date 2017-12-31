@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.parser.Parser.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -98,8 +100,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	List<Class<?>>
 		paramResolvers = new ArrayList<>();
-	Class<? extends SerializerListener> serializerListener;
-	Class<? extends ParserListener> parserListener;
 	SerializerGroupBuilder serializers = SerializerGroup.create();
 	ParserGroupBuilder parsers = ParserGroup.create();
 	Object partSerializer = SimpleUonPartSerializer.class, partParser = UonPartParser.class;
@@ -416,38 +416,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder setProperties(Map<String,Object> properties) {
 		this.properties.putAll(properties);
-		return this;
-	}
-
-	/**
-	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#serializerListener() @RestResource.serializerListener()} annotation.
-	 *
-	 * @param listener The listener to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder serializerListener(Class<? extends SerializerListener> listener) {
-		if (listener != SerializerListener.class)
-			this.serializerListener = listener;
-		return this;
-	}
-
-	/**
-	 * Specifies the parser listener class to use for listening to non-fatal parse errors.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#parserListener() @RestResource.parserListener()} annotation.
-	 *
-	 * @param listener The listener to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder parserListener(Class<? extends ParserListener> listener) {
-		if (listener != ParserListener.class)
-			this.parserListener = listener;
 		return this;
 	}
 
@@ -1515,6 +1483,38 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder maxInput(String value) {
 		return set(REST_maxInput, value);
+	}
+
+	/**
+	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#serializerListener() @RestResource.serializerListener()} annotation.
+	 *
+	 * @param listener The listener to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder serializerListener(Class<? extends SerializerListener> listener) {
+		if (listener == SerializerListener.Null.class)
+			return this;
+		return set(SERIALIZER_listener, listener);
+	}
+
+	/**
+	 * Specifies the parser listener class to use for listening to non-fatal parse errors.
+	 *
+	 * <p>
+	 * This is the programmatic equivalent to the
+	 * {@link RestResource#parserListener() @RestResource.parserListener()} annotation.
+	 *
+	 * @param listener The listener to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder parserListener(Class<? extends ParserListener> listener) {
+		if (listener == ParserListener.Null.class)
+			return this;
+		return set(PARSER_listener, listener);
 	}
 
 	@Override /* BeanContextBuilder */
