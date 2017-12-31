@@ -723,20 +723,23 @@ public @interface RestResource {
 	String contextPath() default "";
 
 	/**
-	 * Enable header URL parameters.
+	 * <b>Configuration property:</b>  Allow header URL parameters.
 	 *
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
-	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
-	 *
-	 * <ul>
+	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowHeaderParams}
+	 * 	<li>Annotation:  {@link RestResource#allowHeaderParams()}
+	 * 	<li>Method: {@link RestContextBuilder#allowHeaderParams(boolean)}
 	 * 	<li>Boolean value.
-	 * 	<li>Defaults to system property <js>"juneau.allowHeaderParams"</js>, or <js>"true"</js> if not specified.
 	 * 	<li>Can contain variables.
 	 *		<li>Parameter names are case-insensitive.
 	 * 	<li>Useful for debugging REST interface using only a browser.
-	 * </ul>
+	 *	</ul>
 	 */
 	String allowHeaderParams() default "";
 
@@ -754,6 +757,7 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
 	 * 	<li>Defaults to system property <js>"juneau.allowMethodParam"</js>, or <js>"HEAD,OPTIONS"</js> if not specified.
+	 * 	<li>Boolean value.
 	 * 	<li>Can contain variables.
 	 * 	<li>Parameter name is case-insensitive.
 	 * 	<li>Use "*" to represent all methods.
@@ -768,71 +772,92 @@ public @interface RestResource {
 	String allowMethodParam() default "";
 
 	/**
-	 * Enable <js>"body"</js> URL parameter.
+	 * <b>Configuration property:</b>  Allow body URL parameter.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.allowBodyParam.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
 	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
-	 * For example:  <js>"?body={name:'John%20Smith',age:45}"</js>
-	 *
-	 * <ul>
+	 * <br>
+	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowBodyParam}
+	 * 	<li>Annotation:  {@link RestResource#allowBodyParam()}
+	 * 	<li>Method: {@link RestContextBuilder#allowBodyParam(boolean)}
 	 * 	<li>Boolean value.
-	 * 	<li>Defaults to system property <js>"juneau.allowBodyParam"</js>, or <js>"true"</js> if not specified.
 	 * 	<li>Can contain variables.
 	 * 	<li>Parameter name is case-insensitive.
 	 * 	<li>Useful for debugging PUT and POST methods using only a browser.
-	 * </ul>
+	 *	</ul>
 	 */
 	String allowBodyParam() default "";
 
 	/**
-	 * Render stack traces.
+	 * <b>Configuration property:</b>  Render response stack traces in responses.
 	 *
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 *
-	 * <ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_renderResponseStackTraces}
+	 * 	<li>Annotation:  {@link RestResource#renderResponseStackTraces()}
+	 * 	<li>Method: {@link RestContextBuilder#renderResponseStackTraces(boolean)}
 	 * 	<li>Boolean value.
-	 * 	<li>Defaults to system property <js>"juneau.renderResponseStackTraces"</js>, or <js>"false"</js> if not specified.
 	 * 	<li>Can contain variables.
-	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns.
-	 * </ul>
+	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
+	 * 		caution when enabling.
+	 *	</ul>
 	 */
 	String renderResponseStackTraces() default "";
 
 	/**
-	 * Use stack trace hashes.
+	 * <b>Configuration property:</b>  Use stack trace hashes.
 	 *
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
 	 *
-	 * <ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_useStackTraceHashes}
+	 * 	<li>Annotation:  {@link RestResource#useStackTraceHashes()}
+	 * 	<li>Method: {@link RestContextBuilder#useStackTraceHashes(boolean)}
 	 * 	<li>Boolean value.
-	 * 	<li>Defaults to system property <js>"juneau.useStackTraceHashes"</js>, or <js>"true"</js> if not specified.
 	 * 	<li>Can contain variables.
-	 * </ul>
+	 *	</ul>
 	 */
 	String useStackTraceHashes() default "";
 
 	/**
-	 * Default character encoding.
-	 *
+	 * <b>Configuration property:</b>  Default character encoding.
+	 * 
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultCharset}
+	 * 	<li>Annotation:  {@link RestResource#defaultCharset()} / {@link RestMethod#defaultCharset()}
+	 * 	<li>Method: {@link RestContextBuilder#defaultCharset(String)}
 	 * 	<li>String value.
-	 * 	<li>Defaults to system property <js>"juneau.defaultCharset"</js>, or <js>"utf-8"</js> if not specified.
 	 * 	<li>Can contain variables.
-	 * 	<li>Can be overridden at the method level using {@link RestMethod#defaultCharset() @RestMethod.defaultCharset()}.
-	 * </ul>
+	 *	</ul>
 	 */
 	String defaultCharset() default "";
 
 	/**
-	 * Expected format of request parameters.
+	 * <b>Configuration property:</b>  Expected format of request parameters.
 	 *
+	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -844,47 +869,46 @@ public @interface RestResource {
 	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
 	 * 		mode.
 	 * </ul>
-	 *
 	 * <p>
 	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
 	 * <js>"foo"</js> when using UON mode.
 	 *
-	 * <p>
-	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and
-	 * {@link Query#format() @Query.format()} annotations.
-	 *
-	 * <ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramFormat}
+	 * 	<li>Annotation:  {@link RestResource#paramFormat()} / {@link RestMethod#paramFormat()}
+	 * 	<li>Method: {@link RestContextBuilder#paramFormat(String)}
 	 * 	<li>String value.
-	 * 	<li>Defaults to system property <js>"juneau.paramFormat"</js>, or <js>"UON"</js> if not specified.
 	 * 	<li>Can contain variables.
-	 * 	<li>Can be overridden at the method level using {@link RestMethod#paramFormat() @RestMethod.paramFormat()}.
-	 * </ul>
+	 *	</ul>
 	 */
 	String paramFormat() default "";
 	
 	/**
-	 * The maximum allowed input size (in bytes) on HTTP requests.
-	 * 
+	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
+	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 * 
-	 * <ul>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		maxInput=<js>"100M"</js>
+	 * 	)
+	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_maxInput}
+	 * 	<li>Annotation:  {@link RestResource#maxInput()} / {@link RestMethod#maxInput()}
+	 * 	<li>Method: {@link RestContextBuilder#maxInput(String)}
 	 * 	<li>String value that gets resolved to a <jk>long</jk>.
 	 * 	<li>Can contain variables.
 	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
 	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-	 * 	<li>Defaults to <js>"100M"</js>.
 	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		path=<js>"/myPath"</js>,
-	 * 		maxInput=<js>"100M"</js>
-	 * 	)
-	 * </p>
+	 *	</ul>
 	 */
 	String maxInput() default "";
 }

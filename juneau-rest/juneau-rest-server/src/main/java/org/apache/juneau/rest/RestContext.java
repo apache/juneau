@@ -56,6 +56,203 @@ import org.apache.juneau.utils.*;
  */
 public final class RestContext extends Context {
 	
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String PREFIX = "RestContext.";
+	
+	/**
+	 * <b>Configuration property:</b>  Allow header URL parameters.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.allowHeaderParams.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>
+	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowHeaderParams}
+	 * 	<li>Annotation:  {@link RestResource#allowHeaderParams()}
+	 * 	<li>Method: {@link RestContextBuilder#allowHeaderParams(boolean)}
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Useful for debugging REST interface using only a browser.
+	 *	</ul>
+	 */
+	public static final String REST_allowHeaderParams = PREFIX + "allowHeaderParams.b";
+	
+	/**
+	 * <b>Configuration property:</b>  Allow body URL parameter.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.allowBodyParam.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * URL parameter.
+	 * <br>
+	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowBodyParam}
+	 * 	<li>Annotation:  {@link RestResource#allowBodyParam()}
+	 * 	<li>Method: {@link RestContextBuilder#allowBodyParam(boolean)}
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Useful for debugging PUT and POST methods using only a browser.
+	 *	</ul>
+	 */
+	public static final String REST_allowBodyParam = PREFIX + "allowBodyParam.b";
+	
+	/**
+	 * <b>Configuration property:</b>  Render response stack traces in responses.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.renderResponseStackTraces.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Render stack traces in HTTP response bodies when errors occur.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_renderResponseStackTraces}
+	 * 	<li>Annotation:  {@link RestResource#renderResponseStackTraces()}
+	 * 	<li>Method: {@link RestContextBuilder#renderResponseStackTraces(boolean)}
+	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
+	 * 		caution when enabling.
+	 *	</ul>
+	 */
+	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
+	
+	/**
+	 * <b>Configuration property:</b>  Use stack trace hashes.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.useStackTraceHashes.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
+	 * made available through the {@link RestException#getOccurrence()} method.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_useStackTraceHashes}
+	 * 	<li>Annotation:  {@link RestResource#useStackTraceHashes()}
+	 * 	<li>Method: {@link RestContextBuilder#useStackTraceHashes(boolean)}
+	 *	</ul>
+	 */
+	public static final String REST_useStackTraceHashes = PREFIX + "useStackTraceHashes.b";
+	
+	/**
+	 * <b>Configuration property:</b>  Default character encoding.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.defaultCharset.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"utf-8"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * The default character encoding for the request and response if not specified on the request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultCharset}
+	 * 	<li>Annotation:  {@link RestResource#defaultCharset()} / {@link RestMethod#defaultCharset()}
+	 * 	<li>Method: {@link RestContextBuilder#defaultCharset(String)}
+	 *	</ul>
+	 */
+	public static final String REST_defaultCharset = PREFIX + "defaultCharset.s";
+	
+	/**
+	 * <b>Configuration property:</b>  Expected format of request parameters.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.paramFormat.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"UON"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
+	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 	<li>
+	 * 		<js>"PLAIN"</js> - Plain text.
+	 * 		<br>This treats request parameters as plain text.
+	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
+	 * 		mode.
+	 * </ul>
+	 * <p>
+	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
+	 * <js>"foo"</js> when using UON mode.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramFormat}
+	 * 	<li>Annotation:  {@link RestResource#paramFormat()} / {@link RestMethod#paramFormat()}
+	 * 	<li>Method: {@link RestContextBuilder#paramFormat(String)}
+	 *	</ul>
+	 * TODO - Deprecate?
+	 */
+	public static final String REST_paramFormat = PREFIX + "paramFormat.s";
+
+	/**
+	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.maxInput.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"100M"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
+	 * in out-of-memory errors which could affect system stability.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_maxInput}
+	 * 	<li>Annotation:  {@link RestResource#maxInput()} / {@link RestMethod#maxInput()}
+	 * 	<li>Method: {@link RestContextBuilder#maxInput(String)}
+	 * 	<li>String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
+	 *	</ul>
+	 */
+	public static final String REST_maxInput = PREFIX + "maxInput.s";
+	
+	
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
 	private final Object resource;
 	final RestContextBuilder builder;
 	private final boolean
@@ -146,24 +343,27 @@ public final class RestContext extends Context {
 	 */
 	@SuppressWarnings("unchecked")
 	public RestContext(RestContextBuilder builder) throws Exception {
-		super(PropertyStore.DEFAULT);
+		super(builder.getPropertyStore());
+		
 		RestException _initException = null;
 		ServletContext servletContext = builder.servletContext;
+
+		allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
+		allowBodyParam = getProperty(REST_allowBodyParam, boolean.class, true);
+		renderResponseStackTraces = getProperty(REST_renderResponseStackTraces, boolean.class, false);
+		useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
+		defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
+		paramFormat = getProperty(REST_paramFormat, String.class, "UON");
+		maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
+		
 		try {
 			this.resource = builder.resource;
 			this.builder = builder;
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 			this.parentContext = builder.parentContext;
 
-			Builder b = new Builder(resource, builder);
-			this.allowHeaderParams = b.allowHeaderParams;
-			this.allowBodyParam = b.allowBodyParam;
-			this.renderResponseStackTraces = b.renderResponseStackTraces;
-			this.useStackTraceHashes = b.useStackTraceHashes;
+			Builder b = new Builder(builder);
 			this.allowMethodParams = Collections.unmodifiableSet(b.allowMethodParams);
-			this.defaultCharset = b.defaultCharset;
-			this.paramFormat = b.paramFormat;
-			this.maxInput = b.maxInput;
 			this.varResolver = b.varResolver;
 			this.configFile = b.configFile;
 			this.properties = b.properties;
@@ -447,7 +647,6 @@ public final class RestContext extends Context {
 
 	private static final class Builder {
 
-		boolean allowHeaderParams, allowBodyParam, renderResponseStackTraces, useStackTraceHashes;
 		VarResolver varResolver;
 		ConfigFile configFile;
 		ObjectMap properties;
@@ -459,8 +658,7 @@ public final class RestContext extends Context {
 		HttpPartSerializer partSerializer;
 		HttpPartParser partParser;
 		EncoderGroup encoders;
-		String clientVersionHeader = "", defaultCharset, paramFormat;
-		long maxInput;
+		String clientVersionHeader = "";
 
 		List<MediaType> supportedContentTypes, supportedAcceptTypes;
 		Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -481,43 +679,38 @@ public final class RestContext extends Context {
 		String contextPath;
 
 		@SuppressWarnings("unchecked")
-		Builder(Object resource, RestContextBuilder sc) throws Exception {
+		Builder(RestContextBuilder rcb) throws Exception {
 
+			Object resource = rcb.resource;
+			
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
 
-			allowHeaderParams = getBoolean(sc.allowHeaderParams, "juneau.allowHeaderParams", true);
-			allowBodyParam = getBoolean(sc.allowBodyParam, "juneau.allowBodyParam", true);
-			renderResponseStackTraces = getBoolean(sc.renderResponseStackTraces, "juneau.renderResponseStackTraces", false);
-			useStackTraceHashes = getBoolean(sc.useStackTraceHashes, "juneau.useStackTraceHashes", true);
-			defaultCharset = getString(sc.defaultCharset, "juneau.defaultCharset", "utf-8");
-			paramFormat = getString(sc.paramFormat, "juneau.paramFormat", "UON");
-			resourceResolver = sc.resourceResolver;
-			maxInput = getLong(sc.maxInput, "juneau.maxInput", 100_000_000l);
+			resourceResolver = rcb.resourceResolver;
 
-			String amp = getString(sc.allowMethodParam, "juneau.allowMethodParam", "HEAD,OPTIONS");
+			String amp = getString(rcb.allowMethodParam, "juneau.allowMethodParam", "HEAD,OPTIONS");
 			if ("true".equals(amp))
 				amp = "*";// For backwards compatibility when this was a boolean field.
 			else
 				amp = amp.toUpperCase();
 			allowMethodParams.addAll(Arrays.asList(StringUtils.split(amp)));
 
-			varResolver = sc.varResolverBuilder
+			varResolver = rcb.varResolverBuilder
 				.vars(FileVar.class, LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
 				.build()
 			;
 			
-			configFile = sc.configFile.getResolving(this.varResolver);
-			properties = sc.properties;
+			configFile = rcb.configFile.getResolving(this.varResolver);
+			properties = rcb.properties;
 			
-			beanFilters = ArrayUtils.reverseInline(toObjectArray(sc.beanFilters, Class.class));
-			pojoSwaps = ArrayUtils.reverseInline(toObjectArray(sc.pojoSwaps, Class.class));
+			beanFilters = ArrayUtils.reverseInline(toObjectArray(rcb.beanFilters, Class.class));
+			pojoSwaps = ArrayUtils.reverseInline(toObjectArray(rcb.pojoSwaps, Class.class));
 
-			for (Class<?> c : sc.paramResolvers) {
+			for (Class<?> c : rcb.paramResolvers) {
 				RestParam rp = newInstanceFromOuter(resource, RestParam.class, c, true);
 				paramResolvers.put(rp.forClass(), rp);
 			}
 
-			clientVersionHeader = sc.clientVersionHeader;
+			clientVersionHeader = rcb.clientVersionHeader;
 
 			// Find resource resource bundle location.
 			for (Map.Entry<Class<?>,RestResource> e : restResourceAnnotationsChildFirst.entrySet()) {
@@ -534,34 +727,34 @@ public final class RestContext extends Context {
 			if (messageBundle == null)
 				messageBundle = new MessageBundle(resource.getClass(), "");
 
-			serializers = sc.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(sc.serializerListener).build();
-			parsers = sc.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(sc.parserListener).build();
-			partSerializer = resolve(resource, HttpPartSerializer.class, sc.partSerializer, serializers.getPropertyStore());
-			partParser = resolve(resource, HttpPartParser.class, sc.partParser, parsers.getPropertyStore());
-			encoders = sc.encoders.build();
-			supportedContentTypes = sc.supportedContentTypes != null ? sc.supportedContentTypes : serializers.getSupportedMediaTypes();
-			supportedAcceptTypes = sc.supportedAcceptTypes != null ? sc.supportedAcceptTypes : parsers.getSupportedMediaTypes();
-			defaultRequestHeaders.putAll(sc.defaultRequestHeaders);
-			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(sc.defaultResponseHeaders));
+			serializers = rcb.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(rcb.serializerListener).build();
+			parsers = rcb.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(rcb.parserListener).build();
+			partSerializer = resolve(resource, HttpPartSerializer.class, rcb.partSerializer, serializers.getPropertyStore());
+			partParser = resolve(resource, HttpPartParser.class, rcb.partParser, parsers.getPropertyStore());
+			encoders = rcb.encoders.build();
+			supportedContentTypes = rcb.supportedContentTypes != null ? rcb.supportedContentTypes : serializers.getSupportedMediaTypes();
+			supportedAcceptTypes = rcb.supportedAcceptTypes != null ? rcb.supportedAcceptTypes : parsers.getSupportedMediaTypes();
+			defaultRequestHeaders.putAll(rcb.defaultRequestHeaders);
+			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(rcb.defaultResponseHeaders));
 			beanContext = BeanContext.create().beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).build();
-			contextPath = sc.contextPath;
+			contextPath = rcb.contextPath;
 
-			for (Object o : sc.converters)
+			for (Object o : rcb.converters)
 				converters.add(resolve(resource, RestConverter.class, o));
 
-			for (Object o : sc.guards)
+			for (Object o : rcb.guards)
 				guards.add(resolve(resource, RestGuard.class, o));
 
-			for (Object o : sc.responseHandlers)
+			for (Object o : rcb.responseHandlers)
 				responseHandlers.add(resolve(resource, ResponseHandler.class, o));
 
-			mimetypesFileTypeMap = sc.mimeTypes;
+			mimetypesFileTypeMap = rcb.mimeTypes;
 
-			VarResolver vr = sc.getVarResolverBuilder().build();
+			VarResolver vr = rcb.getVarResolverBuilder().build();
 
 			staticFilesMap = new LinkedHashMap<>();
-			if (sc.staticFiles != null) {
-				for (Object o : sc.staticFiles) {
+			if (rcb.staticFiles != null) {
+				for (Object o : rcb.staticFiles) {
 					if (o instanceof Pair) {
 						Pair<Class<?>,String> p = (Pair<Class<?>,String>)o;
 						// TODO - Currently doesn't take parent class location into account.
@@ -573,15 +766,15 @@ public final class RestContext extends Context {
 			}
 			staticFilesPrefixes = staticFilesMap.keySet().toArray(new String[0]);
 
-			logger = sc.logger == null ? new RestLogger.NoOp() : resolve(resource, RestLogger.class, sc.logger);
+			logger = rcb.logger == null ? new RestLogger.NoOp() : resolve(resource, RestLogger.class, rcb.logger);
 
-			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
+			fullPath = (rcb.parentContext == null ? "" : (rcb.parentContext.fullPath + '/')) + rcb.path;
 
-			HtmlDocBuilder hdb = new HtmlDocBuilder(sc.properties);
+			HtmlDocBuilder hdb = new HtmlDocBuilder(rcb.properties);
 
 			this.widgets = new LinkedHashMap<>();
 
-			for (Class<? extends Widget> wc : sc.widgets) {
+			for (Class<? extends Widget> wc : rcb.widgets) {
 				Widget w = resolve(resource, Widget.class, wc);
 				String n = w.getName();
 				this.widgets.put(n, w);

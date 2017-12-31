@@ -63,7 +63,7 @@ public class DockerRegistryResource extends Resource {
 	}
 
 	@Override /* Servlet */
-	public void destroy() {
+	public synchronized void destroy() {
 		rc.closeQuietly();
 		super.destroy();
 	}

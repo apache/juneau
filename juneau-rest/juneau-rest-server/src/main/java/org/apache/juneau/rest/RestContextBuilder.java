@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -120,12 +121,12 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	String contextPath;
 	HtmlDocBuilder htmlDocBuilder;
 	List<Class<? extends Widget>> widgets = new ArrayList<>();
+	Object allowMethodParam;
 
 	Object resourceResolver = RestResourceResolverSimple.class;
 	Object logger = RestLogger.Normal.class;
 	Object callHandler = RestCallHandler.class;
 	Object infoProvider = RestInfoProvider.class;
-	Object allowHeaderParams, allowMethodParam, allowBodyParam, renderResponseStackTraces, useStackTraceHashes, defaultCharset, paramFormat, maxInput;
 
 	Class<?> resourceClass;
 
@@ -1134,20 +1135,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
-	 * Sets the <code>allowHeaderParams</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#allowHeaderParams() RestResource.allowHeaderParams()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder allowHeaderParams(boolean value) {
-		this.allowHeaderParams = value;
-		return this;
-	}
-
-	/**
 	 * Sets the <code>allowMethodParam</code> setting on this resource.
 	 *
 	 * <p>
@@ -1158,90 +1145,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public RestContextBuilder allowMethodParam(String...value) {
 		this.allowMethodParam = StringUtils.join(value, ',');
-		return this;
-	}
-
-	/**
-	 * Sets the <code>allowBodyParam</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#allowBodyParam() RestResource.allowBodyParam()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder allowBodyParam(boolean value) {
-		this.allowBodyParam = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <code>renderResponseStackTraces</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#renderResponseStackTraces() RestResource.renderResponseStackTraces()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder renderResponseStackTraces(boolean value) {
-		this.renderResponseStackTraces = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <code>useStackTraceHashes</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#useStackTraceHashes() RestResource.useStackTraceHashes()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder useStackTraceHashes(boolean value) {
-		this.useStackTraceHashes = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <code>defaultCharset</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#defaultCharset() RestResource.defaultCharset()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder defaultCharset(String value) {
-		this.defaultCharset = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <code>paramFormat</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#paramFormat() RestResource.paramFormat()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder paramFormat(String value) {
-		this.paramFormat = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <code>maxInput</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#maxInput() RestResource.maxInput()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder maxInput(String value) {
-		this.maxInput = value;
 		return this;
 	}
 
@@ -1485,6 +1388,242 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return varResolverBuilder;
 	}
 
+	
+	//----------------------------------------------------------------------------------------------------
+	// Properties
+	//----------------------------------------------------------------------------------------------------
+
+	/**
+	 * <b>Configuration property:</b>  Allow header URL parameters.
+	 *
+	 * <p>
+	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowHeaderParams}
+	 * 	<li>Annotation:  {@link RestResource#allowHeaderParams()}
+	 * 	<li>Method: {@link RestContextBuilder#allowHeaderParams(boolean)}
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Useful for debugging REST interface using only a browser.
+	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_allowHeaderParams</jsf>, value)</code>.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder allowHeaderParams(boolean value) {
+		return set(REST_allowHeaderParams, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Allow body URL parameter.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.allowBodyParam.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * URL parameter.
+	 * <br>
+	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowBodyParam}
+	 * 	<li>Annotation:  {@link RestResource#allowBodyParam()}
+	 * 	<li>Method: {@link RestContextBuilder#allowBodyParam(boolean)}
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Useful for debugging PUT and POST methods using only a browser.
+	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_allowBodyParam</jsf>, value)</code>.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder allowBodyParam(boolean value) {
+		return set(REST_allowBodyParam, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Render response stack traces in responses.
+	 *
+	 * <p>
+	 * Render stack traces in HTTP response bodies when errors occur.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_renderResponseStackTraces}
+	 * 	<li>Annotation:  {@link RestResource#renderResponseStackTraces()}
+	 * 	<li>Method: {@link RestContextBuilder#renderResponseStackTraces(boolean)}
+	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
+	 * 		caution when enabling.
+	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_renderResponseStackTraces</jsf>, value)</code>.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder renderResponseStackTraces(boolean value) {
+		return set(REST_renderResponseStackTraces, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Use stack trace hashes.
+	 *
+	 * <p>
+	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
+	 * made available through the {@link RestException#getOccurrence()} method.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_useStackTraceHashes}
+	 * 	<li>Annotation:  {@link RestResource#useStackTraceHashes()} 
+	 * 	<li>Method: {@link RestContextBuilder#useStackTraceHashes(boolean)}
+	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_useStackTraceHashes</jsf>, value)</code>.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder useStackTraceHashes(boolean value) {
+		return set(REST_useStackTraceHashes, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Default character encoding.
+	 * 
+	 * <p>
+	 * The default character encoding for the request and response if not specified on the request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultCharset}
+	 * 	<li>Annotation:  {@link RestResource#defaultCharset()} / {@link RestMethod#defaultCharset()}
+	 * 	<li>Method: {@link RestContextBuilder#defaultCharset(String)}
+	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_defaultCharset</jsf>, value)</code>.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder defaultCharset(String value) {
+		return set(REST_defaultCharset, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Expected format of request parameters.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
+	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 	<li>
+	 * 		<js>"PLAIN"</js> - Plain text.
+	 * 		<br>This treats request parameters as plain text.
+	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
+	 * 		mode.
+	 * </ul>
+	 * <p>
+	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
+	 * <js>"foo"</js> when using UON mode.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramFormat}
+	 * 	<li>Annotation:  {@link RestResource#paramFormat()} / {@link RestMethod#paramFormat()}
+	 * 	<li>Method: {@link RestContextBuilder#paramFormat(String)}
+	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_paramFormat</jsf>, value)</code>.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder paramFormat(String value) {
+		return set(REST_paramFormat, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
+	 *
+	 * <p>
+	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
+	 * in out-of-memory errors which could affect system stability.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_maxInput}
+	 * 	<li>Annotation:  {@link RestResource#maxInput()} / {@link RestMethod#maxInput()}
+	 * 	<li>Method: {@link RestContextBuilder#maxInput(String)}
+	 * 	<li>String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder maxInput(String value) {
+		return set(REST_maxInput, value);
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder add(Map<String,Object> properties) {
+		super.add(properties);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder apply(PropertyStore copyFrom) {
+		super.apply(copyFrom);
+		return this;
+	}
+	
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods inherited from ServletConfig

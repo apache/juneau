@@ -635,23 +635,26 @@ public @interface RestMethod {
 	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
-	 * Default character encoding.
-	 *
+	 * <b>Configuration property:</b>  Default character encoding.
+	 * 
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultCharset}
+	 * 	<li>Annotation:  {@link RestResource#defaultCharset()} / {@link RestMethod#defaultCharset()}
+	 * 	<li>Method: {@link RestContextBuilder#defaultCharset(String)}
 	 * 	<li>String value.
-	 * 	<li>Defaults to system property <js>"juneau.defaultCharset"</js>, or <js>"utf-8"</js> if not specified.
 	 * 	<li>Can contain variables.
-	 * 	<li>Overrides the value at the class level via {@link RestResource#defaultCharset() @RestResource.defaultCharset()}.
-	 * </ul>
+	 *	</ul>
 	 */
 	String defaultCharset() default "";
 
 	/**
-	 * Expected format of request parameters.
+	 * <b>Configuration property:</b>  Expected format of request parameters.
 	 *
+	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -663,39 +666,27 @@ public @interface RestMethod {
 	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
 	 * 		mode.
 	 * </ul>
-	 *
 	 * <p>
 	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
 	 * <js>"foo"</js> when using UON mode.
 	 *
-	 * <p>
-	 * The format can also be specified per-parameter using the {@link FormData#format() @FormData.format()} and
-	 * {@link Query#format() @Query.format()} annotations.
-	 *
-	 * <ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramFormat}
+	 * 	<li>Annotation:  {@link RestResource#paramFormat()} / {@link RestMethod#paramFormat()}
+	 * 	<li>Method: {@link RestContextBuilder#paramFormat(String)}
 	 * 	<li>String value.
-	 * 	<li>Defaults to system property <js>"juneau.paramFormat"</js>, or <js>"UON"</js> if not specified.
 	 * 	<li>Can contain variables.
-	 * 	<li>Overrides the value at the class level via {@link RestResource#paramFormat() @RestResource.paramFormat()}.
-	 * </ul>
+	 *	</ul>
 	 */
 	String paramFormat() default "";
 	
 	/**
-	 * The maximum allowed input size (in bytes) on HTTP requests.
-	 * 
+	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
+	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
-	 * 
-	 * <ul>
-	 * 	<li>String value that gets resolved to a <jk>long</jk>.
-	 * 	<li>Can contain variables.
-	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
-	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-	 * 	<li>Defaults to <js>"100M"</js>.
-	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
-	 * </ul>
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -703,6 +694,18 @@ public @interface RestMethod {
 	 * 		maxInput=<js>"100M"</js>
 	 * 	)
 	 * </p>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_maxInput}
+	 * 	<li>Annotation:  {@link RestResource#maxInput()} / {@link RestMethod#maxInput()}
+	 * 	<li>Method: {@link RestContextBuilder#maxInput(String)}
+	 * 	<li>String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>Can contain variables.
+	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
+	 *	</ul>
 	 */
 	String maxInput() default "";
 }
