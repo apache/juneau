@@ -291,10 +291,9 @@
 	<p class='bcode'>
 	<ja>@RestResource</ja>(
 		path=<js>"/remoteable"</js>,
-		properties={
-			<jc>// Allow us to use method=POST from a browser.</jc>
-			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>)
-		}
+		
+		<jc>// Allow us to use method=POST from a browser.</jc>
+		allowedMethodParams=<js>"*"</js>
 	)
 	<jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet {
 	</p>

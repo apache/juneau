@@ -44,7 +44,7 @@ import org.apache.juneau.transforms.*;
 	properties={
 		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
 	},
-	allowMethodParam="*",
+	allowedMethodParams="*",
 	pojoSwaps={
 		IteratorSwap.class,       // Allows Iterators and Iterables to be serialized.
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.

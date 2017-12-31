@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	path="/testParams",
 	serializers=PlainTextSerializer.class,
-	allowMethodParam="*",
+	allowedMethodParams="*",
 	pojoSwaps={CalendarSwap.DateMedium.class},
 	messages="ParamsResource"
 )

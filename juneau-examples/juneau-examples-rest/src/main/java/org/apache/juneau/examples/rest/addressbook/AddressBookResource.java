@@ -83,7 +83,7 @@ import org.apache.juneau.utils.*;
 	),
 
 	// Allow INIT as a method parameter.
-	allowMethodParam="*",
+	allowedMethodParams="*",
 	
 	// Properties that get applied to all serializers and parsers.
 	properties={

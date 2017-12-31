@@ -69,7 +69,7 @@ import org.apache.juneau.utils.*;
 			"options: servlet:/?method=OPTIONS"
 		}
 	),
-	allowMethodParam="*",
+	allowedMethodParams="*",
 	properties={
 		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
 		@Property(name="DirectoryResource.rootDir", value="")

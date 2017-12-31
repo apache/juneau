@@ -5678,7 +5678,7 @@
 		),
 
 		<jc>// Allow INIT as a method parameter.</jc>
-		allowMethodParam=<js>"*"</js>,
+		allowedMethodParams=<js>"*"</js>,
 	
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
 		properties={
@@ -6360,7 +6360,7 @@
 				</p>
 				<p>
 					The ability to overload methods is enabled through the 
-					{@link org.apache.juneau.rest.annotation.RestResource#allowMethodParam()} setting.
+					<code><del>RestResource.allowMethodParam()</del></code> setting.
 				</p>
 			</div>
 		</div>	
@@ -6402,7 +6402,7 @@
 			}
 		),
 		<jc>// Allow us to use method=POST from a browser.</jc> 
-		allowMethodParam=<js>"*"</js> 
+		allowedMethodParams=<js>"*"</js> 
 	) 
 	<jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet { 
 	
@@ -7963,6 +7963,8 @@
 				Eliminated the <code>RestMatcherReflecting</code> class.
 				<br>You can now simply create a {@link org.apache.juneau.rest.RestMatcher} that has a public constructor that 
 				takes in the server and method arguments.
+			<li>
+				<code>RestResource.allowMethodParam</code> renamed to {@link org.apache.juneau.rest.annotation.RestResource#allowedMethodParams}.
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -8561,7 +8563,7 @@
 						<br>Allows you to override the context path value inherited from the servlet container.
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#allowHeaderParams() allowHeaderParams()} - 
 						<br>Replaces the <code>RestContext.REST_allowHeaderParams</code> setting.
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#allowMethodParam() allowMethodParam()} - 
+					<li><code><del>RestResource.allowMethodParam()</del></code> - 
 						<br>Replaces the <code>RestContext.REST_allowMethodParam</code> setting.
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#allowBodyParam() allowBodyParam()} - 
 						<br>Replaces the <code>RestContext.REST_allowBodyParam</code> setting.
@@ -10900,7 +10902,7 @@
 		<ul class='spaced-list'>
 			<li>Added a default OPTIONS page to {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code>.
 			<li><code>RestServletProperties.REST_allowMethodParam</code> has been enhanced to allow you to
-				explicitely specify which HTTP methods can be used in the <code>&amp;method</code> parameter.
+				explicitly specify which HTTP methods can be used in the <code>&amp;method</code> parameter.
 			<li>New methods added to {@link org.apache.juneau.rest.RestRequest}:
 			<ul>
 				<li><code><del>RestRequest.getParser()</del></code>

@@ -187,7 +187,7 @@ import org.apache.juneau.xml.*;
 		// URI-resolution is disabled by default.  Need to enable it.
 		@Property(name=SERIALIZER_uriResolution, value="ROOT_RELATIVE")
 	},
-	allowMethodParam="OPTIONS",
+	allowedMethodParams="OPTIONS",
 	htmldoc=@HtmlDoc(
 		header={
 			"<h1>$R{servletTitle}</h1>",

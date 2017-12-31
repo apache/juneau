@@ -43,7 +43,7 @@ import org.apache.juneau.rest.remoteable.*;
 		}
 	),
 	// Allow us to use method=POST from a browser.
-	allowMethodParam="*",
+	allowedMethodParams="*",
 	config="$S{juneau.configFile}"  // So we can resolve $C{Source/gitHub} above.
 )
 public class SampleRemoteableServlet extends RemoteableServlet {

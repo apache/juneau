@@ -117,6 +117,39 @@ public final class RestContext extends Context {
 	public static final String REST_allowBodyParam = PREFIX + "allowBodyParam.b";
 	
 	/**
+	 * <b>Configuration property:</b>  Allowed method parameters.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.allowedMethodParams.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"HEAD,OPTIONS"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
+	 * GET request.
+	 * <br>
+	 * For example:  <js>"?method=OPTIONS"</js>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowedMethodParams}
+	 * 	<li>Annotation:  {@link RestResource#allowedMethodParams()}
+	 * 	<li>Method: {@link RestContextBuilder#allowedMethodParams(String...)}
+	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Use "*" to represent all methods.
+	 *	</ul>
+	 *
+	 * <p>
+	 * Note that per the <a class="doclink"
+	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
+	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
+	 */
+	public static final String REST_allowedMethodParams = PREFIX + "allowedMethodParams.s";
+
+	/**
 	 * <b>Configuration property:</b>  Render response stack traces in responses.
 	 *
 	 * <ul>
@@ -235,7 +268,7 @@ public final class RestContext extends Context {
 
 	private final Map<String,Widget> widgets;
 
-	private final Set<String> allowMethodParams;
+	private final Set<String> allowedMethodParams;
 
 	private final ObjectMap properties;
 	private final Class<?>[]
@@ -311,21 +344,22 @@ public final class RestContext extends Context {
 		RestException _initException = null;
 		ServletContext servletContext = builder.servletContext;
 
+		this.resource = builder.resource;
+		this.builder = builder;
+		this.parentContext = builder.parentContext;
+
 		allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
 		allowBodyParam = getProperty(REST_allowBodyParam, boolean.class, true);
+		allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getProperty(REST_allowedMethodParams, String.class, "HEAD,OPTIONS")))));
 		renderResponseStackTraces = getProperty(REST_renderResponseStackTraces, boolean.class, false);
 		useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
 		defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
 		maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
 		
 		try {
-			this.resource = builder.resource;
-			this.builder = builder;
 			this.resourceFinder = new ResourceFinder(resource.getClass());
-			this.parentContext = builder.parentContext;
 
 			Builder b = new Builder(builder);
-			this.allowMethodParams = Collections.unmodifiableSet(b.allowMethodParams);
 			this.varResolver = b.varResolver;
 			this.configFile = b.configFile;
 			this.properties = b.properties;
@@ -633,7 +667,6 @@ public final class RestContext extends Context {
 		Map<String,String> staticFilesMap;
 		String[] staticFilesPrefixes;
 		MessageBundle messageBundle;
-		Set<String> allowMethodParams = new LinkedHashSet<>();
 		RestLogger logger;
 		String fullPath;
 		Map<String,Widget> widgets;
@@ -648,13 +681,6 @@ public final class RestContext extends Context {
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
 
 			resourceResolver = rcb.resourceResolver;
-
-			String amp = getString(rcb.allowMethodParam, "juneau.allowMethodParam", "HEAD,OPTIONS");
-			if ("true".equals(amp))
-				amp = "*";// For backwards compatibility when this was a boolean field.
-			else
-				amp = amp.toUpperCase();
-			allowMethodParams.addAll(Arrays.asList(StringUtils.split(amp)));
 
 			varResolver = rcb.varResolverBuilder
 				.vars(FileVar.class, LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
@@ -1322,7 +1348,7 @@ public final class RestContext extends Context {
 	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
 	 */
 	protected boolean allowMethodParam(String m) {
-		return (! isEmpty(m) && (allowMethodParams.contains(m) || allowMethodParams.contains("*")));
+		return (! isEmpty(m) && (allowedMethodParams.contains(m) || allowedMethodParams.contains("*")));
 	}
 
 	/**

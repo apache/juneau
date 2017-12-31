@@ -121,7 +121,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	String contextPath;
 	HtmlDocBuilder htmlDocBuilder;
 	List<Class<? extends Widget>> widgets = new ArrayList<>();
-	Object allowMethodParam;
 
 	Object resourceResolver = RestResourceResolverSimple.class;
 	Object logger = RestLogger.Normal.class;
@@ -240,8 +239,8 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 					infoProvider(r.infoProvider());
 				if (! r.allowHeaderParams().isEmpty())
 					allowHeaderParams(Boolean.valueOf(vr.resolve(r.allowHeaderParams())));
-				if (! r.allowMethodParam().isEmpty())
-					allowMethodParam(vr.resolve(r.allowMethodParam()));
+				if (! r.allowedMethodParams().isEmpty())
+					allowedMethodParams(vr.resolve(r.allowedMethodParams()));
 				if (! r.allowBodyParam().isEmpty())
 					allowBodyParam(Boolean.valueOf(vr.resolve(r.allowBodyParam())));
 				if (! r.renderResponseStackTraces().isEmpty())
@@ -1133,20 +1132,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	}
 
 	/**
-	 * Sets the <code>allowMethodParam</code> setting on this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#allowMethodParam() RestResource.allowMethodParam()} annotation.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder allowMethodParam(String...value) {
-		this.allowMethodParam = StringUtils.join(value, ',');
-		return this;
-	}
-
-	/**
 	 * Sets the URL path of the resource <js>"/foobar"</js>.
 	 *
 	 * <p>
@@ -1404,6 +1389,7 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 * 	<li>Property: {@link RestContext#REST_allowHeaderParams}
 	 * 	<li>Annotation:  {@link RestResource#allowHeaderParams()}
 	 * 	<li>Method: {@link RestContextBuilder#allowHeaderParams(boolean)}
+	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
 	 * 	<li>Parameter name is case-insensitive.
 	 * 	<li>Useful for debugging REST interface using only a browser.
 	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_allowHeaderParams</jsf>, value)</code>.
@@ -1447,6 +1433,36 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public RestContextBuilder allowBodyParam(boolean value) {
 		return set(REST_allowBodyParam, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Allowed method parameters.
+	 *
+	 * <p>
+	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
+	 * GET request.
+	 * <br>
+	 * For example:  <js>"?method=OPTIONS"</js>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowedMethodParams}
+	 * 	<li>Annotation:  {@link RestResource#allowedMethodParams()}
+	 * 	<li>Method: {@link RestContextBuilder#allowedMethodParams(String...)}
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Use "*" to represent all methods.
+	 *	</ul>
+	 *
+	 * <p>
+	 * Note that per the <a class="doclink"
+	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
+	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder allowedMethodParams(String...value) {
+		return set(REST_allowedMethodParams, StringUtils.join(value, ','));
 	}
 
 	/**

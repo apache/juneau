@@ -36,7 +36,7 @@ import org.apache.juneau.rest.labels.*;
 			"options: servlet:/?method=OPTIONS"
 		}
 	),
-	allowMethodParam="OPTIONS,POST"
+	allowedMethodParams="OPTIONS,POST"
 )
 @SuppressWarnings("javadoc")
 public class DebugResource extends Resource {

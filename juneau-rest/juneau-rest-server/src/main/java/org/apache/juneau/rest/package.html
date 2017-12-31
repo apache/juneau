@@ -3132,13 +3132,13 @@
 	}
 		</p>
 		<p>
-			To support overloaded methods, the {@link org.apache.juneau.rest.annotation.RestResource#allowMethodParam()} 
+			To support overloaded methods, the {@link org.apache.juneau.rest.annotation.RestResource#allowedMethodParams()} 
 			setting must be enabled on your servlet.
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		<jc>// Allow &amp;method parameter on BAR requests</jc>
-		allowMethodParam=<js>"BAR"</js>
+		allowedMethodParams=<js>"BAR"</js>
 	)
 		</p>
 	</div>
@@ -3181,7 +3181,7 @@
 				<td class='code'>&amp;method=X</td>
 				<td>
 					Overload the HTTP method as a GET parameter (e.g <l>"POST"</l>).
-					<br>Must be enabled via {@link org.apache.juneau.rest.annotation.RestResource#allowMethodParam()} setting.
+					<br>Must be enabled via {@link org.apache.juneau.rest.annotation.RestResource#allowedMethodParams()} setting.
 				</td>
 			</tr>
 			<tr>
@@ -3547,7 +3547,7 @@
 		),
 
 		<jc>// Allow INIT as a method parameter.</jc>
-		allowMethodParam=<js>"*"</js>,
+		allowedMethodParams=<js>"*"</js>,
 	
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
 		properties={

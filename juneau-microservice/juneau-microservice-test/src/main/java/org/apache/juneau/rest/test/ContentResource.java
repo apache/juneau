@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 @RestResource(
 	path="/testContent",
-	allowMethodParam="*"
+	allowedMethodParams="*"
 )
 public class ContentResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;

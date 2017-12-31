@@ -744,32 +744,31 @@ public @interface RestResource {
 	String allowHeaderParams() default "";
 
 	/**
-	 * Enable <js>"method"</js> URL parameter for specific HTTP methods.
+	 * <b>Configuration property:</b>  Allowed method parameters.
 	 *
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
+	 * <br>
 	 * For example:  <js>"?method=OPTIONS"</js>
 	 *
-	 * <p>
-	 * Example: <js>"HEAD,OPTIONS"</js>
-	 *
-	 * <ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_allowedMethodParams}
+	 * 	<li>Annotation:  {@link RestResource#allowedMethodParams()}
+	 * 	<li>Method: {@link RestContextBuilder#allowedMethodParams(String...)}
 	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-	 * 	<li>Defaults to system property <js>"juneau.allowMethodParam"</js>, or <js>"HEAD,OPTIONS"</js> if not specified.
-	 * 	<li>Boolean value.
-	 * 	<li>Can contain variables.
 	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Can contain variables.
 	 * 	<li>Use "*" to represent all methods.
-	 * 	<li>For backwards compatibility, "true" also means "*".
-	 * </ul>
+	 *	</ul>
 	 *
 	 * <p>
 	 * Note that per the <a class="doclink"
 	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
 	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
 	 */
-	String allowMethodParam() default "";
+	String allowedMethodParams() default "";
 
 	/**
 	 * <b>Configuration property:</b>  Allow body URL parameter.

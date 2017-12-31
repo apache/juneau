@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		}
 	),
-	allowMethodParam="*",
+	allowedMethodParams="*",
 	properties={
 		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
 		@Property(name="rootDir", value="$S{java.io.tmpdir}"),
