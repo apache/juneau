@@ -855,36 +855,6 @@ public @interface RestResource {
 	String defaultCharset() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Expected format of request parameters.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
-	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
-	 * 	<li>
-	 * 		<js>"PLAIN"</js> - Plain text.
-	 * 		<br>This treats request parameters as plain text.
-	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
-	 * 		mode.
-	 * </ul>
-	 * <p>
-	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
-	 * <js>"foo"</js> when using UON mode.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_paramFormat}
-	 * 	<li>Annotation:  {@link RestResource#paramFormat()} / {@link RestMethod#paramFormat()}
-	 * 	<li>Method: {@link RestContextBuilder#paramFormat(String)}
-	 * 	<li>String value.
-	 * 	<li>Can contain variables.
-	 *	</ul>
-	 */
-	String paramFormat() default "";
-	
-	/**
 	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <p>

@@ -117,7 +117,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		BeanContext beanContext;
 		ObjectMap properties;
 		Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
-		boolean plainParams, deprecated;
+		boolean deprecated;
 		long maxInput;
 		Integer priority;
 		org.apache.juneau.rest.annotation.Parameter[] parameters;
@@ -154,14 +154,11 @@ class CallMethod implements Comparable<CallMethod>  {
 				properties = new ObjectMap().setInner(context.getProperties());
 				defaultCharset = context.getDefaultCharset();
 				maxInput = context.getMaxInput();
-				String paramFormat = context.getParamFormat();
 
 				if (! m.defaultCharset().isEmpty())
 					defaultCharset = context.getVarResolver().resolve(m.defaultCharset());
 				if (! m.maxInput().isEmpty())
 					maxInput = StringUtils.parseLongWithSuffix(context.getVarResolver().resolve(m.maxInput()));
-				if (! m.paramFormat().isEmpty())
-					paramFormat = context.getVarResolver().resolve(m.paramFormat());
 
 				HtmlDocBuilder hdb = new HtmlDocBuilder(properties);
 
@@ -380,11 +377,7 @@ class CallMethod implements Comparable<CallMethod>  {
 					}
 				}
 
-				plainParams = paramFormat.equals("PLAIN");
-
 				pathPattern = new UrlPathPattern(p);
-
-				params = context.findParams(method, plainParams, pathPattern, false);
 
 				if (sgb != null) 
 					serializers = sgb.build();
@@ -396,6 +389,8 @@ class CallMethod implements Comparable<CallMethod>  {
 				}
 				if (bcb != null)
 					beanContext = bcb.build();
+
+				params = context.findParams(method, pathPattern, false);
 
 				// Need this to access methods in anonymous inner classes.
 				method.setAccessible(true);

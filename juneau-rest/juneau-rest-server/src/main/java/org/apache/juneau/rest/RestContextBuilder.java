@@ -250,8 +250,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 					useStackTraceHashes(Boolean.valueOf(vr.resolve(r.useStackTraceHashes())));
 				if (! r.defaultCharset().isEmpty())
 					defaultCharset(vr.resolve(r.defaultCharset()));
-				if (! r.paramFormat().isEmpty())
-					paramFormat(vr.resolve(r.paramFormat()));
 				if (! r.maxInput().isEmpty())
 					maxInput(vr.resolve(r.maxInput()));
 
@@ -1515,40 +1513,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public RestContextBuilder defaultCharset(String value) {
 		return set(REST_defaultCharset, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Expected format of request parameters.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
-	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
-	 * 	<li>
-	 * 		<js>"PLAIN"</js> - Plain text.
-	 * 		<br>This treats request parameters as plain text.
-	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
-	 * 		mode.
-	 * </ul>
-	 * <p>
-	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
-	 * <js>"foo"</js> when using UON mode.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_paramFormat}
-	 * 	<li>Annotation:  {@link RestResource#paramFormat()} / {@link RestMethod#paramFormat()}
-	 * 	<li>Method: {@link RestContextBuilder#paramFormat(String)}
-	 * 	<li>This is equivalent to calling <code>set(<jsf>REST_paramFormat</jsf>, value)</code>.
-	 *	</ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder paramFormat(String value) {
-		return set(REST_paramFormat, value);
 	}
 
 	/**

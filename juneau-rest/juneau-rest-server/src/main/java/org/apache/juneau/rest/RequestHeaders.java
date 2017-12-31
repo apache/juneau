@@ -209,10 +209,26 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException 
 	 */
-	public <T> T get(String name, Class<T> type) {
-		String h = getString(name);
-		return beanSession.convertToType(h, type);
+	public <T> T get(String name, Class<T> type) throws ParseException {
+		return get(parser, name, null, type);
+	}
+
+	/**
+	 * Same as {@link #get(String, Class)} but allows you to override the part parser used.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string header.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The HTTP header name.
+	 * @param type The class type to convert the header value to.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException 
+	 */
+	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
+		return get(parser, name, null, type);
 	}
 
 	/**
@@ -223,12 +239,32 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param type The class type to convert the header value to.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException 
 	 */
-	public <T> T get(String name, T def, Class<T> type) {
-		String h = getString(name);
-		if (h == null)
+	public <T> T get(String name, T def, Class<T> type) throws ParseException {
+		return get(parser, name, def, type);
+	}
+
+	/**
+	 * Same as {@link #get(String, Object, Class)} but allows you to override the part parser used.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string header.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The HTTP header name.
+	 * @param def The default value if the header was not specified or is <jk>null</jk>.
+	 * @param type The class type to convert the header value to.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException 
+	 */
+	public <T> T get(HttpPartParser parser, String name, T def, Class<T> type) throws ParseException {
+		String s = getString(name);
+		if (s == null)
 			return def;
-		return beanSession.convertToType(h, type);
+		if (parser == null)
+			parser = this.parser;
+		return parser.parse(HttpPartType.HEADER, s, getClassMeta(type));
 	}
 
 	/**
@@ -258,10 +294,39 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The parameter value converted to the specified class type.
 	 * @throws ParseException If the header could not be converted to the specified type.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
-		String h = getString(name);
-		return (T)parser.parse(HttpPartType.HEADER, h, beanSession.getClassMeta(type, args));
+		return get(null, name, type, args);
+	}
+
+	/**
+	 * Same as {@link #get(String, Type, Type...)} but allows you to override the part parser used.
+	 * 
+	 * @param parser
+	 * 	The parser to use for parsing the string header.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name 
+	 * 	The HTTP header name.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException If the header could not be converted to the specified type.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
+		String s = getString(name);
+		if (s == null)
+			return null;
+		if (parser == null)
+			parser = this.parser;
+		return (T)parser.parse(HttpPartType.HEADER, s, getClassMeta(type, args));
 	}
 
 	/**
@@ -799,6 +864,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 			m.put(e.getKey(), v.length == 1 ? v[0] : v);
 		}
 		return JsonSerializer.DEFAULT_LAX.toString(m);
+	}
+	
+	private ClassMeta<?> getClassMeta(Type type, Type...args) {
+		return beanSession.getClassMeta(type, args);
+	}
+
+	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
+		return beanSession.getClassMeta(type);
 	}
 
 	@Override /* Object */

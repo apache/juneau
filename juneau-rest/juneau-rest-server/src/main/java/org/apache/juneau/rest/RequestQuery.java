@@ -217,7 +217,23 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Class<T> type) throws ParseException {
-		return get(name, beanSession.getClassMeta(type));
+		return get(null, name, type);
+	}
+
+	/**
+	 * Same as {@link #get(String, Class)} but allows you to override the part parser.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The parameter name.
+	 * @param type The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
+		return get(parser, name, getClassMeta(type));
 	}
 
 	/**
@@ -231,7 +247,24 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, T def, Class<T> type) throws ParseException {
-		return get(name, def, beanSession.getClassMeta(type));
+		return get(null, name, def, type);
+	}
+
+	/**
+	 * Same as {@link #get(String, Object, Class)} but allows you to override the part parser.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The parameter name.
+	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
+	 * @param type The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(HttpPartParser parser, String name, T def, Class<T> type) throws ParseException {
+		return get(parser, name, def, getClassMeta(type));
 	}
 
 	/**
@@ -274,7 +307,32 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
-		return (T)parse(name, beanSession.getClassMeta(type, args));
+		return get((HttpPartParser)null, name, type, args);
+	}
+
+	/**
+	 * Same as {@link #get(String, Type, Type...)} but allows you to override the part parser.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 *
+	 * @param name The parameter name.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
+		return (T)parse(parser, name, getClassMeta(type, args));
 	}
 
 	/**
@@ -296,7 +354,32 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T get(String name, Object def, Type type, Type...args) throws ParseException {
-		return (T)parse(name, def, beanSession.getClassMeta(type, args));
+		return get(null, name, def, type, args);
+	}
+
+	/**
+	 * Same as {@link #get(String, Object, Type, Type...)} but allows you to override the part parser.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The parameter name.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(HttpPartParser parser, String name, Object def, Type type, Type...args) throws ParseException {
+		return (T)parse(parser, name, def, getClassMeta(type, args));
 	}
 
 	/**
@@ -338,7 +421,31 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws ParseException
 	 */
 	public <T> T getAll(String name, Type type, Type...args) throws ParseException {
-		return (T)parseAll(name, beanSession.getClassMeta(type, args));
+		return getAll(null, name, type, args);
+	}
+
+	/**
+	 * Same as {@link #getAll(String, Type, Type...)} but allows you to override the part parser.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the servlet/method. 
+	 * @param name The query parameter name.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
+	 * 	{@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The query parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getAll(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
+		return (T)parseAll(parser, name, getClassMeta(type, args));
 	}
 
 	/**
@@ -417,37 +524,37 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(String name, T def, ClassMeta<T> cm) throws ParseException {
+	private <T> T parse(HttpPartParser parser, String name, Object def, ClassMeta<T> cm) throws ParseException {
 		String val = getString(name);
 		if (val == null)
-			return def;
-		return parseValue(val, cm);
+			return (T)def;
+		return parseValue(parser, val, cm);
 	}
 
 	/* Workhorse method */
-	private <T> T parse(String name, ClassMeta<T> cm) throws ParseException {
+	private <T> T parse(HttpPartParser parser, String name, ClassMeta<T> cm) throws ParseException {
 		String val = getString(name);
 		if (cm.isPrimitive() && (val == null || val.isEmpty()))
 			return cm.getPrimitiveDefault();
-		return parseValue(val, cm);
+		return parseValue(parser, val, cm);
 	}
 
 	/* Workhorse method */
 	@SuppressWarnings("rawtypes")
-	private <T> T parseAll(String name, ClassMeta<T> cm) throws ParseException {
+	private <T> T parseAll(HttpPartParser parser, String name, ClassMeta<T> cm) throws ParseException {
 		String[] p = get(name);
 		if (p == null)
 			return null;
 		if (cm.isArray()) {
 			List c = new ArrayList();
 			for (int i = 0; i < p.length; i++)
-				c.add(parseValue(p[i], cm.getElementType()));
+				c.add(parseValue(parser, p[i], cm.getElementType()));
 			return (T)toArray(c, cm.getElementType().getInnerClass());
 		} else if (cm.isCollection()) {
 			try {
 				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
 				for (int i = 0; i < p.length; i++)
-					c.add(parseValue(p[i], cm.getElementType()));
+					c.add(parseValue(parser, p[i], cm.getElementType()));
 				return (T)c;
 			} catch (ParseException e) {
 				throw e;
@@ -459,7 +566,9 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		throw new ParseException("Invalid call to getQueryParameters(String, ClassMeta).  Class type must be a Collection or array.");
 	}
 
-	private <T> T parseValue(String val, ClassMeta<T> c) throws ParseException {
+	private <T> T parseValue(HttpPartParser parser, String val, ClassMeta<T> c) throws ParseException {
+		if (parser == null)
+			parser = this.parser;
 		return parser.parse(HttpPartType.QUERY, val, c);
 	}
 
@@ -496,6 +605,14 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 			}
 		}
 		return sb.toString();
+	}
+
+	private ClassMeta<?> getClassMeta(Type type, Type...args) {
+		return beanSession.getClassMeta(type, args);
+	}
+
+	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
+		return beanSession.getClassMeta(type);
 	}
 
 	@Override /* Object */

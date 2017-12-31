@@ -7958,6 +7958,8 @@
 						</ul>
 				</ul>
 			<li>
+				Refactored the <code>RestConfig</code> class into {@link org.apache.juneau.rest.RestContextBuilder}.
+			<li>
 				Eliminated the <code>RestMatcherReflecting</code> class.
 				<br>You can now simply create a {@link org.apache.juneau.rest.RestMatcher} that has a public constructor that 
 				takes in the server and method arguments.
@@ -8569,14 +8571,14 @@
 						<br>Replaces the <code>RestContext.REST_useStackTraceHashes</code> setting.
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#defaultCharset() defaultCharset()} - 
 						<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#paramFormat() paramFormat()} - 
+					<li><code><del>RestResource.paramFormat()</del></code> - 
 						<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
 				</ul>
 			<li>New annotations on {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultCharset() defaultCharset()} - 
 						<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#paramFormat() paramFormat()} - 
+					<li><code><del>RestMethod.paramFormat()</del></code> - 
 						<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
 				</ul>
 			<li>

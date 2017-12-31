@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -88,28 +89,13 @@ public @interface FormData {
 	boolean multipart() default false;
 
 	/**
-	 * The expected format of the request parameter.
+	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
 	 *
 	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
-	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
-	 * 	<li>
-	 * 		<js>"PLAIN"</js> - Plain text.
-	 * 		<br>This treats request parameters as plain text.
-	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this mode.
-	 * 	<li>
-	 * 		<js>"INHERIT"</js> (default) - Inherit from the {@link RestResource#paramFormat()} property on the
-	 * 		servlet method or class.
-	 * </ul>
-	 *
-	 * <p>
-	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
-	 * <js>"foo"</js> when using UON mode.
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
+	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
 	 */
-	String format() default "INHERIT";
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
 	 * The default value for this form-data parameter if it's not present in the request.

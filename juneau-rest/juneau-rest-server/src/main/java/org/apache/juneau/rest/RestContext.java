@@ -186,42 +186,6 @@ public final class RestContext extends Context {
 	public static final String REST_defaultCharset = PREFIX + "defaultCharset.s";
 	
 	/**
-	 * <b>Configuration property:</b>  Expected format of request parameters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.paramFormat.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"UON"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"UON"</js> - URL-Encoded Object Notation.
-	 * 		<br>This notation allows for request parameters to contain arbitrarily complex POJOs.
-	 * 	<li>
-	 * 		<js>"PLAIN"</js> - Plain text.
-	 * 		<br>This treats request parameters as plain text.
-	 * 		<br>Only POJOs directly convertible from <l>Strings</l> can be represented in parameters when using this
-	 * 		mode.
-	 * </ul>
-	 * <p>
-	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
-	 * <js>"foo"</js> when using UON mode.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_paramFormat}
-	 * 	<li>Annotation:  {@link RestResource#paramFormat()} / {@link RestMethod#paramFormat()}
-	 * 	<li>Method: {@link RestContextBuilder#paramFormat(String)}
-	 *	</ul>
-	 * TODO - Deprecate?
-	 */
-	public static final String REST_paramFormat = PREFIX + "paramFormat.s";
-
-	/**
 	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <ul>
@@ -262,7 +226,6 @@ public final class RestContext extends Context {
 		useStackTraceHashes;
 	private final String
 		defaultCharset,
-		paramFormat,
 		clientVersionHeader,
 		contextPath;
 	private final long
@@ -353,7 +316,6 @@ public final class RestContext extends Context {
 		renderResponseStackTraces = getProperty(REST_renderResponseStackTraces, boolean.class, false);
 		useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
 		defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
-		paramFormat = getProperty(REST_paramFormat, String.class, "UON");
 		maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
 		
 		try {
@@ -501,7 +463,7 @@ public final class RestContext extends Context {
 							if (! _preCallMethods.containsKey(sig)) {
 								Visibility.setAccessible(m);
 								_preCallMethods.put(sig, m);
-								_preCallMethodParams.add(findParams(m, false, null, true));
+								_preCallMethodParams.add(findParams(m, null, true));
 							}
 							break;
 						}
@@ -509,7 +471,7 @@ public final class RestContext extends Context {
 							if (! _postCallMethods.containsKey(sig)) {
 								Visibility.setAccessible(m);
 								_postCallMethods.put(sig, m);
-								_postCallMethodParams.add(findParams(m, false, null, true));
+								_postCallMethodParams.add(findParams(m, null, true));
 							}
 							break;
 						}
@@ -1326,15 +1288,6 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * Returns the value of the {@link RestResource#paramFormat()} setting.
-	 *
-	 * @return The value of the {@link RestResource#paramFormat()} setting.
-	 */
-	protected String getParamFormat() {
-		return paramFormat;
-	}
-
-	/**
 	 * Returns the value of the {@link RestResource#maxInput()} setting.
 	 *
 	 * @return The value of the {@link RestResource#maxInput()} setting.
@@ -1408,18 +1361,18 @@ public final class RestContext extends Context {
 	 * Finds the {@link RestParam} instances to handle resolving objects on the calls to the specified Java method.
 	 *
 	 * @param method The Java method being called.
-	 * @param methodPlainParams Whether plain-params setting is specified.
 	 * @param pathPattern The parsed URL path pattern.
 	 * @param isPreOrPost Whether this is a <ja>@RestMethodPre</ja> or <ja>@RestMethodPost</ja>.
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	protected RestParam[] findParams(Method method, boolean methodPlainParams, UrlPathPattern pathPattern, boolean isPreOrPost) throws ServletException {
+	protected RestParam[] findParams(Method method, UrlPathPattern pathPattern, boolean isPreOrPost) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
 		Annotation[][] pa = method.getParameterAnnotations();
 		RestParam[] rp = new RestParam[pt.length];
 		int attrIndex = 0;
+		PropertyStore ps = getPropertyStore();
 
 		for (int i = 0; i < pt.length; i++) {
 
@@ -1434,11 +1387,11 @@ public final class RestContext extends Context {
 			if (rp[i] == null) {
 				for (Annotation a : pa[i]) {
 					if (a instanceof Header)
-						rp[i] = new RestParamDefaults.HeaderObject((Header)a, t);
+						rp[i] = new RestParamDefaults.HeaderObject((Header)a, t, ps);
 					else if (a instanceof FormData)
-						rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, methodPlainParams);
+						rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, ps);
 					else if (a instanceof Query)
-						rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, methodPlainParams);
+						rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, ps);
 					else if (a instanceof HasFormData)
 						rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
 					else if (a instanceof HasQuery)

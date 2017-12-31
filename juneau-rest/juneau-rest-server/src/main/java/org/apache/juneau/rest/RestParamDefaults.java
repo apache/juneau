@@ -28,6 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -558,14 +559,16 @@ class RestParamDefaults {
 	}
 
 	static final class HeaderObject extends RestParam {
+		private final HttpPartParser partParser;
 
-		protected HeaderObject(Header a, Type type) {
+		protected HeaderObject(Header a, Type type, PropertyStore ps) {
 			super(HEADER, firstNonEmpty(a.name(), a.value()), type);
+			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getHeaders().get(name, type);
+			return req.getHeaders().get(partParser, name, type);
 		}
 	}
 
@@ -584,46 +587,42 @@ class RestParamDefaults {
 	}
 
 	static final class FormDataObject extends RestParam {
-		private final boolean multiPart, plainParams;
+		private final boolean multiPart;
+		private final HttpPartParser partParser;
 
-		protected FormDataObject(Method method, FormData a, Type type, boolean methodPlainParams) throws ServletException {
+		protected FormDataObject(Method method, FormData a, Type type, PropertyStore ps) throws ServletException {
 			super(FORMDATA, firstNonEmpty(a.name(), a.value()), type);
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
-			this.plainParams = a.format().equals("INHERIT") ? methodPlainParams : a.format().equals("PLAIN");
+			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			BeanSession bs = req.getBeanSession();
 			if (multiPart)
-				return req.getFormData().getAll(name, type);
-			if (plainParams)
-				return bs.convertToType(req.getFormData().getString(name), bs.getClassMeta(type));
-			return req.getFormData().get(name, type);
+				return req.getFormData().getAll(partParser, name, type);
+			return req.getFormData().get(partParser, name, type);
 		}
 	}
 
 	static final class QueryObject extends RestParam {
-		private final boolean multiPart, plainParams;
+		private final boolean multiPart;
+		private final HttpPartParser partParser;
 
-		protected QueryObject(Method method, Query a, Type type, boolean methodPlainParams) throws ServletException {
+		protected QueryObject(Method method, Query a, Type type, PropertyStore ps) throws ServletException {
 			super(QUERY, firstNonEmpty(a.name(), a.value()), type);
 			if (a.multipart() && ! isCollection(type))
 					throw new RestServletException("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
 			this.multiPart = a.multipart();
-			this.plainParams = a.format().equals("INHERIT") ? methodPlainParams : a.format().equals("PLAIN");
+			this.partParser = a.parser() == HttpPartParser.Null.class ? null : ClassUtils.newInstance(HttpPartParser.class, a.parser(), true, ps);
 		}
 
 		@Override /* RestParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			BeanSession bs = req.getBeanSession();
 			if (multiPart)
-				return req.getQuery().getAll(name, type);
-			if (plainParams)
-				return bs.convertToType(req.getQuery().getString(name), bs.getClassMeta(type));
-			return req.getQuery().get(name, type);
+				return req.getQuery().getAll(partParser, name, type);
+			return req.getQuery().get(partParser, name, type);
 		}
 	}
 

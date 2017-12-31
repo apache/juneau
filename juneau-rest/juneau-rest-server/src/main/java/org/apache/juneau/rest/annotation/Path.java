@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.httppart.*;
+
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as a variable
  * in a URL path pattern converted to a POJO.
@@ -87,4 +89,13 @@ public @interface Path {
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 */
 	String value() default "";
+	
+	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 *
+	 * <p>
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
+	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 }

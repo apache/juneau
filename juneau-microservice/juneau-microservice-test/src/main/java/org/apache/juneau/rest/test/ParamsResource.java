@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -156,7 +157,7 @@ public class ParamsResource extends RestServletDefault {
 	// @FormData(format=PLAIN) annotation - GET
 	//====================================================================================================
 	@RestMethod(name=GET, path="/testPlainParamGet/*")
-	public String testPlainParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainParamGet(RestRequest req, @Query(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
 		RequestQuery q = req.getQuery();
 		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 	}
@@ -165,7 +166,7 @@ public class ParamsResource extends RestServletDefault {
 	// @FormData(format=PLAIN) annotation - POST
 	//====================================================================================================
 	@RestMethod(name=POST, path="/testPlainParamPost/*")
-	public String testPlainParamPost(RestRequest req, @FormData(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainParamPost(RestRequest req, @FormData(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
 		RequestFormData f = req.getFormData();
 		return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
 	}
@@ -174,7 +175,7 @@ public class ParamsResource extends RestServletDefault {
 	// @Query(format=PLAIN) annotation - GET
 	//====================================================================================================
 	@RestMethod(name=GET, path="/testPlainQParamGet/*")
-	public String testPlainQParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainQParamGet(RestRequest req, @Query(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
 		RequestQuery q = req.getQuery();
 		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 	}
@@ -183,7 +184,7 @@ public class ParamsResource extends RestServletDefault {
 	// @Query(format=PLAIN) annotation - POST
 	//====================================================================================================
 	@RestMethod(name=POST, path="/testPlainQParamPost/*")
-	public String testPlainQParamPost(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainQParamPost(RestRequest req, @Query(value="p1",parser=SimplePartParser.class) String p1) throws Exception {
 		RequestQuery q = req.getQuery();
 		return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 	}
