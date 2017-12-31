@@ -1173,367 +1173,367 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackages(boolean append, String...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackages(boolean append, Collection<String> values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackagesRemove(Collection<String> values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClasses(boolean append, Class<?>...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClassesRemove(Collection<Class<?>> values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanFilters(boolean append, Class<?>...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanFilters(boolean append, Collection<Class<?>> values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanFiltersRemove(Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanFiltersRemove(Collection<Class<?>> values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwaps(boolean append, Class<?>...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwapsRemove(Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwapsRemove(Collection<Class<?>> values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public <T> RestClientBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder includeProperties(String beanClassName, String properties) {
 		super.includeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder includeProperties(Class<?> beanClass, String properties) {
 		super.includeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder excludeProperties(String beanClassName, String properties) {
 		super.excludeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanDictionary(boolean append, Class<?>...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanDictionaryRemove(Collection<Class<?>> values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder debug() {
 		super.debug();
 		set(RESTCLIENT_debug, true);
