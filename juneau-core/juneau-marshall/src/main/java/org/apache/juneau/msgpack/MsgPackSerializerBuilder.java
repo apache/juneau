@@ -175,367 +175,367 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanPackages(boolean append, String...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFilters(boolean append, Class<?>...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFilters(boolean append, Collection<Class<?>> values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFiltersRemove(Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFiltersRemove(Collection<Class<?>> values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder pojoSwapsRemove(Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public <T> MsgPackSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder includeProperties(String beanClassName, String properties) {
 		super.includeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
 		super.includeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder excludeProperties(String beanClassName, String properties) {
 		super.excludeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder debug() {
 		super.debug();
 		return this;

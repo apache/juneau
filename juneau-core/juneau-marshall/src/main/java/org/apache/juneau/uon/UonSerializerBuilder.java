@@ -230,367 +230,367 @@ public class UonSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackages(boolean append, String...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFilters(boolean append, Class<?>...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFilters(boolean append, Collection<Class<?>> values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFiltersRemove(Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFiltersRemove(Collection<Class<?>> values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwapsRemove(Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public <T> UonSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder includeProperties(String beanClassName, String properties) {
 		super.includeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
 		super.includeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder excludeProperties(String beanClassName, String properties) {
 		super.excludeProperties(beanClassName, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder debug() {
 		super.debug();
 		return this;

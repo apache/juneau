@@ -85,331 +85,331 @@ public class MsgPackParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder methodVisibility(Visibility value) {
 		super.methodVisibility(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanPackages(Collection<String> values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanPackages(boolean append, String...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanPackages(boolean append, Collection<String> values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanPackagesRemove(Collection<String> values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanClasses(Collection<Class<?>> values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanClasses(boolean append, Class<?>...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder notBeanClassesRemove(Collection<Class<?>> values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFilters(Collection<Class<?>> values) {
 		super.beanFilters(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFilters(boolean append, Class<?>...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFilters(boolean append, Collection<Class<?>> values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFiltersRemove(Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFiltersRemove(Collection<Class<?>> values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder pojoSwaps(Collection<Class<?>> values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder pojoSwaps(boolean append, Class<?>...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder pojoSwapsRemove(Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder pojoSwapsRemove(Collection<Class<?>> values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public <T> MsgPackParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanDictionary(Collection<Class<?>> values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanDictionary(boolean append, Class<?>...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder defaultParser(Class<?> value) {
 		super.defaultParser(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder debug() {
 		super.debug();
 		return this;

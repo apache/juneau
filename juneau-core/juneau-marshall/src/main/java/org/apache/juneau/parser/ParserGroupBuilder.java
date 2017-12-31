@@ -885,4 +885,15 @@ public class ParserGroupBuilder {
 	public ParserGroupBuilder debug() {
 		return set(BEAN_debug, true);
 	}
+
+	/**
+	 * Copies all the values in the specified property store into this builder.
+	 * 
+	 * @param copyFrom The property store to copy the values from. 
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroupBuilder apply(PropertyStore copyFrom) {
+		this.propertyStore.apply(copyFrom);
+		return this;
+	}
 }
