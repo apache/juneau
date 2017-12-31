@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
@@ -144,7 +145,7 @@ public @interface RestResource {
 	Class<?>[] pojoSwaps() default {};
 
 	/**
-	 * Class-level Java method parameter resolvers.
+	 * <b>Configuration property:</b>  Java method parameter resolvers.
 	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
@@ -171,11 +172,13 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 *
-	 * <p>
-	 * <b>Note:</b>{@link RestParam} classes must have no-arg constructors.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#paramResolvers(Class...)} method.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramResolvers}
+	 * 	<li>Annotation:  {@link RestResource#paramResolvers()}
+	 * 	<li>Method: {@link RestContextBuilder#paramResolvers(Class...)}
+	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
 	 */
 	Class<? extends RestParam>[] paramResolvers() default {};
 

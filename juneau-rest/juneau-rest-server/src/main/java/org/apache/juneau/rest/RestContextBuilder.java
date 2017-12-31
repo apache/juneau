@@ -98,8 +98,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	ConfigFile configFile;
 	VarResolverBuilder varResolverBuilder;
 
-	List<Class<?>>
-		paramResolvers = new ArrayList<>();
 	SerializerGroupBuilder serializers = SerializerGroup.create();
 	ParserGroupBuilder parsers = ParserGroup.create();
 	Object partSerializer = SimpleUonPartSerializer.class, partParser = UonPartParser.class;
@@ -432,22 +430,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder contextPath(String contextPath) {
 		if (! contextPath.isEmpty())
 			this.contextPath = contextPath;
-		return this;
-	}
-
-	/**
-	 * Adds class-level parameter resolvers to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#paramResolvers() @RestResource.paramResolvers()} annotation.
-	 *
-	 * @param paramResolvers The parameter resolvers to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	public RestContextBuilder paramResolvers(Class<? extends RestParam>...paramResolvers) {
-		this.paramResolvers.addAll(Arrays.asList(paramResolvers));
 		return this;
 	}
 
@@ -1483,6 +1465,50 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder maxInput(String value) {
 		return set(REST_maxInput, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Java method parameter resolvers.
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <p>
+	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
+	 *
+	 * 		<jc>// Must have no-arg constructor!</jc>
+	 * 		<jk>public</jk> MyRestParam() {
+	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
+	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramResolvers}
+	 * 	<li>Annotation:  {@link RestResource#paramResolvers()}
+	 * 	<li>Method: {@link RestContextBuilder#paramResolvers(Class...)}
+	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 * @param paramResolvers The parameter resolvers to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestContextBuilder paramResolvers(Class<? extends RestParam>...paramResolvers) {
+		return addTo(REST_paramResolvers, paramResolvers);
 	}
 
 	/**

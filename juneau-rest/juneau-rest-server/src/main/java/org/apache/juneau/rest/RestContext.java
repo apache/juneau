@@ -245,6 +245,51 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_maxInput = PREFIX + "maxInput.s";
 	
+	/**
+	 * <b>Configuration property:</b>  Java method parameter resolvers.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.paramResolvers.lc"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>extends</jk> RestParam&gt;&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <p>
+	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
+	 *
+	 * 		<jc>// Must have no-arg constructor!</jc>
+	 * 		<jk>public</jk> MyRestParam() {
+	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
+	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramResolvers}
+	 * 	<li>Annotation:  {@link RestResource#paramResolvers()}
+	 * 	<li>Method: {@link RestContextBuilder#paramResolvers(Class...)}
+	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 */
+	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lc";
+
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -344,6 +389,7 @@ public final class RestContext extends BeanContext {
 		this.resource = builder.resource;
 		this.builder = builder;
 		this.parentContext = builder.parentContext;
+		PropertyStore ps = getPropertyStore();
 
 		allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
 		allowBodyParam = getProperty(REST_allowBodyParam, boolean.class, true);
@@ -352,15 +398,19 @@ public final class RestContext extends BeanContext {
 		useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
 		defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
 		maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
+
+		Map<Class<?>,RestParam> _paramResolvers = new HashMap<>();
+		for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, ps)) 
+			_paramResolvers.put(rp.forClass(), rp);
+		paramResolvers = Collections.unmodifiableMap(_paramResolvers);
 		
 		try {
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 
-			Builder b = new Builder(builder, getPropertyStore());
+			Builder b = new Builder(builder, ps);
 			this.varResolver = b.varResolver;
 			this.configFile = b.configFile;
 			this.properties = b.properties;
-			this.paramResolvers = Collections.unmodifiableMap(b.paramResolvers);
 			this.serializers = b.serializers;
 			this.parsers = b.parsers;
 			this.partSerializer = b.partSerializer;
@@ -641,7 +691,6 @@ public final class RestContext extends BeanContext {
 		VarResolver varResolver;
 		ConfigFile configFile;
 		ObjectMap properties;
-		Map<Class<?>,RestParam> paramResolvers = new HashMap<>();
 		SerializerGroup serializers;
 		ParserGroup parsers;
 		HttpPartSerializer partSerializer;
@@ -683,11 +732,6 @@ public final class RestContext extends BeanContext {
 			configFile = rcb.configFile.getResolving(this.varResolver);
 			properties = rcb.properties;
 			
-			for (Class<?> c : rcb.paramResolvers) {
-				RestParam rp = ClassUtils.newInstanceFromOuter(resource, RestParam.class, c, true);
-				paramResolvers.put(rp.forClass(), rp);
-			}
-
 			clientVersionHeader = rcb.clientVersionHeader;
 
 			// Find resource resource bundle location.
