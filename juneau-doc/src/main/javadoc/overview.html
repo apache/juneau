@@ -7964,7 +7964,10 @@
 				<br>You can now simply create a {@link org.apache.juneau.rest.RestMatcher} that has a public constructor that 
 				takes in the server and method arguments.
 			<li>
-				<code>RestResource.allowMethodParam</code> renamed to {@link org.apache.juneau.rest.annotation.RestResource#allowedMethodParams}.
+				<code>@RestResource.allowMethodParam</code> renamed to {@link org.apache.juneau.rest.annotation.RestResource#allowedMethodParams}.
+			<li>
+				<code>@RestMethod.serializersInherit</code> and <code>@RestMethod.parsersInherit</code> replaced with
+				simplified {@link org.apache.juneau.rest.annotation.RestMethod#inherit()}. 
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -12016,7 +12019,7 @@
 						New <code>RestMethod.filters()</code> annotation for defining POJO filters at the method level.
 					</li>
 					<li>
-						New {@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit()} and {@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit()} annotations for controlling how serializers and parsers (and associated filters and properties) are inherited from the class.<br>
+						New <code><del>RestMethod.serializersInherit()</del></code> and <code><del>RestMethod.parsersInherit()</del></code> annotations for controlling how serializers and parsers (and associated filters and properties) are inherited from the class.<br>
 						This replaces the previous <code>addSerializers</code> and <code>addParsers</code> annotations.
 				</ul>
 			</li>

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.annotation.Inherit.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
@@ -85,7 +84,7 @@ public class SerializersResource extends RestServletDefault {
 	//====================================================================================================
 	// Serializer overridden on method.
 	//====================================================================================================
-	@RestMethod(name=GET, path="/testSerializerOverriddenOnMethod", serializers={TestSerializerB.class,TestSerializerC.class}, serializersInherit=SERIALIZERS)
+	@RestMethod(name=GET, path="/testSerializerOverriddenOnMethod", serializers={TestSerializerB.class,TestSerializerC.class}, inherit="SERIALIZERS")
 	public String testSerializerOverriddenOnMethod() {
 		return "test3";
 	}
@@ -111,7 +110,7 @@ public class SerializersResource extends RestServletDefault {
 	//====================================================================================================
 	// Serializer with different Accept than Content-Type.
 	//====================================================================================================
-	@RestMethod(name=GET, path="/testSerializerWithDifferentMediaTypes", serializers={TestSerializerD.class}, serializersInherit=SERIALIZERS)
+	@RestMethod(name=GET, path="/testSerializerWithDifferentMediaTypes", serializers={TestSerializerD.class}, inherit="SERIALIZERS")
 	public String testSerializerWithDifferentMediaTypes() {
 		return "test4";
 	}

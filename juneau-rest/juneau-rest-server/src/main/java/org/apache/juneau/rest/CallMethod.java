@@ -17,7 +17,7 @@ import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
-import static org.apache.juneau.rest.annotation.Inherit.*;
+import static org.apache.juneau.BeanContext.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -37,6 +37,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
@@ -173,8 +174,9 @@ class CallMethod implements Comparable<CallMethod>  {
 					hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 				}
 
-				List<Inherit> si = Arrays.asList(m.serializersInherit());
-				List<Inherit> pi = Arrays.asList(m.parsersInherit());
+				ASet<String> inherit = new ASet<String>().appendAll(StringUtils.split(m.inherit()));
+				if (inherit.contains("*")) 
+					inherit.appendAll("SERIALIZERS","PARSERS","TRANSFORMS","PROPERTIES");
 
 				SerializerGroupBuilder sgb = null;
 				ParserGroupBuilder pgb = null;
@@ -189,10 +191,10 @@ class CallMethod implements Comparable<CallMethod>  {
 					uepb = Parser.create();
 					bcb = beanContext.builder();
 
-					if (si.contains(SERIALIZERS) || m.serializers().length == 0)
+					if (inherit.contains("SERIALIZERS") || m.serializers().length == 0)
 						sgb.append(serializers.getSerializers());
 
-					if (pi.contains(PARSERS) || m.parsers().length == 0)
+					if (inherit.contains("PARSERS") || m.parsers().length == 0)
 						pgb.append(parsers.getParsers());
 				}
 
@@ -230,14 +232,17 @@ class CallMethod implements Comparable<CallMethod>  {
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
-				Class<?>[] beanFilters = context.getBeanFilters(), pojoSwaps = context.getPojoSwaps();
+				PropertyStore ps = context.getPropertyStore();
+				if (! inherit.contains("TRANSFORMS"))
+					ps = ps.builder().set(BEAN_beanFilters, null).set(BEAN_pojoSwaps, null).build();
 				
 				if (sgb != null) {
 					sgb.append(m.serializers());
-					if (si.contains(TRANSFORMS))
-						sgb.beanFilters(beanFilters).pojoSwaps(pojoSwaps);
-					if (si.contains(PROPERTIES))
-						sgb.add(properties);
+				
+					if (! inherit.contains("PROPERTIES"))
+						sgb.beanFilters(ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
+					else
+						sgb.apply(ps);
 					for (Property p1 : m.properties())
 						sgb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
@@ -274,10 +279,10 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				if (pgb != null) {
 					pgb.append(m.parsers());
-					if (pi.contains(TRANSFORMS))
-						pgb.beanFilters(beanFilters).pojoSwaps(pojoSwaps);
-					if (pi.contains(PROPERTIES))
-						pgb.add(properties);
+					if (! inherit.contains("PROPERTIES"))
+						pgb.beanFilters(ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
+					else
+						pgb.apply(ps);
 					for (Property p1 : m.properties())
 						pgb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
@@ -287,6 +292,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				}
 
 				if (uepb != null) {
+					uepb.apply(ps);
 					for (Property p1 : m.properties())
 						uepb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
@@ -296,6 +302,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				}
 				
 				if (bcb != null) {
+					bcb.apply(ps);
 					for (Property p1 : m.properties())
 						bcb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())

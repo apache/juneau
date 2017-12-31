@@ -169,7 +169,7 @@ public @interface RestMethod {
 	 *
 	 * <p>
 	 * To append to the list of serializers assigned at the servlet level, use
-	 * <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
+	 * <code>inherit=<js>"SERIALIZERS"</js></code>.
 	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
@@ -178,7 +178,7 @@ public @interface RestMethod {
 	 * 			name=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			serializers=MySpecialSerializer.<jk>class</jk>,
-	 * 			serializersInherit=<jsf>SERIALIZERS</jsf>
+	 * 			inherit=<js>"SERIALIZERS"</js>
 	 * 		)
 	 * 		<jk>public</jk> Object doGetWithSpecialAcceptType() {
 	 * 			<jc>// Handle request for special Accept type</jc>
@@ -189,30 +189,6 @@ public @interface RestMethod {
 	Class<? extends Serializer>[] serializers() default {};
 
 	/**
-	 * Used in conjunction with {@link #serializers()} to identify what class-level settings are inherited by the method
-	 * serializer group.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li>{@link Inherit#SERIALIZERS} - Inherit class-level serializers.
-	 * 	<li>{@link Inherit#PROPERTIES} - Inherit class-level properties.
-	 * 	<li>{@link Inherit#TRANSFORMS} - Inherit class-level transforms.
-	 * </ul>
-	 *
-	 * <p>
-	 * For example, to inherit all serializers, properties, and transforms from the servlet class:
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		path=<js>"/foo"</js>,
-	 * 		serializers=MySpecialSerializer.<jk>class</jk>,
-	 * 		serializersInherit={<jsf>SERIALIZERS</jsf>,<jsf>PROPERTIES</jsf>,<jsf>TRANSFORMS</jsf>}
-	 * 	)
-	 * </p>
-	 */
-	Inherit[] serializersInherit() default {};
-
-	/**
 	 * Overrides the list of parsers assigned at the method level.
 	 *
 	 * <p>
@@ -220,8 +196,8 @@ public @interface RestMethod {
 	 * the servlet level.
 	 *
 	 * <p>
-	 * To append to the list of serializers assigned at the servlet level, use
-	 * <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
+	 * To append to the list of parsers assigned at the servlet level, use
+	 * <code>inherit=<js>"PARSERS"</js></code>.
 	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
@@ -230,7 +206,7 @@ public @interface RestMethod {
 	 * 			name=<jsf>PUT</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			parsers=MySpecialParser.<jk>class</jk>,
-	 * 			parsersInherit=<jsf>PARSERS</jsf>
+	 * 			inherit=<js>"PARSERS"</js>
 	 * 		)
 	 * 		<jk>public</jk> Object doGetWithSpecialAcceptType() {
 	 * 			<jc>// Handle request for special Accept type</jc>
@@ -241,15 +217,16 @@ public @interface RestMethod {
 	Class<? extends Parser>[] parsers() default {};
 
 	/**
-	 * Used in conjunction with {@link #parsers()} to identify what class-level settings are inherited by the method
-	 * parser group.
-	 *
+	 * Identifies what class-level properties are inherited by the serializers and parsers defined on the method.
+	 * 
 	 * <p>
 	 * Possible values:
 	 * <ul>
-	 * 	<li>{@link Inherit#PARSERS} - Inherit class-level parsers.
-	 * 	<li>{@link Inherit#PROPERTIES} - Inherit class-level properties.
-	 * 	<li>{@link Inherit#TRANSFORMS} - Inherit class-level transforms.
+	 * 	<li>"SERIALIZERS" - Inherit class-level serializers.
+	 * 	<li>"PARSERS" - Inherit class-level parsers.
+	 * 	<li>"TRANSFORMS" - Inherit class-level bean properties and pojo-swaps.
+	 * 	<li>"PROPERTIES" - Inherit class-level properties (other than transforms).
+	 * 	<li>"*" - Inherit everything.
 	 * </ul>
 	 *
 	 * <p>
@@ -258,12 +235,12 @@ public @interface RestMethod {
 	 * 	<ja>@RestMethod</ja>(
 	 * 		path=<js>"/foo"</js>,
 	 * 		parsers=MySpecialParser.<jk>class</jk>,
-	 * 		parsersInherit={<jsf>PARSERS</jsf>,<jsf>PROPERTIES</jsf>,<jsf>TRANSFORMS</jsf>}
+	 * 		inherit=<js>"PARSERS,PROPERTIES,TRANSFORMS"</js>
 	 * 	)
 	 * </p>
 	 */
-	Inherit[] parsersInherit() default {};
-
+	String inherit() default "";
+	
 	/**
 	 * Appends to the list of {@link Encoder encoders} specified on the servlet.
 	 *

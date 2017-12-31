@@ -54,7 +54,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * See {@link PropertyStore} for more information about context properties.
  */
-public final class RestContext extends Context {
+public final class RestContext extends BeanContext {
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -271,9 +271,6 @@ public final class RestContext extends Context {
 	private final Set<String> allowedMethodParams;
 
 	private final ObjectMap properties;
-	private final Class<?>[]
-		beanFilters,
-		pojoSwaps;
 	private final Map<Class<?>,RestParam> paramResolvers;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
@@ -359,12 +356,10 @@ public final class RestContext extends Context {
 		try {
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 
-			Builder b = new Builder(builder);
+			Builder b = new Builder(builder, getPropertyStore());
 			this.varResolver = b.varResolver;
 			this.configFile = b.configFile;
 			this.properties = b.properties;
-			this.beanFilters = b.beanFilters;
-			this.pojoSwaps = b.pojoSwaps;
 			this.paramResolvers = Collections.unmodifiableMap(b.paramResolvers);
 			this.serializers = b.serializers;
 			this.parsers = b.parsers;
@@ -646,8 +641,6 @@ public final class RestContext extends Context {
 		VarResolver varResolver;
 		ConfigFile configFile;
 		ObjectMap properties;
-		Class<?>[] beanFilters;
-		Class<?>[] pojoSwaps;
 		Map<Class<?>,RestParam> paramResolvers = new HashMap<>();
 		SerializerGroup serializers;
 		ParserGroup parsers;
@@ -674,7 +667,7 @@ public final class RestContext extends Context {
 		String contextPath;
 
 		@SuppressWarnings("unchecked")
-		Builder(RestContextBuilder rcb) throws Exception {
+		Builder(RestContextBuilder rcb, PropertyStore ps) throws Exception {
 
 			Object resource = rcb.resource;
 			
@@ -690,11 +683,8 @@ public final class RestContext extends Context {
 			configFile = rcb.configFile.getResolving(this.varResolver);
 			properties = rcb.properties;
 			
-			beanFilters = ArrayUtils.reverseInline(toObjectArray(rcb.beanFilters, Class.class));
-			pojoSwaps = ArrayUtils.reverseInline(toObjectArray(rcb.pojoSwaps, Class.class));
-
 			for (Class<?> c : rcb.paramResolvers) {
-				RestParam rp = newInstanceFromOuter(resource, RestParam.class, c, true);
+				RestParam rp = ClassUtils.newInstanceFromOuter(resource, RestParam.class, c, true);
 				paramResolvers.put(rp.forClass(), rp);
 			}
 
@@ -714,9 +704,9 @@ public final class RestContext extends Context {
 
 			if (messageBundle == null)
 				messageBundle = new MessageBundle(resource.getClass(), "");
-
-			serializers = rcb.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(rcb.serializerListener).build();
-			parsers = rcb.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).listener(rcb.parserListener).build();
+			
+			serializers = rcb.serializers.apply(ps).add(properties).listener(rcb.serializerListener).build();
+			parsers = rcb.parsers.apply(ps).add(properties).listener(rcb.parserListener).build();
 			partSerializer = resolve(resource, HttpPartSerializer.class, rcb.partSerializer, serializers.getPropertyStore());
 			partParser = resolve(resource, HttpPartParser.class, rcb.partParser, parsers.getPropertyStore());
 			encoders = rcb.encoders.build();
@@ -724,7 +714,7 @@ public final class RestContext extends Context {
 			supportedAcceptTypes = rcb.supportedAcceptTypes != null ? rcb.supportedAcceptTypes : parsers.getSupportedMediaTypes();
 			defaultRequestHeaders.putAll(rcb.defaultRequestHeaders);
 			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(rcb.defaultResponseHeaders));
-			beanContext = BeanContext.create().beanFilters(beanFilters).pojoSwaps(pojoSwaps).add(properties).build();
+			beanContext = BeanContext.create().apply(ps).add(properties).build();
 			contextPath = rcb.contextPath;
 
 			for (Object o : rcb.converters)
@@ -1352,38 +1342,6 @@ public final class RestContext extends Context {
 	}
 
 	/**
-	 * Returns the bean filters associated with this resource.
-	 *
-	 * <p>
-	 * Bean filters at the class level are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#beanFilters() @RestResource.beanFilters()} annotation.
-	 * 	<li>{@link RestContextBuilder#beanFilters(Class...)} method.
-	 * </ul>
-	 *
-	 * @return The bean filters associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected Class<?>[] getBeanFilters() {
-		return beanFilters;
-	}
-
-	/**
-	 * Returns the POJO swaps associated with this resource.
-	 *
-	 * <p>
-	 * POJO swaps at the class level are defined via one of the following:
-	 * <ul>
-	 * 	<li>{@link RestResource#pojoSwaps() @RestResource.pojoSwaps()} annotation.
-	 * 	<li>{@link RestContextBuilder#pojoSwaps(Class...)} method.
-	 * </ul>
-	 *
-	 * @return The POJO swaps associated with this resource.  Never <jk>null</jk>.
-	 */
-	protected Class<?>[] getPojoSwaps() {
-		return pojoSwaps;
-	}
-
-	/**
 	 * Finds the {@link RestParam} instances to handle resolving objects on the calls to the specified Java method.
 	 *
 	 * @param method The Java method being called.
@@ -1863,13 +1821,13 @@ public final class RestContext extends Context {
 		}
 	}
 
-	@Override
-	public Session createSession(SessionArgs args) {
+	@Override /* BeanContextBuilder */
+	public BeanSession createSession(BeanSessionArgs args) {
 		throw new NoSuchMethodError();
 	}
 
-	@Override
-	public SessionArgs createDefaultSessionArgs() {
+	@Override /* BeanContextBuilder */
+	public BeanSessionArgs createDefaultSessionArgs() {
 		throw new NoSuchMethodError();
 	}
 }

@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.rest.annotation.Inherit.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
@@ -91,7 +90,7 @@ public class ParsersResource extends RestServletDefault {
 	//====================================================================================================
 	// Parser overridden on method.
 	//====================================================================================================
-	@RestMethod(name=PUT, path="/testParserOverriddenOnMethod", parsers={TestParserB.class,TestParserC.class}, parsersInherit=PARSERS)
+	@RestMethod(name=PUT, path="/testParserOverriddenOnMethod", parsers={TestParserB.class,TestParserC.class}, inherit="PARSERS")
 	public String testParserOverriddenOnMethod(@Body String in) {
 		return in;
 	}
@@ -118,7 +117,7 @@ public class ParsersResource extends RestServletDefault {
 	//====================================================================================================
 	// Parser with different Accept than Content-Type.
 	//====================================================================================================
-	@RestMethod(name=PUT, path="/testParserWithDifferentMediaTypes", parsers={TestParserD.class}, parsersInherit=PARSERS)
+	@RestMethod(name=PUT, path="/testParserWithDifferentMediaTypes", parsers={TestParserD.class}, inherit="PARSERS")
 	public String testParserWithDifferentMediaTypes(@Body String in) {
 		return in;
 	}

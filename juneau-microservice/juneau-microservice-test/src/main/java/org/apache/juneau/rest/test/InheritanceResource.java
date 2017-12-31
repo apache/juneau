@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.annotation.Inherit.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
@@ -84,7 +83,7 @@ public class InheritanceResource extends RestServlet {
 			name=GET,
 			path="/test3",
 			serializers=S5.class,
-			serializersInherit=SERIALIZERS
+			inherit="SERIALIZERS"
 		)
 		public Reader test3(RestResponse res) {
 			return new StringReader(new ObjectList(res.getSupportedMediaTypes()).toString());
@@ -122,7 +121,7 @@ public class InheritanceResource extends RestServlet {
 			name=GET,
 			path="/test3",
 			parsers=P5.class,
-			parsersInherit=PARSERS
+			inherit="PARSERS"
 		)
 		public Reader test3(RestRequest req) {
 			return new StringReader(new ObjectList(req.getSupportedMediaTypes()).toString());
@@ -164,7 +163,7 @@ public class InheritanceResource extends RestServlet {
 		}
 
 		// Should show ['F1Swap','F2Swap','F3Swap']
-		@RestMethod(name=GET, path="/test3", pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
+		@RestMethod(name=GET, path="/test3", pojoSwaps=F3Swap.class, inherit="TRANSFORMS")
 		public Object[] test3() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
@@ -178,7 +177,7 @@ public class InheritanceResource extends RestServlet {
 
 		// Should show ['F1Swap','F2Swap','F3Swap']
 		// Overriding serializer does have parent filters applied.
-		@RestMethod(name=GET, path="/test5", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
+		@RestMethod(name=GET, path="/test5", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class, inherit="TRANSFORMS")
 		public Object[] test5() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}

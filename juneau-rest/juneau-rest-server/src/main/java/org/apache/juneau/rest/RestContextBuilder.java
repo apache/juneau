@@ -79,7 +79,7 @@ import org.apache.juneau.utils.*;
  * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)</code> before
  * you modify this config object, you won't see the changes!
  */
-public class RestContextBuilder extends ContextBuilder implements ServletConfig {
+public class RestContextBuilder extends BeanContextBuilder implements ServletConfig {
 
 	final ServletConfig inner;
 	
@@ -97,8 +97,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	VarResolverBuilder varResolverBuilder;
 
 	List<Class<?>>
-		beanFilters = new ArrayList<>(),
-		pojoSwaps = new ArrayList<>(),
 		paramResolvers = new ArrayList<>();
 	Class<? extends SerializerListener> serializerListener;
 	Class<? extends ParserListener> parserListener;
@@ -418,43 +416,6 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 	 */
 	public RestContextBuilder setProperties(Map<String,Object> properties) {
 		this.properties.putAll(properties);
-		return this;
-	}
-
-	/**
-	 * Adds class-level bean filters to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#beanFilters() @RestResource.beanFilters()}
-	 * annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param beanFilters The bean filters to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder beanFilters(Class<?>...beanFilters) {
-		this.beanFilters.addAll(Arrays.asList(beanFilters));
-		return this;
-	}
-
-	/**
-	 * Adds class-level pojo swaps to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#pojoSwaps() @RestResource.pojoSwaps()} annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param pojoSwaps The pojo swaps to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder pojoSwaps(Class<?>...pojoSwaps) {
-		this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 		return this;
 	}
 
@@ -1556,6 +1517,372 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return set(REST_maxInput, value);
 	}
 
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beansRequireDefaultConstructor(boolean value) {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beansRequireSerializable(boolean value) {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beansRequireSettersForGetters(boolean value) {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beansRequireSomeProperties(boolean value) {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder methodVisibility(Visibility value) {
+		super.methodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackages(String...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackages(Collection<String> values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackages(boolean append, String...values) {
+		super.notBeanPackages(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackages(boolean append, Collection<String> values) {
+		super.notBeanPackages(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackagesRemove(Collection<String> values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClasses(Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClasses(Collection<Class<?>> values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClasses(boolean append, Class<?>...values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClassesRemove(Class<?>...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFilters(Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFilters(Collection<Class<?>> values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFilters(boolean append, Class<?>...values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFiltersRemove(Collection<Class<?>> values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwaps(Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwaps(Collection<Class<?>> values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwaps(boolean append, Class<?>...values) {
+		super.pojoSwaps(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
+		super.pojoSwaps(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> RestContextBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder excludeProperties(String beanClassName, String properties) {
+		super.excludeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionary(Collection<Class<?>> values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionary(boolean append, Class<?>...values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder defaultParser(Class<?> value) {
+		super.defaultParser(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder debug() {
+		super.debug();
+		return this;
+	}
+
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
@@ -1629,9 +1956,9 @@ public class RestContextBuilder extends ContextBuilder implements ServletConfig 
 		return inner.getServletName();
 	}
 
-	@Override
-	public Context build() {
-		// TODO Auto-generated method stub
+	@Override /* BeanContextBuilder */
+	public BeanContext build() {
+		// We don't actually generate bean context objects from this class yet.
 		return null;
 	}
 }

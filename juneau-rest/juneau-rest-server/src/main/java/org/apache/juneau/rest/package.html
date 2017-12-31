@@ -1557,7 +1557,7 @@
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
 			<li class='ja'>
-				{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit() @RestMethod.serializersInherit()}
+				{@link org.apache.juneau.rest.annotation.RestMethod#inherit() @RestMethod.inherit()}
 				<br>Controls how serializers are inherited from the servlet class.
 		</ul>
 	</div>
@@ -1620,7 +1620,7 @@
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
 			<li class='ja'>
-				{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit() @RestMethod.parsersInherit()} 
+				{@link org.apache.juneau.rest.annotation.RestMethod#inherit() @RestMethod.inherit()} 
 				<br>Controls how parsers are inherited from the servlet class.
 		</ul>
 	</div>
@@ -1722,11 +1722,8 @@
 				{@link org.apache.juneau.rest.RestContext}
 				<br>Properties associated with the {@link org.apache.juneau.rest.RestServlet} class.
 			<li class='ja'>
-				{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit @RestMethod.serializersInherit()} 
-				<br>Controls how serializers inherit properties from the servlet class.
-			<li class='ja'>
-				{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit @RestMethod.parsersInheritInherit()} 
-				<br>Controls how parsers inherit properties from the servlet class.
+				{@link org.apache.juneau.rest.annotation.RestMethod#inherit @RestMethod.inherit()} 
+				<br>Controls how serializers and parsers inherit properties from the servlet class.
 		</ul>
 	</div>
 	
@@ -1786,11 +1783,8 @@
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
 			<li class='ja'>
-				{@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit @RestMethod.serializersInherit()} 
-				<br>Controls how serializers inherit transforms (bean filters and POJO swaps) from the servlet class.
-			<li class='ja'>
-				{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit @RestMethod.parsersInherit()} 
-				<br>Controls how parsers inherit transforms from the servlet class.
+				{@link org.apache.juneau.rest.annotation.RestMethod#inherit @RestMethod.inherit()} 
+				<br>Controls how serializers and parsers inherit transforms (bean filters and POJO swaps) from the servlet class.
 		</ul>
 	</div>	
 	
