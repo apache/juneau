@@ -21,6 +21,11 @@ import org.apache.juneau.http.*;
  */
 public class BeanSessionArgs extends SessionArgs {
 
+	/**
+	 * Default empty session arguments.
+	 */
+	public static final BeanSessionArgs DEFAULT = new BeanSessionArgs(ObjectMap.EMPTY_MAP, null, null, null);
+
 	final Locale locale;
 	final TimeZone timeZone;
 	final MediaType mediaType;

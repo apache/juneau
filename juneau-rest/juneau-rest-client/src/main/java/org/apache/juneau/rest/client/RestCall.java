@@ -69,7 +69,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked" })
-public final class RestCall extends Session {
+public final class RestCall extends BeanSession {
 
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
@@ -106,7 +106,7 @@ public final class RestCall extends Session {
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestCall(RestClient client, HttpRequestBase request, URI uri) throws RestCallException {
-		super(SessionArgs.DEFAULT);
+		super(client, BeanSessionArgs.DEFAULT);
 		this.client = client;
 		this.request = request;
 		for (RestCallInterceptor i : this.client.interceptors)
@@ -2082,13 +2082,5 @@ public final class RestCall extends Session {
 	public RestCall debug() throws RestCallException {
 		header("Debug", true);
 		return this;
-	}
-
-	private boolean isBean(Object o) throws RestCallException {
-		return getBeanContext().isBean(o);
-	}
-
-	private BeanMap<?> toBeanMap(Object o) throws RestCallException {
-		return getBeanContext().createSession().toBeanMap(o);
 	}
 }
