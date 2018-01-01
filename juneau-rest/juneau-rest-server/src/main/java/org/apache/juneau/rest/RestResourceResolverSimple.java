@@ -19,10 +19,9 @@ import java.lang.reflect.*;
 /**
  * Denotes the default resolver.
  *
- * <p>
  * The default implementation simply instantiates the class using one of the following constructors:
  * <ul>
- * 	<li><code><jk>public</jk> T(RestConfig)</code>
+ * 	<li><code><jk>public</jk> T(RestContextBuilder)</code>
  * 	<li><code><jk>public</jk> T()</code>
  * </ul>
  *
@@ -32,11 +31,10 @@ import java.lang.reflect.*;
  * full initialization.
  *
  * <p>
- * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
- * {@link RestContextBuilder} and {@link RestContext} objects:
+ * Non-<code>RestServlet</code> classes can also add the following method to get access to the {@link RestContextBuilder} 
+ * object:
  * <ul>
- * 	<li><code><jk>public void</jk> init(RestConfig);</code>
- * 	<li><code><jk>public void</jk> init(RestContext);</code>
+ * 	<li><code><jk>public void</jk> init(RestContextBuilder);</code>
  * </ul>
  *
  */

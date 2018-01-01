@@ -507,11 +507,110 @@ public final class RestContext extends BeanContext {
 	 * 	<li>Property: {@link RestContext#REST_clientVersionHeader}
 	 * 	<li>Annotation:  {@link RestResource#clientVersionHeader()} 
 	 * 	<li>Method: {@link RestContextBuilder#clientVersionHeader(String)}
-	 * 	<li>The default value is <js>"X-Client-Version"</js>.
 	 *	</ul>
 	 */
 	public static final String REST_clientVersionHeader = PREFIX + "clientVersionHeader.s";
 
+	/**
+	 * <b>Configuration property:</b>  REST resource resolver.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.resourceResolver.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestResourceResolver&gt; | RestResourceResolver</code>
+	 * 	<li><b>Default:</b> {@link RestResourceResolverSimple}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * The resolver used for resolving child resources.
+	 * 
+	 * <p>
+	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_resourceResolver}
+	 * 	<li>Annotation:  {@link RestResource#resourceResolver()} 
+	 * 	<li>Method: {@link RestContextBuilder#resourceResolver(Class)} / {@link RestContextBuilder#resourceResolver(RestResourceResolver)}
+	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 *	</ul>
+	 */
+	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
+
+	/**
+	 * <b>Configuration property:</b>  REST logger.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.logger.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestLogger&gt; | RestLogger</code>
+	 * 	<li><b>Default:</b> {@link RestLogger.Normal}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the logger to use for logging.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_logger}
+	 * 	<li>Annotation:  {@link RestResource#logger()} 
+	 * 	<li>Method: {@link RestContextBuilder#logger(Class)} / {@link RestContextBuilder#logger(RestLogger)} 
+	 * 	<li>The {@link RestLogger.Normal} logger can be used to provide basic error logging to the Java logger.
+	 *	</ul>
+	 */
+	public static final String REST_logger = PREFIX + "logger.o";
+
+	/**
+	 * <b>Configuration property:</b>  REST call handler.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.callHandler.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestCallHandler&gt; | RestCallHandler</code>
+	 * 	<li><b>Default:</b> {@link RestCallHandler}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * This class handles the basic lifecycle of an HTTP REST call.
+	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
+
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_callHandler}
+	 * 	<li>Annotation:  {@link RestResource#callHandler()} 
+	 * 	<li>Method: {@link RestContextBuilder#callHandler(Class)} / {@link RestContextBuilder#callHandler(RestCallHandler)} 
+	 *	</ul>
+	 */
+	public static final String REST_callHandler = PREFIX + "callHandler.o";
+
+	/**
+	 * <b>Configuration property:</b>  REST info provider. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.infoProvider.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestInfoProvider&gt; | RestInfoProvider</code>
+	 * 	<li><b>Default:</b> {@link RestInfoProvider}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Class used to retrieve title/description/swagger information about a resource.
+	 *
+	 * <p>
+	 * Subclasses can be used to customize the documentation on a resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_infoProvider}
+	 * 	<li>Annotation:  {@link RestResource#infoProvider()} 
+	 * 	<li>Method: {@link RestContextBuilder#infoProvider(Class)} / {@link RestContextBuilder#infoProvider(RestInfoProvider)} 
+	 *	</ul>
+	 */
+	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
+	
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -636,6 +735,8 @@ public final class RestContext extends BeanContext {
 		
 		defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, String.class);
 		
+		logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLogger.NoOp.class, false);
+
 		try {
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 
@@ -654,7 +755,6 @@ public final class RestContext extends BeanContext {
 			this.staticFilesPrefixes = b.staticFilesPrefixes;
 			this.msgs = b.messageBundle;
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
-			this.logger = b.logger;
 			this.fullPath = b.fullPath;
 			this.contextPath = nullIfEmpty(b.contextPath);
 			this.widgets = Collections.unmodifiableMap(b.widgets);
@@ -853,7 +953,7 @@ public final class RestContext extends BeanContext {
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = resolve(resource, RestResourceResolver.class, b.resourceResolver);
+			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverSimple.class : parentContext.resourceResolver, true, this);
 			for (Object o : builder.childResources) {
 				String path = null;
 				Object r = null;
@@ -893,8 +993,8 @@ public final class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = builder.callHandler == null ? new RestCallHandler(this) : resolve(resource, RestCallHandler.class, builder.callHandler, this);
-			infoProvider = builder.infoProvider == null ? new RestInfoProvider(this) : resolve(resource, RestInfoProvider.class, builder.infoProvider, this);
+			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandler.class, true, this);
+			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProvider.class, true, this);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -929,10 +1029,8 @@ public final class RestContext extends BeanContext {
 		Map<String,String> staticFilesMap;
 		String[] staticFilesPrefixes;
 		MessageBundle messageBundle;
-		RestLogger logger;
 		String fullPath;
 		Map<String,Widget> widgets;
-		Object resourceResolver;
 		String contextPath;
 
 		@SuppressWarnings("unchecked")
@@ -941,8 +1039,6 @@ public final class RestContext extends BeanContext {
 			Object resource = rcb.resource;
 			
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
-
-			resourceResolver = rcb.resourceResolver;
 
 			varResolver = rcb.varResolverBuilder
 				.vars(FileVar.class, LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
@@ -993,7 +1089,6 @@ public final class RestContext extends BeanContext {
 			}
 			staticFilesPrefixes = staticFilesMap.keySet().toArray(new String[0]);
 
-			logger = rcb.logger == null ? new RestLogger.NoOp() : resolve(resource, RestLogger.class, rcb.logger);
 
 			fullPath = (rcb.parentContext == null ? "" : (rcb.parentContext.fullPath + '/')) + rcb.path;
 

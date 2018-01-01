@@ -28,10 +28,12 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li>{@link RestContextBuilder#resourceResolver(Class)}/{@link RestContextBuilder#resourceResolver(RestResourceResolver)}
  * 		methods.
  * </ul>
- *
- * <p>
- * An instance of this class can also be passed in through the servlet context as the context attribute
- * {@link RestResource#resourceResolver()}.
+ * 
+ * Implementations must provide one of the following public constructors:
+ * <ul>
+ * 	<li>RestResourceResolver()
+ * 	<li>RestResourceResolver(RestContext)
+ * </ul>
  */
 public interface RestResourceResolver {
 

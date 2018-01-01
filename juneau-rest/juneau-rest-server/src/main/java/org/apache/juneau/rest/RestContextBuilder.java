@@ -112,11 +112,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	HtmlDocBuilder htmlDocBuilder;
 	List<Class<? extends Widget>> widgets = new ArrayList<>();
 
-	Object resourceResolver = RestResourceResolverSimple.class;
-	Object logger = RestLogger.Normal.class;
-	Object callHandler = RestCallHandler.class;
-	Object infoProvider = RestInfoProvider.class;
-
 	Class<?> resourceClass;
 
 	/**
@@ -146,7 +141,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.inner = config;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
-		this.resourceResolver = parentContext == null ? RestResourceResolverSimple.class : parentContext.getResourceResolver();
+		
+		logger(RestLogger.Normal.class);
+
 		try {
 
 			ConfigFileBuilder cfb = new ConfigFileBuilder();
@@ -705,40 +702,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Overrides the default REST resource resolver.
-	 *
-	 * <p>
-	 * The resource resolver is used to resolve instances from {@link Class} objects defined in the
-	 * {@link RestResource#children()} annotation.
-	 * The default value is {@link RestResourceResolverSimple}.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#resourceResolver() @RestResource.resourceResolver()} annotation.
-	 *
-	 * @param resourceResolver The new resource resolver.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder resourceResolver(Class<? extends RestResourceResolver> resourceResolver) {
-		this.resourceResolver = resourceResolver;
-		return this;
-	}
-
-	/**
-	 * Overrides the default REST resource resolver.
-	 *
-	 * <p>
-	 * Same as {@link #resourceResolver(Class)} except allows you to specify an instance instead of a class.
-	 *
-	 * @param resourceResolver The new resource resolver.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder resourceResolver(RestResourceResolver resourceResolver) {
-		this.resourceResolver = resourceResolver;
-		return this;
-	}
-
-	/**
 	 * Sets the URL path of the resource <js>"/foobar"</js>.
 	 *
 	 * <p>
@@ -776,110 +739,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public HtmlDocBuilder getHtmlDocBuilder() {
 		return htmlDocBuilder;
-	}
-
-	/**
-	 * Overrides the logger for the resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#logger() @RestResource.logger()} annotation.
-	 *
-	 * @param logger The new logger for this resource.  Can be <jk>null</jk> to disable logging.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder logger(Class<? extends RestLogger> logger) {
-		this.logger = logger;
-		return this;
-	}
-
-	/**
-	 * Overrides the logger for the resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#logger() @RestResource.logger()} annotation.
-	 *
-	 * @param logger The new logger for this resource.  Can be <jk>null</jk> to disable logging.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder logger(RestLogger logger) {
-		this.logger = logger;
-		return this;
-	}
-
-	/**
-	 * Overrides the call handler for the resource.
-	 *
-	 * <p>
-	 * The call handler is the object that handles execution of REST HTTP calls.
-	 * Subclasses can be created that customize the behavior of how REST calls are handled.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#callHandler() @RestResource.callHandler()}
-	 * annotation.
-	 *
-	 * @param restHandler The new call handler for this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder callHandler(Class<? extends RestCallHandler> restHandler) {
-		this.callHandler = restHandler;
-		return this;
-	}
-
-	/**
-	 * Overrides the call handler for the resource.
-	 *
-	 * <p>
-	 * The call handler is the object that handles execution of REST HTTP calls.
-	 * Subclasses can be created that customize the behavior of how REST calls are handled.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#callHandler() @RestResource.callHandler()}
-	 * annotation.
-	 *
-	 * @param restHandler The new call handler for this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder callHandler(RestCallHandler restHandler) {
-		this.callHandler = restHandler;
-		return this;
-	}
-
-	/**
-	 * Overrides the info provider for the resource.
-	 *
-	 * <p>
-	 * The info provider provides all the various information about a resource such as the Swagger documentation.
-	 * Subclasses can be created that customize the information.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#infoProvider() @RestResource.infoProvider()}
-	 * annotation.
-	 *
-	 * @param infoProvider The new info provider for this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder infoProvider(Class<? extends RestInfoProvider> infoProvider) {
-		this.infoProvider = infoProvider;
-		return this;
-	}
-
-	/**
-	 * Overrides the info provider for the resource.
-	 *
-	 * <p>
-	 * The info provider provides all the various information about a resource such as the Swagger documentation.
-	 * Subclasses can be created that customize the information.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#infoProvider() @RestResource.infoProvider()}
-	 * annotation.
-	 *
-	 * @param infoProvider The new info provider for this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder infoProvider(RestInfoProvider infoProvider) {
-		this.infoProvider = infoProvider;
-		return this;
 	}
 
 	/**
@@ -1661,11 +1520,210 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * REST resource resolver.
+	 * 
+	 * <p>
+	 * The resolver used for resolving child resources.
+	 * 
+	 * <p>
+	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_resourceResolver}
+	 * 	<li>Annotation:  {@link RestResource#resourceResolver()} 
+	 * 	<li>Method: {@link RestContextBuilder#resourceResolver(Class)} / {@link RestContextBuilder#resourceResolver(RestResourceResolver)}
+	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 *	</ul>
+	 *
+	 * @param resourceResolver The new resource resolver.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder resourceResolver(Class<? extends RestResourceResolver> resourceResolver) {
+		return set(REST_resourceResolver, resourceResolver);
+	}
+
+	/**
+	 * REST resource resolver.
+	 * 
+	 * <p>
+	 * The resolver used for resolving child resources.
+	 * 
+	 * <p>
+	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_resourceResolver}
+	 * 	<li>Annotation:  {@link RestResource#resourceResolver()} 
+	 * 	<li>Method: {@link RestContextBuilder#resourceResolver(Class)} / {@link RestContextBuilder#resourceResolver(RestResourceResolver)}
+	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 *	</ul>
+	 *
+	 * @param resourceResolver The new resource resolver.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder resourceResolver(RestResourceResolver resourceResolver) {
+		return set(REST_resourceResolver, resourceResolver);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST logger.
+	 * 
+	 * <p>
+	 * Specifies the logger to use for logging.
+	 *
+	 * <p>
+	 * The default logger performs basic error logging to the Java logger.
+	 * <br>Subclasses can be used to customize logging behavior on the resource.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_logger}
+	 * 	<li>Annotation:  {@link RestResource#logger()} 
+	 * 	<li>Method: {@link RestContextBuilder#logger(Class)} / {@link RestContextBuilder#logger(RestLogger)} 
+	 *	</ul>
+	 *
+	 * @param logger The new logger for this resource.  Can be <jk>null</jk> to disable logging.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder logger(Class<? extends RestLogger> logger) {
+		return set(REST_logger, logger);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST logger.
+	 * 
+	 * <p>
+	 * Specifies the logger to use for logging.
+	 *
+	 * <p>
+	 * The default logger performs basic error logging to the Java logger.
+	 * <br>Subclasses can be used to customize logging behavior on the resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_logger}
+	 * 	<li>Annotation:  {@link RestResource#logger()} 
+	 * 	<li>Method: {@link RestContextBuilder#logger(Class)} / {@link RestContextBuilder#logger(RestLogger)} 
+	 *	</ul>
+	 *
+	 * @param logger The new logger for this resource.  Can be <jk>null</jk> to disable logging.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder logger(RestLogger logger) {
+		return set(REST_logger, logger);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST call handler.
+	 *
+	 * <p>
+	 * This class handles the basic lifecycle of an HTTP REST call.
+	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
+
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_callHandler}
+	 * 	<li>Annotation:  {@link RestResource#callHandler()} 
+	 * 	<li>Method: {@link RestContextBuilder#callHandler(Class)} / {@link RestContextBuilder#callHandler(RestCallHandler)} 
+	 *	</ul>
+	 *
+	 * @param restHandler The new call handler for this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder callHandler(Class<? extends RestCallHandler> restHandler) {
+		return set(REST_callHandler, restHandler);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST call handler.
+	 *
+	 * <p>
+	 * This class handles the basic lifecycle of an HTTP REST call.
+	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_callHandler}
+	 * 	<li>Annotation:  {@link RestResource#callHandler()} 
+	 * 	<li>Method: {@link RestContextBuilder#callHandler(Class)} / {@link RestContextBuilder#callHandler(RestCallHandler)} 
+	 *	</ul>
+	 *
+	 * @param restHandler The new call handler for this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder callHandler(RestCallHandler restHandler) {
+		return set(REST_callHandler, restHandler);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST info provider. 
+	 *
+	 * <p>
+	 * Class used to retrieve title/description/swagger information about a resource.
+	 *
+	 * <p>
+	 * Subclasses can be used to customize the documentation on a resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_infoProvider}
+	 * 	<li>Annotation:  {@link RestResource#infoProvider()} 
+	 * 	<li>Method: {@link RestContextBuilder#infoProvider(Class)} / {@link RestContextBuilder#infoProvider(RestInfoProvider)} 
+	 *	</ul>
+	 *
+	 * @param infoProvider The new info provider for this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder infoProvider(Class<? extends RestInfoProvider> infoProvider) {
+		return set(REST_infoProvider, infoProvider);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST info provider. 
+	 *
+	 * <p>
+	 * Class used to retrieve title/description/swagger information about a resource.
+	 *
+	 * <p>
+	 * Subclasses can be used to customize the documentation on a resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_infoProvider}
+	 * 	<li>Annotation:  {@link RestResource#infoProvider()} 
+	 * 	<li>Method: {@link RestContextBuilder#infoProvider(Class)} / {@link RestContextBuilder#infoProvider(RestInfoProvider)} 
+	 *	</ul>
+	 *
+	 * @param infoProvider The new info provider for this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder infoProvider(RestInfoProvider infoProvider) {
+		return set(REST_infoProvider, infoProvider);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Serializer listener.
+	 * 
+	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#serializerListener() @RestResource.serializerListener()} annotation.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link Serializer#SERIALIZER_listener}
+	 * 	<li>Annotation:  {@link RestResource#serializerListener()} 
+	 * 	<li>Method: {@link RestContextBuilder#serializerListener(Class)} 
+	 *	</ul>
 	 *
 	 * @param listener The listener to add to this config.
 	 * @return This object (for method chaining).
@@ -1677,11 +1735,18 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Specifies the parser listener class to use for listening to non-fatal parse errors.
+	 * <b>Configuration property:</b>  Parser listener.
+	 * 
+	 * <p>
+	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#parserListener() @RestResource.parserListener()} annotation.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link Parser#PARSER_listener}
+	 * 	<li>Annotation:  {@link RestResource#parserListener()} 
+	 * 	<li>Method: {@link RestContextBuilder#parserListener(Class)} 
+	 *	</ul>
 	 *
 	 * @param listener The listener to add to this config.
 	 * @return This object (for method chaining).

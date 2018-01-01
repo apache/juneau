@@ -601,84 +601,110 @@ public @interface RestResource {
 	String clientVersionHeader() default "";
 
 	/**
-	 * Specifies the resolver class to use for resolving child resources by class name.
+	 * REST resource resolver.
+	 * 
+	 * <p>
+	 * The resolver used for resolving child resources.
+	 * 
+	 * <p>
+	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
 	 *
 	 * <p>
-	 * The default implementation simply instantiates the class using one of the following constructors:
-	 * <ul>
-	 * 	<li><code><jk>public</jk> T(RestConfig)</code>
-	 * 	<li><code><jk>public</jk> T()</code>
-	 * </ul>
-	 *
-	 * <p>
-	 * The former constructor can be used to get access to the {@link RestContextBuilder} object to get access to the config
-	 * file and initialization information or make programmatic modifications to the resource before full initialization.
-	 *
-	 * <p>
-	 * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
-	 * {@link RestContextBuilder} and {@link RestContext} objects:
-	 * <ul>
-	 * 	<li><code><jk>public void</jk> init(RestConfig);</code>
-	 * 	<li><code><jk>public void</jk> init(RestContext);</code>
-	 * </ul>
-	 *
-	 * <p>
-	 * Subclasses can be used to provide customized resolution of REST resource class instances.
-	 *
-	 * <p>
-	 * If not specified on a child resource, the resource resolver is inherited from the parent resource context.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#resourceResolver(Class)}/
-	 * {@link RestContextBuilder#resourceResolver(RestResourceResolver)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_resourceResolver}
+	 * 	<li>Annotation:  {@link RestResource#resourceResolver()} 
+	 * 	<li>Method: {@link RestContextBuilder#resourceResolver(Class)} / {@link RestContextBuilder#resourceResolver(RestResourceResolver)}
+	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 *	</ul>
 	 */
 	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
 
 	/**
-	 * Specifies the logger class to use for logging.
+	 * REST logger.
+	 * 
+	 * <p>
+	 * Specifies the logger to use for logging.
 	 *
 	 * <p>
-	 * The default logger performs basic error logging to the Java logger.
-	 * Subclasses can be used to customize logging behavior on the resource.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestContextBuilder#logger(Class)}/{@link RestContextBuilder#logger(RestLogger)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_logger}
+	 * 	<li>Annotation:  {@link RestResource#logger()} 
+	 * 	<li>Method: {@link RestContextBuilder#logger(Class)} / {@link RestContextBuilder#logger(RestLogger)} 
+	 * 	<li>The {@link org.apache.juneau.rest.RestLogger.Normal} logger can be used to provide basic error logging to the Java logger.
+	 *	</ul>
 	 */
 	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
 
 	/**
-	 * Specifies the REST call handler class.
+	 * REST call handler.
 	 *
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * Subclasses can be used to customize how these HTTP calls are handled.
-	 *
+	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
+
 	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestContextBuilder#callHandler(Class)}/{@link RestContextBuilder#callHandler(RestCallHandler)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_callHandler}
+	 * 	<li>Annotation:  {@link RestResource#callHandler()} 
+	 * 	<li>Method: {@link RestContextBuilder#callHandler(Class)} / {@link RestContextBuilder#callHandler(RestCallHandler)} 
+	 *	</ul>
 	 */
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
 
 	/**
-	 * Specifies the class used to retrieve title/description/swagger information about a resource.
+	 * <b>Configuration property:</b>  REST info provider. 
+	 * 
+	 * <p>
+	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
 	 * <p>
 	 * Subclasses can be used to customize the documentation on a resource.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the
-	 * {@link RestContextBuilder#infoProvider(Class)}/{@link RestContextBuilder#infoProvider(RestInfoProvider)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_infoProvider}
+	 * 	<li>Annotation:  {@link RestResource#infoProvider()} 
+	 * 	<li>Method: {@link RestContextBuilder#infoProvider(Class)} / {@link RestContextBuilder#infoProvider(RestInfoProvider)} 
+	 *	</ul>
 	 */
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
 
 	/**
-	 * Specifies the serializer listener class to use for listening for non-fatal errors.
+	 * Serializer listener.
+	 * 
+	 * <p>
+	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link Serializer#SERIALIZER_listener}
+	 * 	<li>Annotation:  {@link RestResource#serializerListener()} 
+	 * 	<li>Method: {@link RestContextBuilder#serializerListener(Class)} 
+	 *	</ul>
 	 */
 	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
 
 	/**
-	 * Specifies the parser listener class to use for listening for non-fatal errors.
+	 * Parser listener.
+	 * 
+	 * <p>
+	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link Parser#PARSER_listener}
+	 * 	<li>Annotation:  {@link RestResource#parserListener()} 
+	 * 	<li>Method: {@link RestContextBuilder#parserListener(Class)} 
+	 *	</ul>
+	 *
+	 * @param listener The listener to add to this config.
+	 * @return This object (for method chaining).
 	 */
 	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 
