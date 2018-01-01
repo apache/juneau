@@ -580,17 +580,23 @@ public @interface RestResource {
 	String staticFiles() default "";
 
 	/**
-	 * Specifies the HTTP header name used to identify the client version.
+	 * Client version header.
+	 *
+	 * <p>
+	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 *
 	 * <p>
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * Used in conjunction with {@link RestMethod#clientVersion()} annotation.
-	 *
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
+	 * 
 	 * <p>
-	 * If not specified, uses <js>"X-Client-Version"</js>.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#clientVersionHeader(String)} method.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_clientVersionHeader}
+	 * 	<li>Annotation:  {@link RestResource#clientVersionHeader()} 
+	 * 	<li>Method: {@link RestContextBuilder#clientVersionHeader(String)}
+	 * 	<li>The default value is <js>"X-Client-Version"</js>.
+	 *	</ul>
 	 */
 	String clientVersionHeader() default "";
 

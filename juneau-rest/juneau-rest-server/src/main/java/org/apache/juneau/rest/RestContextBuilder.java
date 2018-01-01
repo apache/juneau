@@ -108,7 +108,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	List<Object> staticFiles;
 	RestContext parentContext;
 	String path;
-	String clientVersionHeader = "X-Client-Version";
 	String contextPath;
 	HtmlDocBuilder htmlDocBuilder;
 	List<Class<? extends Widget>> widgets = new ArrayList<>();
@@ -752,21 +751,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (startsWith(path, '/'))
 			path = path.substring(1);
 		this.path = path;
-		return this;
-	}
-
-	/**
-	 * Sets name of the header used to denote the client version on HTTP requests.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#clientVersionHeader() @RestResource.clientVersionHeader()} annotation.
-	 *
-	 * @param clientVersionHeader The name of the HTTP header that denotes the client version.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder clientVersionHeader(String clientVersionHeader) {
-		this.clientVersionHeader = clientVersionHeader;
 		return this;
 	}
 
@@ -1649,6 +1633,31 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder supportedContentTypes(boolean append, MediaType...mediaTypes) {
 		return set(append, REST_supportedContentTypes, mediaTypes);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Client version header.
+	 *
+	 * <p>
+	 * Specifies the name of the header used to denote the client version on HTTP requests.
+	 *
+	 * <p>
+	 * The client version is used to support backwards compatibility for breaking REST interface changes.
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_clientVersionHeader}
+	 * 	<li>Annotation:  {@link RestResource#clientVersionHeader()} 
+	 * 	<li>Method: {@link RestContextBuilder#clientVersionHeader(String)}
+	 *	</ul>
+	 *
+	 * @param clientVersionHeader The name of the HTTP header that denotes the client version.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder clientVersionHeader(String clientVersionHeader) {
+		return set(REST_clientVersionHeader, clientVersionHeader);
 	}
 
 	/**

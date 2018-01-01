@@ -484,6 +484,35 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_supportedAcceptTypes = PREFIX + "supportedAcceptTypes.ls";
 
+	/**
+	 * <b>Configuration property:</b>  Client version header.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.clientVersionHeader.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"X-Client-Version"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the name of the header used to denote the client version on HTTP requests.
+	 *
+	 * <p>
+	 * The client version is used to support backwards compatibility for breaking REST interface changes.
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_clientVersionHeader}
+	 * 	<li>Annotation:  {@link RestResource#clientVersionHeader()} 
+	 * 	<li>Method: {@link RestContextBuilder#clientVersionHeader(String)}
+	 * 	<li>The default value is <js>"X-Client-Version"</js>.
+	 *	</ul>
+	 */
+	public static final String REST_clientVersionHeader = PREFIX + "clientVersionHeader.s";
+
+	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -590,6 +619,7 @@ public final class RestContext extends BeanContext {
 		useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
 		defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
 		maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
+		clientVersionHeader = getProperty(REST_clientVersionHeader, String.class, "X-Client-Version");
 
 		converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, ps);
 		guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, ps);
@@ -618,7 +648,6 @@ public final class RestContext extends BeanContext {
 			this.partSerializer = b.partSerializer;
 			this.partParser = b.partParser;
 			this.encoders = b.encoders;
-			this.clientVersionHeader = b.clientVersionHeader;
 			this.beanContext = b.beanContext;
 			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
 			this.staticFilesMap = Collections.unmodifiableMap(b.staticFilesMap);
@@ -894,7 +923,6 @@ public final class RestContext extends BeanContext {
 		HttpPartSerializer partSerializer;
 		HttpPartParser partParser;
 		EncoderGroup encoders;
-		String clientVersionHeader = "";
 
 		BeanContext beanContext;
 		MimetypesFileTypeMap mimetypesFileTypeMap;
@@ -924,8 +952,6 @@ public final class RestContext extends BeanContext {
 			configFile = rcb.configFile.getResolving(this.varResolver);
 			properties = rcb.properties;
 			
-			clientVersionHeader = rcb.clientVersionHeader;
-
 			// Find resource resource bundle location.
 			for (Map.Entry<Class<?>,RestResource> e : restResourceAnnotationsChildFirst.entrySet()) {
 				Class<?> c = e.getKey();
