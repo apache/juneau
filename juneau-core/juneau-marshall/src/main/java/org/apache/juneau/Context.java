@@ -153,6 +153,18 @@ public abstract class Context {
 	}
 	
 	/**
+	 * Returns the set property with the specified name.
+	 * 
+	 * @param key The property name.
+	 * @param eType The class type of the elements in the property.
+	 * @param def The default value if the property doesn't exist or is empty.
+	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or the default value if it doesn't exist or is empty.
+	 */
+	public final <T> Set<T> getSetProperty(String key, Class<T> eType, Set<T> def) {
+		return propertyStore.getSetProperty(key, eType, def);
+	}
+	
+	/**
 	 * Returns the class set property with the specified name.
 	 * 
 	 * @param key The property name.
@@ -184,6 +196,18 @@ public abstract class Context {
 		return propertyStore.getListProperty(key, eType);
 	}
 	
+	/**
+	 * Returns the list property with the specified name.
+	 * 
+	 * @param key The property name.
+	 * @param eType The class type of the elements in the property.
+	 * @param def The default value if the property doesn't exist or is empty.
+	 * @return The property value as an unmodifiable <code>ArrayList</code>, or the default value if it doesn't exist or is empty.
+	 */
+	public final <T> List<T> getListProperty(String key, Class<T> eType, List<T> def) {
+		return propertyStore.getListProperty(key, eType, def);
+	}
+
 	/**
 	 * Returns the class list property with the specified name.
 	 * 

@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
@@ -439,6 +438,52 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_defaultResponseHeaders = PREFIX + "defaultResponseHeaders.oms";
 
+	/**
+	 * <b>Configuration property:</b>  Supported content media types.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.supportedContentTypes.ls"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_supportedContentTypes}
+	 * 	<li>Annotation:  N/A 
+	 * 	<li>Method: {@link RestContextBuilder#supportedContentTypes(boolean,String...)} / {@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}
+	 *	</ul>
+	 */
+	public static final String REST_supportedContentTypes = PREFIX + "supportedContentTypes.ls";
+	
+	/**
+	 * <b>Configuration property:</b>  Supported accept media types.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.supportedAcceptTypes.ls"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_supportedAcceptTypes}
+	 * 	<li>Annotation:  N/A 
+	 * 	<li>Method: {@link RestContextBuilder#supportedAcceptTypes(boolean,String...)} / {@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}
+	 *	</ul>
+	 */
+	public static final String REST_supportedAcceptTypes = PREFIX + "supportedAcceptTypes.ls";
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -470,7 +515,7 @@ public final class RestContext extends BeanContext {
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final EncoderGroup encoders;
-	private final MediaType[]
+	private final List<MediaType>
 		supportedContentTypes,
 		supportedAcceptTypes;
 	private final Map<String,String> defaultRequestHeaders, defaultResponseHeaders;
@@ -573,8 +618,6 @@ public final class RestContext extends BeanContext {
 			this.partSerializer = b.partSerializer;
 			this.partParser = b.partParser;
 			this.encoders = b.encoders;
-			this.supportedContentTypes = toObjectArray(b.supportedContentTypes, MediaType.class);
-			this.supportedAcceptTypes = toObjectArray(b.supportedAcceptTypes, MediaType.class);
 			this.clientVersionHeader = b.clientVersionHeader;
 			this.beanContext = b.beanContext;
 			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
@@ -586,6 +629,9 @@ public final class RestContext extends BeanContext {
 			this.fullPath = b.fullPath;
 			this.contextPath = nullIfEmpty(b.contextPath);
 			this.widgets = Collections.unmodifiableMap(b.widgets);
+
+			supportedContentTypes = getListProperty(REST_supportedContentTypes, MediaType.class, serializers.getSupportedMediaTypes());
+			supportedAcceptTypes = getListProperty(REST_supportedAcceptTypes, MediaType.class, parsers.getSupportedMediaTypes());
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -850,7 +896,6 @@ public final class RestContext extends BeanContext {
 		EncoderGroup encoders;
 		String clientVersionHeader = "";
 
-		List<MediaType> supportedContentTypes, supportedAcceptTypes;
 		BeanContext beanContext;
 		MimetypesFileTypeMap mimetypesFileTypeMap;
 		Map<String,String> staticFilesMap;
@@ -901,8 +946,6 @@ public final class RestContext extends BeanContext {
 			partSerializer = resolve(resource, HttpPartSerializer.class, rcb.partSerializer, serializers.getPropertyStore());
 			partParser = resolve(resource, HttpPartParser.class, rcb.partParser, parsers.getPropertyStore());
 			encoders = rcb.encoders.build();
-			supportedContentTypes = rcb.supportedContentTypes != null ? rcb.supportedContentTypes : serializers.getSupportedMediaTypes();
-			supportedAcceptTypes = rcb.supportedAcceptTypes != null ? rcb.supportedAcceptTypes : parsers.getSupportedMediaTypes();
 			beanContext = BeanContext.create().apply(ps).add(properties).build();
 			contextPath = rcb.contextPath;
 
@@ -1773,7 +1816,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return The supported <code>Accept</code> header values for this resource.  Never <jk>null</jk>.
 	 */
-	protected MediaType[] getSupportedAcceptTypes() {
+	protected List<MediaType> getSupportedAcceptTypes() {
 		return supportedAcceptTypes;
 	}
 
@@ -1787,7 +1830,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return The supported <code>Content-Type</code> header values for this resource.  Never <jk>null</jk>.
 	 */
-	protected MediaType[] getSupportedContentTypes() {
+	protected List<MediaType> getSupportedContentTypes() {
 		return supportedContentTypes;
 	}
 

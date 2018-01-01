@@ -105,7 +105,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
 	List<Object> childResources = new ArrayList<>();
-	List<MediaType> supportedContentTypes, supportedAcceptTypes;
 	List<Object> staticFiles;
 	RestContext parentContext;
 	String path;
@@ -678,89 +677,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder childResources(Class<?>...children) {
 		this.childResources.addAll(Arrays.asList(children));
-		return this;
-	}
-
-	/**
-	 * Specifies the list of supported <code>Accept</code> media types for this resource.
-	 *
-	 * <p>
-	 * This overrides the media types inferred from the parsers on this resource.
-	 *
-	 * <p>
-	 * There is no annotation equivalent to this method call.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
-	 * @param mediaTypes The new list of media types supported by this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder supportedAcceptTypes(boolean append, String...mediaTypes) {
-		supportedAcceptTypes = append || supportedAcceptTypes == null ? new ArrayList<MediaType>() : supportedAcceptTypes;
-		for (String mediaType : mediaTypes)
-			supportedAcceptTypes.add(MediaType.forString(mediaType));
-		return this;
-	}
-
-	/**
-	 * Specifies the list of supported <code>Accept</code> media types for this resource.
-	 *
-	 * <p>
-	 * This overrides the media types inferred from the parsers on this resource.
-	 *
-	 * <p>
-	 * There is no annotation equivalent to this method call.
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
-	 * @param mediaTypes The new list of media types supported by this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder supportedAcceptTypes(boolean append, MediaType...mediaTypes) {
-		supportedAcceptTypes = append || supportedAcceptTypes == null ? new ArrayList<MediaType>() : supportedAcceptTypes;
-		supportedAcceptTypes.addAll(Arrays.asList(mediaTypes));
-		return this;
-	}
-
-	/**
-	 * Specifies the list of supported <code>Content-Type</code> media types for this resource.
-	 *
-	 * <p>
-	 * This overrides the media types inferred from the serializers on this resource.
-	 *
-	 * <p>
-	 * There is no annotation equivalent to this method call.
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
-	 * @param mediaTypes The new list of media types supported by this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder supportedContentTypes(boolean append, String...mediaTypes) {
-		supportedContentTypes = append || supportedContentTypes == null ? new ArrayList<MediaType>() : supportedContentTypes;
-		supportedContentTypes = new ArrayList<>();
-		for (String mediaType : mediaTypes)
-			supportedContentTypes.add(MediaType.forString(mediaType));
-		return this;
-	}
-
-	/**
-	 * Specifies the list of supported <code>Content-Type</code> media types for this resource.
-	 *
-	 * <p>
-	 * This overrides the media types inferred from the serializers on this resource.
-	 *
-	 * <p>
-	 * There is no annotation equivalent to this method call.
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
-	 * @param mediaTypes The new list of media types supported by this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder supportedContentTypes(boolean append, MediaType...mediaTypes) {
-		supportedContentTypes = append || supportedContentTypes == null ? new ArrayList<MediaType>() : supportedContentTypes;
-		supportedContentTypes.addAll(Arrays.asList(mediaTypes));
 		return this;
 	}
 
@@ -1641,6 +1557,98 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			defaultResponseHeader(h[0], h[1]);
 		}
 		return this;
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Supported accept media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_supportedAcceptTypes}
+	 * 	<li>Annotation:  N/A 
+	 * 	<li>Method: {@link RestContextBuilder#supportedAcceptTypes(boolean,String...)} / {@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}
+	 *	</ul>
+	 *
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param mediaTypes The new list of media types supported by this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder supportedAcceptTypes(boolean append, String...mediaTypes) {
+		return set(append, REST_supportedAcceptTypes, mediaTypes);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Supported accept media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_supportedAcceptTypes}
+	 * 	<li>Annotation:  N/A 
+	 * 	<li>Method: {@link RestContextBuilder#supportedAcceptTypes(boolean,String...)} / {@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}
+	 *	</ul>
+	 *
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param mediaTypes The new list of media types supported by this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder supportedAcceptTypes(boolean append, MediaType...mediaTypes) {
+		return set(append, REST_supportedAcceptTypes, mediaTypes);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Supported content media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_supportedContentTypes}
+	 * 	<li>Annotation:  N/A 
+	 * 	<li>Method: {@link RestContextBuilder#supportedContentTypes(boolean,String...)} / {@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}
+	 *	</ul>
+	 *
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param mediaTypes The new list of media types supported by this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder supportedContentTypes(boolean append, String...mediaTypes) {
+		return set(append, REST_supportedContentTypes, mediaTypes);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Supported content media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_supportedContentTypes}
+	 * 	<li>Annotation:  N/A 
+	 * 	<li>Method: {@link RestContextBuilder#supportedContentTypes(boolean,String...)} / {@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}
+	 *	</ul>
+	 *
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param mediaTypes The new list of media types supported by this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder supportedContentTypes(boolean append, MediaType...mediaTypes) {
+		return set(append, REST_supportedContentTypes, mediaTypes);
 	}
 
 	/**

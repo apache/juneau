@@ -290,6 +290,19 @@ public final class PropertyStore {
 	}
 	
 	/**
+	 * Returns the set property with the specified name.
+	 * 
+	 * @param key The property name.
+	 * @param eType The class type of the elements in the property.
+	 * @param def The default value if the property doesn't exist or is empty.
+	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or the default value if it doesn't exist or is empty.
+	 */
+	public <T> Set<T> getSetProperty(String key, Class<T> eType, Set<T> def) {
+		Set<T> l = getSetProperty(key, eType);
+		return (l.isEmpty() ? def : l);
+	}
+
+	/**
 	 * Returns the class set property with the specified name.
 	 * 
 	 * @param key The property name.
@@ -324,6 +337,19 @@ public final class PropertyStore {
 		return p == null ? Collections.EMPTY_LIST : p.asList(eType);
 	}
 	
+	/**
+	 * Returns the list property with the specified name.
+	 * 
+	 * @param key The property name.
+	 * @param eType The class type of the elements in the property.
+	 * @param def The default value if the property doesn't exist or is empty.
+	 * @return The property value as an unmodifiable <code>ArrayList</code>, or the default value if it doesn't exist or is empty.
+	 */
+	public <T> List<T> getListProperty(String key, Class<T> eType, List<T> def) {
+		List<T> l = getListProperty(key, eType);
+		return (l.isEmpty() ? def : l);
+	}
+
 	/**
 	 * Returns the class list property with the specified name.
 	 * 
