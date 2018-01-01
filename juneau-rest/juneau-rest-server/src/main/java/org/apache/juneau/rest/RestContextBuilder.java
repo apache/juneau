@@ -104,8 +104,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	EncoderGroupBuilder encoders = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
 
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
-	Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-	Map<String,Object> defaultResponseHeaders = new LinkedHashMap<>();
 	List<Object> childResources = new ArrayList<>();
 	List<MediaType> supportedContentTypes, supportedAcceptTypes;
 	List<Object> staticFiles;
@@ -626,102 +624,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			this.mimeTypes = new ExtendedMimetypesFileTypeMap();
 		for (String mimeType : mimeTypes)
 			this.mimeTypes.addMimeTypes(mimeType);
-		return this;
-	}
-
-	/**
-	 * Adds class-level default HTTP request headers to this resource.
-	 *
-	 * <p>
-	 * Default request headers are default values for when HTTP requests do not specify a header value.
-	 * For example, you can specify a default value for <code>Accept</code> if a request does not specify that header
-	 * value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder defaultRequestHeader(String name, Object value) {
-		this.defaultRequestHeaders.put(name, StringUtils.toString(value));
-		return this;
-	}
-
-	/**
-	 * Adds class-level default HTTP request headers to this resource.
-	 *
-	 * <p>
-	 * Default request headers are default values for when HTTP requests do not specify a header value.
-	 * For example, you can specify a default value for <code>Accept</code> if a request does not specify that header
-	 * value.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders()} annotation.
-	 *
-	 * @param headers HTTP headers of the form <js>"Name: Value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If header string is not correctly formatted.
-	 */
-	public RestContextBuilder defaultRequestHeaders(String...headers) throws RestServletException {
-		for (String header : headers) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			defaultRequestHeader(h[0], h[1]);
-		}
-		return this;
-	}
-
-	/**
-	 * Adds class-level default HTTP response headers to this resource.
-	 *
-	 * <p>
-	 * Default response headers are headers that will be appended to all responses if those headers have not already been
-	 * set on the response object.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder defaultResponseHeader(String name, Object value) {
-		this.defaultResponseHeaders.put(name, value);
-		return this;
-	}
-
-	/**
-	 * Adds class-level default HTTP response headers to this resource.
-	 *
-	 * <p>
-	 * Default response headers are headers that will be appended to all responses if those headers have not already been
-	 * set on the response object.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders()} annotation.
-	 *
-	 * @param headers HTTP headers of the form <js>"Name: Value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If header string is not correctly formatted.
-	 */
-	public RestContextBuilder defaultResponseHeaders(String...headers) throws RestServletException {
-		for (String header : headers) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new RestServletException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			defaultResponseHeader(h[0], h[1]);
-		}
 		return this;
 	}
 
@@ -1615,6 +1517,130 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder responseHandlers(ResponseHandler...responseHandlers) {
 		return addTo(REST_responseHandlers, responseHandlers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Default request headers.
+	 *
+	 * <p>
+	 * Adds class-level default HTTP request headers to this resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultRequestHeaders()} / {@link RestMethod#defaultRequestHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultRequestHeader(String,Object)} / {@link RestContextBuilder#defaultRequestHeaders(String...)}
+	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 *	</ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder defaultRequestHeader(String name, Object value) {
+		return addTo(REST_defaultRequestHeaders, name, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Default request headers.
+	 *
+	 * <p>
+	 * Adds class-level default HTTP request headers to this resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultRequestHeaders()} / {@link RestMethod#defaultRequestHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultRequestHeader(String,Object)} / {@link RestContextBuilder#defaultRequestHeaders(String...)}
+	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li>Key and value is trimmed of whitespace.
+	 * 	<li>Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 *	</ul>
+	 *
+	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
+	 * @return This object (for method chaining).
+	 * @throws RestServletException If malformed header is found.
+	 */
+	public RestContextBuilder defaultRequestHeaders(String...headers) throws RestServletException {
+		for (String header : headers) {
+			String[] h = RestUtils.parseHeader(header);
+			if (h == null)
+				throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+			defaultRequestHeader(h[0], h[1]);
+		}
+		return this;
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultResponseHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultResponseHeader(String,Object)} / {@link RestContextBuilder#defaultResponseHeaders(String...)}
+	 * 	<li>This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
+	 * 		the Java methods.
+	 * 	<li>The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 *	</ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder defaultResponseHeader(String name, Object value) {
+		return addTo(REST_defaultResponseHeaders, name, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultResponseHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultResponseHeader(String,Object)} / {@link RestContextBuilder#defaultResponseHeaders(String...)}
+	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li>Key and value is trimmed of whitespace.
+	 * 	<li>Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+	 * 	<li>This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
+	 * 		the Java methods.
+	 * 	<li>The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 *	</ul>
+	 *
+	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
+	 * @return This object (for method chaining).
+	 * @throws RestServletException If malformed header is found.
+	 */
+	public RestContextBuilder defaultResponseHeaders(String...headers) throws RestServletException {
+		for (String header : headers) {
+			String[] h = RestUtils.parseHeader(header);
+			if (h == null)
+				throw new RestServletException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+			defaultResponseHeader(h[0], h[1]);
+		}
+		return this;
 	}
 
 	/**

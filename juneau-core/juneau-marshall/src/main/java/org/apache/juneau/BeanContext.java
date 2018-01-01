@@ -660,7 +660,7 @@ public class BeanContext extends Context {
 	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.mc"</js>
+	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.smc"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,Class&gt;</code>
 	 * 	<li><b>Default:</b> empty map
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -671,13 +671,13 @@ public class BeanContext extends Context {
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 	 * parse).
 	 */
-	public static final String BEAN_implClasses = PREFIX + "implClasses.mc";
+	public static final String BEAN_implClasses = PREFIX + "implClasses.smc";
 
 	/**
 	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties.ms"</js>
+	 * 	<li><b>Name:</b> <js>"BeanContext.includeProperties.sms"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b> <code>{}</code>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -698,13 +698,13 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 */
-	public static final String BEAN_includeProperties = PREFIX + "includeProperties.ms";
+	public static final String BEAN_includeProperties = PREFIX + "includeProperties.sms";
 
 	/**
 	 * <b>Configuration property:</b>  Exclude specified properties from beans.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties.ms"</js>
+	 * 	<li><b>Name:</b> <js>"BeanContext.excludeProperties.sms"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b> <code>{}</code>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
@@ -725,7 +725,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 */
-	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.ms";
+	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.sms";
 
 	/**
 	 * <b>Configuration property:</b>  Bean lookup dictionary.

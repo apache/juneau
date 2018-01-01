@@ -69,8 +69,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		super(res);
 		this.request = req;
 
-		for (Map.Entry<String,Object> e : context.getDefaultResponseHeaders().entrySet())
-			setHeader(e.getKey(), e.getValue().toString());
+		for (Map.Entry<String,String> e : context.getDefaultResponseHeaders().entrySet())
+			setHeader(e.getKey(), e.getValue());
 
 		try {
 			String passThroughHeaders = req.getHeader("x-response-headers");

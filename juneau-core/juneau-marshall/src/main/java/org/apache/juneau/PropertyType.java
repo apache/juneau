@@ -58,18 +58,30 @@ public enum PropertyType {
 	/** List&lt;Object&gt; */
 	LIST_OBJECT("List<Object>", "lo", OBJECT_CONVERTER),
 
-	/** Map&lt;String,String&gt; */
-	MAP_STRING("Map<String,String>", "ms", STRING_CONVERTER), 
+	/** TreeMap&lt;String,String&gt; */
+	SORTED_MAP_STRING("Map<String,String>", "sms", STRING_CONVERTER), 
 
-	/** Map&lt;String,Integer&gt; */
-	MAP_INTEGER("Map<String,Integer>", "mi", INTEGER_CONVERTER), 
+	/** TreeMap&lt;String,Integer&gt; */
+	SORTED_MAP_INTEGER("Map<String,Integer>", "smi", INTEGER_CONVERTER), 
 
-	/** Map&lt;String,Class&gt; */
-	MAP_CLASS("Map<String,Class>", "mc", CLASS_CONVERTER),
+	/** TreeMap&lt;String,Class&gt; */
+	SORTED_MAP_CLASS("Map<String,Class>", "smc", CLASS_CONVERTER),
 
-	/** Map&lt;String,Object&gt; */
-	MAP_OBJECT("Map<String,Object>", "mo", OBJECT_CONVERTER);
+	/** TreeMap&lt;String,Object&gt; */
+	SORTED_MAP_OBJECT("Map<String,Object>", "smo", OBJECT_CONVERTER),
 	
+	/** LinkedHashMap&lt;String,String&gt; */
+	ORDERED_MAP_STRING("Map<String,String>", "oms", STRING_CONVERTER), 
+
+	/** LinkedHashMap&lt;String,Integer&gt; */
+	ORDERED_MAP_INTEGER("Map<String,Integer>", "omi", INTEGER_CONVERTER), 
+
+	/** LinkedHashMap&lt;String,Class&gt; */
+	ORDERED_MAP_CLASS("Map<String,Class>", "omc", CLASS_CONVERTER),
+
+	/** LinkedHashMap&lt;String,Object&gt; */
+	ORDERED_MAP_OBJECT("Map<String,Object>", "omo", OBJECT_CONVERTER);
+
 	private final String type, suffix;
 	final PropertyConverter<?> converter;
 	

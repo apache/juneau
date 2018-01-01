@@ -387,6 +387,57 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
 
+	/**
+	 * <b>Configuration property:</b>  Default request headers.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.defaultRequestHeaders.sms"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> empty map
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies default values for request headers.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultRequestHeaders()} / {@link RestMethod#defaultRequestHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultRequestHeader(String,Object)} / {@link RestContextBuilder#defaultRequestHeaders(String...)}
+	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 *	</ul>
+	 */
+	public static final String REST_defaultRequestHeaders = PREFIX + "defaultRequestHeaders.sms";
+
+	/**
+	 * <b>Configuration property:</b>  Default response headers.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.defaultResponseHeaders.oms"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> empty map
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies default values for response headers.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultResponseHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultResponseHeader(String,Object)} / {@link RestContextBuilder#defaultResponseHeaders(String...)}
+	 * 	<li>This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
+	 * 		the Java methods.
+	 * 	<li>The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 *	</ul>
+	 */
+	public static final String REST_defaultResponseHeaders = PREFIX + "defaultResponseHeaders.oms";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -422,8 +473,7 @@ public final class RestContext extends BeanContext {
 	private final MediaType[]
 		supportedContentTypes,
 		supportedAcceptTypes;
-	private final Map<String,String> defaultRequestHeaders;
-	private final Map<String,Object> defaultResponseHeaders;
+	private final Map<String,String> defaultRequestHeaders, defaultResponseHeaders;
 	private final BeanContext beanContext;
 	private final RestConverter[] converters;
 	private final RestGuard[] guards;
@@ -505,6 +555,12 @@ public final class RestContext extends BeanContext {
 			_paramResolvers.put(rp.forClass(), rp);
 		paramResolvers = Collections.unmodifiableMap(_paramResolvers);
 		
+		Map<String,String> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		_defaultRequestHeaders.putAll(getMapProperty(REST_defaultRequestHeaders, String.class));
+		defaultRequestHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(_defaultRequestHeaders));
+		
+		defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, String.class);
+		
 		try {
 			this.resourceFinder = new ResourceFinder(resource.getClass());
 
@@ -520,8 +576,6 @@ public final class RestContext extends BeanContext {
 			this.supportedContentTypes = toObjectArray(b.supportedContentTypes, MediaType.class);
 			this.supportedAcceptTypes = toObjectArray(b.supportedAcceptTypes, MediaType.class);
 			this.clientVersionHeader = b.clientVersionHeader;
-			this.defaultRequestHeaders = Collections.unmodifiableMap(b.defaultRequestHeaders);
-			this.defaultResponseHeaders = Collections.unmodifiableMap(b.defaultResponseHeaders);
 			this.beanContext = b.beanContext;
 			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
 			this.staticFilesMap = Collections.unmodifiableMap(b.staticFilesMap);
@@ -797,8 +851,6 @@ public final class RestContext extends BeanContext {
 		String clientVersionHeader = "";
 
 		List<MediaType> supportedContentTypes, supportedAcceptTypes;
-		Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		Map<String,Object> defaultResponseHeaders;
 		BeanContext beanContext;
 		MimetypesFileTypeMap mimetypesFileTypeMap;
 		Map<String,String> staticFilesMap;
@@ -851,8 +903,6 @@ public final class RestContext extends BeanContext {
 			encoders = rcb.encoders.build();
 			supportedContentTypes = rcb.supportedContentTypes != null ? rcb.supportedContentTypes : serializers.getSupportedMediaTypes();
 			supportedAcceptTypes = rcb.supportedAcceptTypes != null ? rcb.supportedAcceptTypes : parsers.getSupportedMediaTypes();
-			defaultRequestHeaders.putAll(rcb.defaultRequestHeaders);
-			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(rcb.defaultResponseHeaders));
 			beanContext = BeanContext.create().apply(ps).add(properties).build();
 			contextPath = rcb.contextPath;
 
@@ -1776,7 +1826,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return The default response headers for this resource.  Never <jk>null</jk>.
 	 */
-	public Map<String,Object> getDefaultResponseHeaders() {
+	public Map<String,String> getDefaultResponseHeaders() {
 		return defaultResponseHeaders;
 	}
 

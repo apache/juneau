@@ -767,40 +767,40 @@ public class PropertyStore2Test {
 	public void testMapString() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.ms", new AMap<String,String>().append("foo", "bar").append("baz", "qux").append("quux", null).append(null, null));  
-		b.set("A.f2.ms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", TestEnum.ONE).append("qux", null));  
-		b.set("A.f3.ms", new AMap<String,StringBuilder>().append("foo", new StringBuilder("bar")).append("baz", null));  
-		b.set("A.f4.ms", "{foo:'bar',baz:123,qux:true}");  
-		b.set("A.f5.ms", null);
+		b.set("A.f1.sms", new AMap<String,String>().append("foo", "bar").append("baz", "qux").append("quux", null).append(null, null));  
+		b.set("A.f2.sms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", TestEnum.ONE).append("qux", null));  
+		b.set("A.f3.sms", new AMap<String,StringBuilder>().append("foo", new StringBuilder("bar")).append("baz", null));  
+		b.set("A.f4.sms", "{foo:'bar',baz:123,qux:true}");  
+		b.set("A.f5.sms", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.ms':{baz:'qux',foo:'bar'},'f2.ms':{bar:'true',baz:'ONE',foo:'123'},'f3.ms':{foo:'bar'},'f4.ms':{baz:'123',foo:'bar',qux:'true'}}}", ps);
-		assertType(Map.class, ps.getProperty("A.f1.ms"));
-		assertType(Map.class, ps.getProperty("A.f2.ms"));
-		assertType(Map.class, ps.getProperty("A.f3.ms"));
-		assertType(Map.class, ps.getProperty("A.f4.ms"));
+		assertObjectEquals("{A:{'f1.sms':{baz:'qux',foo:'bar'},'f2.sms':{bar:'true',baz:'ONE',foo:'123'},'f3.sms':{foo:'bar'},'f4.sms':{baz:'123',foo:'bar',qux:'true'}}}", ps);
+		assertType(Map.class, ps.getProperty("A.f1.sms"));
+		assertType(Map.class, ps.getProperty("A.f2.sms"));
+		assertType(Map.class, ps.getProperty("A.f3.sms"));
+		assertType(Map.class, ps.getProperty("A.f4.sms"));
 
 		b.clear();
-		b.set("A.f1.ms/add", "{foo:'bar'}");  
-		assertObjectEquals("{A:{'f1.ms':{foo:'bar'}}}", b.build());
+		b.set("A.f1.sms/add", "{foo:'bar'}");  
+		assertObjectEquals("{A:{'f1.sms':{foo:'bar'}}}", b.build());
 		
 		b.clear();
-		b.set("A.f1.ms/add.foo", "bar");  
-		assertObjectEquals("{A:{'f1.ms':{foo:'bar'}}}", b.build());
-		b.set("A.f1.ms/add.foo", null);  
+		b.set("A.f1.sms/add.foo", "bar");  
+		assertObjectEquals("{A:{'f1.sms':{foo:'bar'}}}", b.build());
+		b.set("A.f1.sms/add.foo", null);  
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.ms", null);
+		b.set("A.f1.sms", null);
 		assertObjectEquals("{}", b.build());
 				
 		b.clear();
-		b.set("A.f1.ms", "{foo:'bar'}");
-		testError(b, "A.f1.ms/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.ms' (Map<String,String>).");
+		b.set("A.f1.sms", "{foo:'bar'}");
+		testError(b, "A.f1.sms/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
 		try {
-			b.removeFrom("A.f1.ms", "foo");
+			b.removeFrom("A.f1.sms", "foo");
 			fail("Exception expected.");
 		} catch (Exception e) {
-			assertEquals("Cannot remove value 'foo' (String) from property 'f1.ms' (Map<String,String>).", e.getMessage());
+			assertEquals("Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).", e.getMessage());
 		}
 	}
 	
@@ -808,40 +808,40 @@ public class PropertyStore2Test {
 	public void testMapInteger() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.mi", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));  
-		b.set("A.f2.mi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null));  
-		b.set("A.f3.mi", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));  
-		b.set("A.f4.mi", "{foo:'123',baz:456,qux:null}");  
-		b.set("A.f5.mi", null);
+		b.set("A.f1.smi", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));  
+		b.set("A.f2.smi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null));  
+		b.set("A.f3.smi", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));  
+		b.set("A.f4.smi", "{foo:'123',baz:456,qux:null}");  
+		b.set("A.f5.smi", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.mi':{baz:2,foo:1},'f2.mi':{bar:456,foo:123},'f3.mi':{foo:123},'f4.mi':{baz:456,foo:123}}}", ps);
-		assertType(Map.class, ps.getProperty("A.f1.mi"));
-		assertType(Map.class, ps.getProperty("A.f2.mi"));
-		assertType(Map.class, ps.getProperty("A.f3.mi"));
-		assertType(Map.class, ps.getProperty("A.f4.mi"));
+		assertObjectEquals("{A:{'f1.smi':{baz:2,foo:1},'f2.smi':{bar:456,foo:123},'f3.smi':{foo:123},'f4.smi':{baz:456,foo:123}}}", ps);
+		assertType(Map.class, ps.getProperty("A.f1.smi"));
+		assertType(Map.class, ps.getProperty("A.f2.smi"));
+		assertType(Map.class, ps.getProperty("A.f3.smi"));
+		assertType(Map.class, ps.getProperty("A.f4.smi"));
 
 		b.clear();
-		b.set("A.f1.mi/add", "{foo:'123'}");  
-		assertObjectEquals("{A:{'f1.mi':{foo:123}}}", b.build());
+		b.set("A.f1.smi/add", "{foo:'123'}");  
+		assertObjectEquals("{A:{'f1.smi':{foo:123}}}", b.build());
 		
 		b.clear();
-		b.set("A.f1.mi/add.foo", "123");  
-		assertObjectEquals("{A:{'f1.mi':{foo:123}}}", b.build());
-		b.set("A.f1.mi/add.foo", null);  
+		b.set("A.f1.smi/add.foo", "123");  
+		assertObjectEquals("{A:{'f1.smi':{foo:123}}}", b.build());
+		b.set("A.f1.smi/add.foo", null);  
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.mi", null);
+		b.set("A.f1.smi", null);
 		assertObjectEquals("{}", b.build());
 				
 		b.clear();
-		b.set("A.f1.mi", "{foo:'123'}");
-		testError(b, "A.f1.mi/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.mi' (Map<String,Integer>).");
+		b.set("A.f1.smi", "{foo:'123'}");
+		testError(b, "A.f1.smi/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
 		try {
-			b.removeFrom("A.f1.mi", "foo");
+			b.removeFrom("A.f1.smi", "foo");
 			fail("Exception expected.");
 		} catch (Exception e) {
-			assertEquals("Cannot remove value 'foo' (String) from property 'f1.mi' (Map<String,Integer>).", e.getMessage());
+			assertEquals("Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).", e.getMessage());
 		}
 	}
 	
@@ -849,34 +849,34 @@ public class PropertyStore2Test {
 	public void testMapClass() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.mc", new AMap<String,Class<?>>().append("foo", String.class).append("baz", Integer.class).append("quux", null).append(null, null));  
-		b.set("A.f2.mc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null));  
-		b.set("A.f3.mc", null);
+		b.set("A.f1.smc", new AMap<String,Class<?>>().append("foo", String.class).append("baz", Integer.class).append("quux", null).append(null, null));  
+		b.set("A.f2.smc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null));  
+		b.set("A.f3.smc", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.mc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.mc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}", ps);
-		assertType(Map.class, ps.getProperty("A.f1.mc"));
-		assertType(Map.class, ps.getProperty("A.f2.mc"));
-		assertType(Class.class, ((Map<?,?>)ps.getProperty("A.f1.mc")).values().iterator().next());
-		assertType(Class.class, ((Map<?,?>)ps.getProperty("A.f2.mc")).values().iterator().next());
+		assertObjectEquals("{A:{'f1.smc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.smc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}", ps);
+		assertType(Map.class, ps.getProperty("A.f1.smc"));
+		assertType(Map.class, ps.getProperty("A.f2.smc"));
+		assertType(Class.class, ((Map<?,?>)ps.getProperty("A.f1.smc")).values().iterator().next());
+		assertType(Class.class, ((Map<?,?>)ps.getProperty("A.f2.smc")).values().iterator().next());
 
 		b.clear();
-		b.set("A.f1.mc/add.foo", String.class);  
-		assertObjectEquals("{A:{'f1.mc':{foo:'java.lang.String'}}}", b.build());
-		b.set("A.f1.mc/add.foo", null);  
+		b.set("A.f1.smc/add.foo", String.class);  
+		assertObjectEquals("{A:{'f1.smc':{foo:'java.lang.String'}}}", b.build());
+		b.set("A.f1.smc/add.foo", null);  
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.mc", null);
+		b.set("A.f1.smc", null);
 		assertObjectEquals("{}", b.build());
 				
 		b.clear();
-		b.set("A.f1.mc/add.foo", String.class);  
-		testError(b, "A.f1.mc/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.mc' (Map<String,Class>).");
+		b.set("A.f1.smc/add.foo", String.class);  
+		testError(b, "A.f1.smc/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
 		try {
-			b.removeFrom("A.f1.mc", "foo");
+			b.removeFrom("A.f1.smc", "foo");
 			fail("Exception expected.");
 		} catch (Exception e) {
-			assertEquals("Cannot remove value 'foo' (String) from property 'f1.mc' (Map<String,Class>).", e.getMessage());
+			assertEquals("Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).", e.getMessage());
 		}
 	}
 	
@@ -885,40 +885,40 @@ public class PropertyStore2Test {
 		PropertyStoreBuilder b = PropertyStore.create();
 		
 		PropertyStore ps = null;
-		b.set("A.f1.mo", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));  
-		b.set("A.f2.mo", new AMap<String,Object>().append("foo", 123).append("bar", StringBuilder.class).append("qux", null));  
-		b.set("A.f3.mo", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));  
-		b.set("A.f4.mo", "{foo:'123',baz:456,qux:null}");  
-		b.set("A.f5.mo", null);
+		b.set("A.f1.smo", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));  
+		b.set("A.f2.smo", new AMap<String,Object>().append("foo", 123).append("bar", StringBuilder.class).append("qux", null));  
+		b.set("A.f3.smo", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));  
+		b.set("A.f4.smo", "{foo:'123',baz:456,qux:null}");  
+		b.set("A.f5.smo", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.mo':{baz:'2',foo:'1'},'f2.mo':{bar:'java.lang.StringBuilder',foo:123},'f3.mo':{foo:'123'},'f4.mo':{baz:456,foo:'123'}}}", ps);
-		assertType(Map.class, ps.getProperty("A.f1.mo"));
-		assertType(Map.class, ps.getProperty("A.f2.mo"));
-		assertType(Map.class, ps.getProperty("A.f3.mo"));
-		assertType(Map.class, ps.getProperty("A.f4.mo"));
+		assertObjectEquals("{A:{'f1.smo':{baz:'2',foo:'1'},'f2.smo':{bar:'java.lang.StringBuilder',foo:123},'f3.smo':{foo:'123'},'f4.smo':{baz:456,foo:'123'}}}", ps);
+		assertType(Map.class, ps.getProperty("A.f1.smo"));
+		assertType(Map.class, ps.getProperty("A.f2.smo"));
+		assertType(Map.class, ps.getProperty("A.f3.smo"));
+		assertType(Map.class, ps.getProperty("A.f4.smo"));
 
 		b.clear();
-		b.set("A.f1.mo/add", "{foo:'123'}");  
-		assertObjectEquals("{A:{'f1.mo':{foo:'123'}}}", b.build());
+		b.set("A.f1.smo/add", "{foo:'123'}");  
+		assertObjectEquals("{A:{'f1.smo':{foo:'123'}}}", b.build());
 		
 		b.clear();
-		b.set("A.f1.mo/add.foo", "123");  
-		assertObjectEquals("{A:{'f1.mo':{foo:'123'}}}", b.build());
-		b.set("A.f1.mo/add.foo", null);  
+		b.set("A.f1.smo/add.foo", "123");  
+		assertObjectEquals("{A:{'f1.smo':{foo:'123'}}}", b.build());
+		b.set("A.f1.smo/add.foo", null);  
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.mo", null);
+		b.set("A.f1.smo", null);
 		assertObjectEquals("{}", b.build());
 				
 		b.clear();
-		b.set("A.f1.mo", "{foo:'123'}");
-		testError(b, "A.f1.mo/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.mo' (Map<String,Object>).");
+		b.set("A.f1.smo", "{foo:'123'}");
+		testError(b, "A.f1.smo/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
 		try {
-			b.removeFrom("A.f1.mo", "foo");
+			b.removeFrom("A.f1.smo", "foo");
 			fail("Exception expected.");
 		} catch (Exception e) {
-			assertEquals("Cannot remove value 'foo' (String) from property 'f1.mo' (Map<String,Object>).", e.getMessage());
+			assertEquals("Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).", e.getMessage());
 		}
 	}
 	
@@ -1304,25 +1304,25 @@ public class PropertyStore2Test {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 		
-		b1.set("A.f1.ms", new AMap<String,String>().append("foo", "123").append("bar", "true").append("baz", null).append(null, null));
-		b2.set("A.f1.ms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", null).append(null, null));
+		b1.set("A.f1.sms", new AMap<String,String>().append("foo", "123").append("bar", "true").append("baz", null).append(null, null));
+		b2.set("A.f1.sms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", null).append(null, null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.ms", new AMap<String,Object>().append("foo", new StringBuilder("123")).append("bar", new StringBuilder("true")));
+		b2.set("A.f1.sms", new AMap<String,Object>().append("foo", new StringBuilder("123")).append("bar", new StringBuilder("true")));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.ms", new AMap<String,Object>().append("bar", new StringBuilder("true")).append("foo", new StringBuilder("123")));
+		b2.set("A.f1.sms", new AMap<String,Object>().append("bar", new StringBuilder("true")).append("foo", new StringBuilder("123")));
 		testEquals(b1, b2);
 		
-		b2.set("A.f1.ms", new AMap<String,Object>().append("bar", false).append("foo", new StringBuilder("123")));
+		b2.set("A.f1.sms", new AMap<String,Object>().append("bar", false).append("foo", new StringBuilder("123")));
 		testNotEquals(b1, b2);
 
-		b1.set("A.f1.ms", "{foo:'bar'}");
+		b1.set("A.f1.sms", "{foo:'bar'}");
 		ps = b1.build();
-		b1.set("A.f1.ms", "{foo:'bar'}");
+		b1.set("A.f1.sms", "{foo:'bar'}");
 		assertTrue(ps == b1.build());
 
-		b1.set("A.f1.ms", "{foo:'baz'}");
+		b1.set("A.f1.sms", "{foo:'baz'}");
 		assertTrue(ps != b1.build());
 		
 		b1.clear();
@@ -1335,25 +1335,25 @@ public class PropertyStore2Test {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 		
-		b1.set("A.f1.mi", new AMap<String,Integer>().append("foo", 123).append("bar", 456).append("baz", null).append(null, null));
-		b2.set("A.f1.mi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null).append(null, null));
+		b1.set("A.f1.smi", new AMap<String,Integer>().append("foo", 123).append("bar", 456).append("baz", null).append(null, null));
+		b2.set("A.f1.smi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null).append(null, null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.mi", new AMap<String,Object>().append("foo", new StringBuilder("123")).append("bar", new StringBuilder("456")));
+		b2.set("A.f1.smi", new AMap<String,Object>().append("foo", new StringBuilder("123")).append("bar", new StringBuilder("456")));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.mi", new AMap<String,Object>().append("bar", new StringBuilder("456")).append("foo", new StringBuilder("123")));
+		b2.set("A.f1.smi", new AMap<String,Object>().append("bar", new StringBuilder("456")).append("foo", new StringBuilder("123")));
 		testEquals(b1, b2);
 		
-		b2.set("A.f1.mi", new AMap<String,Object>().append("bar", "457").append("foo", new StringBuilder("123")));
+		b2.set("A.f1.smi", new AMap<String,Object>().append("bar", "457").append("foo", new StringBuilder("123")));
 		testNotEquals(b1, b2);
 
-		b1.set("A.f1.mi", "{foo:'123'}");
+		b1.set("A.f1.smi", "{foo:'123'}");
 		ps = b1.build();
-		b1.set("A.f1.mi", "{foo:'123'}");
+		b1.set("A.f1.smi", "{foo:'123'}");
 		assertTrue(ps == b1.build());
 
-		b1.set("A.f1.mi", "{foo:'456'}");
+		b1.set("A.f1.smi", "{foo:'456'}");
 		assertTrue(ps != b1.build());
 		
 		b1.clear();
@@ -1366,26 +1366,26 @@ public class PropertyStore2Test {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 		
-		b1.set("A.f1.mc", new AMap<String,Class<?>>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
-		b2.set("A.f1.mc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
+		b1.set("A.f1.smc", new AMap<String,Class<?>>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
+		b2.set("A.f1.smc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.mc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class));
+		b2.set("A.f1.smc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.mc", new AMap<String,Object>().append("bar", Integer.class).append("foo", String.class));
+		b2.set("A.f1.smc", new AMap<String,Object>().append("bar", Integer.class).append("foo", String.class));
 		testEquals(b1, b2);
 		
-		b2.set("A.f1.mc", new AMap<String,Object>().append("bar", Integer.class).append("foo", StringBuilder.class));
+		b2.set("A.f1.smc", new AMap<String,Object>().append("bar", Integer.class).append("foo", StringBuilder.class));
 		testNotEquals(b1, b2);
 
 		b1.clear();
-		b1.set("A.f1.mc/add.foo", Integer.class);
+		b1.set("A.f1.smc/add.foo", Integer.class);
 		ps = b1.build();
-		b1.set("A.f1.mc/add.foo", Integer.class);
+		b1.set("A.f1.smc/add.foo", Integer.class);
 		assertTrue(ps == b1.build());
 
-		b1.set("A.f1.mc/add.foo", String.class);
+		b1.set("A.f1.smc/add.foo", String.class);
 		assertTrue(ps != b1.build());
 		
 		b1.clear();
@@ -1398,26 +1398,26 @@ public class PropertyStore2Test {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 		
-		b1.set("A.f1.mo", new AMap<String,TestEnum>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
-		b2.set("A.f1.mo", new AMap<String,Object>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
+		b1.set("A.f1.smo", new AMap<String,TestEnum>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
+		b2.set("A.f1.smo", new AMap<String,Object>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.mo", new AMap<String,Object>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO));
+		b2.set("A.f1.smo", new AMap<String,Object>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.mo", new AMap<String,Object>().append("bar", TestEnum.TWO).append("foo", TestEnum.ONE));
+		b2.set("A.f1.smo", new AMap<String,Object>().append("bar", TestEnum.TWO).append("foo", TestEnum.ONE));
 		testEquals(b1, b2);
 		
-		b2.set("A.f1.mo", new AMap<String,Object>().append("bar", TestEnum.ONE).append("foo", TestEnum.TWO));
+		b2.set("A.f1.smo", new AMap<String,Object>().append("bar", TestEnum.ONE).append("foo", TestEnum.TWO));
 		testNotEquals(b1, b2);
 
 		b1.clear();
-		b1.set("A.f1.mo/add.foo", TestEnum.ONE);
+		b1.set("A.f1.smo/add.foo", TestEnum.ONE);
 		ps = b1.build();
-		b1.set("A.f1.mo/add.foo", TestEnum.ONE);
+		b1.set("A.f1.smo/add.foo", TestEnum.ONE);
 		assertTrue(ps == b1.build());
 
-		b1.set("A.f1.mo/add.foo", TestEnum.TWO);
+		b1.set("A.f1.smo/add.foo", TestEnum.TWO);
 		assertTrue(ps != b1.build());
 		
 		b1.clear();
@@ -1498,27 +1498,27 @@ public class PropertyStore2Test {
 	public void testMapStringDefault() {
 		PropertyStore ps = PropertyStore.create().build();
 		
-		System.setProperty("A.f1.ms", "{foo:'bar',baz:null}");		
-		assertObjectEquals("{foo:'bar'}", ps.getProperty("A.f1.ms"));
-		System.clearProperty("A.f1.ms");
+		System.setProperty("A.f1.sms", "{foo:'bar',baz:null}");		
+		assertObjectEquals("{foo:'bar'}", ps.getProperty("A.f1.sms"));
+		System.clearProperty("A.f1.sms");
 	}
 	
 	@Test
 	public void testMapIntegerDefault() {
 		PropertyStore ps = PropertyStore.create().build();
 		
-		System.setProperty("A.f1.mi", "{foo:'123',baz:null}");		
-		assertObjectEquals("{foo:123}", ps.getProperty("A.f1.mi"));
-		System.clearProperty("A.f1.mi");
+		System.setProperty("A.f1.smi", "{foo:'123',baz:null}");		
+		assertObjectEquals("{foo:123}", ps.getProperty("A.f1.smi"));
+		System.clearProperty("A.f1.smi");
 	}
 
 	@Test
 	public void testMapObjectDefault() {
 		PropertyStore ps = PropertyStore.create().build();
 		
-		System.setProperty("A.f1.mo", "{foo:123,bar:'baz',qux:true,quux:null}");		
-		assertObjectEquals("{bar:'baz',foo:123,qux:true}", ps.getProperty("A.f1.mo"));
-		System.clearProperty("A.f1.mo");
+		System.setProperty("A.f1.smo", "{foo:123,bar:'baz',qux:true,quux:null}");		
+		assertObjectEquals("{bar:'baz',foo:123,qux:true}", ps.getProperty("A.f1.smo"));
+		System.clearProperty("A.f1.smo");
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1598,22 +1598,22 @@ public class PropertyStore2Test {
 	public void testAddToInvalidObjectMap() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		try {
-			b.addTo("A.foo.ms", "{xxx}");
+			b.addTo("A.foo.sms", "{xxx}");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add '{xxx}' (java.lang.String) to property 'foo.ms' (Map<String,String>) because it's not a valid JSON object.", e.getMessage());
+			assertEquals("Cannot add '{xxx}' (java.lang.String) to property 'foo.sms' (Map<String,String>) because it's not a valid JSON object.", e.getMessage());
 		}
 		try {
-			b.addTo("A.foo.ms", "xxx");
+			b.addTo("A.foo.sms", "xxx");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add 'xxx' (java.lang.String) to property 'foo.ms' (Map<String,String>).", e.getMessage());
+			assertEquals("Cannot add 'xxx' (java.lang.String) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 		try {
-			b.addTo("A.foo.ms", new StringBuilder("foo"));
+			b.addTo("A.foo.sms", new StringBuilder("foo"));
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add 'foo' (java.lang.StringBuilder) to property 'foo.ms' (Map<String,String>).", e.getMessage());
+			assertEquals("Cannot add 'foo' (java.lang.StringBuilder) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 	}
 
@@ -1687,16 +1687,16 @@ public class PropertyStore2Test {
 		b.set("A.foo.li", "[123]");
 		b.set("A.foo.lc/add", String.class);
 		b.set("A.foo.lo/add", StringBuilder.class);
-		b.set("A.foo.ms", "{foo:'bar'}");
-		b.set("A.foo.mi", "{foo:123}");
-		b.set("A.foo.mc/add.foo", String.class);
-		b.set("A.foo.mo/add.foo", StringBuilder.class);
+		b.set("A.foo.sms", "{foo:'bar'}");
+		b.set("A.foo.smi", "{foo:123}");
+		b.set("A.foo.smc/add.foo", String.class);
+		b.set("A.foo.smo/add.foo", StringBuilder.class);
 		PropertyStore ps = b.build();
 		
 		b = ps.builder();
 		ps = b.build();
 		
-		assertObjectEquals("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.mc':{foo:'java.lang.String'},'foo.mi':{foo:123},'foo.mo':{foo:'java.lang.StringBuilder'},'foo.ms':{foo:'bar'},'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.ss':['bar']}}", ps);
+		assertObjectEquals("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.smc':{foo:'java.lang.String'},'foo.smi':{foo:123},'foo.smo':{foo:'java.lang.StringBuilder'},'foo.sms':{foo:'bar'},'foo.ss':['bar']}}", ps);
 	}
 
 	@Test

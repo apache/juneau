@@ -67,7 +67,7 @@ public @interface RestResource {
 	String messages() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Class-level guards.
+	 * Class-level guards.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
@@ -90,7 +90,7 @@ public @interface RestResource {
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
-	 * <b>Configuration property:</b>  Class-level response converters.
+	 * Class-level response converters.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
@@ -156,7 +156,7 @@ public @interface RestResource {
 	Class<?>[] pojoSwaps() default {};
 
 	/**
-	 * <b>Configuration property:</b>  Java method parameter resolvers.
+	 * Java method parameter resolvers.
 	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
@@ -265,7 +265,7 @@ public @interface RestResource {
 	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
 
 	/**
-	 * <b>Configuration property:</b>  Response handlers.
+	 * Response handlers.
 	 *
 	 * <p>
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
@@ -318,20 +318,10 @@ public @interface RestResource {
 	Class<? extends Encoder>[] encoders() default {};
 
 	/**
+	 * Default request headers.
+	 * 
+	 * <p>
 	 * Specifies default values for request headers.
-	 *
-	 * <p>
-	 * Strings are of the format <js>"Header-Name: header-value"</js>.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
-	 *
-	 * <p>
-	 * The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
-	 * specified so that a particular default {@link Serializer} is picked.
-	 *
-	 * <p>
-	 * Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -341,28 +331,29 @@ public @interface RestResource {
 	 * 		...
 	 * 	}
 	 * </p>
-	 *
+	 * 
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#defaultRequestHeader(String, Object)}/
-	 * {@link RestContextBuilder#defaultRequestHeaders(String...)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultRequestHeaders()} / {@link RestMethod#defaultRequestHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultRequestHeader(String,Object)} / {@link RestContextBuilder#defaultRequestHeaders(String...)}
+	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li>Key and value is trimmed of whitespace.
+	 * 	<li>Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 *	</ul>
 	 */
 	String[] defaultRequestHeaders() default {};
 
 	/**
+	 * Default response headers.
+	 *
+	 * <p>
 	 * Specifies default values for response headers.
-	 *
-	 * <p>
-	 * Strings are of the format <js>"Header-Name: header-value"</js>.
-	 *
-	 * <p>
-	 * This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of the Java
-	 * methods.
-	 *
-	 * <p>
-	 * The header value will not be set if the header value has already been specified (hence the 'default' in the name).
-	 *
-	 * <p>
-	 * Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -374,8 +365,21 @@ public @interface RestResource {
 	 * </p>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#defaultResponseHeader(String, Object)}/
-	 * {@link RestContextBuilder#defaultResponseHeaders(String...)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultResponseHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultResponseHeader(String,Object)} / {@link RestContextBuilder#defaultResponseHeaders(String...)}
+	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li>Key and value is trimmed of whitespace.
+	 * 	<li>Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+	 * 	<li>This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
+	 * 		the Java methods.
+	 * 	<li>The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 *	</ul>
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -753,7 +757,7 @@ public @interface RestResource {
 	String contextPath() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Allow header URL parameters.
+	 * Allow header URL parameters.
 	 *
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
@@ -774,7 +778,7 @@ public @interface RestResource {
 	String allowHeaderParams() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Allowed method parameters.
+	 * Allowed method parameters.
 	 *
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
@@ -801,7 +805,7 @@ public @interface RestResource {
 	String allowedMethodParams() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Allow body URL parameter.
+	 * Allow body URL parameter.
 	 *
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RestContext.allowBodyParam.b"</js>
@@ -830,7 +834,7 @@ public @interface RestResource {
 	String allowBodyParam() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Render response stack traces in responses.
+	 * Render response stack traces in responses.
 	 *
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
@@ -849,7 +853,7 @@ public @interface RestResource {
 	String renderResponseStackTraces() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Use stack trace hashes.
+	 * Use stack trace hashes.
 	 *
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
@@ -867,7 +871,7 @@ public @interface RestResource {
 	String useStackTraceHashes() default "";
 
 	/**
-	 * <b>Configuration property:</b>  Default character encoding.
+	 * Default character encoding.
 	 * 
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
@@ -884,7 +888,7 @@ public @interface RestResource {
 	String defaultCharset() default "";
 
 	/**
-	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
+	 * The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting

@@ -116,7 +116,7 @@ public @interface RestMethod {
 	int priority() default 0;
 
 	/**
-	 * <b>Configuration property:</b>  Method-level guards.
+	 * Method-level guards.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
@@ -139,7 +139,7 @@ public @interface RestMethod {
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
-	 * <b>Configuration property:</b>  Method-level response converters.
+	 * Method-level response converters.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource method.
@@ -415,23 +415,10 @@ public @interface RestMethod {
 	String[] bpx() default {};
 
 	/**
+	 * Default request headers.
+	 * 
+	 * <p>
 	 * Specifies default values for request headers.
-	 *
-	 * <p>
-	 * Strings are of the format <js>"Header-Name: header-value"</js>.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
-	 *
-	 * <p>
-	 * The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
-	 * specified so that a particular default {@link Serializer} is picked.
-	 *
-	 * <p>
-	 * Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
-	 *
-	 * <p>
-	 * Header values specified at the method level override header values specified at the servlet level.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -441,10 +428,21 @@ public @interface RestMethod {
 	 * 		...
 	 * 	}
 	 * </p>
-	 *
+	 * 
 	 * <p>
-	 * You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * Key and value is trimmed of whitespace.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li>Annotation:  {@link RestResource#defaultRequestHeaders()} / {@link RestMethod#defaultRequestHeaders()} 
+	 * 	<li>Method: {@link RestContextBuilder#defaultRequestHeader(String,Object)} / {@link RestContextBuilder#defaultRequestHeaders(String...)}
+	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li>Key and value is trimmed of whitespace.
+	 * 	<li>Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 *	</ul>
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -630,7 +628,7 @@ public @interface RestMethod {
 	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
-	 * <b>Configuration property:</b>  Default character encoding.
+	 * Default character encoding.
 	 * 
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
@@ -646,7 +644,7 @@ public @interface RestMethod {
 	 */
 	String defaultCharset() default "";
 	/**
-	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
+	 * The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting

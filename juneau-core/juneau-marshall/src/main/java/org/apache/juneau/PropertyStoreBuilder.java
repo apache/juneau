@@ -441,10 +441,14 @@ public class PropertyStoreBuilder {
 				case LIST_INTEGER:
 				case LIST_CLASS:
 				case LIST_OBJECT: return new MutableListProperty(name, pt, value);
-				case MAP_STRING:
-				case MAP_INTEGER:
-				case MAP_CLASS:
-				case MAP_OBJECT: return new MutableMapProperty(name, pt, value);
+				case SORTED_MAP_STRING:
+				case SORTED_MAP_INTEGER:
+				case SORTED_MAP_CLASS:
+				case SORTED_MAP_OBJECT: return new MutableMapProperty(name, pt, value);
+				case ORDERED_MAP_STRING:
+				case ORDERED_MAP_INTEGER:
+				case ORDERED_MAP_CLASS:
+				case ORDERED_MAP_OBJECT: return new MutableLinkedMapProperty(name, pt, value);
 				default: return new MutableSimpleProperty(name, PropertyType.STRING, value);
 			}
 		}
@@ -730,21 +734,26 @@ public class PropertyStoreBuilder {
 
 	@SuppressWarnings("rawtypes")
 	static class MutableMapProperty extends MutableProperty {
-		private Map<String,Object> value = new ConcurrentHashMap<>();
+		protected Map<String,Object> map;
 		
 		MutableMapProperty(String name, PropertyType type, Object value) {
 			super(name, type);
+			this.map = createMap();
 			set(value);
+		}
+		
+		protected Map<String,Object> createMap() {
+			return new ConcurrentHashMap<>();
 		}
 		
 		@Override /* MutableProperty */
 		synchronized Property build() {
-			return new Property(name, Collections.unmodifiableMap(new TreeMap<>(value)), type);
+			return new Property(name, Collections.unmodifiableMap(new TreeMap<>(map)), type);
 		}
 
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
-			this.value.clear();
+			this.map.clear();
 			add(null, value);
 		}
 
@@ -760,9 +769,9 @@ public class PropertyStoreBuilder {
 			if (arg != null) {
 				value = convert(value);
 				if (value == null)
-					this.value.remove(arg);
+					this.map.remove(arg);
 				else
-					this.value.put(arg, value);
+					this.map.put(arg, value);
 				
 			} else if (value != null) {
 				if (value instanceof Map) {
@@ -790,15 +799,36 @@ public class PropertyStoreBuilder {
 
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
-			return this.value.isEmpty();
+			return this.map.isEmpty();
 		}
 
 		@Override /* MutableProperty */
 		synchronized Object peek() {
-			return value;
+			return map;
 		}
 	}
 	
+	//-------------------------------------------------------------------------------------------------------------------
+	// MutableLinkedMapProperty
+	//-------------------------------------------------------------------------------------------------------------------
+	
+	static class MutableLinkedMapProperty extends MutableMapProperty {
+		
+		MutableLinkedMapProperty(String name, PropertyType type, Object value) {
+			super(name, type, value);
+			set(value);
+		}
+		
+		@Override
+		protected Map<String,Object> createMap() {
+			return Collections.synchronizedMap(new LinkedHashMap<String,Object>());
+		}
+		
+		@Override /* MutableProperty */
+		synchronized Property build() {
+			return new Property(name, Collections.unmodifiableMap(new LinkedHashMap<>(map)), type);
+		}
+	}
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods

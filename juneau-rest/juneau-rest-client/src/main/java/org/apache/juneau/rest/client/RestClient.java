@@ -162,7 +162,7 @@ public class RestClient extends BeanContext {
 	 * <b>Configuration property:</b>  Request headers.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.requestHeader.ms"</js>
+	 * 	<li><b>Name:</b> <js>"RestClient.requestHeader.sms"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b> empty map
 	 * </ul>
@@ -170,13 +170,13 @@ public class RestClient extends BeanContext {
 	 * <p>
 	 * Headers to add to every request.
 	 */
-	public static final String RESTCLIENT_headers = PREFIX + "headers.ms";
+	public static final String RESTCLIENT_headers = PREFIX + "headers.sms";
 
 	/**
 	 * <b>Configuration property:</b>  Request query parameters.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.query.ms"</js>
+	 * 	<li><b>Name:</b> <js>"RestClient.query.sms"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b> empty map
 	 * </ul>
@@ -184,7 +184,7 @@ public class RestClient extends BeanContext {
 	 * <p>
 	 * Query parameters to add to every request.
 	 */
-	public static final String RESTCLIENT_query = PREFIX + "query.ms";
+	public static final String RESTCLIENT_query = PREFIX + "query.sms";
 
 	/**
 	 * <b>Configuration property:</b>  Serializer.

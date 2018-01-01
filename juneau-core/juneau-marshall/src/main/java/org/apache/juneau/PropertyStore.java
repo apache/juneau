@@ -661,10 +661,14 @@ public final class PropertyStore {
 				case LIST_INTEGER:
 				case LIST_CLASS: 
 				case LIST_OBJECT: return new MutableListProperty(name, type, value);
-				case MAP_STRING: 
-				case MAP_INTEGER: 
-				case MAP_CLASS: 
-				case MAP_OBJECT: return new MutableMapProperty(name, type, value);
+				case SORTED_MAP_STRING: 
+				case SORTED_MAP_INTEGER: 
+				case SORTED_MAP_CLASS: 
+				case SORTED_MAP_OBJECT: return new MutableMapProperty(name, type, value);
+				case ORDERED_MAP_STRING: 
+				case ORDERED_MAP_INTEGER: 
+				case ORDERED_MAP_CLASS: 
+				case ORDERED_MAP_OBJECT: return new MutableLinkedMapProperty(name, type, value);
 			}
 			throw new ConfigException("Invalid type specified: ''{0}''", type);
 		}
@@ -743,9 +747,13 @@ public final class PropertyStore {
 		}
 
 		public <T> Map<String,T> asMap(Class<T> eType) {
-			if (type == MAP_STRING && eType == String.class || type == MAP_INTEGER && eType == Integer.class || type == MAP_CLASS && eType == Class.class || type == MAP_OBJECT) {
+			if (
+				eType == String.class && (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING) 
+				|| eType == Integer.class && (type == SORTED_MAP_INTEGER || type == ORDERED_MAP_INTEGER) 
+				|| eType == Class.class && (type == SORTED_MAP_CLASS || type == ORDERED_MAP_CLASS) 
+				|| (type == SORTED_MAP_OBJECT || type == ORDERED_MAP_OBJECT)) {
 				return (Map<String,T>)value;
-			} else if (type == MAP_STRING) {
+			} else if (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING) {
 				Map<String,T> m = new LinkedHashMap<>();
 				for (Map.Entry<String,String> e : ((Map<String,String>)value).entrySet()) {
 					T t = ClassUtils.fromString(eType, e.getValue());
