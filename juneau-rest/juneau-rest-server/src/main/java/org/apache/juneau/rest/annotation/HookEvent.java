@@ -314,7 +314,7 @@ public enum HookEvent {
 	 * 		<jk>private</jk> Map<Integer,Pet> <jf>petDB</jf>;
 	 *
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> onInit(RestConfig config) <jk>throws</jk> Exception {
+	 * 		<jk>public void</jk> onInit(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 * 			<jc>// Load our database from a local JSON file.</jc>
 	 * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>);
 	 * 		}

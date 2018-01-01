@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * 		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
  *
  * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
- * 		<jk>public void</jk> initMyDatabase(RestConfig config) <jk>throws</jk> Exception {
+ * 		<jk>public void</jk> initMyDatabase(RestContextBuilder builder) <jk>throws</jk> Exception {
  * 			<jf>myDatabase</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
  * 		}
  * 	}

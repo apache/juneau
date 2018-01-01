@@ -154,7 +154,7 @@ public abstract class RestServlet extends HttpServlet {
 				throw new RestException(SC_INTERNAL_SERVER_ERROR, initException);
 			}
 			if (context == null)
-				throw new RestException(SC_INTERNAL_SERVER_ERROR, "Servlet {0} not initialized.  init(RestConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
+				throw new RestException(SC_INTERNAL_SERVER_ERROR, "Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
 			if (! isInitialized)
 				throw new RestException(SC_INTERNAL_SERVER_ERROR, "Servlet {0} has not been initialized", getClass().getName());
 
