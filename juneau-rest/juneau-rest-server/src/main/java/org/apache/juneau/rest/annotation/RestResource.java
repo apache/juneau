@@ -433,19 +433,23 @@ public @interface RestResource {
 	Class<?>[] children() default {};
 
 	/**
+	 * Resource path.   
+	 *
+	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
 	 *
 	 * <p>
-	 * Typically, this annotation is only applicable to resources defined as children through the {@link #children()}
-	 * annotation.
-	 * However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-	 *
-	 * <p>
-	 * This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
-	 * Therefore, implementers can optionally specify a path value for documentation purposes.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#path(String)} method.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_path}
+	 * 	<li>Annotation:  {@link RestResource#path()} 
+	 * 	<li>Method: {@link RestContextBuilder#path(String)} 
+	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
+	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
+	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
+	 * 		{@link RestResource#children()} annotation.
+	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 *	</ul>
 	 */
 	String path() default "";
 
@@ -778,6 +782,9 @@ public @interface RestResource {
 	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
+	 * Resource context path. 
+	 * 
+	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
 	 *
 	 * <p>
@@ -785,6 +792,14 @@ public @interface RestResource {
 	 * the context path is not actually specified on the servlet container.
 	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
 	 * will return this value instead of the actual context path of the web app.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_contextPath}
+	 * 	<li>Annotation:  {@link RestResource#contextPath()} 
+	 * 	<li>Method: {@link RestContextBuilder#contextPath(String)} 
+	 *	</ul>
 	 */
 	String contextPath() default "";
 

@@ -65,10 +65,11 @@ import org.apache.juneau.utils.*;
  * <p>
  * To interact with this object, simply implement the following init method in your resource class:
  * <p class='bcode'>
- * 	<jk>public synchronized void</jk> init(RestConfig config) <jk>throws</jk> Exception {
- * 		config.addPojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>);
- * 		config.setProperty(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
- * 		<jk>super</jk>.init(config); <jc>// Make sure this is the last line! (or just leave it out entirely)</jc>
+ * 	<jk>public synchronized void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+ * 		builder
+ * 			.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
+ * 			.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+ * 		<jk>super</jk>.init(builder); <jc>// Make sure this is the last line! (or just leave it out entirely)</jc>
  * 	}
  * </p>
  *
@@ -85,6 +86,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	final ServletConfig inner;
 	
+	Class<?> resourceClass;
 	Object resource;
 	ServletContext servletContext;
 
@@ -108,11 +110,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	List<Object> staticFiles;
 	RestContext parentContext;
 	String path;
-	String contextPath;
 	HtmlDocBuilder htmlDocBuilder;
 	List<Class<? extends Widget>> widgets = new ArrayList<>();
-
-	Class<?> resourceClass;
 
 	/**
 	 * Constructor for top-level servlets when using dependency injection.
@@ -409,22 +408,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Specifies the override context path for this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#contextPath() @RestResource.contextPath()} annotation.
-	 *
-	 * @param contextPath The context path for this resource and any child resources.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder contextPath(String contextPath) {
-		if (! contextPath.isEmpty())
-			this.contextPath = contextPath;
-		return this;
-	}
-
-	/**
 	 * Adds class-level serializers to this resource.
 	 *
 	 * <p>
@@ -702,22 +685,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Sets the URL path of the resource <js>"/foobar"</js>.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#path() @RestResource.path()} annotation.
-	 *
-	 * @param path The URL path of this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder path(String path) {
-		if (startsWith(path, '/'))
-			path = path.substring(1);
-		this.path = path;
-		return this;
-	}
-
-	/**
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
 	 *
@@ -826,6 +793,64 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	//----------------------------------------------------------------------------------------------------
 	// Properties
 	//----------------------------------------------------------------------------------------------------
+
+	/**
+	 * <b>Configuration property:</b>  Resource path.   
+	 *
+	 * <p>
+	 * Identifies the URL subpath relative to the parent resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_path}
+	 * 	<li>Annotation:  {@link RestResource#path()} 
+	 * 	<li>Method: {@link RestContextBuilder#path(String)} 
+	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
+	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
+	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
+	 * 		{@link RestResource#children()} annotation.
+	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 *	</ul>
+	 *
+	 * @param path The URL path of this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder path(String path) {
+		if (startsWith(path, '/'))
+			path = path.substring(1);
+		this.path = path;
+		return this;
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Resource context path. 
+	 *
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
+	 * the context path is not actually specified on the servlet container.
+	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
+	 * will return this value instead of the actual context path of the web app.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_contextPath}
+	 * 	<li>Annotation:  {@link RestResource#contextPath()} 
+	 * 	<li>Method: {@link RestContextBuilder#contextPath(String)} 
+	 *	</ul>
+	 *
+	 * @param contextPath The context path for this resource and any child resources.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder contextPath(String contextPath) {
+		if (! contextPath.isEmpty())
+			set(REST_contextPath, contextPath);
+		return this;
+	}
 
 	/**
 	 * <b>Configuration property:</b>  Allow header URL parameters.

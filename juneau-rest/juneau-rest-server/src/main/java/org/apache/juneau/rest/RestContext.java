@@ -611,6 +611,62 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
 	
+	/**
+	 * <b>Configuration property:</b>  Resource path.   
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.path.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Identifies the URL subpath relative to the parent resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_path}
+	 * 	<li>Annotation:  {@link RestResource#path()} 
+	 * 	<li>Method: {@link RestContextBuilder#path(String)} 
+	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
+	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
+	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
+	 * 		{@link RestResource#children()} annotation.
+	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 *	</ul>
+	 */
+	public static final String REST_path = PREFIX + "path.s";
+
+	/**
+	 * <b>Configuration property:</b>  Resource context path. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.contextPath.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
+	 * the context path is not actually specified on the servlet container.
+	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
+	 * will return this value instead of the actual context path of the web app.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_contextPath}
+	 * 	<li>Annotation:  {@link RestResource#contextPath()} 
+	 * 	<li>Method: {@link RestContextBuilder#contextPath(String)} 
+	 *	</ul>
+	 */
+	public static final String REST_contextPath = PREFIX + "contextPath.s";
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -709,8 +765,10 @@ public final class RestContext extends BeanContext {
 		this.resource = builder.resource;
 		this.builder = builder;
 		this.parentContext = builder.parentContext;
+		
 		PropertyStore ps = getPropertyStore();
 
+		contextPath = nullIfEmpty(getProperty(REST_contextPath, String.class, null));
 		allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
 		allowBodyParam = getProperty(REST_allowBodyParam, boolean.class, true);
 		allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getProperty(REST_allowedMethodParams, String.class, "HEAD,OPTIONS")))));
@@ -756,7 +814,6 @@ public final class RestContext extends BeanContext {
 			this.msgs = b.messageBundle;
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 			this.fullPath = b.fullPath;
-			this.contextPath = nullIfEmpty(b.contextPath);
 			this.widgets = Collections.unmodifiableMap(b.widgets);
 
 			supportedContentTypes = getListProperty(REST_supportedContentTypes, MediaType.class, serializers.getSupportedMediaTypes());
@@ -1031,7 +1088,6 @@ public final class RestContext extends BeanContext {
 		MessageBundle messageBundle;
 		String fullPath;
 		Map<String,Widget> widgets;
-		String contextPath;
 
 		@SuppressWarnings("unchecked")
 		Builder(RestContextBuilder rcb, PropertyStore ps) throws Exception {
@@ -1069,7 +1125,6 @@ public final class RestContext extends BeanContext {
 			partParser = resolve(resource, HttpPartParser.class, rcb.partParser, parsers.getPropertyStore());
 			encoders = rcb.encoders.build();
 			beanContext = BeanContext.create().apply(ps).add(properties).build();
-			contextPath = rcb.contextPath;
 
 			mimetypesFileTypeMap = rcb.mimeTypes;
 
