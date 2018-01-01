@@ -576,23 +576,42 @@ public final class ClassUtils {
 	 * Finds a public constructor with the specified parameters without throwing an exception.
 	 *
 	 * @param c The class to search for a constructor.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy-arg matching.
+	 * 	Find a constructor that best matches the specified args.
 	 * @param argTypes
 	 * 	The argument types in the constructor.
 	 * 	Can be subtypes of the actual constructor argument types.
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Class<?>...argTypes) {
+	public static <T> Constructor<T> findPublicConstructor(Class<T> c, boolean fuzzyArgs, Class<?>...argTypes) {
 		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
 		if (cce != null && argsMatch(cce.paramTypes, argTypes)) 
 			return (Constructor<T>)cce.constructor;
+	
+		if (fuzzyArgs) {
+			int bestCount = -1;
+			Constructor<?> bestMatch = null;
+			for (Constructor<?> n : c.getConstructors()) {
+				int m = fuzzyArgsMatch(n.getParameterTypes(), argTypes);
+				if (m > bestCount) {
+					bestCount = m;
+					bestMatch = n;
+				}
+			}
+			if (bestCount >= 0) 
+				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, bestMatch));
+			return (Constructor<T>)bestMatch;
+		} 
 		
 		for (Constructor<?> n : c.getConstructors()) {
-			if (isPublic(n) && argsMatch(n.getParameterTypes(), argTypes)) {
+			if (argsMatch(n.getParameterTypes(), argTypes)) {
 				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
 				return (Constructor<T>)n;
 			}
 		}
+
 		return null;
 	}
 	
@@ -623,6 +642,27 @@ public final class ClassUtils {
 		return false;
 	}
 	
+	/**
+	 * Returns a number representing the number of arguments that match the specified parameters.
+	 * 
+	 * @param paramTypes The parameters types specified on a method.
+	 * @param argTypes The class types of the arguments being passed to the method.
+	 * @return The number of matching arguments, or <code>-1</code> a parameter was found that isn't in the list of args.
+	 */
+	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>[] argTypes) {
+		int matches = 0;
+		outer: for (Class<?> p : paramTypes) {
+			p = getWrapperIfPrimitive(p);
+			for (Class<?> a : argTypes) {
+				if (isParentClass(p, a)) {
+					matches++;
+					continue outer;				
+				}
+			}
+			return -1;
+		}
+		return matches;
+	}
 
 	/**
 	 * Finds the public constructor that can take in the specified arguments.
@@ -634,7 +674,36 @@ public final class ClassUtils {
 	 * 	arguments.
 	 */
 	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Object...args) {
-		return findPublicConstructor(c, getClasses(args));
+		return findPublicConstructor(c, false, getClasses(args));
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments.
+	 *
+	 * @param c The class we're trying to construct.
+	 * @param args The argument types we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Class<?>...args) {
+		return findPublicConstructor(c, false, args);
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments.
+	 *
+	 * @param c The class we're trying to construct.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy-arg matching.
+	 * 	Find a constructor that best matches the specified args.
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public static <T> Constructor<T> findPublicConstructor(Class<T> c, boolean fuzzyArgs, Object...args) {
+		return findPublicConstructor(c, fuzzyArgs, getClasses(args));
 	}
 
 	/**
@@ -718,8 +787,10 @@ public final class ClassUtils {
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param allowNoArgs 
-	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	The arguments to pass to the constructor.
 	 * @return 
@@ -727,8 +798,8 @@ public final class ClassUtils {
 	 * @throws 
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public static <T> T newInstance(Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
-		return newInstanceFromOuter(null, c, c2, allowNoArgs, args);
+	public static <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
+		return newInstanceFromOuter(null, c, c2, fuzzyArgs, args);
 	}
 
 	/**
@@ -742,8 +813,10 @@ public final class ClassUtils {
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param allowNoArgs 
-	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	The arguments to pass to the constructor.
 	 * @return 
@@ -752,7 +825,7 @@ public final class ClassUtils {
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
+	public static <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
 		if (c2 == null)
 			return null;
 		if (c2 instanceof Class) {
@@ -760,22 +833,14 @@ public final class ClassUtils {
 				Class<?> c3 = (Class<?>)c2;
 				if (c3.isInterface() || isAbstract(c3))
 					return null;
-				Constructor<?> con = findPublicConstructor(c3, args);
+				Constructor<?> con = findPublicConstructor(c3, fuzzyArgs, args);
 				if (con != null)
-					return (T)con.newInstance(args);
-				if (allowNoArgs && args.length != 0)
-					con = findPublicConstructor(c3);
-				if (con != null)
-					return (T)con.newInstance();
+					return (T)con.newInstance(fuzzyArgs ? getMatchingArgs(con, args) : args);
 				if (outer != null) {
 					Object[] args2 = new AList<>().append(outer).appendAll(args).toArray();
-					con = findPublicConstructor(c3, args2);
+					con = findPublicConstructor(c3, fuzzyArgs, args2);
 					if (con != null)
-						return (T)con.newInstance(args2);
-					if (allowNoArgs && args.length != 0)
-						con = findPublicConstructor(c3);
-					if (con != null)
-						return (T)con.newInstance();
+						return (T)con.newInstance(fuzzyArgs ? getMatchingArgs(con, args) : args);
 				}
 				throw new FormattedRuntimeException("Could not instantiate class {0}.  Constructor not found.", c.getName());
 			} catch (Exception e) {
@@ -786,6 +851,21 @@ public final class ClassUtils {
 		} else {
 			throw new FormattedRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
 		}
+	}
+
+	private static Object[] getMatchingArgs(Constructor<?> con, Object[] args) {
+		Class<?>[] paramTypes = con.getParameterTypes();
+		Object[] params = new Object[paramTypes.length];
+		for (int i = 0; i < paramTypes.length; i++) {
+			Class<?> pt = getWrapperIfPrimitive(paramTypes[i]);
+			for (int j = 0; j < args.length; j++) {
+				if (isParentClass(pt, args[j].getClass())) {
+					params[i] = args[j];
+					break;
+				}
+			}
+		}
+		return params;
 	}
 
 	/**

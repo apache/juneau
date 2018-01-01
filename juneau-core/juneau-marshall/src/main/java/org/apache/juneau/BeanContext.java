@@ -1741,8 +1741,10 @@ public class BeanContext extends Context {
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param allowNoArgs 
-	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	The arguments to pass to the constructor.
 	 * @return 
@@ -1750,8 +1752,8 @@ public class BeanContext extends Context {
 	 * @throws 
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public <T> T newInstance(Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
-		return ClassUtils.newInstance(c, c2, allowNoArgs, args);
+	public <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
+		return ClassUtils.newInstance(c, c2, fuzzyArgs, args);
 	}
 
 	/**
@@ -1765,8 +1767,10 @@ public class BeanContext extends Context {
 	 * @param c2
 	 * 	The class to instantiate.
 	 * 	Can also be an instance of the class.
-	 * @param allowNoArgs 
-	 * 	If constructor with specified args cannot be found, use the no-args constructor.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	The arguments to pass to the constructor.
 	 * @return 
@@ -1774,8 +1778,8 @@ public class BeanContext extends Context {
 	 * @throws 
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean allowNoArgs, Object...args) {
-		return ClassUtils.newInstanceFromOuter(outer, c, c2, allowNoArgs, args);
+	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
+		return ClassUtils.newInstanceFromOuter(outer, c, c2, fuzzyArgs, args);
 	}
 	
 	/**

@@ -318,4 +318,66 @@ public class ClassUtilsTest {
 		int a1;
 		int b1;
 	}
+
+	//====================================================================================================
+	// Fuzzy constructor args
+	//====================================================================================================
+	@Test
+	public void newInstanceWithFuzzyArgs() throws Exception {
+		FA t = null;
+		
+		t = ClassUtils.newInstance(FA.class, FA.class, true);
+		assertEquals(1, t.c);
+
+		t = ClassUtils.newInstance(FA.class, FA.class, true, "foo");
+		assertEquals(2, t.c);
+
+		t = ClassUtils.newInstance(FA.class, FA.class, true, 123, "foo");
+		assertEquals(3, t.c);
+
+		t = ClassUtils.newInstance(FA.class, FA.class, true, "foo", 123);
+		assertEquals(3, t.c);
+	
+		FB t2 = null;
+		
+		try {
+			t2 = ClassUtils.newInstance(FB.class, FB.class, true);
+			fail();
+		} catch (Exception e) {
+			assertEquals("Could not instantiate class org.apache.juneau.utils.ClassUtilsTest$FB", e.getMessage());
+		}
+
+		t2 = ClassUtils.newInstance(FB.class, FB.class, true, "foo");
+		assertEquals(1, t2.c);
+
+		t2 = ClassUtils.newInstance(FB.class, FB.class, true, 123, "foo");
+		assertEquals(1, t2.c);
+
+		t2 = ClassUtils.newInstance(FB.class, FB.class, true, "foo", 123);
+		assertEquals(1, t2.c);
+	}
+	
+	public static class FA {
+		int c;
+		
+		public FA() {
+			c = 1;
+		}
+		
+		public FA(String foo) {
+			c = 2;
+		}
+
+		public FA(int foo, String bar) {
+			c = 3;
+		}
+	}
+
+	public static class FB {
+		int c;
+		
+		public FB(String foo) {
+			c = 1;
+		}
+	}
 }

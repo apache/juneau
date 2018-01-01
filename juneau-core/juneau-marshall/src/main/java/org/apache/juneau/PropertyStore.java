@@ -408,15 +408,17 @@ public final class PropertyStore {
 	 * @param def 
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def, boolean allowNoArgs, Object...args) {
-		return getInstanceProperty(key, null, type, def, allowNoArgs, args);
+	public <T> T getInstanceProperty(String key, Class<T> type, Object def, boolean fuzzyArgs, Object...args) {
+		return getInstanceProperty(key, null, type, def, fuzzyArgs, args);
 	}
 
 	/**
@@ -428,21 +430,23 @@ public final class PropertyStore {
 	 * @param def 
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, boolean allowNoArgs, Object...args) {
+	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, boolean fuzzyArgs, Object...args) {
 		Property p = findProperty(key);
 		if (p != null)
-			return p.asInstance(outer, type, allowNoArgs, args);
+			return p.asInstance(outer, type, fuzzyArgs, args);
 		if (def == null)
 			return null;
 		if (def instanceof Class) 
-			return ClassUtils.newInstance(type, def, allowNoArgs, args);
+			return ClassUtils.newInstance(type, def, fuzzyArgs, args);
 		if (type.isInstance(def))
 			return (T)def;
 		throw new ConfigException("Could not instantiate property ''{0}'' as type ''{1}'' with default value ''{2}''", key, type, def);
@@ -466,15 +470,17 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, boolean allowNoArgs, Object...args) {
-		return getInstanceArrayProperty(key, null, type, def, allowNoArgs, args);
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, boolean fuzzyArgs, Object...args) {
+		return getInstanceArrayProperty(key, null, type, def, fuzzyArgs, args);
 	}
 
 	/**
@@ -484,16 +490,18 @@ public final class PropertyStore {
 	 * @param outer The outer object if the class we're instantiating is an inner class.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, boolean allowNoArgs, Object...args) {
+	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, boolean fuzzyArgs, Object...args) {
 		Property p = findProperty(key);
-		return p == null ? def : p.asInstanceArray(outer, type, allowNoArgs, args);
+		return p == null ? def : p.asInstanceArray(outer, type, fuzzyArgs, args);
 	}
 
 	/**
@@ -751,15 +759,15 @@ public final class PropertyStore {
 			}
 		}
 
-		public <T> T asInstance(Object outer, Class<T> iType, boolean allowNoArgs, Object...args) {
+		public <T> T asInstance(Object outer, Class<T> iType, boolean fuzzyArgs, Object...args) {
 			if (type == STRING) 
 				return ClassUtils.fromString(iType, value.toString());
 			else if (type == OBJECT || type == CLASS) 
-				return ClassUtils.newInstanceFromOuter(outer, iType, value, allowNoArgs, args);
+				return ClassUtils.newInstanceFromOuter(outer, iType, value, fuzzyArgs, args);
 			throw new ConfigException("Invalid property instantiation ''{0}'' to ''{1}'' on property ''{2}''", type, iType, name);
 		}
 
-		public <T> T[] asInstanceArray(Object outer, Class<T> eType, boolean allowNoArgs, Object...args) {
+		public <T> T[] asInstanceArray(Object outer, Class<T> eType, boolean fuzzyArgs, Object...args) {
 			if (value instanceof Collection) {
 				Collection<?> l = (Collection<?>)value;
 				Object t = Array.newInstance(eType, l.size());
@@ -771,7 +779,7 @@ public final class PropertyStore {
 					else if (type == SET_STRING || type == LIST_STRING) 
 						o2 = ClassUtils.fromString(eType, o.toString());
 					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
-						o2 = ClassUtils.newInstanceFromOuter(outer, eType, o, allowNoArgs, args);
+						o2 = ClassUtils.newInstanceFromOuter(outer, eType, o, fuzzyArgs, args);
 					if (o2 == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
 					Array.set(t, i++, o2);

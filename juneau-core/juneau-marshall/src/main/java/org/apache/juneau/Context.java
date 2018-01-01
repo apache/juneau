@@ -263,15 +263,17 @@ public abstract class Context {
 	 * @param def 
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstanceProperty(String key, Class<T> type, Object def, boolean allowNoArgs, Object...args) {
-		return propertyStore.getInstanceProperty(key, type, def, allowNoArgs, args);
+	public <T> T getInstanceProperty(String key, Class<T> type, Object def, boolean fuzzyArgs, Object...args) {
+		return propertyStore.getInstanceProperty(key, type, def, fuzzyArgs, args);
 	}
 
 	/**
@@ -283,15 +285,17 @@ public abstract class Context {
 	 * @param def 
 	 * 	The default value if the property doesn't exist.
 	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, boolean allowNoArgs, Object...args) {
-		return propertyStore.getInstanceProperty(key, outer, type, def, allowNoArgs, args);
+	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, boolean fuzzyArgs, Object...args) {
+		return propertyStore.getInstanceProperty(key, outer, type, def, fuzzyArgs, args);
 	}
 
 	/**
@@ -312,15 +316,17 @@ public abstract class Context {
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, boolean allowNoArgs, Object...args) {
-		return propertyStore.getInstanceArrayProperty(key, type, def, allowNoArgs, args);
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, boolean fuzzyArgs, Object...args) {
+		return propertyStore.getInstanceArrayProperty(key, type, def, fuzzyArgs, args);
 	}
 
 	/**
@@ -330,15 +336,17 @@ public abstract class Context {
 	 * @param outer The outer object if the class we're instantiating is an inner class.
 	 * @param type The class type of the property.
 	 * @param def The default object to return if the property doesn't exist.
-	 * @param allowNoArgs 
-	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param fuzzyArgs 
+	 * 	Use fuzzy constructor arg matching.  
+	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
+	 * 	<br>No-arg constructors are also used if no other constructors are found.
 	 * @param args 
 	 * 	Arguments to pass to the constructor.
 	 * 	Constructors matching the arguments are always used before no-arg constructors.
 	 * @return A new property instance.
 	 */
-	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, boolean allowNoArgs, Object...args) {
-		return propertyStore.getInstanceArrayProperty(key, outer, type, def, allowNoArgs, args);
+	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, boolean fuzzyArgs, Object...args) {
+		return propertyStore.getInstanceArrayProperty(key, outer, type, def, fuzzyArgs, args);
 	}
 
 	/**
