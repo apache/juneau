@@ -25,6 +25,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.response.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -66,7 +67,7 @@ public @interface RestResource {
 	String messages() default "";
 
 	/**
-	 * Class-level guards.
+	 * <b>Configuration property:</b>  Class-level guards.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
@@ -76,14 +77,20 @@ public @interface RestResource {
 	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
 	 * for other purposes like pre-call validation of a request.
 	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#guards(Class...)}/
-	 * {@link RestContextBuilder#guards(RestGuard...)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_guards}
+	 * 	<li>Annotation:  {@link RestResource#guards()} / {@link RestMethod#guards()}
+	 * 	<li>Method: {@link RestContextBuilder#guards(Class...)} / {@link RestContextBuilder#guards(RestGuard...)}
+	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 *	</ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
-	 * Class-level converters.
+	 * <b>Configuration property:</b>  Class-level response converters.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
@@ -96,10 +103,14 @@ public @interface RestResource {
 	 * <p>
 	 * Default converter implementations are provided in the <a class='doclink'
 	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#converters(Class...)}/
-	 * {@link RestContextBuilder#converters(RestConverter...)} methods.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_converters}
+	 * 	<li>Annotation:  {@link RestResource#converters()} / {@link RestMethod#converters()}
+	 * 	<li>Method: {@link RestContextBuilder#converters(Class...)} / {@link RestContextBuilder#converters(RestConverter...)}
+	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -254,15 +265,31 @@ public @interface RestResource {
 	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
 
 	/**
+	 * <b>Configuration property:</b>  Response handlers.
+	 *
+	 * <p>
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
 	 * <p>
-	 * See {@link ResponseHandler} for details.
-	 *
+	 * By default, the following response handlers are provided out-of-the-box:
+	 * <ul>
+	 * 	<li>{@link StreamableHandler}
+	 * 	<li>{@link WritableHandler}
+	 * 	<li>{@link ReaderHandler}
+	 * 	<li>{@link InputStreamHandler}
+	 * 	<li>{@link RedirectHandler}
+	 * 	<li>{@link DefaultHandler}
+	 * </ul>
+
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#responseHandlers(Class...)}/
-	 * {@link RestContextBuilder#responseHandlers(ResponseHandler...)} methods.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_responseHandlers}
+	 * 	<li>Annotation:  {@link RestResource#responseHandlers()} 
+	 * 	<li>Method: {@link RestContextBuilder#responseHandlers(Class...)} / {@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
 

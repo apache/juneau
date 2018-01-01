@@ -41,6 +41,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Properties;
+import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -249,8 +250,8 @@ public final class RestContext extends BeanContext {
 	 * <b>Configuration property:</b>  Java method parameter resolvers.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.paramResolvers.lc"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>extends</jk> RestParam&gt;&gt;</code>
+	 * 	<li><b>Name:</b> <js>"RestContext.paramResolvers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;RestParam | Class&lt;? <jk>extends</jk> RestParam&gt;&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
@@ -284,13 +285,109 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>Property: {@link RestContext#REST_paramResolvers}
 	 * 	<li>Annotation:  {@link RestResource#paramResolvers()}
-	 * 	<li>Method: {@link RestContextBuilder#paramResolvers(Class...)}
+	 * 	<li>Method: {@link RestContextBuilder#paramResolvers(Class...)} / {@link RestContextBuilder#paramResolvers(RestParam...)}
 	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
 	 *	</ul>
 	 */
-	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lc";
+	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
 
-	
+	/**
+	 * <b>Configuration property:</b>  Class-level response converters.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.converters.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;RestConverter | Class&lt;? <jk>extends</jk> RestConverter&gt;&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Associates one or more {@link RestConverter converters} with a resource class.
+	 * These converters get called immediately after execution of the REST method in the same order specified in the
+	 * annotation.
+	 *
+	 * <p>
+	 * Can be used for performing post-processing on the response object before serialization.
+	 *
+	 * <p>
+	 * Default converter implementations are provided in the <a class='doclink'
+	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_converters}
+	 * 	<li>Annotation:  {@link RestResource#converters()} / {@link RestMethod#converters()}
+	 * 	<li>Method: {@link RestContextBuilder#converters(Class...)} / {@link RestContextBuilder#converters(RestConverter...)}
+	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 */
+	public static final String REST_converters = PREFIX + "converters.lo";
+
+	/**
+	 * <b>Configuration property:</b>  Class-level guards.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.guards.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;RestGuard | Class&lt;? <jk>extends</jk> RestGuard&gt;&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
+	 * These guards get called immediately before execution of any REST method in this class.
+	 *
+	 * <p>
+	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
+	 * for other purposes like pre-call validation of a request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_guards}
+	 * 	<li>Annotation:  {@link RestResource#guards()} / {@link RestMethod#guards()}
+	 * 	<li>Method: {@link RestContextBuilder#guards(Class...)} / {@link RestContextBuilder#guards(RestGuard...)}
+	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 */
+	public static final String REST_guards = PREFIX + "guards.lo";
+
+	/**
+	 * <b>Configuration property:</b>  Response handlers.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.responseHandlers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>extends</jk> ResponseHandler&gt;&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+	 *
+	 * <p>
+	 * By default, the following response handlers are provided out-of-the-box:
+	 * <ul>
+	 * 	<li>{@link StreamableHandler}
+	 * 	<li>{@link WritableHandler}
+	 * 	<li>{@link ReaderHandler}
+	 * 	<li>{@link InputStreamHandler}
+	 * 	<li>{@link RedirectHandler}
+	 * 	<li>{@link DefaultHandler}
+	 * </ul>
+
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_responseHandlers}
+	 * 	<li>Annotation:  {@link RestResource#responseHandlers()} 
+	 * 	<li>Method: {@link RestContextBuilder#responseHandlers(Class...)} / {@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 */
+	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
+
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -399,6 +496,10 @@ public final class RestContext extends BeanContext {
 		defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
 		maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
 
+		converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, ps);
+		guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, ps);
+		responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], true, ps);
+
 		Map<Class<?>,RestParam> _paramResolvers = new HashMap<>();
 		for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, ps)) 
 			_paramResolvers.put(rp.forClass(), rp);
@@ -422,9 +523,6 @@ public final class RestContext extends BeanContext {
 			this.defaultRequestHeaders = Collections.unmodifiableMap(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = Collections.unmodifiableMap(b.defaultResponseHeaders);
 			this.beanContext = b.beanContext;
-			this.converters = b.converters.toArray(new RestConverter[b.converters.size()]);
-			this.guards = b.guards.toArray(new RestGuard[b.guards.size()]);
-			this.responseHandlers = toObjectArray(b.responseHandlers, ResponseHandler.class);
 			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
 			this.staticFilesMap = Collections.unmodifiableMap(b.staticFilesMap);
 			this.staticFilesPrefixes = b.staticFilesPrefixes;
@@ -702,9 +800,6 @@ public final class RestContext extends BeanContext {
 		Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 		Map<String,Object> defaultResponseHeaders;
 		BeanContext beanContext;
-		List<RestConverter> converters = new ArrayList<>();
-		List<RestGuard> guards = new ArrayList<>();
-		List<ResponseHandler> responseHandlers = new ArrayList<>();
 		MimetypesFileTypeMap mimetypesFileTypeMap;
 		Map<String,String> staticFilesMap;
 		String[] staticFilesPrefixes;
@@ -760,15 +855,6 @@ public final class RestContext extends BeanContext {
 			defaultResponseHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(rcb.defaultResponseHeaders));
 			beanContext = BeanContext.create().apply(ps).add(properties).build();
 			contextPath = rcb.contextPath;
-
-			for (Object o : rcb.converters)
-				converters.add(resolve(resource, RestConverter.class, o));
-
-			for (Object o : rcb.guards)
-				guards.add(resolve(resource, RestGuard.class, o));
-
-			for (Object o : rcb.responseHandlers)
-				responseHandlers.add(resolve(resource, ResponseHandler.class, o));
 
 			mimetypesFileTypeMap = rcb.mimeTypes;
 

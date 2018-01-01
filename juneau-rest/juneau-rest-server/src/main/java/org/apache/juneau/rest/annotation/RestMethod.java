@@ -116,23 +116,33 @@ public @interface RestMethod {
 	int priority() default 0;
 
 	/**
-	 * Method guards.
+	 * <b>Configuration property:</b>  Method-level guards.
 	 *
 	 * <p>
-	 * Associates one or more {@link RestGuard RestGuards} with a method call.
-	 * These guards get called immediately before execution of the REST method.
+	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
+	 * These guards get called immediately before execution of any REST method in this class.
 	 *
 	 * <p>
 	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
 	 * for other purposes like pre-call validation of a request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_guards}
+	 * 	<li>Annotation:  {@link RestResource#guards()} / {@link RestMethod#guards()}
+	 * 	<li>Method: {@link RestContextBuilder#guards(Class...)} / {@link RestContextBuilder#guards(RestGuard...)}
+	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 *	</ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
-	 * Method response converters.
+	 * <b>Configuration property:</b>  Method-level response converters.
 	 *
 	 * <p>
-	 * Associates one or more {@link RestConverter RestConverters} with a method call.
+	 * Associates one or more {@link RestConverter converters} with a resource method.
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
 	 * annotation.
 	 *
@@ -140,8 +150,16 @@ public @interface RestMethod {
 	 * Can be used for performing post-processing on the response object before serialization.
 	 *
 	 * <p>
-	 * Default converters are available in the <a class='doclink'
+	 * Default converter implementations are provided in the <a class='doclink'
 	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_converters}
+	 * 	<li>Annotation:  {@link RestResource#converters()} / {@link RestMethod#converters()}
+	 * 	<li>Method: {@link RestContextBuilder#converters(Class...)} / {@link RestContextBuilder#converters(RestConverter...)}
+	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 

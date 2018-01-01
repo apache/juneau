@@ -275,6 +275,26 @@ public abstract class Context {
 	}
 
 	/**
+	 * Returns an instance of the specified class, string, or object property.
+	 * 
+	 * @param key The property name.
+	 * @param outer The outer object if the class we're instantiating is an inner class.
+	 * @param type The class type of the property.
+	 * @param def 
+	 * 	The default value if the property doesn't exist.
+	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
+	 * @param allowNoArgs 
+	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param args 
+	 * 	Arguments to pass to the constructor.
+	 * 	Constructors matching the arguments are always used before no-arg constructors.
+	 * @return A new property instance.
+	 */
+	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, boolean allowNoArgs, Object...args) {
+		return propertyStore.getInstanceProperty(key, outer, type, def, allowNoArgs, args);
+	}
+
+	/**
 	 * Returns the specified property as an array of instantiated objects.
 	 * 
 	 * @param key The property name.
@@ -301,6 +321,24 @@ public abstract class Context {
 	 */
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def, boolean allowNoArgs, Object...args) {
 		return propertyStore.getInstanceArrayProperty(key, type, def, allowNoArgs, args);
+	}
+
+	/**
+	 * Returns the specified property as an array of instantiated objects.
+	 * 
+	 * @param key The property name.
+	 * @param outer The outer object if the class we're instantiating is an inner class.
+	 * @param type The class type of the property.
+	 * @param def The default object to return if the property doesn't exist.
+	 * @param allowNoArgs 
+	 * 	Look for no-arg constructors when instantiating a class.
+	 * @param args 
+	 * 	Arguments to pass to the constructor.
+	 * 	Constructors matching the arguments are always used before no-arg constructors.
+	 * @return A new property instance.
+	 */
+	public <T> T[] getInstanceArrayProperty(String key, Object outer, Class<T> type, T[] def, boolean allowNoArgs, Object...args) {
+		return propertyStore.getInstanceArrayProperty(key, outer, type, def, allowNoArgs, args);
 	}
 
 	/**

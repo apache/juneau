@@ -102,12 +102,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	ParserGroupBuilder parsers = ParserGroup.create();
 	Object partSerializer = SimpleUonPartSerializer.class, partParser = UonPartParser.class;
 	EncoderGroupBuilder encoders = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
-	List<Object> converters = new ArrayList<>();
-	List<Object> guards = new ArrayList<>();
+
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
 	Map<String,String> defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	Map<String,Object> defaultResponseHeaders = new LinkedHashMap<>();
-	List<Object> responseHandlers = new ArrayList<>();
 	List<Object> childResources = new ArrayList<>();
 	List<MediaType> supportedContentTypes, supportedAcceptTypes;
 	List<Object> staticFiles;
@@ -608,82 +606,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Adds class-level converters to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#converters() @RestResource.converters()}
-	 * annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * <p>
-	 * By default, this config includes the following converters:
-	 * <ul>
-	 * 	<li>{@link StreamableHandler}
-	 * 	<li>{@link WritableHandler}
-	 * 	<li>{@link ReaderHandler}
-	 * 	<li>{@link InputStreamHandler}
-	 * 	<li>{@link RedirectHandler}
-	 * 	<li>{@link DefaultHandler}
-	 * </ul>
-	 *
-	 * @param converters The converter classes to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder converters(Class<?>...converters) {
-		this.converters.addAll(Arrays.asList(converters));
-		return this;
-	}
-
-	/**
-	 * Adds class-level encoders to this resource.
-	 *
-	 * <p>
-	 * Same as {@link #converters(Class...)} except allows you to pass in converter instances.
-	 *
-	 * @param converters The converters to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder converters(RestConverter...converters) {
-		this.converters.addAll(Arrays.asList(converters));
-		return this;
-	}
-
-	/**
-	 * Adds class-level guards to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#guards() @RestResource.guards()} annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param guards The guard classes to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder guards(Class<?>...guards) {
-		this.guards.addAll(Arrays.asList(guards));
-		return this;
-	}
-
-	/**
-	 * Adds class-level guards to this resource.
-	 *
-	 * <p>
-	 * Same as {@link #guards(Class...)} except allows you to pass in guard instances.
-	 *
-	 * @param guards The guards to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder guards(RestGuard...guards) {
-		this.guards.addAll(Arrays.asList(guards));
-		return this;
-	}
-
-	/**
 	 * Adds MIME-type definitions.
 	 *
 	 * <p>
@@ -800,49 +722,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				throw new RestServletException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
 			defaultResponseHeader(h[0], h[1]);
 		}
-		return this;
-	}
-
-	/**
-	 * Adds class-level response handler classes to this resource.
-	 *
-	 * <p>
-	 * Response handlers are responsible for converting various POJOs returned by REST methods into actual HTTP responses.
-	 *
-	 * <p>
-	 * By default, this config includes the following response handlers:
-	 * <ul>
-	 * 	<li>{@link StreamableHandler}
-	 * 	<li>{@link WritableHandler}
-	 * 	<li>{@link ReaderHandler}
-	 * 	<li>{@link InputStreamHandler}
-	 * 	<li>{@link RedirectHandler}
-	 * 	<li>{@link DefaultHandler}
-	 * </ul>
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the
-	 * {@link RestResource#responseHandlers() @RestResource.responseHandlers()} annotation.
-	 *
-	 * @param responseHandlers The response handlers to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder responseHandlers(Class<?>...responseHandlers) {
-		this.responseHandlers.addAll(Arrays.asList(responseHandlers));
-		return this;
-	}
-
-	/**
-	 * Adds class-level response handlers to this resource.
-	 *
-	 * <p>
-	 * Same as {@link #responseHandlers(Class...)} except allows you to pass in response handler instances.
-	 *
-	 * @param responseHandlers The response handlers to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder responseHandlers(ResponseHandler...responseHandlers) {
-		this.responseHandlers.addAll(Arrays.asList(responseHandlers));
 		return this;
 	}
 
@@ -1509,6 +1388,233 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@SuppressWarnings("unchecked")
 	public RestContextBuilder paramResolvers(Class<? extends RestParam>...paramResolvers) {
 		return addTo(REST_paramResolvers, paramResolvers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Java method parameter resolvers.
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <p>
+	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
+	 *
+	 * 		<jc>// Must have no-arg constructor!</jc>
+	 * 		<jk>public</jk> MyRestParam() {
+	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
+	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_paramResolvers}
+	 * 	<li>Annotation:  {@link RestResource#paramResolvers()}
+	 * 	<li>Method: {@link RestContextBuilder#paramResolvers(Class...)}
+	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 * @param paramResolvers The parameter resolvers to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder paramResolvers(RestParam...paramResolvers) {
+		return addTo(REST_paramResolvers, paramResolvers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Response converters.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestConverter converters} with a resource class.
+	 * These converters get called immediately after execution of the REST method in the same order specified in the
+	 * annotation.
+	 *
+	 * <p>
+	 * Can be used for performing post-processing on the response object before serialization.
+	 *
+	 * <p>
+	 * Default converter implementations are provided in the <a class='doclink'
+	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_converters}
+	 * 	<li>Annotation:  {@link RestResource#converters()} / {@link RestMethod#converters()}
+	 * 	<li>Method: {@link RestContextBuilder#converters(Class...)} / {@link RestContextBuilder#converters(RestConverter...)}
+	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 * @param converters The converter classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder converters(Class<?>...converters) {
+		return addTo(REST_converters, converters);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Response converters.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestConverter converters} with a resource class.
+	 * These converters get called immediately after execution of the REST method in the same order specified in the
+	 * annotation.
+	 *
+	 * <p>
+	 * Can be used for performing post-processing on the response object before serialization.
+	 *
+	 * <p>
+	 * Default converter implementations are provided in the <a class='doclink'
+	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_converters}
+	 * 	<li>Annotation:  {@link RestResource#converters()} / {@link RestMethod#converters()}
+	 * 	<li>Method: {@link RestContextBuilder#converters(Class...)} / {@link RestContextBuilder#converters(RestConverter...)}
+	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 * @param converters The converter classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder converters(RestConverter...converters) {
+		return addTo(REST_converters, converters);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Class-level guards.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
+	 * These guards get called immediately before execution of any REST method in this class.
+	 *
+	 * <p>
+	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
+	 * for other purposes like pre-call validation of a request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_guards}
+	 * 	<li>Annotation:  {@link RestResource#guards()} / {@link RestMethod#guards()}
+	 * 	<li>Method: {@link RestContextBuilder#guards(Class...)} / {@link RestContextBuilder#guards(RestGuard...)}
+	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 *	</ul>
+	 *
+	 * @param guards The guard classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder guards(Class<?>...guards) {
+		return addTo(REST_guards, guards);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Class-level guards.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
+	 * These guards get called immediately before execution of any REST method in this class.
+	 *
+	 * <p>
+	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
+	 * for other purposes like pre-call validation of a request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_guards}
+	 * 	<li>Annotation:  {@link RestResource#guards()} / {@link RestMethod#guards()}
+	 * 	<li>Method: {@link RestContextBuilder#guards(Class...)} / {@link RestContextBuilder#guards(RestGuard...)}
+	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 *	</ul>
+	 *
+	 * @param guards The guard classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder guards(RestGuard...guards) {
+		return addTo(REST_guards, guards);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Response handlers.
+	 *
+	 * <p>
+	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+	 *
+	 * <p>
+	 * By default, the following response handlers are provided out-of-the-box:
+	 * <ul>
+	 * 	<li>{@link StreamableHandler}
+	 * 	<li>{@link WritableHandler}
+	 * 	<li>{@link ReaderHandler}
+	 * 	<li>{@link InputStreamHandler}
+	 * 	<li>{@link RedirectHandler}
+	 * 	<li>{@link DefaultHandler}
+	 * </ul>
+
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_responseHandlers}
+	 * 	<li>Annotation:  {@link RestResource#responseHandlers()} 
+	 * 	<li>Method: {@link RestContextBuilder#responseHandlers(Class...)} / {@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 * @param responseHandlers The response handlers to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder responseHandlers(Class<?>...responseHandlers) {
+		return addTo(REST_responseHandlers, responseHandlers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Response handlers.
+	 *
+	 * <p>
+	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+	 *
+	 * <p>
+	 * By default, the following response handlers are provided out-of-the-box:
+	 * <ul>
+	 * 	<li>{@link StreamableHandler}
+	 * 	<li>{@link WritableHandler}
+	 * 	<li>{@link ReaderHandler}
+	 * 	<li>{@link InputStreamHandler}
+	 * 	<li>{@link RedirectHandler}
+	 * 	<li>{@link DefaultHandler}
+	 * </ul>
+
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property: {@link RestContext#REST_responseHandlers}
+	 * 	<li>Annotation:  {@link RestResource#responseHandlers()} 
+	 * 	<li>Method: {@link RestContextBuilder#responseHandlers(Class...)} / {@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 * @param responseHandlers The response handlers to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder responseHandlers(ResponseHandler...responseHandlers) {
+		return addTo(REST_responseHandlers, responseHandlers);
 	}
 
 	/**
