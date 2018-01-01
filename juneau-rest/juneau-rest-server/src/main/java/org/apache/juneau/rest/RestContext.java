@@ -760,64 +760,87 @@ public final class RestContext extends BeanContext {
 		super(builder.getPropertyStore());
 		
 		RestException _initException = null;
-		ServletContext servletContext = builder.servletContext;
-
-		this.resource = builder.resource;
-		this.builder = builder;
-		this.parentContext = builder.parentContext;
 		
-		PropertyStore ps = getPropertyStore();
-
-		contextPath = nullIfEmpty(getProperty(REST_contextPath, String.class, null));
-		allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
-		allowBodyParam = getProperty(REST_allowBodyParam, boolean.class, true);
-		allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getProperty(REST_allowedMethodParams, String.class, "HEAD,OPTIONS")))));
-		renderResponseStackTraces = getProperty(REST_renderResponseStackTraces, boolean.class, false);
-		useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
-		defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
-		maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
-		clientVersionHeader = getProperty(REST_clientVersionHeader, String.class, "X-Client-Version");
-
-		converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, ps);
-		guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, ps);
-		responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], true, ps);
-
-		Map<Class<?>,RestParam> _paramResolvers = new HashMap<>();
-		for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, ps)) 
-			_paramResolvers.put(rp.forClass(), rp);
-		paramResolvers = Collections.unmodifiableMap(_paramResolvers);
-		
-		Map<String,String> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		_defaultRequestHeaders.putAll(getMapProperty(REST_defaultRequestHeaders, String.class));
-		defaultRequestHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(_defaultRequestHeaders));
-		
-		defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, String.class);
-		
-		logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLogger.NoOp.class, false);
-
 		try {
-			this.resourceFinder = new ResourceFinder(resource.getClass());
+			ServletContext servletContext = builder.servletContext;
+
+			this.resource = builder.resource;
+			this.builder = builder;
+			this.parentContext = builder.parentContext;
+			
+			PropertyStore ps = getPropertyStore();
+
+			contextPath = nullIfEmpty(getProperty(REST_contextPath, String.class, null));
+			allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
+			allowBodyParam = getProperty(REST_allowBodyParam, boolean.class, true);
+			allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getProperty(REST_allowedMethodParams, String.class, "HEAD,OPTIONS")))));
+			renderResponseStackTraces = getProperty(REST_renderResponseStackTraces, boolean.class, false);
+			useStackTraceHashes = getProperty(REST_useStackTraceHashes, boolean.class, true);
+			defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
+			maxInput = getProperty(REST_maxInput, long.class, 100_000_000l);
+			clientVersionHeader = getProperty(REST_clientVersionHeader, String.class, "X-Client-Version");
+
+			converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, ps);
+			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, ps);
+			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], true, ps);
+
+			Map<Class<?>,RestParam> _paramResolvers = new HashMap<>();
+			for (RestParam rp : getInstanceArrayProperty(REST_paramResolvers, RestParam.class, new RestParam[0], true, ps)) 
+				_paramResolvers.put(rp.forClass(), rp);
+			paramResolvers = Collections.unmodifiableMap(_paramResolvers);
+			
+			Map<String,String> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+			_defaultRequestHeaders.putAll(getMapProperty(REST_defaultRequestHeaders, String.class));
+			defaultRequestHeaders = Collections.unmodifiableMap(new LinkedHashMap<>(_defaultRequestHeaders));
+			
+			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, String.class);
+			
+			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLogger.NoOp.class, false);
+
+			varResolver = builder.varResolverBuilder
+				.vars(
+					FileVar.class, 
+					LocalizationVar.class, 
+					RequestAttributeVar.class, 
+					RequestFormDataVar.class, 
+					RequestHeaderVar.class, 
+					RequestPathVar.class, 
+					RequestQueryVar.class, 
+					RequestVar.class,
+					RestInfoVar.class,
+					SerializedRequestAttrVar.class, 
+					ServletInitParamVar.class, 
+					UrlVar.class, 
+					UrlEncodeVar.class, 
+					WidgetVar.class
+				)
+				.build()
+			;
+
+			configFile = builder.configFile.getResolving(this.varResolver);
+			
+			properties = builder.properties;
+			serializers = builder.serializers.apply(ps).add(properties).build();
+			parsers = builder.parsers.apply(ps).add(properties).build();
+			partSerializer = resolve(resource, HttpPartSerializer.class, builder.partSerializer, serializers.getPropertyStore());
+			partParser = resolve(resource, HttpPartParser.class, builder.partParser, parsers.getPropertyStore());
+			encoders = builder.encoders.build();
+			beanContext = BeanContext.create().apply(ps).add(properties).build();
+
+			mimetypesFileTypeMap = builder.mimeTypes;
+			
+			resourceFinder = new ResourceFinder(resource.getClass());
+
+			supportedContentTypes = getListProperty(REST_supportedContentTypes, MediaType.class, serializers.getSupportedMediaTypes());
+			supportedAcceptTypes = getListProperty(REST_supportedAcceptTypes, MediaType.class, parsers.getSupportedMediaTypes());
 
 			Builder b = new Builder(builder, ps);
-			this.varResolver = b.varResolver;
-			this.configFile = b.configFile;
-			this.properties = b.properties;
-			this.serializers = b.serializers;
-			this.parsers = b.parsers;
-			this.partSerializer = b.partSerializer;
-			this.partParser = b.partParser;
-			this.encoders = b.encoders;
-			this.beanContext = b.beanContext;
-			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
 			this.staticFilesMap = Collections.unmodifiableMap(b.staticFilesMap);
 			this.staticFilesPrefixes = b.staticFilesPrefixes;
 			this.msgs = b.messageBundle;
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 			this.fullPath = b.fullPath;
 			this.widgets = Collections.unmodifiableMap(b.widgets);
-
-			supportedContentTypes = getListProperty(REST_supportedContentTypes, MediaType.class, serializers.getSupportedMediaTypes());
-			supportedAcceptTypes = getListProperty(REST_supportedAcceptTypes, MediaType.class, parsers.getSupportedMediaTypes());
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -1072,17 +1095,6 @@ public final class RestContext extends BeanContext {
 
 	private static final class Builder {
 
-		VarResolver varResolver;
-		ConfigFile configFile;
-		ObjectMap properties;
-		SerializerGroup serializers;
-		ParserGroup parsers;
-		HttpPartSerializer partSerializer;
-		HttpPartParser partParser;
-		EncoderGroup encoders;
-
-		BeanContext beanContext;
-		MimetypesFileTypeMap mimetypesFileTypeMap;
 		Map<String,String> staticFilesMap;
 		String[] staticFilesPrefixes;
 		MessageBundle messageBundle;
@@ -1095,14 +1107,6 @@ public final class RestContext extends BeanContext {
 			Object resource = rcb.resource;
 			
 			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
-
-			varResolver = rcb.varResolverBuilder
-				.vars(FileVar.class, LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlVar.class, UrlEncodeVar.class, WidgetVar.class)
-				.build()
-			;
-			
-			configFile = rcb.configFile.getResolving(this.varResolver);
-			properties = rcb.properties;
 			
 			// Find resource resource bundle location.
 			for (Map.Entry<Class<?>,RestResource> e : restResourceAnnotationsChildFirst.entrySet()) {
@@ -1119,15 +1123,6 @@ public final class RestContext extends BeanContext {
 			if (messageBundle == null)
 				messageBundle = new MessageBundle(resource.getClass(), "");
 			
-			serializers = rcb.serializers.apply(ps).add(properties).build();
-			parsers = rcb.parsers.apply(ps).add(properties).build();
-			partSerializer = resolve(resource, HttpPartSerializer.class, rcb.partSerializer, serializers.getPropertyStore());
-			partParser = resolve(resource, HttpPartParser.class, rcb.partParser, parsers.getPropertyStore());
-			encoders = rcb.encoders.build();
-			beanContext = BeanContext.create().apply(ps).add(properties).build();
-
-			mimetypesFileTypeMap = rcb.mimeTypes;
-
 			VarResolver vr = rcb.getVarResolverBuilder().build();
 
 			staticFilesMap = new LinkedHashMap<>();

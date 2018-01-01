@@ -706,9 +706,6 @@ public @interface RestResource {
 	 * 	<li>Annotation:  {@link RestResource#parserListener()} 
 	 * 	<li>Method: {@link RestContextBuilder#parserListener(Class)} 
 	 *	</ul>
-	 *
-	 * @param listener The listener to add to this config.
-	 * @return This object (for method chaining).
 	 */
 	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 

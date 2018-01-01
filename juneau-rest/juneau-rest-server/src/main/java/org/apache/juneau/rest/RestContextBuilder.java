@@ -102,7 +102,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	SerializerGroupBuilder serializers = SerializerGroup.create();
 	ParserGroupBuilder parsers = ParserGroup.create();
-	Object partSerializer = SimpleUonPartSerializer.class, partParser = UonPartParser.class;
+	Object 
+		partSerializer = SimpleUonPartSerializer.class, 
+		partParser = UonPartParser.class;
 	EncoderGroupBuilder encoders = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
 
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
