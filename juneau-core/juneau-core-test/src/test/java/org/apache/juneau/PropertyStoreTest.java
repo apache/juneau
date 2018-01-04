@@ -24,7 +24,7 @@ import org.junit.*;
 /**
  * Test the PropertyStore class.
  */
-public class PropertyStore2Test {
+public class PropertyStoreTest {
 
 	//====================================================================================================
 	// testBasic()
@@ -1703,6 +1703,42 @@ public class PropertyStore2Test {
 	public void testToString() {
 		PropertyStore p = PropertyStore.create().build();
 		assertEquals("{}", p.toString());
+	}
+
+	@Test
+	public void testNoneOnList() {
+		PropertyStoreBuilder psb = PropertyStore.create();
+		
+		psb.set("A.foo.ls", "['foo','bar']");
+		psb.set("A.foo.ls", "NONE");
+		assertEquals("{}", psb.build().toString());
+	}
+
+	@Test
+	public void testNoneOnSet() {
+		PropertyStoreBuilder psb = PropertyStore.create();
+		
+		psb.set("A.foo.ss", "['foo','bar']");
+		psb.set("A.foo.ss", "NONE");
+		assertEquals("{}", psb.build().toString());
+	}
+	
+	@Test
+	public void testInheritOnList() {
+		PropertyStoreBuilder psb = PropertyStore.create();
+		
+		psb.set("A.foo.ls", "['foo','bar']");
+		psb.set("A.foo.ls", "['baz','INHERIT','qux']");
+		assertEquals("{A:{'foo.ls':['baz','foo','bar','qux']}}", psb.build().toString());
+	}
+
+	@Test
+	public void testInheritOnSet() {
+		PropertyStoreBuilder psb = PropertyStore.create();
+		
+		psb.set("A.foo.ls", "['foo','bar']");
+		psb.set("A.foo.ls", "['baz','INHERIT','qux']");
+		assertEquals("{A:{'foo.ls':['baz','foo','bar','qux']}}", psb.build().toString());
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

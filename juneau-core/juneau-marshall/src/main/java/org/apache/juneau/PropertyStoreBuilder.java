@@ -523,6 +523,7 @@ public class PropertyStoreBuilder {
 	@SuppressWarnings("unchecked")
 	static class MutableSetProperty extends MutableProperty {
 		private final Set<Object> value;
+		private Set<Object> oldValue;
 
 		MutableSetProperty(String name, PropertyType type, Object value) {
 			super(name, type);
@@ -537,8 +538,10 @@ public class PropertyStoreBuilder {
 
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
+			this.oldValue = this.value.isEmpty() ? Collections.EMPTY_SET : new LinkedHashSet<>(this.value);
 			this.value.clear();
 			add(null, value);
+			this.oldValue = null;
 		}
 		
 		@Override /* MutableProperty */
@@ -567,6 +570,10 @@ public class PropertyStoreBuilder {
 							JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
 						);
 					}
+				} else if (isNone(value)) {
+					this.value.clear();
+				} else if (isInherit(value) && oldValue != null) {
+					add(null, oldValue);
 				} else {
 					value = convert(value);
 					this.value.add(value);
@@ -616,7 +623,8 @@ public class PropertyStoreBuilder {
 	
 	@SuppressWarnings("unchecked")
 	static class MutableListProperty extends MutableProperty {
-		private List<Object> value = new CopyOnWriteArrayList<>();
+		private final List<Object> value = new CopyOnWriteArrayList<>();
+		private List<Object> oldValue;
 
 		MutableListProperty(String name, PropertyType type, Object value) {
 			super(name, type);
@@ -630,8 +638,10 @@ public class PropertyStoreBuilder {
 
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
+			this.oldValue = this.value.isEmpty() ? Collections.EMPTY_LIST : new ArrayList<>(this.value);
 			this.value.clear();
 			add(null, value);
+			this.oldValue = null;
 		}
 		
 		@Override /* MutableProperty */
@@ -680,6 +690,12 @@ public class PropertyStoreBuilder {
 							JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
 						);
 					}
+				} else if (isNone(value)) {
+					this.value.clear();
+					return -1;
+				} else if (isInherit(value) && oldValue != null) {
+					for (Object o : oldValue)
+						index = add(index, o);
 				} else {
 					value = convert(value);
 					boolean replaced = this.value.remove(value);
@@ -838,6 +854,22 @@ public class PropertyStoreBuilder {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
 			return (s.startsWith("[") && s.endsWith("]") && BeanContext.DEFAULT != null);
+		}
+		return false;
+	}
+
+	static boolean isNone(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return "NONE".equals(s);
+		}
+		return false;
+	}
+
+	static boolean isInherit(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return "INHERIT".equals(s);
 		}
 		return false;
 	}
