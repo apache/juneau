@@ -109,7 +109,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
 	List<Object> childResources = new ArrayList<>();
-	List<Object> staticFiles;
 	RestContext parentContext;
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
