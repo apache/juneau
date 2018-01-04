@@ -112,7 +112,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	RestContext parentContext;
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
-	List<Class<? extends Widget>> widgets = new ArrayList<>();
 
 	/**
 	 * Constructor for top-level servlets when using dependency injection.
@@ -251,9 +250,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					maxInput(vr.resolve(r.maxInput()));
 
 				HtmlDoc hd = r.htmldoc();
-				for (Class<? extends Widget> cw : hd.widgets())
-					this.widgets.add(cw);
-
+				widgets(hd.widgets());
 				htmlDocBuilder.process(hd);
 			}
 
@@ -283,6 +280,17 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	void init(Object resource) throws ServletException {
 		this.resource = resource;
+
+		// Once we have the resource object, we can construct the Widgets.
+		// We want to do that here so that we can update the script/style properties while they're still modifiable.
+		HtmlDocBuilder hdb = getHtmlDocBuilder();
+		PropertyStore ps = getPropertyStore();
+		Widget[] widgets = ps.getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0], true, ps, resource);
+		for (Widget w : widgets) {
+			hdb.script("INHERIT", "$W{"+w.getName()+".script}");
+			hdb.style("INHERIT", "$W{"+w.getName()+".style}");
+		}
+		widgets(false, widgets);
 		
 		Map<String,Method> map = new LinkedHashMap<>();
 		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
@@ -678,21 +686,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	/**
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement text.
-	 *
-	 * <p>
-	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
-	 *
-	 * @param value The widget class to add.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder widget(Class<? extends Widget> value) {
-		this.widgets.add(value);
-		return this;
-	}
-	
 	/**
 	 * Returns an instance of an HTMLDOC builder for setting HTMLDOC-related properties.
 	 * 
@@ -2296,6 +2289,104 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder useClasspathResourceCaching(boolean value) {
 		return set(REST_useClasspathResourceCaching, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  HTML Widgets. 
+	 *
+	 * <p>
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement text.
+	 * 
+	 * Widgets resolve the following variables:
+	 * <ul>
+	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
+	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
+	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
+	 * 			 in the HTML page.
+	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest)}.
+	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
+	 * 			 in the HTML page.
+	 * </ul>
+	 *
+	 * <p>
+	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+	 * and aside section of the page:
+	 *
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		widgets={
+	 * 			MyWidget.<jk>class</jk>
+	 * 		}
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			navlinks={
+	 * 				<js>"$W{MyWidget}"</js>
+	 * 			},
+	 * 			aside={
+	 * 				<js>"Check out this widget:  $W{MyWidget}"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_widgets}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link HtmlDoc#widgets()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#widgets(Class...)}
+	 * 			<li>{@link RestContextBuilder#widgets(Widget...)}
+	 * 			<li>{@link RestContextBuilder#widgets(boolean,Widget...)}
+	 * 		</ul>
+	 * 	<li>Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * 	<li>Values are appended to the existing list.
+	 * </ul>
+	 *
+	 * @param values The widget classes to add.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestContextBuilder widgets(Class<? extends Widget>...values) {
+		return addTo(REST_widgets, values);
+	}
+	
+	/**
+	 * <b>Configuration property:</b>  HTML Widgets. 
+	 * 
+	 * <p>
+	 * Same as {@link #widgets(Class...)} but allows you to pass in pre-instantiated Widget objects.
+	 * 
+	 * <p>
+	 * Values are appended to the existing list.
+	 *
+	 * @param values The widget objects to add.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder widgets(Widget...values) {
+		return addTo(REST_widgets, values);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  HTML Widgets. 
+	 * 
+	 * <p>
+	 * Same as {@link #widgets(Class...)} but allows you to pass in pre-instantiated Widget objects.
+	 * 
+	 * <p>
+	 * Values are appended to the existing list.
+	 * 
+	 * @param append 
+	 * 	If <jk>true</jk>, appends to the existing list of widgets.
+	 * 	<br>Otherwise, replaces the previous list.
+	 * @param values The widget objects to add.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder widgets(boolean append, Widget...values) {
+		return set(append, REST_widgets, values);
 	}
 
 	/**

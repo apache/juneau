@@ -986,6 +986,68 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_useClasspathResourceCaching = PREFIX + "useClasspathResourceCaching.b";
 
+	/**
+	 * <b>Configuration property:</b>  HTML Widgets. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.widgets.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>extends</jk> Widget&gt; | Widget&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement text.
+	 * 
+	 * Widgets resolve the following variables:
+	 * <ul>
+	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
+	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
+	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
+	 * 			 in the HTML page.
+	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest)}.
+	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
+	 * 			 in the HTML page.
+	 * </ul>
+	 *
+	 * <p>
+	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+	 * and aside section of the page:
+	 *
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		widgets={
+	 * 			MyWidget.<jk>class</jk>
+	 * 		}
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			navlinks={
+	 * 				<js>"$W{MyWidget}"</js>
+	 * 			},
+	 * 			aside={
+	 * 				<js>"Check out this widget:  $W{MyWidget}"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_widgets}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link HtmlDoc#widgets()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#widgets(Class...)}
+	 * 			<li>{@link RestContextBuilder#widgets(Widget...)}
+	 * 			<li>{@link RestContextBuilder#widgets(boolean,Widget...)}
+	 * 		</ul>
+	 * 	<li>Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * </ul>
+	 */
+	public static final String REST_widgets = PREFIX + "widgets.lo";
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -1169,7 +1231,11 @@ public final class RestContext extends BeanContext {
 			this.msgs = b.messageBundle;
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 			this.fullPath = b.fullPath;
-			this.widgets = Collections.unmodifiableMap(b.widgets);
+			
+			Map<String,Widget> _widgets = new LinkedHashMap<>();
+			for (Widget w : getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0], true, resource, ps))
+				_widgets.put(w.getName(), w);
+			this.widgets = Collections.unmodifiableMap(_widgets);
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -1426,7 +1492,6 @@ public final class RestContext extends BeanContext {
 
 		MessageBundle messageBundle;
 		String fullPath;
-		Map<String,Widget> widgets;
 
 		Builder(RestContextBuilder rcb, PropertyStore ps) throws Exception {
 
@@ -1450,18 +1515,6 @@ public final class RestContext extends BeanContext {
 				messageBundle = new MessageBundle(resource.getClass(), "");
 			
 			fullPath = (rcb.parentContext == null ? "" : (rcb.parentContext.fullPath + '/')) + rcb.path;
-
-			HtmlDocBuilder hdb = new HtmlDocBuilder(rcb.properties);
-
-			this.widgets = new LinkedHashMap<>();
-
-			for (Class<? extends Widget> wc : rcb.widgets) {
-				Widget w = resolve(resource, Widget.class, wc);
-				String n = w.getName();
-				this.widgets.put(n, w);
-				hdb.script("INHERIT", "$W{"+n+".script}");
-				hdb.style("INHERIT", "$W{"+n+".style}");
-			}
 		}
 	}
 
@@ -1794,7 +1847,7 @@ public final class RestContext extends BeanContext {
 	 * The widgets used for resolving <js>"$W{...}"<js> variables.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestContextBuilder#widget(Class)} method.
+	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestContextBuilder#widgets(Class...)} method.
 	 *
 	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
 	 */

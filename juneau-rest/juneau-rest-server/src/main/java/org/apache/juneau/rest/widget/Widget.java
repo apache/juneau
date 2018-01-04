@@ -26,7 +26,8 @@ import org.apache.juneau.utils.*;
  * Widgets are associated with resources through the following
  * <ul>
  * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets}
- * 	<li>{@link RestContextBuilder#widget(Class)}
+ * 	<li>{@link RestContextBuilder#widgets(Class...)}
+ * 	<li>{@link RestContextBuilder#widgets(Widget...)}
  * </ul>
  *
  * <p>
@@ -89,7 +90,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <p>
- * Note the {@link #getResourceAsString(String)} and {@link #getResourceAsString(String, Locale)} convenience methods
+ * Note the {@link #getClasspathResourceAsString(String)} and {@link #getClasspathResourceAsString(String, Locale)} convenience methods
  * provided for quickly loading javascript and css files from the classpath or file system.
  * These are useful if your script or styles are complex and you want them loaded from files.
  *
@@ -110,6 +111,16 @@ import org.apache.juneau.utils.*;
  * 		}
  * 	}
  * </p>
+ * 
+ * <p>
+ * Widgets must provide one of the following public constructors:
+ * <ul>
+ * 	<li><code><jk>public</jk> Widget();</code>
+ * 	<li><code><jk>public</jk> Widget(PropertyStore);</code>
+ * </ul>
+ * 
+ * <p>
+ * Widgets can be defined as inner classes of REST resource classes.
  */
 public abstract class Widget {
 
@@ -190,12 +201,12 @@ public abstract class Widget {
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 */
-	protected String getResourceAsString(String name) throws IOException {
+	protected String getClasspathResourceAsString(String name) throws IOException {
 		return rm.getString(name);
 	}
 
 	/**
-	 * Same as {@link #getResourceAsString(String)} except also looks for localized-versions of the file.
+	 * Same as {@link #getClasspathResourceAsString(String)} except also looks for localized-versions of the file.
 	 *
 	 * <p>
 	 * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
@@ -213,12 +224,12 @@ public abstract class Widget {
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 */
-	protected String getResourceAsString(String name, Locale locale) throws IOException {
+	protected String getClasspathResourceAsString(String name, Locale locale) throws IOException {
 		return rm.getString(name, locale);
 	}
 
 	/**
-	 * Convenience method for calling {@link #getResourceAsString(String)} except also strips Javascript comments from
+	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips Javascript comments from
 	 * the file.
 	 *
 	 * <p>
@@ -229,14 +240,14 @@ public abstract class Widget {
 	 * @throws IOException
 	 */
 	protected String loadScript(String name) throws IOException {
-		String s = getResourceAsString(name);
+		String s = getClasspathResourceAsString(name);
 		if (s != null)
 			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 		return s;
 	}
 
 	/**
-	 * Convenience method for calling {@link #getResourceAsString(String)} except also strips CSS comments from
+	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips CSS comments from
 	 * the file.
 	 *
 	 * <p>
@@ -247,14 +258,14 @@ public abstract class Widget {
 	 * @throws IOException
 	 */
 	protected String loadStyle(String name) throws IOException {
-		String s = getResourceAsString(name);
+		String s = getClasspathResourceAsString(name);
 		if (s != null)
 			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 		return s;
 	}
 
 	/**
-	 * Convenience method for calling {@link #getResourceAsString(String)} except also strips HTML comments from the
+	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips HTML comments from the
 	 * file.
 	 *
 	 * <p>
@@ -265,7 +276,7 @@ public abstract class Widget {
 	 * @throws IOException
 	 */
 	protected String loadHtml(String name) throws IOException {
-		String s = getResourceAsString(name);
+		String s = getClasspathResourceAsString(name);
 		if (s != null)
 			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
 		return s;

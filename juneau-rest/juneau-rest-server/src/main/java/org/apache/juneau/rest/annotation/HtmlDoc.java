@@ -492,13 +492,58 @@ public @interface HtmlDoc {
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.class;
 
 	/**
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement HTML.
+	 * <b>Configuration property:</b>  HTML Widgets. 
 	 *
-	 * <h6 class='topic'>Other Notes</h6>
+	 * <p>
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement text.
+	 * 
+	 * Widgets resolve the following variables:
+	 * <ul>
+	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
+	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
+	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
+	 * 			 in the HTML page.
+	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest)}.
+	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
+	 * 			 in the HTML page.
+	 * </ul>
+	 *
+	 * <p>
+	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+	 * and aside section of the page:
+	 *
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		widgets={
+	 * 			MyWidget.<jk>class</jk>
+	 * 		}
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			navlinks={
+	 * 				<js>"$W{MyWidget}"</js>
+	 * 			},
+	 * 			aside={
+	 * 				<js>"Check out this widget:  $W{MyWidget}"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * 	<li>Property:  {@link RestContext#REST_widgets}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link HtmlDoc#widgets()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#widgets(Class...)}
+	 * 			<li>{@link RestContextBuilder#widgets(Widget...)}
+	 * 			<li>{@link RestContextBuilder#widgets(boolean,Widget...)}
+	 * 		</ul>
+	 * 	<li>Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * 	<li>Values are appended to the existing list.
 	 * </ul>
 	 */
 	Class<? extends Widget>[] widgets() default {};
