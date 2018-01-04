@@ -510,7 +510,36 @@ public class StringUtilsTest {
 		assertEquals("2\\", r[1]);
 		assertEquals("", r[2]);
 	}
+	
+	//====================================================================================================
+	// split(String,char,int)
+	//====================================================================================================
+	@Test
+	public void testSplitWithLimit() {
+		String[] r;
+		
+		r = split("boo:and:foo", ':', 10);
+		assertObjectEquals("['boo','and','foo']", r);
 
+		r = split("boo:and:foo", ':', 2);
+		assertObjectEquals("['boo','and:foo']", r);
+
+		r = split("boo:and:foo", ':', 1);
+		assertObjectEquals("['boo:and:foo']", r);
+
+		r = split("boo:and:foo", ':', 0);
+		assertObjectEquals("['boo:and:foo']", r);
+		
+		r = split("boo:and:foo", ':', -1);
+		assertObjectEquals("['boo:and:foo']", r);		
+		
+		r = split("boo : and : foo", ':', 10);
+		assertObjectEquals("['boo','and','foo']", r);
+
+		r = split("boo : and : foo", ':', 2);
+		assertObjectEquals("['boo','and : foo']", r);
+	}
+	
 	//====================================================================================================
 	// nullIfEmpty(String)
 	//====================================================================================================

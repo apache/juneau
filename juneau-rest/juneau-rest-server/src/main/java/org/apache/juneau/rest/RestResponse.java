@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -69,8 +70,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		super(res);
 		this.request = req;
 
-		for (Map.Entry<String,String> e : context.getDefaultResponseHeaders().entrySet())
-			setHeader(e.getKey(), e.getValue());
+		for (Map.Entry<String,Object> e : context.getDefaultResponseHeaders().entrySet())
+			setHeader(e.getKey(), StringUtils.toString(e.getValue()));
 
 		try {
 			String passThroughHeaders = req.getHeader("x-response-headers");

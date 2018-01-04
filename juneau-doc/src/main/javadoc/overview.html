@@ -4924,7 +4924,7 @@
 				<li>
 					How to use form entry beans to process form POSTs.
 				<li>
-					How to use the {@link org.apache.juneau.rest.RestRequest#getReaderResource(String)} method to 
+					How to use the {@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)} method to 
 					serve up static files with embedded string variables.
 			</ul>
 			<p>
@@ -4946,7 +4946,7 @@
 		<jd>/** GET request handler */</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
-			<jk>return</jk> req.getReaderResource(<js>"UrlEncodedForm.html"</js>, <jk>true</jk>); 
+			<jk>return</jk> req.getClasspathReaderResource(<js>"UrlEncodedForm.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** POST request handler */</jd> 
@@ -4965,7 +4965,7 @@
 	}		
 			</p>
 			<p>
-				The {@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)} method pulls in the following
+				The {@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean)} method pulls in the following
 					file located in the same package as the class:
 			</p>
 			
@@ -6521,7 +6521,7 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/upload"</js>) 
 		<jk>public</jk> ReaderResource getUploadPage(RestRequest req) <jk>throws</jk> IOException { 
-			<jk>return</jk> req.getReaderResource(<js>"TempDirUploadPage.html"</js>, <jk>true</jk>); 
+			<jk>return</jk> req.getClasspathReaderResource(<js>"TempDirUploadPage.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** 
@@ -7181,7 +7181,7 @@
 		<jd>/** GET request handler - Display the query entry page. */</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
-			<jk>return</jk> req.getReaderResource(<js>"SqlQueryResource.html"</js>, <jk>true</jk>); 
+			<jk>return</jk> req.getClasspathReaderResource(<js>"SqlQueryResource.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** POST request handler - Execute the query. */</jd> 
@@ -7379,7 +7379,7 @@
 			<jc>// Note that you don't want variables in the config file to be resolved,</jc> 
 			<jc>// so you need to escape any $ characters that you see.</jc> 
 			req.setAttribute(<js>"contents"</js>, getConfig().toString().replaceAll(<js>"\\$"</js>, <js>"\\\\\\$"</js>)); 
-			<jk>return</jk> req.getReaderResource(<js>"ConfigEdit.html"</js>, <jk>true</jk>); 
+			<jk>return</jk> req.getClasspathReaderResource(<js>"ConfigEdit.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** 
@@ -7910,8 +7910,15 @@
 				</ul>
 				Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
 			<li>	
-				<code>ContexBuilder.property(String,Object)</code> renamed to {@link org.apache.juneau.ContextBuilder#set(String,Object)}.
-			
+				<code>ContextBuilder.property(String,Object)</code> renamed to {@link org.apache.juneau.ContextBuilder#set(String,Object)}.
+			<li><code>ResourceFinder</code> class has been replaced with the following:
+				<ul>
+					<li>{@link org.apache.juneau.utils.ClasspathResourceFinder}
+					<li>{@link org.apache.juneau.utils.ClasspathResourceFinderSimple}
+					<li>{@link org.apache.juneau.utils.ClasspathResourceFinderBasic}
+					<li>{@link org.apache.juneau.utils.ClasspathResourceFinderRecursive}
+					<li>{@link org.apache.juneau.utils.ClasspathResourceManager}
+				</ul>	
 		</ul>
 
 		<h6 class='topic'>juneau-rest-server</h6>
@@ -7959,6 +7966,48 @@
 				</ul>
 			<li>
 				Refactored the <code>RestConfig</code> class into {@link org.apache.juneau.rest.RestContextBuilder}.
+				<br>Settings on {@link org.apache.juneau.rest.RestContext} objects can now be set declaratively through the 
+					following new properties:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestContext#REST_allowHeaderParams REST_allowHeaderParams}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_allowBodyParam REST_allowBodyParam}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_useStackTraceHashes REST_useStackTraceHashes}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_defaultCharset REST_defaultCharset}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_maxInput REST_maxInput}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_paramResolvers REST_paramResolvers}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_converters REST_converters}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_guards REST_guards}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers REST_responseHandlers}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_defaultRequestHeaders REST_defaultRequestHeaders}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_defaultResponseHeaders REST_defaultResponseHeaders}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_supportedAcceptTypes REST_supportedAcceptTypes}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_supportedContentTypes REST_supportedContentTypes}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver REST_resourceResolver}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_logger REST_logger}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_callHandler REST_callHandler}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_infoProvider REST_infoProvider}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_path REST_path}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_contextPath REST_contextPath}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_staticFiles REST_staticFiles}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}
+				</ul>
+			<li>
+				Support for static files has been simplified and improved.
+				<ul>
+					<li>Syntax on {@link org.apache.juneau.rest.annotation.RestResource#staticFiles()} has been simplified, and
+						now allows you to specify response headers in the strings.
+					<li>Response headers for static files can also be configured through 
+						{@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}.
+					<li>Static file in-memory caching now configurable through 
+						{@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}.
+					<li>Static file retrieval can be customized through 
+						{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
+				</ul>
 			<li>
 				Eliminated the <code>RestMatcherReflecting</code> class.
 				<br>You can now simply create a {@link org.apache.juneau.rest.RestMatcher} that has a public constructor that 
@@ -7968,6 +8017,58 @@
 			<li>
 				<code>@RestMethod.serializersInherit</code> and <code>@RestMethod.parsersInherit</code> replaced with
 				simplified {@link org.apache.juneau.rest.annotation.RestMethod#inherit()}. 
+			<li>
+				Changes to {@link org.apache.juneau.rest.RequestFormData}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RequestFormData#addDefault(Map) addDefault(Map)} takes in a 
+						<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
+				</ul>
+			<li>
+				Changes to {@link org.apache.juneau.rest.RequestHeaders}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RequestHeaders#addDefault(Map) addDefault(Map)} takes in a 
+						<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
+				</ul>
+			<li>
+				Changes to {@link org.apache.juneau.rest.RequestQuery}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RequestQuery#addDefault(Map) addDefault(Map)} takes in a 
+						<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
+				</ul>
+			<li>
+				Changes to {@link org.apache.juneau.rest.RestContext}:
+				<ul>
+					<li><code>getResource(String,Locale)</code> renamed to {@link org.apache.juneau.rest.RestContext#getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
+					<li><code>getResourceAsString(String,Locale)</code> renamed to {@link org.apache.juneau.rest.RestContext#getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
+					<li><code>getResource(Class,MediaType,String,Locale)</code> renamed to {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,MediaType,String,Locale) getClasspathResourceAsString(Class,MediaType,String,Locale)}
+					<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,String,Locale) getClasspathResource(Class,String,Locale)}.
+					<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResourceAsString(Class,String,Locale) getClasspathResourceAsString(Class,String,Locale)}.
+					<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,Class,MediaType,String,Locale) getClasspathResource(Class,Class,MediaType,String,Locale)}.
+					<li>{@link org.apache.juneau.rest.RestContext#getDefaultRequestHeaders() getDefaultRequestHeaders} returns a 
+						<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
+					<li>{@link org.apache.juneau.rest.RestContext#getDefaultResponseHeaders() getDefaultRequestHeaders} returns a 
+						<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
+				</ul>
+			<li>
+				Changes to {@link org.apache.juneau.rest.RestRequest}:
+				<ul>	
+					<li><code>getSupportedMediaTypes()</code> replaced with
+						{@link org.apache.juneau.rest.RestRequest#getSupportedAcceptTypes() getSupportedAcceptTypes()} and
+						{@link org.apache.juneau.rest.RestRequest#getSupportedContentTypes() getSupportedContentTypes()}.
+					<li><code>getReaderResource(String,boolean,MediaType)</code> renamed to 
+						{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
+					<li><code>getReaderResource(String,boolean)</code> renamed to 
+						{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean) getClasspathReaderResource(String,boolean)}
+					<li><code>getReaderResource(String)</code> renamed to 
+						{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
+				</ul>
+			<li>
+				Changes to {@link org.apache.juneau.rest.annotation.RestMethod}:
+				<ul>
+					<li>New {@link org.apache.juneau.rest.annotation.RestMethod#supportedAcceptTypes() supportedAcceptTypes()} and
+						{@link org.apache.juneau.rest.annotation.RestMethod#supportedContentTypes() supportedContentTypes()}
+						for overriding the supported media types inferred from the serializers and parsers.
+				</ul>
 		</ul>
 
 		<h6 class='topic'>juneau-rest-client</h6>
@@ -7980,6 +8081,12 @@
 				<br>The default value is now {@link org.apache.juneau.httppart.SimpleUonPartSerializer} which will
 				serialize strings as plain-text and collections/arrays as comma-delimited lists.
 				<br>We decided to change the default behavior in favor of practicality over purity.
+			<li>
+				New methods on {@link org.apache.juneau.rest.client.RestCall} class:
+				<ul>
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseHeader(String) getResponseHeader(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseCode() getResponseCode()}
+				</ul>
 		</ul>
 
 	</div>
@@ -8680,7 +8787,7 @@
 					<li><code><del>HTMLDOC_stylesheet</del></code> - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
 				</ul>
 			<li>
-				New {@link org.apache.juneau.utils.ResourceFinder} utility class.
+				New <code><del>ResourceFinder</del></code> utility class.
 				Allows you to search for resources up the parent hierarchy chain.
 				Also allows you to search for localized resources.
 			<li>
@@ -10383,8 +10490,8 @@
 			<li>Fixed a bug in the stack trace hash algorithm in {@link org.apache.juneau.rest.RestException}.
 			<li>New methods in {@link org.apache.juneau.rest.RestRequest}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestRequest#getReaderResource(String)} - Replaces <code>getVarResource(String)</code>.
-					<li>{@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)} 
+					<li><code><del>RestRequest.getReaderResource(String)</del></code> - Replaces <code>getVarResource(String)</code>.
+					<li><code><del>RestRequest.getReaderResource(String,boolean)</del></code> 
 					<li><code><del>RestRequest.getReaderResource(String,boolean,String)</del></code>
 				</ul>
 			<li>Changes in {@link org.apache.juneau.rest.RestResponse}:

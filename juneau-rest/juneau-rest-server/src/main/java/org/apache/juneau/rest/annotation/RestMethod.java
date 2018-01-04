@@ -16,9 +16,11 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
@@ -128,9 +130,17 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_guards}
-	 * 	<li>Annotation:  {@link RestResource#guards()} / {@link RestMethod#guards()}
-	 * 	<li>Method: {@link RestContextBuilder#guards(Class...)} / {@link RestContextBuilder#guards(RestGuard...)}
+	 * 	<li>Property:  {@link RestContext#REST_guards}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#guards()}
+	 * 			<li>{@link RestMethod#guards()}
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#guards(Class...)}
+	 * 			<li>{@link RestContextBuilder#guards(RestGuard...)}
+	 * 		</ul>
 	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
 	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
 	 * 		annotation.
@@ -155,9 +165,17 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_converters}
-	 * 	<li>Annotation:  {@link RestResource#converters()} / {@link RestMethod#converters()}
-	 * 	<li>Method: {@link RestContextBuilder#converters(Class...)} / {@link RestContextBuilder#converters(RestConverter...)}
+	 * 	<li>Property:  {@link RestContext#REST_converters}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#converters()}
+	 * 			<li>{@link RestMethod#converters()}
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#converters(Class...)}
+	 * 			<li>{@link RestContextBuilder#converters(RestConverter...)}
+	 * 		</ul>
 	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
 	 *	</ul>
 	 */
@@ -260,6 +278,62 @@ public @interface RestMethod {
 	String inherit() default "";
 	
 	/**
+	 * Supported accept media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 * 
+	 * <p>
+	 * This affects the values returned by {@link RestRequest#getSupportedAcceptTypes()} and the supported accept
+	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_supportedAcceptTypes}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#supportedAcceptTypes()}
+	 * 			<li>{@link RestMethod#supportedAcceptTypes()}
+	 * 		</ul> 
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#supportedAcceptTypes(boolean,String...)}
+	 * 			<li>{@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}
+	 * 		</ul>
+	 *	</ul>
+	 */
+	String[] supportedAcceptTypes() default {};
+	
+	/**
+	 * Supported content media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 *
+	 * <p>
+	 * This affects the values returned by {@link RestRequest#getSupportedContentTypes()} and the supported content
+	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_supportedContentTypes}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#supportedContentTypes()}
+	 * 			<li>{@link RestMethod#supportedContentTypes()}
+	 * 		</ul> 
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#supportedContentTypes(boolean,String...)}
+	 * 			<li>{@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}
+	 * 		</ul>
+	 *	</ul>
+	 */
+	String[] supportedContentTypes() default {};
+
+	/**
 	 * Appends to the list of {@link Encoder encoders} specified on the servlet.
 	 *
 	 * <p>
@@ -313,11 +387,49 @@ public @interface RestMethod {
 
 	/**
 	 * Appends the specified bean filters to all serializers and parsers used by this method.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link BeanContext#BEAN_beanFilters}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#beanFilters()}
+	 * 			<li>{@link RestMethod#beanFilters()}
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#beanFilters(Class...)}
+	 * 			<li>{@link RestContextBuilder#beanFilters(Collection)}
+	 * 			<li>{@link RestContextBuilder#beanFilters(boolean, Class...)}
+	 * 			<li>{@link RestContextBuilder#beanFilters(boolean, Collection)}
+	 * 			<li>{@link RestContextBuilder#beanFiltersRemove(Class...)}
+	 * 			<li>{@link RestContextBuilder#beanFiltersRemove(Collection)}
+	 * 		</ul>
+	 *	</ul>
 	 */
 	Class<?>[] beanFilters() default {};
 
 	/**
 	 * Appends the specified POJO swaps to all serializers and parsers used by this method.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link BeanContext#BEAN_pojoSwaps}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#pojoSwaps()}
+	 * 			<li>{@link RestMethod#pojoSwaps()}
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#pojoSwaps(Class...)}
+	 * 			<li>{@link RestContextBuilder#pojoSwaps(Collection)}
+	 * 			<li>{@link RestContextBuilder#pojoSwaps(boolean, Class...)}
+	 * 			<li>{@link RestContextBuilder#pojoSwaps(boolean, Collection)}
+	 * 			<li>{@link RestContextBuilder#pojoSwapsRemove(Class...)}
+	 * 			<li>{@link RestContextBuilder#pojoSwapsRemove(Collection)}
+	 * 		</ul>
+	 *	</ul>
 	 */
 	Class<?>[] pojoSwaps() default {};
 
@@ -432,9 +544,17 @@ public @interface RestMethod {
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_defaultRequestHeaders}
-	 * 	<li>Annotation:  {@link RestResource#defaultRequestHeaders()} / {@link RestMethod#defaultRequestHeaders()} 
-	 * 	<li>Method: {@link RestContextBuilder#defaultRequestHeader(String,Object)} / {@link RestContextBuilder#defaultRequestHeaders(String...)}
+	 * 	<li>Property:  {@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#defaultRequestHeaders()}
+	 * 			<li>{@link RestMethod#defaultRequestHeaders()} 
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#defaultRequestHeader(String,Object)}
+	 * 			<li>{@link RestContextBuilder#defaultRequestHeaders(String...)}
+	 * 		</ul>
 	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
 	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * 	<li>Key and value is trimmed of whitespace.
@@ -635,9 +755,16 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_defaultCharset}
-	 * 	<li>Annotation:  {@link RestResource#defaultCharset()} / {@link RestMethod#defaultCharset()}
-	 * 	<li>Method: {@link RestContextBuilder#defaultCharset(String)}
+	 * 	<li>Property:  {@link RestContext#REST_defaultCharset}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#defaultCharset()}
+	 * 			<li>{@link RestMethod#defaultCharset()}
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#defaultCharset(String)}
+	 * 		</ul>
 	 * 	<li>String value.
 	 * 	<li>Can contain variables.
 	 *	</ul>
@@ -659,9 +786,16 @@ public @interface RestMethod {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_maxInput}
-	 * 	<li>Annotation:  {@link RestResource#maxInput()} / {@link RestMethod#maxInput()}
-	 * 	<li>Method: {@link RestContextBuilder#maxInput(String)}
+	 * 	<li>Property:  {@link RestContext#REST_maxInput}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#maxInput()}
+	 * 			<li>{@link RestMethod#maxInput()}
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#maxInput(String)}
+	 * 		</ul>
 	 * 	<li>String value that gets resolved to a <jk>long</jk>.
 	 * 	<li>Can contain variables.
 	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  

@@ -87,7 +87,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
 	private RequestFormData formData;
-	private Map<String,String> defFormData;
+	private Map<String,Object> defFormData;
 	private RequestPathMatch pathParams;
 	private boolean isPost;
 	private UriContext uriContext;
@@ -96,6 +96,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private ConfigFile cf;
 	private Swagger swagger, fileSwagger;
 	private Map<String,Widget> widgets;
+	private List<MediaType> supportedContentTypes, supportedAcceptTypes;
 
 	/**
 	 * Constructor.
@@ -159,10 +160,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
-			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset, long maxInput,
+	final void init(Method javaMethod, ObjectMap properties, Map<String,Object> defHeader,
+			Map<String,Object> defQuery, Map<String,Object> defFormData, String defaultCharset, long maxInput,
 			SerializerGroup mSerializers, ParserGroup mParsers, HttpPartParser mUrlEncodingParser,
-			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets) {
+			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets, List<MediaType> supportedAcceptTypes, 
+			List<MediaType> supportedContentTypes) {
 		this.javaMethod = javaMethod;
 		this.properties = properties;
 		this.partParser = mUrlEncodingParser;
@@ -190,6 +192,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.defaultCharset = defaultCharset;
 		this.defFormData = defFormData;
 		this.widgets = widgets;
+		this.supportedAcceptTypes = supportedAcceptTypes;
+		this.supportedContentTypes = supportedContentTypes;
 
 		String stylesheet = getQuery().getString("stylesheet");
 		if (stylesheet != null)
@@ -301,12 +305,21 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
+	 * Returns the media types that are valid for <code>Accept</code> headers on the request.
+	 *
+	 * @return The set of media types registered in the serializer group of this request.
+	 */
+	public List<MediaType> getSupportedAcceptTypes() {
+		return supportedAcceptTypes;
+	}
+
+	/**
 	 * Returns the media types that are valid for <code>Content-Type</code> headers on the request.
 	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 */
-	public List<MediaType> getSupportedMediaTypes() {
-		return parserGroup.getSupportedMediaTypes();
+	public List<MediaType> getSupportedContentTypes() {
+		return supportedContentTypes;
 	}
 
 	/**
@@ -870,8 +883,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
 	 */
-	public ReaderResource getReaderResource(String name, boolean resolveVars, MediaType mediaType) throws IOException {
-		String s = context.getResourceAsString(name, getLocale());
+	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars, MediaType mediaType) throws IOException {
+		String s = context.getClasspathResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
 		ReaderResource.Builder b = new ReaderResource.Builder().mediaType(mediaType).contents(s);
@@ -881,7 +894,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getReaderResource(String, boolean, MediaType)} except uses the resource mime-type map
+	 * Same as {@link #getClasspathReaderResource(String, boolean, MediaType)} except uses the resource mime-type map
 	 * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
@@ -892,19 +905,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
 	 */
-	public ReaderResource getReaderResource(String name, boolean resolveVars) throws IOException {
-		return getReaderResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)));
+	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars) throws IOException {
+		return getClasspathReaderResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)));
 	}
 
 	/**
-	 * Same as {@link #getReaderResource(String, boolean)} with <code>resolveVars == <jk>false</jk></code>
+	 * Same as {@link #getClasspathReaderResource(String, boolean)} with <code>resolveVars == <jk>false</jk></code>
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
 	 */
-	public ReaderResource getReaderResource(String name) throws IOException {
-		return getReaderResource(name, false, MediaType.forString(context.getMediaTypeForName(name)));
+	public ReaderResource getClasspathReaderResource(String name) throws IOException {
+		return getClasspathReaderResource(name, false, MediaType.forString(context.getMediaTypeForName(name)));
 	}
 
 	/**
@@ -973,7 +986,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			sb.append("\t").append(h).append(": ").append(getHeader(h)).append("\n");
 		}
 		sb.append("---Default Servlet Headers---\n");
-		for (Map.Entry<String,String> e : context.getDefaultRequestHeaders().entrySet()) {
+		for (Map.Entry<String,Object> e : context.getDefaultRequestHeaders().entrySet()) {
 			sb.append("\t").append(e.getKey()).append(": ").append(e.getValue()).append("\n");
 		}
 		if (javaMethod == null) {

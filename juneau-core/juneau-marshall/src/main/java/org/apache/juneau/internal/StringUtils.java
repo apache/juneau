@@ -493,6 +493,18 @@ public final class StringUtils {
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
 	public static String[] split(String s, char c) {
+		return split(s, c, Integer.MAX_VALUE);
+	}
+	
+	/**
+	 * Same as {@link #split(String, char)} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] split(String s, char c, int limit) {
 
 		char[] unEscapeChars = new char[]{'\\', c};
 
@@ -506,12 +518,14 @@ public final class StringUtils {
 		List<String> l = new LinkedList<>();
 		char[] sArray = s.toCharArray();
 		int x1 = 0, escapeCount = 0;
-		for (int i = 0; i < sArray.length; i++) {
+		limit--;
+		for (int i = 0; i < sArray.length && limit > 0; i++) {
 			if (sArray[i] == '\\') escapeCount++;
 			else if (sArray[i]==c && escapeCount % 2 == 0) {
 				String s2 = new String(sArray, x1, i-x1);
 				String s3 = unEscapeChars(s2, unEscapeChars);
 				l.add(s3.trim());
+				limit--;
 				x1 = i+1;
 			}
 			if (sArray[i] != '\\') escapeCount = 0;

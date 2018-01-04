@@ -153,7 +153,7 @@ import org.apache.juneau.xml.*;
  * 		to <js>"styles/juneau.css"</js>.
  * 	<li>
  * 		Provides a default classpath entry "htdocs" by setting
- * 		{@link RestResource#staticFiles() @RestResource.staticFiles()} to <js>"{htdocs:'htdocs'}"</js>.
+ * 		{@link RestResource#staticFiles() @RestResource.staticFiles()} to <code>{<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}</code>.
  * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL
  * 		<code>/servletPath/htdocs</code>.
  * </ul>
@@ -201,7 +201,8 @@ import org.apache.juneau.xml.*;
 	),
 
 	// These are static files that are served up by the servlet under the specified sub-paths.
-	staticFiles="{htdocs:'htdocs',styles:'styles'}"
+	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+	staticFiles={"htdocs:htdocs","styles:styles"}
 )
 public abstract class RestServletDefault extends RestServlet {
 	private static final long serialVersionUID = 1L;

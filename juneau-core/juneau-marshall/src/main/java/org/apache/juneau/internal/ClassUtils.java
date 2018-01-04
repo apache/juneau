@@ -833,15 +833,27 @@ public final class ClassUtils {
 				Class<?> c3 = (Class<?>)c2;
 				if (c3.isInterface() || isAbstract(c3))
 					return null;
-				Constructor<?> con = findPublicConstructor(c3, fuzzyArgs, args);
+
+				// First look for an exact match.
+				Constructor<?> con = findPublicConstructor(c3, false, args);
 				if (con != null)
-					return (T)con.newInstance(fuzzyArgs ? getMatchingArgs(con, args) : args);
+					return (T)con.newInstance(args);
+
+				// Next look for an exact match including the outer.
 				if (outer != null) {
-					Object[] args2 = new AList<>().append(outer).appendAll(args).toArray();
-					con = findPublicConstructor(c3, fuzzyArgs, args2);
+					args = new AList<>().append(outer).appendAll(args).toArray();
+					con = findPublicConstructor(c3, false, args);
 					if (con != null)
-						return (T)con.newInstance(fuzzyArgs ? getMatchingArgs(con, args) : args);
+						return (T)con.newInstance(args);
 				}
+				
+				// Finally use fuzzy matching.
+				if (fuzzyArgs) {
+					con = findPublicConstructor(c3, true, args);
+					if (con != null)
+						return (T)con.newInstance(getMatchingArgs(con, args));
+				}
+
 				throw new FormattedRuntimeException("Could not instantiate class {0}.  Constructor not found.", c.getName());
 			} catch (Exception e) {
 				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());

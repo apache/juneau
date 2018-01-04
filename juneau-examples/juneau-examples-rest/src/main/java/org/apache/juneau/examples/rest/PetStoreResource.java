@@ -65,7 +65,8 @@ import org.apache.juneau.transforms.*;
 		head={
 			"<link rel='icon' href='$U{servlet:/htdocs/cat.png}'/>"
 		}
-	)
+	),
+	staticFiles={"htdocs:htdocs"}
 )
 public class PetStoreResource extends ResourceJena {
 	private static final long serialVersionUID = 1L;

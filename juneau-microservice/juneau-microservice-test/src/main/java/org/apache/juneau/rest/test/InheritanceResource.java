@@ -103,7 +103,7 @@ public class InheritanceResource extends RestServlet {
 			path="/test1"
 		)
 		public Reader test1(RestRequest req) {
-			return new StringReader(new ObjectList(req.getSupportedMediaTypes()).toString());
+			return new StringReader(new ObjectList(req.getSupportedContentTypes()).toString());
 		}
 
 		// Should show ['text/p5']
@@ -113,7 +113,7 @@ public class InheritanceResource extends RestServlet {
 			parsers=P5.class
 		)
 		public Reader test2(RestRequest req) {
-			return new StringReader(new ObjectList(req.getSupportedMediaTypes()).toString());
+			return new StringReader(new ObjectList(req.getSupportedContentTypes()).toString());
 		}
 
 		// Should show ['text/p5','text/p3','text/p4','text/p1','text/p2']
@@ -124,7 +124,7 @@ public class InheritanceResource extends RestServlet {
 			inherit="PARSERS"
 		)
 		public Reader test3(RestRequest req) {
-			return new StringReader(new ObjectList(req.getSupportedMediaTypes()).toString());
+			return new StringReader(new ObjectList(req.getSupportedContentTypes()).toString());
 		}
 	}
 

@@ -2424,7 +2424,7 @@
 		</table>
 		<p>
 			In addition to being used in annotation values, string variables can also be embedded in resource files 
-			retrieved through the {@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)} method.
+			retrieved through the {@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean)} method.
 			This can often be useful for embedding localized strings inside HTML form pages.  
 		</p>
 		<p>
@@ -2497,7 +2497,7 @@
 		<jd>/** GET request handler */</jd> 
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
 		<jk>public</jk> ReaderResource doGet(RestRequest req) <jk>throws</jk> IOException { 
-			<jk>return</jk> req.getReaderResource(<js>"UrlEncodedForm.html"</js>, <jk>true</jk>); 
+			<jk>return</jk> req.getClasspathReaderResource(<js>"UrlEncodedForm.html"</js>, <jk>true</jk>); 
 		} 
 		
 		<jd>/** POST request handler */</jd> 
@@ -2534,7 +2534,7 @@
 			<li class='jc'>
 				{@link org.apache.juneau.rest.ReaderResource}
 			<li class='jm'>
-				{@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)}
+				{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean)}
 			<li class='jp'>
 				<a class='doclink' href='../svl/package-summary.html#TOC'>org.apache.juneau.svl</a>
 		</ul>
@@ -2560,7 +2560,7 @@
 
 	<ja>@RestResource</ja>(
 		path=<js>"/myresource"</js>,
-		staticFiles=<js>"{htdocs:'docs'}"</js>
+		staticFiles={<js>"htdocs:docs"</js>}
 	)
 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
 	}

@@ -32,22 +32,62 @@ public class StaticFilesTest extends RestTestcase {
 
 		r = client.doGet(url + "/test.txt").getResponseAsString();
 		assertTrue(r.endsWith("OK-1"));
-		r = client.doGet(url + "/xdocs/test.txt").getResponseAsString();
+		r = client.doGet(url + "/xsubdocs/test.txt").getResponseAsString();
 		assertTrue(r.endsWith("OK-2"));
 
 		// For security reasons, paths containing ".." should always return 404.
 		try {
-			client.doGet(url + "/xdocs/../test.txt?noTrace=true").connect();
+			client.doGet(url + "/xsubdocs/../test.txt?noTrace=true").connect();
 			fail("404 exception expected");
 		} catch (RestCallException e) {
 			assertEquals(404, e.getResponseCode());
 		}
 
 		try {
-			client.doGet(url + "/xdocs/%2E%2E/test.txt?noTrace=true").connect();
+			client.doGet(url + "/xsubdocs/%2E%2E/test.txt?noTrace=true").connect();
 			fail("404 exception expected");
 		} catch (RestCallException e) {
 			assertEquals(404, e.getResponseCode());
 		}
+	}
+
+	//====================================================================================================
+	// Tests the @RestResource(staticFiles) annotation.
+	//====================================================================================================
+	@Test
+	public void testXdocsPreventPathTraversal() throws Exception {
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
+		String url = URL + "/xdocs";
+
+		// For security reasons, paths containing ".." should always return 404.
+		try {
+			client.doGet(url + "/xsubdocs/../test.txt?noTrace=true").connect();
+			fail("404 exception expected");
+		} catch (RestCallException e) {
+			assertEquals(404, e.getResponseCode());
+		}
+
+		try {
+			client.doGet(url + "/xsubdocs/%2E%2E/test.txt?noTrace=true").connect();
+			fail("404 exception expected");
+		} catch (RestCallException e) {
+			assertEquals(404, e.getResponseCode());
+		}
+	}
+
+	//====================================================================================================
+	// Tests the @RestResource(staticFiles) annotation.
+	//====================================================================================================
+	@Test
+	public void testXdocsWithHeader() throws Exception {
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
+		String r;
+		String url = URL + "/xdocs2";
+
+		r = client.doGet(url + "/test.txt").getResponseAsString();
+		assertTrue(r.endsWith("OK-3"));
+		
+		r = client.doGet(url + "/test.txt").getResponseHeader("Foo");
+		assertEquals("Bar", r);
 	}
 }

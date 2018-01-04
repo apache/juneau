@@ -52,13 +52,14 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param defaultEntries The default entries.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RequestFormData addDefault(Map<String,String> defaultEntries) {
+	public RequestFormData addDefault(Map<String,Object> defaultEntries) {
 		if (defaultEntries != null) {
-			for (Map.Entry<String,String> e : defaultEntries.entrySet()) {
-				String key = e.getKey(), value = e.getValue();
+			for (Map.Entry<String,Object> e : defaultEntries.entrySet()) {
+				String key = e.getKey();
+				Object value = e.getValue();
 				String[] v = get(key);
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-					put(key, new String[]{value});
+					put(key, new String[]{StringUtils.toString(value)});
 			}
 		}
 		return this;

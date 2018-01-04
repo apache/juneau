@@ -24,11 +24,11 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * File variables resolve to the contents of resource files located on the classpath or local JVM directory.
- * They use the {@link RestRequest#getReaderResource(String)} method to retrieve the contents of the file.
- * That in turn uses the {@link ResourceFinder} associated with the servlet class to find the file.
+ * They use the {@link RestRequest#getClasspathReaderResource(String)} method to retrieve the contents of the file.
+ * That in turn uses the {@link ClasspathResourceFinder} associated with the servlet class to find the file.
  *
  * <p>
- * The {@link ResourceFinder} is similar to {@link Class#getResourceAsStream(String)} except if it doesn't find the
+ * The {@link ClasspathResourceFinder} is similar to {@link Class#getResourceAsStream(String)} except if it doesn't find the
  * resource on this class, it searches up the parent hierarchy chain.
  *
  * <p>
@@ -80,7 +80,7 @@ public class FileVar extends DefaultingVar {
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
-		ReaderResource rr = req.getReaderResource(key);
+		ReaderResource rr = req.getClasspathReaderResource(key);
 		return (rr == null ? null : rr.toCommentStrippedString());
 	}
 }

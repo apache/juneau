@@ -122,7 +122,7 @@ public class RestInfoProvider {
 	 * @return A new Swagger instance.
 	 * @throws RestException
 	 */
-	protected Swagger getSwagger(RestRequest req) throws RestException {
+	public Swagger getSwagger(RestRequest req) throws RestException {
 		try {
 			// If a file is defined, use that.
 			Swagger s = req.getSwaggerFromFile();
@@ -136,8 +136,8 @@ public class RestInfoProvider {
 					.description(getDescription(req))
 					.termsOfService(getTermsOfService(req))
 				)
-				.consumes(context.getSupportedAcceptTypes())
-				.produces(context.getSupportedContentTypes())
+				.consumes(req.getSupportedAcceptTypes())
+				.produces(req.getSupportedContentTypes())
 				.tags(getTags(req))
 				.externalDocs(getExternalDocs(req));
 
@@ -177,7 +177,7 @@ public class RestInfoProvider {
 		Swagger s = swaggers.get(locale);
 		if (s == null) {
 			try {
-				s = context.getResource(Swagger.class, MediaType.JSON, getClass().getSimpleName() + ".json", locale);
+				s = context.getClasspathResource(Swagger.class, MediaType.JSON, getClass().getSimpleName() + ".json", locale);
 				swaggers.putIfAbsent(locale, s == null ? Swagger.NULL : s);
 			} catch (Exception e) {
 				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);

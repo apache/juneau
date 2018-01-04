@@ -1733,7 +1733,11 @@ public final class RestCall extends BeanSession {
 	/**
 	 * Connects to the remote resource (if {@code connect()} hasn't already been called) and returns the HTTP response
 	 * message body as plain text.
-	 *
+	 * 
+	 * <p>
+	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the output to an
+	 * output stream or writer.
+	 * 
 	 * @return The response as a string.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 * @throws IOException If an exception occurred while streaming was already occurring.
@@ -1747,6 +1751,53 @@ public final class RestCall extends BeanSession {
 		} finally {
 			close();
 		}
+	}
+	
+	/**
+	 * Connects to the remote resource (if {@code connect()} hasn't already been called) and returns the value of
+	 * an HTTP header on the response.
+	 * 
+	 * <p>
+	 * Useful if you're only interested in a particular header value from the response and not the body of the response.
+	 * 
+	 * <p>
+	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the output to an
+	 * output stream or writer.
+	 * 
+	 * @param name The header name. 
+	 * @return The response header as a string, or <jk>null</jk> if the header was not found.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 * @throws IOException If an exception occurred while streaming was already occurring.
+	 */
+	public String getResponseHeader(String name) throws IOException {
+		try {
+			HttpResponse r = getResponse();
+			Header h = r.getFirstHeader(name);
+			return h == null ? null : h.getValue();
+		} catch (IOException e) {
+			isFailed = true;
+			throw e;
+		} finally {
+			close();
+		}
+	}
+		
+	/**
+	 * Connects to the remote resource (if {@code connect()} hasn't already been called) and returns the HTTP response code.
+	 * 
+	 * <p>
+	 * Useful if you're only interested in the status code and not the body of the response.
+	 * 
+	 * <p>
+	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the output to an
+	 * output stream or writer.
+	 * 
+	 * @return The response code.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 * @throws IOException If an exception occurred while streaming was already occurring.
+	 */
+	public int getResponseCode() throws IOException {
+		return run();
 	}
 
 	/**

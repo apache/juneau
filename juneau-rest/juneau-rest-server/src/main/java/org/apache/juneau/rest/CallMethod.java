@@ -28,6 +28,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.HttpPartParser;
 import org.apache.juneau.internal.*;
@@ -57,7 +58,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final HttpPartParser partParser;
 	private final HttpPartSerializer partSerializer;
 	private final ObjectMap properties;
-	private final Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
+	private final Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
 	private final String defaultCharset;
 	private final long maxInput;
 	private final boolean deprecated;
@@ -68,6 +69,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final RestContext context;
 	private final BeanContext beanContext;
 	private final Map<String,Widget> widgets;
+	private final List<MediaType> supportedAcceptTypes, supportedContentTypes;
 
 	CallMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
@@ -100,6 +102,8 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.priority = b.priority;
 		this.parameters = b.parameters;
 		this.responses = b.responses;
+		this.supportedAcceptTypes = b.supportedAcceptTypes;
+		this.supportedContentTypes = b.supportedContentTypes;
 		this.widgets = Collections.unmodifiableMap(b.widgets);
 	}
 
@@ -117,13 +121,14 @@ class CallMethod implements Comparable<CallMethod>  {
 		HttpPartSerializer partSerializer;
 		BeanContext beanContext;
 		ObjectMap properties;
-		Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
+		Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
 		boolean deprecated;
 		long maxInput;
 		Integer priority;
 		org.apache.juneau.rest.annotation.Parameter[] parameters;
 		Response[] responses;
 		Map<String,Widget> widgets;
+		List<MediaType> supportedAcceptTypes, supportedContentTypes;
 
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
@@ -397,6 +402,15 @@ class CallMethod implements Comparable<CallMethod>  {
 				if (bcb != null)
 					beanContext = bcb.build();
 
+				supportedAcceptTypes = 
+					m.supportedAcceptTypes().length > 0 
+					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(m.supportedAcceptTypes())))) 
+					: serializers.getSupportedMediaTypes();
+				supportedContentTypes =
+					m.supportedContentTypes().length > 0 
+					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(m.supportedContentTypes())))) 
+					: parsers.getSupportedMediaTypes();
+					
 				params = context.findParams(method, pathPattern, false);
 
 				// Need this to access methods in anonymous inner classes.
@@ -780,7 +794,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		ObjectMap requestProperties = new ResolvingObjectMap(req.getVarResolverSession()).setInner(properties);
 
 		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
-			maxInput, serializers, parsers, partParser, beanContext, encoders, widgets);
+			maxInput, serializers, parsers, partParser, beanContext, encoders, widgets, supportedAcceptTypes, supportedContentTypes);
 		res.init(requestProperties, defaultCharset, serializers, partSerializer, encoders);
 
 		// Class-level guards

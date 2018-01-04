@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 @RestResource(
 	path="/testStaticFiles",
-	staticFiles="{xdocs:'xdocs'}"
+	staticFiles={"xdocs:xdocs","xdocs2:xdocs2:{Foo:'Bar'}"}
 )
 public class StaticFilesResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
@@ -34,5 +34,4 @@ public class StaticFilesResource extends RestServlet {
 	public String testXdocs() {
 		return null;
 	}
-
 }

@@ -113,7 +113,7 @@ import org.apache.juneau.utils.*;
  */
 public abstract class Widget {
 
-	private final ResourceFinder resourceFinder = new ResourceFinder(getClass());
+	private final ClasspathResourceManager rm = new ClasspathResourceManager(getClass());
 
 	/**
 	 * The widget key.
@@ -191,7 +191,7 @@ public abstract class Widget {
 	 * @throws IOException
 	 */
 	protected String getResourceAsString(String name) throws IOException {
-		return resourceFinder.getResourceAsString(name);
+		return rm.getString(name);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public abstract class Widget {
 	 * @throws IOException
 	 */
 	protected String getResourceAsString(String name, Locale locale) throws IOException {
-		return resourceFinder.getResourceAsString(name, locale);
+		return rm.getString(name, locale);
 	}
 
 	/**
