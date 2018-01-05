@@ -7995,6 +7995,8 @@
 					<li>{@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}
 					<li>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
 					<li>{@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_widgets REST_widgets}
+					<li>{@link org.apache.juneau.rest.RestContext#REST_mimeTypes REST_mimeTypes}
 				</ul>
 			<li>
 				Support for static files has been simplified and improved.
@@ -8061,6 +8063,11 @@
 						{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean) getClasspathReaderResource(String,boolean)}
 					<li><code>getReaderResource(String)</code> renamed to 
 						{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
+				</ul>
+			<li>
+				Changes to {@link org.apache.juneau.rest.annotation.RestResource}:
+				<ul>
+					<li>New {@link org.apache.juneau.rest.annotation.RestResource#mimeTypes() mimeTypes()} annotation.
 				</ul>
 			<li>
 				Changes to {@link org.apache.juneau.rest.annotation.RestMethod}:

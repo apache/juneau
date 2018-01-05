@@ -22,7 +22,6 @@ import static org.apache.juneau.parser.Parser.*;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import javax.activation.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -89,6 +88,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Class<?> resourceClass;
 	Object resource;
 	ServletContext servletContext;
+	RestContext parentContext;
 
 	//---------------------------------------------------------------------------
 	// The following fields are meant to be modifiable.
@@ -107,9 +107,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		partParser = UonPartParser.class;
 	EncoderGroupBuilder encoders = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
 
-	MimetypesFileTypeMap mimeTypes = new ExtendedMimetypesFileTypeMap();
 	List<Object> childResources = new ArrayList<>();
-	RestContext parentContext;
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
 
@@ -248,6 +246,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					defaultCharset(vr.resolve(r.defaultCharset()));
 				if (! r.maxInput().isEmpty())
 					maxInput(vr.resolve(r.maxInput()));
+				mimeTypes(resolveVars(vr, r.mimeTypes()));
 
 				HtmlDoc hd = r.htmldoc();
 				widgets(hd.widgets());
@@ -605,30 +604,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder encoders(Encoder...encoders) {
 		this.encoders.append(encoders);
-		return this;
-	}
-
-	/**
-	 * Adds MIME-type definitions.
-	 *
-	 * <p>
-	 * These definitions are used in the following locations for setting the media type on responses:
-	 * <ul>
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String)}
-	 * 	<li>Static files resolved through {@link RestResource#staticFiles()}
-	 * </ul>
-	 *
-	 * <p>
-	 * Refer to {@link MimetypesFileTypeMap#addMimeTypes(String)} for an explanation of the format.
-	 *
-	 * @param mimeTypes The MIME-types to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder mimeTypes(String...mimeTypes) {
-		if (this.mimeTypes == ExtendedMimetypesFileTypeMap.DEFAULT)
-			this.mimeTypes = new ExtendedMimetypesFileTypeMap();
-		for (String mimeType : mimeTypes)
-			this.mimeTypes.addMimeTypes(mimeType);
 		return this;
 	}
 
@@ -2387,6 +2362,46 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder widgets(boolean append, Widget...values) {
 		return set(append, REST_widgets, values);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  MIME types. 
+	 *
+	 * <p>
+	 * Defines MIME-type file type mappings.
+	 * 
+	 * <p>
+	 * Used for specifying the content type on file resources retrieved through the following methods:
+	 * <ul>
+	 * 	<li>{@link RestContext#resolveStaticFile(String)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String)}
+	 * </ul>
+	 * 
+	 * <p>
+	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_mimeTypes}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#mimeTypes()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#mimeTypes(String...)}
+	 * 		</ul>
+	 * 	<li>Values are .mime.types formatted entry string.
+	 * 		<br>Example: <js>"image/svg+xml svg"</js>
+	 * </ul>
+	 *
+	 * @param mimeTypes The MIME-types to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder mimeTypes(String...mimeTypes) {
+		return addTo(REST_mimeTypes, mimeTypes);
 	}
 
 	/**

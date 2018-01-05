@@ -1049,6 +1049,49 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_widgets = PREFIX + "widgets.lo";
 	
+	/**
+	 * <b>Configuration property:</b>  MIME types. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.mimeTypes.ss"</js>
+	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Defines MIME-type file type mappings.
+	 * 
+	 * <p>
+	 * Used for specifying the content type on file resources retrieved through the following methods:
+	 * <ul>
+	 * 	<li>{@link RestContext#resolveStaticFile(String)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String)}
+	 * </ul>
+	 * 
+	 * <p>
+	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_mimeTypes}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#mimeTypes()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#mimeTypes(String...)}
+	 * 		</ul>
+	 * 	<li>Values are .mime.types formatted entry string.
+	 * 		<br>Example: <js>"image/svg+xml svg"</js>
+	 * </ul>
+	 */
+	public static final String REST_mimeTypes = PREFIX + "mimeTypes.ss";
+
+	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1212,7 +1255,9 @@ public final class RestContext extends BeanContext {
 			encoders = builder.encoders.build();
 			beanContext = BeanContext.create().apply(ps).add(properties).build();
 
-			mimetypesFileTypeMap = builder.mimeTypes;
+			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
+			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
+				mimetypesFileTypeMap.addMimeTypes(mimeType);
 			
 			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class);
 			boolean useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
