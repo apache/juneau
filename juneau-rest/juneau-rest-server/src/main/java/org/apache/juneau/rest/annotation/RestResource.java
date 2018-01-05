@@ -301,20 +301,50 @@ public @interface RestResource {
 	Class<? extends Parser>[] parsers() default {};
 
 	/**
-	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 * HTTP part serializer. 
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#partSerializer(Class)}/
-	 * {@link RestContextBuilder#partSerializer(HttpPartSerializer)} methods.
+	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partSerializer()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
+	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
 	
 	/**
-	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 * HTTP part parser. 
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#partParser(Class)}/
-	 * {@link RestContextBuilder#partParser(HttpPartParser)} methods.
+	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partParser}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partParser()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partParser(Class)}
+	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
 	 */
 	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
 

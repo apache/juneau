@@ -1146,57 +1146,67 @@ public final class RestContext extends BeanContext {
 //	 */
 //	public static final String REST_parsers = PREFIX + "parsers.lo";
 //
-//	/**
-//	 * <b>Configuration property:</b>  HTTP part serializer. 
-//	 *
-//	 * <ul>
-//	 * 	<li><b>Name:</b> <js>"RestContext.partSerializer.o"</js>
-//	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartSerializer&gt; | HttpPartSerializer</code>
-//	 * 	<li><b>Default:</b> {@link SimpleUonPartSerializer}
-//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-//	 * </ul>
-//	 * 
-//	 * <h6 class='topic'>Notes:</h6>
-//	 * <ul class='spaced-list'>
-//	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
-//	 * 	<li>Annotations: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestResource#partSerializer()} 
-//	 * 		</ul>
-//	 * 	<li>Methods: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
-//	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
-//	 * 		</ul>
-//	 * </ul>
-//	 */
-//	public static final String REST_partSerializer = PREFIX + "partSerializer.o";
-//
-//	/**
-//	 * <b>Configuration property:</b>  HTTP part parser. 
-//	 *
-//	 * <ul>
-//	 * 	<li><b>Name:</b> <js>"RestContext.partParser.o"</js>
-//	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartParser&gt; | HttpPartParser</code>
-//	 * 	<li><b>Default:</b> {@link UonPartParser}
-//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-//	 * </ul>
-//	 * 
-//	 * <h6 class='topic'>Notes:</h6>
-//	 * <ul class='spaced-list'>
-//	 * 	<li>Property:  {@link RestContext#REST_partParser}
-//	 * 	<li>Annotations: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestResource#partParser()} 
-//	 * 		</ul>
-//	 * 	<li>Methods: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestContextBuilder#partParser(Class)}
-//	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
-//	 * 		</ul>
-//	 * </ul>
-//	 */
-//	public static final String REST_partParser = PREFIX + "partParser.o";
+	/**
+	 * <b>Configuration property:</b>  HTTP part serializer. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.partSerializer.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartSerializer&gt; | HttpPartSerializer</code>
+	 * 	<li><b>Default:</b> {@link SimpleUonPartSerializer}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partSerializer()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
+	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_partSerializer = PREFIX + "partSerializer.o";
+
+	/**
+	 * <b>Configuration property:</b>  HTTP part parser. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.partParser.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartParser&gt; | HttpPartParser</code>
+	 * 	<li><b>Default:</b> {@link UonPartParser}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partParser}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partParser()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partParser(Class)}
+	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_partParser = PREFIX + "partParser.o";
 
 	/**
 	 * <b>Configuration property:</b>  Compression encoders. 
@@ -1399,8 +1409,8 @@ public final class RestContext extends BeanContext {
 			properties = builder.properties;
 			serializers = builder.serializers.apply(ps).add(properties).build();
 			parsers = builder.parsers.apply(ps).add(properties).build();
-			partSerializer = resolve(resource, HttpPartSerializer.class, builder.partSerializer, serializers.getPropertyStore());
-			partParser = resolve(resource, HttpPartParser.class, builder.partParser, parsers.getPropertyStore());
+			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, SimpleUonPartSerializer.class, true, resource, ps);
+			partParser = getInstanceProperty(REST_partSerializer, HttpPartParser.class, UonPartParser.class, true, resource, ps);
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).add(properties).build();
 

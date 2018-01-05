@@ -102,9 +102,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	SerializerGroupBuilder serializers = SerializerGroup.create();
 	ParserGroupBuilder parsers = ParserGroup.create();
-	Object 
-		partSerializer = SimpleUonPartSerializer.class, 
-		partParser = UonPartParser.class;
 
 	List<Object> childResources = new ArrayList<>();
 	String path;
@@ -513,62 +510,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder parsers(Parser...parsers) {
 		this.parsers.append(parsers);
-		return this;
-	}
-
-	/**
-	 * Specifies the class-level {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#partSerializer() @RestResource.partSerializer()} annotation.
-	 *
-	 * @param partSerializer The serializer class.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> partSerializer) {
-		this.partSerializer = partSerializer;
-		return this;
-	}
-
-	/**
-	 * Specifies the class-level {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#partSerializer() @RestResource.partSerializer()} annotation.
-	 *
-	 * @param partSerializer The serializer instance.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder partSerializer(HttpPartSerializer partSerializer) {
-		this.partSerializer = partSerializer;
-		return this;
-	}
-
-	/**
-	 * Specifies the class-level {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#partParser() @RestResource.partParser()} annotation.
-	 *
-	 * @param partParser The parser class.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder partParser(Class<? extends HttpPartParser> partParser) {
-		this.partParser = partParser;
-		return this;
-	}
-
-	/**
-	 * Specifies the class-level {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#partParser() @RestResource.partParser()} annotation.
-	 *
-	 * @param partParser The parser instance.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder partParser(HttpPartParser partParser) {
-		this.partParser = partParser;
 		return this;
 	}
 
@@ -2367,6 +2308,122 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder mimeTypes(String...mimeTypes) {
 		return addTo(REST_mimeTypes, mimeTypes);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  HTTP part serializer. 
+	 *
+	 * <p>
+	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partSerializer()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
+	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 *
+	 * @param partSerializer The serializer class.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> partSerializer) {
+		return set(REST_partSerializer, partSerializer);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  HTTP part serializer. 
+	 *
+	 * <p>
+	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partSerializer()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
+	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 *
+	 * @param partSerializer The serializer instance.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder partSerializer(HttpPartSerializer partSerializer) {
+		return set(REST_partSerializer, partSerializer);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  HTTP part parser. 
+	 *
+	 * <p>
+	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partParser}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partParser()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partParser(Class)}
+	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 *
+	 * @param partParser The parser class.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder partParser(Class<? extends HttpPartParser> partParser) {
+		return set(REST_partParser, partParser);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  HTTP part parser. 
+	 *
+	 * <p>
+	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partParser}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partParser()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partParser(Class)}
+	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 *
+	 * @param partParser The parser instance.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder partParser(HttpPartParser partParser) {
+		return set(REST_partParser, partParser);
 	}
 
 	/**
