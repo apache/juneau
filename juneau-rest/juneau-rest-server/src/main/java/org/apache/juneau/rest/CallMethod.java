@@ -181,7 +181,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				ASet<String> inherit = new ASet<String>().appendAll(StringUtils.split(m.inherit()));
 				if (inherit.contains("*")) 
-					inherit.appendAll("SERIALIZERS","PARSERS","TRANSFORMS","PROPERTIES");
+					inherit.appendAll("SERIALIZERS","PARSERS","TRANSFORMS","PROPERTIES","ENCODERS");
 
 				SerializerGroupBuilder sgb = null;
 				ParserGroupBuilder pgb = null;
@@ -324,12 +324,10 @@ class CallMethod implements Comparable<CallMethod>  {
 						properties.put(p1, true);
 				}
 
-				if (m.encoders().length > 0 || ! m.inheritEncoders()) {
-					EncoderGroupBuilder g = EncoderGroup.create();
-					if (m.inheritEncoders())
+				if (m.encoders().length > 0) {
+					EncoderGroupBuilder g = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
+					if (inherit.contains("ENCODERS"))
 						g.append(encoders);
-					else
-						g.append(IdentityEncoder.INSTANCE);
 
 					for (Class<? extends Encoder> c : m.encoders()) {
 						try {

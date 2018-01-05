@@ -105,7 +105,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Object 
 		partSerializer = SimpleUonPartSerializer.class, 
 		partParser = UonPartParser.class;
-	EncoderGroupBuilder encoders = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
 
 	List<Object> childResources = new ArrayList<>();
 	String path;
@@ -141,6 +140,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		
 		logger(RestLogger.Normal.class);
 		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
+		encoders(IdentityEncoder.INSTANCE);
 
 		try {
 
@@ -569,41 +569,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder partParser(HttpPartParser partParser) {
 		this.partParser = partParser;
-		return this;
-	}
-
-	/**
-	 * Adds class-level encoders to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#encoders() @RestResource.encoders()} annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * <p>
-	 * By default, only the {@link IdentityEncoder} is included in this list.
-	 *
-	 * @param encoders The parser classes to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder encoders(Class<?>...encoders) {
-		this.encoders.append(encoders);
-		return this;
-	}
-
-	/**
-	 * Adds class-level encoders to this resource.
-	 *
-	 * <p>
-	 * Same as {@link #encoders(Class...)} except allows you to pass in encoder instances.
-	 *
-	 * @param encoders The encoders to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder encoders(Encoder...encoders) {
-		this.encoders.append(encoders);
 		return this;
 	}
 
@@ -2402,6 +2367,86 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder mimeTypes(String...mimeTypes) {
 		return addTo(REST_mimeTypes, mimeTypes);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Compression encoders. 
+	 *
+	 * <p>
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
+	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_encoders}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#encoders()} 
+	 * 			<li>{@link RestMethod#encoders()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
+	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
+	 * 		</ul>
+	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
+	 * 		{@link PropertyStore} object.
+	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
+	 * </ul>
+	 *
+	 * @param encoders Encoder classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder encoders(Class<?>...encoders) {
+		return addTo(REST_encoders, encoders);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Compression encoders. 
+	 *
+	 * <p>
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
+	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_encoders}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#encoders()} 
+	 * 			<li>{@link RestMethod#encoders()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
+	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
+	 * 		</ul>
+	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
+	 * 		{@link PropertyStore} object.
+	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
+	 * </ul>
+	 *
+	 * @param encoders Encoder instances to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder encoders(Encoder...encoders) {
+		return addTo(REST_encoders, encoders);
 	}
 
 	/**

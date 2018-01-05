@@ -103,7 +103,7 @@ public class GzipResource {
 		}
 
 		// This method overrides the set of encoders at the method level and so shouldn't use GZip encoding.
-		@RestMethod(name=GET, path="/direct4", inheritEncoders=false)
+		@RestMethod(name=GET, path="/direct4", encoders={IdentityEncoder.class})
 		public void direct4(RestResponse res) throws Exception {
 			Writer w = res.getNegotiatedWriter();
 			w.append("test");

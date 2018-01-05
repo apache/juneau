@@ -411,13 +411,10 @@ public @interface RestResource {
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
 
 	/**
-	 * Specifies a list of {@link Encoder} to associate with this servlet.
+	 * Compression encoders. 
 	 *
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 *
-	 * <p>
-	 * This annotation can only be used on {@link Encoder} classes that have no-arg constructors.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -427,10 +424,24 @@ public @interface RestResource {
 	 * 		...
 	 * 	}
 	 * </p>
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#encoders(Class...)}/
-	 * {@link RestContextBuilder#encoders(Encoder...)} methods.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_encoders}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#encoders()} 
+	 * 			<li>{@link RestMethod#encoders()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
+	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
+	 * 		</ul>
+	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
+	 * 		{@link PropertyStore} object.
+	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
+	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 

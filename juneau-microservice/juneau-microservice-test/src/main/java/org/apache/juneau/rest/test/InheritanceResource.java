@@ -136,7 +136,7 @@ public class InheritanceResource extends RestServlet {
 		private static final long serialVersionUID = 1L;
 
 		// Should show ['e3','e4','e1','e2','identity']
-		@RestMethod(name=GET, path="/test")
+		@RestMethod(name=GET, path="/test", inherit="ENCODERS")
 		public Reader test(RestResponse res) throws RestServletException {
 			return new StringReader(new ObjectList(res.getSupportedEncodings()).toString());
 		}

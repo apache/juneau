@@ -854,7 +854,7 @@ public final class ClassUtils {
 						return (T)con.newInstance(getMatchingArgs(con, args));
 				}
 
-				throw new FormattedRuntimeException("Could not instantiate class {0}.  Constructor not found.", c.getName());
+				throw new FormattedRuntimeException("Could not instantiate class {0}/{1}.  Constructor not found.", c.getName(), c2);
 			} catch (Exception e) {
 				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());
 			}

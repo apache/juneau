@@ -32,6 +32,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
@@ -1091,6 +1092,154 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_mimeTypes = PREFIX + "mimeTypes.ss";
 
+//	/**
+//	 * <b>Configuration property:</b>  Serializers. 
+//	 *
+//	 * <ul>
+//	 * 	<li><b>Name:</b> <js>"RestContext.serializers.lo"</js>
+//	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Serializer&gt; | Serializer&gt;</code>
+//	 * 	<li><b>Default:</b> empty list
+//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+//	 * </ul>
+//	 * 
+//	 * <h6 class='topic'>Notes:</h6>
+//	 * <ul class='spaced-list'>
+//	 * 	<li>Property:  {@link RestContext#REST_serializers}
+//	 * 	<li>Annotations: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestResource#serializers()} 
+//	 * 			<li>{@link RestMethod#serializers()} 
+//	 * 		</ul>
+//	 * 	<li>Methods: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
+//	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
+//	 * 		</ul>
+//	 * </ul>
+//	 */
+//	public static final String REST_serializers = PREFIX + "serializers.lo";
+//
+//	/**
+//	 * <b>Configuration property:</b>  Parsers. 
+//	 *
+//	 * <ul>
+//	 * 	<li><b>Name:</b> <js>"RestContext.parsers.lo"</js>
+//	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Parser&gt; | Parser&gt;</code>
+//	 * 	<li><b>Default:</b> empty list
+//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+//	 * </ul>
+//	 * 
+//	 * <h6 class='topic'>Notes:</h6>
+//	 * <ul class='spaced-list'>
+//	 * 	<li>Property:  {@link RestContext#REST_parsers}
+//	 * 	<li>Annotations: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestResource#parsers()} 
+//	 * 			<li>{@link RestMethod#parsers()} 
+//	 * 		</ul>
+//	 * 	<li>Methods: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
+//	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
+//	 * 		</ul>
+//	 * </ul>
+//	 */
+//	public static final String REST_parsers = PREFIX + "parsers.lo";
+//
+//	/**
+//	 * <b>Configuration property:</b>  HTTP part serializer. 
+//	 *
+//	 * <ul>
+//	 * 	<li><b>Name:</b> <js>"RestContext.partSerializer.o"</js>
+//	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartSerializer&gt; | HttpPartSerializer</code>
+//	 * 	<li><b>Default:</b> {@link SimpleUonPartSerializer}
+//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+//	 * </ul>
+//	 * 
+//	 * <h6 class='topic'>Notes:</h6>
+//	 * <ul class='spaced-list'>
+//	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
+//	 * 	<li>Annotations: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestResource#partSerializer()} 
+//	 * 		</ul>
+//	 * 	<li>Methods: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
+//	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+//	 * 		</ul>
+//	 * </ul>
+//	 */
+//	public static final String REST_partSerializer = PREFIX + "partSerializer.o";
+//
+//	/**
+//	 * <b>Configuration property:</b>  HTTP part parser. 
+//	 *
+//	 * <ul>
+//	 * 	<li><b>Name:</b> <js>"RestContext.partParser.o"</js>
+//	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartParser&gt; | HttpPartParser</code>
+//	 * 	<li><b>Default:</b> {@link UonPartParser}
+//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+//	 * </ul>
+//	 * 
+//	 * <h6 class='topic'>Notes:</h6>
+//	 * <ul class='spaced-list'>
+//	 * 	<li>Property:  {@link RestContext#REST_partParser}
+//	 * 	<li>Annotations: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestResource#partParser()} 
+//	 * 		</ul>
+//	 * 	<li>Methods: 
+//	 * 		<ul>
+//	 * 			<li>{@link RestContextBuilder#partParser(Class)}
+//	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
+//	 * 		</ul>
+//	 * </ul>
+//	 */
+//	public static final String REST_partParser = PREFIX + "partParser.o";
+
+	/**
+	 * <b>Configuration property:</b>  Compression encoders. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.encoders.o"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Encoder&gt; | Encoder&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
+	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_encoders}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#encoders()} 
+	 * 			<li>{@link RestMethod#encoders()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
+	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
+	 * 		</ul>
+	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
+	 * 		{@link PropertyStore} object.
+	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
+	 * </ul>
+	 */
+	public static final String REST_encoders = PREFIX + "encoders.lo";
+
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -1252,7 +1401,7 @@ public final class RestContext extends BeanContext {
 			parsers = builder.parsers.apply(ps).add(properties).build();
 			partSerializer = resolve(resource, HttpPartSerializer.class, builder.partSerializer, serializers.getPropertyStore());
 			partParser = resolve(resource, HttpPartParser.class, builder.partParser, parsers.getPropertyStore());
-			encoders = builder.encoders.build();
+			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).add(properties).build();
 
 			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();

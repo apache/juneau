@@ -23,7 +23,7 @@ public class IdentityEncoder extends Encoder {
 	public static final IdentityEncoder INSTANCE = new IdentityEncoder();
 
 	/** Constructor. */
-	protected IdentityEncoder() {}
+	public IdentityEncoder() {}
 
 	@Override /* Encoder */
 	public InputStream getInputStream(InputStream is) throws IOException {

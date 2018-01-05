@@ -262,6 +262,7 @@ public @interface RestMethod {
 	 * 	<li>"PARSERS" - Inherit class-level parsers.
 	 * 	<li>"TRANSFORMS" - Inherit class-level bean properties and pojo-swaps.
 	 * 	<li>"PROPERTIES" - Inherit class-level properties (other than transforms).
+	 * 	<li>"ENCODERS" - Inherit class-level encoders.
 	 * 	<li>"*" - Inherit everything.
 	 * </ul>
 	 *
@@ -334,39 +335,44 @@ public @interface RestMethod {
 	String[] supportedContentTypes() default {};
 
 	/**
-	 * Appends to the list of {@link Encoder encoders} specified on the servlet.
+	 * Compression encoders. 
 	 *
 	 * <p>
 	 * Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at
 	 * the servlet level.
-	 *
+	 * 
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
-	 *
-	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<jsf>PUT</jsf>,
-	 * 			path=<js>"/foo"</js>,
-	 * 			encoders={GzipEncoder.<jk>class</jk>}
-	 * 		)
-	 * 		<jk>public</jk> Object doGetWithSpecialEncoding() {
-	 * 			<jc>// Handle request with special encoding</jc>
-	 * 		}
+	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
+	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	 * 		...
 	 * 	}
 	 * </p>
-	 *
-	 * <p>
-	 * If you want to OVERRIDE the set of encoders specified by the servlet, combine this annotation with
-	 * <code><ja>@RestMethod</ja>(inheritEncoders=<jk>false</jk>)</code>.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_encoders}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#encoders()} 
+	 * 			<li>{@link RestMethod#encoders()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
+	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
+	 * 		</ul>
+	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
+	 * 		{@link PropertyStore} object.
+	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
+	 * 	<li>Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
+	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
-
-	/**
-	 * Specifies whether the method should inherit encoders from the servlet.
-	 */
-	boolean inheritEncoders() default true;
 
 	/**
 	 * Same as {@link RestResource#properties()}, except defines property values by default when this method is called.
