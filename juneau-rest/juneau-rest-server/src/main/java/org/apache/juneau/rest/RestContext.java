@@ -63,39 +63,6 @@ public final class RestContext extends BeanContext {
 	private static final String PREFIX = "RestContext.";
 	
 	/**
-	 * <b>Configuration property:</b>  Allow header URL parameters.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.allowHeaderParams.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * <br>
-	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_allowHeaderParams}
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link RestResource#allowHeaderParams()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#allowHeaderParams(boolean)}
-	 * 		</ul>
-	 * 	<li>Parameter name is case-insensitive.
-	 * 	<li>Useful for debugging REST interface using only a browser.
-	 *	</ul>
-	 */
-	public static final String REST_allowHeaderParams = PREFIX + "allowHeaderParams.b";
-	
-	/**
 	 * <b>Configuration property:</b>  Allow body URL parameter.
 	 *
 	 * <ul>
@@ -168,178 +135,174 @@ public final class RestContext extends BeanContext {
 	public static final String REST_allowedMethodParams = PREFIX + "allowedMethodParams.s";
 
 	/**
-	 * <b>Configuration property:</b>  Render response stack traces in responses.
+	 * <b>Configuration property:</b>  Allow header URL parameters.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.renderResponseStackTraces.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Render stack traces in HTTP response bodies when errors occur.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_renderResponseStackTraces}
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link RestResource#renderResponseStackTraces()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#renderResponseStackTraces(boolean)}
-	 * 		</ul>
-	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
-	 * 		caution when enabling.
-	 *	</ul>
-	 */
-	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
-	
-	/**
-	 * <b>Configuration property:</b>  Use stack trace hashes.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.useStackTraceHashes.b"</js>
+	 * 	<li><b>Name:</b> <js>"RestContext.allowHeaderParams.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 *
 	 * <p>
-	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
-	 * made available through the {@link RestException#getOccurrence()} method.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_useStackTraceHashes}
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link RestResource#useStackTraceHashes()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#useStackTraceHashes(boolean)}
-	 * 		</ul>
-	 *	</ul>
-	 */
-	public static final String REST_useStackTraceHashes = PREFIX + "useStackTraceHashes.b";
-	
-	/**
-	 * <b>Configuration property:</b>  Default character encoding.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.defaultCharset.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"utf-8"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * The default character encoding for the request and response if not specified on the request.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_defaultCharset}
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link RestResource#defaultCharset()}
-	 * 			<li>{@link RestMethod#defaultCharset()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#defaultCharset(String)}
-	 * 		</ul>
-	 *	</ul>
-	 */
-	public static final String REST_defaultCharset = PREFIX + "defaultCharset.s";
-	
-	/**
-	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.maxInput.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"100M"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
-	 * in out-of-memory errors which could affect system stability.
+	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>
+	 * For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_maxInput}
+	 * 	<li>Property:  {@link RestContext#REST_allowHeaderParams}
 	 * 	<li>Annotations:  
 	 * 		<ul>
-	 * 			<li>{@link RestResource#maxInput()}
-	 * 			<li>{@link RestMethod#maxInput()}
+	 * 			<li>{@link RestResource#allowHeaderParams()}
 	 * 		</ul>
 	 * 	<li>Methods:  
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#maxInput(String)}
+	 * 			<li>{@link RestContextBuilder#allowHeaderParams(boolean)}
 	 * 		</ul>
-	 * 	<li>String value that gets resolved to a <jk>long</jk>.
-	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
-	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Useful for debugging REST interface using only a browser.
 	 *	</ul>
 	 */
-	public static final String REST_maxInput = PREFIX + "maxInput.s";
+	public static final String REST_allowHeaderParams = PREFIX + "allowHeaderParams.b";
 	
 	/**
-	 * <b>Configuration property:</b>  Java method parameter resolvers.
+	 * <b>Configuration property:</b>  REST call handler.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.paramResolvers.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;RestParam | Class&lt;? <jk>extends</jk> RestParam&gt;&gt;</code>
-	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Name:</b> <js>"RestContext.callHandler.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestCallHandler&gt; | RestCallHandler</code>
+	 * 	<li><b>Default:</b> {@link RestCallHandler}
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
-	 *
+	 * 
 	 * <p>
-	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
-	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
+	 * This class handles the basic lifecycle of an HTTP REST call.
+	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
+
 	 * <p>
-	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
-	 * the following resolver:
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
-	 *
-	 * 		<jc>// Must have no-arg constructor!</jc>
-	 * 		<jk>public</jk> MyRestParam() {
-	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
-	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// The method that creates our object.
-	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
-	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_paramResolvers}
-	 * 	<li>Annotations:  
+	 * 	<li>Property:  {@link RestContext#REST_callHandler}
+	 * 	<li>Annotations: 
 	 * 		<ul>
-	 * 			<li>{@link RestResource#paramResolvers()}
+	 * 			<li>{@link RestResource#callHandler()} 
+	 * 		</ul>
 	 * 	<li>Methods: 
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#paramResolvers(Class...)}
-	 * 			<li>{@link RestContextBuilder#paramResolvers(RestParam...)}
+	 * 			<li>{@link RestContextBuilder#callHandler(Class)}
+	 * 			<li>{@link RestContextBuilder#callHandler(RestCallHandler)} 
 	 * 		</ul>
-	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
 	 *	</ul>
 	 */
-	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
+	public static final String REST_callHandler = PREFIX + "callHandler.o";
 
+	/**
+	 * <b>Configuration property:</b>  Classpath resource finder. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.classpathResourceFinder.o"</js>
+	 * 	<li><b>Data type:</b> {@link ClasspathResourceFinder}
+	 * 	<li><b>Default:</b> {@link ClasspathResourceFinderBasic}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Used to retrieve localized files from the classpath.
+	 * 
+	 * <p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_classpathResourceFinder}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#classpathResourceFinder()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#classpathResourceFinder(Class)}
+	 * 			<li>{@link RestContextBuilder#classpathResourceFinder(ClasspathResourceFinder)}
+	 * 		</ul>
+	 * 	<li>
+	 * 		The default value is {@link ClasspathResourceFinderBasic} which provides basic support for finding localized
+	 * 		resources on the classpath and JVM working directory.
+	 * 		<br>The {@link ClasspathResourceFinderRecursive} is another option that also recursively searches for resources
+	 * 		up the parent class hierarchy.
+	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
+	 * </ul>
+	 */
+	public static final String REST_classpathResourceFinder = PREFIX + "classpathResourceFinder.o";
+	
+	/**
+	 * <b>Configuration property:</b>  Client version header.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.clientVersionHeader.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"X-Client-Version"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the name of the header used to denote the client version on HTTP requests.
+	 *
+	 * <p>
+	 * The client version is used to support backwards compatibility for breaking REST interface changes.
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_clientVersionHeader}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#clientVersionHeader()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#clientVersionHeader(String)}
+	 * 		</ul>
+	 *	</ul>
+	 */
+	public static final String REST_clientVersionHeader = PREFIX + "clientVersionHeader.s";
+
+	/**
+	 * <b>Configuration property:</b>  Resource context path. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.contextPath.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
+	 * the context path is not actually specified on the servlet container.
+	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
+	 * will return this value instead of the actual context path of the web app.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_contextPath}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#contextPath()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#contextPath(String)} 
+	 * 		</ul>
+	 *	</ul>
+	 */
+	public static final String REST_contextPath = PREFIX + "contextPath.s";
+	
 	/**
 	 * <b>Configuration property:</b>  Class-level response converters.
 	 *
@@ -381,84 +344,34 @@ public final class RestContext extends BeanContext {
 	public static final String REST_converters = PREFIX + "converters.lo";
 
 	/**
-	 * <b>Configuration property:</b>  Class-level guards.
+	 * <b>Configuration property:</b>  Default character encoding.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.guards.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;RestGuard | Class&lt;? <jk>extends</jk> RestGuard&gt;&gt;</code>
-	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Name:</b> <js>"RestContext.defaultCharset.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"utf-8"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 *
 	 * <p>
-	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
-	 * These guards get called immediately before execution of any REST method in this class.
-	 *
-	 * <p>
-	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
-	 * for other purposes like pre-call validation of a request.
+	 * The default character encoding for the request and response if not specified on the request.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_guards}
+	 * 	<li>Property:  {@link RestContext#REST_defaultCharset}
 	 * 	<li>Annotations:  
 	 * 		<ul>
-	 * 			<li>{@link RestResource#guards()}
-	 * 			<li>{@link RestMethod#guards()}
+	 * 			<li>{@link RestResource#defaultCharset()}
+	 * 			<li>{@link RestMethod#defaultCharset()}
 	 * 		</ul>
-	 * 	<li>Methods: 
+	 * 	<li>Methods:  
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#guards(Class...)}
-	 * 			<li>{@link RestContextBuilder#guards(RestGuard...)}
+	 * 			<li>{@link RestContextBuilder#defaultCharset(String)}
 	 * 		</ul>
-	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
 	 *	</ul>
 	 */
-	public static final String REST_guards = PREFIX + "guards.lo";
-
-	/**
-	 * <b>Configuration property:</b>  Response handlers.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.responseHandlers.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>extends</jk> ResponseHandler&gt;&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
-	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
-	 *
-	 * <p>
-	 * By default, the following response handlers are provided out-of-the-box:
-	 * <ul>
-	 * 	<li>{@link StreamableHandler}
-	 * 	<li>{@link WritableHandler}
-	 * 	<li>{@link ReaderHandler}
-	 * 	<li>{@link InputStreamHandler}
-	 * 	<li>{@link RedirectHandler}
-	 * 	<li>{@link DefaultHandler}
-	 * </ul>
-
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_responseHandlers}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#responseHandlers()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#responseHandlers(Class...)}
-					<li>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
-				</ul>
-	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 *	</ul>
-	 */
-	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
-
+	public static final String REST_defaultCharset = PREFIX + "defaultCharset.s";
+	
 	/**
 	 * <b>Configuration property:</b>  Default request headers.
 	 *
@@ -526,6 +439,685 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_defaultResponseHeaders = PREFIX + "defaultResponseHeaders.omo";
 
+	/**
+	 * <b>Configuration property:</b>  Compression encoders. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.encoders.o"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Encoder&gt; | Encoder&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
+	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_encoders}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#encoders()} 
+	 * 			<li>{@link RestMethod#encoders()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
+	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
+	 * 		</ul>
+	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
+	 * 		{@link PropertyStore} object.
+	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
+	 * </ul>
+	 */
+	public static final String REST_encoders = PREFIX + "encoders.lo";
+
+	/**
+	 * <b>Configuration property:</b>  Class-level guards.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.guards.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;RestGuard | Class&lt;? <jk>extends</jk> RestGuard&gt;&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
+	 * These guards get called immediately before execution of any REST method in this class.
+	 *
+	 * <p>
+	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
+	 * for other purposes like pre-call validation of a request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_guards}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#guards()}
+	 * 			<li>{@link RestMethod#guards()}
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#guards(Class...)}
+	 * 			<li>{@link RestContextBuilder#guards(RestGuard...)}
+	 * 		</ul>
+	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 */
+	public static final String REST_guards = PREFIX + "guards.lo";
+
+	/**
+	 * <b>Configuration property:</b>  REST info provider. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.infoProvider.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestInfoProvider&gt; | RestInfoProvider</code>
+	 * 	<li><b>Default:</b> {@link RestInfoProvider}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Class used to retrieve title/description/swagger information about a resource.
+	 *
+	 * <p>
+	 * Subclasses can be used to customize the documentation on a resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_infoProvider}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#infoProvider()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#infoProvider(Class)}
+	 * 			<li>{@link RestContextBuilder#infoProvider(RestInfoProvider)} 
+	 * 		</ul>
+	 *	</ul>
+	 */
+	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
+	
+	/**
+	 * <b>Configuration property:</b>  REST logger.
+	 * 
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.logger.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestLogger&gt; | RestLogger</code>
+	 * 	<li><b>Default:</b> {@link RestLogger.Normal}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the logger to use for logging.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_logger}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#logger()} 
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#logger(Class)}
+	 * 			<li>{@link RestContextBuilder#logger(RestLogger)} 
+	 * 		</ul>
+	 * 	<li>The {@link RestLogger.Normal} logger can be used to provide basic error logging to the Java logger.
+	 *	</ul>
+	 */
+	public static final String REST_logger = PREFIX + "logger.o";
+
+	/**
+	 * <b>Configuration property:</b>  The maximum allowed input size (in bytes) on HTTP requests.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.maxInput.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"100M"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
+	 * in out-of-memory errors which could affect system stability.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_maxInput}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#maxInput()}
+	 * 			<li>{@link RestMethod#maxInput()}
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#maxInput(String)}
+	 * 		</ul>
+	 * 	<li>String value that gets resolved to a <jk>long</jk>.
+	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
+	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
+	 *	</ul>
+	 */
+	public static final String REST_maxInput = PREFIX + "maxInput.s";
+	
+	/**
+	 * <b>Configuration property:</b>  Messages. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.messages.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;MessageBundleLocation&gt;</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Identifies the location of the resource bundle for this class.
+	 *
+	 * <p>
+	 * This annotation is used to provide localized messages for the following methods:
+	 * <ul>
+	 * 	<li>{@link RestRequest#getMessage(String, Object...)}
+	 * 	<li>{@link RestContext#getMessages()}
+	 * </ul>
+	 *
+	 * <p>
+	 * Refer to the {@link MessageBundle} class for a description of the message key formats used in the properties file.
+	 *
+	 * <p>
+	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
+	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
+	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_messages}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#messages()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#messages(String)},
+	 * 			<li>{@link RestContextBuilder#messages(Class,String)}
+	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation)} 
+	 * 		</ul>
+	 * 	<li>Mappings are cumulative from parent to child.  
+	 * </ul>
+	 */
+	public static final String REST_messages = PREFIX + "messages.lo";
+	
+	/**
+	 * <b>Configuration property:</b>  MIME types. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.mimeTypes.ss"</js>
+	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Defines MIME-type file type mappings.
+	 * 
+	 * <p>
+	 * Used for specifying the content type on file resources retrieved through the following methods:
+	 * <ul>
+	 * 	<li>{@link RestContext#resolveStaticFile(String)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean)}
+	 * 	<li>{@link RestRequest#getClasspathReaderResource(String)}
+	 * </ul>
+	 * 
+	 * <p>
+	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_mimeTypes}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#mimeTypes()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#mimeTypes(String...)}
+	 * 		</ul>
+	 * 	<li>Values are .mime.types formatted entry string.
+	 * 		<br>Example: <js>"image/svg+xml svg"</js>
+	 * </ul>
+	 */
+	public static final String REST_mimeTypes = PREFIX + "mimeTypes.ss";
+
+	/**
+	 * <b>Configuration property:</b>  Java method parameter resolvers.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.paramResolvers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;RestParam | Class&lt;? <jk>extends</jk> RestParam&gt;&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <p>
+	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
+	 *
+	 * 		<jc>// Must have no-arg constructor!</jc>
+	 * 		<jk>public</jk> MyRestParam() {
+	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
+	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_paramResolvers}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#paramResolvers()}
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#paramResolvers(Class...)}
+	 * 			<li>{@link RestContextBuilder#paramResolvers(RestParam...)}
+	 * 		</ul>
+	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 */
+	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
+
+	/**
+	 * <b>Configuration property:</b>  Parsers. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.parsers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Parser&gt; | Parser&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Adds class-level parsers to this resource.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_parsers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#parsers()} 
+	 * 			<li>{@link RestMethod#parsers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_parsers = PREFIX + "parsers.lo";
+
+	/**
+	 * <b>Configuration property:</b>  HTTP part parser. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.partParser.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartParser&gt; | HttpPartParser</code>
+	 * 	<li><b>Default:</b> {@link UonPartParser}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partParser}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partParser()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partParser(Class)}
+	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_partParser = PREFIX + "partParser.o";
+
+	/**
+	 * <b>Configuration property:</b>  HTTP part serializer. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.partSerializer.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartSerializer&gt; | HttpPartSerializer</code>
+	 * 	<li><b>Default:</b> {@link SimpleUonPartSerializer}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#partSerializer()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
+	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_partSerializer = PREFIX + "partSerializer.o";
+
+	/**
+	 * <b>Configuration property:</b>  Resource path.   
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.path.s"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Identifies the URL subpath relative to the parent resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_path}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#path()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#path(String)} 
+	 * 		</ul>
+	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
+	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
+	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
+	 * 		{@link RestResource#children()} annotation.
+	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 *	</ul>
+	 */
+	public static final String REST_path = PREFIX + "path.s";
+
+	/**
+	 * <b>Configuration property:</b>  Render response stack traces in responses.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.renderResponseStackTraces.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * Render stack traces in HTTP response bodies when errors occur.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_renderResponseStackTraces}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#renderResponseStackTraces()}
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#renderResponseStackTraces(boolean)}
+	 * 		</ul>
+	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
+	 * 		caution when enabling.
+	 *	</ul>
+	 */
+	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
+	
+	/**
+	 * <b>Configuration property:</b>  REST resource resolver.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.resourceResolver.o"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestResourceResolver&gt; | RestResourceResolver</code>
+	 * 	<li><b>Default:</b> {@link RestResourceResolverSimple}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * The resolver used for resolving child resources.
+	 * 
+	 * <p>
+	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_resourceResolver}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#resourceResolver()} 
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#resourceResolver(Class)}
+					<li>{@link RestContextBuilder#resourceResolver(RestResourceResolver)}
+				</ul>
+	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
+	 *	</ul>
+	 */
+	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
+
+	/**
+	 * <b>Configuration property:</b>  Response handlers.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.responseHandlers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>extends</jk> ResponseHandler&gt;&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+	 *
+	 * <p>
+	 * By default, the following response handlers are provided out-of-the-box:
+	 * <ul>
+	 * 	<li>{@link StreamableHandler}
+	 * 	<li>{@link WritableHandler}
+	 * 	<li>{@link ReaderHandler}
+	 * 	<li>{@link InputStreamHandler}
+	 * 	<li>{@link RedirectHandler}
+	 * 	<li>{@link DefaultHandler}
+	 * </ul>
+
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_responseHandlers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#responseHandlers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#responseHandlers(Class...)}
+					<li>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+				</ul>
+	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 */
+	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
+
+	/**
+	 * <b>Configuration property:</b>  Serializers. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.serializers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Serializer&gt; | Serializer&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Adds class-level serializers to this resource.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_serializers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#serializers()} 
+	 * 			<li>{@link RestMethod#serializers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_serializers = PREFIX + "serializers.lo";
+
+	/**
+	 * <b>Configuration property:</b>  Static file response headers. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.staticFileResponseHeaders.omo"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Used to customize the headers on responses returned for statically-served files.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_staticFileResponseHeaders}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#staticFileResponseHeaders()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#staticFileResponseHeaders(boolean,Map)}
+	 * 			<li>{@link RestContextBuilder#staticFileResponseHeaders(String...)}
+	 * 			<li>{@link RestContextBuilder#staticFileResponseHeader(String,String)}
+	 * 		</ul>
+	 * </ul>
+	 */
+	public static final String REST_staticFileResponseHeaders = PREFIX + "staticFileResponseHeaders.omo";
+	
+	/**
+	 * <b>Configuration property:</b>  Static file mappings. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.staticFiles.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;StaticFileMapping&gt;</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Used to define paths and locations of statically-served files such as images or HTML documents.
+	 * 
+	 * <p>
+	 * Static files are found by calling {@link #getClasspathResource(String,Locale)} which uses the registered 
+	 * {@link ClasspathResourceFinder} for locating files on the classpath (or other location).
+	 * 
+	 * <p>
+	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
+	 * <p class='bcode'>
+	 * 	<jk>package</jk> com.foo.mypackage;
+	 * 
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/myresource"</js>,
+	 * 		staticFiles={<js>"htdocs:docs"</js>,<js>"styles:styles"</js>}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {...}
+	 * </p>
+	 * 
+	 * <p>
+	 * In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find 
+	 * the <l>foobar.html</l> file in the following ordered locations:
+	 * <ol>
+	 * 	<li><l>com.foo.mypackage.docs</l> package.
+	 * 	<li><l>org.apache.juneau.rest.docs</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.rest</l>).
+	 * 	<li><l>[working-dir]/docs</l> directory.
+	 * </ol>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_staticFiles}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#staticFiles()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#staticFiles(String)},
+	 * 			<li>{@link RestContextBuilder#staticFiles(Class,String)}
+	 * 			<li>{@link RestContextBuilder#staticFiles(String,String)}
+	 * 			<li>{@link RestContextBuilder#staticFiles(Class,String,String)} 
+	 * 			<li>{@link RestContextBuilder#staticFiles(StaticFileMapping...)} 
+	 * 		</ul>
+	 * 	<li>Mappings are cumulative from parent to child.  
+	 * 	<li>Child resources can override mappings made on parent resources.
+	 * 	<li>The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
+	 * 	<li>The resource finder is configured via the {@link #REST_classpathResourceFinder} setting, and can be
+	 * 		overridden to provide customized handling of resource retrieval.
+	 * 	<li>The {@link #REST_useClasspathResourceCaching} setting can be used to cache static files in memory
+	 * 		to improve performance.
+	 * </ul>
+	 */
+	public static final String REST_staticFiles = PREFIX + "staticFiles.lo";
+	
 	/**
 	 * <b>Configuration property:</b>  Supported accept media types.
 	 *
@@ -597,413 +1189,6 @@ public final class RestContext extends BeanContext {
 	public static final String REST_supportedContentTypes = PREFIX + "supportedContentTypes.ls";
 	
 	/**
-	 * <b>Configuration property:</b>  Client version header.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.clientVersionHeader.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"X-Client-Version"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Specifies the name of the header used to denote the client version on HTTP requests.
-	 *
-	 * <p>
-	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_clientVersionHeader}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#clientVersionHeader()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#clientVersionHeader(String)}
-	 * 		</ul>
-	 *	</ul>
-	 */
-	public static final String REST_clientVersionHeader = PREFIX + "clientVersionHeader.s";
-
-	/**
-	 * <b>Configuration property:</b>  REST resource resolver.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.resourceResolver.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestResourceResolver&gt; | RestResourceResolver</code>
-	 * 	<li><b>Default:</b> {@link RestResourceResolverSimple}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * The resolver used for resolving child resources.
-	 * 
-	 * <p>
-	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_resourceResolver}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#resourceResolver()} 
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#resourceResolver(Class)}
-					<li>{@link RestContextBuilder#resourceResolver(RestResourceResolver)}
-				</ul>
-	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
-	 *	</ul>
-	 */
-	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
-
-	/**
-	 * <b>Configuration property:</b>  REST logger.
-	 * 
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.logger.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestLogger&gt; | RestLogger</code>
-	 * 	<li><b>Default:</b> {@link RestLogger.Normal}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Specifies the logger to use for logging.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_logger}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#logger()} 
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#logger(Class)}
-					<li>{@link RestContextBuilder#logger(RestLogger)} 
-				</ul>
-	 * 	<li>The {@link RestLogger.Normal} logger can be used to provide basic error logging to the Java logger.
-	 *	</ul>
-	 */
-	public static final String REST_logger = PREFIX + "logger.o";
-
-	/**
-	 * <b>Configuration property:</b>  REST call handler.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.callHandler.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestCallHandler&gt; | RestCallHandler</code>
-	 * 	<li><b>Default:</b> {@link RestCallHandler}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
-
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_callHandler}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#callHandler()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#callHandler(Class)}
-	 * 			<li>{@link RestContextBuilder#callHandler(RestCallHandler)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	public static final String REST_callHandler = PREFIX + "callHandler.o";
-
-	/**
-	 * <b>Configuration property:</b>  REST info provider. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.infoProvider.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> RestInfoProvider&gt; | RestInfoProvider</code>
-	 * 	<li><b>Default:</b> {@link RestInfoProvider}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Class used to retrieve title/description/swagger information about a resource.
-	 *
-	 * <p>
-	 * Subclasses can be used to customize the documentation on a resource.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_infoProvider}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#infoProvider()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#infoProvider(Class)}
-	 * 			<li>{@link RestContextBuilder#infoProvider(RestInfoProvider)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
-	
-	/**
-	 * <b>Configuration property:</b>  Resource path.   
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.path.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Identifies the URL subpath relative to the parent resource.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_path}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#path()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#path(String)} 
-	 * 		</ul>
-	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
-	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
-	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
-	 * 		{@link RestResource#children()} annotation.
-	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-	 *	</ul>
-	 */
-	public static final String REST_path = PREFIX + "path.s";
-
-	/**
-	 * <b>Configuration property:</b>  Resource context path. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.contextPath.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Overrides the context path value for this resource and any child resources.
-	 *
-	 * <p>
-	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
-	 * the context path is not actually specified on the servlet container.
-	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
-	 * will return this value instead of the actual context path of the web app.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_contextPath}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#contextPath()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#contextPath(String)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	public static final String REST_contextPath = PREFIX + "contextPath.s";
-	
-	/**
-	 * <b>Configuration property:</b>  Static file mappings. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.staticFiles.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;StaticFileMapping&gt;</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Used to define paths and locations of statically-served files such as images or HTML documents.
-	 * 
-	 * <p>
-	 * Static files are found by calling {@link #getClasspathResource(String,Locale)} which uses the registered 
-	 * {@link ClasspathResourceFinder} for locating files on the classpath (or other location).
-	 * 
-	 * <p>
-	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
-	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.foo.mypackage;
-	 * 
-	 * 	<ja>@RestResource</ja>(
-	 * 		path=<js>"/myresource"</js>,
-	 * 		staticFiles={<js>"htdocs:docs"</js>,<js>"styles:styles"</js>}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {...}
-	 * </p>
-	 * 
-	 * <p>
-	 * In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find 
-	 * the <l>foobar.html</l> file in the following ordered locations:
-	 * <ol>
-	 * 	<li><l>com.foo.mypackage.docs</l> package.
-	 * 	<li><l>org.apache.juneau.rest.docs</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.rest</l>).
-	 * 	<li><l>[working-dir]/docs</l> directory.
-	 * </ol>
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_staticFiles}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#staticFiles()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#staticFiles(String)},
-	 * 			<li>{@link RestContextBuilder#staticFiles(Class,String)}
-	 * 			<li>{@link RestContextBuilder#staticFiles(String,String)}
-	 * 			<li>{@link RestContextBuilder#staticFiles(Class,String,String)} 
-	 * 			<li>{@link RestContextBuilder#staticFiles(StaticFileMapping...)} 
-	 * 		</ul>
-	 * 	<li>Mappings are cumulative from parent to child.  
-	 * 	<li>Child resources can override mappings made on parent resources.
-	 * 	<li>The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
-	 * 	<li>The resource finder is configured via the {@link #REST_classpathResourceFinder} setting, and can be
-	 * 		overridden to provide customized handling of resource retrieval.
-	 * 	<li>The {@link #REST_useClasspathResourceCaching} setting can be used to cache static files in memory
-	 * 		to improve performance.
-	 * </ul>
-	 */
-	public static final String REST_staticFiles = PREFIX + "staticFiles.lo";
-	
-	/**
-	 * <b>Configuration property:</b>  Messages. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.messages.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;MessageBundleLocation&gt;</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Identifies the location of the resource bundle for this class.
-	 *
-	 * <p>
-	 * This annotation is used to provide localized messages for the following methods:
-	 * <ul>
-	 * 	<li>{@link RestRequest#getMessage(String, Object...)}
-	 * 	<li>{@link RestContext#getMessages()}
-	 * </ul>
-	 *
-	 * <p>
-	 * Refer to the {@link MessageBundle} class for a description of the message key formats used in the properties file.
-	 *
-	 * <p>
-	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
-	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
-	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_messages}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#messages()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#messages(String)},
-	 * 			<li>{@link RestContextBuilder#messages(Class,String)}
-	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation)} 
-	 * 		</ul>
-	 * 	<li>Mappings are cumulative from parent to child.  
-	 * </ul>
-	 */
-	public static final String REST_messages = PREFIX + "messages.lo";
-	
-	/**
-	 * <b>Configuration property:</b>  Static file response headers. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.staticFileResponseHeaders.omo"</js>
-	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b> <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Used to customize the headers on responses returned for statically-served files.
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_staticFileResponseHeaders}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#staticFileResponseHeaders()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#staticFileResponseHeaders(boolean,Map)}
-	 * 			<li>{@link RestContextBuilder#staticFileResponseHeaders(String...)}
-	 * 			<li>{@link RestContextBuilder#staticFileResponseHeader(String,String)}
-	 * 		</ul>
-	 * </ul>
-	 */
-	public static final String REST_staticFileResponseHeaders = PREFIX + "staticFileResponseHeaders.omo";
-	
-	/**
-	 * <b>Configuration property:</b>  Classpath resource finder. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.classpathResourceFinder.o"</js>
-	 * 	<li><b>Data type:</b> {@link ClasspathResourceFinder}
-	 * 	<li><b>Default:</b> {@link ClasspathResourceFinderBasic}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Used to retrieve localized files from the classpath.
-	 * 
-	 * <p>
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_classpathResourceFinder}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#classpathResourceFinder()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#classpathResourceFinder(Class)}
-	 * 			<li>{@link RestContextBuilder#classpathResourceFinder(ClasspathResourceFinder)}
-	 * 		</ul>
-	 * 	<li>
-	 * 		The default value is {@link ClasspathResourceFinderBasic} which provides basic support for finding localized
-	 * 		resources on the classpath and JVM working directory.
-	 * 		<br>The {@link ClasspathResourceFinderRecursive} is another option that also recursively searches for resources
-	 * 		up the parent class hierarchy.
-	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
-	 * </ul>
-	 */
-	public static final String REST_classpathResourceFinder = PREFIX + "classpathResourceFinder.o";
-	
-	/**
 	 * <b>Configuration property:</b>  Use classpath resource caching. 
 	 *
 	 * <ul>
@@ -1032,6 +1217,35 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_useClasspathResourceCaching = PREFIX + "useClasspathResourceCaching.b";
 
+	/**
+	 * <b>Configuration property:</b>  Use stack trace hashes.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.useStackTraceHashes.b"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 *
+	 * <p>
+	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
+	 * made available through the {@link RestException#getOccurrence()} method.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_useStackTraceHashes}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#useStackTraceHashes()}
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#useStackTraceHashes(boolean)}
+	 * 		</ul>
+	 *	</ul>
+	 */
+	public static final String REST_useStackTraceHashes = PREFIX + "useStackTraceHashes.b";
+	
 	/**
 	 * <b>Configuration property:</b>  HTML Widgets. 
 	 *
@@ -1095,220 +1309,6 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_widgets = PREFIX + "widgets.lo";
 	
-	/**
-	 * <b>Configuration property:</b>  MIME types. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.mimeTypes.ss"</js>
-	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Defines MIME-type file type mappings.
-	 * 
-	 * <p>
-	 * Used for specifying the content type on file resources retrieved through the following methods:
-	 * <ul>
-	 * 	<li>{@link RestContext#resolveStaticFile(String)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String)}
-	 * </ul>
-	 * 
-	 * <p>
-	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_mimeTypes}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#mimeTypes()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#mimeTypes(String...)}
-	 * 		</ul>
-	 * 	<li>Values are .mime.types formatted entry string.
-	 * 		<br>Example: <js>"image/svg+xml svg"</js>
-	 * </ul>
-	 */
-	public static final String REST_mimeTypes = PREFIX + "mimeTypes.ss";
-
-	/**
-	 * <b>Configuration property:</b>  Serializers. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.serializers.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Serializer&gt; | Serializer&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Adds class-level serializers to this resource.
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_serializers}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#serializers()} 
-	 * 			<li>{@link RestMethod#serializers()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	public static final String REST_serializers = PREFIX + "serializers.lo";
-
-	/**
-	 * <b>Configuration property:</b>  Parsers. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.parsers.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Parser&gt; | Parser&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Adds class-level parsers to this resource.
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_parsers}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#parsers()} 
-	 * 			<li>{@link RestMethod#parsers()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	public static final String REST_parsers = PREFIX + "parsers.lo";
-
-	/**
-	 * <b>Configuration property:</b>  HTTP part serializer. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.partSerializer.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartSerializer&gt; | HttpPartSerializer</code>
-	 * 	<li><b>Default:</b> {@link SimpleUonPartSerializer}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#partSerializer()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
-	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	public static final String REST_partSerializer = PREFIX + "partSerializer.o";
-
-	/**
-	 * <b>Configuration property:</b>  HTTP part parser. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.partParser.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class &lt;? <jk>extends</jk> HttpPartParser&gt; | HttpPartParser</code>
-	 * 	<li><b>Default:</b> {@link UonPartParser}
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_partParser}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#partParser()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partParser(Class)}
-	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	public static final String REST_partParser = PREFIX + "partParser.o";
-
-	/**
-	 * <b>Configuration property:</b>  Compression encoders. 
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.encoders.o"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Encoder&gt; | Encoder&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-	 * </ul>
-	 * 
-	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
-	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
-	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
-	 * 		...
-	 * 	}
-	 * </p>
-	 * 
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_encoders}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#encoders()} 
-	 * 			<li>{@link RestMethod#encoders()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
-	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
-	 * 		</ul>
-	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
-	 * 		{@link PropertyStore} object.
-	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
-	 * </ul>
-	 */
-	public static final String REST_encoders = PREFIX + "encoders.lo";
-
 	
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -1442,7 +1442,7 @@ public final class RestContext extends BeanContext {
 			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);	
 			
-			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLogger.NoOp.class, false);
+			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, RestLogger.NoOp.class, true, ps);
 
 			varResolver = builder.varResolverBuilder
 				.vars(
@@ -1472,7 +1472,7 @@ public final class RestContext extends BeanContext {
 			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, SimpleUonPartSerializer.class, true, resource, ps);
 			partParser = getInstanceProperty(REST_partSerializer, HttpPartParser.class, UonPartParser.class, true, resource, ps);
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();
-			beanContext = BeanContext.create().apply(ps).add(properties).build();
+			beanContext = BeanContext.create().apply(ps).build();
 
 			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
@@ -1505,7 +1505,7 @@ public final class RestContext extends BeanContext {
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 			
 			Map<String,Widget> _widgets = new LinkedHashMap<>();
-			for (Widget w : getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0], true, resource, ps))
+			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], true, ps))
 				_widgets.put(w.getName(), w);
 			this.widgets = Collections.unmodifiableMap(_widgets);
 
@@ -1534,13 +1534,13 @@ public final class RestContext extends BeanContext {
 				_postInitChildFirstMethodParams = new ArrayList<>(),
 				_destroyMethodParams = new ArrayList<>();
 
-			for (java.lang.reflect.Method method : resource.getClass().getMethods()) {
+			for (java.lang.reflect.Method method : resourceClass.getMethods()) {
 				if (method.isAnnotationPresent(RestMethod.class)) {
 					RestMethod a = method.getAnnotation(RestMethod.class);
 					methodsFound.add(method.getName() + "," + a.name() + "," + a.path());
 					try {
 						if (! Modifier.isPublic(method.getModifiers()))
-							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", this.getClass().getName(), method.getName());
+							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), method.getName());
 
 						CallMethod sm = new CallMethod(resource, method, this);
 						String httpMethod = sm.getHttpMethod();
@@ -1602,12 +1602,12 @@ public final class RestContext extends BeanContext {
 							addToRouter(routers, httpMethod, sm);
 						}
 					} catch (RestServletException e) {
-						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", this.getClass().getName(), JsonSerializer.DEFAULT_LAX.serialize(methodsFound)).initCause(e);
+						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", resourceClass.getName(), JsonSerializer.DEFAULT_LAX.serialize(methodsFound)).initCause(e);
 					}
 				}
 			}
 
-			for (Method m : ClassUtils.getAllMethods(resource.getClass(), true)) {
+			for (Method m : ClassUtils.getAllMethods(resourceClass, true)) {
 				if (ClassUtils.isPublic(m) && m.isAnnotationPresent(RestHook.class)) {
 					HookEvent he = m.getAnnotation(RestHook.class).value();
 					String sig = ClassUtils.getMethodSignature(m);
@@ -1700,7 +1700,7 @@ public final class RestContext extends BeanContext {
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverSimple.class : parentContext.resourceResolver, true, this);
+			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverSimple.class : parentContext.resourceResolver, true, this, ps);
 			for (Object o : builder.childResources) {
 				String path = null;
 				Object r = null;
@@ -1740,8 +1740,8 @@ public final class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandler.class, true, this);
-			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProvider.class, true, this);
+			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, RestCallHandler.class, true, this, ps);
+			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, RestInfoProvider.class, true, this, ps);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -1758,27 +1758,6 @@ public final class RestContext extends BeanContext {
 		if (! routers.containsKey(httpMethodName))
 			routers.put(httpMethodName, new CallRouter.Builder(httpMethodName));
 		routers.get(httpMethodName).add(cm);
-	}
-
-	static final boolean getBoolean(Object o, String systemProperty, boolean def) {
-		if (o == null)
-			o = SystemUtils.getFirstBoolean(def, systemProperty);
-		return "true".equalsIgnoreCase(o.toString());
-	}
-
-	static final String getString(Object o, String systemProperty, String def) {
-		if (o == null)
-			o = SystemUtils.getFirstString(def, systemProperty);
-		return o.toString();
-	}
-
-	static final long getLong(Object o, String systemProperty, long def) {
-		String s = StringUtils.toString(o);
-		if (s == null)
-			s = System.getProperty(systemProperty);
-		if (StringUtils.isEmpty(s))
-			return def;
-		return StringUtils.parseLongWithSuffix(s);
 	}
 
 	/**
@@ -1849,9 +1828,12 @@ public final class RestContext extends BeanContext {
 	 * The following is the default list of supported variables:
 	 * <ul>
 	 * 	<li><code>$C{key[,defaultValue]}</code> - Config file entry. See {@link ConfigFileVar}.
+	 * 	<li><code>$CO{arg1[,arg2...]}</code> - Coalesce variable. See {@link CoalesceVar}.
+	 * 	<li><code>$CR{arg1[,arg2...]}</code> - Coalesce-and-recurse variable. See {@link CoalesceAndRecurseVar}.
 	 * 	<li><code>$E{envVar[,defaultValue]}</code> - Environment variable. See {@link EnvVariablesVar}.
 	 * 	<li><code>$F{path[,defaultValue]}</code> - File resource. See {@link FileVar}.
 	 * 	<li><code>$I{name[,defaultValue]}</code> - Servlet init parameter. See {@link ServletInitParamVar}.
+	 * 	<li><code>$IF{booleanArg,thenValue[,elseValue]}</code> - If/else variable. See {@link IfVar}.
 	 * 	<li><code>$L{key[,args...]}</code> - Localized message. See {@link LocalizationVar}.
 	 * 	<li><code>$RA{key1[,key2...]}</code> - Request attribute variable. See {@link RequestAttributeVar}.
 	 * 	<li><code>$RF{key1[,key2...]}</code> - Request form-data variable. See {@link RequestFormDataVar}.
@@ -1861,18 +1843,10 @@ public final class RestContext extends BeanContext {
 	 * 	<li><code>$R{key1[,key2...]}</code> - Request object variable. See {@link RequestVar}.
 	 * 	<li><code>$S{systemProperty[,defaultValue]}</code> - System property. See {@link SystemPropertiesVar}.
 	 * 	<li><code>$SA{contentType,key[,defaultValue]}</code> - Serialized request attribute. See {@link SerializedRequestAttrVar}.
+	 * 	<li><code>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</code> - Switch variable. See {@link SwitchVar}.
 	 * 	<li><code>$U{uri}</code> - URI resolver. See {@link UrlVar}.
 	 * 	<li><code>$UE{uriPart}</code> - URL-Encoder. See {@link UrlEncodeVar}.
 	 * 	<li><code>$W{widgetName}</code> - HTML widget variable. See {@link WidgetVar}.
-	 * </ul>
-	 *
-	 * <p>
-	 * The following syntax variables are also provided:
-	 * <ul>
-	 * 	<li><code>$CO{string1[,string2...]}</code> - Coalesce variable. See {@link CoalesceVar}.
-	 * 	<li><code>$CR{string1[,string2...]}</code> - Coalesce-and-recurse variable. See {@link CoalesceAndRecurseVar}.
-	 * 	<li><code>$IF{booleanArg,thenValue[,elseValue]}</code> - If/else variable. See {@link IfVar}.
-	 * 	<li><code>$SW{stringArg(,pattern,thenValue)+[,elseValue]}</code> - Switch variable. See {@link SwitchVar}.
 	 * </ul>
 	 *
 	 * <p>
@@ -2853,21 +2827,6 @@ public final class RestContext extends BeanContext {
 		if (parentContext != null)
 			return parentContext.getContextPath();
 		return null;
-	}
-
-	//----------------------------------------------------------------------------------------------------
-	// Utility methods
-	//----------------------------------------------------------------------------------------------------
-
-	/**
-	 * Takes in an object of type T or a Class<T> and either casts or constructs a T.
-	 */
-	static final <T> T resolve(Object outer, Class<T> c, Object o, Object...cArgs) throws RestServletException {
-		try {
-			return ClassUtils.newInstanceFromOuter(outer, c, o, true, cArgs);
-		} catch (Exception e) {
-			throw new RestServletException("Exception occurred while constructing class ''{0}''", c).initCause(e);
-		}
 	}
 
 	@Override /* BeanContextBuilder */

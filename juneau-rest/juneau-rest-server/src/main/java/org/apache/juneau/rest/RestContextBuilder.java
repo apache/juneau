@@ -35,7 +35,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.response.*;
-import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -149,7 +148,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					EnvVariablesVar.class,
 					ConfigFileVar.class,
 					IfVar.class,
-					SwitchVar.class
+					SwitchVar.class,
+					CoalesceVar.class,
+					CoalesceAndRecurseVar.class
 				);
 
 			VarResolver vr = varResolverBuilder.build();
@@ -327,26 +328,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * used to resolve string variables of the form <js>"$X{...}"</js>.
 	 *
 	 * <p>
-	 * By default, this config includes the following variables:
-	 * <ul>
-	 * 	<li>{@link SystemPropertiesVar}
-	 * 	<li>{@link EnvVariablesVar}
-	 * 	<li>{@link ConfigFileVar}
-	 * 	<li>{@link IfVar}
-	 * 	<li>{@link SwitchVar}
-	 * </ul>
-	 *
-	 * <p>
-	 * Later during the construction of {@link RestContext}, we add the following variables:
-	 * <ul>
-	 * 	<li>{@link LocalizationVar}
-	 * 	<li>{@link RequestVar}
-	 * 	<li>{@link SerializedRequestAttrVar}
-	 * 	<li>{@link ServletInitParamVar}
-	 * 	<li>{@link UrlVar}
-	 * 	<li>{@link UrlEncodeVar}
-	 * 	<li>{@link WidgetVar}
-	 * </ul>
+	 * See {@link RestContext#getVarResolver()} for a list of predefined variables.
 	 *
 	 * @param vars The {@link Var} classes to add to this config.
 	 * @return This object (for method chaining).
