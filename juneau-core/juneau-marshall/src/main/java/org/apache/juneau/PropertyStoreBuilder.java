@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -21,6 +19,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.PropertyStore.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
 
 /**
  * A builder for {@link PropertyStore} objects.
@@ -464,17 +463,15 @@ public class PropertyStoreBuilder {
 		abstract Object peek();
 
 		void add(String arg, Object value) {
-			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).",
-				JsonSerializer.DEFAULT_LAX.toString(value), value.getClass().getSimpleName(), name, type);
+			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
 		}
 
 		void remove(Object value) {
-			throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}).",
-				JsonSerializer.DEFAULT_LAX.toString(value), value.getClass().getSimpleName(), name, type);
+			throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", string(value), className(value), name, type);
 		}
 
 		Object convert(Object value) {
-			return value == null ? null : type.converter.convert(value, this);
+			return value == null ? null : type.converter.convert(value);
 		}
 	}
 	
@@ -522,26 +519,28 @@ public class PropertyStoreBuilder {
 	
 	@SuppressWarnings("unchecked")
 	static class MutableSetProperty extends MutableProperty {
-		private final Set<Object> value;
-		private Set<Object> oldValue;
+		private final Set<Object> set;
 
 		MutableSetProperty(String name, PropertyType type, Object value) {
 			super(name, type);
-			this.value = new ConcurrentSkipListSet<>(type.comparator());
+			set = new ConcurrentSkipListSet<>(type.comparator());
 			set(value);
 		}
 		
 		@Override /* MutableProperty */
 		synchronized Property build() {
-			return new Property(name, Collections.unmodifiableSet(new LinkedHashSet<>(value)), type);
+			return new Property(name, Collections.unmodifiableSet(new LinkedHashSet<>(set)), type);
 		}
 
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
-			this.oldValue = this.value.isEmpty() ? Collections.EMPTY_SET : new LinkedHashSet<>(this.value);
-			this.value.clear();
-			add(null, value);
-			this.oldValue = null;
+			try {
+				Set<Object> newSet = PropertyStoreUtils.merge(set, type.converter, value);
+				set.clear();
+				set.addAll(newSet);
+			} catch (ParseException e) {
+				throw new ConfigException("Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type).initCause(e);
+			}
 		}
 		
 		@Override /* MutableProperty */
@@ -551,69 +550,57 @@ public class PropertyStoreBuilder {
 		}
 		
 		@Override /* MutableProperty */
-		synchronized void add(String arg, Object value) {
+		synchronized void add(String arg, Object o) {
 			if (arg != null)
 				throw new ConfigException("Cannot use argument ''{0}'' on add command for property ''{1}'' ({2})", arg, name, type);
-			if (value != null) {
-				if (value.getClass().isArray()) {
-					for (int i = 0; i < Array.getLength(value); i++)
-						add(null, Array.get(value, i));
-				} else if (value instanceof Collection) {
-					for (Object o : (Collection<Object>)value)
-						add(null, o);
-				} else if (isObjectList(value)) {
+			if (o != null) {
+				if (o.getClass().isArray()) {
+					for (int i = 0; i < Array.getLength(o); i++)
+						add(null, Array.get(o, i));
+				} else if (o instanceof Collection) {
+					for (Object o2 : (Collection<Object>)o)
+						add(null, o2);
+				} else if (isObjectList(o)) {
 					try {
-						add(null, new ObjectList(value.toString()));
+						add(null, new ObjectList(o.toString()));
 					} catch (Exception e) {
-						throw new ConfigException(
-							"Cannot add value {0} ({1}) to property ''{2}'' ({3}).",
-							JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
-						);
+						throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 					}
-				} else if (isNone(value)) {
-					this.value.clear();
-				} else if (isInherit(value) && oldValue != null) {
-					add(null, oldValue);
 				} else {
-					value = convert(value);
-					this.value.add(value);
+					set.add(convert(o));
 				}
 			}
 		}
 		
 		@Override /* MutableProperty */
-		synchronized void remove(Object value) {
-			if (value != null) {
-				if (value.getClass().isArray()) {
-					for (int i = 0; i < Array.getLength(value); i++)
-						remove(Array.get(value, i));
-				} else if (value instanceof Collection) {
-					for (Object o : (Collection<Object>)value)
-						remove(o);
-				} else if (isObjectList(value)) {
+		synchronized void remove(Object o) {
+			if (o != null) {
+				if (o.getClass().isArray()) {
+					for (int i = 0; i < Array.getLength(o); i++)
+						remove(Array.get(o, i));
+				} else if (o instanceof Collection) {
+					for (Object o2 : (Collection<Object>)o)
+						remove(o2);
+				} else if (isObjectList(o)) {
 					try {
-						remove(new ObjectList(value.toString()));
+						remove(new ObjectList(o.toString()));
 					} catch (Exception e) {
-						throw new ConfigException(
-							"Cannot remove value {0} ({1}) from property ''{2}'' ({3}) because it''s not a valid JSON array.",
-							JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
-						);
+						throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}) because it''s not a valid JSON array.", string(o), className(o), name, type);
 					}					
 				} else {
-					value = convert(value);
-					this.value.remove(value);
+					set.remove(convert(o));
 				}
 			}
 		}
 		
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
-			return this.value.isEmpty();
+			return set.isEmpty();
 		}
 
 		@Override /* MutableProperty */
 		synchronized Object peek() {
-			return value;
+			return set;
 		}
 	}
 	
@@ -623,8 +610,7 @@ public class PropertyStoreBuilder {
 	
 	@SuppressWarnings("unchecked")
 	static class MutableListProperty extends MutableProperty {
-		private final List<Object> value = new CopyOnWriteArrayList<>();
-		private List<Object> oldValue;
+		private final List<Object> list = new CopyOnWriteArrayList<>();
 
 		MutableListProperty(String name, PropertyType type, Object value) {
 			super(name, type);
@@ -633,15 +619,20 @@ public class PropertyStoreBuilder {
 		
 		@Override /* MutableProperty */
 		synchronized Property build() {
-			return new Property(name, Collections.unmodifiableList(CollectionUtils.reverse(new ArrayList<>(value))), type);
+			return new Property(name, Collections.unmodifiableList(CollectionUtils.reverse(new ArrayList<>(list))), type);
 		}
 
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
-			this.oldValue = this.value.isEmpty() ? Collections.EMPTY_LIST : new ArrayList<>(this.value);
-			this.value.clear();
-			add(null, value);
-			this.oldValue = null;
+			try {
+				List<Object> oldList = CollectionUtils.reverseCopy(list);
+				List<Object> newList = PropertyStoreUtils.merge(oldList, type.converter, value);
+				Collections.reverse(newList);
+				list.clear();
+				list.addAll(newList);
+			} catch (ParseException e) {
+				throw new ConfigException("Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type).initCause(e);
+			}
 		}
 		
 		@Override /* MutableProperty */
@@ -650,22 +641,22 @@ public class PropertyStoreBuilder {
 		}
 
 		@Override /* MutableProperty */
-		synchronized void add(String arg, Object value) {
+		synchronized void add(String arg, Object o) {
 			if (arg != null && ! StringUtils.isNumeric(arg))
 				throw new ConfigException("Invalid argument ''{0}'' on add command for property ''{1}'' ({2})", arg, name, type);
 			
 			// Note that since lists are stored in reverse-order, the index should be the compliment.
 			
-			int index = arg == null ? this.value.size() : this.value.size() - Integer.parseInt(arg);
+			int index = arg == null ? list.size() : list.size() - Integer.parseInt(arg);
 			if (index < 0)
 				index = 0;
-			else if (index > this.value.size())
-				index = this.value.size();
-			add(index, value);
+			else if (index > list.size())
+				index = list.size();
+			add(index, o);
 		}
 		
-		private synchronized int add(int index, Object value) {
-			if (value != null) {
+		private synchronized int add(int index, Object o) {
+			if (o != null) {
 				
 				// Important!
 				// Arrays and collections are inserted in REVERSE order.
@@ -675,33 +666,24 @@ public class PropertyStoreBuilder {
 				// subsequent calls to addTo() are added to the end.
 				// What you get is a list ordered in least-to-most important.
 				
-				if (value.getClass().isArray()) {
-					for (int i = Array.getLength(value) - 1; i >= 0; i--)
-						index = add(index, Array.get(value, i));
-				} else if (value instanceof Collection) {
-					for (Object o : CollectionUtils.reverseIterable((Collection<Object>)value))
-						index = add(index, o);
-				} else if (isObjectList(value)) {
+				if (o.getClass().isArray()) {
+					for (int i = Array.getLength(o) - 1; i >= 0; i--)
+						index = add(index, Array.get(o, i));
+				} else if (o instanceof Collection) {
+					for (Object o2 : CollectionUtils.reverseIterable((Collection<Object>)o))
+						index = add(index, o2);
+				} else if (isObjectList(o)) {
 					try {
-						index = add(index, new ObjectList(value.toString()));
+						index = add(index, new ObjectList(o.toString()));
 					} catch (Exception e) {
-						throw new ConfigException(
-							"Cannot add value {0} ({1}) to property ''{2}'' ({3}).",
-							JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
-						);
+						throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 					}
-				} else if (isNone(value)) {
-					this.value.clear();
-					return -1;
-				} else if (isInherit(value) && oldValue != null) {
-					for (Object o : oldValue)
-						index = add(index, o);
 				} else {
-					value = convert(value);
-					boolean replaced = this.value.remove(value);
+					o = convert(o);
+					boolean replaced = list.remove(o);
 					if (replaced)
 						index--;
-					this.value.add(index, value);
+					list.add(index, o);
 					index++;
 				}
 			}
@@ -709,38 +691,34 @@ public class PropertyStoreBuilder {
 		}
 
 		@Override /* MutableProperty */
-		synchronized void remove(Object value) {
-			if (value != null) {
-				if (value.getClass().isArray()) {
-					for (int i = 0; i < Array.getLength(value); i++)
-						remove(Array.get(value, i));
-				} else if (value instanceof Collection) {
-					for (Object o : (Collection<Object>)value)
-						remove(o);
-				} else if (isObjectList(value)) {
+		synchronized void remove(Object o) {
+			if (o != null) {
+				if (o.getClass().isArray()) {
+					for (int i = 0; i < Array.getLength(o); i++)
+						remove(Array.get(o, i));
+				} else if (o instanceof Collection) {
+					for (Object o2 : (Collection<Object>)o)
+						remove(o2);
+				} else if (isObjectList(o)) {
 					try {
-						remove(new ObjectList(value.toString()));
+						remove(new ObjectList(o.toString()));
 					} catch (Exception e) {
-						throw new ConfigException(
-							"Cannot remove value {0} ({1}) from property ''{2}'' ({3}) because it''s not a valid JSON array.",
-							JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
-						);
+						throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}) because it''s not a valid JSON array.", string(o), className(o), name, type);
 					}					
 				} else {
-					value = convert(value);
-					this.value.remove(value);
+					list.remove(convert(o));
 				}
 			}
 		}
 
 		@Override /* MutableProperty */
 		synchronized boolean isEmpty() {
-			return this.value.isEmpty();
+			return list.isEmpty();
 		}
 
 		@Override /* MutableProperty */
 		synchronized Object peek() {
-			return value;
+			return list;
 		}
 	}
 	
@@ -781,34 +759,28 @@ public class PropertyStoreBuilder {
 		}
 
 		@Override /* MutableProperty */
-		synchronized void add(String arg, Object value) {
+		synchronized void add(String arg, Object o) {
 			if (arg != null) {
-				value = convert(value);
-				if (value == null)
+				o = convert(o);
+				if (o == null)
 					this.map.remove(arg);
 				else
-					this.map.put(arg, value);
+					this.map.put(arg, o);
 				
-			} else if (value != null) {
-				if (value instanceof Map) {
-					Map m = (Map)value;
+			} else if (o != null) {
+				if (o instanceof Map) {
+					Map m = (Map)o;
 					for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 						if (e.getKey() != null)
 							add(e.getKey().toString(), e.getValue());
-				} else if (isObjectMap(value)) {
+				} else if (isObjectMap(o)) {
 					try {
-						add(null, new ObjectMap(value.toString()));
+						add(null, new ObjectMap(o.toString()));
 					} catch (Exception e) {
-						throw new ConfigException(
-							"Cannot add {0} ({1}) to property ''{2}'' ({3}) because it''s not a valid JSON object.",
-							JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
-						);
+						throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}) because it''s not a valid JSON object.", string(o), className(o), name, type);
 					}
 				} else {
-					throw new ConfigException(
-						"Cannot add {0} ({1}) to property ''{2}'' ({3}).",
-						JsonSerializer.DEFAULT_LAX.toString(value), getReadableClassNameForObject(value), name, type
-					);
+					throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 				}
 			}
 		}
@@ -846,6 +818,7 @@ public class PropertyStoreBuilder {
 		}
 	}
 	
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
@@ -857,23 +830,15 @@ public class PropertyStoreBuilder {
 		}
 		return false;
 	}
-
-	static boolean isNone(Object o) {
-		if (o instanceof CharSequence) {
-			String s = o.toString();
-			return "NONE".equals(s);
-		}
-		return false;
+	
+	static String string(Object value) {
+		return JsonSerializer.DEFAULT_LAX.toString(value);
 	}
-
-	static boolean isInherit(Object o) {
-		if (o instanceof CharSequence) {
-			String s = o.toString();
-			return "INHERIT".equals(s);
-		}
-		return false;
+	
+	static String className(Object value) {
+		return value.getClass().getSimpleName();
 	}
-
+	
 	static boolean isObjectMap(Object o) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();

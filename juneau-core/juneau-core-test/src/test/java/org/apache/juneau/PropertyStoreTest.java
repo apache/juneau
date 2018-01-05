@@ -161,7 +161,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.i/add", "foo", "Cannot add value 'foo' (String) to property 'f1.i' (Integer).");
 		testError(b, "A.f1.i/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.i' (Integer).");
 		testError(b, "A.f1.i/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.i' (Integer).");
-		testError(b, "A.f1.i", "foo", "Value 'foo' (String) cannot be converted to an Integer on property 'f1.i' (Integer).");
+		testError(b, "A.f1.i", "foo", "Value 'foo' (String) cannot be converted to an Integer.");
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.c/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.c' (Class).");
 		
 		// Do not allow this for security reasons.
-		testError(b, "A.f1.c", "java.lang.String", "Value 'java.lang.String' (String) cannot be converted to a Class on property 'f1.c' (Class).");
+		testError(b, "A.f1.c", "java.lang.String", "Value 'java.lang.String' (String) cannot be converted to a Class.");
 	}
 
 	@Test
@@ -394,8 +394,8 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.sc':['java.lang.String']}}", b.build());
 		
 		b.clear();
-		testError(b, "A.f1.sc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (java.lang.String) to property 'f1.sc' (Set<Class>).");  
-		testError(b, "A.f1.sc/add", "java.lang.Integer", "Value 'java.lang.Integer' (String) cannot be converted to a Class on property 'f1.sc' (Set<Class>).");
+		testError(b, "A.f1.sc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.sc' (Set<Class>).");  
+		testError(b, "A.f1.sc/add", "java.lang.Integer", "Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
 		b.set("A.f1.sc/add", new AList<Class<?>>().appendAll(Integer.class, String.class));  
@@ -608,7 +608,7 @@ public class PropertyStoreTest {
 		b.set("A.f1.ls/add.1", "['8','9']");  
 		assertObjectEquals("{A:{'f1.ls':['7','8','9','6','1','5','2','3','4']}}", b.build());
 
-		testError(b, "A.f1.li/add.123", "foo", "Value 'foo' (String) cannot be converted to an Integer on property 'f1.li' (List<Integer>).");
+		testError(b, "A.f1.li/add.123", "foo", "Value 'foo' (String) cannot be converted to an Integer.");
 		try {
 			b.addTo("A.f1.li", "foo", "bar");
 			fail("Exception expected.");
@@ -637,8 +637,8 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.lc':['java.lang.String']}}", b.build());
 		
 		b.clear();
-		testError(b, "A.f1.lc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (java.lang.String) to property 'f1.lc' (List<Class>).");  
-		testError(b, "A.f1.lc/add", "java.lang.Integer", "Value 'java.lang.Integer' (String) cannot be converted to a Class on property 'f1.lc' (List<Class>).");
+		testError(b, "A.f1.lc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.lc' (List<Class>).");  
+		testError(b, "A.f1.lc/add", "java.lang.Integer", "Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
 		b.set("A.f1.lc/add", new AList<Class<?>>().appendAll(Integer.class, String.class));  
@@ -681,7 +681,7 @@ public class PropertyStoreTest {
 		b.set("A.f1.lc/add.-10", Object.class);
 		assertObjectEquals("{A:{'f1.lc':['java.lang.Object','java.util.List','java.lang.String','java.util.Map','java.lang.Integer']}}", b.build());
 
-		testError(b, "A.f1.lc/add.123", "foo", "Value 'foo' (String) cannot be converted to a Class on property 'f1.lc' (List<Class>).");
+		testError(b, "A.f1.lc/add.123", "foo", "Value 'foo' (String) cannot be converted to a Class.");
 		try {
 			b.addTo("A.f1.lc", "foo", "bar");
 			fail("Exception expected.");
@@ -1584,13 +1584,13 @@ public class PropertyStoreTest {
 			b.removeFrom("A.foo.ss", "[xxx]");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot remove value '[xxx]' (java.lang.String) from property 'foo.ss' (Set<String>) because it's not a valid JSON array.", e.getMessage());
+			assertEquals("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>) because it's not a valid JSON array.", e.getMessage());
 		}
 		try {
 			b.removeFrom("A.foo.ls", "[xxx]");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot remove value '[xxx]' (java.lang.String) from property 'foo.ls' (List<String>) because it's not a valid JSON array.", e.getMessage());
+			assertEquals("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>) because it's not a valid JSON array.", e.getMessage());
 		}
 	}
 
@@ -1601,19 +1601,19 @@ public class PropertyStoreTest {
 			b.addTo("A.foo.sms", "{xxx}");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add '{xxx}' (java.lang.String) to property 'foo.sms' (Map<String,String>) because it's not a valid JSON object.", e.getMessage());
+			assertEquals("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>) because it's not a valid JSON object.", e.getMessage());
 		}
 		try {
 			b.addTo("A.foo.sms", "xxx");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add 'xxx' (java.lang.String) to property 'foo.sms' (Map<String,String>).", e.getMessage());
+			assertEquals("Cannot add 'xxx' (String) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 		try {
 			b.addTo("A.foo.sms", new StringBuilder("foo"));
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add 'foo' (java.lang.StringBuilder) to property 'foo.sms' (Map<String,String>).", e.getMessage());
+			assertEquals("Cannot add 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 	}
 
@@ -1739,6 +1739,19 @@ public class PropertyStoreTest {
 		psb.set("A.foo.ls", "['foo','bar']");
 		psb.set("A.foo.ls", "['baz','INHERIT','qux']");
 		assertEquals("{A:{'foo.ls':['baz','foo','bar','qux']}}", psb.build().toString());
+	}
+
+	@Test
+	public void testIndexedValuesOnList() {
+		PropertyStoreBuilder psb = PropertyStore.create();
+		
+		psb.set("A.foo.ls", "['foo','bar']");
+		psb.set("A.foo.ls", new String[]{"INHERIT", "[0]:baz"});
+		assertEquals("{A:{'foo.ls':['baz','foo','bar']}}", psb.build().toString());
+		psb.set("A.foo.ls", new String[]{"INHERIT", "[1]:qux"});
+		assertEquals("{A:{'foo.ls':['baz','qux','foo','bar']}}", psb.build().toString());
+		psb.set("A.foo.ls", new String[]{"INHERIT", "[10]:quux"});
+		assertEquals("{A:{'foo.ls':['baz','qux','foo','bar','quux']}}", psb.build().toString());
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

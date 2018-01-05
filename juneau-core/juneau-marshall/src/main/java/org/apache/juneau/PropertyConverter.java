@@ -12,60 +12,83 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import org.apache.juneau.PropertyStoreBuilder.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Used to convert property values to standardized Boolean/Integer/Class/Object values in property store builders.
+ * 
+ * @param <T> The normalized form.
  */
-interface PropertyConverter<T> {
-	T convert(Object o, MutableProperty p);
+public interface PropertyConverter<T> {
+	
+	/**
+	 * Convert the value to normalized form.
+	 *  
+	 * @param o The raw value.
+	 * @return The converted value.
+	 */
+	T convert(Object o);
 
+	/**
+	 * Converts objects to strings.
+	 */
 	static final PropertyConverter<String> STRING_CONVERTER = new PropertyConverter<String>() {
 		@Override
-		public String convert(Object o, MutableProperty p) {
+		public String convert(Object o) {
 			return ClassUtils.toString(o);
 		}
 	};
 	
+	/**
+	 * Converts objects to integers.
+	 */
 	static final PropertyConverter<Integer> INTEGER_CONVERTER = new PropertyConverter<Integer>() {
 		@Override
-		public Integer convert(Object o, MutableProperty p) {
+		public Integer convert(Object o) {
 			try {
 				if (o instanceof Integer)
 					return (Integer)o;
 				return Integer.valueOf(o.toString());
 			} catch (Exception e) {
-				throw new ConfigException("Value ''{0}'' ({1}) cannot be converted to an Integer on property ''{2}'' ({3}).", o, o.getClass().getSimpleName(), p.name, p.type);
+				throw new ConfigException("Value ''{0}'' ({1}) cannot be converted to an Integer.", o, o.getClass().getSimpleName());
 			}
 		}
 	};
 		
+	/**
+	 * Converts objects to booleans.
+	 */
 	static final PropertyConverter<Boolean> BOOLEAN_CONVERTER = new PropertyConverter<Boolean>() {
 		@Override
-		public Boolean convert(Object o, MutableProperty p) {
+		public Boolean convert(Object o) {
 			if (o instanceof Boolean)
 				return (Boolean)o;
 			return Boolean.parseBoolean(o.toString());
 		}
 	};
 		
+	/**
+	 * Converts objects to classes.
+	 */
 	static final PropertyConverter<Class<?>> CLASS_CONVERTER = new PropertyConverter<Class<?>>() {
 		@Override
-		public Class<?> convert(Object o, MutableProperty p) {
+		public Class<?> convert(Object o) {
 			try {
 				if (o instanceof Class)
 					return (Class<?>)o;
-				throw new ConfigException("Value ''{0}'' ({1}) cannot be converted to a Class on property ''{2}'' ({3}).", o, o.getClass().getSimpleName(), p.name, p.type);
+				throw new ConfigException("Value ''{0}'' ({1}) cannot be converted to a Class.", o, o.getClass().getSimpleName());
 			} catch (Exception e) {
-				throw new ConfigException("Value ''{0}'' ({1}) cannot be converted to a Class on property ''{2}'' ({3}).", o, o.getClass().getSimpleName(), p.name, p.type);
+				throw new ConfigException("Value ''{0}'' ({1}) cannot be converted to a Class.", o, o.getClass().getSimpleName());
 			}
 		}
 	};
 	
+	/**
+	 * Converts objects to objects.
+	 */
 	static final PropertyConverter<Object> OBJECT_CONVERTER = new PropertyConverter<Object>() {
 		@Override
-		public Object convert(Object o, MutableProperty p) {
+		public Object convert(Object o) {
 			return o;
 		}
 	};

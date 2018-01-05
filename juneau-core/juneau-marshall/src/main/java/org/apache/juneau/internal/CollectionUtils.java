@@ -116,4 +116,21 @@ public final class CollectionUtils {
 		Collections.reverse(l);
 		return l;
 	}
+	
+	/**
+	 * Creates a new copy of a list in reverse order.
+	 * 
+	 * @param l The old list.
+	 * @return 
+	 * 	A new list with reversed entries.
+	 * 	<br>Returns <jk>null</jk> if the list was <jk>null</jk>.
+	 * 	<br>Returns the same list if the list is empty.
+	 */
+	public static <T> List<T> reverseCopy(List<T> l) {
+		if (l == null || l.isEmpty())
+			return l;
+		List<T> l2 = new ArrayList<>(l);
+		Collections.reverse(l2);
+		return l2;
+	}
 }

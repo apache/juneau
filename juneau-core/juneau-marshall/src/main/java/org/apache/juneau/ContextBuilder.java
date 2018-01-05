@@ -40,6 +40,31 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Constructor.
+	 * 
+	 * <p>
+	 * Used in cases where multiple context builder are sharing the same property store builder.
+	 * <br>(e.g. <code>HtlmlDocBuilder</code>)
+	 * 
+	 * @param psb The property store builder to use.
+	 */
+	protected ContextBuilder(PropertyStoreBuilder psb) {
+		this.psb = psb;
+	}
+	
+	/**
+	 * Returns access to the inner property store builder.
+	 * 
+	 * <p>
+	 * Used in conjunction with {@link #ContextBuilder(PropertyStoreBuilder)} when builders share property store builders.
+	 * 
+	 * @return The inner property store builder.
+	 */
+	protected PropertyStoreBuilder getPropertyStoreBuilder() {
+		return psb;
+	}
+
+	/**
 	 * Build the object.
 	 *
 	 * @return The built object.
