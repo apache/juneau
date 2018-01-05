@@ -197,15 +197,17 @@ public @interface RestMethod {
 	Class<? extends RestMatcher>[] matchers() default {};
 
 	/**
+	 * Serializers. 
+	 *
+	 * <p>
 	 * Overrides the list of serializers assigned at the method level.
 	 *
 	 * <p>
 	 * Use this annotation when the list of serializers assigned to a method differs from the list of serializers
 	 * assigned at the servlet level.
-	 *
+	 * 
 	 * <p>
-	 * To append to the list of serializers assigned at the servlet level, use
-	 * <code>inherit=<js>"SERIALIZERS"</js></code>.
+	 * To append to the list of serializers assigned at the servlet level, use <code>inherit=<js>"SERIALIZERS"</js></code>.
 	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
@@ -221,10 +223,32 @@ public @interface RestMethod {
 	 * 		}
 	 * 	}
 	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_serializers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#serializers()} 
+	 * 			<li>{@link RestMethod#serializers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
 	/**
+	 * Parsers. 
+	 *
+	 * <p>
 	 * Overrides the list of parsers assigned at the method level.
 	 *
 	 * <p>
@@ -249,6 +273,27 @@ public @interface RestMethod {
 	 * 		}
 	 * 	}
 	 * </p>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_parsers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#parsers()} 
+	 * 			<li>{@link RestMethod#parsers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 * </ul>
 	 */
 	Class<? extends Parser>[] parsers() default {};
 

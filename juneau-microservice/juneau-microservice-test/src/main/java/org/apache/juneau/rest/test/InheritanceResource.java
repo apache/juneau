@@ -156,8 +156,7 @@ public class InheritanceResource extends RestServlet {
 		}
 
 		// Should show ['F1Swap','F2Swap','F3Swap']
-		// Inherited serializer already has parent filters applied.
-		@RestMethod(name=GET, path="/test2", pojoSwaps=F3Swap.class)
+		@RestMethod(name=GET, path="/test2", pojoSwaps=F3Swap.class, inherit="TRANSFORMS")
 		public Object[] test2() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}

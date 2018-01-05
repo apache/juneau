@@ -1092,60 +1092,74 @@ public final class RestContext extends BeanContext {
 	 */
 	public static final String REST_mimeTypes = PREFIX + "mimeTypes.ss";
 
-//	/**
-//	 * <b>Configuration property:</b>  Serializers. 
-//	 *
-//	 * <ul>
-//	 * 	<li><b>Name:</b> <js>"RestContext.serializers.lo"</js>
-//	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Serializer&gt; | Serializer&gt;</code>
-//	 * 	<li><b>Default:</b> empty list
-//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-//	 * </ul>
-//	 * 
-//	 * <h6 class='topic'>Notes:</h6>
-//	 * <ul class='spaced-list'>
-//	 * 	<li>Property:  {@link RestContext#REST_serializers}
-//	 * 	<li>Annotations: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestResource#serializers()} 
-//	 * 			<li>{@link RestMethod#serializers()} 
-//	 * 		</ul>
-//	 * 	<li>Methods: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
-//	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
-//	 * 		</ul>
-//	 * </ul>
-//	 */
-//	public static final String REST_serializers = PREFIX + "serializers.lo";
-//
-//	/**
-//	 * <b>Configuration property:</b>  Parsers. 
-//	 *
-//	 * <ul>
-//	 * 	<li><b>Name:</b> <js>"RestContext.parsers.lo"</js>
-//	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Parser&gt; | Parser&gt;</code>
-//	 * 	<li><b>Default:</b> empty list
-//	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
-//	 * </ul>
-//	 * 
-//	 * <h6 class='topic'>Notes:</h6>
-//	 * <ul class='spaced-list'>
-//	 * 	<li>Property:  {@link RestContext#REST_parsers}
-//	 * 	<li>Annotations: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestResource#parsers()} 
-//	 * 			<li>{@link RestMethod#parsers()} 
-//	 * 		</ul>
-//	 * 	<li>Methods: 
-//	 * 		<ul>
-//	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
-//	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
-//	 * 		</ul>
-//	 * </ul>
-//	 */
-//	public static final String REST_parsers = PREFIX + "parsers.lo";
-//
+	/**
+	 * <b>Configuration property:</b>  Serializers. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.serializers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Serializer&gt; | Serializer&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Adds class-level serializers to this resource.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_serializers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#serializers()} 
+	 * 			<li>{@link RestMethod#serializers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_serializers = PREFIX + "serializers.lo";
+
+	/**
+	 * <b>Configuration property:</b>  Parsers. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.parsers.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class &lt;? <jk>extends</jk> Parser&gt; | Parser&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Adds class-level parsers to this resource.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_parsers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#parsers()} 
+	 * 			<li>{@link RestMethod#parsers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * </ul>
+	 */
+	public static final String REST_parsers = PREFIX + "parsers.lo";
+
 	/**
 	 * <b>Configuration property:</b>  HTTP part serializer. 
 	 *
@@ -1354,7 +1368,7 @@ public final class RestContext extends BeanContext {
 			this.builder = builder;
 			this.parentContext = builder.parentContext;
 			
-			PropertyStore ps = getPropertyStore();
+			PropertyStore ps = getPropertyStore().builder().add(builder.properties).build();
 
 			contextPath = nullIfEmpty(getProperty(REST_contextPath, String.class, null));
 			allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
@@ -1407,8 +1421,8 @@ public final class RestContext extends BeanContext {
 			configFile = builder.configFile.getResolving(this.varResolver);
 			
 			properties = builder.properties;
-			serializers = builder.serializers.apply(ps).add(properties).build();
-			parsers = builder.parsers.apply(ps).add(properties).build();
+			serializers = SerializerGroup.create().append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], true, resource, ps)).build();
+			parsers = ParserGroup.create().append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], true, resource, ps)).build();
 			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, SimpleUonPartSerializer.class, true, resource, ps);
 			partParser = getInstanceProperty(REST_partSerializer, HttpPartParser.class, UonPartParser.class, true, resource, ps);
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();

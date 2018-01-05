@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.BeanContext.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -187,6 +188,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				ParserGroupBuilder pgb = null;
 				ParserBuilder uepb = null;
 				BeanContextBuilder bcb = null;
+				PropertyStore cps = context.getPropertyStore();
 
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
@@ -197,10 +199,10 @@ class CallMethod implements Comparable<CallMethod>  {
 					bcb = beanContext.builder();
 
 					if (inherit.contains("SERIALIZERS") || m.serializers().length == 0)
-						sgb.append(serializers.getSerializers());
+						sgb.append(cps.getArrayProperty(REST_serializers, Object.class));
 
 					if (inherit.contains("PARSERS") || m.parsers().length == 0)
-						pgb.append(parsers.getParsers());
+						pgb.append(cps.getArrayProperty(REST_parsers, Object.class));
 				}
 
 				httpMethod = m.name().toUpperCase(Locale.ENGLISH);

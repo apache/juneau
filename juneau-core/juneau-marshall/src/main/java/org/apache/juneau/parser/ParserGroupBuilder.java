@@ -75,6 +75,10 @@ public class ParserGroupBuilder {
 
 	/**
 	 * Registers the specified parsers with this group.
+	 * 
+	 * <p>
+	 * When passing in pre-instantiated parsers to this group, applying properties and transforms to the group
+	 * do not affect them.
 	 *
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
@@ -86,11 +90,28 @@ public class ParserGroupBuilder {
 
 	/**
 	 * Registers the specified parsers with this group.
+	 * 
+	 * <p>
+	 * Objects can either be instances of parsers or parser classes.
 	 *
 	 * @param p The parsers to append to this group.
 	 * @return This object (for method chaining).
 	 */
-	public ParserGroupBuilder append(List<Parser> p) {
+	public ParserGroupBuilder append(List<Object> p) {
+		addReverse(parsers, p);
+		return this;
+	}
+
+	/**
+	 * Registers the specified parsers with this group.
+	 * 
+	 * <p>
+	 * Objects can either be instances of parsers or parser classes.
+	 *
+	 * @param p The parsers to append to this group.
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroupBuilder append(Object...p) {
 		addReverse(parsers, p);
 		return this;
 	}
@@ -111,14 +132,10 @@ public class ParserGroupBuilder {
 			PropertyStore ps = propertyStore.build();
 			if (p instanceof Class) {
 				c = (Class<? extends Parser>)p;
+				l.add(ContextCache.INSTANCE.create(c, ps));
 			} else {
-				// Note that if we added a serializer instance, we want a new instance with this builder's properties
-				// on top of the previous serializer's properties.
-				Parser p2 = (Parser)p;
-				ps = p2.getPropertyStore().builder().apply(ps).build();
-				c = p2.getClass();
+				l.add((Parser)p);
 			}
-			l.add(ContextCache.INSTANCE.create(c, ps));
 		}
 		return new ParserGroup(propertyStore.build(), ArrayUtils.toReverseArray(Parser.class, l));
 	}

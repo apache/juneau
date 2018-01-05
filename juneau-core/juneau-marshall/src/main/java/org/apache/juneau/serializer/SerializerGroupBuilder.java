@@ -75,6 +75,10 @@ public class SerializerGroupBuilder {
 
 	/**
 	 * Registers the specified serializers with this group.
+	 * 
+	 * <p>
+	 * When passing in pre-instantiated serializers to this group, applying properties and transforms to the group
+	 * do not affect them.
 	 *
 	 * @param s The serializers to append to this group.
 	 * @return This object (for method chaining).
@@ -86,11 +90,28 @@ public class SerializerGroupBuilder {
 
 	/**
 	 * Registers the specified serializers with this group.
+	 * 
+	 * <p>
+	 * Objects can either be instances of serializers or serializer classes.
 	 *
 	 * @param s The serializers to append to this group.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerGroupBuilder append(List<Serializer> s) {
+	public SerializerGroupBuilder append(List<Object> s) {
+		addReverse(serializers, s);
+		return this;
+	}
+
+	/**
+	 * Registers the specified serializers with this group.
+	 * 
+	 * <p>
+	 * Objects can either be instances of serializers or serializer classes.
+	 *
+	 * @param s The serializers to append to this group.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder append(Object...s) {
 		addReverse(serializers, s);
 		return this;
 	}
@@ -111,14 +132,10 @@ public class SerializerGroupBuilder {
 			PropertyStore ps = propertyStore.build();
 			if (s instanceof Class) {
 				c = (Class<? extends Serializer>)s;
+				l.add(ContextCache.INSTANCE.create(c, ps));
 			} else {
-				// Note that if we added a serializer instance, we want a new instance with this builder's properties
-				// on top of the previous serializer's properties.
-				Serializer s2 = (Serializer)s;
-				ps = s2.getPropertyStore().builder().apply(ps).build();
-				c = s2.getClass();
+				l.add((Serializer)s);
 			}
-			l.add(ContextCache.INSTANCE.create(c, ps));
 		}
 		return new SerializerGroup(propertyStore.build(), ArrayUtils.toReverseArray(Serializer.class, l));
 	}

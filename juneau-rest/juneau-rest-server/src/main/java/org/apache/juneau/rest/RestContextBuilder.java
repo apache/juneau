@@ -100,9 +100,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	ConfigFile configFile;
 	VarResolverBuilder varResolverBuilder;
 
-	SerializerGroupBuilder serializers = SerializerGroup.create();
-	ParserGroupBuilder parsers = ParserGroup.create();
-
 	List<Object> childResources = new ArrayList<>();
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
@@ -427,89 +424,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder setProperties(Map<String,Object> properties) {
 		this.properties.putAll(properties);
-		return this;
-	}
-
-	/**
-	 * Adds class-level serializers to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#serializers() @RestResource.serializers()}
-	 * annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param serializers The serializer classes to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder serializers(Class<?>...serializers) {
-		this.serializers.append(serializers);
-		return this;
-	}
-
-	/**
-	 * Adds class-level serializers to this resource.
-	 *
-	 * <p>
-	 * Same as {@link #serializers(Class...)} except allows you to pass in serializer instances.
-	 * The actual serializer ends up being the result of this operation using the bean filters, pojo swaps, and
-	 * properties on this config:
-	 * <p class='bcode'>
-	 * 	serializer = serializer.builder().beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).build();
-	 * </p>
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param serializers The serializers to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder serializers(Serializer...serializers) {
-		this.serializers.append(serializers);
-		return this;
-	}
-
-	/**
-	 * Adds class-level parsers to this resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#parsers() @RestResource.parsers()} annotation.
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param parsers The parser classes to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder parsers(Class<?>...parsers) {
-		this.parsers.append(parsers);
-		return this;
-	}
-
-	/**
-	 * Adds class-level parsers to this resource.
-	 *
-	 * <p>
-	 * Same as {@link #parsers(Class...)} except allows you to pass in parser instances.
-	 * The actual parser ends up being the result of this operation using the bean filters, pojo swaps, and properties
-	 * on this config:
-	 * <p class='bcode'>
-	 * 	parser = parser.builder().beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).build();
-	 * </p>
-	 *
-	 * <p>
-	 * Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * annotation.
-	 *
-	 * @param parsers The parsers to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder parsers(Parser...parsers) {
-		this.parsers.append(parsers);
 		return this;
 	}
 
@@ -2308,6 +2222,172 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder mimeTypes(String...mimeTypes) {
 		return addTo(REST_mimeTypes, mimeTypes);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Serializers. 
+	 *
+	 * <p>
+	 * Adds class-level serializers to this resource.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_serializers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#serializers()} 
+	 * 			<li>{@link RestMethod#serializers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 * </ul>
+	 *
+	 * @param serializers The serializer classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder serializers(Class<?>...serializers) {
+		return addTo(REST_serializers, serializers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Serializers. 
+	 *
+	 * <p>
+	 * Same as {@link #serializers(Class...)} except allows you to overwrite the list of existing serializers instead
+	 * of appending.
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param serializers The serializer classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder serializers(boolean append, Class<?>...serializers) {
+		return set(append, REST_serializers, serializers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Serializers. 
+	 *
+	 * <p>
+	 * Same as {@link #serializers(Class...)} except allows you to pass in serializer instances.
+	 * 
+	 * <p>
+	 * Serializer instances are considered set-in-stone and do NOT inherit properties and transforms defined on the
+	 * resource class or method. 
+	 * 
+	 * @param serializers The serializer to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder serializers(Serializer...serializers) {
+		return addTo(REST_serializers, serializers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Serializers. 
+	 *
+	 * <p>
+	 * Same as {@link #serializers(Serializer...)} except allows you to overwrite the list of existing serializers instead
+	 * of appending.
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param serializers The serializer to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder serializers(boolean append, Serializer...serializers) {
+		return set(append, REST_serializers, serializers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Parsers. 
+	 *
+	 * <p>
+	 * Adds class-level parsers to this resource.
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_parsers}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#parsers()} 
+	 * 			<li>{@link RestMethod#parsers()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
+	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
+	 * 		</ul>
+	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
+	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
+	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
+	 * 		annotation.
+	 * </ul>
+	 *
+	 * @param parsers The parser classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder parsers(Class<?>...parsers) {
+		return addTo(REST_parsers, parsers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Parsers. 
+	 *
+	 * <p>
+	 * Same as {@link #parsers(Class...)} except allows you to overwrite the list of existing parsers instead
+	 * of appending.
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param parsers The parser classes to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder parsers(boolean append, Class<?>...parsers) {
+		return set(append, REST_parsers, parsers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Parsers. 
+	 *
+	 * <p>
+	 * Same as {@link #parsers(Class...)} except allows you to pass in parser instances.
+	 * 
+	 * <p>
+	 * Parser instances are considered set-in-stone and do NOT inherit properties and transforms defined on the
+	 * resource class or method. 
+	 * 
+	 * @param parsers The parsers to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder parsers(Parser...parsers) {
+		return addTo(REST_parsers, parsers);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Parsers. 
+	 *
+	 * <p>
+	 * Same as {@link #parsers(Parser...)} except allows you to overwrite the list of existing parsers instead
+	 * of appending.
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
+	 * @param parsers The parsers to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder parsers(boolean append, Parser...parsers) {
+		return set(append, REST_parsers, parsers);
 	}
 
 	/**
