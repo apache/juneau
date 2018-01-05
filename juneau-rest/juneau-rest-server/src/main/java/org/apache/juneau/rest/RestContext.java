@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -892,6 +891,52 @@ public final class RestContext extends BeanContext {
 	public static final String REST_staticFiles = PREFIX + "staticFiles.lo";
 	
 	/**
+	 * <b>Configuration property:</b>  Messages. 
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.messages.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;MessageBundleLocation&gt;</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Identifies the location of the resource bundle for this class.
+	 *
+	 * <p>
+	 * This annotation is used to provide localized messages for the following methods:
+	 * <ul>
+	 * 	<li>{@link RestRequest#getMessage(String, Object...)}
+	 * 	<li>{@link RestContext#getMessages()}
+	 * </ul>
+	 *
+	 * <p>
+	 * Refer to the {@link MessageBundle} class for a description of the message key formats used in the properties file.
+	 *
+	 * <p>
+	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
+	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
+	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_messages}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#messages()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#messages(String)},
+	 * 			<li>{@link RestContextBuilder#messages(Class,String)}
+	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation)} 
+	 * 		</ul>
+	 * 	<li>Mappings are cumulative from parent to child.  
+	 * </ul>
+	 */
+	public static final String REST_messages = PREFIX + "messages.lo";
+	
+	/**
 	 * <b>Configuration property:</b>  Static file response headers. 
 	 *
 	 * <ul>
@@ -1369,6 +1414,7 @@ public final class RestContext extends BeanContext {
 			this.parentContext = builder.parentContext;
 			
 			PropertyStore ps = getPropertyStore().builder().add(builder.properties).build();
+			Class<?> resourceClass = resource.getClass();
 
 			contextPath = nullIfEmpty(getProperty(REST_contextPath, String.class, null));
 			allowHeaderParams = getProperty(REST_allowHeaderParams, boolean.class, true);
@@ -1434,7 +1480,7 @@ public final class RestContext extends BeanContext {
 			
 			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class);
 			boolean useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
-			staticResourceManager = new ClasspathResourceManager(resource.getClass(), rf, useClasspathResourceCaching);
+			staticResourceManager = new ClasspathResourceManager(resourceClass, rf, useClasspathResourceCaching);
 
 			supportedContentTypes = getListProperty(REST_supportedContentTypes, MediaType.class, serializers.getSupportedMediaTypes());
 			supportedAcceptTypes = getListProperty(REST_supportedAcceptTypes, MediaType.class, parsers.getSupportedMediaTypes());
@@ -1445,10 +1491,18 @@ public final class RestContext extends BeanContext {
 				s.add(sfm.path);
 			staticFilesPaths = s.toArray(new String[s.size()]);
 			
-			Builder b = new Builder(builder, ps);
-			this.msgs = b.messageBundle;
+			MessageBundleLocation[] mbl = getInstanceArrayProperty(REST_messages, MessageBundleLocation.class, new MessageBundleLocation[0]);
+			if (mbl.length == 0)
+				msgs = new MessageBundle(resourceClass, "");
+			else {
+				msgs = new MessageBundle(mbl[0] != null ? mbl[0].baseClass : resourceClass, mbl[0].bundlePath);
+				for (int i = 1; i < mbl.length; i++)
+					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : resourceClass, mbl[i].bundlePath);
+			}
+			
+			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.path;
+			
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
-			this.fullPath = b.fullPath;
 			
 			Map<String,Widget> _widgets = new LinkedHashMap<>();
 			for (Widget w : getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0], true, resource, ps))
@@ -1704,36 +1758,6 @@ public final class RestContext extends BeanContext {
 		if (! routers.containsKey(httpMethodName))
 			routers.put(httpMethodName, new CallRouter.Builder(httpMethodName));
 		routers.get(httpMethodName).add(cm);
-	}
-
-	private static final class Builder {
-
-		MessageBundle messageBundle;
-		String fullPath;
-
-		Builder(RestContextBuilder rcb, PropertyStore ps) throws Exception {
-
-			Object resource = rcb.resource;
-			
-			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
-			
-			// Find resource resource bundle location.
-			for (Map.Entry<Class<?>,RestResource> e : restResourceAnnotationsChildFirst.entrySet()) {
-				Class<?> c = e.getKey();
-				RestResource r = e.getValue();
-				if (! r.messages().isEmpty()) {
-					if (messageBundle == null)
-						messageBundle = new MessageBundle(c, r.messages());
-					else
-						messageBundle.addSearchPath(c, r.messages());
-				}
-			}
-
-			if (messageBundle == null)
-				messageBundle = new MessageBundle(resource.getClass(), "");
-			
-			fullPath = (rcb.parentContext == null ? "" : (rcb.parentContext.fullPath + '/')) + rcb.path;
-		}
 	}
 
 	static final boolean getBoolean(Object o, String systemProperty, boolean def) {

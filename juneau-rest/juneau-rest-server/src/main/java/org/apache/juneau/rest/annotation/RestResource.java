@@ -47,6 +47,8 @@ import org.apache.juneau.utils.*;
 public @interface RestResource {
 
 	/**
+	 * Messages. 
+	 * 
 	 * Identifies the location of the resource bundle for this class.
 	 *
 	 * <p>
@@ -63,6 +65,22 @@ public @interface RestResource {
 	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
 	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
 	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_messages}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#messages()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#messages(String)},
+	 * 			<li>{@link RestContextBuilder#messages(Class,String)}
+	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation)} 
+	 * 		</ul>
+	 * 	<li>Mappings are cumulative from parent to child.  
+	 * </ul>
 	 */
 	String messages() default "";
 

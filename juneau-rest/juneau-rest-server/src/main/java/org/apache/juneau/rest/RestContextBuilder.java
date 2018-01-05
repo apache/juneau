@@ -209,6 +209,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				contextPath(r.contextPath());
 				for (String mapping : r.staticFiles())
 					staticFiles(c, vr.resolve(mapping));
+				if (! r.messages().isEmpty())
+					messages(c, vr.resolve(r.messages()));
 				staticFileResponseHeaders(resolveVars(vr, r.staticFileResponseHeaders()));
 				if (! r.useClasspathResourceCaching().isEmpty())
 					useClasspathResourceCaching(Boolean.valueOf(vr.resolve(r.useClasspathResourceCaching())));
@@ -1897,6 +1899,80 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder staticFiles(Class<?> baseClass, String path, String location) {
 		return staticFiles(new StaticFileMapping(baseClass, path, location, null));
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Messages. 
+	 *
+	 * <p>
+	 * Identifies the location of the resource bundle for this class.
+	 *
+	 * <p>
+	 * This annotation is used to provide localized messages for the following methods:
+	 * <ul>
+	 * 	<li>{@link RestRequest#getMessage(String, Object...)}
+	 * 	<li>{@link RestContext#getMessages()}
+	 * </ul>
+	 *
+	 * <p>
+	 * Refer to the {@link MessageBundle} class for a description of the message key formats used in the properties file.
+	 *
+	 * <p>
+	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
+	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
+	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
+	 * 
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_messages}
+	 * 	<li>Annotations: 
+	 * 		<ul>
+	 * 			<li>{@link RestResource#messages()} 
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#messages(String)},
+	 * 			<li>{@link RestContextBuilder#messages(Class,String)}
+	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation)} 
+	 * 		</ul>
+	 * 	<li>Mappings are cumulative from parent to child.  
+	 * </ul>
+	 *
+	 * @param messageBundleLocation The message bundle location to add to the search path.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder messages(MessageBundleLocation messageBundleLocation) {
+		return addTo(REST_messages, messageBundleLocation);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Messages. 
+	 *
+	 * <p>
+	 * Same as {@link #messages(MessageBundleLocation)} except allows you to pass in the base class and bundle
+	 * path separately.
+	 * 
+	 * @param baseClass 
+	 * 	The base class that the bundle path is relative to.
+	 * 	<br>If <jk>null</jk>, assumed to be the resource class itself.
+	 * @param bundlePath The bundle path relative to the base class.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder messages(Class<?> baseClass, String bundlePath) {
+		return addTo(REST_messages, new MessageBundleLocation(baseClass, bundlePath));
+	}
+	
+	/**
+	 * <b>Configuration property:</b>  Messages. 
+	 *
+	 * <p>
+	 * Same as {@link #messages(Class,String)} except assumes the base class is the resource class itself.
+	 * 
+	 * @param bundlePath The bundle path relative to the base class.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder messages(String bundlePath) {
+		return addTo(REST_messages, new MessageBundleLocation(null, bundlePath));
 	}
 
 	/**
