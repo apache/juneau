@@ -98,8 +98,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	ObjectMap properties;
 	ConfigFile configFile;
 	VarResolverBuilder varResolverBuilder;
-
-	List<Object> childResources = new ArrayList<>();
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
 
@@ -199,7 +197,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				responseHandlers(r.responseHandlers());
 				converters(r.converters());
 				guards(reverse(r.guards()));
-				childResources(r.children());
+				children(r.children());
 				beanFilters(r.beanFilters());
 				pojoSwaps(r.pojoSwaps());
 				paramResolvers(r.paramResolvers());
@@ -412,60 +410,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Adds a child resource to this resource.
-	 *
-	 * <p>
-	 * Child resources are resources that are accessed under the path of the parent resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#children() @RestResource.children()} annotation.
-	 *
-	 * @param path The child path of the resource.  Must conform to {@link RestResource#path()} format.
-	 * @param child The child resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder childResource(String path, Object child) {
-		this.childResources.add(new Pair<>(path, child));
-		return this;
-	}
-
-	/**
-	 * Add child resources to this resource.
-	 *
-	 * <p>
-	 * Child resources are resources that are accessed under the path of the parent resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#children() @RestResource.children()} annotation.
-	 *
-	 * @param children The child resources to add to this resource.
-	 * Children must be annotated with {@link RestResource#path()} to identify the child path.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder childResources(Object...children) {
-		this.childResources.addAll(Arrays.asList(children));
-		return this;
-	}
-
-	/**
-	 * Add child resources to this resource.
-	 *
-	 * <p>
-	 * Child resources are resources that are accessed under the path of the parent resource.
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#children() @RestResource.children()} annotation.
-	 *
-	 * @param children The child resources to add to this resource.
-	 * Children must be annotated with {@link RestResource#path()} to identify the child path.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder childResources(Class<?>...children) {
-		this.childResources.addAll(Arrays.asList(children));
-		return this;
-	}
-
-	/**
 	 * Returns an instance of an HTMLDOC builder for setting HTMLDOC-related properties.
 	 * 
 	 * @return An instance of an HTMLDOC builder for setting HTMLDOC-related properties.
@@ -561,107 +505,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	//----------------------------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Resource path.   
-	 *
-	 * <p>
-	 * Identifies the URL subpath relative to the parent resource.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_path}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#path()}
-	 * 		</ul> 
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#path(String)} 
-	 * 		</ul>
-	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
-	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
-	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
-	 * 		{@link RestResource#children()} annotation.
-	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-	 *	</ul>
-	 *
-	 * @param path The URL path of this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder path(String path) {
-		if (startsWith(path, '/'))
-			path = path.substring(1);
-		this.path = path;
-		return this;
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Resource context path. 
-	 *
-	 * <p>
-	 * Overrides the context path value for this resource and any child resources.
-	 *
-	 * <p>
-	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
-	 * the context path is not actually specified on the servlet container.
-	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
-	 * will return this value instead of the actual context path of the web app.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_contextPath}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#contextPath()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>@link RestContextBuilder#contextPath(String)} 
-	 * 		</ul>
-	 *	</ul>
-	 *
-	 * @param contextPath The context path for this resource and any child resources.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder contextPath(String contextPath) {
-		if (! contextPath.isEmpty())
-			set(REST_contextPath, contextPath);
-		return this;
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Allow header URL parameters.
-	 *
-	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_allowHeaderParams}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#allowHeaderParams()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#allowHeaderParams(boolean)}
-	 * 		</ul>
-	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-	 * 	<li>Parameter name is case-insensitive.
-	 * 	<li>Useful for debugging REST interface using only a browser.
-	 *	</ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder allowHeaderParams(boolean value) {
-		return set(REST_allowHeaderParams, value);
-	}
-
-	/**
 	 * <b>Configuration property:</b>  Allow body URL parameter.
 	 *
 	 * <ul>
@@ -733,6 +576,263 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder allowedMethodParams(String...value) {
 		return set(REST_allowedMethodParams, StringUtils.join(value, ','));
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Allow header URL parameters.
+	 *
+	 * <p>
+	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_allowHeaderParams}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#allowHeaderParams()}
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#allowHeaderParams(boolean)}
+	 * 		</ul>
+	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
+	 * 	<li>Parameter name is case-insensitive.
+	 * 	<li>Useful for debugging REST interface using only a browser.
+	 *	</ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder allowHeaderParams(boolean value) {
+		return set(REST_allowHeaderParams, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST call handler.
+	 *
+	 * <p>
+	 * This class handles the basic lifecycle of an HTTP REST call.
+	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
+
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_callHandler}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#callHandler()} 
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#callHandler(Class)}
+	 * 			<li>{@link RestContextBuilder#callHandler(RestCallHandler)} 
+	 * 		</ul>
+	 *	</ul>
+	 *
+	 * @param restHandler The new call handler for this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder callHandler(Class<? extends RestCallHandler> restHandler) {
+		return set(REST_callHandler, restHandler);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  REST call handler.
+	 *
+	 * <p>
+	 * Same as {@link #callHandler(Class)} but allows you to pass in a call handler instance.
+	 * 
+	 * @param restHandler The new call handler for this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder callHandler(RestCallHandler restHandler) {
+		return set(REST_callHandler, restHandler);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Children.
+	 *
+	 * <p>
+	 * Defines children of this resource.
+	 *
+	 * <p>
+	 * A REST child resource is simply another servlet that is initialized as part of the parent resource and has a
+	 * servlet path directly under the parent servlet path.
+	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
+	 * <code>web.xml</code> file of the web application.
+	 * <br>This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
+	 * large numbers of servlets.
+	 *
+	 * <p>
+	 * Child resources must specify a value for {@link RestResource#path()} that identifies the subpath of the child resource
+	 * relative to the parent path.
+	 *
+	 * <p>
+	 * It should be noted that servlets can be nested arbitrarily deep using this technique (i.e. children can also have
+	 * children).
+	 *
+	 * <dl>
+	 * 	<dt>Servlet initialization:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			A child resource will be initialized immediately after the parent servlet is initialized.
+	 * 			The child resource receives the same servlet config as the parent resource.
+	 * 			This allows configuration information such as servlet initialization parameters to filter to child
+	 * 			resources.
+	 * 		</p>
+	 * 	</dd>
+	 * 	<dt>Runtime behavior:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			As a rule, methods defined on the <code>HttpServletRequest</code> object will behave as if the child
+	 * 			servlet were deployed as a top-level resource under the child's servlet path.
+	 * 			For example, the <code>getServletPath()</code> and <code>getPathInfo()</code> methods on the
+	 * 			<code>HttpServletRequest</code> object will behave as if the child resource were deployed using the
+	 * 			child's servlet path.
+	 * 			Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
+	 * 			<code>web.xml</code> file of the web application.
+	 * 		</p>
+	 * 	</dd>
+	 * </dl>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_children}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#children()}
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#child(String,Object)}
+	 * 			<li>{@link RestContextBuilder#children(Class...)}
+	 * 			<li>{@link RestContextBuilder#children(Object...)}
+	 * 		</ul>
+	 * 	<li>When defined as classes, instances are resolved using the registered {@link RestContext#REST_resourceResolver} which
+	 * 		by default is {@link RestResourceResolverSimple} which requires the class have one of the following
+	 * 		constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 *	</ul>
+	 * 
+	 * @param children The children to add to this resource..
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder children(Class<?>...children) {
+		return addTo(REST_children, children);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Children.
+	 *
+	 * <p>
+	 * Same as {@link #children(Class...)} but allows you to pass in already-constructed child instances.
+	 * 
+	 * @param children 
+	 * 	The children to add to this resource.
+	 * 	<br>Objects can be any of the following:
+	 * 	<ul>
+	 * 		<li>A class that can be resolved to an instance using the registered {@link RestContext#REST_resourceResolver resource resolver}.
+	 * 			<br>The class must specify a {@link RestResource#path()} annotation to identify parent-relative path for the child.
+	 * 		<li>A resource instance.
+	 * 			<br>The class must specify a {@link RestResource#path()} annotation to identify parent-relative path for the child.
+	 * 		<li>An instance of {@link RestChild} that defines the path/resource mapping.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder children(Object...children) {
+		return addTo(REST_children, children);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Children.
+	 *
+	 * <p>
+	 * Shortcut for adding a single child to this resource.
+	 * 
+	 * <p>
+	 * This can be used for resources that don't have a {@link RestResource#path()} annotation.
+	 * 
+	 * @param path The child path relative to the parent resource URI.
+	 * @param child The child to add to this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder child(String path, Object child) {
+		return addTo(REST_children, new RestChild(path, child));
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Resource path.   
+	 *
+	 * <p>
+	 * Identifies the URL subpath relative to the parent resource.
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_path}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#path()}
+	 * 		</ul> 
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#path(String)} 
+	 * 		</ul>
+	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
+	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
+	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
+	 * 		{@link RestResource#children()} annotation.
+	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
+	 *	</ul>
+	 *
+	 * @param path The URL path of this resource.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder path(String path) {
+		if (startsWith(path, '/'))
+			path = path.substring(1);
+		this.path = path;
+		return this;
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Resource context path. 
+	 *
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
+	 * the context path is not actually specified on the servlet container.
+	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
+	 * will return this value instead of the actual context path of the web app.
+	 * 
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_contextPath}
+	 * 	<li>Annotations:
+	 * 		<ul>
+	 * 			<li>{@link RestResource#contextPath()} 
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>@link RestContextBuilder#contextPath(String)} 
+	 * 		</ul>
+	 *	</ul>
+	 *
+	 * @param contextPath The context path for this resource and any child resources.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder contextPath(String contextPath) {
+		if (! contextPath.isEmpty())
+			set(REST_contextPath, contextPath);
+		return this;
 	}
 
 	/**
@@ -1629,64 +1729,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder logger(RestLogger logger) {
 		return set(REST_logger, logger);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  REST call handler.
-	 *
-	 * <p>
-	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
-
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_callHandler}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#callHandler()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#callHandler(Class)}
-	 * 			<li>{@link RestContextBuilder#callHandler(RestCallHandler)} 
-	 * 		</ul>
-	 *	</ul>
-	 *
-	 * @param restHandler The new call handler for this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder callHandler(Class<? extends RestCallHandler> restHandler) {
-		return set(REST_callHandler, restHandler);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  REST call handler.
-	 *
-	 * <p>
-	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_callHandler}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#callHandler()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#callHandler(Class)}
-	 * 			<li>{@link RestContextBuilder#callHandler(RestCallHandler)} 
-	 * 		</ul>
-	 *	</ul>
-	 *
-	 * @param restHandler The new call handler for this resource.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder callHandler(RestCallHandler restHandler) {
-		return set(REST_callHandler, restHandler);
 	}
 
 	/**

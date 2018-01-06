@@ -199,6 +199,82 @@ public final class RestContext extends BeanContext {
 	public static final String REST_callHandler = PREFIX + "callHandler.o";
 
 	/**
+	 * <b>Configuration property:</b>  Children.
+	 *
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestContext.children.lo"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class | Object | RestChild&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * </ul>
+	 * 
+	 * <p>
+	 * Defines children of this resource.
+	 *
+	 * <p>
+	 * A REST child resource is simply another servlet or object that is initialized as part of the parent resource and has a
+	 * servlet path directly under the parent servlet path.
+	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
+	 * <code>web.xml</code> file of the web application.
+	 * <br>This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
+	 * large numbers of servlets.
+	 *
+	 * <p>
+	 * Child resources must specify a value for {@link RestResource#path()} that identifies the subpath of the child resource
+	 * relative to the parent path.
+	 *
+	 * <p>
+	 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
+	 *
+	 * <dl>
+	 * 	<dt>Servlet initialization:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			A child resource will be initialized immediately after the parent servlet is initialized.
+	 * 			The child resource receives the same servlet config as the parent resource.
+	 * 			This allows configuration information such as servlet initialization parameters to filter to child
+	 * 			resources.
+	 * 		</p>
+	 * 	</dd>
+	 * 	<dt>Runtime behavior:</dt>
+	 * 	<dd>
+	 * 		<p>
+	 * 			As a rule, methods defined on the <code>HttpServletRequest</code> object will behave as if the child
+	 * 			servlet were deployed as a top-level resource under the child's servlet path.
+	 * 			For example, the <code>getServletPath()</code> and <code>getPathInfo()</code> methods on the
+	 * 			<code>HttpServletRequest</code> object will behave as if the child resource were deployed using the
+	 * 			child's servlet path.
+	 * 			Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
+	 * 			<code>web.xml</code> file of the web application.
+	 * 		</p>
+	 * 	</dd>
+	 * </dl>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_children}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#children()}
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#child(String,Object)}
+	 * 			<li>{@link RestContextBuilder#children(Class...)}
+	 * 			<li>{@link RestContextBuilder#children(Object...)}
+	 * 		</ul>
+	 * 	<li>When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
+	 * 		by default is {@link RestResourceResolverSimple} which requires the class have one of the following
+	 * 		constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 *	</ul>
+	 */
+	public static final String REST_children = PREFIX + "children.lo";
+
+	/**
 	 * <b>Configuration property:</b>  Classpath resource finder. 
 	 *
 	 * <ul>
@@ -1400,7 +1476,6 @@ public final class RestContext extends BeanContext {
 	 * @param builder The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
-	@SuppressWarnings("unchecked")
 	public RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
 		
@@ -1701,13 +1776,13 @@ public final class RestContext extends BeanContext {
 
 			// Initialize our child resources.
 			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? RestResourceResolverSimple.class : parentContext.resourceResolver, true, this, ps);
-			for (Object o : builder.childResources) {
+			for (Object o : getArrayProperty(REST_children, Object.class)) {
 				String path = null;
 				Object r = null;
-				if (o instanceof Pair) {
-					Pair<String,Object> p = (Pair<String,Object>)o;
-					path = p.first();
-					r = p.second();
+				if (o instanceof RestChild) {
+					RestChild rc = (RestChild)o;
+					path = rc.path;
+					r = rc.resource;
 				} else if (o instanceof Class<?>) {
 					Class<?> c = (Class<?>)o;
 					// Don't allow specifying yourself as a child.  Causes an infinite loop.
@@ -1723,7 +1798,7 @@ public final class RestContext extends BeanContext {
 				if (o instanceof Class) {
 					Class<?> oc = (Class<?>)o;
 					childBuilder = new RestContextBuilder(builder.inner, oc, this);
-					r = resourceResolver.resolve(oc, childBuilder);
+					r = resourceResolver.resolve(resource, oc, childBuilder);
 				} else {
 					r = o;
 					childBuilder = new RestContextBuilder(builder.inner, o.getClass(), this);

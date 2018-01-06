@@ -613,18 +613,21 @@ public @interface RestResource {
 	String[] defaultResponseHeaders() default {};
 
 	/**
+	 *Children.
+	 *
+	 * <p>
 	 * Defines children of this resource.
 	 *
 	 * <p>
 	 * A REST child resource is simply another servlet that is initialized as part of the parent resource and has a
 	 * servlet path directly under the parent servlet path.
-	 * The main advantage to defining servlets as REST children is that you do not need to define them in the
+	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
 	 * <code>web.xml</code> file of the web application.
-	 * This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
+	 * <br>This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
 	 * large numbers of servlets.
 	 *
 	 * <p>
-	 * Child resources must specify a value for {@link #path()} that identifies the subpath of the child resource
+	 * Child resources must specify a value for {@link RestResource#path()} that identifies the subpath of the child resource
 	 * relative to the parent path.
 	 *
 	 * <p>
@@ -654,10 +657,28 @@ public @interface RestResource {
 	 * 		</p>
 	 * 	</dd>
 	 * </dl>
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#childResource(String, Object)}/
-	 * {@link RestContextBuilder#childResources(Class...)}/{@link RestContextBuilder#childResources(Object...)} methods.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Property:  {@link RestContext#REST_children}
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link RestResource#children()}
+	 * 		</ul>
+	 * 	<li>Methods: 
+	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#child(String,Object)}
+	 * 			<li>{@link RestContextBuilder#children(Class...)}
+	 * 			<li>{@link RestContextBuilder#children(Object...)}
+	 * 		</ul>
+	 * 	<li>When defined as classes, instances are resolved using the registered {@link RestContext#REST_resourceResolver} which
+	 * 		by default is {@link RestResourceResolverSimple} which requires the class have one of the following
+	 * 		constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 		</ul>
+	 *	</ul>
 	 */
 	Class<?>[] children() default {};
 

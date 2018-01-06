@@ -45,11 +45,13 @@ public interface RestResourceResolver {
 	 *
 	 * <p>
 	 * The default implementation simply creates a new class instance using {@link Class#newInstance()}.
-	 *
+	 * 
+	 * @param parent 
+	 * 	The parent resource (i.e. the instance whose class has the {@link RestResource#children()} annotation.
 	 * @param c The class to resolve.
 	 * @param builder The initialization configuration for the resource.
 	 * @return The instance of that class.
 	 * @throws Exception If class could not be resolved.
 	 */
-	Object resolve(Class<?> c, RestContextBuilder builder) throws Exception;
+	Object resolve(Object parent, Class<?> c, RestContextBuilder builder) throws Exception;
 }
