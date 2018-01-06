@@ -74,29 +74,24 @@ import org.apache.juneau.utils.*;
 public final class RestRequest extends HttpServletRequestWrapper {
 
 	private final RestContext context;
+	private RestJavaMethod restJavaMethod;
 
 	private final String method;
 	private RequestBody body;
 	private Method javaMethod;
 	private ObjectMap properties;
-	private SerializerGroup serializerGroup;
-	private ParserGroup parserGroup;
 	private final boolean debug;
-	private HttpPartParser partParser;
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
 	private RequestFormData formData;
-	private Map<String,Object> defFormData;
 	private RequestPathMatch pathParams;
 	private boolean isPost;
 	private UriContext uriContext;
-	private String charset, defaultCharset;
+	private String charset;
 	private RequestHeaders headers;
 	private ConfigFile cf;
 	private Swagger swagger, fileSwagger;
-	private Map<String,Widget> widgets;
-	private List<MediaType> supportedContentTypes, supportedAcceptTypes;
 
 	/**
 	 * Constructor.
@@ -160,40 +155,29 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(Method javaMethod, ObjectMap properties, Map<String,Object> defHeader,
-			Map<String,Object> defQuery, Map<String,Object> defFormData, String defaultCharset, long maxInput,
-			SerializerGroup mSerializers, ParserGroup mParsers, HttpPartParser mUrlEncodingParser,
-			BeanContext beanContext, EncoderGroup encoders, Map<String,Widget> widgets, List<MediaType> supportedAcceptTypes, 
-			List<MediaType> supportedContentTypes) {
-		this.javaMethod = javaMethod;
+	final void init(RestJavaMethod rjm, ObjectMap properties) {
+		this.restJavaMethod = rjm;
+		this.javaMethod = rjm.method;
 		this.properties = properties;
-		this.partParser = mUrlEncodingParser;
-		this.beanSession = beanContext.createSession();
+		this.beanSession = rjm.beanContext.createSession();
 		this.pathParams
-			.setParser(partParser)
+			.setParser(rjm.partParser)
 			.setBeanSession(beanSession);
 		this.queryParams
-			.addDefault(defQuery)
-			.setParser(partParser)
+			.addDefault(rjm.defaultQuery)
+			.setParser(rjm.partParser)
 			.setBeanSession(beanSession);
 		this.headers
-			.addDefault(defHeader)
+			.addDefault(rjm.defaultRequestHeaders)
 			.addDefault(context.getDefaultRequestHeaders())
-			.setParser(partParser)
+			.setParser(rjm.partParser)
 			.setBeanSession(beanSession);
 		this.body
-			.setEncoders(encoders)
-			.setParsers(mParsers)
+			.setEncoders(rjm.encoders)
+			.setParsers(rjm.parsers)
 			.setHeaders(headers)
 			.setBeanSession(beanSession)
-			.setMaxInput(maxInput);
-		this.serializerGroup = mSerializers;
-		this.parserGroup = mParsers;
-		this.defaultCharset = defaultCharset;
-		this.defFormData = defFormData;
-		this.widgets = widgets;
-		this.supportedAcceptTypes = supportedAcceptTypes;
-		this.supportedContentTypes = supportedContentTypes;
+			.setMaxInput(rjm.maxInput);
 
 		String stylesheet = getQuery().getString("stylesheet");
 		if (stylesheet != null)
@@ -310,7 +294,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getSupportedAcceptTypes() {
-		return supportedAcceptTypes;
+		return restJavaMethod.supportedAcceptTypes;
 	}
 
 	/**
@@ -319,7 +303,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getSupportedContentTypes() {
-		return supportedContentTypes;
+		return restJavaMethod.supportedContentTypes;
 	}
 
 	/**
@@ -346,7 +330,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					charset = h.substring(i+9).trim();
 			}
 			if (charset == null)
-				charset = defaultCharset;
+				charset = restJavaMethod.defaultCharset;
 			if (! Charset.isSupported(charset))
 				throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported charset in header ''Content-Type'': ''{0}''", h);
 		}
@@ -424,7 +408,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		try {
 			if (formData == null) {
 				formData = new RequestFormData();
-				formData.setParser(partParser).setBeanSession(beanSession);
+				formData.setParser(restJavaMethod.partParser).setBeanSession(beanSession);
 				if (! body.isLoaded()) {
 					formData.putAll(getParameterMap());
 				} else {
@@ -435,7 +419,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
-			formData.addDefault(defFormData);
+			formData.addDefault(restJavaMethod.defaultFormData);
 			return formData;
 		} catch (Exception e) {
 			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
@@ -712,7 +696,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializerGroup() {
-		return serializerGroup;
+		return restJavaMethod.serializers;
 	}
 
 	/**
@@ -721,7 +705,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParserGroup() {
-		return parserGroup;
+		return restJavaMethod.parsers;
 	}
 
 
@@ -954,7 +938,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	Never <jk>null</jk>.
 	 */
 	public Map<String,Widget> getWidgets() {
-		return widgets;
+		return restJavaMethod.widgets;
 	}
 
 	/**

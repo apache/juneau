@@ -45,7 +45,6 @@ import org.apache.juneau.utils.*;
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
 class RestJavaMethod implements Comparable<RestJavaMethod>  {
-	private final java.lang.reflect.Method method;
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
 	private final RestParam[] params;
@@ -53,24 +52,30 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
 	private final RestConverter[] converters;
-	private final SerializerGroup serializers;
-	private final ParserGroup parsers;
-	private final EncoderGroup encoders;
-	private final HttpPartParser partParser;
 	private final HttpPartSerializer partSerializer;
 	private final ObjectMap properties;
-	private final Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
-	private final String defaultCharset;
-	private final long maxInput;
 	private final boolean deprecated;
 	private final String description, tags, summary, externalDocs;
 	private final Integer priority;
 	private final org.apache.juneau.rest.annotation.Parameter[] parameters;
 	private final Response[] responses;
 	private final RestContext context;
-	private final BeanContext beanContext;
-	private final Map<String,Widget> widgets;
-	private final List<MediaType> supportedAcceptTypes, supportedContentTypes;
+	final java.lang.reflect.Method method;
+	final SerializerGroup serializers;
+	final ParserGroup parsers;
+	final EncoderGroup encoders;
+	final HttpPartParser partParser;
+	final Map<String,Object> 
+		defaultRequestHeaders,
+		defaultQuery,
+		defaultFormData;
+	final String defaultCharset;
+	final long maxInput;
+	final BeanContext beanContext;
+	final Map<String,Widget> widgets;
+	final List<MediaType> 
+		supportedAcceptTypes,
+		supportedContentTypes;
 
 	RestJavaMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
@@ -793,8 +798,7 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 		ObjectMap requestProperties = new ResolvingObjectMap(req.getVarResolverSession()).setInner(properties);
 
-		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
-			maxInput, serializers, parsers, partParser, beanContext, encoders, widgets, supportedAcceptTypes, supportedContentTypes);
+		req.init(this, requestProperties);
 		res.init(requestProperties, defaultCharset, serializers, partSerializer, encoders);
 
 		// Class-level guards
