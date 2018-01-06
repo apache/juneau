@@ -44,7 +44,7 @@ public class RestCallHandler {
 
 	private final RestContext context;
 	private final RestLogger logger;
-	private final Map<String,CallRouter> callRouters;
+	private final Map<String,RestCallRouter> restCallRouters;
 
 	/**
 	 * Constructor.
@@ -54,7 +54,7 @@ public class RestCallHandler {
 	public RestCallHandler(RestContext context) {
 		this.context = context;
 		this.logger = context.getLogger();
-		this.callRouters = context.getCallRouters();
+		this.restCallRouters = context.getCallRouters();
 	}
 
 	/**
@@ -153,10 +153,10 @@ public class RestCallHandler {
 			} else {
 				// If the specified method has been defined in a subclass, invoke it.
 				int rc = SC_METHOD_NOT_ALLOWED;
-				if (callRouters.containsKey(methodUC)) {
-					rc = callRouters.get(methodUC).invoke(pathInfo, req, res);
-				} else if (callRouters.containsKey("*")) {
-					rc = callRouters.get("*").invoke(pathInfo, req, res);
+				if (restCallRouters.containsKey(methodUC)) {
+					rc = restCallRouters.get(methodUC).invoke(pathInfo, req, res);
+				} else if (restCallRouters.containsKey("*")) {
+					rc = restCallRouters.get("*").invoke(pathInfo, req, res);
 				}
 
 				// If not invoked above, see if it's an OPTIONs request

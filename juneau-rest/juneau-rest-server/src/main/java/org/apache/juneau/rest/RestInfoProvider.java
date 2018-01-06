@@ -141,7 +141,7 @@ public class RestInfoProvider {
 				.tags(getTags(req))
 				.externalDocs(getExternalDocs(req));
 
-			for (CallMethod sm : context.getCallMethods().values()) {
+			for (RestJavaMethod sm : context.getCallMethods().values()) {
 				if (sm.isRequestAllowed(req)) {
 					Operation o = sm.getSwaggerOperation(req);
 					s.path(
@@ -207,7 +207,7 @@ public class RestInfoProvider {
 	 * @return The localized summary of the method, or a blank string if no summary was found.
 	 */
 	public String getMethodSummary(String javaMethodName, RestRequest req) {
-		CallMethod m = context.getCallMethods().get(javaMethodName);
+		RestJavaMethod m = context.getCallMethods().get(javaMethodName);
 		if (m != null)
 			return m.getSummary(req);
 		return "";
@@ -257,7 +257,7 @@ public class RestInfoProvider {
 	 * @return The localized description of the method, or a blank string if no description was found.
 	 */
 	public String getMethodDescription(String javaMethodName, RestRequest req) {
-		CallMethod m = context.getCallMethods().get(javaMethodName);
+		RestJavaMethod m = context.getCallMethods().get(javaMethodName);
 		if (m != null)
 			return m.getDescription(req);
 		return "";

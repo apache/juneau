@@ -1434,8 +1434,8 @@ public final class RestContext extends BeanContext {
 	private final MessageBundle msgs;
 	private final ConfigFile configFile;
 	private final VarResolver varResolver;
-	private final Map<String,CallRouter> callRouters;
-	private final Map<String,CallMethod> callMethods;
+	private final Map<String,RestCallRouter> callRouters;
+	private final Map<String,RestJavaMethod> callMethods;
 	private final Map<String,RestContext> childResources;
 	private final RestLogger logger;
 	private final RestCallHandler callHandler;
@@ -1589,8 +1589,8 @@ public final class RestContext extends BeanContext {
 			// Done after initializing fields above since we pass this object to the child resources.
 			//----------------------------------------------------------------------------------------------------
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
-			Map<String,CallRouter.Builder> routers = new LinkedHashMap<>();
-			Map<String,CallMethod> _javaRestMethods = new LinkedHashMap<>();
+			Map<String,RestCallRouter.Builder> routers = new LinkedHashMap<>();
+			Map<String,RestJavaMethod> _javaRestMethods = new LinkedHashMap<>();
 			Map<String,Method>
 				_startCallMethods = new LinkedHashMap<>(),
 				_preCallMethods = new LinkedHashMap<>(),
@@ -1617,7 +1617,7 @@ public final class RestContext extends BeanContext {
 						if (! Modifier.isPublic(method.getModifiers()))
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), method.getName());
 
-						CallMethod sm = new CallMethod(resource, method, this);
+						RestJavaMethod sm = new RestJavaMethod(resource, method, this);
 						String httpMethod = sm.getHttpMethod();
 
 						// PROXY is a special case where a method returns an interface that we
@@ -1630,7 +1630,7 @@ public final class RestContext extends BeanContext {
 							if (remoteableMethods.isEmpty())
 								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remoteable methods.", getMethodSignature(method), interfaceClass.getReadableName());
 
-							sm = new CallMethod(resource, method, this) {
+							sm = new RestJavaMethod(resource, method, this) {
 
 								@Override
 								int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException {
@@ -1769,8 +1769,8 @@ public final class RestContext extends BeanContext {
 			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
 			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
-			Map<String,CallRouter> _callRouters = new LinkedHashMap<>();
-			for (CallRouter.Builder crb : routers.values())
+			Map<String,RestCallRouter> _callRouters = new LinkedHashMap<>();
+			for (RestCallRouter.Builder crb : routers.values())
 				_callRouters.put(crb.getHttpMethodName(), crb.build());
 			this.callRouters = Collections.unmodifiableMap(_callRouters);
 
@@ -1829,9 +1829,9 @@ public final class RestContext extends BeanContext {
 		}
 	}
 
-	private static void addToRouter(Map<String, CallRouter.Builder> routers, String httpMethodName, CallMethod cm) throws RestServletException {
+	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestJavaMethod cm) throws RestServletException {
 		if (! routers.containsKey(httpMethodName))
-			routers.put(httpMethodName, new CallRouter.Builder(httpMethodName));
+			routers.put(httpMethodName, new RestCallRouter.Builder(httpMethodName));
 		routers.get(httpMethodName).add(cm);
 	}
 
@@ -2214,7 +2214,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return A map with HTTP method names upper-cased as the keys, and call routers as the values.
 	 */
-	protected Map<String,CallRouter> getCallRouters() {
+	protected Map<String,RestCallRouter> getCallRouters() {
 		return callRouters;
 	}
 
@@ -2848,7 +2848,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return A map of Java method names to call method objects.
 	 */
-	protected Map<String,CallMethod> getCallMethods() {
+	protected Map<String,RestJavaMethod> getCallMethods() {
 		return callMethods;
 	}
 

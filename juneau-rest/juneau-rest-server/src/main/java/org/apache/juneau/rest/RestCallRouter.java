@@ -24,20 +24,20 @@ import javax.servlet.http.*;
  *
  * <p>
  * Incoming requests for a particular HTTP method type (e.g. <js>"GET"</js>) are handed off to this class and then
- * dispatched to the appropriate CallMethod.
+ * dispatched to the appropriate RestJavaMethod.
  */
-class CallRouter {
-	private final CallMethod[] callMethods;
+class RestCallRouter {
+	private final RestJavaMethod[] restJavaMethods;
 
-	CallRouter(CallMethod[] callMethods) {
-		this.callMethods = callMethods;
+	RestCallRouter(RestJavaMethod[] callMethods) {
+		this.restJavaMethods = callMethods;
 	}
 
 	/**
 	 * Builder class.
 	 */
 	static final class Builder {
-		private List<CallMethod> childMethods = new ArrayList<>();
+		private List<RestJavaMethod> childMethods = new ArrayList<>();
 		private Set<String> collisions = new HashSet<>();
 		private String httpMethodName;
 
@@ -49,7 +49,7 @@ class CallRouter {
 			return httpMethodName;
 		}
 
-		Builder add(CallMethod m) throws RestServletException {
+		Builder add(RestJavaMethod m) throws RestServletException {
 			if (! m.hasGuardsOrMatchers()) {
 				String p = m.getHttpMethod() + ":" + m.getPathPattern();
 				if (collisions.contains(p))
@@ -60,9 +60,9 @@ class CallRouter {
 			return this;
 		}
 
-		CallRouter build() {
+		RestCallRouter build() {
 			Collections.sort(childMethods);
-			return new CallRouter(childMethods.toArray(new CallMethod[childMethods.size()]));
+			return new RestCallRouter(childMethods.toArray(new RestJavaMethod[childMethods.size()]));
 		}
 	}
 
@@ -76,11 +76,11 @@ class CallRouter {
 	 * @return The HTTP response code.
 	 */
 	int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException {
-		if (callMethods.length == 1)
-			return callMethods[0].invoke(pathInfo, req, res);
+		if (restJavaMethods.length == 1)
+			return restJavaMethods[0].invoke(pathInfo, req, res);
 
 		int maxRc = 0;
-		for (CallMethod m : callMethods) {
+		for (RestJavaMethod m : restJavaMethods) {
 			int rc = m.invoke(pathInfo, req, res);
 			if (rc == SC_OK)
 				return SC_OK;
@@ -91,8 +91,8 @@ class CallRouter {
 
 	@Override /* Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder("CallRouter: [\n");
-		for (CallMethod sm : callMethods)
+		StringBuilder sb = new StringBuilder("RestCallRouter: [\n");
+		for (RestJavaMethod sm : restJavaMethods)
 			sb.append("\t" + sm + "\n");
 		sb.append("]");
 		return sb.toString();

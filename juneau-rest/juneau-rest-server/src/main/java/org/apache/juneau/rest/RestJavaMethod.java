@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
-class CallMethod implements Comparable<CallMethod>  {
+class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final java.lang.reflect.Method method;
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
@@ -72,7 +72,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final Map<String,Widget> widgets;
 	private final List<MediaType> supportedAcceptTypes, supportedContentTypes;
 
-	CallMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
+	RestJavaMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
 		this.context = context;
 		this.method = method;
@@ -877,11 +877,11 @@ class CallMethod implements Comparable<CallMethod>  {
 	}
 
 	/*
-	 * compareTo() method is used to keep SimpleMethods ordered in the CallRouter list.
+	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
 	 * It maintains the order in which matches are made during requests.
 	 */
 	@Override /* Comparable */
-	public int compareTo(CallMethod o) {
+	public int compareTo(RestJavaMethod o) {
 		int c;
 
 		c = priority.compareTo(o.priority);
@@ -909,9 +909,9 @@ class CallMethod implements Comparable<CallMethod>  {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (! (o instanceof CallMethod))
+		if (! (o instanceof RestJavaMethod))
 			return false;
-		return (compareTo((CallMethod)o) == 0);
+		return (compareTo((RestJavaMethod)o) == 0);
 	}
 
 	@Override /* Object */
