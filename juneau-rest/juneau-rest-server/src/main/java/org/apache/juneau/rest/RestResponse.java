@@ -53,12 +53,10 @@ import org.apache.juneau.serializer.*;
 public final class RestResponse extends HttpServletResponseWrapper {
 
 	private final RestRequest request;
+	private RestJavaMethod restJavaMethod;
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private ObjectMap properties;                // Response properties
-	SerializerGroup serializerGroup;
-	HttpPartSerializer partSerializer;
-	private EncoderGroup encoders;
 	private ServletOutputStream os;
 	private PrintWriter w;
 	private HtmlDocBuilder htmlDocBuilder;
@@ -89,22 +87,20 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(ObjectMap properties, String defaultCharset, SerializerGroup mSerializers, HttpPartSerializer partSerializer, EncoderGroup encoders) {
+	final void init(RestJavaMethod rjm, ObjectMap properties) {
+		this.restJavaMethod = rjm;
 		this.properties = properties;
-		this.serializerGroup = mSerializers;
-		this.partSerializer = partSerializer;
-		this.encoders = encoders;
 
 		// Find acceptable charset
 		String h = request.getHeader("accept-charset");
 		String charset = null;
 		if (h == null)
-			charset = defaultCharset;
+			charset = rjm.defaultCharset;
 		else for (MediaTypeRange r : MediaTypeRange.parse(h)) {
 			if (r.getQValue() > 0) {
 				MediaType mt = r.getMediaType();
 				if (mt.getType().equals("*"))
-					charset = defaultCharset;
+					charset = rjm.defaultCharset;
 				else if (Charset.isSupported(mt.getType()))
 					charset = mt.getType();
 				if (charset != null)
@@ -123,7 +119,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The serializer group for the response.
 	 */
 	public SerializerGroup getSerializerGroup() {
-		return serializerGroup;
+		return restJavaMethod.serializers;
 	}
 
 	/**
@@ -132,7 +128,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		return serializerGroup.getSupportedMediaTypes();
+		return restJavaMethod.supportedAcceptTypes;
 	}
 
 	/**
@@ -143,7 +139,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @throws RestServletException
 	 */
 	public List<String> getSupportedEncodings() throws RestServletException {
-		return encoders.getSupportedEncodings();
+		return restJavaMethod.encoders.getSupportedEncodings();
 	}
 
 	/**
@@ -270,10 +266,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	public ServletOutputStream getNegotiatedOutputStream() throws IOException {
 		if (os == null) {
 			Encoder encoder = null;
-
+			EncoderGroup encoders = restJavaMethod.encoders;
+			
 			String ae = request.getHeader("Accept-Encoding");
 			if (! (ae == null || ae.isEmpty())) {
-				EncoderMatch match = encoders != null ? encoders.getEncoderMatch(ae) : null;
+				EncoderMatch match = encoders.getEncoderMatch(ae);
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
 					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
@@ -432,7 +429,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The HTTP-part serializer associated with this response.
 	 */
 	public HttpPartSerializer getPartSerializer() {
-		return partSerializer;
+		return restJavaMethod.partSerializer;
 	}
 
 	@Override /* ServletResponse */

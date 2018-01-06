@@ -52,7 +52,6 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
 	private final RestConverter[] converters;
-	private final HttpPartSerializer partSerializer;
 	private final ObjectMap properties;
 	private final boolean deprecated;
 	private final String description, tags, summary, externalDocs;
@@ -64,6 +63,7 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	final SerializerGroup serializers;
 	final ParserGroup parsers;
 	final EncoderGroup encoders;
+	final HttpPartSerializer partSerializer;
 	final HttpPartParser partParser;
 	final Map<String,Object> 
 		defaultRequestHeaders,
@@ -799,7 +799,7 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		ObjectMap requestProperties = new ResolvingObjectMap(req.getVarResolverSession()).setInner(properties);
 
 		req.init(this, requestProperties);
-		res.init(requestProperties, defaultCharset, serializers, partSerializer, encoders);
+		res.init(this, requestProperties);
 
 		// Class-level guards
 		for (RestGuard guard : context.getGuards())
