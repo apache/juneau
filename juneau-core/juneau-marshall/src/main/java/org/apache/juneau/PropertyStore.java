@@ -20,7 +20,6 @@ import java.util.*;
 import org.apache.juneau.PropertyStoreBuilder.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 
 
 /**
@@ -29,6 +28,8 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The general idea behind a property store is to serve as a reusable configuration of an artifact (e.g. a Serializer)
  * such that the artifact can be cached and reused if the property stores are 'equal'.
+ * 
+ * <h6 class='topic'>Concept</h6>
  * 
  * <p>
  * For example, two serializers of the same type created with the same configuration will always end up being
@@ -44,85 +45,154 @@ import org.apache.juneau.serializer.*;
  * This has the effect of significantly improving performance, especially if you're creating many Serializers and 
  * Parsers.
  * 
+ * <h6 class='topic'>PropertyStoreBuilder</h6>
+ * 
+ * <p>
+ * The {@link PropertyStoreBuilder} class is used to build up and instantiate immutable <code>PropertyStore</code>
+ * objects.
+ * 
+ * <p>
+ * In the example above, the property store being built looks like the following:
+ *  
+ * <p class='bcode'>
+ * 	PropertyStore ps = PropertyStore
+ * 		.<jsm>create</jsm>()
+ * 		.set(<js>"BeanContext.pojoSwaps.lc"</js>, MySwap.<jk>class</jk>)
+ * 		.set(<js>"JsonSerializer.simpleMode.b"</js>, <jk>true</jk>)
+ * 		.build();
+ * </p>
+ * 
+ * <p>
+ * Property stores are immutable, comparable, and their hashcodes are calculated exactly one time.
+ * That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
+ * 
+ * <h6 class='topic'>Property naming convention</h6>
+ * 
  * <p>
  * Property names must have the following format...
  * <p class='bcode'>
- * 	<js>"{group}.{name}.{type}"</js>
+ * 	<js>"{class}.{name}.{type}"</js>
  * </p>
+ * <p>
  * ...where the parts consist of the following...
  * <ul>
- * 	<li><js>"{group}"</js> - The group name of the property (e.g. <js>"JsonSerializer"</js>).
+ * 	<li><js>"{class}"</js> - The group name of the property (e.g. <js>"JsonSerializer"</js>).
  * 		<br>It's always going to be the simple class name of the class it's associated with.
  * 	<li><js>"{name}"</js> - The property name (e.g. <js>"useWhitespace"</js>).
  * 	<li><js>"{type}"</js> - The property data type.
  * 		<br>A 1 or 2 character string that identifies the data type of the property.
  * 		<br>Valid values are:
  * 		<ul>
- * 			<li><js>"s"<js>:  <code>String</code>
- * 			<li><js>"b"<js>:  <code>Boolean</code>
- * 			<li><js>"i"<js>:  <code>Integer</code>
- * 			<li><js>"c"<js>:  <code>Class</code>
- * 			<li><js>"o"<js>:  <code>Object</code>
- * 			<li><js>"ss"<js>:  <code>TreeSet&lt;String&gt;</code>
- * 			<li><js>"si"<js>:  <code>TreeSet&lt;Integer&gt;</code>
- * 			<li><js>"sc"<js>:  <code>TreeSet&lt;Class&gt;</code>
- * 			<li><js>"ls"<js>:  <code>ArrayList&lt;String&gt;</code>
- * 			<li><js>"li"<js>:  <code>ArrayList&lt;Integer&gt;</code>
- * 			<li><js>"lc"<js>:  <code>ArrayList&lt;Class&gt;</code>
- * 			<li><js>"lo"<js>:  <code>ArrayList&lt;Object&gt;</code>
- * 			<li><js>"ms"<js>:  <code>TreeMap&lt;String,String&gt;</code>
- * 			<li><js>"mi"<js>:  <code>TreeMap&lt;String,Integer&gt;</code>
- * 			<li><js>"mc"<js>:  <code>TreeMap&lt;String,Class&gt;</code>
- * 			<li><js>"mo"<js>:  <code>TreeMap&lt;String,Object&gt;</code>
+ * 			<li><js>"s"</js>:  <code>String</code>
+ * 			<li><js>"b"</js>:  <code>Boolean</code>
+ * 			<li><js>"i"</js>:  <code>Integer</code>
+ * 			<li><js>"c"</js>:  <code>Class</code>
+ * 			<li><js>"o"</js>:  <code>Object</code>
+ * 			<li><js>"ss"</js>:  <code>TreeSet&lt;String&gt;</code>
+ * 			<li><js>"si"</js>:  <code>TreeSet&lt;Integer&gt;</code>
+ * 			<li><js>"sc"</js>:  <code>TreeSet&lt;Class&gt;</code>
+ * 			<li><js>"ls"</js>:  <code>Linkedlist&lt;String&gt;</code>
+ * 			<li><js>"li"</js>:  <code>Linkedlist&lt;Integer&gt;</code>
+ * 			<li><js>"lc"</js>:  <code>Linkedlist&lt;Class&gt;</code>
+ * 			<li><js>"lo"</js>:  <code>Linkedlist&lt;Object&gt;</code>
+ * 			<li><js>"sms"</js>:  <code>TreeMap&lt;String,String&gt;</code>
+ * 			<li><js>"smi"</js>:  <code>TreeMap&lt;String,Integer&gt;</code>
+ * 			<li><js>"smc"</js>:  <code>TreeMap&lt;String,Class&gt;</code>
+ * 			<li><js>"smo"</js>:  <code>TreeMap&lt;String,Object&gt;</code>
+ * 			<li><js>"oms"</js>:  <code>LinkedHashMap&lt;String,String&gt;</code>
+ * 			<li><js>"omi"</js>:  <code>LinkedHashMap&lt;String,Integer&gt;</code>
+ * 			<li><js>"omc"</js>:  <code>LinkedHashMap&lt;String,Class&gt;</code>
+ * 			<li><js>"omo"</js>:  <code>LinkedHashMap&lt;String,Object&gt;</code>
  * 		</ul>
  * </ul>
  * 
  * <p>
- * For example, the {@link JsonSerializer} extends from {@link Serializer} and {@link BeanContext}, and therefore
- * is configured by properties defined in the <js>"JsonSerializer"</js>, <js>"Serializer"</js>, and <js>"BeanContext"</js>
- * groups.  Since serializers and bean contexts can be relatively expensive to instantiate, we can cache and
- * reuse <code>JsonSerializer</code> instances if the property store used to instantiate them have equivalent
- * <js>"JsonSerializer"</js>, <js>"Serializer"</js>, and <js>"BeanContext"</js> groups.
+ * For example, <js>"BeanContext.pojoSwaps.lc"</js> refers to a property on the <code>BeanContext</code> class
+ * called <code>pojoSwaps</code> that has a data type of <code>List&lt;Class&gt;</code>.
+ * 
+ * <h6 class='topic'>Property value normalization</h6>
  * 
  * <p>
- * Set and list properties have the additional convenience 'command' names for adding and removing entries:
- * <p class='bcode'>
- * 	<js>"{group}.{name}.{type}/add"</js>  <jc>// Add a value to the set/list.</jc>
- * 	<js>"{group}.{name}.{type}/remove"</js>  <jc>// Remove a value from the set/list.</jc>
- * </p>
+ * Property values get 'normalized' when they get set.  
+ * For example, calling <code>propertyStore.set(<js>"BeanContext.debug.b"</js>, <js>"true"</js>)</code> will cause the property
+ * value to be converted to a boolean. 
+ * 
+ * <h6 class='topic'>Set types</h6>
  * 
  * <p>
- * Set properties are typically used in cases where the order of the value is not important.
- * A <code>TreeSet</code> is used so that the order in which you add elements does not affect the resulting order
- * of the property.
+ * The <js>"sX"</js> property types are sorted sets.
+ * <br>Use these for collections of objects where the order is not important.
+ * <br>Internally, a <code>TreeSet</code> is used so that the order in which you add elements does not affect the 
+ * resulting order of the property.
+ * 
+ * <h6 class='topic'>List types</h6>
  * 
  * <p>
- * List properties are typically used in cases where the order in which entries are added is important.
+ * The <js>"lX"</js> property types are ordered lists.
+ * <br>Use these in cases where the order in which entries are added is important.
+ * 
+ * <p>
  * Adding to a list property will cause the new entries to be added to the BEGINNING of the list.
- * This ensures that the resulting order of the list is in most-to-least importance.
+ * <br>This ensures that the resulting order of the list is in most-to-least importance.
+ * 
+ * <p>
  * For example, multiple calls to <code>pojoSwaps()</code> causes new entries to be added to the beginning of the list
  * so that previous values can be 'overridden':
  * <p class='bcode'>
- *		<jc>// Swap order:  [MySwap2.class, MySwap1.class]</jc>
- * 	JsonSerializer.create().pojoSwaps(MySwap1.class).pojoSwaps(MySwap2.class).build();
+ * 	<jc>// Swap order:  [MySwap2.class, MySwap1.class]</jc>
+ * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>).pojoSwaps(MySwap2.<jk>class</jk>).build();
  * </p>
+ * 
  * <p>
  * Note that the order is different when passing multiple values into the <code>pojoSwaps()</code> method, in which
  * case the order should be first-match-wins:
  * <p class='bcode'>
- *		<jc>// Swap order:  [MySwap1.class, MySwap2.class]</jc>
- * 	JsonSerializer.create().pojoSwaps(MySwap1.class,MySwap2.class).build();
+ * 	<jc>// Swap order:  [MySwap1.class, MySwap2.class]</jc>
+ * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>).build();
+ * </p>
+ * 
+ * <p>
+ * Combined, the results look like this:
+ * <p class='bcode'>
+ * 	<jc>// Swap order:  [MySwap4.class, MySwap3.class, MySwap1.class, MySwap2.class]</jc>
+ * 	JsonSerializer
+ * 		.create()
+ * 		.pojoSwaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>)
+ * 		.pojoSwaps(MySwap3.<jk>class</jk>)
+ * 		.pojoSwaps(MySwap4.<jk>class</jk>)
+ * 		.build();
+ * </p>
+ * 
+ * <h6 class='topic'>Map types</h6>
+ * 
+ * <p>
+ * The <js>"smX"</js> and <js>"omX"</js> are sorted and order maps respectively.
+ * 
+ * <h6 class='topic'>Command properties</h6>
+ * 
+ * <p>
+ * Set and list properties have the additional convenience 'command' names for adding and removing entries:
+ * <p class='bcode'>
+ * 	<js>"{class}.{name}.{type}/add"</js>  <jc>// Add a value to the set/list.</jc>
+ * 	<js>"{class}.{name}.{type}/remove"</js>  <jc>// Remove a value from the set/list.</jc>
  * </p>
  * 
  * <p>
  * Map properties have the additional convenience property name for adding and removing map entries:
  * <p class='bcode'>
- * 	<js>"{group}.{name}.{type}/add.{key}"</js>  <jc>// Add a map entry (or delete if the value is null).</jc>
+ * 	<js>"{class}.{name}.{type}/add.{key}"</js>  <jc>// Add a map entry (or delete if the value is null).</jc>
  * </p>
  * 
+ * <h6 class='topic'>Setting properties</h6>
+ * 
  * <p>
- * Property stores are entirely immutable which means their hashcode is calculated exactly once, meaning they
- * are particularly good for use as hashmap keys.
+ * TODO
+ * 
+ * <h6 class='topic'>Retrieving properties</h6>
+ * 
+ * <p>
+ * TODO
+ * 
  */
 @SuppressWarnings("unchecked")
 public final class PropertyStore {
