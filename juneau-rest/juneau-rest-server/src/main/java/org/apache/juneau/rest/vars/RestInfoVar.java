@@ -54,7 +54,7 @@ import org.apache.juneau.svl.*;
  * 	String titleOrDescription = restRequest.resolveVars(<js>"$RI{title,description}"</js>); 
  * </p>
  * 
- * <h6 class='topic'>Notes:</h6>
+ * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver 

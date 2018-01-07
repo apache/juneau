@@ -817,7 +817,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Keep HttpClient open.
+	 * Configuration property:  Keep HttpClient open.
 	 *
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
@@ -836,7 +836,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Request headers.
+	 * Configuration property:  Request headers.
 	 *
 	 * @param key The header name.
 	 * @param value The header value.
@@ -848,7 +848,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Request query parameters.
+	 * Configuration property:  Request query parameters.
 	 *
 	 * @param key The query parameter name.
 	 * @param value The query parameter value value.

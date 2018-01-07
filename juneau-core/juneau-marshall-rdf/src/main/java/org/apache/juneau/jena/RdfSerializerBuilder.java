@@ -56,7 +56,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  RDF language.
+	 * Configuration property:  RDF language.
 	 * 
 	 * <p>
 	 * Can be any of the following:
@@ -148,7 +148,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
+	 * Configuration property:  XML namespace for Juneau properties.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -165,7 +165,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
+	 * Configuration property:  Default XML namespace for bean properties.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -182,7 +182,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 * 
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
@@ -204,7 +204,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
+	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -221,7 +221,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
+	 * Configuration property:  Add RDF root identifier property to root node.
 	 * 
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of 
@@ -247,7 +247,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Auto-detect namespace usage.
+	 * Configuration property:  Auto-detect namespace usage.
 	 * 
 	 * <p>
 	 * Detect namespace usage before serialization.
@@ -271,7 +271,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Default namespaces.
+	 * Configuration property:  Default namespaces.
 	 * 
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -291,7 +291,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
+	 * Configuration property:  RDF format for representing collections and arrays.
 	 * 
 	 * <p>
 	 * Possible values:
@@ -329,7 +329,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
 	 * 
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of

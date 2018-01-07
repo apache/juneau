@@ -77,8 +77,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	private static final String PREFIX = "HtmlDocSerializer.";
 
 	/**
-	 * <b>Configuration property:</b>  Header section contents.
+	 * Configuration property:  Header section contents.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -86,6 +87,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to override the contents of the header section on the HTML page.
 	 * The header section normally contains the title and description at the top of the page.
@@ -104,8 +106,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_header = PREFIX + "header.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Page navigation links.
+	 * Configuration property:  Page navigation links.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.navlinks.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -113,6 +116,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
 	 *
@@ -169,13 +173,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_navlinks = PREFIX + "navlinks.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_navlinks} property.
+	 * Configuration property:  Add to the {@link #HTMLDOC_navlinks} property.
 	 */
 	public static final String HTMLDOC_navlinks_add = PREFIX + "navlinks.ls/add";
 
 	/**
-	 * <b>Configuration property:</b>  Nav section contents.
+	 * Configuration property:  Nav section contents.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nav.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -183,6 +188,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to override the contents of the nav section on the HTML page.
 	 * The nav section normally contains the page links at the top of the page.
@@ -204,8 +210,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_nav = PREFIX + "nav.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Aside section contents.
+	 * Configuration property:  Aside section contents.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.aside.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -213,6 +220,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to specify the contents of the aside section on the HTML page.
 	 * The aside section floats on the right of the page for providing content supporting the serialized content of
@@ -239,8 +247,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_aside = PREFIX + "aside.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Footer section contents.
+	 * Configuration property:  Footer section contents.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.footer.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -248,6 +257,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to specify the contents of the footer section on the HTML page.
 	 *
@@ -268,8 +278,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_footer = PREFIX + "footer.ls";
 
 	/**
-	 * <b>Configuration property:</b>  No-results message.
+	 * Configuration property:  No-results message.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.noResultsMessage.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -277,6 +288,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
 	 *
@@ -295,8 +307,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_noResultsMessage = PREFIX + "noResultsMessage.s";
 
 	/**
-	 * <b>Configuration property:</b>  Prevent word wrap on page.
+	 * Configuration property:  Prevent word wrap on page.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -304,14 +317,16 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 	 */
 	public static final String HTMLDOC_nowrap = PREFIX + "nowrap.b";
 
 	/**
-	 * <b>Configuration property:</b>  Stylesheet import URLs.
+	 * Configuration property:  Stylesheet import URLs.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.stylesheet.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -319,6 +334,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds a link to the specified stylesheet URL.
 	 *
@@ -328,13 +344,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_stylesheet} property.
+	 * Configuration property:  Add to the {@link #HTMLDOC_stylesheet} property.
 	 */
 	public static final String HTMLDOC_stylesheet_add = PREFIX + "stylesheet.ls/add";
 
 	/**
-	 * <b>Configuration property:</b>  CSS style code.
+	 * Configuration property:  CSS style code.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.style.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -342,6 +359,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
@@ -371,13 +389,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_style = PREFIX + "style.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_style} property.
+	 * Configuration property:  Add to the {@link #HTMLDOC_style} property.
 	 */
 	public static final String HTMLDOC_style_add = PREFIX + "style.ls/add";
 
 	/**
-	 * <b>Configuration property:</b>  Javascript code.
+	 * Configuration property:  Javascript code.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.script.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -385,6 +404,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds the specified Javascript code to the HTML page.
 	 *
@@ -413,13 +433,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_script = PREFIX + "script.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_script} property.
+	 * Configuration property:  Add to the {@link #HTMLDOC_script} property.
 	 */
 	public static final String HTMLDOC_script_add = PREFIX + "script.ls/add";
 
 	/**
-	 * <b>Configuration property:</b>  Additional head section content.
+	 * Configuration property:  Additional head section content.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.head.ls"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
@@ -427,6 +448,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds the specified HTML content to the head section of the page.
 	 *
@@ -455,13 +477,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_head = PREFIX + "head.ls";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_head} property.
+	 * Configuration property:  Add to the {@link #HTMLDOC_head} property.
 	 */
 	public static final String HTMLDOC_links_add = PREFIX + "head.ls./add";
 
 	/**
-	 * <b>Configuration property:</b>  HTML document template.
+	 * Configuration property:  HTML document template.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.template.c"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> HtmlDocTemplate&gt;</code>
@@ -469,6 +492,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the template to use for serializing the page.
 	 *

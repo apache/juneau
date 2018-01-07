@@ -95,8 +95,9 @@ public class JsonSerializer extends WriterSerializer {
 	private static final String PREFIX = "JsonSerializer.";
 
 	/**
-	 * <b>Configuration property:</b>  Simple JSON mode.
+	 * Configuration property:  Simple JSON mode.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -104,6 +105,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
@@ -111,8 +113,9 @@ public class JsonSerializer extends WriterSerializer {
 	public static final String JSON_simpleMode = PREFIX + "simpleMode.b";
 
 	/**
-	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
+	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -120,6 +123,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 * The JSON specification allows for either format.
@@ -129,8 +133,9 @@ public class JsonSerializer extends WriterSerializer {
 	public static final String JSON_escapeSolidus = PREFIX + "escapeSolidus.b";
 
 	/**
-	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -138,6 +143,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.

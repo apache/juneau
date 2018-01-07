@@ -53,7 +53,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Anchor text source.
+	 * Configuration property:  Anchor text source.
 	 *
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
@@ -76,7 +76,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Look for URLs in {@link String Strings}.
+	 * Configuration property:  Look for URLs in {@link String Strings}.
 	 *
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
@@ -97,7 +97,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Look for link labels in the <js>"label"</js> parameter of the URL.
+	 * Configuration property:  Look for link labels in the <js>"label"</js> parameter of the URL.
 	 *
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
@@ -120,7 +120,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  The parameter name to use when using {@link HtmlSerializer#HTML_lookForLabelParameters}.
+	 * Configuration property:  The parameter name to use when using {@link HtmlSerializer#HTML_lookForLabelParameters}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -137,7 +137,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
+	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

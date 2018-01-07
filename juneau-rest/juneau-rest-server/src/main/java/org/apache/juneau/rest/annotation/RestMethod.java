@@ -224,7 +224,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_serializers}
 	 * 	<li>Annotations: 
@@ -274,7 +274,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_parsers}
 	 * 	<li>Annotations: 
@@ -398,7 +398,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_encoders}
 	 * 	<li>Annotations: 

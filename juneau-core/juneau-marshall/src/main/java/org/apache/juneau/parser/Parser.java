@@ -140,8 +140,9 @@ public abstract class Parser extends BeanContext {
 	private static final String PREFIX = "Parser.";
 
 	/**
-	 * <b>Configuration property:</b>  Trim parsed strings.
+	 * Configuration property:  Trim parsed strings.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -149,6 +150,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
@@ -156,14 +158,17 @@ public abstract class Parser extends BeanContext {
 	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
 
 	/**
-	 * <b>Configuration property:</b>  Strict mode.
+	 * Configuration property:  Strict mode.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.strict.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
 	 *
@@ -198,8 +203,9 @@ public abstract class Parser extends BeanContext {
 	public static final String PARSER_strict = PREFIX + "strict.b";
 
 	/**
-	 * <b>Configuration property:</b>  Input stream charset.
+	 * Configuration property:  Input stream charset.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -207,6 +213,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 *
@@ -216,8 +223,9 @@ public abstract class Parser extends BeanContext {
 	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
 
 	/**
-	 * <b>Configuration property:</b>  File charset.
+	 * Configuration property:  File charset.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -225,6 +233,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
 	 *
@@ -237,8 +246,9 @@ public abstract class Parser extends BeanContext {
 	public static final String PARSER_fileCharset = PREFIX + "fileCharset.s";
 
 	/**
-	 * <b>Configuration property:</b>  Parser listener.
+	 * Configuration property:  Parser listener.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Parser.listener.c"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? extends ParserListener&gt;</code>
@@ -246,6 +256,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 */

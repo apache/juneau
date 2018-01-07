@@ -47,7 +47,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Max serialization depth.
+	 * Configuration property:  Max serialization depth.
 	 *
 	 * <p>
 	 * Abort serialization if specified depth is reached in the POJO tree.
@@ -68,7 +68,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Initial depth.
+	 * Configuration property:  Initial depth.
 	 *
 	 * <p>
 	 * The initial indentation level at the root.
@@ -88,7 +88,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Automatically detect POJO recursions.
+	 * Configuration property:  Automatically detect POJO recursions.
 	 *
 	 * <p>
 	 * Specifies that recursions should be checked for during serialization.
@@ -120,7 +120,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Ignore recursion errors.
+	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
 	 * Used in conjunction with {@link Serializer#SERIALIZER_detectRecursions}.
@@ -145,7 +145,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Use whitespace.
+	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
@@ -173,7 +173,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Maximum indentation.
+	 * Configuration property:  Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
@@ -192,7 +192,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -216,7 +216,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Quote character.
+	 * Configuration property:  Quote character.
 	 *
 	 * <p>
 	 * This is the character used for quoting attributes and values.
@@ -244,7 +244,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Trim null bean property values.
+	 * Configuration property:  Trim null bean property values.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
@@ -267,7 +267,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Trim empty lists and arrays.
+	 * Configuration property:  Trim empty lists and arrays.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
@@ -291,7 +291,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Trim empty maps.
+	 * Configuration property:  Trim empty maps.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
@@ -314,7 +314,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Trim strings.
+	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
@@ -333,7 +333,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  URI context bean.
+	 * Configuration property:  URI context bean.
 	 *
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
@@ -357,7 +357,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  URI resolution.
+	 * Configuration property:  URI resolution.
 	 *
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
@@ -392,7 +392,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  URI relativity.
+	 * Configuration property:  URI relativity.
 	 *
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
@@ -425,7 +425,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
+	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -442,7 +442,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Sort maps alphabetically.
+	 * Configuration property:  Sort maps alphabetically.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -459,7 +459,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Abridged output.
+	 * Configuration property:  Abridged output.
 	 *
 	 * <p>
 	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
@@ -478,7 +478,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Serializer listener.
+	 * Configuration property:  Serializer listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.

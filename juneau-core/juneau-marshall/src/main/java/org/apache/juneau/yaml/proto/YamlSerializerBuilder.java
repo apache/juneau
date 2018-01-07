@@ -52,7 +52,7 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Simple JSON mode.
+	 * Configuration property:  Simple JSON mode.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
@@ -81,7 +81,7 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
+	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.

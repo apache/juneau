@@ -34,8 +34,9 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	private static final String PREFIX = "MsgPackSerializer.";
 
 	/**
-	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"MsgPackSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -43,6 +44,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.

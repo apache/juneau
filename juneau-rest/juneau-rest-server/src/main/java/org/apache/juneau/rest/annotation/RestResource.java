@@ -66,7 +66,7 @@ public @interface RestResource {
 	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
 	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_messages}
 	 * 	<li>Annotations: 
@@ -306,7 +306,7 @@ public @interface RestResource {
 	 * <p>
 	 * Adds class-level serializers to this resource.
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_serializers}
 	 * 	<li>Annotations: 
@@ -333,7 +333,7 @@ public @interface RestResource {
 	 * <p>
 	 * Adds class-level parsers to this resource.
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_parsers}
 	 * 	<li>Annotations: 
@@ -362,7 +362,7 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 *
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
 	 * 	<li>Annotations: 
@@ -386,7 +386,7 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_partParser}
 	 * 	<li>Annotations: 
@@ -511,7 +511,7 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_encoders}
 	 * 	<li>Annotations: 
@@ -824,7 +824,7 @@ public @interface RestResource {
 	 * 	<li><l>[working-dir]/docs</l> directory.
 	 * </ol>
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_staticFiles}
 	 * 	<li>Annotations: 
@@ -855,7 +855,7 @@ public @interface RestResource {
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_staticFileResponseHeaders}
 	 * 	<li>Annotations: 
@@ -879,7 +879,7 @@ public @interface RestResource {
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_classpathResourceFinder}
 	 * 	<li>Annotations: 
@@ -902,13 +902,13 @@ public @interface RestResource {
 	Class<? extends ClasspathResourceFinder> classpathResourceFinder() default ClasspathResourceFinder.Null.class;
 
 	/**
-	 * <b>Configuration property:</b>  Use classpath resource caching. 
+	 * Configuration property:  Use classpath resource caching. 
 	 *
 	 * <p>
 	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related 
 	 * methods) will be cached in memory to speed subsequent lookups.
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_useClasspathResourceCaching}
 	 * 	<li>Annotations: 
@@ -1026,7 +1026,7 @@ public @interface RestResource {
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
 
 	/**
-	 * <b>Configuration property:</b>  REST info provider. 
+	 * Configuration property:  REST info provider. 
 	 * 
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
@@ -1396,7 +1396,7 @@ public @interface RestResource {
 	String maxInput() default "";
 	
 	/**
-	 * <b>Configuration property:</b>  MIME types. 
+	 * Configuration property:  MIME types. 
 	 *
 	 * <p>
 	 * Defines MIME-type file type mappings.
@@ -1413,7 +1413,7 @@ public @interface RestResource {
 	 * <p>
 	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_mimeTypes}
 	 * 	<li>Annotations: 

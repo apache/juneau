@@ -54,7 +54,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b> Serialize bean property collections/arrays as separate key/value pairs.
+	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.

@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  * 	<li><l>[working-dir]/docs</l> directory.
  * </ol>
  * 
- * <h6 class='topic'>Notes:</h6>
+ * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
  * 		Mappings are cumulative from parent to child.  Child resources can override mappings made on parent resources.

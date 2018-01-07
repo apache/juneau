@@ -36,8 +36,9 @@ public class UonParser extends ReaderParser {
 	private static final String PREFIX = "UonParser.";
 
 	/**
-	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
+	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -45,6 +46,7 @@ public class UonParser extends ReaderParser {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * before being passed to this parser.

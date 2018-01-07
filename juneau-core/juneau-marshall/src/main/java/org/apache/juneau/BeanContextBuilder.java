@@ -99,7 +99,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Beans require no-arg constructors.
+	 * Configuration property:  Beans require no-arg constructors.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
@@ -122,7 +122,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Beans require {@link Serializable} interface.
+	 * Configuration property:  Beans require {@link Serializable} interface.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
@@ -145,7 +145,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Beans require setters for getters.
+	 * Configuration property:  Beans require setters for getters.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
@@ -165,7 +165,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Beans require at least one property.
+	 * Configuration property:  Beans require at least one property.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
@@ -188,7 +188,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * Configuration property:  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * value.
 	 *
 	 * <p>
@@ -213,7 +213,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Look for bean constructors with the specified minimum visibility.
+	 * Configuration property:  Look for bean constructors with the specified minimum visibility.
 	 *
 	 * <p>
 	 * Constructors not meeting this minimum visibility will be ignored.
@@ -234,7 +234,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Look for bean classes with the specified minimum visibility.
+	 * Configuration property:  Look for bean classes with the specified minimum visibility.
 	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
@@ -255,7 +255,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Look for bean fields with the specified minimum visibility.
+	 * Configuration property:  Look for bean fields with the specified minimum visibility.
 	 *
 	 * <p>
 	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
@@ -277,7 +277,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Look for bean methods with the specified minimum visibility.
+	 * Configuration property:  Look for bean methods with the specified minimum visibility.
 	 *
 	 * <p>
 	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
@@ -299,7 +299,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Use Java {@link Introspector} for determining bean properties.
+	 * Configuration property:  Use Java {@link Introspector} for determining bean properties.
 	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
@@ -319,7 +319,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Use interface proxies.
+	 * Configuration property:  Use interface proxies.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
@@ -339,7 +339,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Ignore unknown properties.
+	 * Configuration property:  Ignore unknown properties.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
@@ -359,7 +359,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Ignore unknown properties with null values.
+	 * Configuration property:  Ignore unknown properties with null values.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
@@ -379,7 +379,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Ignore properties without setters.
+	 * Configuration property:  Ignore properties without setters.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
@@ -399,7 +399,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Ignore invocation errors on getters.
+	 * Configuration property:  Ignore invocation errors on getters.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
@@ -419,7 +419,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Ignore invocation errors on setters.
+	 * Configuration property:  Ignore invocation errors on setters.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
@@ -439,7 +439,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Sort bean properties in alphabetical order.
+	 * Configuration property:  Sort bean properties in alphabetical order.
 	 *
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
@@ -466,7 +466,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
+	 * Configuration property:  Packages whose classes should not be considered beans.
 	 *
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
@@ -493,7 +493,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
+	 * Configuration property:  Packages whose classes should not be considered beans.
 	 *
 	 * Same as {@link #notBeanPackages(boolean, String...)} but using a <code>Collection</code>.
 	 * 
@@ -508,7 +508,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to packages whose classes should not be considered beans.
+	 * Configuration property:  Add to packages whose classes should not be considered beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -525,7 +525,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to packages whose classes should not be considered beans.
+	 * Configuration property:  Add to packages whose classes should not be considered beans.
 	 *
 	 * <p>
 	 * Same as {@link #notBeanPackages(String...)} but using a <code>Collection</code>.
@@ -539,7 +539,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from packages whose classes should not be considered beans.
+	 * Configuration property:  Remove from packages whose classes should not be considered beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -557,7 +557,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from packages whose classes should not be considered beans.
+	 * Configuration property:  Remove from packages whose classes should not be considered beans.
 	 *
 	 * <p>
 	 * Same as {@link #notBeanPackagesRemove(String...)} but using a <code>Collection</code>.
@@ -572,7 +572,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
+	 * Configuration property:  Classes to be excluded from consideration as being beans.
 	 *
 	 * <p>
 	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
@@ -594,7 +594,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
+	 * Configuration property:  Classes to be excluded from consideration as being beans.
 	 *
 	 * <p>
 	 * Same as {@link #notBeanClasses(boolean, Class...)} but using a <code>Collection</code>.
@@ -610,7 +610,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to classes that should not be considered beans.
+	 * Configuration property:  Add to classes that should not be considered beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -628,7 +628,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to classes that should not be considered beans.
+	 * Configuration property:  Add to classes that should not be considered beans.
 	 *
 	 * <p>
 	 * Same as {@link #notBeanClasses(Class...)} but using a <code>Collection</code>.
@@ -643,7 +643,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from classes that should not be considered beans.
+	 * Configuration property:  Remove from classes that should not be considered beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -661,7 +661,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from classes that should not be considered beans.
+	 * Configuration property:  Remove from classes that should not be considered beans.
 	 *
 	 * <p>
 	 * Same as {@link #notBeanClassesRemove(Class...)} but using a <code>Collection</code>.
@@ -676,7 +676,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Bean filters to apply to beans.
+	 * Configuration property:  Bean filters to apply to beans.
 	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
@@ -712,7 +712,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Bean filters to apply to beans.
+	 * Configuration property:  Bean filters to apply to beans.
 	 *
 	 * <p>
 	 * Same as {@link #beanFilters(boolean, Class...)} but using a <code>Collection</code>.
@@ -728,7 +728,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to bean filters.
+	 * Configuration property:  Add to bean filters.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -746,7 +746,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to bean filters.
+	 * Configuration property:  Add to bean filters.
 	 *
 	 * <p>
 	 * Same as {@link #beanFilters(Class...)} but using a <code>Collection</code>.
@@ -761,7 +761,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from bean filters.
+	 * Configuration property:  Remove from bean filters.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -779,7 +779,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from bean filters.
+	 * Configuration property:  Remove from bean filters.
 	 *
 	 * <p>
 	 * Same as {@link #beanFiltersRemove(Class...)} but using a <code>Collection</code>.
@@ -794,7 +794,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
+	 * Configuration property:  POJO swaps to apply to Java objects.
 	 *
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
@@ -819,7 +819,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
+	 * Configuration property:  POJO swaps to apply to Java objects.
 	 *
 	 * <p>
 	 * Same as {@link #pojoSwaps(boolean, Class...)} but using a <code>Collection</code>.
@@ -835,7 +835,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to POJO swaps.
+	 * Configuration property:  Add to POJO swaps.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -853,7 +853,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Add to POJO swaps.
+	 * Configuration property:  Add to POJO swaps.
 	 *
 	 * <p>
 	 * Same as {@link #pojoSwaps(Class...)} but using a <code>Collection</code>.
@@ -868,7 +868,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from POJO swaps.
+	 * Configuration property:  Remove from POJO swaps.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -886,7 +886,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from POJO swaps.
+	 * Configuration property:  Remove from POJO swaps.
 	 *
 	 * <p>
 	 * Same as {@link #pojoSwapsRemove(Class...)} but using a <code>Collection</code>.
@@ -901,7 +901,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
+	 * Configuration property:  Implementation classes for interfaces and abstract classes.
 	 *
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
@@ -922,7 +922,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
+	 * Configuration property:  Implementation classes for interfaces and abstract classes.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -941,7 +941,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 * Configuration property:  Explicitly specify visible bean properties.
 	 *
 	 * <p>
 	 * Specifies to only include the specified list of properties for the specified bean classes.
@@ -969,7 +969,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 * Configuration property:  Explicitly specify visible bean properties.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -987,7 +987,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Explicitly specify visible bean properties.
+	 * Configuration property:  Explicitly specify visible bean properties.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1005,7 +1005,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 * Configuration property:  Exclude specified properties from beans.
 	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
@@ -1033,7 +1033,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 * Configuration property:  Exclude specified properties from beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1051,7 +1051,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Exclude specified properties from beans.
+	 * Configuration property:  Exclude specified properties from beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1069,7 +1069,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Bean lookup dictionary.
+	 * Configuration property:  Bean lookup dictionary.
 	 * 
 	 * <h6 class='figure'>Example:</h6>
 	 *
@@ -1099,7 +1099,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Bean lookup dictionary.
+	 * Configuration property:  Bean lookup dictionary.
 	 *
 	 * <p>
 	 * The list of classes that make up the bean dictionary in this bean context.
@@ -1154,7 +1154,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Remove from bean dictionary.
+	 * Configuration property:  Remove from bean dictionary.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1172,7 +1172,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Name to use for the bean type properties used to represent a bean type.
+	 * Configuration property:  Name to use for the bean type properties used to represent a bean type.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1188,7 +1188,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Default parser to use when converting <code>Strings</code> to POJOs.
+	 * Configuration property:  Default parser to use when converting <code>Strings</code> to POJOs.
 	 *
 	 * <p>
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
@@ -1207,7 +1207,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Locale.
+	 * Configuration property:  Locale.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1223,7 +1223,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  TimeZone.
+	 * Configuration property:  TimeZone.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -1239,7 +1239,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Media type.
+	 * Configuration property:  Media type.
 	 *
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
@@ -1258,7 +1258,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 	
 	/**
-	 * <b>Configuration property:</b>  Debug mode.
+	 * Configuration property:  Debug mode.
 	 *
 	 * <p>
 	 * Enables the following additional information during serialization:

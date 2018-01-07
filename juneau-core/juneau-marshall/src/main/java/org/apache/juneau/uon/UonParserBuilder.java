@@ -52,7 +52,7 @@ public class UonParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
+	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been

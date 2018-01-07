@@ -54,8 +54,9 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	private static final String PREFIX = "RdfParser.";
 
 	/**
-	 * <b>Configuration property:</b>  Trim whitespace from text elements.
+	 * Configuration property:  Trim whitespace from text elements.
 	 * 
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -63,6 +64,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * 
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 */

@@ -53,7 +53,7 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Format to use for top-level query names and simple parameters.
+	 * Configuration property:  Format to use for top-level query names and simple parameters.
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.

@@ -46,8 +46,9 @@ public abstract class Serializer extends BeanContext {
 	private static final String PREFIX = "Serializer.";
 
 	/**
-	 * <b>Configuration property:</b>  Max serialization depth.
+	 * Configuration property:  Max serialization depth.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.maxDepth.i"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
@@ -55,6 +56,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Abort serialization if specified depth is reached in the POJO tree.
 	 * If this depth is exceeded, an exception is thrown.
@@ -63,8 +65,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth.i";
 
 	/**
-	 * <b>Configuration property:</b>  Initial depth.
+	 * Configuration property:  Initial depth.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.initialDepth.i"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
@@ -72,6 +75,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * The initial indentation level at the root.
 	 * Useful when constructing document fragments that need to be indented at a certain level.
@@ -79,8 +83,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_initialDepth = PREFIX + "initialDepth.i";
 
 	/**
-	 * <b>Configuration property:</b>  Automatically detect POJO recursions.
+	 * Configuration property:  Automatically detect POJO recursions.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.detectRecursions.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -88,6 +93,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies that recursions should be checked for during serialization.
 	 *
@@ -110,8 +116,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_detectRecursions = PREFIX + "detectRecursions.b";
 
 	/**
-	 * <b>Configuration property:</b>  Ignore recursion errors.
+	 * Configuration property:  Ignore recursion errors.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.ignoreRecursions.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -119,6 +126,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Used in conjunction with {@link #SERIALIZER_detectRecursions}.
 	 * Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
@@ -130,8 +138,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_ignoreRecursions = PREFIX + "ignoreRecursions.b";
 
 	/**
-	 * <b>Configuration property:</b>  Use whitespace.
+	 * Configuration property:  Use whitespace.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.useWhitespace.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -139,6 +148,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
 	 *
@@ -148,8 +158,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
 
 	/**
-	 * <b>Configuration property:</b>  Maximum indentation.
+	 * Configuration property:  Maximum indentation.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.maxIndent.i"</js>
 	 * 	<li><b>Data type:</b> <code>Integer</code>
@@ -157,6 +168,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
@@ -166,8 +178,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_maxIndent = PREFIX + "maxIndent.i";
 
 	/**
-	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -175,6 +188,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
@@ -185,8 +199,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 	/**
-	 * <b>Configuration property:</b>  Quote character.
+	 * Configuration property:  Quote character.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.quoteChar.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
@@ -194,6 +209,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is the character used for quoting attributes and values.
 	 *
@@ -203,8 +219,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_quoteChar = PREFIX + "quoteChar.s";
 
 	/**
-	 * <b>Configuration property:</b>  Trim null bean property values.
+	 * Configuration property:  Trim null bean property values.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimNullProperties.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -212,6 +229,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 *
@@ -225,8 +243,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_trimNullProperties = PREFIX + "trimNullProperties.b";
 
 	/**
-	 * <b>Configuration property:</b>  Trim empty lists and arrays.
+	 * Configuration property:  Trim empty lists and arrays.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyLists.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -234,6 +253,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
@@ -249,8 +269,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_trimEmptyCollections = PREFIX + "trimEmptyLists.b";
 
 	/**
-	 * <b>Configuration property:</b>  Trim empty maps.
+	 * Configuration property:  Trim empty maps.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyMaps.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -258,6 +279,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 *
@@ -271,8 +293,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_trimEmptyMaps = PREFIX + "trimEmptyMaps.b";
 
 	/**
-	 * <b>Configuration property:</b>  Trim strings.
+	 * Configuration property:  Trim strings.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -280,14 +303,16 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
 	public static final String SERIALIZER_trimStrings = PREFIX + "trimStrings.b";
 
 	/**
-	 * <b>Configuration property:</b>  URI context bean.
+	 * Configuration property:  URI context bean.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriContext.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code> (JSON object representing a {@link UriContext})
@@ -295,6 +320,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
@@ -306,8 +332,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_uriContext = PREFIX + "uriContext.s";
 
 	/**
-	 * <b>Configuration property:</b>  URI resolution.
+	 * Configuration property:  URI resolution.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code> ({@link UriResolution})
@@ -315,6 +342,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
 	 * <ul>
@@ -337,8 +365,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";
 
 	/**
-	 * <b>Configuration property:</b>  URI relativity.
+	 * Configuration property:  URI relativity.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.uriRelativity.s"</js>
 	 * 	<li><b>Data type:</b> <code>String</code> ({@link UriRelativity})
@@ -346,6 +375,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
 	 * <ul>
@@ -366,8 +396,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity.s";
 
 	/**
-	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
+	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.sortCollections.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -375,14 +406,16 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
 	public static final String SERIALIZER_sortCollections = PREFIX + "sortCollections.b";
 
 	/**
-	 * <b>Configuration property:</b>  Sort maps alphabetically.
+	 * Configuration property:  Sort maps alphabetically.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.sortMaps.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -390,14 +423,16 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
 	public static final String SERIALIZER_sortMaps = PREFIX + "sortMaps.b";
 
 	/**
-	 * <b>Configuration property:</b>  Abridged output.
+	 * Configuration property:  Abridged output.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.abridged.b"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
@@ -405,6 +440,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
@@ -416,8 +452,9 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_abridged = PREFIX + "abridged.b";
 
 	/**
-	 * <b>Configuration property:</b>  Serializer listener.
+	 * Configuration property:  Serializer listener.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.listener.c"</js>
 	 * 	<li><b>Data type:</b> <code>Class&lt;? extends SerializerListener&gt;</code>
@@ -425,6 +462,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 */

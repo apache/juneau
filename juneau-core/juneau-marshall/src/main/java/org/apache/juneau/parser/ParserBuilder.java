@@ -46,7 +46,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Trim parsed strings.
+	 * Configuration property:  Trim parsed strings.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
@@ -66,7 +66,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Strict mode.
+	 * Configuration property:  Strict mode.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
@@ -122,7 +122,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Input stream charset.
+	 * Configuration property:  Input stream charset.
 	 *
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
@@ -144,7 +144,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  File charset.
+	 * Configuration property:  File charset.
 	 *
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
@@ -169,7 +169,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Parser listener.
+	 * Configuration property:  Parser listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.

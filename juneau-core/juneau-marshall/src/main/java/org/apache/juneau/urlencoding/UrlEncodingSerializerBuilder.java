@@ -54,7 +54,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Serialize bean property collections/arrays as separate key/value pairs.
+	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
@@ -99,7 +99,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Format to use for top-level query names and simple parameters.
+	 * Configuration property:  Format to use for top-level query names and simple parameters.
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.

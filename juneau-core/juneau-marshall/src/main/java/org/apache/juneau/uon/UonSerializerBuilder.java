@@ -52,7 +52,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Encode non-valid URI characters.
+	 * Configuration property:  Encode non-valid URI characters.
 	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
@@ -86,7 +86,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Format to use for query/form-data/header values.
+	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.

@@ -492,7 +492,7 @@ public @interface HtmlDoc {
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.class;
 
 	/**
-	 * <b>Configuration property:</b>  HTML Widgets. 
+	 * Configuration property:  HTML Widgets. 
 	 *
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
@@ -529,7 +529,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 * 
-	 * <h6 class='topic'>Notes:</h6>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_widgets}
 	 * 	<li>Annotations: 

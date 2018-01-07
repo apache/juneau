@@ -56,7 +56,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Trim whitespace from text elements.
+	 * Configuration property:  Trim whitespace from text elements.
 	 * 
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
@@ -75,7 +75,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  RDF language.
+	 * Configuration property:  RDF language.
 	 * 
 	 * <p>
 	 * Can be any of the following:
@@ -166,7 +166,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
+	 * Configuration property:  XML namespace for Juneau properties.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -182,7 +182,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
+	 * Configuration property:  Default XML namespace for bean properties.
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -198,7 +198,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 * 
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
@@ -219,7 +219,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
+	 * Configuration property:  RDF format for representing collections and arrays.
 	 * 
 	 * <p>
 	 * Possible values:
@@ -257,7 +257,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
 	 * 
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of

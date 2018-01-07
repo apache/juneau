@@ -55,7 +55,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * <b>Configuration property:</b>  Enable validation.
+	 * Configuration property:  Enable validation.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
@@ -79,7 +79,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  XML reporter.
+	 * Configuration property:  XML reporter.
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
@@ -107,7 +107,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  XML resolver.
+	 * Configuration property:  XML resolver.
 	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
@@ -130,7 +130,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  XML event allocator.
+	 * Configuration property:  XML event allocator.
 	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
@@ -153,7 +153,7 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Preserve root element during generalized parsing.
+	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key is
