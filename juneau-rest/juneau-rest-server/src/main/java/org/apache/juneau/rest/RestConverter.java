@@ -51,7 +51,14 @@ import org.apache.juneau.serializer.*;
  * It's up to the implementer to decide what this means.
  *
  * <p>
- * Converters must implement a no-args constructor.
+ * Subclasses must implement one of the following constructors:
+ * <ul>
+ * 	<li><jk>public</jk> T();  <jk>// No-arg constructor</jk>
+ * 	<li><jk>public</jk> T(PropertyStore);  <jk>// Property store of the RestContext</jk>
+ * </ul>
+ * 
+ * <p>
+ * Subclasses can also be defined as inner classes of the resource class.
  *
  * <h6 class='topic'>Predefined converters</h6>
  *

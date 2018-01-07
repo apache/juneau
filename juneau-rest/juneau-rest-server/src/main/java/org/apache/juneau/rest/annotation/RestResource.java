@@ -16,18 +16,16 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.Encoder;
-import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.response.*;
+import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -47,106 +45,75 @@ import org.apache.juneau.utils.*;
 public @interface RestResource {
 
 	/**
-	 * Messages. 
+	 * Allow body URL parameter.
+	 *
+	 * <p>
+	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * URL parameter.
+	 * <br>
+	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
 	 * 
-	 * Identifies the location of the resource bundle for this class.
-	 *
 	 * <p>
-	 * This annotation is used to provide localized messages for the following methods:
-	 * <ul>
-	 * 	<li>{@link RestRequest#getMessage(String, Object...)}
-	 * 	<li>{@link RestContext#getMessages()}
-	 * </ul>
-	 *
-	 * <p>
-	 * Refer to the {@link MessageBundle} class for a description of the message key formats used in the properties file.
-	 *
-	 * <p>
-	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
-	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
-	 * absolute path, like <js>"com.foo.sample.nls.Messages"</js>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_messages}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#messages()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#messages(String)},
-	 * 			<li>{@link RestContextBuilder#messages(Class,String)}
-	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation)} 
-	 * 		</ul>
-	 * 	<li>Mappings are cumulative from parent to child.  
-	 * </ul>
+	 * <p>
+	 * See {@link RestContext#REST_allowBodyParam} for more information.
 	 */
-	String messages() default "";
+	String allowBodyParam() default "";
 
 	/**
-	 * Class-level guards.
+	 * Allowed method parameters.
 	 *
 	 * <p>
-	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
-	 * These guards get called immediately before execution of any REST method in this class.
+	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
+	 * GET request.
+	 * <br>
+	 * For example:  <js>"?method=OPTIONS"</js>
 	 *
 	 * <p>
-	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
-	 * for other purposes like pre-call validation of a request.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_guards}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#guards()}
-	 * 			<li>{@link RestMethod#guards()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#guards(Class...)}
-	 * 			<li>{@link RestContextBuilder#guards(RestGuard...)}
-	 * 		</ul>
-	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * 		annotation.
-	 *	</ul>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_allowedMethodParams} for more information.
 	 */
-	Class<? extends RestGuard>[] guards() default {};
+	String allowedMethodParams() default "";
 
 	/**
-	 * Class-level response converters.
+	 * Allow header URL parameters.
 	 *
 	 * <p>
-	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 * These converters get called immediately after execution of the REST method in the same order specified in the
-	 * annotation.
-	 *
-	 * <p>
-	 * Can be used for performing post-processing on the response object before serialization.
-	 *
-	 * <p>
-	 * Default converter implementations are provided in the <a class='doclink'
-	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
+	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_converters}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#converters()}
-	 * 			<li>{@link RestMethod#converters()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#converters(Class...)}
-	 * 			<li>{@link RestContextBuilder#converters(RestConverter...)}
-	 * 		</ul>
-	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 *	</ul>
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_allowHeaderParams} for more information.
 	 */
-	Class<? extends RestConverter>[] converters() default {};
+	String allowHeaderParams() default "";
 
 	/**
 	 * Class-level bean filters.
@@ -160,371 +127,139 @@ public @interface RestResource {
 	 * </ul>
 	 *
 	 * <p>
-	 * If the specified class is an instance of {@link BeanFilterBuilder}, then a filter built from that builder is added.
-	 * Any other classes are wrapped in a {@link InterfaceBeanFilterBuilder} to indicate that subclasses should be
-	 * treated as the specified class type.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link BeanContext#BEAN_beanFilters}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#beanFilters()}
-	 * 			<li>{@link RestMethod#beanFilters()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#beanFilters(Object...)}
-	 * 			<li>{@link RestContextBuilder#beanFilters(boolean, Object...)}
-	 * 			<li>{@link RestContextBuilder#beanFiltersRemove(Object...)}
-	 * 		</ul>
-	 *	</ul>
+	 * See {@link BeanContext#BEAN_beanFilters} for more information.
 	 */
 	Class<?>[] beanFilters() default {};
 
 	/**
-	 * Class-level POJO swaps.
+	 * REST call handler.
 	 *
 	 * <p>
-	 * Shortcut to add POJO swaps to the bean contexts of the objects returned by the following methods:
-	 * <ul>
-	 * 	<li>{@link RestContext#getBeanContext()}
-	 * 	<li>{@link RestContext#getSerializers()}
-	 * 	<li>{@link RestContext#getParsers()}
-	 * </ul>
-	 *
-	 * <p>
-	 * If the specified class is an instance of {@link PojoSwap}, then that swap is added.
-	 * Any other classes are wrapped in a {@link SurrogateSwap}.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link BeanContext#BEAN_pojoSwaps}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#pojoSwaps()}
-	 * 			<li>{@link RestMethod#pojoSwaps()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#pojoSwaps(Object...)}
-	 * 			<li>{@link RestContextBuilder#pojoSwaps(Class...)}
-	 * 			<li>{@link RestContextBuilder#pojoSwaps(boolean, Object...)}
-	 * 			<li>{@link RestContextBuilder#pojoSwapsRemove(Object...)}
-	 * 		</ul>
-	 *	</ul>
-	 */
-	Class<?>[] pojoSwaps() default {};
-
-	/**
-	 * Java method parameter resolvers.
-	 *
-	 * <p>
-	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
-	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
-	 * <p>
-	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
-	 * the following resolver:
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
-	 *
-	 * 		<jc>// Must have no-arg constructor!</jc>
-	 * 		<jk>public</jk> MyRestParam() {
-	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
-	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// The method that creates our object.
-	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
-	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_paramResolvers}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#paramResolvers()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#paramResolvers(Class...)}
-	 * 		</ul>
-	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 *	</ul>
-	 */
-	Class<? extends RestParam>[] paramResolvers() default {};
-
-	/**
-	 * Class-level properties.
-	 *
-	 * <p>
-	 * Shortcut for specifying class-level properties on this servlet to the objects returned by the following methods:
-	 * <ul>
-	 * 	<li>{@link RestContext#getBeanContext()}
-	 * 	<li>{@link RestContext#getSerializers()}
-	 * 	<li>{@link RestContext#getParsers()}
-	 * </ul>
-	 * <p>
-	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
-	 *
-	 * <p>
-	 * Property values will be converted to the appropriate type.
-	 *
-	 * <p>
-	 * In some cases, properties can be overridden at runtime through the
-	 * {@link RestResponse#setProperty(String, Object)} method or through a {@link Properties @Properties} annotated
-	 * method parameter.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#setProperty(String, Object)}/
-	 * {@link RestContextBuilder#setProperties(java.util.Map)} methods.
-	 */
-	Property[] properties() default {};
-
-	/**
-	 * Shortcut for setting {@link #properties()} of simple boolean types.
-	 *
-	 * <p>
-	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
-	 */
-	String[] flags() default {};
-
-	/**
-	 * Serializers. 
-	 *
-	 * <p>
-	 * Adds class-level serializers to this resource.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_serializers}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#serializers()} 
-	 * 			<li>{@link RestMethod#serializers()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	Class<? extends Serializer>[] serializers() default {};
-
-	/**
-	 * Parsers. 
-	 *
-	 * <p>
-	 * Adds class-level parsers to this resource.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_parsers}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#parsers()} 
-	 * 			<li>{@link RestMethod#parsers()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * 		annotation.
-	 * </ul>
-	 */
-	Class<? extends Parser>[] parsers() default {};
-
-	/**
-	 * HTTP part serializer. 
-	 *
-	 * <p>
-	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_partSerializer}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#partSerializer()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partSerializer(Class)}
-	 * 			<li>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
-	
-	/**
-	 * HTTP part parser. 
-	 *
-	 * <p>
-	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_partParser}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#partParser()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#partParser(Class)}
-	 * 			<li>{@link RestContextBuilder#partParser(HttpPartParser)}
-	 * 		</ul>
-	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
-	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
-	 * </ul>
-	 */
-	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
-
-	/**
-	 * Supported accept media types.
-	 *
-	 * <p>
-	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 * This class handles the basic lifecycle of an HTTP REST call.
 	 * 
 	 * <p>
-	 * This affects the values returned by {@link RestRequest#getSupportedAcceptTypes()} and the supported accept
-	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_supportedAcceptTypes}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#supportedAcceptTypes()}
-	 * 			<li>{@link RestMethod#supportedAcceptTypes()}
-	 * 		</ul> 
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#supportedAcceptTypes(boolean,String...)}
-	 * 			<li>{@link RestContextBuilder#supportedAcceptTypes(boolean,MediaType...)}
-	 * 		</ul>
-	 *	</ul>
+	 * See {@link RestContext#REST_callHandler} for more information.
 	 */
-	String[] supportedAcceptTypes() default {};
-	
-	/**
-	 * Supported content media types.
-	 *
-	 * <p>
-	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 *
-	 * <p>
-	 * This affects the values returned by {@link RestRequest#getSupportedContentTypes()} and the supported content
-	 * types shown in {@link RestInfoProvider#getSwagger(RestRequest)}.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_supportedContentTypes}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#supportedContentTypes()}
-	 * 			<li>{@link RestMethod#supportedContentTypes()}
-	 * 		</ul> 
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#supportedContentTypes(boolean,String...)}
-	 * 			<li>{@link RestContextBuilder#supportedContentTypes(boolean,MediaType...)}
-	 * 		</ul>
-	 *	</ul>
-	 */
-	String[] supportedContentTypes() default {};
-	
-	/**
-	 * Response handlers.
-	 *
-	 * <p>
-	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
-	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
-	 *
-	 * <p>
-	 * By default, the following response handlers are provided out-of-the-box:
-	 * <ul>
-	 * 	<li>{@link StreamableHandler}
-	 * 	<li>{@link WritableHandler}
-	 * 	<li>{@link ReaderHandler}
-	 * 	<li>{@link InputStreamHandler}
-	 * 	<li>{@link RedirectHandler}
-	 * 	<li>{@link DefaultHandler}
-	 * </ul>
-
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_responseHandlers}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#responseHandlers()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#responseHandlers(Class...)}
-	 * 			<li>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
-	 * 		</ul>
-	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 *	</ul>
-	 */
-	Class<? extends ResponseHandler>[] responseHandlers() default {};
+	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
 
 	/**
-	 * Compression encoders. 
+	 *	Children.
 	 *
 	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 * Defines children of this resource.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
-	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
-	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
-	 * 		...
-	 * 	}
-	 * </p>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_encoders}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#encoders()} 
-	 * 			<li>{@link RestMethod#encoders()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#encoders(Class...)}
-	 * 			<li>{@link RestContextBuilder#encoders(Encoder...)}
-	 * 		</ul>
-	 * 	<li>Instance classes must provide a public no-arg constructor, or a public constructor that takes in a
-	 * 		{@link PropertyStore} object.
-	 * 	<li>Instance class can be defined as an inner class of the REST resource class.
-	 * </ul>
+	 * <p>
+	 * See {@link RestContext#REST_children} for more information.
 	 */
-	Class<? extends Encoder>[] encoders() default {};
+	Class<?>[] children() default {};
+
+	/**
+	 * Classpath resource finder. 
+	 *
+	 * <p>
+	 * Used to retrieve localized files from the classpath.
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_classpathResourceFinder} for more information.
+	 */
+	Class<? extends ClasspathResourceFinder> classpathResourceFinder() default ClasspathResourceFinder.Null.class;
+
+	/**
+	 * Client version header.
+	 *
+	 * <p>
+	 * Specifies the name of the header used to denote the client version on HTTP requests.
+	 * 
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_clientVersionHeader} for more information.
+	 */
+	String clientVersionHeader() default "";
+
+	/**
+	 * Optional location of configuration file for this servlet.
+	 *
+	 * <p>
+	 * The configuration file .
+	 *
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#configFile(ConfigFile)} method.
+	 */
+	String config() default "";
+
+	/**
+	 * Resource context path. 
+	 * 
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 * 
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_contextPath} for more information.
+	 */
+	String contextPath() default "";
+
+	/**
+	 * Class-level response converters.
+	 *
+	 * <p>
+	 * Associates one or more {@link RestConverter converters} with a resource class.
+	 * These converters get called immediately after execution of the REST method in the same order specified in the
+	 * annotation.
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_converters} for more information.
+	 */
+	Class<? extends RestConverter>[] converters() default {};
+
+	/**
+	 * Default character encoding.
+	 * 
+	 * <p>
+	 * The default character encoding for the request and response if not specified on the request.
+	 * 
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_defaultCharset} for more information.
+	 */
+	String defaultCharset() default "";
 
 	/**
 	 * Default request headers.
@@ -532,37 +267,18 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies default values for request headers.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestResource</ja>(defaultRequestHeaders={<js>"Accept: text/json"</js>})
-	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
-	 * 		...
-	 * 	}
-	 * </p>
+	 * <p>
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
 	 * 
 	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_defaultRequestHeaders}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#defaultRequestHeaders()}
-	 * 			<li>{@link RestMethod#defaultRequestHeaders()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#defaultRequestHeader(String,Object)}
-	 * 			<li>{@link RestContextBuilder#defaultRequestHeaders(String...)}
-	 * 		</ul>
-	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
-	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li>Key and value is trimmed of whitespace.
-	 * 	<li>Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
-	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
-	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
-	 * 		specified so that a particular default {@link Serializer} is picked.
-	 *	</ul>
+	 * See {@link RestContext#REST_defaultRequestHeaders} for more information.
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -572,184 +288,20 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies default values for response headers.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Add a version header attribute to all responses</jc>
-	 * 	<ja>@RestResource</ja>(defaultResponseHeaders={<js>"X-Version: 1.0"</js>})
-	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
-	 * 		...
-	 * 	}
-	 * </p>
-	 *
 	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_defaultResponseHeaders}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#defaultResponseHeaders()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#defaultResponseHeader(String,Object)}
-	 * 			<li>{@link RestContextBuilder#defaultResponseHeaders(String...)}
-	 * 		</ul>
-	 * 	<li>Strings are of the format <js>"Header-Name: header-value"</js>.
-	 * 	<li>You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li>Key and value is trimmed of whitespace.
-	 * 	<li>Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
-	 * 	<li>This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
-	 * 		the Java methods.
-	 * 	<li>The header value will not be set if the header value has already been specified (hence the 'default' in the name).
-	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
-	 * 		annotation.
-	 *	</ul>
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_defaultResponseHeaders} for more information.
 	 */
 	String[] defaultResponseHeaders() default {};
-
-	/**
-	 *Children.
-	 *
-	 * <p>
-	 * Defines children of this resource.
-	 *
-	 * <p>
-	 * A REST child resource is simply another servlet that is initialized as part of the parent resource and has a
-	 * servlet path directly under the parent servlet path.
-	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
-	 * <code>web.xml</code> file of the web application.
-	 * <br>This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
-	 * large numbers of servlets.
-	 *
-	 * <p>
-	 * Child resources must specify a value for {@link RestResource#path()} that identifies the subpath of the child resource
-	 * relative to the parent path.
-	 *
-	 * <p>
-	 * It should be noted that servlets can be nested arbitrarily deep using this technique (i.e. children can also have
-	 * children).
-	 *
-	 * <dl>
-	 * 	<dt>Servlet initialization:</dt>
-	 * 	<dd>
-	 * 		<p>
-	 * 			A child resource will be initialized immediately after the parent servlet is initialized.
-	 * 			The child resource receives the same servlet config as the parent resource.
-	 * 			This allows configuration information such as servlet initialization parameters to filter to child
-	 * 			resources.
-	 * 		</p>
-	 * 	</dd>
-	 * 	<dt>Runtime behavior:</dt>
-	 * 	<dd>
-	 * 		<p>
-	 * 			As a rule, methods defined on the <code>HttpServletRequest</code> object will behave as if the child
-	 * 			servlet were deployed as a top-level resource under the child's servlet path.
-	 * 			For example, the <code>getServletPath()</code> and <code>getPathInfo()</code> methods on the
-	 * 			<code>HttpServletRequest</code> object will behave as if the child resource were deployed using the
-	 * 			child's servlet path.
-	 * 			Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
-	 * 			<code>web.xml</code> file of the web application.
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_children}
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link RestResource#children()}
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#child(String,Object)}
-	 * 			<li>{@link RestContextBuilder#children(Class...)}
-	 * 			<li>{@link RestContextBuilder#children(Object...)}
-	 * 		</ul>
-	 * 	<li>When defined as classes, instances are resolved using the registered {@link RestContext#REST_resourceResolver} which
-	 * 		by default is {@link RestResourceResolverSimple} which requires the class have one of the following
-	 * 		constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 		</ul>
-	 *	</ul>
-	 */
-	Class<?>[] children() default {};
-
-	/**
-	 * Resource path.   
-	 *
-	 * <p>
-	 * Identifies the URL subpath relative to the parent resource.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property: {@link RestContext#REST_path}
-	 * 	<li>Annotation:  {@link RestResource#path()} 
-	 * 	<li>Method: {@link RestContextBuilder#path(String)} 
-	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
-	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
-	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
-	 * 		{@link RestResource#children()} annotation.
-	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-	 *	</ul>
-	 */
-	String path() default "";
-
-	/**
-	 * Optional site name.
-	 *
-	 * <p>
-	 * The site name is intended to be a title that can be applied to the entire site.
-	 *
-	 * <p>
-	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
-	 *
-	 * <p>
-	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
-	 * common parent class like so:
-	 * <p class='bcode'>
-	 * 	htmldoc=<ja>@HtmlDoc</ja>(
-	 * 		header={
-	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
-	 * 			<js>"&lt;h2&gt;$R{servletTitle}&lt;/h2&gt;"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getSiteName(RestRequest)} method.
-	 */
-	String siteName() default "";
-
-	/**
-	 * Optional servlet title.
-	 *
-	 * <p>
-	 * It is used to populate the Swagger title field.
-	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
-	 *
-	 * <p>
-	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
-	 * (e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/title</code>.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTitle(RestRequest)} method.
-	 */
-	String title() default "";
 
 	/**
 	 * Optional servlet description.
@@ -763,8 +315,27 @@ public @interface RestResource {
 	 * (e.g. <js>"description = foo"</js> or <js>"MyServlet.description = foo"</js>).
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
 	 *
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/description</code>.
@@ -775,345 +346,45 @@ public @interface RestResource {
 	String description() default "";
 
 	/**
-	 * Optional location of configuration file for this servlet.
+	 * Compression encoders. 
 	 *
 	 * <p>
-	 * The configuration file .
+	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
 	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestContextBuilder#configFile(ConfigFile)} method.
+	 * See {@link RestContext#REST_encoders} for more information.
 	 */
-	String config() default "";
+	Class<? extends Encoder>[] encoders() default {};
 
 	/**
-	 * Static file mappings. 
+	 * Shortcut for setting {@link #properties()} of simple boolean types.
 	 *
 	 * <p>
-	 * Used to define paths and locations of statically-served files such as images or HTML documents.
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
 	 * 
 	 * <p>
-	 * Static files are found using the registered  {@link ClasspathResourceFinder} for locating files on the classpath 
-	 * (or other location).
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.foo.mypackage;
-	 * 
-	 * 	<ja>@RestResource</ja>(
-	 * 		path=<js>"/myresource"</js>,
-	 * 		staticFiles=<js>"htdocs:docs"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {...}
-	 * </p>
-	 * 
-	 * <p>
-	 * In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find 
-	 * the <l>foobar.html</l> file in the following ordered locations:
-	 * <ol>
-	 * 	<li><l>com.foo.mypackage.docs</l> package.
-	 * 	<li><l>org.apache.juneau.rest.docs</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.rest</l>).
-	 * 	<li><l>[working-dir]/docs</l> directory.
-	 * </ol>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_staticFiles}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#staticFiles()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#staticFiles(String)},
-	 * 			<li>{@link RestContextBuilder#staticFiles(Class,String)}
-	 * 			<li>{@link RestContextBuilder#staticFiles(String,String)}
-	 * 			<li>{@link RestContextBuilder#staticFiles(Class,String,String)} 
-	 * 			<li>{@link RestContextBuilder#staticFiles(StaticFileMapping...)} 
-	 * 		</ul>
-	 * 	<li>Mappings are cumulative from parent to child.  
-	 * 	<li>Child resources can override mappings made on parent resources.
-	 * 	<li>The resource finder is configured via the {@link RestContext#REST_classpathResourceFinder} setting, and can be
-	 * 		overridden to provide customized handling of resource retrieval.
-	 * 	<li>The {@link RestContext#REST_useClasspathResourceCaching} setting can be used to cache static files in memory
-	 * 		to improve performance.
-	 * </ul>
+	 * Setting a flag is equivalent to setting the same property to <js>"true"</js>.
 	 */
-	String[] staticFiles() default {};
-	
-	/**
-	 * Static file response headers. 
-	 *
-	 * <p>
-	 * Used to customize the headers on responses returned for statically-served files.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_staticFileResponseHeaders}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#staticFileResponseHeaders()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#staticFileResponseHeaders(boolean,Map)}
-	 * 			<li>{@link RestContextBuilder#staticFileResponseHeaders(String...)}
-	 * 			<li>{@link RestContextBuilder#staticFileResponseHeader(String,String)}
-	 * 		</ul>
-	 * 	<li>The default values is <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>.
-	 * </ul>
-	 */
-	String[] staticFileResponseHeaders() default {};
-	
-	/**
-	 * Classpath resource finder. 
-	 *
-	 * <p>
-	 * Used to retrieve localized files from the classpath.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_classpathResourceFinder}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#classpathResourceFinder()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#classpathResourceFinder(Class)}
-	 * 			<li>{@link RestContextBuilder#classpathResourceFinder(ClasspathResourceFinder)}
-	 * 		</ul>
-	 * 	<li>
-	 * 		The default value is {@link ClasspathResourceFinderBasic} which provides basic support for finding localized
-	 * 		resources on the classpath and JVM working directory.
-	 * 		<br>The {@link ClasspathResourceFinderRecursive} is another option that also recursively searches for resources
-	 * 		up the parent class hierarchy.
-	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
-	 * </ul>
-	 */
-	Class<? extends ClasspathResourceFinder> classpathResourceFinder() default ClasspathResourceFinder.Null.class;
+	String[] flags() default {};
 
 	/**
-	 * Configuration property:  Use classpath resource caching. 
+	 * Class-level guards.
 	 *
 	 * <p>
-	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related 
-	 * methods) will be cached in memory to speed subsequent lookups.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_useClasspathResourceCaching}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#useClasspathResourceCaching()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#useClasspathResourceCaching(boolean)}
-	 * 		</ul>
-	 * </ul>
+	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
+	 * These guards get called immediately before execution of any REST method in this class.
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_guards} for more information.
 	 */
-	String useClasspathResourceCaching() default "";
-	
-	/**
-	 * Client version header.
-	 *
-	 * <p>
-	 * Specifies the name of the header used to denote the client version on HTTP requests.
-	 *
-	 * <p>
-	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_clientVersionHeader}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#clientVersionHeader()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#clientVersionHeader(String)}
-	 * 		</ul>
-	 * 	<li>The default value is <js>"X-Client-Version"</js>.
-	 *	</ul>
-	 */
-	String clientVersionHeader() default "";
-
-	/**
-	 * REST resource resolver.
-	 * 
-	 * <p>
-	 * The resolver used for resolving child resources.
-	 * 
-	 * <p>
-	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_resourceResolver}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#resourceResolver()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#resourceResolver(Class)}
-	 * 			<li>{@link RestContextBuilder#resourceResolver(RestResourceResolver)}
-	 * 		</ul>
-	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
-	 *	</ul>
-	 */
-	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
-
-	/**
-	 * REST logger.
-	 * 
-	 * <p>
-	 * Specifies the logger to use for logging.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_logger}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#logger()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#logger(Class)}
-	 * 			<li>{@link RestContextBuilder#logger(RestLogger)} 
-	 * 		</ul>
-	 * 	<li>The {@link org.apache.juneau.rest.RestLogger.Normal} logger can be used to provide basic error logging to the Java logger.
-	 *	</ul>
-	 */
-	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
-
-	/**
-	 * REST call handler.
-	 *
-	 * <p>
-	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
-
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_callHandler}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#callHandler()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#callHandler(Class)}
-	 * 			<li>{@link RestContextBuilder#callHandler(RestCallHandler)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
-
-	/**
-	 * Configuration property:  REST info provider. 
-	 * 
-	 * <p>
-	 * Class used to retrieve title/description/swagger information about a resource.
-	 *
-	 * <p>
-	 * Subclasses can be used to customize the documentation on a resource.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_infoProvider}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#infoProvider()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#infoProvider(Class)}
-	 * 			<li>{@link RestContextBuilder#infoProvider(RestInfoProvider)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
-
-	/**
-	 * Serializer listener.
-	 * 
-	 * <p>
-	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link Serializer#SERIALIZER_listener}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#serializerListener()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#serializerListener(Class)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
-
-	/**
-	 * Parser listener.
-	 * 
-	 * <p>
-	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link Parser#PARSER_listener}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#parserListener()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#parserListener(Class)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
-
-	/**
-	 * Provides swagger-specific metadata on this resource.
-	 *
-	 * <p>
-	 * Used to populate the auto-generated OPTIONS swagger documentation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		path=<js>"/addressBook"</js>,
-	 *
-	 * 		<jc>// Swagger info.</jc>
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
-	 * 			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
-	 * 			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
-	 * 			version=<js>"2.0"</js>,
-	 * 			termsOfService=<js>"You're on your own."</js>,
-	 * 			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
-	 * 			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
-	 * 		)
-	 * 	)
-	 * </p>
-	 */
-	ResourceSwagger swagger() default @ResourceSwagger;
+	Class<? extends RestGuard>[] guards() default {};
 
 	/**
 	 * Provides HTML-doc-specific metadata on this method.
@@ -1160,200 +431,26 @@ public @interface RestResource {
 	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
-	 * Resource context path. 
+	 * Configuration property:  REST info provider. 
 	 * 
 	 * <p>
-	 * Overrides the context path value for this resource and any child resources.
+	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
 	 * <p>
-	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
-	 * the context path is not actually specified on the servlet container.
-	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
-	 * will return this value instead of the actual context path of the web app.
+	 * See {@link RestContext#REST_infoProvider} for more information.
+	 */
+	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
+
+	/**
+	 * REST logger.
 	 * 
 	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_contextPath}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#contextPath()} 
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#contextPath(String)} 
-	 * 		</ul>
-	 *	</ul>
-	 */
-	String contextPath() default "";
-
-	/**
-	 * Allow header URL parameters.
+	 * Specifies the logger to use for logging.
 	 *
 	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_allowHeaderParams}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#allowHeaderParams()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#allowHeaderParams(boolean)}
-	 * 		</ul>
-	 * 	<li>Boolean value.
-	 * 	<li>Can contain variables.
-	 *		<li>Parameter names are case-insensitive.
-	 * 	<li>Useful for debugging REST interface using only a browser.
-	 *	</ul>
+	 * See {@link RestContext#REST_logger} for more information.
 	 */
-	String allowHeaderParams() default "";
-
-	/**
-	 * Allowed method parameters.
-	 *
-	 * <p>
-	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
-	 * GET request.
-	 * <br>
-	 * For example:  <js>"?method=OPTIONS"</js>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_allowedMethodParams}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#allowedMethodParams()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#allowedMethodParams(String...)}
-	 * 		</ul>
-	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-	 * 	<li>Parameter name is case-insensitive.
-	 * 	<li>Can contain variables.
-	 * 	<li>Use "*" to represent all methods.
-	 *	</ul>
-	 *
-	 * <p>
-	 * Note that per the <a class="doclink"
-	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
-	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
-	 */
-	String allowedMethodParams() default "";
-
-	/**
-	 * Allow body URL parameter.
-	 *
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 * <p>
-	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
-	 * URL parameter.
-	 * <br>
-	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_allowBodyParam}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#allowBodyParam()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#allowBodyParam(boolean)}
-	 * 		</ul>
-	 * 	<li>Boolean value.
-	 * 	<li>Can contain variables.
-	 * 	<li>Parameter name is case-insensitive.
-	 * 	<li>Useful for debugging PUT and POST methods using only a browser.
-	 *	</ul>
-	 */
-	String allowBodyParam() default "";
-
-	/**
-	 * Render response stack traces in responses.
-	 *
-	 * <p>
-	 * Render stack traces in HTTP response bodies when errors occur.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_renderResponseStackTraces}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#renderResponseStackTraces()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#renderResponseStackTraces(boolean)}
-	 * 		</ul>
-	 * 	<li>Boolean value.
-	 * 	<li>Can contain variables.
-	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
-	 * 		caution when enabling.
-	 *	</ul>
-	 */
-	String renderResponseStackTraces() default "";
-
-	/**
-	 * Use stack trace hashes.
-	 *
-	 * <p>
-	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
-	 * made available through the {@link RestException#getOccurrence()} method.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_useStackTraceHashes}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#useStackTraceHashes()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#useStackTraceHashes(boolean)}
-	 * 		</ul>
-	 * 	<li>Boolean value.
-	 * 	<li>Can contain variables.
-	 *	</ul>
-	 */
-	String useStackTraceHashes() default "";
-
-	/**
-	 * Default character encoding.
-	 * 
-	 * <p>
-	 * The default character encoding for the request and response if not specified on the request.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_defaultCharset}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#defaultCharset()}
-	 * 			<li>{@link RestMethod#defaultCharset()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#defaultCharset(String)}
-	 * 		</ul>
-	 * 	<li>String value.
-	 * 	<li>Can contain variables.
-	 *	</ul>
-	 */
-	String defaultCharset() default "";
+	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
@@ -1362,34 +459,41 @@ public @interface RestResource {
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		maxInput=<js>"100M"</js>
-	 * 	)
-	 * </p>
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_maxInput}
-	 * 	<li>Annotations:
-	 * 		<ul>
-	 * 			<li>{@link RestResource#maxInput()}
-	 * 			<li>{@link RestMethod#maxInput()}
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#maxInput(String)}
-	 * 		</ul>
-	 * 	<li>String value that gets resolved to a <jk>long</jk>.
-	 * 	<li>Can contain variables.
-	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
-	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
-	 *	</ul>
+	 * <p>
+	 * See {@link RestContext#REST_maxInput} for more information.
 	 */
 	String maxInput() default "";
 	
+	/**
+	 * Messages. 
+	 * 
+	 * Identifies the location of the resource bundle for this class.
+	 *
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_messages} for more information.
+	 */
+	String messages() default "";
+
 	/**
 	 * Configuration property:  MIME types. 
 	 *
@@ -1397,32 +501,448 @@ public @interface RestResource {
 	 * Defines MIME-type file type mappings.
 	 * 
 	 * <p>
-	 * Used for specifying the content type on file resources retrieved through the following methods:
-	 * <ul>
-	 * 	<li>{@link RestContext#resolveStaticFile(String)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String,boolean)}
-	 * 	<li>{@link RestRequest#getClasspathReaderResource(String)}
-	 * </ul>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
 	 * 
 	 * <p>
-	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Property:  {@link RestContext#REST_mimeTypes}
-	 * 	<li>Annotations: 
-	 * 		<ul>
-	 * 			<li>{@link RestResource#mimeTypes()} 
-	 * 		</ul>
-	 * 	<li>Methods: 
-	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#mimeTypes(String...)}
-	 * 		</ul>
-	 * 	<li>Values are .mime.types formatted entry string.
-	 * 		<br>Example: <js>"image/svg+xml svg"</js>
-	 * 	<li>Can contain variables.
-	 * </ul>
+	 * See {@link RestContext#REST_mimeTypes} for more information.
 	 */
 	String[] mimeTypes() default {};
+
+	/**
+	 * Java method parameter resolvers.
+	 *
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_paramResolvers} for more information.
+	 */
+	Class<? extends RestParam>[] paramResolvers() default {};
+
+	/**
+	 * Parser listener.
+	 * 
+	 * <p>
+	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
+	 *
+	 * <p>
+	 * See {@link Parser#PARSER_listener} for more information.
+	 */
+	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
+
+	/**
+	 * Parsers. 
+	 *
+	 * <p>
+	 * Adds class-level parsers to this resource.
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_parsers} for more information.
+	 */
+	Class<? extends Parser>[] parsers() default {};
+
+	/**
+	 * HTTP part parser. 
+	 *
+	 * <p>
+	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_partParser} for more information.
+	 */
+	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
+
+	/**
+	 * HTTP part serializer. 
+	 *
+	 * <p>
+	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_partSerializer} for more information.
+	 */
+	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
+	
+	/**
+	 * Resource path.   
+	 *
+	 * <p>
+	 * Identifies the URL subpath relative to the parent resource.
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_path} for more information.
+	 */
+	String path() default "";
+
+	/**
+	 * Class-level POJO swaps.
+	 *
+	 * <p>
+	 * Shortcut to add POJO swaps to the bean contexts of the objects returned by the following methods:
+	 * <ul>
+	 * 	<li>{@link RestContext#getBeanContext()}
+	 * 	<li>{@link RestContext#getSerializers()}
+	 * 	<li>{@link RestContext#getParsers()}
+	 * </ul>
+	 *
+	 * <p>
+	 * See {@link BeanContext#BEAN_pojoSwaps} for more information.
+	 */
+	Class<?>[] pojoSwaps() default {};
+
+	/**
+	 * Class-level properties.
+	 *
+	 * <p>
+	 * Shortcut for specifying class-level properties on this servlet to the objects returned by the following methods:
+	 * <ul>
+	 * 	<li>{@link RestContext#getBeanContext()}
+	 * 	<li>{@link RestContext#getSerializers()}
+	 * 	<li>{@link RestContext#getParsers()}
+	 * </ul>
+	 * <p>
+	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
+	 *
+	 * <p>
+	 * Property values will be converted to the appropriate type.
+	 *
+	 * <p>
+	 * In some cases, properties can be overridden at runtime through the
+	 * {@link RestResponse#setProperty(String, Object)} method or through a {@link Properties @Properties} annotated
+	 * method parameter.
+	 *
+	 * <p>
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestContextBuilder#setProperty(String, Object)}/
+	 * {@link RestContextBuilder#setProperties(java.util.Map)} methods.
+	 */
+	Property[] properties() default {};
+
+	/**
+	 * Render response stack traces in responses.
+	 *
+	 * <p>
+	 * Render stack traces in HTTP response bodies when errors occur.
+	 * 
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_renderResponseStackTraces} for more information.
+	 */
+	String renderResponseStackTraces() default "";
+
+	/**
+	 * REST resource resolver.
+	 * 
+	 * <p>
+	 * The resolver used for resolving child resources.
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_resourceResolver} for more information.
+	 */
+	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
+
+	/**
+	 * Response handlers.
+	 *
+	 * <p>
+	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
+	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_responseHandlers} for more information.
+	 */
+	Class<? extends ResponseHandler>[] responseHandlers() default {};
+
+	/**
+	 * Serializer listener.
+	 * 
+	 * <p>
+	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
+	 *
+	 * <p>
+	 * See {@link Serializer#SERIALIZER_listener} for more information.
+	 */
+	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
+
+	/**
+	 * Serializers. 
+	 *
+	 * <p>
+	 * Adds class-level serializers to this resource.
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_serializers} for more information.
+	 */
+	Class<? extends Serializer>[] serializers() default {};
+
+	/**
+	 * Optional site name.
+	 *
+	 * <p>
+	 * The site name is intended to be a title that can be applied to the entire site.
+	 *
+	 * <p>
+	 * This value can be retrieved programmatically through the {@link RestRequest#getSiteName()} method.
+	 *
+	 * <p>
+	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
+	 * common parent class like so:
+	 * <p class='bcode'>
+	 * 	htmldoc=<ja>@HtmlDoc</ja>(
+	 * 		header={
+	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
+	 * 			<js>"&lt;h2&gt;$R{servletTitle}&lt;/h2&gt;"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
+	 * 
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getSiteName(RestRequest)} method.
+	 */
+	String siteName() default "";
+
+	/**
+	 * Static file response headers. 
+	 *
+	 * <p>
+	 * Used to customize the headers on responses returned for statically-served files.
+	 * 
+	 * <p>
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_staticFileResponseHeaders} for more information.
+	 */
+	String[] staticFileResponseHeaders() default {};
+	
+	/**
+	 * Static file mappings. 
+	 *
+	 * <p>
+	 * Used to define paths and locations of statically-served files such as images or HTML documents.
+	 * 
+	 * <p>
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_staticFiles} for more information.
+	 */
+	String[] staticFiles() default {};
+	
+	/**
+	 * Supported accept media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 * 
+	 * <p>
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_supportedAcceptTypes} for more information.
+	 */
+	String[] supportedAcceptTypes() default {};
+	
+	/**
+	 * Supported content media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 *
+	 * <p>
+	 * Values can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_supportedContentTypes} for more information.
+	 */
+	String[] supportedContentTypes() default {};
+	
+	/**
+	 * Provides swagger-specific metadata on this resource.
+	 *
+	 * <p>
+	 * Used to populate the auto-generated OPTIONS swagger documentation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/addressBook"</js>,
+	 *
+	 * 		<jc>// Swagger info.</jc>
+	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+	 * 			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+	 * 			version=<js>"2.0"</js>,
+	 * 			termsOfService=<js>"You're on your own."</js>,
+	 * 			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+	 * 			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
+	ResourceSwagger swagger() default @ResourceSwagger;
+
+	/**
+	 * Optional servlet title.
+	 *
+	 * <p>
+	 * It is used to populate the Swagger title field.
+	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
+	 *
+	 * <p>
+	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
+	 * (e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
+	 *
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link FileVar $F} 
+	 * {@link ServletInitParamVar $I},
+	 * {@link IfVar $IF}
+	 * {@link LocalizationVar $L}
+	 * {@link RequestAttributeVar $RA} 
+	 * {@link RequestFormDataVar $RF} 
+	 * {@link RequestHeaderVar $RH} 
+	 * {@link RequestPathVar $RP} 
+	 * {@link RequestQueryVar $RQ} 
+	 * {@link RequestVar $R} 
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SerializedRequestAttrVar $SA}
+	 * {@link SwitchVar $SW}
+	 * {@link UrlVar $U}
+	 * {@link UrlEncodeVar $UE}
+	 * {@link WidgetVar $W}
+	 *
+	 * <p>
+	 * Corresponds to the swagger field <code>/info/title</code>.
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTitle(RestRequest)} method.
+	 */
+	String title() default "";
+
+	/**
+	 * Configuration property:  Use classpath resource caching. 
+	 *
+	 * <p>
+	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related 
+	 * methods) will be cached in memory to speed subsequent lookups.
+	 * 
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 * 
+	 * <p>
+	 * See {@link RestContext#REST_useClasspathResourceCaching} for more information.
+	 */
+	String useClasspathResourceCaching() default "";
+	
+	/**
+	 * Use stack trace hashes.
+	 *
+	 * <p>
+	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
+	 * made available through the {@link RestException#getOccurrence()} method.
+	 * 
+	 * <p>
+	 * Value can contain any of the following variables:  
+	 * {@link ConfigFileVar $C} 
+	 * {@link CoalesceVar $CO}
+	 * {@link CoalesceAndRecurseVar $CR}
+	 * {@link EnvVariablesVar $E} 
+	 * {@link IfVar $IF}
+	 * {@link SystemPropertiesVar $S}
+	 * {@link SwitchVar $SW}
+	 *
+	 * <p>
+	 * See {@link RestContext#REST_useStackTraceHashes} for more information.
+	 */
+	String useStackTraceHashes() default "";
 }

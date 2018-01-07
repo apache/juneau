@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
-class RestJavaMethod implements Comparable<RestJavaMethod>  {
+public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
 	private final RestParam[] params;

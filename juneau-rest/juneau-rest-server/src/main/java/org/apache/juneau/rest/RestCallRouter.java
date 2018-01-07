@@ -26,7 +26,7 @@ import javax.servlet.http.*;
  * Incoming requests for a particular HTTP method type (e.g. <js>"GET"</js>) are handed off to this class and then
  * dispatched to the appropriate RestJavaMethod.
  */
-class RestCallRouter {
+public class RestCallRouter {
 	private final RestJavaMethod[] restJavaMethods;
 
 	RestCallRouter(RestJavaMethod[] callMethods) {

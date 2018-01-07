@@ -148,34 +148,34 @@ public @interface RestMethod {
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
-	 * Method-level response converters.
+	 *	Class-level response converters.
 	 *
 	 * <p>
-	 * Associates one or more {@link RestConverter converters} with a resource method.
+	 * Associates one or more {@link RestConverter converters} with a resource class.
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
 	 * annotation.
 	 *
 	 * <p>
 	 * Can be used for performing post-processing on the response object before serialization.
 	 *
-	 * <p>
-	 * Default converter implementations are provided in the <a class='doclink'
-	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
-	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_converters}
-	 * 	<li>Annotations:
+	 * 	<li>Annotations:  
 	 * 		<ul>
 	 * 			<li>{@link RestResource#converters()}
 	 * 			<li>{@link RestMethod#converters()}
 	 * 		</ul>
-	 * 	<li>Methods:
+	 * 	<li>Methods: 
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#converters(Class...)}
 	 * 			<li>{@link RestContextBuilder#converters(RestConverter...)}
 	 * 		</ul>
-	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../package-summary.html#RestResources.Converters">Converters</a>
 	 *	</ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};
@@ -233,14 +233,18 @@ public @interface RestMethod {
 	 * 		</ul>
 	 * 	<li>Methods: 
 	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#serializers(Object...)}
 	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Object...)}
 	 * 		</ul>
 	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
+	 *
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../package-summary.html#RestResources.Serializers">Serializers</a>
+	 *	</ul>
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -283,16 +287,20 @@ public @interface RestMethod {
 	 * 		</ul>
 	 * 	<li>Methods: 
 	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#parsers(Object...)}
 	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Object...)}
 	 * 		</ul>
 	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * 	<li>Values are added AFTER those found in the annotation and therefore take precedence over those defined via the
 	 * 		annotation.
 	 * </ul>
+	 *
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../package-summary.html#RestResources.Parsers">Parsers</a>
+	 *	</ul>
 	 */
 	Class<? extends Parser>[] parsers() default {};
 

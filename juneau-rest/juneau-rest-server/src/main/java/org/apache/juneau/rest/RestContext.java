@@ -179,7 +179,7 @@ public final class RestContext extends BeanContext {
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestCallHandler&gt; | RestCallHandler</code>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt; | {@link RestCallHandler}</code>
 	 * 	<li><b>Default:</b>  {@link RestCallHandler}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
@@ -212,7 +212,7 @@ public final class RestContext extends BeanContext {
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.children.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class | Object | RestChild&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Class | Object | {@link RestChild}&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
@@ -399,7 +399,7 @@ public final class RestContext extends BeanContext {
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.converters.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;RestConverter | Class&lt;? <jk>extends</jk> RestConverter&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestConverter} | Class&lt;? <jk>extends</jk> {@link RestConverter}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
@@ -413,10 +413,6 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Can be used for performing post-processing on the response object before serialization.
 	 *
-	 * <p>
-	 * Default converter implementations are provided in the <a class='doclink'
-	 * href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
-	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_converters}
@@ -430,7 +426,11 @@ public final class RestContext extends BeanContext {
 	 * 			<li>{@link RestContextBuilder#converters(Class...)}
 	 * 			<li>{@link RestContextBuilder#converters(RestConverter...)}
 	 * 		</ul>
-	 * 	<li>{@link RestConverter} classes must have either a no-arg or {@link PropertyStore} argument constructors.
+	 *	</ul>
+	 *
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="package-summary.html#RestResources.Converters">Converters</a>
 	 *	</ul>
 	 */
 	public static final String REST_converters = PREFIX + "converters.lo";
@@ -762,7 +762,7 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li>{@link RestContextBuilder#messages(String)},
 	 * 			<li>{@link RestContextBuilder#messages(Class,String)}
-	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation)} 
+	 * 			<li>{@link RestContextBuilder#messages(MessageBundleLocation...)} 
 	 * 		</ul>
 	 * 	<li>Mappings are cumulative from parent to child.  
 	 * </ul>
@@ -828,7 +828,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
-	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <p>
 	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
@@ -891,14 +891,18 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li>Methods: 
 	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#parsers(Object...)}
 	 * 			<li>{@link RestContextBuilder#parsers(Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#parsers(Parser...)}
-	 * 			<li>{@link RestContextBuilder#parsers(boolean,Parser...)}
+	 * 			<li>{@link RestContextBuilder#parsers(boolean,Object...)}
 	 * 		</ul>
 	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
+	 *
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="package-summary.html#RestResources.Parsers">Parsers</a>
+	 *	</ul>
 	 */
 	public static final String REST_parsers = PREFIX + "parsers.lo";
 
@@ -1142,14 +1146,18 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li>Methods: 
 	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#serializers(Object...)}
 	 * 			<li>{@link RestContextBuilder#serializers(Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Class...)}
-	 * 			<li>{@link RestContextBuilder#serializers(Serializer...)}
-	 * 			<li>{@link RestContextBuilder#serializers(boolean,Serializer...)}
+	 * 			<li>{@link RestContextBuilder#serializers(boolean,Object...)}
 	 * 		</ul>
 	 * 	<li>When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
+	 *
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="package-summary.html#RestResources.Serializers">Serializers</a>
+	 *	</ul>
 	 */
 	public static final String REST_serializers = PREFIX + "serializers.lo";
 
@@ -2370,7 +2378,7 @@ public final class RestContext extends BeanContext {
 	 * Serializers at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#serializers() @RestResource.serializers()} annotation.
-	 * 	<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Serializer...)} methods.
+	 * 	<li>{@link RestContextBuilder#serializers(Class...)}/{@link RestContextBuilder#serializers(Object...)} methods.
 	 * </ul>
 	 *
 	 * @return The serializers registered with this resource.
@@ -2386,7 +2394,7 @@ public final class RestContext extends BeanContext {
 	 * Parsers at the class level are defined via one of the following:
 	 * <ul>
 	 * 	<li>{@link RestResource#parsers() @RestResource.parsers()} annotation.
-	 * 	<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Parser...)} methods.
+	 * 	<li>{@link RestContextBuilder#parsers(Class...)}/{@link RestContextBuilder#parsers(Object...)} methods.
 	 * </ul>
 	 *
 	 * @return The parsers registered with this resource.
