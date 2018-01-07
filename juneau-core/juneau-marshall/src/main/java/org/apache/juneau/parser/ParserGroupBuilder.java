@@ -557,7 +557,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
-	public ParserGroupBuilder notBeanClasses(Class<?>...values) {
+	public ParserGroupBuilder notBeanClasses(Object...values) {
 		return set(BEAN_notBeanClasses_add, values);
 	}
 
@@ -568,7 +568,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
-	public ParserGroupBuilder notBeanClasses(Collection<Class<?>> values) {
+	public ParserGroupBuilder notBeanClasses(Class<?>...values) {
 		return set(BEAN_notBeanClasses_add, values);
 	}
 
@@ -669,7 +669,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public ParserGroupBuilder pojoSwaps(Class<?>...values) {
+	public ParserGroupBuilder pojoSwaps(Object...values) {
 		return set(BEAN_pojoSwaps_add, values);
 	}
 
@@ -680,7 +680,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public ParserGroupBuilder pojoSwaps(Collection<Class<?>> values) {
+	public ParserGroupBuilder pojoSwaps(Class<?>...values) {
 		return set(BEAN_pojoSwaps_add, values);
 	}
 

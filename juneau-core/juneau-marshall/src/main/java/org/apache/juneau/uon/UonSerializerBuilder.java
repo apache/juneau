@@ -333,38 +333,32 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackages(Collection<String> values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackages(boolean append, String...values) {
+	public UonSerializerBuilder notBeanPackages(boolean append, Object...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackagesRemove(String...values) {
+	public UonSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
-		super.notBeanPackagesRemove(values);
+	public UonSerializerBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
 		return this;
 	}
 
@@ -375,31 +369,13 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanClasses(Collection<Class<?>> values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
+	public UonSerializerBuilder notBeanClasses(boolean append, Object...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+	public UonSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
@@ -429,37 +405,25 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder pojoSwaps(Collection<Class<?>> values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
+	public UonSerializerBuilder pojoSwaps(boolean append, Object...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
-		super.pojoSwaps(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+	public UonSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}

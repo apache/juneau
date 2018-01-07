@@ -602,38 +602,32 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackages(Collection<String> values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackages(boolean append, String...values) {
+	public RdfSerializerBuilder notBeanPackages(boolean append, Object...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackagesRemove(String...values) {
+	public RdfSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
-		super.notBeanPackagesRemove(values);
+	public RdfSerializerBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
 		return this;
 	}
 
@@ -644,31 +638,13 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClasses(Collection<Class<?>> values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
+	public RdfSerializerBuilder notBeanClasses(boolean append, Object...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+	public RdfSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
@@ -698,37 +674,25 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwaps(Collection<Class<?>> values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
+	public RdfSerializerBuilder pojoSwaps(boolean append, Object...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
-		super.pojoSwaps(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+	public RdfSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}

@@ -412,38 +412,32 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanPackages(Collection<String> values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanPackages(boolean append, String...values) {
+	public HtmlSerializerBuilder notBeanPackages(boolean append, Object...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanPackages(boolean append, Collection<String> values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanPackagesRemove(String...values) {
+	public HtmlSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanPackagesRemove(Collection<String> values) {
-		super.notBeanPackagesRemove(values);
+	public HtmlSerializerBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
 		return this;
 	}
 
@@ -454,31 +448,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClasses(Collection<Class<?>> values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClasses(boolean append, Class<?>...values) {
+	public HtmlSerializerBuilder notBeanClasses(boolean append, Object...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+	public HtmlSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
@@ -508,37 +484,25 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder pojoSwaps(Collection<Class<?>> values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder pojoSwaps(boolean append, Class<?>...values) {
+	public HtmlSerializerBuilder pojoSwaps(boolean append, Object...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
-		super.pojoSwaps(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+	public HtmlSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}

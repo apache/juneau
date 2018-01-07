@@ -188,38 +188,32 @@ public class JsoParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoParserBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanPackages(Collection<String> values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanPackages(boolean append, String...values) {
+	public JsoParserBuilder notBeanPackages(boolean append, Object...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanPackages(boolean append, Collection<String> values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanPackagesRemove(String...values) {
+	public JsoParserBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanPackagesRemove(Collection<String> values) {
-		super.notBeanPackagesRemove(values);
+	public JsoParserBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
 		return this;
 	}
 
@@ -230,31 +224,13 @@ public class JsoParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanClasses(Collection<Class<?>> values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanClasses(boolean append, Class<?>...values) {
+	public JsoParserBuilder notBeanClasses(boolean append, Object...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+	public JsoParserBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
@@ -284,37 +260,25 @@ public class JsoParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoParserBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoParserBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder pojoSwaps(Collection<Class<?>> values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder pojoSwaps(boolean append, Class<?>...values) {
+	public JsoParserBuilder pojoSwaps(boolean append, Object...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
-		super.pojoSwaps(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsoParserBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+	public JsoParserBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}

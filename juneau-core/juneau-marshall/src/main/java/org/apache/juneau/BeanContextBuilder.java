@@ -466,6 +466,40 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Add to packages whose classes should not be considered beans.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
+	 * 		or <code>property(<jsf>BEAN_notBeanPackages_add</jsf>, s)</code>.
+	 * </ul>
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_notBeanPackages_add
+	 */
+	public BeanContextBuilder notBeanPackages(Object...values) {
+		return addTo(BEAN_notBeanPackages, values);
+	}
+
+	/**
+	 * Configuration property:  Add to packages whose classes should not be considered beans.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
+	 * 		or <code>property(<jsf>BEAN_notBeanPackages_add</jsf>, s)</code>.
+	 * </ul>
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @see BeanContext#BEAN_notBeanPackages_add
+	 */
+	public BeanContextBuilder notBeanPackages(String...values) {
+		return addTo(BEAN_notBeanPackages, values);
+	}
+
+	/**
 	 * Configuration property:  Packages whose classes should not be considered beans.
 	 *
 	 * <p>
@@ -488,54 +522,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages
 	 */
-	public BeanContextBuilder notBeanPackages(boolean append, String...values) {
+	public BeanContextBuilder notBeanPackages(boolean append, Object...values) {
 		return set(append, BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * Configuration property:  Packages whose classes should not be considered beans.
-	 *
-	 * Same as {@link #notBeanPackages(boolean, String...)} but using a <code>Collection</code>.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
-	 */
-	public BeanContextBuilder notBeanPackages(boolean append, Collection<String> values) {
-		return set(append, BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * Configuration property:  Add to packages whose classes should not be considered beans.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_notBeanPackages_add</jsf>, s)</code>.
-	 * </ul>
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_add
-	 */
-	public BeanContextBuilder notBeanPackages(String...values) {
-		return addTo(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * Configuration property:  Add to packages whose classes should not be considered beans.
-	 *
-	 * <p>
-	 * Same as {@link #notBeanPackages(String...)} but using a <code>Collection</code>.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
-	 */
-	public BeanContextBuilder notBeanPackages(Collection<String> values) {
-		return addTo(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -552,61 +540,26 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @see BeanContext#BEAN_notBeanPackages
 	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
-	public BeanContextBuilder notBeanPackagesRemove(String...values) {
+	public BeanContextBuilder notBeanPackagesRemove(Object...values) {
 		return removeFrom(BEAN_notBeanPackages, values);
 	}
 
 	/**
-	 * Configuration property:  Remove from packages whose classes should not be considered beans.
-	 *
-	 * <p>
-	 * Same as {@link #notBeanPackagesRemove(String...)} but using a <code>Collection</code>.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
-	 * @see BeanContext#BEAN_notBeanPackages_remove
-	 */
-	public BeanContextBuilder notBeanPackagesRemove(Collection<String> values) {
-		return removeFrom(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * Configuration property:  Classes to be excluded from consideration as being beans.
-	 *
-	 * <p>
-	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
-	 * bean-like.
+	 * Configuration property:  Add to classes that should not be considered beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_notBeanClasses</jsf>, values)</code>.
+	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanClasses</jsf>, values)</code>
+	 * 		or <code>property(<jsf>BEAN_notBeanClasses_add</jsf>, values)</code>.
 	 * </ul>
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The new value for this property.
+	 *
+	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanClasses
+	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
-	public BeanContextBuilder notBeanClasses(boolean append, Class<?>...values) {
-		return set(append, BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * Configuration property:  Classes to be excluded from consideration as being beans.
-	 *
-	 * <p>
-	 * Same as {@link #notBeanClasses(boolean, Class...)} but using a <code>Collection</code>.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
-	 */
-	public BeanContextBuilder notBeanClasses(boolean append, Collection<Class<?>> values) {
-		return set(append, BEAN_notBeanClasses, values);
+	public BeanContextBuilder notBeanClasses(Object...values) {
+		return addTo(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -628,18 +581,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to classes that should not be considered beans.
+	 * Configuration property:  Classes to be excluded from consideration as being beans.
 	 *
 	 * <p>
-	 * Same as {@link #notBeanClasses(Class...)} but using a <code>Collection</code>.
+	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
+	 * bean-like.
 	 *
-	 * @param values The values to add to this property.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_notBeanClasses</jsf>, values)</code>.
+	 * </ul>
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
+	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanClasses
-	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
-	public BeanContextBuilder notBeanClasses(Collection<Class<?>> values) {
-		return addTo(BEAN_notBeanClasses, values);
+	public BeanContextBuilder notBeanClasses(boolean append, Object...values) {
+		return set(append, BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -656,22 +616,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @see BeanContext#BEAN_notBeanClasses
 	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
-	public BeanContextBuilder notBeanClassesRemove(Class<?>...values) {
-		return removeFrom(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * Configuration property:  Remove from classes that should not be considered beans.
-	 *
-	 * <p>
-	 * Same as {@link #notBeanClassesRemove(Class...)} but using a <code>Collection</code>.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses
-	 * @see BeanContext#BEAN_notBeanClasses_remove
-	 */
-	public BeanContextBuilder notBeanClassesRemove(Collection<Class<?>> values) {
+	public BeanContextBuilder notBeanClassesRemove(Object...values) {
 		return removeFrom(BEAN_notBeanClasses, values);
 	}
 
@@ -761,44 +706,21 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps to apply to Java objects.
-	 *
-	 * <p>
-	 * There are two category of classes that can be passed in through this method:
-	 * <ul>
-	 * 	<li>Subclasses of {@link PojoSwap}.
-	 * 	<li>Implementations of {@link Surrogate}.
-	 * </ul>
+	 * Configuration property:  Add to POJO swaps.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_pojoSwaps</jsf>, values)</code>.
+	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_pojoSwaps</jsf>, values)</code>
+	 * 		or <code>property(<jsf>BEAN_pojoSwaps_add</jsf>, values)</code>.
 	 * </ul>
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
-	 */
-	public BeanContextBuilder pojoSwaps(boolean append, Class<?>...values) {
-		return set(append, BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * Configuration property:  POJO swaps to apply to Java objects.
 	 *
-	 * <p>
-	 * Same as {@link #pojoSwaps(boolean, Class...)} but using a <code>Collection</code>.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The new value for this property.
+	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps
+	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public BeanContextBuilder pojoSwaps(boolean append, Collection<Class<?>> values) {
-		return set(append, BEAN_pojoSwaps, values);
+	public BeanContextBuilder pojoSwaps(Object...values) {
+		return addTo(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -820,18 +742,28 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to POJO swaps.
+	 * Configuration property:  POJO swaps to apply to Java objects.
 	 *
 	 * <p>
-	 * Same as {@link #pojoSwaps(Class...)} but using a <code>Collection</code>.
+	 * There are two category of classes that can be passed in through this method:
+	 * <ul>
+	 * 	<li>Subclasses of {@link PojoSwap}.
+	 * 	<li>Implementations of {@link Surrogate}.
+	 * </ul>
 	 *
-	 * @param values The values to add to this property.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_pojoSwaps</jsf>, values)</code>.
+	 * </ul>
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
+	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps
-	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public BeanContextBuilder pojoSwaps(Collection<Class<?>> values) {
-		return addTo(BEAN_pojoSwaps, values);
+	public BeanContextBuilder pojoSwaps(boolean append, Object...values) {
+		return set(append, BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -848,22 +780,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @see BeanContext#BEAN_pojoSwaps
 	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
-	public BeanContextBuilder pojoSwapsRemove(Class<?>...values) {
-		return removeFrom(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * Configuration property:  Remove from POJO swaps.
-	 *
-	 * <p>
-	 * Same as {@link #pojoSwapsRemove(Class...)} but using a <code>Collection</code>.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
-	 * @see BeanContext#BEAN_pojoSwaps_remove
-	 */
-	public BeanContextBuilder pojoSwapsRemove(Collection<Class<?>> values) {
+	public BeanContextBuilder pojoSwapsRemove(Object...values) {
 		return removeFrom(BEAN_pojoSwaps, values);
 	}
 

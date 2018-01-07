@@ -16,7 +16,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
@@ -470,12 +469,10 @@ public @interface RestMethod {
 	 * 		</ul>
 	 * 	<li>Methods:
 	 * 		<ul>
+	 * 			<li>{@link RestContextBuilder#pojoSwaps(Object...)}
 	 * 			<li>{@link RestContextBuilder#pojoSwaps(Class...)}
-	 * 			<li>{@link RestContextBuilder#pojoSwaps(Collection)}
-	 * 			<li>{@link RestContextBuilder#pojoSwaps(boolean, Class...)}
-	 * 			<li>{@link RestContextBuilder#pojoSwaps(boolean, Collection)}
-	 * 			<li>{@link RestContextBuilder#pojoSwapsRemove(Class...)}
-	 * 			<li>{@link RestContextBuilder#pojoSwapsRemove(Collection)}
+	 * 			<li>{@link RestContextBuilder#pojoSwaps(boolean, Object...)}
+	 * 			<li>{@link RestContextBuilder#pojoSwapsRemove(Object...)}
 	 * 		</ul>
 	 *	</ul>
 	 */

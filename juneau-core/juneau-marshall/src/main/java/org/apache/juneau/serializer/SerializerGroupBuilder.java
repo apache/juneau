@@ -727,7 +727,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
-	public SerializerGroupBuilder notBeanClasses(Class<?>...values) {
+	public SerializerGroupBuilder notBeanClasses(Object...values) {
 		return set(BEAN_notBeanClasses_add, values);
 	}
 
@@ -738,7 +738,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
-	public SerializerGroupBuilder notBeanClasses(Collection<Class<?>> values) {
+	public SerializerGroupBuilder notBeanClasses(Class<?>...values) {
 		return set(BEAN_notBeanClasses_add, values);
 	}
 
@@ -839,7 +839,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public SerializerGroupBuilder pojoSwaps(Class<?>...values) {
+	public SerializerGroupBuilder pojoSwaps(Object...values) {
 		return set(BEAN_pojoSwaps_add, values);
 	}
 
@@ -850,7 +850,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
-	public SerializerGroupBuilder pojoSwaps(Collection<Class<?>> values) {
+	public SerializerGroupBuilder pojoSwaps(Class<?>...values) {
 		return set(BEAN_pojoSwaps_add, values);
 	}
 
