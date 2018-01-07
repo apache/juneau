@@ -1542,7 +1542,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param parsers The parser classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder parsers(boolean append, Class<?>...parsers) {
+	public RestContextBuilder parsers(boolean append, Object...parsers) {
 		return set(append, REST_parsers, parsers);
 	}
 
@@ -1559,23 +1559,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param parsers The parsers to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder parsers(Parser...parsers) {
+	public RestContextBuilder parsers(Object...parsers) {
 		return addTo(REST_parsers, parsers);
-	}
-
-	/**
-	 * Configuration property:  Parsers. 
-	 *
-	 * <p>
-	 * Same as {@link #parsers(Parser...)} except allows you to overwrite the previous value.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
-	 * @param parsers The parsers to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder parsers(boolean append, Parser...parsers) {
-		return set(append, REST_parsers, parsers);
 	}
 
 	/**
@@ -1896,7 +1881,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param serializers The serializer classes to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder serializers(boolean append, Class<?>...serializers) {
+	public RestContextBuilder serializers(boolean append, Object...serializers) {
 		return set(append, REST_serializers, serializers);
 	}
 
@@ -1913,23 +1898,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param serializers The serializer to add to this config.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder serializers(Serializer...serializers) {
+	public RestContextBuilder serializers(Object...serializers) {
 		return addTo(REST_serializers, serializers);
-	}
-
-	/**
-	 * Configuration property:  Serializers. 
-	 *
-	 * <p>
-	 * Same as {@link #serializers(Serializer...)} except allows you to overwrite the previous value.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
-	 * @param serializers The serializer to add to this config.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder serializers(boolean append, Serializer...serializers) {
-		return set(append, REST_serializers, serializers);
 	}
 
 	/**
