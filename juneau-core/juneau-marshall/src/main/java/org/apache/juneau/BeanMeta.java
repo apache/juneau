@@ -256,7 +256,7 @@ public class BeanMeta<T> {
 					fixedBeanProps.addAll(Arrays.asList(includeProperties));
 
 				if (propertyNamer == null)
-					propertyNamer = new PropertyNamerDefault();
+					propertyNamer = ctx.propertyNamer;
 
 				// First populate the properties with those specified in the bean annotation to
 				// ensure that ordering first.

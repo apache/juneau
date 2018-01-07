@@ -462,12 +462,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

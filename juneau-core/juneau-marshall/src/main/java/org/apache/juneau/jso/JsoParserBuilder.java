@@ -326,12 +326,6 @@ public class JsoParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsoParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

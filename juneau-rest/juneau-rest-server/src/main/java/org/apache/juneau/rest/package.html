@@ -2065,19 +2065,23 @@
 	}		
 		</p>
 		<p>
-			Children can also be defined programmatically using any of the following methods:
+			Children are defined through the following:
 		</p>
-		<ul class='doctree'>
-			<li class='jac'>
-			{@link org.apache.juneau.rest.RestContextBuilder}
+		<ul class='spaced-list'>
+			<li><b>Properties:</b>
 			<ul>
-				<li class='jm'>
-					{@link org.apache.juneau.rest.RestContextBuilder#child(String,Object)}
-				<li class='jm'>
-					{@link org.apache.juneau.rest.RestContextBuilder#children(Class[])}
-				<li class='jm'>
-					{@link org.apache.juneau.rest.RestContextBuilder#children(Object[])}
-			</ul> 
+				 <li>{@link org.apache.juneau.rest.RestContext#REST_children}
+			</ul>
+			<li><b>Annotations:</b>  
+			<ul>
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#children()}
+			</ul>
+			<li><b>Methods:</b> 
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#child(String,Object)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Class...)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Object...)}
+			</ul>
 		</ul>
 	</div>
 	

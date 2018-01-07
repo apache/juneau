@@ -298,7 +298,7 @@ l {
 	font-size: 1.2em;
 }
 
-.spaced-list li { padding:5px; }
+.spaced-list>li { padding:5px; }
 .footer .spaced-list ul { margin:0 }
 
 /* Documentation Tree */

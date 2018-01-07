@@ -776,12 +776,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

@@ -452,12 +452,6 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public CsvSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

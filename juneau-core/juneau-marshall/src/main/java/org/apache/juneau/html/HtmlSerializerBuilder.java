@@ -586,12 +586,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

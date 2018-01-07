@@ -334,12 +334,6 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

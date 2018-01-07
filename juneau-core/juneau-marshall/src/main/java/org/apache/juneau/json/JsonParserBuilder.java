@@ -327,12 +327,6 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsonParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

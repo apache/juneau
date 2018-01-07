@@ -464,12 +464,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsonSchemaSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

@@ -785,6 +785,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Bean property namer
+	 *
+	 * <p>
+	 * The class to use for calculating bean property names.
+	 * 
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder propertyNamer(Class<? extends PropertyNamer> value) {
+		return set(BEAN_propertyNamer, value);
+	}
+
+	/**
 	 * Configuration property:  Implementation classes for interfaces and abstract classes.
 	 *
 	 * <p>
@@ -1082,25 +1095,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder beanTypePropertyName(String value) {
 		return set(BEAN_beanTypePropertyName, value);
-	}
-
-	/**
-	 * Configuration property:  Default parser to use when converting <code>Strings</code> to POJOs.
-	 *
-	 * <p>
-	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_defaultParser</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_defaultParser
-	 */
-	public BeanContextBuilder defaultParser(Class<?> value) {
-		return set(BEAN_defaultParser, value);
 	}
 
 	/**

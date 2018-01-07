@@ -1927,12 +1927,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestContextBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

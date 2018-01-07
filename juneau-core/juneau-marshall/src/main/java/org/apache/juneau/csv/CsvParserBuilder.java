@@ -325,12 +325,6 @@ public class CsvParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public CsvParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public CsvParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

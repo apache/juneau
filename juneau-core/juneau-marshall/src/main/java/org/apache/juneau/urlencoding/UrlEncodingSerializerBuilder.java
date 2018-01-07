@@ -546,12 +546,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

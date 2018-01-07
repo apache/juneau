@@ -452,12 +452,6 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

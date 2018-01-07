@@ -584,12 +584,6 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RdfParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

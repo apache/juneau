@@ -452,12 +452,6 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public PlainTextSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

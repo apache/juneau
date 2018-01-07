@@ -502,12 +502,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SoapXmlSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SoapXmlSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

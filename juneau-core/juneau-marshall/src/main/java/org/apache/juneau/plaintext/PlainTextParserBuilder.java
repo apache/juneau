@@ -326,12 +326,6 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

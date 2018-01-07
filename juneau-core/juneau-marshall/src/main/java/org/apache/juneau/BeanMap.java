@@ -316,12 +316,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
-	 * Convenience method for setting multiple property values by passing in JSON (or other) text.
-	 *
-	 * <p>
-	 * Typically the input is going to be JSON, although the actual data type depends on the default parser specified by
-	 * the {@link BeanContext#BEAN_defaultParser} property value on the config that created the context that created
-	 * this map.
+	 * Convenience method for setting multiple property values by passing in JSON text.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>

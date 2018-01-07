@@ -605,12 +605,6 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

@@ -46,6 +46,8 @@ import org.apache.juneau.*;
  */
 public abstract class BeanFilterBuilder {
 
+	private String TODO = "Need to convert to property builder";
+	
 	Class<?> beanClass;
 	String typeName;
 	String[] properties, excludeProperties;

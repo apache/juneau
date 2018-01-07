@@ -354,12 +354,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

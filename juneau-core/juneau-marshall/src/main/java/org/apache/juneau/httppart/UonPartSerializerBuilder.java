@@ -500,12 +500,6 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public UonPartSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

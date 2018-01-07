@@ -233,6 +233,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanClassVisibility(Visibility)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -252,6 +256,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanConstructorVisibility(Visibility)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility.s";
@@ -265,6 +273,19 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#beanDictionary()} 
+	 * 			<li class='ja'>{@link BeanProperty#beanDictionary()} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#beanDictionary(Class...)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -284,23 +305,6 @@ public class BeanContext extends Context {
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Properties:
-	 * 		<ul> 	
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
-	 * 		</ul>
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link Bean#beanDictionary()}
-	 * 			<li>{@link BeanProperty#beanDictionary()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
-	 * 		</ul>
 	 * 	<li>Values can consist of any of the following types:
 	 *			<ul>
 	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
@@ -334,6 +338,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFieldVisibility(Visibility)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -356,6 +364,17 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(boolean,Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersRemove(Object...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -399,6 +418,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -420,6 +443,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -440,6 +467,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -460,6 +491,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -478,6 +513,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSomeProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -498,6 +537,14 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"_type"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#typePropertyName()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanTypePropertyName(String)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName.s";
@@ -511,6 +558,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#debug()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -535,23 +586,6 @@ public class BeanContext extends Context {
 	public static final String BEAN_debug = PREFIX + "debug.b";
 
 	/**
-	 * Configuration property:  Default parser to use when converting <code>Strings</code> to POJOs.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.defaultParser.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class</code>
-	 * 	<li><b>Default:</b>  {@link JsonSerializer}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
-	 */
-	public static final String BEAN_defaultParser = PREFIX + "defaultParser.c";
-
-	/**
 	 * Configuration property:  Exclude specified properties from beans.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -560,6 +594,17 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#excludeProperties()} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(Class, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(String, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(Map)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#excludeProperties(String...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -589,6 +634,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -607,6 +656,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -625,6 +678,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignorePropertiesWithoutSetters(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -643,6 +700,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -661,6 +722,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownNullBeanProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -679,6 +744,11 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#implClasses(Map)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#implClass(Class, Class)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -698,6 +768,18 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#properties()} 
+	 * 			<li class='ja'>{@link BeanProperty#properties()} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Class, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(String, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Map)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#properties(String...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -727,11 +809,11 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
 	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link Locale#getDefault()})
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
+	 * 		</ul>
 	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
 	public static final String BEAN_locale = PREFIX + "locale.s";
 
@@ -744,6 +826,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link MediaType})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -761,6 +847,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#methodVisibility(Visibility)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -780,6 +870,17 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Set&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link BeanIgnore} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(boolean, Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesRemove(Object...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -818,6 +919,13 @@ public class BeanContext extends Context {
 	 * 		<li><code>java.util.*</code>
 	 * 	</ul>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(String...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(boolean, Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesRemove(Object...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -851,6 +959,18 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Swap} 
+	 * 			<li class='ja'>{@link Swaps} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(boolean, Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -879,6 +999,40 @@ public class BeanContext extends Context {
 	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.lc/remove";
 
 	/**
+	 * Configuration property:  Bean property namer
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> {@link PropertyNamer}&gt;</code>
+	 * 	<li><b>Default:</b>  {@link PropertyNamerDefault}
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#propertyNamer()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#propertyNamer(PropertyNamer)}
+	 * 		</ul>
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * The class to use for calculating bean property names.
+	 * 
+	 * <p>
+	 * Predefined classes:
+	 * <ul>
+	 * 	<li>{@link PropertyNamerDefault} - Default.
+	 * 	<li>{@link PropertyNamerDLC} - Dashed-lower-case names.
+	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
+	 * </ul>
+	 */
+	public static final String BEAN_propertyNamer = PREFIX + "propertyNamer.c";
+
+	/**
 	 * Configuration property:  Sort bean properties in alphabetical order.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -887,6 +1041,15 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#sort()} 
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#sortProperties(boolean)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#sortProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -912,6 +1075,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -929,6 +1096,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#useInterfaceProxies(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -947,6 +1118,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -1032,6 +1207,7 @@ public class BeanContext extends Context {
 	final TimeZone timeZone;
 	final MediaType mediaType;
 	final Map<String,String[]> includeProperties, excludeProperties;
+	final PropertyNamer propertyNamer;
 
 	final Map<Class,ClassMeta> cmCache;
 	final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
@@ -1077,6 +1253,8 @@ public class BeanContext extends Context {
 		beanFieldVisibility = getProperty(BEAN_beanFieldVisibility, Visibility.class, PUBLIC);
 
 		notBeanClasses = getClassArrayProperty(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
+		
+		propertyNamer = getInstanceProperty(BEAN_propertyNamer, PropertyNamer.class, PropertyNamerDefault.class);
 
 		List<String> l1 = new LinkedList<>();
 		List<String> l2 = new LinkedList<>();

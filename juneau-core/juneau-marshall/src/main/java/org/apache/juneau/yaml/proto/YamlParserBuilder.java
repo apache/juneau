@@ -326,12 +326,6 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public YamlParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

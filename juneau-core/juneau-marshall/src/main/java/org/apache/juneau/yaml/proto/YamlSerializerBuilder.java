@@ -505,12 +505,6 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

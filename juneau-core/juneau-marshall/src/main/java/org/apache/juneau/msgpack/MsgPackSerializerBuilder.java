@@ -452,12 +452,6 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;

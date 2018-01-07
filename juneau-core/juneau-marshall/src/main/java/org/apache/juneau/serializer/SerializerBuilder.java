@@ -767,12 +767,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder defaultParser(Class<?> value) {
-		super.defaultParser(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
