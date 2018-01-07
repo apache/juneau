@@ -198,7 +198,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				converters(r.converters());
 				guards(reverse(r.guards()));
 				children(r.children());
-				beanFilters(r.beanFilters());
+				beanFilters((Object[])r.beanFilters());
 				pojoSwaps(r.pojoSwaps());
 				paramResolvers(r.paramResolvers());
 				if (r.serializerListener() != SerializerListener.Null.class)
@@ -2568,37 +2568,25 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder beanFilters(Collection<Class<?>> values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder beanFilters(boolean append, Class<?>...values) {
+	public RestContextBuilder beanFilters(boolean append, Object...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder beanFilters(boolean append, Collection<Class<?>> values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder beanFiltersRemove(Collection<Class<?>> values) {
+	public RestContextBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
@@ -2689,6 +2677,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}

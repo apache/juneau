@@ -260,37 +260,25 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public MsgPackParserBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public MsgPackParserBuilder beanFilters(Collection<Class<?>> values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackParserBuilder beanFilters(boolean append, Class<?>...values) {
+	public MsgPackParserBuilder beanFilters(boolean append, Object...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public MsgPackParserBuilder beanFilters(boolean append, Collection<Class<?>> values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackParserBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackParserBuilder beanFiltersRemove(Collection<Class<?>> values) {
+	public MsgPackParserBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
@@ -345,6 +333,12 @@ public class MsgPackParserBuilder extends ParserBuilder {
 
 	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public MsgPackParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}

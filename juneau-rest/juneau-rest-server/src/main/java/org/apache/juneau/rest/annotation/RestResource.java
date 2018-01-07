@@ -174,12 +174,9 @@ public @interface RestResource {
 	 * 		</ul>
 	 * 	<li>Methods:
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#beanFilters(Class...)}
-	 * 			<li>{@link RestContextBuilder#beanFilters(Collection)}
-	 * 			<li>{@link RestContextBuilder#beanFilters(boolean, Class...)}
-	 * 			<li>{@link RestContextBuilder#beanFilters(boolean, Collection)}
-	 * 			<li>{@link RestContextBuilder#beanFiltersRemove(Class...)}
-	 * 			<li>{@link RestContextBuilder#beanFiltersRemove(Collection)}
+	 * 			<li>{@link RestContextBuilder#beanFilters(Object...)}
+	 * 			<li>{@link RestContextBuilder#beanFilters(boolean, Object...)}
+	 * 			<li>{@link RestContextBuilder#beanFiltersRemove(Object...)}
 	 * 		</ul>
 	 *	</ul>
 	 */

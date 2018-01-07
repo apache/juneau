@@ -518,37 +518,25 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFilters(Collection<Class<?>> values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFilters(boolean append, Class<?>...values) {
+	public RdfParserBuilder beanFilters(boolean append, Object...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFilters(boolean append, Collection<Class<?>> values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFiltersRemove(Collection<Class<?>> values) {
+	public RdfParserBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
@@ -603,6 +591,12 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}

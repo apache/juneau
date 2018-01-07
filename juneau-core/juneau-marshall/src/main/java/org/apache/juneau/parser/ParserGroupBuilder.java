@@ -623,7 +623,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public ParserGroupBuilder beanFilters(Class<?>...values) {
+	public ParserGroupBuilder beanFilters(Object...values) {
 		return set(BEAN_beanFilters_add, values);
 	}
 
@@ -634,30 +634,21 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public ParserGroupBuilder beanFilters(Collection<Class<?>> values) {
+	public ParserGroupBuilder beanFilters(Class<?>...values) {
 		return set(BEAN_beanFilters_add, values);
 	}
 
 	/**
 	 * Sets the {@link BeanContext#BEAN_beanFilters} property on all parsers in this group.
-	 *
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters
 	 */
-	public ParserGroupBuilder setBeanFilters(Class<?>...values) {
-		return set(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters} property on all parsers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 */
-	public ParserGroupBuilder setBeanFilters(Collection<Class<?>> values) {
-		return set(BEAN_beanFilters, values);
+	public ParserGroupBuilder beanFilters(boolean append, Object...values) {
+		return set(append, BEAN_beanFilters, values);
 	}
 
 	/**
@@ -667,18 +658,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
-	public ParserGroupBuilder removeBeanFilters(Class<?>...values) {
-		return set(BEAN_beanFilters_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters_remove} property on all parsers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters_remove
-	 */
-	public ParserGroupBuilder removeBeanFilters(Collection<Class<?>> values) {
+	public ParserGroupBuilder beanFiltersRemove(Object...values) {
 		return set(BEAN_beanFilters_remove, values);
 	}
 
@@ -786,34 +766,25 @@ public class ParserGroupBuilder {
 	/**
 	 * Sets the {@link BeanContext#BEAN_beanDictionary_add} property on all parsers in this group.
 	 *
-	 * @param values The values to add to this property.
+	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
-	public ParserGroupBuilder beanDictionary(Collection<Class<?>> values) {
+	public ParserGroupBuilder beanDictionary(Class<?>...values) {
 		return set(BEAN_beanDictionary_add, values);
 	}
 
 	/**
 	 * Sets the {@link BeanContext#BEAN_beanDictionary} property on all parsers in this group.
 	 *
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
-	public ParserGroupBuilder setBeanDictionary(Class<?>...values) {
-		return set(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary} property on all parsers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary
-	 */
-	public ParserGroupBuilder setBeanDictionary(Collection<Class<?>> values) {
-		return set(BEAN_beanDictionary, values);
+	public ParserGroupBuilder beanDictionary(boolean append, Object...values) {
+		return set(append, BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -823,18 +794,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
-	public ParserGroupBuilder removeFromBeanDictionary(Class<?>...values) {
-		return set(BEAN_beanDictionary_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary_remove} property on all parsers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary_remove
-	 */
-	public ParserGroupBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
+	public ParserGroupBuilder beanDictionaryRemove(Object...values) {
 		return set(BEAN_beanDictionary_remove, values);
 	}
 

@@ -707,23 +707,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters
 	 */
-	public BeanContextBuilder beanFilters(boolean append, Class<?>...values) {
-		return set(append, BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Configuration property:  Bean filters to apply to beans.
-	 *
-	 * <p>
-	 * Same as {@link #beanFilters(boolean, Class...)} but using a <code>Collection</code>.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 */
-	public BeanContextBuilder beanFilters(boolean append, Collection<Class<?>> values) {
+	public BeanContextBuilder beanFilters(boolean append, Object...values) {
 		return set(append, BEAN_beanFilters, values);
 	}
 
@@ -741,22 +725,20 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public BeanContextBuilder beanFilters(Class<?>...values) {
+	public BeanContextBuilder beanFilters(Object...values) {
 		return addTo(BEAN_beanFilters, values);
 	}
 
 	/**
 	 * Configuration property:  Add to bean filters.
-	 *
+	 * 
 	 * <p>
-	 * Same as {@link #beanFilters(Class...)} but using a <code>Collection</code>.
+	 * Same as {@link #beanFilters(Object...)} but takes in an array of classes.
 	 *
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public BeanContextBuilder beanFilters(Collection<Class<?>> values) {
+	public BeanContextBuilder beanFilters(Class<?>...values) {
 		return addTo(BEAN_beanFilters, values);
 	}
 
@@ -774,22 +756,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @see BeanContext#BEAN_beanFilters
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
-	public BeanContextBuilder beanFiltersRemove(Class<?>...values) {
-		return removeFrom(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Configuration property:  Remove from bean filters.
-	 *
-	 * <p>
-	 * Same as {@link #beanFiltersRemove(Class...)} but using a <code>Collection</code>.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 * @see BeanContext#BEAN_beanFilters_remove
-	 */
-	public BeanContextBuilder beanFiltersRemove(Collection<Class<?>> values) {
+	public BeanContextBuilder beanFiltersRemove(Object...values) {
 		return removeFrom(BEAN_beanFilters, values);
 	}
 
@@ -1150,6 +1117,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beanDictionary(Object...values) {
+		return addTo(BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean lookup dictionary.
+	 * 
+	 * <p>
+	 * Same as calling {@link #beanDictionary(Object...)} but with an array of classes.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder beanDictionary(Class<?>...values) {
 		return addTo(BEAN_beanDictionary, values);
 	}
 

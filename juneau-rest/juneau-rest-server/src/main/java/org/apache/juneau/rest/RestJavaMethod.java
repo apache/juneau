@@ -252,7 +252,7 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					sgb.append(m.serializers());
 				
 					if (! inherit.contains("PROPERTIES"))
-						sgb.beanFilters(ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
+						sgb.beanFilters((Object[])ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
 					else
 						sgb.apply(ps);
 					for (Property p1 : m.properties())
@@ -285,21 +285,21 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 						}
 						sgb.excludeProperties(bpxMap);
 					}
-					sgb.beanFilters(m.beanFilters());
+					sgb.beanFilters((Object[])m.beanFilters());
 					sgb.pojoSwaps(m.pojoSwaps());
 				}
 
 				if (pgb != null) {
 					pgb.append(m.parsers());
 					if (! inherit.contains("PROPERTIES"))
-						pgb.beanFilters(ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
+						pgb.beanFilters((Object[])ps.getClassArrayProperty(BEAN_beanFilters)).pojoSwaps(ps.getClassArrayProperty(BEAN_pojoSwaps));
 					else
 						pgb.apply(ps);
 					for (Property p1 : m.properties())
 						pgb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
 						pgb.set(p1, true);
-					pgb.beanFilters(m.beanFilters());
+					pgb.beanFilters((Object[])m.beanFilters());
 					pgb.pojoSwaps(m.pojoSwaps());
 				}
 
@@ -309,7 +309,7 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 						uepb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
 						uepb.set(p1, true);
-					uepb.beanFilters(m.beanFilters());
+					uepb.beanFilters((Object[])m.beanFilters());
 					uepb.pojoSwaps(m.pojoSwaps());
 				}
 				
@@ -319,7 +319,7 @@ class RestJavaMethod implements Comparable<RestJavaMethod>  {
 						bcb.set(p1.name(), p1.value());
 					for (String p1 : m.flags())
 						bcb.set(p1, true);
-					bcb.beanFilters(m.beanFilters());
+					bcb.beanFilters((Object[])m.beanFilters());
 					bcb.pojoSwaps(m.pojoSwaps());
 				}
 				

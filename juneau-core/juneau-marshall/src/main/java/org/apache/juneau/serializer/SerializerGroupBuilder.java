@@ -793,7 +793,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public SerializerGroupBuilder beanFilters(Class<?>...values) {
+	public SerializerGroupBuilder beanFilters(Object...values) {
 		return set(BEAN_beanFilters_add, values);
 	}
 
@@ -804,30 +804,21 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters_add
 	 */
-	public SerializerGroupBuilder beanFilters(Collection<Class<?>> values) {
+	public SerializerGroupBuilder beanFilters(Class<?>...values) {
 		return set(BEAN_beanFilters_add, values);
 	}
 
 	/**
 	 * Sets the {@link BeanContext#BEAN_beanFilters} property on all serializers in this group.
 	 *
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters
 	 */
-	public SerializerGroupBuilder setBeanFilters(Class<?>...values) {
-		return set(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters} property on all serializers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 */
-	public SerializerGroupBuilder setBeanFilters(Collection<Class<?>> values) {
-		return set(BEAN_beanFilters, values);
+	public SerializerGroupBuilder beanFilters(boolean append, Class<?>...values) {
+		return set(append, BEAN_beanFilters, values);
 	}
 
 	/**
@@ -837,18 +828,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
-	public SerializerGroupBuilder removeBeanFilters(Class<?>...values) {
-		return set(BEAN_beanFilters_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters_remove
-	 */
-	public SerializerGroupBuilder removeBeanFilters(Collection<Class<?>> values) {
+	public SerializerGroupBuilder beanFiltersRemove(Object...values) {
 		return set(BEAN_beanFilters_remove, values);
 	}
 
@@ -1026,34 +1006,25 @@ public class SerializerGroupBuilder {
 	/**
 	 * Sets the {@link BeanContext#BEAN_beanDictionary_add} property on all serializers in this group.
 	 *
-	 * @param values The values to add to this property.
+	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
-	public SerializerGroupBuilder beanDictionary(Collection<Class<?>> values) {
+	public SerializerGroupBuilder beanDictionary(Class<?>...values) {
 		return set(BEAN_beanDictionary_add, values);
 	}
 
 	/**
 	 * Sets the {@link BeanContext#BEAN_beanDictionary} property on all serializers in this group.
 	 *
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
-	public SerializerGroupBuilder setBeanDictionary(Class<?>...values) {
-		return set(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary} property on all serializers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary
-	 */
-	public SerializerGroupBuilder setBeanDictionary(Collection<Class<?>> values) {
-		return set(BEAN_beanDictionary, values);
+	public SerializerGroupBuilder beanDictionary(boolean append, Object...values) {
+		return set(append, BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1063,18 +1034,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
-	public SerializerGroupBuilder removeFromBeanDictionary(Class<?>...values) {
-		return set(BEAN_beanDictionary_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary_remove
-	 */
-	public SerializerGroupBuilder removeFromBeanDictionary(Collection<Class<?>> values) {
+	public SerializerGroupBuilder beanDictionaryRemove(Object...values) {
 		return set(BEAN_beanDictionary_remove, values);
 	}
 
