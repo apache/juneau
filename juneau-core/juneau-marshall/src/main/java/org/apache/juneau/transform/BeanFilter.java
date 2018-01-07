@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Parent class for all bean filters.
@@ -49,7 +50,7 @@ public class BeanFilter {
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
-		this.propertyNamer = builder.propertyNamer;
+		this.propertyNamer = ClassUtils.newInstance(PropertyNamer.class, builder.propertyNamer);
 		this.beanDictionary =
 			builder.beanDictionary == null
 			? null

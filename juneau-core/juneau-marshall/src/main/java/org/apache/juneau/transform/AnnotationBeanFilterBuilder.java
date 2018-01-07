@@ -30,15 +30,12 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 	/**
 	 * Constructor.
 	 * 
-	 * @param bc 
-	 * 	The bean context creating this builder.  
-	 * 	Used to instantiate {@link PropertyNamer PropertyNamers}. 
 	 * @param annotatedClass The class found to have a {@link Bean @Bean} annotation.
 	 * @param annotations
 	 * 	The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 * @throws Exception Thrown from property namer constructor.
 	 */
-	public AnnotationBeanFilterBuilder(BeanContext bc, Class<?> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {
+	public AnnotationBeanFilterBuilder(Class<?> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {
 		super(annotatedClass);
 
 		ListIterator<Bean> li = new ArrayList<>(annotations.values()).listIterator(annotations.size());
@@ -58,7 +55,7 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 				excludeProperties(split(b.excludeProperties()));
 
 			if (b.propertyNamer() != PropertyNamerDefault.class)
-				propertyNamer(bc, b.propertyNamer());
+				propertyNamer(b.propertyNamer());
 
 			if (b.interfaceClass() != Object.class)
 				interfaceClass(b.interfaceClass());

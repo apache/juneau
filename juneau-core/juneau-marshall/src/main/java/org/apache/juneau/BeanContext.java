@@ -1274,7 +1274,7 @@ public class BeanContext extends Context {
 			else if (isParentClass(BeanFilterBuilder.class, c))
 				lbf.add(newInstance(BeanFilterBuilder.class, c).build());
 			else
-				lbf.add(new InterfaceBeanFilterBuilder(this, c).build());
+				lbf.add(new InterfaceBeanFilterBuilder(c).build());
 		}
 		beanFilters = lbf.toArray(new BeanFilter[0]);
 

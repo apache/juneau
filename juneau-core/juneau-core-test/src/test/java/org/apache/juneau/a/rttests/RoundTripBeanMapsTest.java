@@ -678,12 +678,12 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class FB1Filter extends InterfaceBeanFilterBuilder {
 		public FB1Filter() {
-			super(BeanContext.DEFAULT, FB1.class);
+			super(FB1.class);
 		}
 	}
 	public static class FB2Filter extends InterfaceBeanFilterBuilder {
 		public FB2Filter() {
-			super(BeanContext.DEFAULT, FB1.class);
+			super(FB1.class);
 		}
 	}
 

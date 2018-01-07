@@ -46,14 +46,12 @@ import org.apache.juneau.*;
  */
 public abstract class BeanFilterBuilder {
 
-	private String TODO = "Need to convert to property builder";
-	
 	Class<?> beanClass;
 	String typeName;
 	String[] properties, excludeProperties;
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties;
-	PropertyNamer propertyNamer;
+	Object propertyNamer;
 	List<Class<?>> beanDictionary;
 
 	/**
@@ -206,13 +204,12 @@ public abstract class BeanFilterBuilder {
 	/**
 	 * The property namer to use to name bean properties.
 	 * 
-	 * @param bc The bean context used to instantiate the property namer. 
 	 * @param c The property namer class.  Must have a public no-arg constructor.
 	 * @return This object (for method chaining).
 	 * @throws Exception Thrown from constructor method.
 	 */
-	public BeanFilterBuilder propertyNamer(BeanContext bc, Class<? extends PropertyNamer> c) throws Exception {
-		this.propertyNamer = bc.newInstance(PropertyNamer.class, c);
+	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> c) throws Exception {
+		this.propertyNamer = c;
 		return this;
 	}
 

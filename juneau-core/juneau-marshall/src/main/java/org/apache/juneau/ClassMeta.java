@@ -661,7 +661,7 @@ public final class ClassMeta<T> implements Type {
 			try {
 				Map<Class<?>,Bean> ba = findAnnotationsMap(Bean.class, innerClass);
 				if (! ba.isEmpty())
-					return new AnnotationBeanFilterBuilder(beanContext, innerClass, ba).build();
+					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
