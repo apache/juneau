@@ -144,6 +144,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				RestMethod m = method.getAnnotation(RestMethod.class);
 				if (m == null)
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
+				
+				VarResolver vr = context.getVarResolver();
 
 				if (! m.description().isEmpty())
 					description = m.description();
@@ -168,9 +170,9 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				maxInput = context.getMaxInput();
 
 				if (! m.defaultCharset().isEmpty())
-					defaultCharset = context.getVarResolver().resolve(m.defaultCharset());
+					defaultCharset = vr.resolve(m.defaultCharset());
 				if (! m.maxInput().isEmpty())
-					maxInput = StringUtils.parseLongWithSuffix(context.getVarResolver().resolve(m.maxInput()));
+					maxInput = StringUtils.parseLongWithSuffix(vr.resolve(m.maxInput()));
 
 				HtmlDocBuilder hdb = new HtmlDocBuilder(properties);
 
@@ -349,7 +351,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 				for (String s : m.defaultRequestHeaders()) {
-					String[] h = RestUtils.parseKeyValuePair(s);
+					String[] h = RestUtils.parseKeyValuePair(vr.resolve(s));
 					if (h == null)
 						throw new RestServletException(
 							"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
@@ -358,7 +360,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				defaultQuery = new LinkedHashMap<>();
 				for (String s : m.defaultQuery()) {
-					String[] h = RestUtils.parseKeyValuePair(s);
+					String[] h = RestUtils.parseKeyValuePair(vr.resolve(s));
 					if (h == null)
 						throw new RestServletException(
 							"Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
@@ -367,7 +369,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				defaultFormData = new LinkedHashMap<>();
 				for (String s : m.defaultFormData()) {
-					String[] h = RestUtils.parseKeyValuePair(s);
+					String[] h = RestUtils.parseKeyValuePair(vr.resolve(s));
 					if (h == null)
 						throw new RestServletException(
 							"Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
@@ -409,11 +411,11 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				supportedAcceptTypes = 
 					m.supportedAcceptTypes().length > 0 
-					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(m.supportedAcceptTypes())))) 
+					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.supportedAcceptTypes()))))) 
 					: serializers.getSupportedMediaTypes();
 				supportedContentTypes =
 					m.supportedContentTypes().length > 0 
-					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(m.supportedContentTypes())))) 
+					? Collections.unmodifiableList(new ArrayList<>(Arrays.asList(MediaType.forStrings(resolveVars(vr, m.supportedContentTypes()))))) 
 					: parsers.getSupportedMediaTypes();
 					
 				params = context.findParams(method, pathPattern, false);
@@ -921,5 +923,12 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	@Override /* Object */
 	public int hashCode() {
 		return super.hashCode();
+	}
+	
+	static String[] resolveVars(VarResolver vr, String[] in) {
+		String[] out = new String[in.length];
+		for (int i = 0; i < in.length; i++) 
+			out[i] = vr.resolve(in[i]);
+		return out;
 	}
 }
