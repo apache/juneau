@@ -54,6 +54,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#abridged(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -76,6 +80,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -97,6 +105,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -130,6 +142,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -152,6 +168,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>0</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#initialDepth(int)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -170,6 +190,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends SerializerListener&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#listener(Class)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -187,6 +211,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>100</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#maxDepth(int)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -206,6 +234,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>100</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#maxIndent(int)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -226,6 +258,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"\""</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#quoteChar(char)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -246,6 +282,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -263,6 +303,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -276,10 +320,14 @@ public abstract class Serializer extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyLists.b"</js>
+	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -295,7 +343,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		Bean properties with empty list values will not be set.
 	 * </ul>
 	 */
-	public static final String SERIALIZER_trimEmptyCollections = PREFIX + "trimEmptyLists.b";
+	public static final String SERIALIZER_trimEmptyCollections = PREFIX + "trimEmptyCollections.b";
 
 	/**
 	 * Configuration property:  Trim empty maps.
@@ -306,6 +354,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -330,6 +382,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#trimNullProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -354,6 +410,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -371,6 +431,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>String</code> (JSON object representing a {@link UriContext})
 	 * 	<li><b>Default:</b>  <js>"{}"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#uriContext(UriContext)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -393,6 +457,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriRelativity})
 	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#uriRelativity(UriRelativity)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -424,6 +492,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriResolution})
 	 * 	<li><b>Default:</b>  <js>"NONE"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#uriResolution(UriResolution)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -457,6 +529,10 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SerializerBuilder#useWhitespace(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

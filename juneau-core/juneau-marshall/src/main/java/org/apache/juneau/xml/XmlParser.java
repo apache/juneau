@@ -46,6 +46,10 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLEventAllocator}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link XmlParserBuilder#eventAllocator(XMLEventAllocator)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -63,6 +67,10 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link XmlParserBuilder#preserveRootElement(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -95,6 +103,10 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link XmlParserBuilder#reporter(XMLReporter)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -117,6 +129,10 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link XmlParserBuilder#resolver(XMLResolver)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -134,6 +150,10 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link XmlParserBuilder#validating(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

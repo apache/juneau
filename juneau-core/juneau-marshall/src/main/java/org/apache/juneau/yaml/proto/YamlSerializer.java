@@ -93,6 +93,10 @@ public class YamlSerializer extends WriterSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link YamlSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -118,6 +122,10 @@ public class YamlSerializer extends WriterSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link YamlSerializerBuilder#escapeSolidus(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -138,6 +146,11 @@ public class YamlSerializer extends WriterSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link YamlSerializerBuilder#simple()}
+	 * 			<li class='jm'>{@link YamlSerializerBuilder#simple(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

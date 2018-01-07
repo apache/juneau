@@ -42,6 +42,10 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link MsgPackSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

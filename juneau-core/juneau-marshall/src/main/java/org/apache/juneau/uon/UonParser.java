@@ -44,6 +44,10 @@ public class UonParser extends ReaderParser {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link UonParserBuilder#decodeChars(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

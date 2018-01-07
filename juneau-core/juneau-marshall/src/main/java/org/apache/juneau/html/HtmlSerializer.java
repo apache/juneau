@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -139,6 +140,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -164,6 +169,14 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Html#noTableHeaders()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders.b";
@@ -177,6 +190,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#detectLinksInStrings(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -195,6 +212,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"label"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#labelParameter(String)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String HTML_labelParameter = PREFIX + "labelParameter.s";
@@ -208,6 +229,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#lookForLabelParameters(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -228,6 +253,14 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link AnchorText})
 	 * 	<li><b>Default:</b>  <js>"TO_STRING"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link Html#anchorText()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#uriAnchorText(AnchorText)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

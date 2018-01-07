@@ -42,8 +42,21 @@ public class UrlEncodingParser extends UonParser {
 	private static final String PREFIX = "UrlEncodingParser.";
 
 	/**
-	 * Parser bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
+	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs
 	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams(boolean)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
 	 *

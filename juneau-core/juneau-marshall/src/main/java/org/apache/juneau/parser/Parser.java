@@ -148,6 +148,10 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"default"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#fileCharset(String)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -171,6 +175,10 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#inputStreamCharset(String)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -191,6 +199,10 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#listener(Class)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -208,6 +220,11 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#strict()}
+	 * 			<li class='jm'>{@link ParserBuilder#strict(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -253,6 +270,10 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ParserBuilder#trimStrings(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

@@ -17,6 +17,7 @@ import static org.apache.juneau.jena.Constants.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -59,6 +60,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#addBeanTypeProperties(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -84,6 +89,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#addLiteralTypes(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String RDF_addLiteralTypes = PREFIX + "addLiteralTypes.b";
@@ -97,6 +106,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#addRootProperty(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -120,6 +133,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#autoDetectNamespaces(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -141,6 +158,14 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code> (serialized {@link Namespace} objects)
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Rdf#namespace()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#namespaces(Namespace...)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
