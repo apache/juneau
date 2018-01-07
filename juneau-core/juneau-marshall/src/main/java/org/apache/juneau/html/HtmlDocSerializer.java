@@ -77,6 +77,113 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	private static final String PREFIX = "HtmlDocSerializer.";
 
 	/**
+	 * Configuration property:  Aside section contents.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to specify the contents of the aside section on the HTML page.
+	 * The aside section floats on the right of the page for providing content supporting the serialized content of
+	 * the page.
+	 *
+	 * <p>
+	 * By default, the aside section is empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			aside={
+	 * 				<js>"&lt;ul&gt;"</js>,
+	 * 				<js>"	&lt;li&gt;Item 1"</js>,
+	 * 				<js>"	&lt;li&gt;Item 2"</js>,
+	 * 				<js>"	&lt;li&gt;Item 3"</js>,
+	 * 				<js>"&lt;/ul&gt;"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
+	public static final String HTMLDOC_aside = PREFIX + "aside.ls";
+
+	/**
+	 * Configuration property:  Footer section contents.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to specify the contents of the footer section on the HTML page.
+	 *
+	 * <p>
+	 * By default, the footer section is empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			footer={
+	 * 				<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
+	public static final String HTMLDOC_footer = PREFIX + "footer.ls";
+
+	/**
+	 * Configuration property:  Additional head section content.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Adds the specified HTML content to the head section of the page.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_links</jsf>,
+	 * 				value=<js>"['<link rel=\"icon\" href=\"htdocs/mypageicon.ico\">']"</js>)
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=@HtmlDoc(
+	 * 			head={
+	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
+	public static final String HTMLDOC_head = PREFIX + "head.ls";
+
+	/**
 	 * Configuration property:  Header section contents.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -104,6 +211,38 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * </p>
 	 */
 	public static final String HTMLDOC_header = PREFIX + "header.ls";
+
+	/**
+	 * Configuration property:  Nav section contents.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to override the contents of the nav section on the HTML page.
+	 * The nav section normally contains the page links at the top of the page.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			nav={
+	 * 				<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
+	 */
+	public static final String HTMLDOC_nav = PREFIX + "nav.ls";
 
 	/**
 	 * Configuration property:  Page navigation links.
@@ -178,106 +317,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_navlinks_add = PREFIX + "navlinks.ls/add";
 
 	/**
-	 * Configuration property:  Nav section contents.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allows you to override the contents of the nav section on the HTML page.
-	 * The nav section normally contains the page links at the top of the page.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav={
-	 * 				<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
-	 */
-	public static final String HTMLDOC_nav = PREFIX + "nav.ls";
-
-	/**
-	 * Configuration property:  Aside section contents.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allows you to specify the contents of the aside section on the HTML page.
-	 * The aside section floats on the right of the page for providing content supporting the serialized content of
-	 * the page.
-	 *
-	 * <p>
-	 * By default, the aside section is empty.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			aside={
-	 * 				<js>"&lt;ul&gt;"</js>,
-	 * 				<js>"	&lt;li&gt;Item 1"</js>,
-	 * 				<js>"	&lt;li&gt;Item 2"</js>,
-	 * 				<js>"	&lt;li&gt;Item 3"</js>,
-	 * 				<js>"&lt;/ul&gt;"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 */
-	public static final String HTMLDOC_aside = PREFIX + "aside.ls";
-
-	/**
-	 * Configuration property:  Footer section contents.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allows you to specify the contents of the footer section on the HTML page.
-	 *
-	 * <p>
-	 * By default, the footer section is empty.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			footer={
-	 * 				<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 */
-	public static final String HTMLDOC_footer = PREFIX + "footer.ls";
-
-	/**
 	 * Configuration property:  No-results message.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -324,11 +363,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_nowrap = PREFIX + "nowrap.b";
 
 	/**
-	 * Configuration property:  Stylesheet import URLs.
+	 * Configuration property:  Javascript code.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
@@ -336,17 +375,36 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Adds a link to the specified stylesheet URL.
+	 * Adds the specified Javascript code to the HTML page.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_script</jsf>,
+	 * 				value=<js>"alert('hello!');"</js>)
+	 * 		}
+	 * 	)
+	 * </p>
 	 *
 	 * <p>
-	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
+	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=@HtmlDoc(
+	 * 			script={
+	 * 				<js>"alert('hello!');"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
 	 */
-	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet.ls";
+	public static final String HTMLDOC_script = PREFIX + "script.ls";
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_stylesheet} property.
+	 * Configuration property:  Add to the {@link #HTMLDOC_script} property.
 	 */
-	public static final String HTMLDOC_stylesheet_add = PREFIX + "stylesheet.ls/add";
+	public static final String HTMLDOC_script_add = PREFIX + "script.ls/add";
 
 	/**
 	 * Configuration property:  CSS style code.
@@ -394,11 +452,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_style_add = PREFIX + "style.ls/add";
 
 	/**
-	 * Configuration property:  Javascript code.
+	 * Configuration property:  Stylesheet import URLs.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
@@ -406,80 +464,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Adds the specified Javascript code to the HTML page.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_script</jsf>,
-	 * 				value=<js>"alert('hello!');"</js>)
-	 * 		}
-	 * 	)
-	 * </p>
+	 * Adds a link to the specified stylesheet URL.
 	 *
 	 * <p>
-	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=@HtmlDoc(
-	 * 			script={
-	 * 				<js>"alert('hello!');"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
+	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 */
-	public static final String HTMLDOC_script = PREFIX + "script.ls";
+	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet.ls";
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_script} property.
+	 * Configuration property:  Add to the {@link #HTMLDOC_stylesheet} property.
 	 */
-	public static final String HTMLDOC_script_add = PREFIX + "script.ls/add";
-
-	/**
-	 * Configuration property:  Additional head section content.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Adds the specified HTML content to the head section of the page.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_links</jsf>,
-	 * 				value=<js>"['<link rel=\"icon\" href=\"htdocs/mypageicon.ico\">']"</js>)
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=@HtmlDoc(
-	 * 			head={
-	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 */
-	public static final String HTMLDOC_head = PREFIX + "head.ls";
-
-	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_head} property.
-	 */
-	public static final String HTMLDOC_links_add = PREFIX + "head.ls./add";
+	public static final String HTMLDOC_stylesheet_add = PREFIX + "stylesheet.ls/add";
 
 	/**
 	 * Configuration property:  HTML document template.

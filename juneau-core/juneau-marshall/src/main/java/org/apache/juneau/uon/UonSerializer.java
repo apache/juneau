@@ -123,28 +123,6 @@ public class UonSerializer extends WriterSerializer {
 	private static final String PREFIX = "UonSerializer.";
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"UonSerializer.encodeChars.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
-	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
-	 * URL-encoding of non-valid URI characters.
-	 */
-	public static final String UON_encodeChars = PREFIX + "encodeChars.b";
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -168,6 +146,28 @@ public class UonSerializer extends WriterSerializer {
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String UON_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+
+	/**
+	 * Configuration property:  Encode non-valid URI characters.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"UonSerializer.encodeChars.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
+	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
+	 * URL-encoding of non-valid URI characters.
+	 */
+	public static final String UON_encodeChars = PREFIX + "encodeChars.b";
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.

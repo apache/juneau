@@ -71,21 +71,50 @@ public class RestClient extends BeanContext {
 	private static final String PREFIX = "RestClient.";
 
 	/**
-	 * Configuration property:  Keep HttpClient open.
+	 * Configuration property:  Debug.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
+	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 * Enable debug mode.
 	 */
-	public static final String RESTCLIENT_keepHttpClientOpen = PREFIX + "keepHttpClientOpen.b";
+	public static final String RESTCLIENT_debug = PREFIX + "debug.b";
 	
+	/**
+	 * Configuration property:  Executor service.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
+	 * 	<li><b>Default:</b>  <jk>null</jk>.
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 *	<p>
+	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
+	 *
+	 * <p>
+	 * This executor service is used to create {@link Future} objects on the following methods:
+	 * <ul>
+	 * 	<li>{@link RestCall#runFuture()}
+	 * 	<li>{@link RestCall#getResponseFuture(Class)}
+	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
+	 * 	<li>{@link RestCall#getResponseAsString()}
+	 * </ul>
+	 *
+	 * <p>
+	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
+	 * and a queue size of 10.
+	 */
+	public static final String RESTCLIENT_executorService = PREFIX + "executorService.o";
+
 	/**
 	 * Configuration property:  Shut down executor service on close.</b>  
 	 *
@@ -102,6 +131,107 @@ public class RestClient extends BeanContext {
 	 */
 	public static final String RESTCLIENT_executorServiceShutdownOnClose = PREFIX + "executorServiceShutdownOnClose.b";
 	
+	/**
+	 * Configuration property:  Request headers.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeader.sms"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Headers to add to every request.
+	 */
+	public static final String RESTCLIENT_headers = PREFIX + "headers.sms";
+
+	/**
+	 * Configuration property:  Call interceptors.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor | RestCallInterceptor</code>&gt.</code>
+	 * 	<li><b>Default:</b>  empty list.
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 *	<p>
+	 * Interceptors that get called immediately after a connection is made.
+	 */
+	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.lo";
+
+	/**
+	 * Add to the Call interceptors property.
+	 */
+	public static final String RESTCLIENT_interceptors_add = PREFIX + "interceptors.lo/add";
+
+	/**
+	 * Configuration property:  Keep HttpClient open.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 */
+	public static final String RESTCLIENT_keepHttpClientOpen = PREFIX + "keepHttpClientOpen.b";
+	
+	/**
+	 * Configuration property:  Parser.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
+	 * 	<li><b>Default:</b>  {@link JsonParser};
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * The parser to use for parsing POJOs in response bodies.
+	 */
+	public static final String RESTCLIENT_parser = PREFIX + "parser.o";
+
+	/**
+	 * Configuration property:  Part serializer.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.urlEncodingSerializer.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
+	 * 	<li><b>Default:</b>  {@link SimpleUonPartSerializer};
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+	 */
+	public static final String RESTCLIENT_partSerializer = PREFIX + "partSerializer.o";
+	
+	/**
+	 * Configuration property:  Request query parameters.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Query parameters to add to every request.
+	 */
+	public static final String RESTCLIENT_query = PREFIX + "query.sms";
+
 	/**
 	 * Configuration property:  Number of retries to attempt.
 	 *
@@ -171,38 +301,6 @@ public class RestClient extends BeanContext {
 	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
 	
 	/**
-	 * Configuration property:  Request headers.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeader.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b>  empty map
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Headers to add to every request.
-	 */
-	public static final String RESTCLIENT_headers = PREFIX + "headers.sms";
-
-	/**
-	 * Configuration property:  Request query parameters.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b>  empty map
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Query parameters to add to every request.
-	 */
-	public static final String RESTCLIENT_query = PREFIX + "query.sms";
-
-	/**
 	 * Configuration property:  Serializer.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -218,104 +316,6 @@ public class RestClient extends BeanContext {
 	 */
 	public static final String RESTCLIENT_serializer = PREFIX + "serializer.o";
 
-	/**
-	 * Configuration property:  Parser.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
-	 * 	<li><b>Default:</b>  {@link JsonParser};
-	 * </ul>
-	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * The parser to use for parsing POJOs in response bodies.
-	 */
-	public static final String RESTCLIENT_parser = PREFIX + "parser.o";
-
-	/**
-	 * Configuration property:  Part serializer.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.urlEncodingSerializer.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
-	 * 	<li><b>Default:</b>  {@link SimpleUonPartSerializer};
-	 * </ul>
-	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-	 */
-	public static final String RESTCLIENT_partSerializer = PREFIX + "partSerializer.o";
-	
-	/**
-	 * Configuration property:  Executor service.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
-	 * 	<li><b>Default:</b>  <jk>null</jk>.
-	 * </ul>
-	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 *	<p>
-	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
-	 *
-	 * <p>
-	 * This executor service is used to create {@link Future} objects on the following methods:
-	 * <ul>
-	 * 	<li>{@link RestCall#runFuture()}
-	 * 	<li>{@link RestCall#getResponseFuture(Class)}
-	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
-	 * 	<li>{@link RestCall#getResponseAsString()}
-	 * </ul>
-	 *
-	 * <p>
-	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
-	 * and a queue size of 10.
-	 */
-	public static final String RESTCLIENT_executorService = PREFIX + "executorService.o";
-
-	/**
-	 * Configuration property:  Call interceptors.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor | RestCallInterceptor</code>&gt.</code>
-	 * 	<li><b>Default:</b>  empty list.
-	 * </ul>
-	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 *	<p>
-	 * Interceptors that get called immediately after a connection is made.
-	 */
-	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.lo";
-
-	/**
-	 * Add to the Call interceptors property.
-	 */
-	public static final String RESTCLIENT_interceptors_add = PREFIX + "interceptors.lo/add";
-
-	/**
-	 * Configuration property:  Debug.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Enable debug mode.
-	 */
-	public static final String RESTCLIENT_debug = PREFIX + "debug.b";
-	
 
 	private static final ConcurrentHashMap<Class,HttpPartSerializer> partSerializerCache = new ConcurrentHashMap<>();
 	

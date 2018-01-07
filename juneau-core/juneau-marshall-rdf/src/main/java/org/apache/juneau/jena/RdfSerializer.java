@@ -51,6 +51,31 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	private static final String PREFIX = "RdfSerializer.";
 
 	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * 
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred 
+	 * through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined 
+	 * from the value type.
+	 * 
+	 * <p>
+	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String RDF_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+
+	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
 	 * 
 	 *	<h5 class='section'>Property:</h5>
@@ -123,31 +148,6 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * The default list of namespaces associated with this serializer.
 	 */
 	public static final String RDF_namespaces = PREFIX + "namespaces.ls";
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 * 
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypeProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred 
-	 * through reflection.
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined 
-	 * from the value type.
-	 * 
-	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
-	 */
-	public static final String RDF_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

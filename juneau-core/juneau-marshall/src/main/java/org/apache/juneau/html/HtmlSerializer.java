@@ -131,91 +131,6 @@ public class HtmlSerializer extends XmlSerializer {
 	private static final String PREFIX = "HtmlSerializer.";
 
 	/**
-	 * Configuration property:  Anchor text source.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link AnchorText})
-	 * 	<li><b>Default:</b>  <js>"TO_STRING"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
-	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
-	 *
-	 * <p>
-	 * See the {@link AnchorText} enum for possible values.
-	 */
-	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText.s";
-
-	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
-	 */
-	public static final String HTML_detectLinksInStrings = PREFIX + "detectLinksInStrings.b";
-
-	/**
-	 * Configuration property:  Look for link labels in the <js>"label"</js> parameter of the URL.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.lookForLabelParameters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
-	 *
-	 * <p>
-	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
-	 */
-	public static final String HTML_lookForLabelParameters = PREFIX + "lookForLabelParameters.b";
-
-	/**
-	 * Configuration property:  The parameter name to use when using {@link #HTML_lookForLabelParameters}.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"label"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 */
-	public static final String HTML_labelParameter = PREFIX + "labelParameter.s";
-
-	/**
-	 * Configuration property:  Add key/value headers on bean/map tables.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 */
-	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders.b";
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -239,6 +154,91 @@ public class HtmlSerializer extends XmlSerializer {
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String HTML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+
+	/**
+	 * Configuration property:  Add key/value headers on bean/map tables.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 */
+	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders.b";
+
+	/**
+	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
+	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
+	 */
+	public static final String HTML_detectLinksInStrings = PREFIX + "detectLinksInStrings.b";
+
+	/**
+	 * Configuration property:  The parameter name to use when using {@link #HTML_lookForLabelParameters}.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"label"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 */
+	public static final String HTML_labelParameter = PREFIX + "labelParameter.s";
+
+	/**
+	 * Configuration property:  Look for link labels in the <js>"label"</js> parameter of the URL.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.lookForLabelParameters.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 *
+	 * <p>
+	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
+	 */
+	public static final String HTML_lookForLabelParameters = PREFIX + "lookForLabelParameters.b";
+
+	/**
+	 * Configuration property:  Anchor text source.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link AnchorText})
+	 * 	<li><b>Default:</b>  <js>"TO_STRING"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
+	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
+	 *
+	 * <p>
+	 * See the {@link AnchorText} enum for possible values.
+	 */
+	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText.s";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

@@ -140,22 +140,64 @@ public abstract class Parser extends BeanContext {
 	private static final String PREFIX = "Parser.";
 
 	/**
-	 * Configuration property:  Trim parsed strings.
+	 * Configuration property:  File charset.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"Parser.fileCharset.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"default"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
+	 * The character set to use for reading <code>Files</code> from the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <p>
+	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
 	 */
-	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
+	public static final String PARSER_fileCharset = PREFIX + "fileCharset.s";
+
+	/**
+	 * Configuration property:  Input stream charset.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Parser.inputStreamCharset.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 *
+	 * <p>
+	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 */
+	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
+
+	/**
+	 * Configuration property:  Parser listener.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during parsing.
+	 */
+	public static final String PARSER_listener = PREFIX + "listener.c";
 
 	/**
 	 * Configuration property:  Strict mode.
@@ -203,64 +245,22 @@ public abstract class Parser extends BeanContext {
 	public static final String PARSER_strict = PREFIX + "strict.b";
 
 	/**
-	 * Configuration property:  Input stream charset.
+	 * Configuration property:  Trim parsed strings.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Parser.inputStreamCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
+	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 *
-	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 */
-	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
-
-	/**
-	 * Configuration property:  File charset.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Parser.fileCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"default"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <p>
-	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
-	 */
-	public static final String PARSER_fileCharset = PREFIX + "fileCharset.s";
-
-	/**
-	 * Configuration property:  Parser listener.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during parsing.
-	 */
-	public static final String PARSER_listener = PREFIX + "listener.c";
+	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
 
 	static Parser DEFAULT = new Parser(PropertyStore.create().build()) {
 		@Override

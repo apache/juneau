@@ -85,44 +85,6 @@ public class YamlSerializer extends WriterSerializer {
 	private static final String PREFIX = "YamlSerializer.";
 
 	/**
-	 * Configuration property:  Simple JSON mode.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
-	 * Otherwise, they are always quoted.
-	 */
-	public static final String YAML_simpleMode = PREFIX + "simpleMode.b";
-
-	/**
-	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
-	 * The JSON specification allows for either format.
-	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
-	 * <xt>&lt;\/script&gt;</xt>.
-	 */
-	public static final String YAML_escapeSolidus = PREFIX + "escapeSolidus.b";
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -146,6 +108,44 @@ public class YamlSerializer extends WriterSerializer {
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
 	public static final String YAML_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
+
+	/**
+	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
+	 * The JSON specification allows for either format.
+	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
+	 * <xt>&lt;\/script&gt;</xt>.
+	 */
+	public static final String YAML_escapeSolidus = PREFIX + "escapeSolidus.b";
+
+	/**
+	 * Configuration property:  Simple JSON mode.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
+	 * Otherwise, they are always quoted.
+	 */
+	public static final String YAML_simpleMode = PREFIX + "simpleMode.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

@@ -46,41 +46,47 @@ public abstract class Serializer extends BeanContext {
 	private static final String PREFIX = "Serializer.";
 
 	/**
-	 * Configuration property:  Max serialization depth.
+	 * Configuration property:  Abridged output.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.maxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>100</code>
+	 * 	<li><b>Name:</b>  <js>"Serializer.abridged.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Abort serialization if specified depth is reached in the POJO tree.
-	 * If this depth is exceeded, an exception is thrown.
-	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
+	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
+	 *
+	 * <p>
+	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
+	 * this setting is disabled, but not added when it is enabled.
 	 */
-	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth.i";
+	public static final String SERIALIZER_abridged = PREFIX + "abridged.b";
 
 	/**
-	 * Configuration property:  Initial depth.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.initialDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>0</code>
+	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * The initial indentation level at the root.
-	 * Useful when constructing document fragments that need to be indented at a certain level.
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
+	 * the value type.
 	 */
-	public static final String SERIALIZER_initialDepth = PREFIX + "initialDepth.i";
+	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
@@ -138,24 +144,58 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_ignoreRecursions = PREFIX + "ignoreRecursions.b";
 
 	/**
-	 * Configuration property:  Use whitespace.
+	 * Configuration property:  Initial depth.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.useWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"Serializer.initialDepth.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>0</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 *
-	 * <p>
-	 * This setting does not apply to the MessagePack serializer.
+	 * The initial indentation level at the root.
+	 * Useful when constructing document fragments that need to be indented at a certain level.
 	 */
-	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
+	public static final String SERIALIZER_initialDepth = PREFIX + "initialDepth.i";
+
+	/**
+	 * Configuration property:  Serializer listener.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends SerializerListener&gt;</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during serialization.
+	 */
+	public static final String SERIALIZER_listener = PREFIX + "listener.c";
+
+	/**
+	 * Configuration property:  Max serialization depth.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Serializer.maxDepth.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>100</code>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Abort serialization if specified depth is reached in the POJO tree.
+	 * If this depth is exceeded, an exception is thrown.
+	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
+	 */
+	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth.i";
 
 	/**
 	 * Configuration property:  Maximum indentation.
@@ -178,27 +218,6 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_maxIndent = PREFIX + "maxIndent.i";
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypeProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
-	 * the value type.
-	 */
-	public static final String SERIALIZER_addBeanTypeProperties = PREFIX + "addBeanTypeProperties.b";
-
-	/**
 	 * Configuration property:  Quote character.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -219,28 +238,38 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_quoteChar = PREFIX + "quoteChar.s";
 
 	/**
-	 * Configuration property:  Trim null bean property values.
+	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-	 *
-	 * <p>
-	 * Note that enabling this setting has the following effects on parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Map entries with <jk>null</jk> values will be lost.
-	 * </ul>
+	 * Note that this introduces a performance penalty.
 	 */
-	public static final String SERIALIZER_trimNullProperties = PREFIX + "trimNullProperties.b";
+	public static final String SERIALIZER_sortCollections = PREFIX + "sortCollections.b";
+
+	/**
+	 * Configuration property:  Sort maps alphabetically.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Note that this introduces a performance penalty.
+	 */
+	public static final String SERIALIZER_sortMaps = PREFIX + "sortMaps.b";
 
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
@@ -293,6 +322,30 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_trimEmptyMaps = PREFIX + "trimEmptyMaps.b";
 
 	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Map entries with <jk>null</jk> values will be lost.
+	 * </ul>
+	 */
+	public static final String SERIALIZER_trimNullProperties = PREFIX + "trimNullProperties.b";
+
+	/**
 	 * Configuration property:  Trim strings.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -332,6 +385,37 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_uriContext = PREFIX + "uriContext.s";
 
 	/**
+	 * Configuration property:  URI relativity.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriRelativity})
+	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines what relative URIs are relative to when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li>{@link UriRelativity#RESOURCE}
+	 * 		- Relative URIs should be considered relative to the servlet URI.
+	 * 	<li>{@link UriRelativity#PATH_INFO}
+	 * 		- Relative URIs should be considered relative to the request URI.
+	 * </ul>
+	 */
+	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity.s";
+
+	/**
 	 * Configuration property:  URI resolution.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -365,42 +449,11 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";
 
 	/**
-	 * Configuration property:  URI relativity.
+	 * Configuration property:  Use whitespace.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriRelativity})
-	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines what relative URIs are relative to when serializing any of the following:
-	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values are:
-	 * <ul>
-	 * 	<li>{@link UriRelativity#RESOURCE}
-	 * 		- Relative URIs should be considered relative to the servlet URI.
-	 * 	<li>{@link UriRelativity#PATH_INFO}
-	 * 		- Relative URIs should be considered relative to the request URI.
-	 * </ul>
-	 */
-	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity.s";
-
-	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
+	 * 	<li><b>Name:</b>  <js>"Serializer.useWhitespace.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
@@ -408,65 +461,12 @@ public abstract class Serializer extends BeanContext {
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Note that this introduces a performance penalty.
-	 */
-	public static final String SERIALIZER_sortCollections = PREFIX + "sortCollections.b";
-
-	/**
-	 * Configuration property:  Sort maps alphabetically.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Note that this introduces a performance penalty.
-	 */
-	public static final String SERIALIZER_sortMaps = PREFIX + "sortMaps.b";
-
-	/**
-	 * Configuration property:  Abridged output.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.abridged.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-	 * type information that might normally be included to determine the data type will not be serialized.
+	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
 	 *
 	 * <p>
-	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
-	 * this setting is disabled, but not added when it is enabled.
+	 * This setting does not apply to the MessagePack serializer.
 	 */
-	public static final String SERIALIZER_abridged = PREFIX + "abridged.b";
-
-	/**
-	 * Configuration property:  Serializer listener.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends SerializerListener&gt;</code>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during serialization.
-	 */
-	public static final String SERIALIZER_listener = PREFIX + "listener.c";
+	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
 
 	
 	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "") {

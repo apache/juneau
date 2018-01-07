@@ -38,63 +38,6 @@ public class XmlParser extends ReaderParser {
 	private static final String PREFIX = "XmlParser.";
 
 	/**
-	 * Configuration property:  Enable validation.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, XML document will be validated.
-	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
-	 */
-	public static final String XML_validating = PREFIX + "validating.b";
-
-	/**
-	 * Configuration property:  XML reporter.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Associates an {@link XMLReporter} with this parser.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Reporters are not copied to new parsers during a clone.
-	 * </ul>
-	 */
-	public static final String XML_reporter = PREFIX + "reporter.c";
-
-	/**
-	 * Configuration property:  XML resolver.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Associates an {@link XMLResolver} with this parser.
-	 */
-	public static final String XML_resolver = PREFIX + "resolver.c";
-
-	/**
 	 * Configuration property:  XML event allocator.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -142,6 +85,63 @@ public class XmlParser extends ReaderParser {
 	 * </table>
 	 */
 	public static final String XML_preserveRootElement = PREFIX + "preserveRootElement.b";
+
+	/**
+	 * Configuration property:  XML reporter.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Associates an {@link XMLReporter} with this parser.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Reporters are not copied to new parsers during a clone.
+	 * </ul>
+	 */
+	public static final String XML_reporter = PREFIX + "reporter.c";
+
+	/**
+	 * Configuration property:  XML resolver.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Associates an {@link XMLResolver} with this parser.
+	 */
+	public static final String XML_resolver = PREFIX + "resolver.c";
+
+	/**
+	 * Configuration property:  Enable validation.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, XML document will be validated.
+	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
+	 */
+	public static final String XML_validating = PREFIX + "validating.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

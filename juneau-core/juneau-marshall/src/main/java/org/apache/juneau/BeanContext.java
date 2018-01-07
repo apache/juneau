@@ -225,6 +225,193 @@ public class BeanContext extends Context {
 	static final String PREFIX = "BeanContext.";
 
 	/**
+	 * Configuration property:  Look for bean classes with the specified minimum visibility.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Classes are not considered beans unless they meet the minimum visibility requirements.
+	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
+	 * will not be interpreted as a bean class.
+	 */
+	public static final String BEAN_beanClassVisibility = PREFIX + "beanClassVisibility.s";
+
+	/**
+	 * Configuration property:  Look for bean constructors with the specified minimum visibility.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 */
+	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility.s";
+
+	/**
+	 * Configuration property:  Bean lookup dictionary.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * The list of classes that make up the bean dictionary in this bean context.
+	 * 
+	 * <p>
+	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+	 * through reflection.
+	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	BeanContext bc = BeanContext.<jsm>create</jsm>().beanDictionary(Bar.<jk>class</jk>, Baz.<jk>class</jk>).build();
+	 * </p>
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Properties:
+	 * 		<ul> 	
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
+	 * 		</ul>
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link Bean#beanDictionary()}
+	 * 			<li>{@link BeanProperty#beanDictionary()}
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
+	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
+	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
+	 * 		</ul>
+	 * 	<li>Values can consist of any of the following types:
+	 *			<ul>
+	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
+	 * 				annotations.
+	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
+	 * 				annotations.
+	 * 		</ul>
+	 * 	<li>See <a class='doclink' href='../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
+	 * 		for more information.
+	 *	</ul>
+	 */
+	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";
+
+	/**
+	 * Configuration property:  Add to bean lookup dictionary.
+	 */
+	public static final String BEAN_beanDictionary_add = PREFIX + "beanDictionary.lc/add";
+
+	/**
+	 * Configuration property:  Remove from bean lookup dictionary.
+	 */
+	public static final String BEAN_beanDictionary_remove = PREFIX + "beanDictionary.lc/remove";
+
+	/**
+	 * Configuration property:  Look for bean fields with the specified minimum visibility.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
+	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then the field
+	 * will not be interpreted as a bean property.
+	 *
+	 * <p>
+	 * Use {@link Visibility#NONE} to prevent bean fields from being interpreted as bean properties altogether.
+	 */
+	public static final String BEAN_beanFieldVisibility = PREFIX + "beanFieldVisibility.s";
+
+	/**
+	 * Configuration property:  Bean filters to apply to beans.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
+	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter the
+	 * bean classes.
+	 *
+	 * <p>
+	 * There are two category of classes that can be passed in through this method:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Subclasses of {@link BeanFilterBuilder}.
+	 * 		These must have a public no-arg constructor.
+	 * 	<li>
+	 * 		Bean interface classes.
+	 * 		A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 		Any subclasses of an interface class will only have properties defined on the interface.
+	 * 		All other bean properties will be ignored.
+	 * </ul>
+	 */
+	public static final String BEAN_beanFilters = PREFIX + "beanFilters.lc";
+
+	/**
+	 * Configuration property:  Add to bean filters.
+	 */
+	public static final String BEAN_beanFilters_add = PREFIX + "beanFilters.lc/add";
+
+	/**
+	 * Configuration property:  Remove from bean filters.
+	 */
+	public static final String BEAN_beanFilters_remove = PREFIX + "beanFilters.lc/remove";
+
+	/**
+	 * Configuration property:  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * value.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * values.
+	 *
+	 * <p>
+	 * Disabled by default because it introduces a slight performance penalty.
+	 */
+	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + "beanMapPutReturnsOldValue.b";
+
+	/**
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -303,189 +490,95 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireSomeProperties = PREFIX + "beansRequireSomeProperties.b";
 
 	/**
-	 * Configuration property:  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
-	 * value.
+	 * Configuration property:  Name to use for the bean type properties used to represent a bean type.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"_type"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 */
+	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName.s";
+
+	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Enables the following additional information during serialization:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean getters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * 	<li>
+	 * 		Enables {@link Serializer#SERIALIZER_detectRecursions}.
+	 * </ul>
+	 *
+	 * <p>
+	 * Enables the following additional information during parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean setters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * </ul>
+	 */
+	public static final String BEAN_debug = PREFIX + "debug.b";
+
+	/**
+	 * Configuration property:  Default parser to use when converting <code>Strings</code> to POJOs.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.defaultParser.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class</code>
+	 * 	<li><b>Default:</b>  {@link JsonSerializer}
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
-	 * values.
-	 *
-	 * <p>
-	 * Disabled by default because it introduces a slight performance penalty.
+	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
-	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + "beanMapPutReturnsOldValue.b";
+	public static final String BEAN_defaultParser = PREFIX + "defaultParser.c";
 
 	/**
-	 * Configuration property:  Look for bean constructors with the specified minimum visibility.
+	 * Configuration property:  Exclude specified properties from beans.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 */
-	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility.s";
-
-	/**
-	 * Configuration property:  Look for bean classes with the specified minimum visibility.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.excludeProperties.sms"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b>  <code>{}</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Classes are not considered beans unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
-	 * will not be interpreted as a bean class.
-	 */
-	public static final String BEAN_beanClassVisibility = PREFIX + "beanClassVisibility.s";
-
-	/**
-	 * Configuration property:  Look for bean fields with the specified minimum visibility.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then the field
-	 * will not be interpreted as a bean property.
+	 * Specifies to exclude the specified list of properties for the specified bean class.
 	 *
 	 * <p>
-	 * Use {@link Visibility#NONE} to prevent bean fields from being interpreted as bean properties altogether.
-	 */
-	public static final String BEAN_beanFieldVisibility = PREFIX + "beanFieldVisibility.s";
-
-	/**
-	 * Configuration property:  Look for bean methods with the specified minimum visibility.
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
 	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.methodVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then the method
-	 * will not be interpreted as a bean getter or setter.
-	 */
-	public static final String BEAN_methodVisibility = PREFIX + "methodVisibility.s";
-
-	/**
-	 * Configuration property:  Use Java {@link Introspector} for determining bean properties.
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <code>foo</code> and
+	 * <code>bar</code> properties on the specified bean.
 	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-	 * Most {@link Bean @Bean} annotations will be ignored.
+	 * Setting applies to specified class and all subclasses.
 	 */
-	public static final String BEAN_useJavaBeanIntrospector = PREFIX + "useJavaBeanIntrospector.b";
-
-	/**
-	 * Configuration property:  Use interface proxies.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
-	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 */
-	public static final String BEAN_useInterfaceProxies = PREFIX + "useInterfaceProxies.b";
-
-	/**
-	 * Configuration property:  Ignore unknown properties.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
-	 * Otherwise, a {@code RuntimeException} is thrown.
-	 */
-	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + "ignoreUnknownBeanProperties.b";
-
-	/**
-	 * Configuration property:  Ignore unknown properties with null values.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
-	 * Otherwise, a {@code RuntimeException} is thrown.
-	 */
-	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + "ignoreUnknownNullBeanProperties.b";
-
-	/**
-	 * Configuration property:  Ignore properties without setters.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
-	 * Otherwise, a {@code RuntimeException} is thrown.
-	 */
-	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + "ignorePropertiesWithoutSetters.b";
+	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.sms";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
@@ -524,11 +617,29 @@ public class BeanContext extends Context {
 	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + "ignoreInvocationExceptionsOnSetters.b";
 
 	/**
-	 * Configuration property:  Sort bean properties in alphabetical order.
+	 * Configuration property:  Ignore properties without setters.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
+	 * Otherwise, a {@code RuntimeException} is thrown.
+	 */
+	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + "ignorePropertiesWithoutSetters.b";
+
+	/**
+	 * Configuration property:  Ignore unknown properties.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
@@ -536,166 +647,28 @@ public class BeanContext extends Context {
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
-	 *
-	 * <p>
-	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
-	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
-	 * in the Java file.
+	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
+	 * Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public static final String BEAN_sortProperties = PREFIX + "sortProperties.b";
+	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + "ignoreUnknownBeanProperties.b";
 
 	/**
-	 * Configuration property:  Packages whose classes should not be considered beans.
+	 * Configuration property:  Ignore unknown properties with null values.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
-	 * 	<li><b>Default:</b>
-	 * 	<ul>
-	 * 		<li><code>java.lang</code>
-	 * 		<li><code>java.lang.annotation</code>
-	 * 		<li><code>java.lang.ref</code>
-	 * 		<li><code>java.lang.reflect</code>
-	 * 		<li><code>java.io</code>
-	 * 		<li><code>java.net</code>
-	 * 		<li><code>java.nio.*</code>
-	 * 		<li><code>java.util.*</code>
-	 * 	</ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * When specified, the current list of ignore packages are appended to.
-	 *
-	 * <p>
-	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
-	 *
-	 * <p>
-	 * Note that you can specify prefix patterns to include all subpackages.
+	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
+	 * Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public static final String BEAN_notBeanPackages = PREFIX + "notBeanPackages.ss";
-
-	/**
-	 * Configuration property:  Add to packages whose classes should not be considered beans.
-	 */
-	public static final String BEAN_notBeanPackages_add = PREFIX + "notBeanPackages.ss/add";
-
-	/**
-	 * Configuration property:  Remove from packages whose classes should not be considered beans.
-	 */
-	public static final String BEAN_notBeanPackages_remove = PREFIX + "notBeanPackages.ss/remove";
-
-	/**
-	 * Configuration property:  Classes to be excluded from consideration as being beans.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b>  empty set
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
-	 * bean-like.
-	 */
-	public static final String BEAN_notBeanClasses = PREFIX + "notBeanClasses.sc";
-
-	/**
-	 * Configuration property:  Add to classes that should not be considered beans.
-	 */
-	public static final String BEAN_notBeanClasses_add = PREFIX + "notBeanClasses.sc/add";
-
-	/**
-	 * Configuration property:  Remove from classes that should not be considered beans.
-	 */
-	public static final String BEAN_notBeanClasses_remove = PREFIX + "notBeanClasses.sc/remove";
-
-	/**
-	 * Configuration property:  Bean filters to apply to beans.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter the
-	 * bean classes.
-	 *
-	 * <p>
-	 * There are two category of classes that can be passed in through this method:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Subclasses of {@link BeanFilterBuilder}.
-	 * 		These must have a public no-arg constructor.
-	 * 	<li>
-	 * 		Bean interface classes.
-	 * 		A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 		Any subclasses of an interface class will only have properties defined on the interface.
-	 * 		All other bean properties will be ignored.
-	 * </ul>
-	 */
-	public static final String BEAN_beanFilters = PREFIX + "beanFilters.lc";
-
-	/**
-	 * Configuration property:  Add to bean filters.
-	 */
-	public static final String BEAN_beanFilters_add = PREFIX + "beanFilters.lc/add";
-
-	/**
-	 * Configuration property:  Remove from bean filters.
-	 */
-	public static final String BEAN_beanFilters_remove = PREFIX + "beanFilters.lc/remove";
-
-	/**
-	 * Configuration property:  POJO swaps to apply to Java objects.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lc"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * There are two category of classes that can be passed in through this method:
-	 * <ul>
-	 * 	<li>Subclasses of {@link PojoSwap}.
-	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
-	 * </ul>
-	 *
-	 * <p>
-	 * Multiple POJO swaps can be associated with a single class.
-	 * When multiple swaps are applicable to the same class, the media type pattern defined by
-	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes()} are used to come up with the best match.
-	 */
-	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lc";
-
-	/**
-	 * Configuration property:  Add to POJO swap classes.
-	 */
-	public static final String BEAN_pojoSwaps_add = PREFIX + "pojoSwaps.lc/add";
-
-	/**
-	 * Configuration property:  Remove from POJO swap classes.
-	 */
-	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.lc/remove";
+	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + "ignoreUnknownNullBeanProperties.b";
 
 	/**
 	 * Configuration property:  Implementation classes for interfaces and abstract classes.
@@ -746,134 +719,6 @@ public class BeanContext extends Context {
 	public static final String BEAN_includeProperties = PREFIX + "includeProperties.sms";
 
 	/**
-	 * Configuration property:  Exclude specified properties from beans.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.excludeProperties.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b>  <code>{}</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies to exclude the specified list of properties for the specified bean class.
-	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <code>foo</code> and
-	 * <code>bar</code> properties on the specified bean.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 */
-	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.sms";
-
-	/**
-	 * Configuration property:  Bean lookup dictionary.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * The list of classes that make up the bean dictionary in this bean context.
-	 * 
-	 * <p>
-	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
-	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	BeanContext bc = BeanContext.<jsm>create</jsm>().beanDictionary(Bar.<jk>class</jk>, Baz.<jk>class</jk>).build();
-	 * </p>
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Properties:
-	 * 		<ul> 	
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
-	 * 		</ul>
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link Bean#beanDictionary()}
-	 * 			<li>{@link BeanProperty#beanDictionary()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
-	 * 		</ul>
-	 * 	<li>Values can consist of any of the following types:
-	 *			<ul>
-	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
-	 * 				annotations.
-	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
-	 * 				annotations.
-	 * 		</ul>
-	 * 	<li>See <a class='doclink' href='../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
-	 * 		for more information.
-	 *	</ul>
-	 */
-	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";
-
-	/**
-	 * Configuration property:  Add to bean lookup dictionary.
-	 */
-	public static final String BEAN_beanDictionary_add = PREFIX + "beanDictionary.lc/add";
-
-	/**
-	 * Configuration property:  Remove from bean lookup dictionary.
-	 */
-	public static final String BEAN_beanDictionary_remove = PREFIX + "beanDictionary.lc/remove";
-
-	/**
-	 * Configuration property:  Name to use for the bean type properties used to represent a bean type.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"_type"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 */
-	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName.s";
-
-	/**
-	 * Configuration property:  Default parser to use when converting <code>Strings</code> to POJOs.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.defaultParser.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class</code>
-	 * 	<li><b>Default:</b>  {@link JsonSerializer}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
-	 */
-	public static final String BEAN_defaultParser = PREFIX + "defaultParser.c";
-
-	/**
 	 * Configuration property:  Locale.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -889,23 +734,6 @@ public class BeanContext extends Context {
 	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
 	public static final String BEAN_locale = PREFIX + "locale.s";
-
-	/**
-	 * Configuration property:  TimeZone.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
-	 */
-	public static final String BEAN_timeZone = PREFIX + "timeZone.s";
 
 	/**
 	 * Configuration property:  Media type.
@@ -925,36 +753,208 @@ public class BeanContext extends Context {
 	public static final String BEAN_mediaType = PREFIX + "mediaType.s";
 
 	/**
-	 * Configuration property:  Debug mode.
+	 * Configuration property:  Look for bean methods with the specified minimum visibility.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.methodVisibility.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
+	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then the method
+	 * will not be interpreted as a bean getter or setter.
+	 */
+	public static final String BEAN_methodVisibility = PREFIX + "methodVisibility.s";
+
+	/**
+	 * Configuration property:  Classes to be excluded from consideration as being beans.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
+	 * 	<li><b>Data type:</b>  <code>Set&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b>  empty set
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
+	 * bean-like.
+	 */
+	public static final String BEAN_notBeanClasses = PREFIX + "notBeanClasses.sc";
+
+	/**
+	 * Configuration property:  Add to classes that should not be considered beans.
+	 */
+	public static final String BEAN_notBeanClasses_add = PREFIX + "notBeanClasses.sc/add";
+
+	/**
+	 * Configuration property:  Remove from classes that should not be considered beans.
+	 */
+	public static final String BEAN_notBeanClasses_remove = PREFIX + "notBeanClasses.sc/remove";
+
+	/**
+	 * Configuration property:  Packages whose classes should not be considered beans.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
+	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>
+	 * 	<ul>
+	 * 		<li><code>java.lang</code>
+	 * 		<li><code>java.lang.annotation</code>
+	 * 		<li><code>java.lang.ref</code>
+	 * 		<li><code>java.lang.reflect</code>
+	 * 		<li><code>java.io</code>
+	 * 		<li><code>java.net</code>
+	 * 		<li><code>java.nio.*</code>
+	 * 		<li><code>java.util.*</code>
+	 * 	</ul>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * When specified, the current list of ignore packages are appended to.
+	 *
+	 * <p>
+	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
+	 *
+	 * <p>
+	 * Note that you can specify prefix patterns to include all subpackages.
+	 */
+	public static final String BEAN_notBeanPackages = PREFIX + "notBeanPackages.ss";
+
+	/**
+	 * Configuration property:  Add to packages whose classes should not be considered beans.
+	 */
+	public static final String BEAN_notBeanPackages_add = PREFIX + "notBeanPackages.ss/add";
+
+	/**
+	 * Configuration property:  Remove from packages whose classes should not be considered beans.
+	 */
+	public static final String BEAN_notBeanPackages_remove = PREFIX + "notBeanPackages.ss/remove";
+
+	/**
+	 * Configuration property:  POJO swaps to apply to Java objects.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lc"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * There are two category of classes that can be passed in through this method:
+	 * <ul>
+	 * 	<li>Subclasses of {@link PojoSwap}.
+	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
+	 * </ul>
+	 *
+	 * <p>
+	 * Multiple POJO swaps can be associated with a single class.
+	 * When multiple swaps are applicable to the same class, the media type pattern defined by
+	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes()} are used to come up with the best match.
+	 */
+	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lc";
+
+	/**
+	 * Configuration property:  Add to POJO swap classes.
+	 */
+	public static final String BEAN_pojoSwaps_add = PREFIX + "pojoSwaps.lc/add";
+
+	/**
+	 * Configuration property:  Remove from POJO swap classes.
+	 */
+	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.lc/remove";
+
+	/**
+	 * Configuration property:  Sort bean properties in alphabetical order.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
+	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
+	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
+	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
+	 *
+	 * <p>
+	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
+	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
+	 * in the Java file.
+	 */
+	public static final String BEAN_sortProperties = PREFIX + "sortProperties.b";
+
+	/**
+	 * Configuration property:  TimeZone.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
+	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Enables the following additional information during serialization:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean getters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * 	<li>
-	 * 		Enables {@link Serializer#SERIALIZER_detectRecursions}.
+	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
+	 */
+	public static final String BEAN_timeZone = PREFIX + "timeZone.s";
+
+	/**
+	 * Configuration property:  Use interface proxies.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
 	 *
+	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Enables the following additional information during parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean setters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * </ul>
+	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
+	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 */
-	public static final String BEAN_debug = PREFIX + "debug.b";
+	public static final String BEAN_useInterfaceProxies = PREFIX + "useInterfaceProxies.b";
+
+	/**
+	 * Configuration property:  Use Java {@link Introspector} for determining bean properties.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
+	 * Most {@link Bean @Bean} annotations will be ignored.
+	 */
+	public static final String BEAN_useJavaBeanIntrospector = PREFIX + "useJavaBeanIntrospector.b";
 
 	/*
 	 * The default package pattern exclusion list.
