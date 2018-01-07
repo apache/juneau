@@ -30,9 +30,27 @@ public class ConfigException extends FormattedRuntimeException {
 		super(message, args);
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param t The init cause.  Can be <jk>null</jk>. 
+	 * @param message The error message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ConfigException(Throwable t, String message, Object...args) {
+		super(t, message, args);
+	}
+	
 	@Override
-	public synchronized ConfigException initCause(Throwable t) {
-		super.initCause(t);
-		return this;
+	public String getMessage() {
+		Throwable t = getCause();
+		if (t == null)
+			return super.getMessage();
+		StringBuilder sb = new StringBuilder(super.getMessage());
+		while (t != null) {
+			sb.append("  ").append(t.getMessage());
+			t = t.getCause();
+		}
+		return sb.toString();
 	}
 }

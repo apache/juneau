@@ -12,14 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static java.util.Collections.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.*;
 
 import org.apache.juneau.PropertyStore.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
 
 /**
  * A builder for {@link PropertyStore} objects.
@@ -331,7 +333,7 @@ public class PropertyStoreBuilder {
 		final Map<String,MutableProperty> properties = new ConcurrentSkipListMap<>();
 		
 		PropertyGroupBuilder() {
-			this(Collections.EMPTY_MAP);
+			this(EMPTY_MAP);
 		}
 		
 		synchronized void apply(PropertyGroup copyFrom) {
@@ -517,7 +519,6 @@ public class PropertyStoreBuilder {
 	// MutableSetProperty
 	//-------------------------------------------------------------------------------------------------------------------
 	
-	@SuppressWarnings("unchecked")
 	static class MutableSetProperty extends MutableProperty {
 		private final Set<Object> set;
 
@@ -529,67 +530,42 @@ public class PropertyStoreBuilder {
 		
 		@Override /* MutableProperty */
 		synchronized Property build() {
-			return new Property(name, Collections.unmodifiableSet(new LinkedHashSet<>(set)), type);
+			return new Property(name, unmodifiableSet(new LinkedHashSet<>(set)), type);
 		}
 
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
 			try {
-				Set<Object> newSet = PropertyStoreUtils.merge(set, type.converter, value);
+				Set<Object> newSet = merge(set, type.converter, value);
 				set.clear();
 				set.addAll(newSet);
-			} catch (ParseException e) {
-				throw new ConfigException("Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type).initCause(e);
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type);
 			}
 		}
 		
 		@Override /* MutableProperty */
 		synchronized void apply(Object values) {
-			for (Object o : ((Set<?>)values)) 
-				add(null, o);
+			set.addAll((Set<?>)values);
 		}
 		
 		@Override /* MutableProperty */
 		synchronized void add(String arg, Object o) {
 			if (arg != null)
 				throw new ConfigException("Cannot use argument ''{0}'' on add command for property ''{1}'' ({2})", arg, name, type);
-			if (o != null) {
-				if (o.getClass().isArray()) {
-					for (int i = 0; i < Array.getLength(o); i++)
-						add(null, Array.get(o, i));
-				} else if (o instanceof Collection) {
-					for (Object o2 : (Collection<Object>)o)
-						add(null, o2);
-				} else if (isObjectList(o)) {
-					try {
-						add(null, new ObjectList(o.toString()));
-					} catch (Exception e) {
-						throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
-					}
-				} else {
-					set.add(convert(o));
-				}
+			try {
+				set.addAll(normalize(type.converter, o));
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
 		
 		@Override /* MutableProperty */
 		synchronized void remove(Object o) {
-			if (o != null) {
-				if (o.getClass().isArray()) {
-					for (int i = 0; i < Array.getLength(o); i++)
-						remove(Array.get(o, i));
-				} else if (o instanceof Collection) {
-					for (Object o2 : (Collection<Object>)o)
-						remove(o2);
-				} else if (isObjectList(o)) {
-					try {
-						remove(new ObjectList(o.toString()));
-					} catch (Exception e) {
-						throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}) because it''s not a valid JSON array.", string(o), className(o), name, type);
-					}					
-				} else {
-					set.remove(convert(o));
-				}
+			try {
+				set.removeAll(normalize(type.converter, o));
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
 		
@@ -608,9 +584,8 @@ public class PropertyStoreBuilder {
 	// MutableListProperty
 	//-------------------------------------------------------------------------------------------------------------------
 	
-	@SuppressWarnings("unchecked")
 	static class MutableListProperty extends MutableProperty {
-		private final List<Object> list = new CopyOnWriteArrayList<>();
+		private final List<Object> list = synchronizedList(new LinkedList<>());
 
 		MutableListProperty(String name, PropertyType type, Object value) {
 			super(name, type);
@@ -619,25 +594,23 @@ public class PropertyStoreBuilder {
 		
 		@Override /* MutableProperty */
 		synchronized Property build() {
-			return new Property(name, Collections.unmodifiableList(CollectionUtils.reverse(new ArrayList<>(list))), type);
+			return new Property(name, unmodifiableList(new ArrayList<>(list)), type);
 		}
 
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
 			try {
-				List<Object> oldList = CollectionUtils.reverseCopy(list);
-				List<Object> newList = PropertyStoreUtils.merge(oldList, type.converter, value);
-				Collections.reverse(newList);
+				List<Object> newList = merge(list, type.converter, value);
 				list.clear();
 				list.addAll(newList);
-			} catch (ParseException e) {
-				throw new ConfigException("Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type).initCause(e);
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot set value {0} ({1}) on property ''{2}'' ({3}).", string(value), className(value), name, type);
 			}
 		}
 		
 		@Override /* MutableProperty */
 		synchronized void apply(Object values) {
-			add(null, values);
+			list.addAll((List<?>)values);
 		}
 
 		@Override /* MutableProperty */
@@ -645,70 +618,28 @@ public class PropertyStoreBuilder {
 			if (arg != null && ! StringUtils.isNumeric(arg))
 				throw new ConfigException("Invalid argument ''{0}'' on add command for property ''{1}'' ({2})", arg, name, type);
 			
-			// Note that since lists are stored in reverse-order, the index should be the compliment.
-			
-			int index = arg == null ? list.size() : list.size() - Integer.parseInt(arg);
+			int index = arg == null ? 0 : Integer.parseInt(arg);
 			if (index < 0)
 				index = 0;
 			else if (index > list.size())
 				index = list.size();
-			add(index, o);
+			
+			try {
+				List<Object> l = normalize(type.converter, o);
+				list.removeAll(l);
+				list.addAll(index, l);
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+			}
 		}
 		
-		private synchronized int add(int index, Object o) {
-			if (o != null) {
-				
-				// Important!
-				// Arrays and collections are inserted in REVERSE order.
-				// So if you call addTo(X, "['a','b','c']").addTo(X, "['d','e','f']"), the list will end up
-				// containing ['c','b','a','f','e','d'].
-				// This ensures entries in the incoming value takes precedence in first-to-last order, but
-				// subsequent calls to addTo() are added to the end.
-				// What you get is a list ordered in least-to-most important.
-				
-				if (o.getClass().isArray()) {
-					for (int i = Array.getLength(o) - 1; i >= 0; i--)
-						index = add(index, Array.get(o, i));
-				} else if (o instanceof Collection) {
-					for (Object o2 : CollectionUtils.reverseIterable((Collection<Object>)o))
-						index = add(index, o2);
-				} else if (isObjectList(o)) {
-					try {
-						index = add(index, new ObjectList(o.toString()));
-					} catch (Exception e) {
-						throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
-					}
-				} else {
-					o = convert(o);
-					boolean replaced = list.remove(o);
-					if (replaced)
-						index--;
-					list.add(index, o);
-					index++;
-				}
-			}
-			return index;
-		}
-
 		@Override /* MutableProperty */
 		synchronized void remove(Object o) {
-			if (o != null) {
-				if (o.getClass().isArray()) {
-					for (int i = 0; i < Array.getLength(o); i++)
-						remove(Array.get(o, i));
-				} else if (o instanceof Collection) {
-					for (Object o2 : (Collection<Object>)o)
-						remove(o2);
-				} else if (isObjectList(o)) {
-					try {
-						remove(new ObjectList(o.toString()));
-					} catch (Exception e) {
-						throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}) because it''s not a valid JSON array.", string(o), className(o), name, type);
-					}					
-				} else {
-					list.remove(convert(o));
-				}
-			}
+			try {
+				list.removeAll(normalize(type.converter, o));
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", string(o), className(o), name, type);
+			}					
 		}
 
 		@Override /* MutableProperty */
@@ -742,7 +673,7 @@ public class PropertyStoreBuilder {
 		
 		@Override /* MutableProperty */
 		synchronized Property build() {
-			return new Property(name, Collections.unmodifiableMap(new TreeMap<>(map)), type);
+			return new Property(name, unmodifiableMap(new TreeMap<>(map)), type);
 		}
 
 		@Override /* MutableProperty */
@@ -777,7 +708,7 @@ public class PropertyStoreBuilder {
 					try {
 						add(null, new ObjectMap(o.toString()));
 					} catch (Exception e) {
-						throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}) because it''s not a valid JSON object.", string(o), className(o), name, type);
+						throw new ConfigException(e, "Cannot add {0} ({1}) to property ''{2}'' ({3}) .", string(o), className(o), name, type);
 					}
 				} else {
 					throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
@@ -809,12 +740,12 @@ public class PropertyStoreBuilder {
 		
 		@Override
 		protected Map<String,Object> createMap() {
-			return Collections.synchronizedMap(new LinkedHashMap<String,Object>());
+			return synchronizedMap(new LinkedHashMap<String,Object>());
 		}
 		
 		@Override /* MutableProperty */
 		synchronized Property build() {
-			return new Property(name, Collections.unmodifiableMap(new LinkedHashMap<>(map)), type);
+			return new Property(name, unmodifiableMap(new LinkedHashMap<>(map)), type);
 		}
 	}
 	
@@ -823,12 +754,70 @@ public class PropertyStoreBuilder {
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------
 	
-	static boolean isObjectList(Object o) {
-		if (o instanceof CharSequence) {
-			String s = o.toString();
-			return (s.startsWith("[") && s.endsWith("]") && BeanContext.DEFAULT != null);
+	static Set<Object> merge(Set<Object> oldSet, PropertyConverter<?> pc, Object o) throws Exception {
+		return merge(oldSet, new LinkedHashSet<>(), normalize(pc, o));
+	}
+
+	private static Set<Object> merge(Set<Object> oldSet, Set<Object> newSet, List<Object> l) {
+		for (Object o : l) {
+			if (isNone(o))
+				newSet.clear();
+			else if (isInherit(o))
+				newSet.addAll(oldSet);
+			else
+				newSet.add(o);
 		}
-		return false;
+		return newSet;
+	}
+
+	static List<Object> merge(List<Object> oldList, PropertyConverter<?> pc, Object o) throws Exception {
+		return merge(oldList, new ArrayList<>(), normalize(pc, o));
+	}
+
+	private static List<Object> merge(List<Object> oldList, List<Object> newList, List<Object> l) {
+		for (Object o : l) {
+			if (isIndexed(o)) {
+				Matcher lm = INDEXED_LINK_PATTERN.matcher(o.toString());
+				lm.matches();
+				String key = lm.group(1);
+				int i2 = Math.min(newList.size(), Integer.parseInt(lm.group(2)));
+				String remainder = lm.group(3);
+				newList.add(i2, key.isEmpty() ? remainder : key + ":" + remainder);
+			} else if (isNone(o)) {
+				newList.clear();
+			} else if (isInherit(o)) {
+				if (oldList != null)
+					for (Object o2 : oldList)
+						newList.add(o2);
+			} else {
+				newList.remove(o);
+				newList.add(o);
+			}
+		}
+		
+		return newList;
+	}
+	
+	static List<Object> normalize(PropertyConverter<?> pc, Object o) throws Exception {
+		return normalize(new ArrayList<>(), pc, o);
+	}
+
+	@SuppressWarnings("unchecked")
+	static List<Object> normalize(List<Object> l, PropertyConverter<?> pc, Object o) throws Exception {
+		if (o != null) {
+			if (o.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					normalize(l, pc, Array.get(o, i));
+			} else if (o instanceof Collection) {
+				for (Object o2 : (Collection<Object>)o) 
+					normalize(l, pc, o2);
+			} else if (isObjectList(o)) {
+				normalize(l, pc, new ObjectList(o.toString()));
+			} else {
+				l.add(pc == null ? o : pc.convert(o));
+			}
+		}
+		return l;
 	}
 	
 	static String string(Object value) {
@@ -851,5 +840,39 @@ public class PropertyStoreBuilder {
 		if (key == null || key.indexOf('.') == -1)
 			return "";
 		return key.substring(0, key.indexOf('.'));
+	}
+
+	static boolean isObjectList(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return (s.startsWith("[") && s.endsWith("]") && BeanContext.DEFAULT != null);
+		}
+		return false;
+	}
+
+	private static boolean isNone(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return "NONE".equals(s);
+		}
+		return false;
+	}
+
+	private static boolean isIndexed(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches();
+		}
+		return false;
+	}
+
+	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
+	
+	private static boolean isInherit(Object o) {
+		if (o instanceof CharSequence) {
+			String s = o.toString();
+			return "INHERIT".equals(s);
+		}
+		return false;
 	}
 }

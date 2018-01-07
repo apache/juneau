@@ -394,8 +394,8 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.sc':['java.lang.String']}}", b.build());
 		
 		b.clear();
-		testError(b, "A.f1.sc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.sc' (Set<Class>).");  
-		testError(b, "A.f1.sc/add", "java.lang.Integer", "Value 'java.lang.Integer' (String) cannot be converted to a Class.");
+		testError(b, "A.f1.sc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.sc' (Set<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");  
+		testError(b, "A.f1.sc/add", "java.lang.Integer", "Cannot add value 'java.lang.Integer' (String) to property 'f1.sc' (Set<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
 		b.set("A.f1.sc/add", new AList<Class<?>>().appendAll(Integer.class, String.class));  
@@ -608,7 +608,7 @@ public class PropertyStoreTest {
 		b.set("A.f1.ls/add.1", "['8','9']");  
 		assertObjectEquals("{A:{'f1.ls':['7','8','9','6','1','5','2','3','4']}}", b.build());
 
-		testError(b, "A.f1.li/add.123", "foo", "Value 'foo' (String) cannot be converted to an Integer.");
+		testError(b, "A.f1.li/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.li' (List<Integer>).  Value 'foo' (String) cannot be converted to an Integer.");
 		try {
 			b.addTo("A.f1.li", "foo", "bar");
 			fail("Exception expected.");
@@ -637,8 +637,8 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.lc':['java.lang.String']}}", b.build());
 		
 		b.clear();
-		testError(b, "A.f1.lc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.lc' (List<Class>).");  
-		testError(b, "A.f1.lc/add", "java.lang.Integer", "Value 'java.lang.Integer' (String) cannot be converted to a Class.");
+		testError(b, "A.f1.lc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");  
+		testError(b, "A.f1.lc/add", "java.lang.Integer", "Cannot add value 'java.lang.Integer' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
 		b.set("A.f1.lc/add", new AList<Class<?>>().appendAll(Integer.class, String.class));  
@@ -681,7 +681,7 @@ public class PropertyStoreTest {
 		b.set("A.f1.lc/add.-10", Object.class);
 		assertObjectEquals("{A:{'f1.lc':['java.lang.Object','java.util.List','java.lang.String','java.util.Map','java.lang.Integer']}}", b.build());
 
-		testError(b, "A.f1.lc/add.123", "foo", "Value 'foo' (String) cannot be converted to a Class.");
+		testError(b, "A.f1.lc/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.lc' (List<Class>).  Value 'foo' (String) cannot be converted to a Class.");
 		try {
 			b.addTo("A.f1.lc", "foo", "bar");
 			fail("Exception expected.");
@@ -1584,13 +1584,13 @@ public class PropertyStoreTest {
 			b.removeFrom("A.foo.ss", "[xxx]");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>) because it's not a valid JSON array.", e.getMessage());
+			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).  Invalid input for JsonParser parser."));
 		}
 		try {
 			b.removeFrom("A.foo.ls", "[xxx]");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>) because it's not a valid JSON array.", e.getMessage());
+			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).  Invalid input for JsonParser parser."));
 		}
 	}
 
@@ -1601,7 +1601,7 @@ public class PropertyStoreTest {
 			b.addTo("A.foo.sms", "{xxx}");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>) because it's not a valid JSON object.", e.getMessage());
+			assertTrue(e.getMessage().startsWith("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>) .  Invalid input for JsonParser parser."));
 		}
 		try {
 			b.addTo("A.foo.sms", "xxx");
