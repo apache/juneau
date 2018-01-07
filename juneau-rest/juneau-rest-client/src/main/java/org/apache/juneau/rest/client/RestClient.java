@@ -75,9 +75,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.keepHttpClientOpen.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -91,9 +91,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.executorServiceShutdownOnClose.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"RestClient.executorServiceShutdownOnClose.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -107,9 +107,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.retries.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> <code>1</code>
+	 * 	<li><b>Name:</b>  <js>"RestClient.retries.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>1</code>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -123,9 +123,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.retryInterval.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> <code>-1</code>
+	 * 	<li><b>Name:</b>  <js>"RestClient.retryInterval.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>-1</code>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -140,9 +140,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.retryOn.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? extends {@link RetryOn}</code> or {@link RetryOn}
-	 * 	<li><b>Default:</b> {@link RetryOn#DEFAULT}
+	 * 	<li><b>Name:</b>  <js>"RestClient.retryOn.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends {@link RetryOn}</code> or {@link RetryOn}
+	 * 	<li><b>Default:</b>  {@link RetryOn#DEFAULT}
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -156,9 +156,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.rootUri.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"RestClient.rootUri.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -175,9 +175,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.requestHeader.sms"</js>
-	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b> empty map
+	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeader.sms"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -191,9 +191,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.query.sms"</js>
-	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b> empty map
+	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -207,9 +207,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.serializer.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> Serializer&gt;</code> or {@link Serializer}.
-	 * 	<li><b>Default:</b> {@link JsonSerializer};
+	 * 	<li><b>Name:</b>  <js>"RestClient.serializer.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Serializer&gt;</code> or {@link Serializer}.
+	 * 	<li><b>Default:</b>  {@link JsonSerializer};
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -223,9 +223,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.parser.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
-	 * 	<li><b>Default:</b> {@link JsonParser};
+	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
+	 * 	<li><b>Default:</b>  {@link JsonParser};
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -239,9 +239,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.urlEncodingSerializer.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
-	 * 	<li><b>Default:</b> {@link SimpleUonPartSerializer};
+	 * 	<li><b>Name:</b>  <js>"RestClient.urlEncodingSerializer.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
+	 * 	<li><b>Default:</b>  {@link SimpleUonPartSerializer};
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -255,9 +255,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.executorService.o"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
-	 * 	<li><b>Default:</b> <jk>null</jk>.
+	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
+	 * 	<li><b>Default:</b>  <jk>null</jk>.
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -284,9 +284,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.interceptors.lo"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor | RestCallInterceptor</code>&gt.</code>
-	 * 	<li><b>Default:</b> empty list.
+	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor | RestCallInterceptor</code>&gt.</code>
+	 * 	<li><b>Default:</b>  empty list.
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -305,9 +305,9 @@ public class RestClient extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestClient.debug.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

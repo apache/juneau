@@ -122,10 +122,10 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.expandedParams.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk> 
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.expandedParams.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk> 
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

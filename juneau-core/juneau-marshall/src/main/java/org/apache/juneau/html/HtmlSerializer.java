@@ -135,10 +135,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code> ({@link AnchorText})
-	 * 	<li><b>Default:</b> <js>"TO_STRING"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link AnchorText})
+	 * 	<li><b>Default:</b>  <js>"TO_STRING"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -156,10 +156,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -174,10 +174,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.lookForLabelParameters.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -194,10 +194,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"label"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"label"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 */
 	public static final String HTML_labelParameter = PREFIX + "labelParameter.s";
@@ -207,10 +207,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 */
 	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders.b";
@@ -220,10 +220,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addBeanTypeProperties.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

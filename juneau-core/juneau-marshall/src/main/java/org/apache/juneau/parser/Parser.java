@@ -144,10 +144,10 @@ public abstract class Parser extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -162,10 +162,10 @@ public abstract class Parser extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.strict.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -207,10 +207,10 @@ public abstract class Parser extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"UTF-8"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Parser.inputStreamCharset.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -227,10 +227,10 @@ public abstract class Parser extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.fileCharset.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"default"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Parser.fileCharset.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"default"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -250,10 +250,10 @@ public abstract class Parser extends BeanContext {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.listener.c"</js>
-	 * 	<li><b>Data type:</b> <code>Class&lt;? extends ParserListener&gt;</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

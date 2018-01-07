@@ -508,10 +508,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Allow body URL parameter.
 	 *
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RestContext.allowBodyParam.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 * <p>

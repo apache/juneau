@@ -122,10 +122,10 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.enableNamespaces.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.enableNamespaces.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -139,10 +139,10 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.autoDetectNamespaces.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.autoDetectNamespaces.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -174,10 +174,10 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -194,10 +194,10 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.defaultNamespace.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code> ({@link Namespace})
-	 * 	<li><b>Default:</b> <js>"juneau: http://www.apache.org/2013/Juneau"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.defaultNamespace.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Namespace})
+	 * 	<li><b>Default:</b>  <js>"juneau: http://www.apache.org/2013/Juneau"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -211,10 +211,10 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.xsNamespace.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code> ({@link Namespace})
-	 * 	<li><b>Default:</b> <js>"xs: http://www.w3.org/2001/XMLSchema"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.xsNamespace.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Namespace})
+	 * 	<li><b>Default:</b>  <js>"xs: http://www.w3.org/2001/XMLSchema"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -229,10 +229,10 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code> ({@link Namespace})
-	 * 	<li><b>Default:</b> empty set
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.namespaces.ls"</js>
+	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code> ({@link Namespace})
+	 * 	<li><b>Default:</b>  empty set
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -246,10 +246,10 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.addBeanTypeProperties.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

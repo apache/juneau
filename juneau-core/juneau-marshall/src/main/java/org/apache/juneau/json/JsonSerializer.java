@@ -99,10 +99,10 @@ public class JsonSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -117,10 +117,10 @@ public class JsonSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
@@ -137,10 +137,10 @@ public class JsonSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>

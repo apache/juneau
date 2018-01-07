@@ -47,9 +47,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.language.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.language.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"RDF/XML-ABBREV"</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -90,9 +90,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs.s"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.juneauNs.s"</js>
+	 * 	<li><b>Data type:</b>  {@link Namespace}
+	 * 	<li><b>Default:</b>  <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
 	 * </ul>
 	 */
 	public static final String RDF_juneauNs = PREFIX + "juneauNs.s";
@@ -102,9 +102,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs.s"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.juneauBpNs.s"</js>
+	 * 	<li><b>Data type:</b>  {@link Namespace}
+	 * 	<li><b>Default:</b>  <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
 	 * </ul>
 	 */
 	public static final String RDF_juneauBpNs = PREFIX + "juneauBpNs.s";
@@ -114,9 +114,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -131,9 +131,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.iri-rules.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"lax"</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.iri-rules.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"lax"</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -162,9 +162,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.error-mode.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"lax"</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.error-mode.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"lax"</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -203,9 +203,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.embedding.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.embedding.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -226,8 +226,8 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.ERR_"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.ERR_"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -259,8 +259,8 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.WARN_"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.WARN_"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -274,8 +274,8 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.IGN_"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.IGN_"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -289,9 +289,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.xmlbase.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.xmlbase.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -305,9 +305,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.longId.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.longId.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -322,9 +322,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.allowBadURIs.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.allowBadURIs.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -338,9 +338,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.relativeURIs.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"same-document, absolute, relative, parent"</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.relativeURIs.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"same-document, absolute, relative, parent"</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -376,9 +376,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.showXmlDeclaration.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"default"</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.showXmlDeclaration.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"default"</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -402,9 +402,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.showDoctypeDeclaration.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.showDoctypeDeclaration.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -421,9 +421,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.tab.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> <code>2</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.tab.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>2</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -437,9 +437,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.attributeQuoteChar.s"</js>
-	 * 	<li><b>Data type:</b> <code>Character</code>
-	 * 	<li><b>Default:</b> <js>'"'</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.attributeQuoteChar.s"</js>
+	 * 	<li><b>Data type:</b>  <code>Character</code>
+	 * 	<li><b>Default:</b>  <js>'"'</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -453,9 +453,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.blockRules.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>""</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.blockRules.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>""</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -471,9 +471,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.minGap.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> <code>1</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.minGap.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>1</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -487,9 +487,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.objectLists.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.objectLists.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -503,9 +503,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.subjectColumn.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> indentProperty
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.subjectColumn.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  indentProperty
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -519,9 +519,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.propertyColumn.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> <code>8</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.propertyColumn.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>8</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -535,9 +535,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.indentProperty.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> <code>6</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.indentProperty.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>6</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -551,9 +551,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.widePropertyLen.i"</js>
-	 * 	<li><b>Data type:</b> <code>Integer</code>
-	 * 	<li><b>Default:</b> <code>20</code>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.widePropertyLen.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>20</code>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -568,9 +568,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.abbrevBaseURI.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.abbrevBaseURI.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -584,9 +584,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.usePropertySymbols.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.usePropertySymbols.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -600,9 +600,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.useTripleQuotedStrings.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.useTripleQuotedStrings.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -616,9 +616,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.useDoubles.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.useDoubles.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -632,9 +632,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat.s"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
+	 * 	<li><b>Name:</b>  <js>"Rdf.collectionFormat.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -666,9 +666,9 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"Rdf.looseCollections.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>

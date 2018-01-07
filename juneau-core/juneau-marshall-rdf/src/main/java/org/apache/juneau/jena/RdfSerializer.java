@@ -55,10 +55,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addLiteralTypes.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 */
 	public static final String RDF_addLiteralTypes = PREFIX + "addLiteralTypes.b";
@@ -68,10 +68,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addRootProperty.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -91,10 +91,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.autoDetectNamespaces.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -112,10 +112,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code> (serialized {@link Namespace} objects)
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.namespaces.ls"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code> (serialized {@link Namespace} objects)
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -129,10 +129,10 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addBeanTypeProperties.b"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypeProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
