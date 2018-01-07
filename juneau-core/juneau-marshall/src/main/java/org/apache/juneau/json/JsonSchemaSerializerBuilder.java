@@ -50,8 +50,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder simple(boolean value) {
-		super.simple(value);
+	public JsonSchemaSerializerBuilder escapeSolidus(boolean value) {
+		super.escapeSolidus(value);
 		return this;
 	}
 
@@ -62,20 +62,20 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder escapeSolidus(boolean value) {
-		super.escapeSolidus(value);
+	public JsonSchemaSerializerBuilder simple(boolean value) {
+		super.simple(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder maxDepth(int value) {
-		super.maxDepth(value);
+	public JsonSchemaSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder initialDepth(int value) {
-		super.initialDepth(value);
+	public JsonSchemaSerializerBuilder addBeanTypeProperties(boolean value) {
+		super.addBeanTypeProperties(value);
 		return this;
 	}
 
@@ -92,74 +92,32 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
+	public JsonSchemaSerializerBuilder initialDepth(int value) {
+		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder ws() {
-		super.ws();
+	public JsonSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public JsonSchemaSerializerBuilder maxDepth(int value) {
+		super.maxDepth(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder sq() {
-		super.sq();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder uriContext(UriContext value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder uriResolution(UriResolution value) {
-		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder uriRelativity(UriRelativity value) {
-		super.uriRelativity(value);
 		return this;
 	}
 
@@ -176,14 +134,62 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
+	public JsonSchemaSerializerBuilder sq() {
+		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
-		super.listener(value);
+	public JsonSchemaSerializerBuilder trimEmptyCollections(boolean value) {
+		super.trimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder trimEmptyMaps(boolean value) {
+		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder trimNullProperties(boolean value) {
+		super.trimNullProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder ws() {
+		super.ws();
 		return this;
 	}
 
@@ -394,42 +400,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public <T> JsonSchemaSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 

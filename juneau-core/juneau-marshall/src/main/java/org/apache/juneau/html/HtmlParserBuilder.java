@@ -78,20 +78,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public HtmlParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public HtmlParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public HtmlParserBuilder strict() {
-		super.strict();
+	public HtmlParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -102,14 +90,26 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public HtmlParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public HtmlParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public HtmlParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public HtmlParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public HtmlParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public HtmlParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

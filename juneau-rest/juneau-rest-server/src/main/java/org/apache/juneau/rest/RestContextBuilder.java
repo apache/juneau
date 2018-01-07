@@ -15,9 +15,9 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.serializer.Serializer.*;
-import static org.apache.juneau.parser.Parser.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -1857,42 +1857,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public <T> RestContextBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 

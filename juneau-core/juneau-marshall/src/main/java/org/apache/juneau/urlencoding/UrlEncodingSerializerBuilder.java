@@ -150,14 +150,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder maxDepth(int value) {
-		super.maxDepth(value);
+	public UrlEncodingSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder initialDepth(int value) {
-		super.initialDepth(value);
+	public UrlEncodingSerializerBuilder addBeanTypeProperties(boolean value) {
+		super.addBeanTypeProperties(value);
 		return this;
 	}
 
@@ -174,74 +174,32 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
+	public UrlEncodingSerializerBuilder initialDepth(int value) {
+		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder ws() {
-		super.ws();
+	public UrlEncodingSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public UrlEncodingSerializerBuilder maxDepth(int value) {
+		super.maxDepth(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder sq() {
-		super.sq();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriContext(UriContext value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriResolution(UriResolution value) {
-		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriRelativity(UriRelativity value) {
-		super.uriRelativity(value);
 		return this;
 	}
 
@@ -258,14 +216,62 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
+	public UrlEncodingSerializerBuilder sq() {
+		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder listener(Class<? extends SerializerListener> value) {
-		super.listener(value);
+	public UrlEncodingSerializerBuilder trimEmptyCollections(boolean value) {
+		super.trimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimEmptyMaps(boolean value) {
+		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimNullProperties(boolean value) {
+		super.trimNullProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder ws() {
+		super.ws();
 		return this;
 	}
 
@@ -480,42 +486,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
@@ -601,7 +571,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	@Override /* ContextBuilder */
 	public UrlEncodingSerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
 		return this;
 	}
 

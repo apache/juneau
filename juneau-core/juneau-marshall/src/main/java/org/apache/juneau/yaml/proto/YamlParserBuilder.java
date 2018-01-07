@@ -50,20 +50,8 @@ public class YamlParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
-	public YamlParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public YamlParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public YamlParserBuilder strict() {
-		super.strict();
+	public YamlParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -74,14 +62,26 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public YamlParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public YamlParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public YamlParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public YamlParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public YamlParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public YamlParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

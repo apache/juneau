@@ -52,26 +52,14 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
-	@Override /* UonParser */
+	@Override /* UonParserBuilder */
 	public UonPartParserBuilder decodeChars(boolean value) {
 		return set(UON_decodeChars, value);
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UonPartParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UonPartParserBuilder strict() {
-		super.strict();
+	public UonPartParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -82,14 +70,26 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public UonPartParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public UonPartParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonPartParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonPartParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

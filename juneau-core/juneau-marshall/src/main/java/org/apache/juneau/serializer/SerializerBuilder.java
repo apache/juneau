@@ -47,44 +47,46 @@ public class SerializerBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Max serialization depth.
+	 * Configuration property:  Abridged output.
 	 *
 	 * <p>
-	 * Abort serialization if specified depth is reached in the POJO tree.
-	 * If this depth is exceeded, an exception is thrown.
-	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
+	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_maxDepth</jsf>, value)</code>.
-	 * </ul>
+	 * <p>
+	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
+	 * this setting is disabled, but not added when it is enabled.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxDepth
+	 * @see Serializer#SERIALIZER_sortMaps
 	 */
-	public SerializerBuilder maxDepth(int value) {
-		return set(SERIALIZER_maxDepth, value);
+	public SerializerBuilder abridged(boolean value) {
+		return set(SERIALIZER_abridged, value);
 	}
 
 	/**
-	 * Configuration property:  Initial depth.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
-	 * The initial indentation level at the root.
-	 * Useful when constructing document fragments that need to be indented at a certain level.
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
+	 * the value type.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_initialDepth</jsf>, value)</code>.
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_addBeanTypeProperties</jsf>, value)</code>.
+	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_initialDepth
+	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
-	public SerializerBuilder initialDepth(int value) {
-		return set(SERIALIZER_initialDepth, value);
+	public SerializerBuilder addBeanTypeProperties(boolean value) {
+		return set(SERIALIZER_addBeanTypeProperties, value);
 	}
 
 	/**
@@ -145,31 +147,57 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use whitespace.
+	 * Configuration property:  Initial depth.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
+	 * The initial indentation level at the root.
+	 * Useful when constructing document fragments that need to be indented at a certain level.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_useWhitespace</jsf>, value)</code>.
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_initialDepth</jsf>, value)</code>.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_useWhitespace
+	 * @see Serializer#SERIALIZER_initialDepth
 	 */
-	public SerializerBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
+	public SerializerBuilder initialDepth(int value) {
+		return set(SERIALIZER_initialDepth, value);
 	}
 
 	/**
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * Configuration property:  Serializer listener.
 	 *
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during serialization.
+	 *
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerBuilder ws() {
-		return useWhitespace(true);
+	public SerializerBuilder listener(Class<? extends SerializerListener> value) {
+		return set(SERIALIZER_listener, value);
+	}
+
+	/**
+	 * Configuration property:  Max serialization depth.
+	 *
+	 * <p>
+	 * Abort serialization if specified depth is reached in the POJO tree.
+	 * If this depth is exceeded, an exception is thrown.
+	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_maxDepth</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_maxDepth
+	 */
+	public SerializerBuilder maxDepth(int value) {
+		return set(SERIALIZER_maxDepth, value);
 	}
 
 	/**
@@ -192,30 +220,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
-	 * the value type.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_addBeanTypeProperties</jsf>, value)</code>.
-	 * 	<li>Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_addBeanTypeProperties
-	 */
-	public SerializerBuilder addBeanTypeProperties(boolean value) {
-		return set(SERIALIZER_addBeanTypeProperties, value);
-	}
-
-	/**
 	 * Configuration property:  Quote character.
 	 *
 	 * <p>
@@ -235,35 +239,46 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Sort arrays and collections alphabetically.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortCollections</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_sortCollections
+	 */
+	public SerializerBuilder sortCollections(boolean value) {
+		return set(SERIALIZER_sortCollections, value);
+	}
+
+	/**
+	 * Configuration property:  Sort maps alphabetically.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortMaps</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_sortMaps
+	 */
+	public SerializerBuilder sortMaps(boolean value) {
+		return set(SERIALIZER_sortMaps, value);
+	}
+
+	/**
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder sq() {
 		return quoteChar('\'');
-	}
-
-	/**
-	 * Configuration property:  Trim null bean property values.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimNullProperties</jsf>, value)</code>.
-	 * 	<li>Enabling this setting has the following effects on parsing:
-	 * 	<ul>
-	 * 		<li>Map entries with <jk>null</jk> values will be lost.
-	 * 	</ul>
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimNullProperties
-	 */
-	public SerializerBuilder trimNullProperties(boolean value) {
-		return set(SERIALIZER_trimNullProperties, value);
 	}
 
 	/**
@@ -314,6 +329,29 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimNullProperties</jsf>, value)</code>.
+	 * 	<li>Enabling this setting has the following effects on parsing:
+	 * 	<ul>
+	 * 		<li>Map entries with <jk>null</jk> values will be lost.
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_trimNullProperties
+	 */
+	public SerializerBuilder trimNullProperties(boolean value) {
+		return set(SERIALIZER_trimNullProperties, value);
+	}
+
+	/**
 	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
@@ -357,6 +395,39 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  URI relativity.
+	 *
+	 * <p>
+	 * Defines what relative URIs are relative to when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li>{@link UriRelativity#RESOURCE}
+	 * 		- Relative URIs should be considered relative to the servlet URI.
+	 * 	<li>{@link UriRelativity#PATH_INFO}
+	 * 		- Relative URIs should be considered relative to the request URI.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriRelativity</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_uriRelativity
+	 */
+	public SerializerBuilder uriRelativity(UriRelativity value) {
+		return set(SERIALIZER_uriRelativity, value);
+	}
+
+	/**
 	 * Configuration property:  URI resolution.
 	 *
 	 * <p>
@@ -392,102 +463,31 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  URI relativity.
+	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
-	 * Defines what relative URIs are relative to when serializing any of the following:
-	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values are:
-	 * <ul>
-	 * 	<li>{@link UriRelativity#RESOURCE}
-	 * 		- Relative URIs should be considered relative to the servlet URI.
-	 * 	<li>{@link UriRelativity#PATH_INFO}
-	 * 		- Relative URIs should be considered relative to the request URI.
-	 * </ul>
+	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriRelativity</jsf>, value)</code>.
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_useWhitespace</jsf>, value)</code>.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriRelativity
+	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
-	public SerializerBuilder uriRelativity(UriRelativity value) {
-		return set(SERIALIZER_uriRelativity, value);
+	public SerializerBuilder useWhitespace(boolean value) {
+		return set(SERIALIZER_useWhitespace, value);
 	}
 
 	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortCollections</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortCollections
-	 */
-	public SerializerBuilder sortCollections(boolean value) {
-		return set(SERIALIZER_sortCollections, value);
-	}
-
-	/**
-	 * Configuration property:  Sort maps alphabetically.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortMaps</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortMaps
-	 */
-	public SerializerBuilder sortMaps(boolean value) {
-		return set(SERIALIZER_sortMaps, value);
-	}
-
-	/**
-	 * Configuration property:  Abridged output.
-	 *
-	 * <p>
-	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-	 * type information that might normally be included to determine the data type will not be serialized.
-	 *
-	 * <p>
-	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
-	 * this setting is disabled, but not added when it is enabled.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortMaps
-	 */
-	public SerializerBuilder abridged(boolean value) {
-		return set(SERIALIZER_abridged, value);
-	}
-
-	/**
-	 * Configuration property:  Serializer listener.
-	 *
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during serialization.
-	 *
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerBuilder listener(Class<? extends SerializerListener> value) {
-		return set(SERIALIZER_listener, value);
+	public SerializerBuilder ws() {
+		return useWhitespace(true);
 	}
 
 	@Override /* BeanContextBuilder */
@@ -697,42 +697,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public <T> SerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 

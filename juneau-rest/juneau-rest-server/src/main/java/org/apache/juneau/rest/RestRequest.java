@@ -32,18 +32,13 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 
 /**

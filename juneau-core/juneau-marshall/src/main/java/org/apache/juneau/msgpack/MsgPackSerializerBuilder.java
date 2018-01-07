@@ -50,14 +50,14 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder maxDepth(int value) {
-		super.maxDepth(value);
+	public MsgPackSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder initialDepth(int value) {
-		super.initialDepth(value);
+	public MsgPackSerializerBuilder addBeanTypeProperties(boolean value) {
+		super.addBeanTypeProperties(value);
 		return this;
 	}
 
@@ -74,14 +74,20 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
+	public MsgPackSerializerBuilder initialDepth(int value) {
+		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder ws() {
-		super.ws();
+	public MsgPackSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder maxDepth(int value) {
+		super.maxDepth(value);
 		return this;
 	}
 
@@ -92,62 +98,8 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public MsgPackSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder sq() {
-		super.sq();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder uriContext(UriContext value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder uriResolution(UriResolution value) {
-		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder uriRelativity(UriRelativity value) {
-		super.uriRelativity(value);
 		return this;
 	}
 
@@ -164,14 +116,62 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
+	public MsgPackSerializerBuilder sq() {
+		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder listener(Class<? extends SerializerListener> value) {
-		super.listener(value);
+	public MsgPackSerializerBuilder trimEmptyCollections(boolean value) {
+		super.trimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder trimEmptyMaps(boolean value) {
+		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder trimNullProperties(boolean value) {
+		super.trimNullProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder ws() {
+		super.ws();
 		return this;
 	}
 
@@ -382,42 +382,6 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public <T> MsgPackSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 

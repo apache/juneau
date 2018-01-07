@@ -50,20 +50,8 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
-	public MsgPackParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public MsgPackParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public MsgPackParserBuilder strict() {
-		super.strict();
+	public MsgPackParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -74,14 +62,26 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public MsgPackParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public MsgPackParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public MsgPackParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public MsgPackParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public MsgPackParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public MsgPackParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

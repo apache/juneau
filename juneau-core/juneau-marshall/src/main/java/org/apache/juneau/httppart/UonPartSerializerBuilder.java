@@ -104,14 +104,14 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder maxDepth(int value) {
-		super.maxDepth(value);
+	public UonPartSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder initialDepth(int value) {
-		super.initialDepth(value);
+	public UonPartSerializerBuilder addBeanTypeProperties(boolean value) {
+		super.addBeanTypeProperties(value);
 		return this;
 	}
 
@@ -128,74 +128,32 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
+	public UonPartSerializerBuilder initialDepth(int value) {
+		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder ws() {
-		super.ws();
+	public UonPartSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public UonPartSerializerBuilder maxDepth(int value) {
+		super.maxDepth(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
 	public UonPartSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder sq() {
-		super.sq();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder uriContext(UriContext value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder uriResolution(UriResolution value) {
-		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder uriRelativity(UriRelativity value) {
-		super.uriRelativity(value);
 		return this;
 	}
 
@@ -212,14 +170,62 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
+	public UonPartSerializerBuilder sq() {
+		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UonPartSerializerBuilder listener(Class<? extends SerializerListener> value) {
-		super.listener(value);
+	public UonPartSerializerBuilder trimEmptyCollections(boolean value) {
+		super.trimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder trimEmptyMaps(boolean value) {
+		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder trimNullProperties(boolean value) {
+		super.trimNullProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonPartSerializerBuilder ws() {
+		super.ws();
 		return this;
 	}
 
@@ -430,42 +436,6 @@ public class UonPartSerializerBuilder extends UonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public <T> UonPartSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 

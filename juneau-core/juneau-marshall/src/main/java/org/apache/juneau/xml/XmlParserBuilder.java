@@ -55,81 +55,6 @@ public class XmlParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Enable validation.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, XML document will be validated.
-	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_validating</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_validating
-	 */
-	public XmlParserBuilder validating(boolean value) {
-		return set(XML_validating, value);
-	}
-
-	/**
-	 * Configuration property:  XML reporter.
-	 *
-	 * <p>
-	 * Associates an {@link XMLReporter} with this parser.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Reporters are not copied to new parsers during a clone.
-	 * </ul>
-	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_reporter</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_reporter
-	 */
-	public XmlParserBuilder reporter(XMLReporter value) {
-		return set(XML_reporter, value);
-	}
-
-	/**
-	 * Configuration property:  XML resolver.
-	 *
-	 * <p>
-	 * Associates an {@link XMLResolver} with this parser.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_resolver</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_resolver
-	 */
-	public XmlParserBuilder resolver(XMLResolver value) {
-		return set(XML_resolver, value);
-	}
-
-	/**
 	 * Configuration property:  XML event allocator.
 	 *
 	 * <p>
@@ -186,21 +111,84 @@ public class XmlParserBuilder extends ParserBuilder {
 		return set(XML_preserveRootElement, value);
 	}
 
-	@Override /* ParserBuilder */
-	public XmlParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
+	/**
+	 * Configuration property:  XML reporter.
+	 *
+	 * <p>
+	 * Associates an {@link XMLReporter} with this parser.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Reporters are not copied to new parsers during a clone.
+	 * </ul>
+	 *
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_reporter</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see XmlParser#XML_reporter
+	 */
+	public XmlParserBuilder reporter(XMLReporter value) {
+		return set(XML_reporter, value);
+	}
+
+	/**
+	 * Configuration property:  XML resolver.
+	 *
+	 * <p>
+	 * Associates an {@link XMLResolver} with this parser.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_resolver</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see XmlParser#XML_resolver
+	 */
+	public XmlParserBuilder resolver(XMLResolver value) {
+		return set(XML_resolver, value);
+	}
+
+	/**
+	 * Configuration property:  Enable validation.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, XML document will be validated.
+	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_validating</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see XmlParser#XML_validating
+	 */
+	public XmlParserBuilder validating(boolean value) {
+		return set(XML_validating, value);
 	}
 
 	@Override /* ParserBuilder */
-	public XmlParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public XmlParserBuilder strict() {
-		super.strict();
+	public XmlParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -211,14 +199,26 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public XmlParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public XmlParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public XmlParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public XmlParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public XmlParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public XmlParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

@@ -52,35 +52,6 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Simple JSON mode.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
-	 * Otherwise, they are always quoted.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>JSON_simpleMode</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see #YAML_simpleMode
-	 */
-	public YamlSerializerBuilder simple(boolean value) {
-		return set(YAML_simpleMode, value);
-	}
-
-	/**
-	 * Shortcut for calling <code>setSimpleMode(<jk>true</jk>).sq()</code>.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public YamlSerializerBuilder simple() {
-		return simple(true).sq();
-	}
-
-	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <p>
@@ -102,15 +73,44 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 		return set(YAML_escapeSolidus, value);
 	}
 
+	/**
+	 * Shortcut for calling <code>setSimpleMode(<jk>true</jk>).sq()</code>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public YamlSerializerBuilder simple() {
+		return simple(true).sq();
+	}
+
+	/**
+	 * Configuration property:  Simple JSON mode.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
+	 * Otherwise, they are always quoted.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>JSON_simpleMode</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see #YAML_simpleMode
+	 */
+	public YamlSerializerBuilder simple(boolean value) {
+		return set(YAML_simpleMode, value);
+	}
+
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder maxDepth(int value) {
-		super.maxDepth(value);
+	public YamlSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder initialDepth(int value) {
-		super.initialDepth(value);
+	public YamlSerializerBuilder addBeanTypeProperties(boolean value) {
+		super.addBeanTypeProperties(value);
 		return this;
 	}
 
@@ -127,14 +127,20 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
+	public YamlSerializerBuilder initialDepth(int value) {
+		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder ws() {
-		super.ws();
+	public YamlSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder maxDepth(int value) {
+		super.maxDepth(value);
 		return this;
 	}
 
@@ -145,62 +151,8 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder sq() {
-		super.sq();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder uriContext(UriContext value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder uriResolution(UriResolution value) {
-		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder uriRelativity(UriRelativity value) {
-		super.uriRelativity(value);
 		return this;
 	}
 
@@ -217,14 +169,62 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
+	public YamlSerializerBuilder sq() {
+		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public YamlSerializerBuilder listener(Class<? extends SerializerListener> value) {
-		super.listener(value);
+	public YamlSerializerBuilder trimEmptyCollections(boolean value) {
+		super.trimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder trimEmptyMaps(boolean value) {
+		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder trimNullProperties(boolean value) {
+		super.trimNullProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder ws() {
+		super.ws();
 		return this;
 	}
 
@@ -435,42 +435,6 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public <T> YamlSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 

@@ -49,20 +49,8 @@ public class CsvParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
-	public CsvParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public CsvParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public CsvParserBuilder strict() {
-		super.strict();
+	public CsvParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -73,14 +61,26 @@ public class CsvParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public CsvParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public CsvParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public CsvParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public CsvParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public CsvParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public CsvParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

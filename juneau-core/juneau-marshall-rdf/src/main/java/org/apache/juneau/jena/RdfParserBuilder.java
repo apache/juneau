@@ -56,22 +56,73 @@ public class RdfParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Trim whitespace from text elements.
+	 * Configuration property:  RDF format for representing collections and arrays.
 	 * 
 	 * <p>
-	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"SEQ"</js> - RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"BAG"</js> - RDF Bag container.
+	 * 	<li>
+	 * 		<js>"LIST"</js> - RDF List container.
+	 * 	<li>
+	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
+	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_trimWhitespace</jsf>, value)</code>.
+	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
+	 * 		lost.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_collectionFormat</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfParser#RDF_trimWhitespace
+	 * @see RdfCommon#RDF_collectionFormat
 	 */
-	public RdfParserBuilder trimWhitespace(boolean value) {
-		return set(RDF_trimWhitespace, value);
+	public RdfParserBuilder collectionFormat(RdfCollectionFormat value) {
+		return set(RDF_collectionFormat, value);
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauBpNs</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see RdfCommon#RDF_juneauBpNs
+	 */
+	public RdfParserBuilder juneauBpNs(Namespace value) {
+		return set(RDF_juneauBpNs, value);
+	}
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauNs</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see RdfCommon#RDF_juneauNs
+	 */
+	public RdfParserBuilder juneauNs(Namespace value) {
+		return set(RDF_juneauNs, value);
 	}
 
 	/**
@@ -118,142 +169,6 @@ public class RdfParserBuilder extends ParserBuilder {
 	 */
 	public RdfParserBuilder language(String value) {
 		return set(RDF_language, value);
-	}
-
-	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public RdfParserBuilder xml() {
-		return language(Constants.LANG_RDF_XML);
-	}
-
-	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public RdfParserBuilder xmlabbrev() {
-		return language(Constants.LANG_RDF_XML_ABBREV);
-	}
-
-	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public RdfParserBuilder ntriple() {
-		return language(Constants.LANG_NTRIPLE);
-	}
-
-	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public RdfParserBuilder n3() {
-		return language(Constants.LANG_N3);
-	}
-
-	/**
-	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public RdfParserBuilder turtle() {
-		return language(Constants.LANG_TURTLE);
-	}
-
-	/**
-	 * Configuration property:  XML namespace for Juneau properties.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauNs</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_juneauNs
-	 */
-	public RdfParserBuilder juneauNs(Namespace value) {
-		return set(RDF_juneauNs, value);
-	}
-
-	/**
-	 * Configuration property:  Default XML namespace for bean properties.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauBpNs</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_juneauBpNs
-	 */
-	public RdfParserBuilder juneauBpNs(Namespace value) {
-		return set(RDF_juneauBpNs, value);
-	}
-
-	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 * 
-	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
-	 * inherited by the RDF parsers.
-	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_useXmlNamespaces</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_useXmlNamespaces
-	 */
-	public RdfParserBuilder useXmlNamespaces(boolean value) {
-		return set(RDF_useXmlNamespaces, value);
-	}
-
-	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
-	 * 
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"BAG"</js> - RDF Bag container.
-	 * 	<li>
-	 * 		<js>"LIST"</js> - RDF List container.
-	 * 	<li>
-	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
-	 * 		lost.
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_collectionFormat</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_collectionFormat
-	 */
-	public RdfParserBuilder collectionFormat(RdfCollectionFormat value) {
-		return set(RDF_collectionFormat, value);
 	}
 
 	/**
@@ -307,21 +222,94 @@ public class RdfParserBuilder extends ParserBuilder {
 		return set(RDF_looseCollections, value);
 	}
 
-	@Override /* ParserBuilder */
-	public RdfParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
+	/**
+	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3() {
+		return language(Constants.LANG_N3);
+	}
+
+	/**
+	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder ntriple() {
+		return language(Constants.LANG_NTRIPLE);
+	}
+
+	/**
+	 * Configuration property:  Trim whitespace from text elements.
+	 * 
+	 * <p>
+	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_trimWhitespace</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see RdfParser#RDF_trimWhitespace
+	 */
+	public RdfParserBuilder trimWhitespace(boolean value) {
+		return set(RDF_trimWhitespace, value);
+	}
+
+	/**
+	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder turtle() {
+		return language(Constants.LANG_TURTLE);
+	}
+
+	/**
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 * 
+	 * <p>
+	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
+	 * inherited by the RDF parsers.
+	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
+	 * 
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_useXmlNamespaces</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see RdfCommon#RDF_useXmlNamespaces
+	 */
+	public RdfParserBuilder useXmlNamespaces(boolean value) {
+		return set(RDF_useXmlNamespaces, value);
+	}
+
+	/**
+	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder xml() {
+		return language(Constants.LANG_RDF_XML);
+	}
+
+	/**
+	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder xmlabbrev() {
+		return language(Constants.LANG_RDF_XML_ABBREV);
 	}
 
 	@Override /* ParserBuilder */
-	public RdfParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder strict() {
-		super.strict();
+	public RdfParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -332,14 +320,26 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public RdfParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public RdfParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public RdfParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public RdfParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public RdfParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public RdfParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

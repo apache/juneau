@@ -817,6 +817,95 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
+	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_abridged
+	 */
+	public RestClientBuilder abridged(boolean value) {
+		return set(SERIALIZER_abridged, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_addBeanTypeProperties
+	 */
+	public RestClientBuilder addBeanTypeProperties(boolean value) {
+		return set(SERIALIZER_addBeanTypeProperties, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_detectRecursions
+	 */
+	public RestClientBuilder detectRecursions(boolean value) {
+		return set(SERIALIZER_detectRecursions, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Parser#PARSER_fileCharset
+	 */
+	public RestClientBuilder fileCharset(String value) {
+		return set(PARSER_fileCharset, value);
+	}
+
+	/**
+	 * Configuration property:  Request headers.
+	 *
+	 * @param key The header name.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 * @see RestClient#RESTCLIENT_headers
+	 */
+	public RestClientBuilder header(String key, Object value) {
+		return addTo(RESTCLIENT_headers, key, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_ignoreRecursions
+	 */
+	public RestClientBuilder ignoreRecursions(boolean value) {
+		return set(SERIALIZER_ignoreRecursions, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_initialDepth
+	 */
+	public RestClientBuilder initialDepth(int value) {
+		return set(SERIALIZER_initialDepth, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Parser#PARSER_inputStreamCharset
+	 */
+	public RestClientBuilder inputStreamCharset(String value) {
+		return set(PARSER_inputStreamCharset, value);
+	}
+
+	/**
 	 * Configuration property:  Keep HttpClient open.
 	 *
 	 * <p>
@@ -836,228 +925,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Request headers.
-	 *
-	 * @param key The header name.
-	 * @param value The header value.
-	 * @return This object (for method chaining).
-	 * @see RestClient#RESTCLIENT_headers
-	 */
-	public RestClientBuilder header(String key, Object value) {
-		return addTo(RESTCLIENT_headers, key, value);
-	}
-
-	/**
-	 * Configuration property:  Request query parameters.
-	 *
-	 * @param key The query parameter name.
-	 * @param value The query parameter value value.
-	 * @return This object (for method chaining).
-	 * @see RestClient#RESTCLIENT_query
-	 */
-	public RestClientBuilder query(String key, Object value) {
-		return addTo(RESTCLIENT_query, key, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxDepth
-	 */
-	public RestClientBuilder maxDepth(int value) {
-		return set(SERIALIZER_maxDepth, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_initialDepth
-	 */
-	public RestClientBuilder initialDepth(int value) {
-		return set(SERIALIZER_initialDepth, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_detectRecursions
-	 */
-	public RestClientBuilder detectRecursions(boolean value) {
-		return set(SERIALIZER_detectRecursions, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_ignoreRecursions
-	 */
-	public RestClientBuilder ignoreRecursions(boolean value) {
-		return set(SERIALIZER_ignoreRecursions, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_useWhitespace
-	 */
-	public RestClientBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxIndent
-	 */
-	public RestClientBuilder maxIndent(boolean value) {
-		return set(SERIALIZER_maxIndent, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_addBeanTypeProperties
-	 */
-	public RestClientBuilder addBeanTypeProperties(boolean value) {
-		return set(SERIALIZER_addBeanTypeProperties, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_quoteChar
-	 */
-	public RestClientBuilder quoteChar(char value) {
-		return set(SERIALIZER_quoteChar, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimNullProperties
-	 */
-	public RestClientBuilder trimNullProperties(boolean value) {
-		return set(SERIALIZER_trimNullProperties, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyCollections
-	 */
-	public RestClientBuilder trimEmptyCollections(boolean value) {
-		return set(SERIALIZER_trimEmptyCollections, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyMaps
-	 */
-	public RestClientBuilder trimEmptyMaps(boolean value) {
-		return set(SERIALIZER_trimEmptyMaps, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimStrings
-	 */
-	public RestClientBuilder trimStrings(boolean value) {
-		return set(SERIALIZER_trimStrings, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriContext
-	 */
-	public RestClientBuilder uriContext(UriContext value) {
-		return set(SERIALIZER_uriContext, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriResolution
-	 */
-	public RestClientBuilder uriResolution(UriResolution value) {
-		return set(SERIALIZER_uriResolution, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriRelativity
-	 */
-	public RestClientBuilder uriRelativity(UriRelativity value) {
-		return set(SERIALIZER_uriRelativity, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortCollections
-	 */
-	public RestClientBuilder sortCollections(boolean value) {
-		return set(SERIALIZER_sortCollections, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortMaps
-	 */
-	public RestClientBuilder sortMaps(boolean value) {
-		return set(SERIALIZER_sortMaps, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_abridged
-	 */
-	public RestClientBuilder abridged(boolean value) {
-		return set(SERIALIZER_abridged, value);
-	}
-
-	/**
 	 * Sets the {@link Serializer#SERIALIZER_listener} and {@link Parser#PARSER_listener} property on all
 	 * 	serializers and parsers in this group.
 	 *
@@ -1073,47 +940,25 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_trimStrings
+	 * @see Serializer#SERIALIZER_maxDepth
 	 */
-	public RestClientBuilder trimStringsP(boolean value) {
-		return set(PARSER_trimStrings, value);
+	public RestClientBuilder maxDepth(int value) {
+		return set(SERIALIZER_maxDepth, value);
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
+	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_strict
+	 * @see Serializer#SERIALIZER_maxIndent
 	 */
-	public RestClientBuilder strict(boolean value) {
-		return set(PARSER_strict, value);
-	}
-
-	/**
-	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_inputStreamCharset
-	 */
-	public RestClientBuilder inputStreamCharset(String value) {
-		return set(PARSER_inputStreamCharset, value);
-	}
-
-	/**
-	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_fileCharset
-	 */
-	public RestClientBuilder fileCharset(String value) {
-		return set(PARSER_fileCharset, value);
+	public RestClientBuilder maxIndent(boolean value) {
+		return set(SERIALIZER_maxIndent, value);
 	}
 
 	/**
@@ -1173,6 +1018,227 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	/**
+	 * Configuration property:  Request query parameters.
+	 *
+	 * @param key The query parameter name.
+	 * @param value The query parameter value value.
+	 * @return This object (for method chaining).
+	 * @see RestClient#RESTCLIENT_query
+	 */
+	public RestClientBuilder query(String key, Object value) {
+		return addTo(RESTCLIENT_query, key, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_quoteChar
+	 */
+	public RestClientBuilder quoteChar(char value) {
+		return set(SERIALIZER_quoteChar, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_sortCollections
+	 */
+	public RestClientBuilder sortCollections(boolean value) {
+		return set(SERIALIZER_sortCollections, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_sortMaps
+	 */
+	public RestClientBuilder sortMaps(boolean value) {
+		return set(SERIALIZER_sortMaps, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Parser#PARSER_strict
+	 */
+	public RestClientBuilder strict(boolean value) {
+		return set(PARSER_strict, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_trimEmptyCollections
+	 */
+	public RestClientBuilder trimEmptyCollections(boolean value) {
+		return set(SERIALIZER_trimEmptyCollections, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_trimEmptyMaps
+	 */
+	public RestClientBuilder trimEmptyMaps(boolean value) {
+		return set(SERIALIZER_trimEmptyMaps, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_trimNullProperties
+	 */
+	public RestClientBuilder trimNullProperties(boolean value) {
+		return set(SERIALIZER_trimNullProperties, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_trimStrings
+	 */
+	public RestClientBuilder trimStrings(boolean value) {
+		return set(SERIALIZER_trimStrings, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Parser#PARSER_trimStrings
+	 */
+	public RestClientBuilder trimStringsP(boolean value) {
+		return set(PARSER_trimStrings, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_uriContext
+	 */
+	public RestClientBuilder uriContext(UriContext value) {
+		return set(SERIALIZER_uriContext, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_uriRelativity
+	 */
+	public RestClientBuilder uriRelativity(UriRelativity value) {
+		return set(SERIALIZER_uriRelativity, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_uriResolution
+	 */
+	public RestClientBuilder uriResolution(UriResolution value) {
+		return set(SERIALIZER_uriResolution, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Serializer#SERIALIZER_useWhitespace
+	 */
+	public RestClientBuilder useWhitespace(boolean value) {
+		return set(SERIALIZER_useWhitespace, value);
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionary(boolean append, Object...values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFilters(boolean append, Object...values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
@@ -1198,200 +1264,22 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
+	public RestClientBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
+	public RestClientBuilder debug() {
+		super.debug();
+		set(RESTCLIENT_debug, true);
+		header("Debug", true);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> RestClientBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
+	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
@@ -1408,38 +1296,62 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
+	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
+	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
+	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
+	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
+	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
+	public <T> RestClientBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
 		return this;
 	}
 
@@ -1450,22 +1362,110 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder debug() {
-		super.debug();
-		set(RESTCLIENT_debug, true);
-		header("Debug", true);
+	public RestClientBuilder methodVisibility(Visibility value) {
+		super.methodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanClasses(boolean append, Object...values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanClasses(Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanPackages(boolean append, Object...values) {
+		super.notBeanPackages(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanPackages(String...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder pojoSwaps(boolean append, Object...values) {
+		super.pojoSwaps(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder pojoSwaps(Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder pojoSwapsRemove(Object...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 

@@ -50,20 +50,8 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
-	public PlainTextParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public PlainTextParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public PlainTextParserBuilder strict() {
-		super.strict();
+	public PlainTextParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -74,14 +62,26 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public PlainTextParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public PlainTextParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public PlainTextParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public PlainTextParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public PlainTextParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public PlainTextParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

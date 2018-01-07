@@ -50,14 +50,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* XmlSerializerBuilder */
-	public XmlSchemaSerializerBuilder enableNamespaces(boolean value) {
-		super.enableNamespaces(value);
-		return this;
-	}
-
-	@Override /* XmlSerializerBuilder */
-	public XmlSchemaSerializerBuilder ns() {
-		super.ns();
+	public XmlSchemaSerializerBuilder addNamespaceUrisToRoot(boolean value) {
+		super.addNamespaceUrisToRoot(value);
 		return this;
 	}
 
@@ -68,20 +62,14 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* XmlSerializerBuilder */
-	public XmlSchemaSerializerBuilder addNamespaceUrisToRoot(boolean value) {
-		super.addNamespaceUrisToRoot(value);
-		return this;
-	}
-
-	@Override /* XmlSerializerBuilder */
 	public XmlSchemaSerializerBuilder defaultNamespace(String value) {
 		super.defaultNamespace(value);
 		return this;
 	}
 
 	@Override /* XmlSerializerBuilder */
-	public XmlSchemaSerializerBuilder xsNamespace(Namespace value) {
-		super.xsNamespace(value);
+	public XmlSchemaSerializerBuilder enableNamespaces(boolean value) {
+		super.enableNamespaces(value);
 		return this;
 	}
 
@@ -91,15 +79,21 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder maxDepth(int value) {
-		super.maxDepth(value);
+	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder xsNamespace(Namespace value) {
+		super.xsNamespace(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder initialDepth(int value) {
-		super.initialDepth(value);
+	public XmlSchemaSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder addBeanTypeProperties(boolean value) {
+		super.addBeanTypeProperties(value);
 		return this;
 	}
 
@@ -116,74 +110,32 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
+	public XmlSchemaSerializerBuilder initialDepth(int value) {
+		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder ws() {
-		super.ws();
+	public XmlSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder addBeanTypeProperties(boolean value) {
-		super.addBeanTypeProperties(value);
+	public XmlSchemaSerializerBuilder maxDepth(int value) {
+		super.maxDepth(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder sq() {
-		super.sq();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder uriContext(UriContext value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder uriResolution(UriResolution value) {
-		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder uriRelativity(UriRelativity value) {
-		super.uriRelativity(value);
 		return this;
 	}
 
@@ -200,14 +152,62 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder abridged(boolean value) {
-		super.abridged(value);
+	public XmlSchemaSerializerBuilder sq() {
+		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
-		super.listener(value);
+	public XmlSchemaSerializerBuilder trimEmptyCollections(boolean value) {
+		super.trimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder trimEmptyMaps(boolean value) {
+		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder trimNullProperties(boolean value) {
+		super.trimNullProperties(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder ws() {
+		super.ws();
 		return this;
 	}
 
@@ -418,42 +418,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public <T> XmlSchemaSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 

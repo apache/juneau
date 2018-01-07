@@ -49,15 +49,21 @@ public class JsoParserBuilder extends ParserBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
-	@Override /* Parser */
-	public JsoParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
+	@Override /* ParserBuilder */
+	public JsoParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
-	@Override /* Parser */
-	public JsoParserBuilder strict(boolean value) {
-		super.strict(value);
+	@Override /* ParserBuilder */
+	public JsoParserBuilder inputStreamCharset(String value) {
+		super.inputStreamCharset(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public JsoParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
@@ -67,21 +73,15 @@ public class JsoParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* Parser */
-	public JsoParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public JsoParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	@Override /* ParserBuilder */
+	public JsoParserBuilder strict(boolean value) {
+		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public JsoParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public JsoParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

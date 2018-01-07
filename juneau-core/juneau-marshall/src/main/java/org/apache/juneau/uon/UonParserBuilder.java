@@ -81,20 +81,8 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public UonParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UonParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UonParserBuilder strict() {
-		super.strict();
+	public UonParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -105,14 +93,26 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public UonParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public UonParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UonParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public UonParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

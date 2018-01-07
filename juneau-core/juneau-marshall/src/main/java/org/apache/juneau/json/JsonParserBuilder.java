@@ -50,20 +50,8 @@ public class JsonParserBuilder extends ParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
-	public JsonParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder strict() {
-		super.strict();
+	public JsonParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -74,14 +62,26 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public JsonParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public JsonParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public JsonParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public JsonParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public JsonParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public JsonParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 
@@ -312,7 +312,6 @@ public class JsonParserBuilder extends ParserBuilder {
 		super.beanDictionary(append, values);
 		return this;
 	}
-
 
 	@Override /* BeanContextBuilder */
 	public JsonParserBuilder beanDictionaryRemove(Object...values) {

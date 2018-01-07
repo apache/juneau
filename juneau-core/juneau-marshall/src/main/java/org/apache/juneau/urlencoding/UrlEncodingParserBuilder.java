@@ -97,26 +97,14 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return set(URLENC_expandedParams, value);
 	}
 
-	@Override /* UonParser */
+	@Override /* UonParserBuilder */
 	public UrlEncodingParserBuilder decodeChars(boolean value) {
 		return set(UON_decodeChars, value);
 	}
 
 	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder strict() {
-		super.strict();
+	public UrlEncodingParserBuilder fileCharset(String value) {
+		super.fileCharset(value);
 		return this;
 	}
 
@@ -127,14 +115,26 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public UrlEncodingParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
+	public UrlEncodingParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UrlEncodingParserBuilder strict(boolean value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UrlEncodingParserBuilder trimStrings(boolean value) {
+		super.trimStrings(value);
 		return this;
 	}
 

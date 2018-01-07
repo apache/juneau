@@ -131,25 +131,14 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
+	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_trimStrings
+	 * @see Parser#PARSER_fileCharset
 	 */
-	public ParserGroupBuilder trimStrings(boolean value) {
-		return set(PARSER_trimStrings, value);
-	}
-
-	/**
-	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_strict
-	 */
-	public ParserGroupBuilder strict(boolean value) {
-		return set(PARSER_strict, value);
+	public ParserGroupBuilder fileCharset(String value) {
+		return set(PARSER_fileCharset, value);
 	}
 
 	/**
@@ -164,17 +153,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_fileCharset
-	 */
-	public ParserGroupBuilder fileCharset(String value) {
-		return set(PARSER_fileCharset, value);
-	}
-
-	/**
 	 * Sets the {@link Parser#PARSER_listener} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.
@@ -183,6 +161,28 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 */
 	public ParserGroupBuilder listener(Class<? extends ParserListener> value) {
 		return set(PARSER_listener, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Parser#PARSER_strict
+	 */
+	public ParserGroupBuilder strict(boolean value) {
+		return set(PARSER_strict, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see Parser#PARSER_trimStrings
+	 */
+	public ParserGroupBuilder trimStrings(boolean value) {
+		return set(PARSER_trimStrings, value);
 	}
 
 	@Override /* BeanContextBuilder */
@@ -396,42 +396,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
@@ -531,5 +495,5 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	public ParserGroupBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
-	}	
+	}
 }
