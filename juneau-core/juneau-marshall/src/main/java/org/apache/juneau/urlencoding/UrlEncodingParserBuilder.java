@@ -397,37 +397,19 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(Class<?>...values) {
+	public UrlEncodingParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public UrlEncodingParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public UrlEncodingParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

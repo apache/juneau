@@ -344,37 +344,20 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanDictionary(Class<?>...values) {
+	public JsonParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public JsonParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
 
 	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public JsonParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

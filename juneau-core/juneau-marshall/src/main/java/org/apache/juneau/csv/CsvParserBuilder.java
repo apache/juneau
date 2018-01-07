@@ -343,37 +343,19 @@ public class CsvParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public CsvParserBuilder beanDictionary(Class<?>...values) {
+	public CsvParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public CsvParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public CsvParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public CsvParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public CsvParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public CsvParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public CsvParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public CsvParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

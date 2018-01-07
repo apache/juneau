@@ -352,37 +352,19 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionary(Class<?>...values) {
+	public UonPartParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public UonPartParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UonPartParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public UonPartParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

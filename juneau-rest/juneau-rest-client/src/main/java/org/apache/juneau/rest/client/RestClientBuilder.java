@@ -1468,37 +1468,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(Class<?>...values) {
+	public RestClientBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(boolean append, Class<?>...values) {
+	public RestClientBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public RestClientBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

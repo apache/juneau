@@ -794,37 +794,19 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionary(Class<?>...values) {
+	public RdfSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+	public RdfSerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public RdfSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

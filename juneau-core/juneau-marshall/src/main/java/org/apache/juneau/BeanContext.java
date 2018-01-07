@@ -728,34 +728,70 @@ public class BeanContext extends Context {
 	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.sms";
 
 	/**
-	 * <b>Configuration property:</b>  Bean lookup dictionary.
+	 * Configuration property:  Bean lookup dictionary.
 	 *
+	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.lc"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
+	 * 
+	 * <p>
+	 * The list of classes that make up the bean dictionary in this bean context.
+	 * 
+	 * <p>
+	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+	 * through reflection.
+	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	BeanContext bc = BeanContext.<jsm>create</jsm>().beanDictionary(Bar.<jk>class</jk>, Baz.<jk>class</jk>).build();
+	 * </p>
 	 *
 	 * <p>
-	 * This list can consist of the following class types:
-	 * <ul>
-	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
-	 * 		annotations.
-	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
-	 * 		annotations.
-	 * </ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Properties:
+	 * 		<ul> 	
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
+	 * 		</ul>
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link Bean#beanDictionary()}
+	 * 			<li>{@link BeanProperty#beanDictionary()}
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
+	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
+	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
+	 * 		</ul>
+	 * 	<li>Values can consist of any of the following types:
+	 *			<ul>
+	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
+	 * 				annotations.
+	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
+	 * 				annotations.
+	 * 		</ul>
+	 * 	<li>See <a class='doclink' href='../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
+	 * 		for more information.
+	 *	</ul>
 	 */
 	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";
 
 	/**
-	 * <b>Configuration property:</b>  Add to bean dictionary.
+	 * Configuration property:  Add to bean lookup dictionary.
 	 */
 	public static final String BEAN_beanDictionary_add = PREFIX + "beanDictionary.lc/add";
 
 	/**
-	 * <b>Configuration property:</b>  Remove from bean dictionary.
+	 * Configuration property:  Remove from bean lookup dictionary.
 	 */
 	public static final String BEAN_beanDictionary_remove = PREFIX + "beanDictionary.lc/remove";
 

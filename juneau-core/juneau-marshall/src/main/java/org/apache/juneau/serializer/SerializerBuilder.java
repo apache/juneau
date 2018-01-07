@@ -785,37 +785,19 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanDictionary(Class<?>...values) {
+	public SerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+	public SerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public SerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

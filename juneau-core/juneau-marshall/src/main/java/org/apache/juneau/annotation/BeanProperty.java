@@ -234,22 +234,47 @@ public @interface BeanProperty {
 	String properties() default "";
 
 	/**
+	 * Bean lookup dictionary.
+	 * 
+	 * <p>
 	 * The list of classes that make up the bean dictionary for this bean property.
-	 *
+	 * 
 	 * <p>
-	 * The dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
-	 * The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
-	 *
+	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 * 
 	 * <p>
-	 * This list can consist of the following class types:
-	 * <ul>
-	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.name()};
-	 * 	<li>Any subclass of {@link BeanDictionaryList} that defines an entire set of mappings.
-	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
-	 * 	<li>Any subclass of {@link BeanDictionaryMap} that defines an entire set of mappings.
-	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
-	 * </ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Properties:
+	 * 		<ul> 	
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
+	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
+	 * 		</ul>
+	 * 	<li>Annotations:  
+	 * 		<ul>
+	 * 			<li>{@link Bean#beanDictionary()}
+	 * 			<li>{@link BeanProperty#beanDictionary()}
+	 * 		</ul>
+	 * 	<li>Methods:  
+	 * 		<ul>
+	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
+	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
+	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
+	 * 		</ul>
+	 * 	<li>Values can consist of any of the following types:
+	 *			<ul>
+	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
+	 * 				annotations.
+	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
+	 * 				annotations.
+	 * 		</ul>
+	 * 	<li>See <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
+	 * 		for more information.
+	 *	</ul>
 	 */
 	Class<?>[] beanDictionary() default {};
 

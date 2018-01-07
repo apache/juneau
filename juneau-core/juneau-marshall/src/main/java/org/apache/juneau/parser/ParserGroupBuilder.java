@@ -779,7 +779,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_beanDictionary_add
 	 */
-	public ParserGroupBuilder beanDictionary(Class<?>...values) {
+	public ParserGroupBuilder beanDictionary(Object...values) {
 		return set(BEAN_beanDictionary_add, values);
 	}
 

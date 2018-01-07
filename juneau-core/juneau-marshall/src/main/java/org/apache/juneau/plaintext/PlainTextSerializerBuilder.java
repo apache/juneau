@@ -470,37 +470,19 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder beanDictionary(Class<?>...values) {
+	public PlainTextSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+	public PlainTextSerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public PlainTextSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

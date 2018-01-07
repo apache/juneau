@@ -602,37 +602,19 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanDictionary(Class<?>...values) {
+	public RdfParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public RdfParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public RdfParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

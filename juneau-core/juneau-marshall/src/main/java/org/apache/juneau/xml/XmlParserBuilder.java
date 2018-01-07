@@ -481,37 +481,19 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanDictionary(Class<?>...values) {
+	public XmlParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public XmlParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public XmlParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

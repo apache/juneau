@@ -488,37 +488,19 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SimpleUonPartSerializerBuilder beanDictionary(Class<?>...values) {
+	public SimpleUonPartSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SimpleUonPartSerializerBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SimpleUonPartSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+	public SimpleUonPartSerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SimpleUonPartSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SimpleUonPartSerializerBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SimpleUonPartSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public SimpleUonPartSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

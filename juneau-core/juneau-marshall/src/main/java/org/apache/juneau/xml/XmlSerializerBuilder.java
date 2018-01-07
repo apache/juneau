@@ -623,37 +623,19 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionary(Class<?>...values) {
+	public XmlSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+	public XmlSerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public XmlSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

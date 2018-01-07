@@ -523,37 +523,19 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSerializerBuilder beanDictionary(Class<?>...values) {
+	public JsonSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSerializerBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSerializerBuilder beanDictionary(boolean append, Class<?>...values) {
+	public JsonSerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSerializerBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSerializerBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSerializerBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public JsonSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

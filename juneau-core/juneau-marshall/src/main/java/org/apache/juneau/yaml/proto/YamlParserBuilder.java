@@ -344,37 +344,19 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionary(Class<?>...values) {
+	public YamlParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public YamlParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public YamlParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public YamlParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}

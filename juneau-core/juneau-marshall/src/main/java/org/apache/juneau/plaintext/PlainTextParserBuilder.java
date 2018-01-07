@@ -344,37 +344,19 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanDictionary(Class<?>...values) {
+	public PlainTextParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanDictionary(Collection<Class<?>> values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanDictionary(boolean append, Class<?>...values) {
+	public PlainTextParserBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanDictionary(boolean append, Collection<Class<?>> values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanDictionaryRemove(Collection<Class<?>> values) {
+	public PlainTextParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
