@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
@@ -25,30 +24,15 @@ import org.apache.juneau.internal.*;
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
  */
-public class SerializerGroupBuilder {
+public class SerializerGroupBuilder extends BeanContextBuilder {
 
 	private final List<Object> serializers;
-	private final PropertyStoreBuilder propertyStore;
 
 	/**
 	 * Create an empty serializer group builder.
 	 */
 	public SerializerGroupBuilder() {
 		this.serializers = new ArrayList<>();
-		this.propertyStore = PropertyStore.create();
-	}
-
-	/**
-	 * Create an empty serializer group using the specified property store for settings.
-	 *
-	 * <p>
-	 * Note:  Modifying the specified property store externally will also modify it here.
-	 *
-	 * @param propertyStore The property store containing all settings common to all serializers in this group.
-	 */
-	public SerializerGroupBuilder(PropertyStoreBuilder propertyStore) {
-		this.serializers = new ArrayList<>();
-		this.propertyStore = propertyStore;
 	}
 
 	/**
@@ -57,9 +41,9 @@ public class SerializerGroupBuilder {
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
+		super(copyFrom.getPropertyStore());
 		this.serializers = new ArrayList<>();
 		addReverse(serializers, copyFrom.getSerializers());
-		this.propertyStore = copyFrom.getPropertyStore().builder();
 	}
 
 	/**
@@ -124,12 +108,13 @@ public class SerializerGroupBuilder {
 	 *
 	 * @return A new {@link SerializerGroup} object.
 	 */
+	@Override /* ContextBuilder */
 	@SuppressWarnings("unchecked")
 	public SerializerGroup build() {
 		List<Serializer> l = new ArrayList<>();
 		for (Object s : serializers) {
 			Class<? extends Serializer> c = null;
-			PropertyStore ps = propertyStore.build();
+			PropertyStore ps = getPropertyStore();
 			if (s instanceof Class) {
 				c = (Class<? extends Serializer>)s;
 				l.add(ContextCache.INSTANCE.create(c, ps));
@@ -137,108 +122,13 @@ public class SerializerGroupBuilder {
 				l.add((Serializer)s);
 			}
 		}
-		return new SerializerGroup(propertyStore.build(), ArrayUtils.toReverseArray(Serializer.class, l));
+		return new SerializerGroup(getPropertyStore(), ArrayUtils.toReverseArray(Serializer.class, l));
 	}
 
 
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * Sets a property on all serializers in this group.
-	 *
-	 * @param name The property name.
-	 * @param value The property value.
-	 * @return This object (for method chaining).
-	 * @see PropertyStoreBuilder#set(String, Object)
-	 */
-	public SerializerGroupBuilder set(String name, Object value) {
-		propertyStore.set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets or appends to a property on all serializers in this group.
-	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param name The property name.
-	 * @param value The property value.
-	 * @return This object (for method chaining).
-	 * @see PropertyStoreBuilder#set(String, Object)
-	 */
-	public SerializerGroupBuilder set(boolean append, String name, Object value) {
-		if (append)
-			propertyStore.addTo(name, value);
-		else
-			propertyStore.set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets a set of properties on all serializers in this group.
-	 *
-	 * @param properties The properties to set on this class.
-	 * @return This object (for method chaining).
-	 * @see PropertyStoreBuilder#set(java.util.Map)
-	 */
-	public SerializerGroupBuilder set(ObjectMap properties) {
-		propertyStore.set(properties);
-		return this;
-	}
-
-	/**
-	 * Appends a set of properties on all serializers in this group.
-	 *
-	 * @param properties The properties to append on this class.
-	 * @return This object (for method chaining).
-	 * @see PropertyStoreBuilder#add(java.util.Map)
-	 */
-	public SerializerGroupBuilder add(ObjectMap properties) {
-		propertyStore.add(properties);
-		return this;
-	}
-
-	/**
-	 * Adds a value to a SET/LIST property on all serializers in this group.
-	 *
-	 * @param name The property name.
-	 * @param value The new value to add to the SET property.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET property.
-	 */
-	public SerializerGroupBuilder addTo(String name, Object value) {
-		propertyStore.addTo(name, value);
-		return this;
-	}
-
-	/**
-	 * Adds or overwrites a value to a SET/LIST/MAP property on all serializers in this group.
-	 *
-	 * @param name The property name.
-	 * @param key The property value map key.
-	 * @param value The property value map value.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a MAP property.
-	 */
-	public SerializerGroupBuilder addTo(String name, String key, Object value) {
-		propertyStore.addTo(name, key, value);
-		return this;
-	}
-
-	/**
-	 * Removes a value from a SET property on all serializers in this group.
-	 *
-	 * @param name The property name.
-	 * @param value The property value in the SET property.
-	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET property.
-	 */
-	public SerializerGroupBuilder removeFrom(String name, Object value) {
-		propertyStore.removeFrom(name, value);
-		return this;
-	}
 
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
@@ -467,650 +357,357 @@ public class SerializerGroupBuilder {
 		return set(SERIALIZER_listener, value);
 	}
 
-	/**
-	 * Sets the {@link BeanContext#BEAN_beansRequireDefaultConstructor} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
-	 */
+	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireDefaultConstructor(boolean value) {
-		return set(BEAN_beansRequireDefaultConstructor, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beansRequireSerializable} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireSerializable
-	 */
-	public SerializerGroupBuilder beansRequireSerializable(boolean value) {
-		return set(BEAN_beansRequireSerializable, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beansRequireSettersForGetters} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireSettersForGetters
-	 */
-	public SerializerGroupBuilder beansRequireSettersForGetters(boolean value) {
-		return set(BEAN_beansRequireSettersForGetters, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beansRequireSomeProperties} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireSomeProperties
-	 */
-	public SerializerGroupBuilder beansRequireSomeProperties(boolean value) {
-		return set(BEAN_beansRequireSomeProperties, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanMapPutReturnsOldValue} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
-	 */
-	public SerializerGroupBuilder beanMapPutReturnsOldValue(boolean value) {
-		return set(BEAN_beanMapPutReturnsOldValue, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanConstructorVisibility} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanConstructorVisibility
-	 */
-	public SerializerGroupBuilder beanConstructorVisibility(Visibility value) {
-		return set(BEAN_beanConstructorVisibility, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanClassVisibility} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanClassVisibility
-	 */
-	public SerializerGroupBuilder beanClassVisibility(Visibility value) {
-		return set(BEAN_beanClassVisibility, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFieldVisibility} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFieldVisibility
-	 */
-	public SerializerGroupBuilder beanFieldVisibility(Visibility value) {
-		return set(BEAN_beanFieldVisibility, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_methodVisibility} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_methodVisibility
-	 */
-	public SerializerGroupBuilder methodVisibility(Visibility value) {
-		return set(BEAN_methodVisibility, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_useJavaBeanIntrospector} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_useJavaBeanIntrospector
-	 */
-	public SerializerGroupBuilder useJavaBeanIntrospector(boolean value) {
-		return set(BEAN_useJavaBeanIntrospector, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_useInterfaceProxies} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_useInterfaceProxies
-	 */
-	public SerializerGroupBuilder useInterfaceProxies(boolean value) {
-		return set(BEAN_useInterfaceProxies, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_ignoreUnknownBeanProperties} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreUnknownBeanProperties
-	 */
-	public SerializerGroupBuilder ignoreUnknownBeanProperties(boolean value) {
-		return set(BEAN_ignoreUnknownBeanProperties, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_ignoreUnknownNullBeanProperties} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreUnknownNullBeanProperties
-	 */
-	public SerializerGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		return set(BEAN_ignoreUnknownNullBeanProperties, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_ignorePropertiesWithoutSetters} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
-	 */
-	public SerializerGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
-		return set(BEAN_ignorePropertiesWithoutSetters, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
-	 */
-	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
-	 */
-	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_sortProperties} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_sortProperties
-	 */
-	public SerializerGroupBuilder sortProperties(boolean value) {
-		return set(BEAN_sortProperties, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanPackages_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_add
-	 */
-	public SerializerGroupBuilder notBeanPackages(String...values) {
-		return set(BEAN_notBeanPackages_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanPackages_add} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_add
-	 */
-	public SerializerGroupBuilder notBeanPackages(Collection<String> value) {
-		return set(BEAN_notBeanPackages_add, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanPackages} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
-	 */
-	public SerializerGroupBuilder setNotBeanPackages(String...values) {
-		return set(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanPackages} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
-	 */
-	public SerializerGroupBuilder setNotBeanPackages(Collection<String> values) {
-		return set(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanPackages_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_remove
-	 */
-	public SerializerGroupBuilder removeNotBeanPackages(String...values) {
-		return set(BEAN_notBeanPackages_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanPackages_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_remove
-	 */
-	public SerializerGroupBuilder removeNotBeanPackages(Collection<String> values) {
-		return set(BEAN_notBeanPackages_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanClasses_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses_add
-	 */
-	public SerializerGroupBuilder notBeanClasses(Object...values) {
-		return set(BEAN_notBeanClasses_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanClasses_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_add
-	 */
-	public SerializerGroupBuilder notBeanClasses(Class<?>...values) {
-		return set(BEAN_notBeanClasses_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanClasses} property on all serializers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses
-	 */
-	public SerializerGroupBuilder setNotBeanClasses(Class<?>...values) {
-		return set(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanClasses} property on all serializers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses
-	 */
-	public SerializerGroupBuilder setNotBeanClasses(Collection<Class<?>> values) {
-		return set(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanClasses_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses_remove
-	 */
-	public SerializerGroupBuilder removeNotBeanClasses(Class<?>...values) {
-		return set(BEAN_notBeanClasses_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_notBeanClasses_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses_remove
-	 */
-	public SerializerGroupBuilder removeNotBeanClasses(Collection<Class<?>> values) {
-		return set(BEAN_notBeanClasses_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters_add
-	 */
-	public SerializerGroupBuilder beanFilters(Object...values) {
-		return set(BEAN_beanFilters_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters_add
-	 */
-	public SerializerGroupBuilder beanFilters(Class<?>...values) {
-		return set(BEAN_beanFilters_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters} property on all serializers in this group.
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 */
-	public SerializerGroupBuilder beanFilters(boolean append, Class<?>...values) {
-		return set(append, BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanFilters_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters_remove
-	 */
-	public SerializerGroupBuilder beanFiltersRemove(Object...values) {
-		return set(BEAN_beanFilters_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_pojoSwaps_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps_add
-	 */
-	public SerializerGroupBuilder pojoSwaps(Object...values) {
-		return set(BEAN_pojoSwaps_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_pojoSwaps_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps_add
-	 */
-	public SerializerGroupBuilder pojoSwaps(Class<?>...values) {
-		return set(BEAN_pojoSwaps_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_pojoSwaps} property on all serializers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
-	 */
-	public SerializerGroupBuilder setPojoSwaps(Class<?>...values) {
-		return set(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_pojoSwaps} property on all serializers in this group.
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
-	 */
-	public SerializerGroupBuilder setPojoSwaps(Collection<Class<?>> values) {
-		return set(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_pojoSwaps_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps_remove
-	 */
-	public SerializerGroupBuilder removePojoSwaps(Class<?>...values) {
-		return set(BEAN_pojoSwaps_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_pojoSwaps_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps_remove
-	 */
-	public SerializerGroupBuilder removePojoSwaps(Collection<Class<?>> values) {
-		return set(BEAN_pojoSwaps_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_implClasses} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_implClasses
-	 */
-	public SerializerGroupBuilder implClasses(Map<String,Class<?>> values) {
-		return set(BEAN_implClasses, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_implClasses} property on all serializers in this group.
-	 *
-	 * @param interfaceClass The interface class.
-	 * @param implClass The implementation class.
-	 * @param <T> The class type of the interface.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_implClasses
-	 */
-	public <T> SerializerGroupBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		return addTo(BEAN_implClasses, interfaceClass.getName(), implClass);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_includeProperties} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_includeProperties
-	 */
-	public SerializerGroupBuilder includeProperties(Map<String,String> values) {
-		return set(BEAN_includeProperties, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_includeProperties} property on all serializers in this group.
-	 *
-	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
-	 * @param properties Comma-delimited list of property names.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_includeProperties
-	 */
-	public SerializerGroupBuilder includeProperties(String beanClassName, String properties) {
-		return addTo(BEAN_includeProperties, beanClassName, properties);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_includeProperties} property on all serializers in this group.
-	 *
-	 * @param beanClass The bean class.
-	 * @param properties Comma-delimited list of property names.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_includeProperties
-	 */
-	public SerializerGroupBuilder includeProperties(Class<?> beanClass, String properties) {
-		return addTo(BEAN_includeProperties, beanClass.getName(), properties);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_excludeProperties} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_excludeProperties
-	 */
-	public SerializerGroupBuilder excludeProperties(Map<String,String> values) {
-		return set(BEAN_excludeProperties, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_excludeProperties} property on all serializers in this group.
-	 *
-	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
-	 * @param properties Comma-delimited list of property names.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_excludeProperties
-	 */
-	public SerializerGroupBuilder excludeProperties(String beanClassName, String properties) {
-		return addTo(BEAN_excludeProperties, beanClassName, properties);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_excludeProperties} property on all serializers in this group.
-	 *
-	 * @param beanClass The bean class.
-	 * @param properties Comma-delimited list of property names.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_excludeProperties
-	 */
-	public SerializerGroupBuilder excludeProperties(Class<?> beanClass, String properties) {
-		return addTo(BEAN_excludeProperties, beanClass.getName(), properties);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary_add
-	 */
-	public SerializerGroupBuilder beanDictionary(Object...values) {
-		return set(BEAN_beanDictionary_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary_add} property on all serializers in this group.
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary_add
-	 */
-	public SerializerGroupBuilder beanDictionary(Class<?>...values) {
-		return set(BEAN_beanDictionary_add, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary} property on all serializers in this group.
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary
-	 */
-	public SerializerGroupBuilder beanDictionary(boolean append, Object...values) {
-		return set(append, BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanDictionary_remove} property on all serializers in this group.
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary_remove
-	 */
-	public SerializerGroupBuilder beanDictionaryRemove(Object...values) {
-		return set(BEAN_beanDictionary_remove, values);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_beanTypePropertyName} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanTypePropertyName
-	 */
-	public SerializerGroupBuilder beanTypePropertyName(String value) {
-		return set(BEAN_beanTypePropertyName, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_defaultParser} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_defaultParser
-	 */
-	public SerializerGroupBuilder defaultParser(Class<?> value) {
-		return set(BEAN_defaultParser, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_locale} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_locale
-	 */
-	public SerializerGroupBuilder locale(Locale value) {
-		return set(BEAN_locale, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_timeZone} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_timeZone
-	 */
-	public SerializerGroupBuilder timeZone(TimeZone value) {
-		return set(BEAN_timeZone, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_mediaType} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_mediaType
-	 */
-	public SerializerGroupBuilder mediaType(MediaType value) {
-		return set(BEAN_mediaType, value);
-	}
-
-	/**
-	 * Sets the {@link BeanContext#BEAN_debug} property to <jk>true</jk> on all serializers in this group.
-	 *
-	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_debug
-	 */
-	public SerializerGroupBuilder debug() {
-		return set(BEAN_debug, true);
-	}
-
-	/**
-	 * Copies all the values in the specified property store into this builder.
-	 * 
-	 * @param copyFrom The property store to copy the values from. 
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder apply(PropertyStore copyFrom) {
-		this.propertyStore.apply(copyFrom);
+		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSerializable(boolean value) {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSettersForGetters(boolean value) {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSomeProperties(boolean value) {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder methodVisibility(Visibility value) {
+		super.methodVisibility(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackages(String...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackages(boolean append, Object...values) {
+		super.notBeanPackages(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClasses(Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClasses(boolean append, Object...values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFilters(Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFilters(boolean append, Object...values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwaps(Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwaps(boolean append, Object...values) {
+		super.pojoSwaps(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsRemove(Object...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> SerializerGroupBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder includeProperties(String beanClassName, String properties) {
+		super.includeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder includeProperties(Class<?> beanClass, String properties) {
+		super.includeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder excludeProperties(String beanClassName, String properties) {
+		super.excludeProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionary(boolean append, Object...values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder defaultParser(Class<?> value) {
+		super.defaultParser(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder set(boolean append, String name, Object value) {
+		super.set(append, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder add(Map<String,Object> properties) {
+		super.add(properties);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder apply(PropertyStore copyFrom) {
+		super.apply(copyFrom);
+		return this;
+	}	
 }

@@ -69,7 +69,7 @@ import org.apache.juneau.http.*;
  * 	AddressBook addressBook = p.parse(json, AddressBook.<jk>class</jk>);
  * </p>
  */
-public final class ParserGroup {
+public final class ParserGroup extends BeanContext {
 
 	// Maps Content-Type headers to matches.
 	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
@@ -78,7 +78,6 @@ public final class ParserGroup {
 	private final List<MediaType> mediaTypesList;
 	private final Parser[] mediaTypeParsers;
 	private final List<Parser> parsers;
-	private final PropertyStore propertyStore;
 
 	/**
 	 * Instantiates a new clean-slate {@link ParserGroupBuilder} object.
@@ -97,6 +96,7 @@ public final class ParserGroup {
 	 * 
 	 * @return A new {@link ParserGroupBuilder} initialized to this group.
 	 */
+	@Override /* Context */
 	public ParserGroupBuilder builder() {
 		return new ParserGroupBuilder(this);
 	}
@@ -113,7 +113,7 @@ public final class ParserGroup {
 	 * 	tried to match against media types.
 	 */
 	public ParserGroup(PropertyStore ps, Parser[] parsers) {
-		this.propertyStore = ps;
+		super(ps);
 		this.parsers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(parsers)));
 
 		List<MediaType> lmt = new ArrayList<>();
@@ -197,18 +197,6 @@ public final class ParserGroup {
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
 		return mediaTypesList;
-	}
-
-	/**
-	 * Returns a copy of the property store that was used to create the parsers in this group.
-	 *
-	 * <p>
-	 * This method returns a new factory each time so is somewhat expensive.
-	 *
-	 * @return A new copy of the property store passed in to the constructor.
-	 */
-	public PropertyStore getPropertyStore() {
-		return propertyStore;
 	}
 
 	/**

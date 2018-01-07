@@ -61,7 +61,7 @@ import org.apache.juneau.http.*;
  * 	String json = s.serialize(addressBook);
  * </p>
  */
-public final class SerializerGroup {
+public final class SerializerGroup extends BeanContext {
 
 	// Maps Accept headers to matching serializers.
 	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
@@ -70,7 +70,6 @@ public final class SerializerGroup {
 	private final List<MediaType> mediaTypesList;
 	private final Serializer[] mediaTypeSerializers;
 	private final List<Serializer> serializers;
-	private final PropertyStore propertyStore;
 
 	/**
 	 * Instantiates a new clean-slate {@link SerializerGroupBuilder} object.
@@ -89,6 +88,7 @@ public final class SerializerGroup {
 	 * 
 	 * @return A new {@link SerializerGroupBuilder} initialized to this group.
 	 */
+	@Override /* Context */
 	public SerializerGroupBuilder builder() {
 		return new SerializerGroupBuilder(this);
 	}
@@ -105,7 +105,7 @@ public final class SerializerGroup {
 	 * 	to match against media types.
 	 */
 	public SerializerGroup(PropertyStore ps, Serializer[] serializers) {
-		this.propertyStore = ps;
+		super(ps);
 		this.serializers = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(serializers)));
 
 		List<MediaType> lmt = new ArrayList<>();
@@ -243,18 +243,6 @@ public final class SerializerGroup {
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
 		return mediaTypesList;
-	}
-
-	/**
-	 * Returns a copy of the property store that was used to create the serializers in this group.
-	 *
-	 * <p>
-	 * This method returns a new factory each time so is somewhat expensive.
-	 *
-	 * @return A new copy of the property store passed in to the constructor.
-	 */
-	public PropertyStore getPropertyStore() {
-		return propertyStore;
 	}
 
 	/**
