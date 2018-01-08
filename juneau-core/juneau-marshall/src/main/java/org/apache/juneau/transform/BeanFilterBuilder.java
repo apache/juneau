@@ -66,11 +66,11 @@ public abstract class BeanFilterBuilder {
 	/**
 	 * Specifies the type name for this bean.
 	 *
-	 * @param typeName The dictionary name associated with this bean.
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder typeName(String typeName) {
-		this.typeName = typeName;
+	public BeanFilterBuilder typeName(String value) {
+		this.typeName = value;
 		return this;
 	}
 
@@ -82,22 +82,22 @@ public abstract class BeanFilterBuilder {
 	 * related methods.
 	 * Entries in the list can also contain comma-delimited lists that will be split.
 	 *
-	 * @param properties The properties associated with the bean class.
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder properties(String...properties) {
-		this.properties = properties;
+	public BeanFilterBuilder properties(String...value) {
+		this.properties = value;
 		return this;
 	}
 
 	/**
 	 * Specifies the list of properties to ignore on a bean.
 	 *
-	 * @param excludeProperties The list of properties to ignore on a bean.
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder excludeProperties(String...excludeProperties) {
-		this.excludeProperties = excludeProperties;
+	public BeanFilterBuilder excludeProperties(String...value) {
+		this.excludeProperties = value;
 		return this;
 	}
 
@@ -137,11 +137,11 @@ public abstract class BeanFilterBuilder {
 	 * Note that this filter can be used on the parent class so that it filters to all child classes, or can be set
 	 * individually on the child classes.
 	 *
-	 * @param interfaceClass The interface class to use for this bean class.
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder interfaceClass(Class<?> interfaceClass) {
-		this.interfaceClass = interfaceClass;
+	public BeanFilterBuilder interfaceClass(Class<?> value) {
+		this.interfaceClass = value;
 		return this;
 	}
 
@@ -171,45 +171,45 @@ public abstract class BeanFilterBuilder {
 	 * 	}
 	 * </p>
 	 *
-	 * @param stopClass
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder stopClass(Class<?> stopClass) {
-		this.stopClass = stopClass;
+	public BeanFilterBuilder stopClass(Class<?> value) {
+		this.stopClass = value;
 		return this;
 	}
 
 	/**
 	 * Sort properties in alphabetical order.
 	 *
-	 * @param sortProperties
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder sortProperties(boolean sortProperties) {
-		this.sortProperties = sortProperties;
+	public BeanFilterBuilder sortProperties(boolean value) {
+		this.sortProperties = value;
 		return this;
 	}
 
 	/**
 	 * The property namer to use to name bean properties.
 	 *
-	 * @param propertyNamer The property namer instance.
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder propertyNamer(PropertyNamer propertyNamer) {
-		this.propertyNamer = propertyNamer;
+	public BeanFilterBuilder propertyNamer(PropertyNamer value) {
+		this.propertyNamer = value;
 		return this;
 	}
 
 	/**
 	 * The property namer to use to name bean properties.
 	 * 
-	 * @param c The property namer class.  Must have a public no-arg constructor.
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 * @throws Exception Thrown from constructor method.
 	 */
-	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> c) throws Exception {
-		this.propertyNamer = c;
+	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> value) throws Exception {
+		this.propertyNamer = value;
 		return this;
 	}
 
@@ -221,7 +221,7 @@ public abstract class BeanFilterBuilder {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 * 
-	 * @param values The classes to add to this bean's bean dictionary.
+	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder beanDictionary(Class<?>...values) {
@@ -242,7 +242,7 @@ public abstract class BeanFilterBuilder {
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The classes to set on this bean's bean dictionary.
+	 * @param values The new values for this setting.
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder beanDictionary(boolean append, Class<?>...values) {

@@ -361,12 +361,12 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";
 
 	/**
-	 * Configuration property:  Add to bean lookup dictionary.
+	 * Configuration property:  Add to bean dictionary.
 	 */
 	public static final String BEAN_beanDictionary_add = PREFIX + "beanDictionary.lc/add";
 
 	/**
-	 * Configuration property:  Remove from bean lookup dictionary.
+	 * Configuration property:  Remove from bean dictionary.
 	 */
 	public static final String BEAN_beanDictionary_remove = PREFIX + "beanDictionary.lc/remove";
 
@@ -418,7 +418,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanFieldVisibility = PREFIX + "beanFieldVisibility.s";
 
 	/**
-	 * Configuration property:  Bean filters to apply to beans.
+	 * Configuration property:  Bean filters.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -426,14 +426,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b> 
-	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean} 
-	 * 		</ul>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(boolean,Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersRemove(Object...)}
 	 * 		</ul>
@@ -442,21 +438,50 @@ public class BeanContext extends Context {
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter the
-	 * bean classes.
+	 * <br>It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter 
+	 * the bean classes.
 	 *
 	 * <p>
-	 * There are two category of classes that can be passed in through this method:
+	 * Values can consist of any of the following types:
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Subclasses of {@link BeanFilterBuilder}.
-	 * 		These must have a public no-arg constructor.
-	 * 	<li>
-	 * 		Bean interface classes.
-	 * 		A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 		Any subclasses of an interface class will only have properties defined on the interface.
+	 * 	<li>Any subclass of {@link BeanFilterBuilder}.
+	 * 		<br>These must have a public no-arg constructor.
+	 * 	<li>Any bean interfaces.
+	 * 		<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 		<br>Any subclasses of an interface class will only have properties defined on the interface.
 	 * 		All other bean properties will be ignored.
+	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
+	 * 
+	 *	<h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a bean filter for our class.</jc>
+	 * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder {
+	 * 		<jc>// Must provide a no-arg constructor!</jc>
+	 * 		<jk>public</jk> MyBeanFilter() {
+	 * 			<jk>super</jk>(MyBean.<jk>class</jk>);  <jc>// The bean class that this filter applies to.</jc>
+	 * 			properties(<js>"foo,bar,baz"</js>);  <jc>// The properties we want exposed.</jc>
+	 * 		}
+	 * 	}	
+	 * 
+	 * 	<jc>// Associate our bean filter with a serializer.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(MyBeanFilter.<jk>class</jk>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_beanFilters</jsf>, MyBeanFilter.<jk>class</jk>)
+	 * 		.build();
+	 * </p>		
+	 * 
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters and @Bean annotations</a>
+	 *		<li><a class="doclink" href="transform/package-summary.html#BeanFilters">org.apache.juneau.transform &gt; BeanFilter Class</a>
+	 *	</ul>
 	 */
 	public static final String BEAN_beanFilters = PREFIX + "beanFilters.lc";
 
@@ -901,7 +926,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 */
-	public static final String BEAN_includeProperties = PREFIX + "includeProperties.sms";
+	public static final String BEAN_includeProperties = PREFIX + "properties.sms";
 
 	/**
 	 * Configuration property:  Locale.
@@ -2206,7 +2231,7 @@ public class BeanContext extends Context {
 				.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
 				.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
 				.append("implClasses", implClasses)
-				.append("includeProperties", includeProperties)
+				.append("properties", includeProperties)
 				.append("locale", locale)
 				.append("mediaType", mediaType)
 				.append("notBeanClasses", notBeanClasses)

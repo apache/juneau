@@ -1387,6 +1387,13 @@
 			);
 		}
 	}
+				</p>
+				
+				<h6 class='toc'>Additional Information - org.apache.juneau.transform</h6>
+				<ol class='toc'>
+					<li><p><a class='doclink' href='org/apache/juneau/transform/package-summary.html#PojoSwaps'>PojoSwap Class</a></p>
+				</ol>
+				
 			</div>
 	
 			<!-- ======================================================================================================= -->
@@ -1426,12 +1433,12 @@
 		<jc>// Must provide a no-arg constructor!</jc>
 		<jk>public</jk> MyAddressBeanFilter() {
 			<jk>super</jk>(Address.<jk>class</jk>);  <jc>// The bean class that this filter applies to.</jc>
-			setIncludeProperties(<js>"street,city,state"</js>);  <jc>// The properties we want exposed.</jc>
+			properties(<js>"street,city,state"</js>);  <jc>// The properties we want exposed.</jc>
 		}
 	}	
 				</p>		
 				<p>
-					Bean filters are added to serializers and parsers using the <code>*BeanFilters(Class...)</code> methods.
+					Bean filters are added to serializers and parsers using the <code>beanFilters(Object...)</code> method.
 					For example:
 				</p>
 				<p class='bcode'>			
@@ -1443,10 +1450,10 @@
 					The annotations will be detected and bean filters will automatically be created for them.
 				</p>
 				<p>
-					The <code>addBeanFilter(Class...)</code> method also allows you to pass in interfaces.
-					Any class that's not a subclass of {@link org.apache.juneau.transform.BeanFilterBuilder} get interpreted 
+					The <code>beanFilter(Class...)</code> method also allows you to pass in interfaces.
+					<br>Any class that's not a subclass of {@link org.apache.juneau.transform.BeanFilterBuilder} get interpreted 
 					as bean interface classes.
-					These cause bean implementations of those interfaces to only expose the properties defined on the 
+					<br>These cause bean implementations of those interfaces to only expose the properties defined on the 
 					interface.
 				</p>
 				<p class='bcode'>
@@ -1465,6 +1472,11 @@
 	<jc>// Create a new JSON serializer that only exposes street,city,state on Address bean.</jc>
 	Serializer serializer = JsonSerializer.<jsm>create</jsm>().beanFilters(AddressInterface.<jk>class</jk>).build();
 				</p>
+				
+				<h6 class='toc'>Additional Information - org.apache.juneau.transform</h6>
+				<ol class='toc'>
+					<li><p><a class='doclink' href='org/apache/juneau/transform/package-summary.html#BeanFilters'>BeanFilter Class</a></p>
+				</ol>
 			</div>
 
 			<!-- =================================================================================================== -->

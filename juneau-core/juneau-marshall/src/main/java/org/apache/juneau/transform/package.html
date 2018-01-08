@@ -79,43 +79,31 @@
 		These classes are:
 	</p>
 	<ul class='spaced-list'>
-		<li>
-			{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
-		<li>
-			{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
+		<li class='jc'>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
+		<li class='jac'>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
 			serializable POJOs during serialization (and optionally vis-versa during parsing).
 			<ol>
-				<li>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert 
+				<li class='jc'>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert 
 					objects to strings.
-				<li>{@link org.apache.juneau.transform.MapSwap} - Convenience subclass for swaps that convert 
+				<li class='jc'>{@link org.apache.juneau.transform.MapSwap} - Convenience subclass for swaps that convert 
 					objects to maps.
 			</ol>
 		</li>
 	</ul>
 	<p>
-		Transforms are added to serializers and parsers in a variety of ways:
+		Transforms are added to serializers and parsers (and REST clients) using the following methods:
 	</p> 
 	<ul class='spaced-list'>
-		<li>
-			{@link org.apache.juneau.serializer.SerializerBuilder#beanFilters(Class[])} / {@link org.apache.juneau.serializer.SerializerBuilder#pojoSwaps(Class[])} - On serializers.
-		<li>
-			{@link org.apache.juneau.serializer.SerializerGroupBuilder#beanFilters(Class[])} / {@link org.apache.juneau.serializer.SerializerGroupBuilder#pojoSwaps(Class[])} - On groups of serializers.
-		<li>
-			{@link org.apache.juneau.parser.ParserBuilder#beanFilters(Class[])} / {@link org.apache.juneau.parser.ParserBuilder#pojoSwaps(Class[])} - On parsers.
-		<li>
-			{@link org.apache.juneau.parser.ParserGroupBuilder#beanFilters(Class[])} / {@link org.apache.juneau.parser.ParserGroupBuilder#pojoSwaps(Class[])} - On groups of parsers.
-		<li>
-			{@link org.apache.juneau.rest.client.RestClientBuilder#beanFilters(Class[])} / {@link org.apache.juneau.rest.client.RestClientBuilder#pojoSwaps(Class[])} - On the serializer and parser registered on a REST client.
-		<li>
-			{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() @RestResource.beanFilters()} / {@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()}- On all serializers and parsers defined on a REST servlet.
-		<li>
-			{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters() @RestMethod.beanFilters()} / {@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps() @RestMethod.pojoSwaps()} - On all serializers and parsers defined on a method in a REST servlet.
-		<li>
-			{@link org.apache.juneau.rest.jaxrs.JuneauProvider#beanFilters() @JuneauProvider.beanFilters()} / {@link org.apache.juneau.rest.jaxrs.JuneauProvider#pojoSwaps() @JuneauProvider.pojoSwaps()} - On all serializers and parsers defined on a JAX-RS provider.
+		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFilters(Object[])}
+		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwaps(Object[])}
 	</ul>
 	<p>
-		Swaps can also be associated with classes through the {@link org.apache.juneau.annotation.Swap @Swap} annotation. 
+		Annotations are also provided for specifying transforms directly on classes:
 	</p>
+	<ul class='spaced-list'>
+		<li class='ja'>{@link org.apache.juneau.annotation.Bean @Bean}
+		<li class='ja'>{@link org.apache.juneau.annotation.Swap @Swap}
+	</ul>
 		
 	<!-- ======================================================================================================== -->
 	<a id="BeanFilters"></a>
@@ -138,16 +126,17 @@
 		<p>
 			It should be noted that the {@link org.apache.juneau.annotation.Bean @Bean} annotation provides equivalent 
 			functionality through annotations.  
-			However, the <code>BeanFilter</code> class allows you to provide the same features when you do not have 
-			access to the source code.
+			<br>However, the {@link org.apache.juneau.transform.BeanFilter} and {@link org.apache.juneau.transform.BeanFilterBuilder}
+			classes allows you to provide the same features when you do not have access to the source code.
 		<p>
 		
 		<h6 class='topic'>Explicitly specify which properties are visible on a bean class</h6>
 		<p class='bcode'>
 	<jc>// Define bean filter that orders properties by "age" then "name"</jc>
-	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;Person&gt; {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder {
 		<jk>public</jk> MyBeanFilter() {
-			setProperties(<js>"age"</js>,<js>"name"</js>);
+			<jk>super</jk>(Person.<jk>class</jk>);
+			properties(<js>"age"</js>,<js>"name"</js>);
 		}
 	}
 	
@@ -159,7 +148,7 @@
 			Note that this is equivalent to specifying the following annotation on the bean class:
 		</p>
 		<p class='bcode'>
-	<ja>@Bean</ja>(properties="age,name"</js>)
+	<ja>@Bean</ja>(properties=<js>"age,name"</js>)
 	<jk>public class</jk> Person {
 		...
 	}
@@ -168,9 +157,10 @@
 		<h6 class='topic'>Exclude which properties are visible on a bean class</h6>
 		<p class='bcode'>
 	<jc>// Define bean filter that excludes "name"</jc>
-	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;Person&gt; {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder {
 		<jk>public</jk> MyBeanFilter() {
-			setExcludeProperties(<js>"name"</js>);
+			<jk>super</jk>(Person.<jk>class</jk>);
+			excludeProperties(<js>"name"</js>);
 		}
 	}
 	
@@ -191,15 +181,15 @@
 		<h6 class='topic'>Define specialized property namers</h6>
 		<p class='bcode'>
 	<jc>// Define bean filter with our own property namer.</jc>
-	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;Person&gt; {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder {
 		<jk>public</jk> MyBeanFilter() {
-			setPropertyNamer(UpperCasePropertyNamer.<jk>class</jk>);
+			<jk>super</jk>(Person.<jk>class</jk>);
+			propertyNamer(UpperCasePropertyNamer.<jk>class</jk>);
 		}
 	}
 
 	<jc>// Define property namer that upper-cases the property names</jc>	
 	<jk>public class</jk> UpperCasePropertyNamer <jk>implements</jk> PropertyNamer {
-	
 		<ja>@Override</ja>
 		<jk>public</jk> String getPropertyName(String name) {
 			<jk>return</jk> name.toUpperCase();
@@ -255,9 +245,10 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Define bean filter that limits properties to only those defined on MyClass</jc>
-	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;MyClass&gt; {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder {
 		<jk>public</jk> MyBeanFilter() {
-			setInterfaceClass(MyClass.<jk>class</jk>);
+			<jk>super</jk>(MyClass.<jk>class</jk>);
+			interfaceClass(MyClass.<jk>class</jk>);
 		}
 	}
 		</p>
@@ -289,9 +280,9 @@
 	}
 		</p>
 		<p>
-			Also, the <code>*BeanFilters(...)</code> methods will automatically interpret any 
+			Also, the <code>beanFilters(...)</code> methods will automatically interpret any 
 			non-<code>BeanFilter</code> classes passed in as meaning interface classes.  
-			So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
+			<br>So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
 			passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
 		</p>
 		<p class='bcode'>
@@ -322,10 +313,10 @@
 			used by the framework:
 		</p>
 		<ul>
-			<li>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility}
-			<li>{@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility}
-			<li>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility}
-			<li>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility}
+			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility}
+			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility}
+			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility}
+			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility}
 		</ul>
 		<p>
 			Also, specifying a {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation on non-public 
@@ -333,18 +324,18 @@
 		</p>
 		<p class='bcode'>
 	<jk>public class</jk> MyBean {
-		<jc>// A bean property</jc>
+		<jc>// A normal bean property</jc>
 		<jk>public int</jk> f1;    
 		
-		<jc>// Not a bean property</jc>
+		<jc>// Not a bean property even though it's public</jc>
 		<ja>@BeanIgnore</ja>
 		<jk>public int</jk> f2;     
 		
-		<jc>// A bean property</jc>
+		<jc>// A bean property even though it's protected</jc>
 		<ja>@BeanProperty</ja>    
 		<jk>protected int</jk> f3;  
 		
-		<jc>// A bean property</jc>
+		<jc>// A bean property even though it's private</jc>
 		<ja>@BeanProperty</ja>    
 		<jk>private int</jk> getF3() {...}
 	}

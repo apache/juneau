@@ -153,7 +153,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean lookup dictionary.
+	 * Configuration property:  Bean dictionary.
 	 * 
 	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but allows you to optionally overwrite the previous value.
@@ -173,7 +173,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Remove from bean dictionary.
+	 * Configuration property:  Bean dictionary.
 	 * 
 	 * <p>
 	 * Removes from the list of classes that make up the bean dictionary in this bean context.
@@ -209,24 +209,23 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean filters to apply to beans.
+	 * Configuration property:  Bean filters.
 	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter the
-	 * bean classes.
+	 * <br>It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter 
+	 * the bean classes.
 	 *
 	 * <p>
-	 * There are two category of classes that can be passed in through this method:
+	 * Values can consist of any of the following types:
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Subclasses of {@link BeanFilterBuilder}.
-	 * 		These must have a public no-arg constructor.
-	 * 	<li>
-	 * 		Bean interface classes.
-	 * 		A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 		Any subclasses of an interface class will only have properties defined on the interface.
+	 * 	<li>Any subclass of {@link BeanFilterBuilder}.
+	 * 		<br>These must have a public no-arg constructor.
+	 * 	<li>Any bean interfaces.
+	 * 		<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 		<br>Any subclasses of an interface class will only have properties defined on the interface.
 	 * 		All other bean properties will be ignored.
+	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -234,17 +233,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values The new value for this property.
+	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder beanFilters(boolean append, Object...values) {
-		return set(append, BEAN_beanFilters, values);
+	public BeanContextBuilder beanFilters(Object...values) {
+		return addTo(BEAN_beanFilters, values);
 	}
 
 	/**
-	 * Configuration property:  Add to bean filters.
+	 * Configuration property:  Bean filters.
 	 * 
 	 * <p>
 	 * Same as {@link #beanFilters(Object...)} but takes in an array of classes.
@@ -262,34 +259,30 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to bean filters.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_beanFilters</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_beanFilters_add</jsf>, values)</code>.
-	 * </ul>
+	 * Configuration property:  Bean filters.
+	 * 
+	 * <p>
+	 * Same as {@link #beanFilters(Object...)} but allows you to optionally overwrite the previous value.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 * 
-	 * @param values The values to add to this property.
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
+	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder beanFilters(Object...values) {
-		return addTo(BEAN_beanFilters, values);
+	public BeanContextBuilder beanFilters(boolean append, Object...values) {
+		return set(append, BEAN_beanFilters, values);
 	}
 
 	/**
-	 * Configuration property:  Remove from bean filters.
+	 * Configuration property:  Bean filters.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_beanFilters</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_beanFilters_remove</jsf>, values)</code>.
-	 * </ul>
+	 * <p>
+	 * Removes from the list of classes that make up the bean filters in this bean context.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
