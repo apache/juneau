@@ -134,8 +134,8 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public YamlParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

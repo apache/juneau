@@ -283,8 +283,8 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SoapXmlSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public SoapXmlSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

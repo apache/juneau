@@ -120,10 +120,10 @@ public class VisibilityTest {
 		r = s4.build().serialize(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:{f1:1,f2:2,f3:3,f4:4,f5:5},g4:{f1:1,f2:2,f3:3,f4:4,f5:5},g5:{f1:1,f2:2,f3:3,f4:4,f5:5}}", r);
 
-		s1.methodVisibility(NONE);
-		s2.methodVisibility(NONE);
-		s3.methodVisibility(NONE);
-		s4.methodVisibility(NONE);
+		s1.beanMethodVisibility(NONE);
+		s2.beanMethodVisibility(NONE);
+		s3.beanMethodVisibility(NONE);
+		s4.beanMethodVisibility(NONE);
 
 		r = s1.build().serialize(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:'A3',g4:'A4',g5:'A5'}", r);
@@ -137,10 +137,10 @@ public class VisibilityTest {
 		r = s4.build().serialize(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:{f1:1,f2:2,f3:3,f4:4},g4:{f1:1,f2:2,f3:3,f4:4},g5:{f1:1,f2:2,f3:3,f4:4}}", r);
 
-		s1.methodVisibility(PROTECTED);
-		s2.methodVisibility(PROTECTED);
-		s3.methodVisibility(PROTECTED);
-		s4.methodVisibility(PROTECTED);
+		s1.beanMethodVisibility(PROTECTED);
+		s2.beanMethodVisibility(PROTECTED);
+		s3.beanMethodVisibility(PROTECTED);
+		s4.beanMethodVisibility(PROTECTED);
 
 		r = s1.build().serialize(a1);
 		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:'A3',g4:'A4',g5:'A5'}", r);

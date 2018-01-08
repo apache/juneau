@@ -134,8 +134,8 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public MsgPackParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public MsgPackParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

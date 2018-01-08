@@ -647,21 +647,21 @@ public class BeanConfigTest {
 		p2.beanFieldVisibility(Visibility.PROTECTED);
 		assertSameCache(p1, p2);
 
-		p1.methodVisibility(Visibility.DEFAULT);
+		p1.beanMethodVisibility(Visibility.DEFAULT);
 		assertDifferentCache(p1, p2);
-		p2.methodVisibility(Visibility.DEFAULT);
+		p2.beanMethodVisibility(Visibility.DEFAULT);
 		assertSameCache(p1, p2);
-		p1.methodVisibility(Visibility.NONE);
+		p1.beanMethodVisibility(Visibility.NONE);
 		assertDifferentCache(p1, p2);
-		p2.methodVisibility(Visibility.NONE);
+		p2.beanMethodVisibility(Visibility.NONE);
 		assertSameCache(p1, p2);
-		p1.methodVisibility(Visibility.PRIVATE);
+		p1.beanMethodVisibility(Visibility.PRIVATE);
 		assertDifferentCache(p1, p2);
-		p2.methodVisibility(Visibility.PRIVATE);
+		p2.beanMethodVisibility(Visibility.PRIVATE);
 		assertSameCache(p1, p2);
-		p1.methodVisibility(Visibility.PROTECTED);
+		p1.beanMethodVisibility(Visibility.PROTECTED);
 		assertDifferentCache(p1, p2);
-		p2.methodVisibility(Visibility.PROTECTED);
+		p2.beanMethodVisibility(Visibility.PROTECTED);
 		assertSameCache(p1, p2);
 
 		p1.useJavaBeanIntrospector(true);

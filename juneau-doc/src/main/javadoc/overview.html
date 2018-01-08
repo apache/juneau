@@ -1796,7 +1796,7 @@
 					<td>
 						No equivalent annotation, but can be controlled via: 
 						<br>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility}
-						<br>{@link org.apache.juneau.BeanContext#BEAN_methodVisibility}
+						<br>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility}
 						<br>Future annotation support planned.
 					</td>
 				</tr>
@@ -11422,7 +11422,7 @@
 					<li>{@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility} - Control which bean constructors are visible to Juno.
 					<li>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility} - Control which bean classes are interpreted as beans to Juno.
 					<li>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility} - Control which fields are visible to Juno as bean properties.
-					<li>{@link org.apache.juneau.BeanContext#BEAN_methodVisibility} - Control which getters/setters are visible to Juno as bean properties.
+					<li>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility} - Control which getters/setters are visible to Juno as bean properties.
 				</ul>
 				Removed <code>BeanContext.<jsf>INCLUDE_BEAN_FIELD_PROPERTIES</jsf></code> and <code>BeanContext.<jsf>INCLUDE_BEAN_METHOD_PROPERTIES</jsf></code> properties, since ignoring fields and methods
 				can be accomplished by setting the appropriate properties above to {@link org.apache.juneau.Visibility#NONE NONE}.

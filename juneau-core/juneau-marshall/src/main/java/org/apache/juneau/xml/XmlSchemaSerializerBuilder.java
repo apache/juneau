@@ -260,8 +260,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public XmlSchemaSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

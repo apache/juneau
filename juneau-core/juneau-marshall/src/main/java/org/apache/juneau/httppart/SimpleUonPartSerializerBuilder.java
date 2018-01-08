@@ -249,8 +249,8 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SimpleUonPartSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public SimpleUonPartSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

@@ -280,8 +280,8 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public JsonSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

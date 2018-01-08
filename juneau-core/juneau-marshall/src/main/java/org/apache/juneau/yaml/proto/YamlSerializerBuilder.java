@@ -280,8 +280,8 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public YamlSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public YamlSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

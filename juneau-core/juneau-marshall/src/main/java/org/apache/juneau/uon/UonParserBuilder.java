@@ -169,8 +169,8 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public UonParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

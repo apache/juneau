@@ -242,8 +242,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public JsonSchemaSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

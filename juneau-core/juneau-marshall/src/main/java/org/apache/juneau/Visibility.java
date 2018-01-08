@@ -26,7 +26,7 @@ import java.lang.reflect.*;
  * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
  * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
  * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
- * 	<li class='jf'>{@link BeanContext#BEAN_methodVisibility}
+ * 	<li class='jf'>{@link BeanContext#BEAN_beanMethodVisibility}
  * </ul>
  */
 public enum Visibility {

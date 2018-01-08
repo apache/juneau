@@ -300,8 +300,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public UrlEncodingSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

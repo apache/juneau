@@ -224,8 +224,8 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public MsgPackSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public MsgPackSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

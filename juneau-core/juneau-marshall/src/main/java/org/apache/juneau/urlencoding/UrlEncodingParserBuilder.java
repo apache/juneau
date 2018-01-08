@@ -192,8 +192,8 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UrlEncodingParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public UrlEncodingParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

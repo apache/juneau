@@ -162,8 +162,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public HtmlParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

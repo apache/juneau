@@ -414,8 +414,8 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public RdfParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

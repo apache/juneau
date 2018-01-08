@@ -350,8 +350,8 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public ParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

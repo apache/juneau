@@ -607,8 +607,8 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public RdfSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

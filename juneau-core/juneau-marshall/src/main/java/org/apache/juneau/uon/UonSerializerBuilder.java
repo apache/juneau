@@ -299,8 +299,8 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public UonSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

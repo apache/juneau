@@ -1930,8 +1930,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public RestContextBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

@@ -224,8 +224,8 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public JsoSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

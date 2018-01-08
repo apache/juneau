@@ -19,6 +19,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.Visibility;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
@@ -57,15 +58,18 @@ public class BeanContextBuilder extends ContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Look for bean classes with the specified minimum visibility.
+	 * Configuration property:  Minimum bean class visibility.
 	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
+	 * 
+	 * <p>
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
-	 * will not be interpreted as a bean class.
+	 * will not be interpreted as a bean class and will be treated as a string.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
 	 * </ul>
 	 * 
 	 * @param value The new value for this property.
@@ -76,12 +80,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Look for bean constructors with the specified minimum visibility.
+	 * Configuration property:  Minimum bean constructor visibility.
 	 *
 	 * <p>
-	 * Constructors not meeting this minimum visibility will be ignored.
-	 * For example, if the visibility is <code>PUBLIC</code> and the constructor is <jk>protected</jk>, then the
-	 * constructor will be ignored.
+	 * Only look for constructors with the specified minimum visibility.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -185,19 +187,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Look for bean fields with the specified minimum visibility.
+	 * Configuration property:  Minimum bean field visibility.
 	 *
 	 * <p>
-	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then the field
-	 * will not be interpreted as a bean property.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanFieldVisibility</jsf>, value)</code>.
-	 * 	<li>Use {@link Visibility#NONE} to prevent bean fields from being interpreted as bean properties altogether.
-	 * </ul>
-	 *
+	 * Only look for bean fields with the specified minimum visibility.
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
@@ -327,6 +321,24 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder beanMapPutReturnsOldValue(boolean value) {
 		return set(BEAN_beanMapPutReturnsOldValue, value);
+	}
+
+	/**
+	 * Configuration property:  Minimum bean method visibility.
+	 *
+	 * <p>
+	 * Only look for bean methods with the specified minimum visibility.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMethodVisibility}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder beanMethodVisibility(Visibility value) {
+		return set(BEAN_beanMethodVisibility, value);
 	}
 
 	/**
@@ -724,26 +736,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder mediaType(MediaType value) {
 		return set(BEAN_mediaType, value);
-	}
-
-	/**
-	 * Configuration property:  Look for bean methods with the specified minimum visibility.
-	 *
-	 * <p>
-	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then the method
-	 * will not be interpreted as a bean getter or setter.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_methodVisibility}
-	 * </ul>
-	 * 
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanContextBuilder methodVisibility(Visibility value) {
-		return set(BEAN_methodVisibility, value);
 	}
 
 	/**

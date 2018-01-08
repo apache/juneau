@@ -134,8 +134,8 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public JsonParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

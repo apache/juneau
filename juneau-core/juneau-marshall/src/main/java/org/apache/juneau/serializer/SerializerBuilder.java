@@ -573,8 +573,8 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public SerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

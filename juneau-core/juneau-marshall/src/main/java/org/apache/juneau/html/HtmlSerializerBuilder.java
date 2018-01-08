@@ -375,8 +375,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public HtmlSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

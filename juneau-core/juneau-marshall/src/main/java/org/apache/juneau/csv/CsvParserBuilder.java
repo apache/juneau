@@ -133,8 +133,8 @@ public class CsvParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public CsvParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public CsvParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

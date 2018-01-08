@@ -224,8 +224,8 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public CsvSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public CsvSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

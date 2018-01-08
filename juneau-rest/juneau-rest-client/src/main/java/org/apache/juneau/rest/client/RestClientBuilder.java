@@ -1536,8 +1536,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public RestClientBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

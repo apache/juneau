@@ -203,8 +203,7 @@ public class BeanContext extends Context {
 	static final String PREFIX = "BeanContext.";
 
 	/**
-	 * 
-	 * Configuration property:  Look for bean classes with the specified minimum visibility.
+	 * Configuration property:  Minimum bean class visibility.
 	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -221,19 +220,31 @@ public class BeanContext extends Context {
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
+	 * 
+	 * <p>
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
-	 * will not be interpreted as a bean class.
+	 * will not be interpreted as a bean class and be serialized as a string.
+	 * <br>Use this setting to reduce the visibility requirement.
 	 * 
 	 *	<h5 class='section'>Example:</h5>
 	 *	<p class='bcode'>
 	 * 	<jc>// Create a serializer that serializes protected classes.</jc>
-	 * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanClassVisibility(<jsf>PROTECTED</jsf>).build();
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanClassVisibility(<jsf>PROTECTED</jsf>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_beanClassVisibility</jsf>, <js>"PROTECTED"</js>)
+	 * 		.build();
 	 *	</p>
 	 */
 	public static final String BEAN_beanClassVisibility = PREFIX + "beanClassVisibility.s";
 
 	/**
-	 * Configuration property:  Look for bean constructors with the specified minimum visibility.
+	 * Configuration property:  Minimum bean constructor visibility.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -246,6 +257,30 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanConstructorVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
+	 * 
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Only look for constructors with the specified minimum visibility.
+	 * 
+	 * <p>
+	 * This setting affects the logic for finding no-arg constructors for bean.  
+	 * <br>Normally, only <jk>public</jk> no-arg constructors are used.
+	 * <br>Use this setting if you want to reduce the visibility requirement.
+	 * 
+	 *	<h5 class='section'>Example:</h5>
+	 *	<p class='bcode'>
+	 * 	<jc>// Create a serializer that looks for protected no-arg constructors.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanConstructorVisibility(<jsf>PROTECTED</jsf>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_beanConstructorVisibility</jsf>, <js>"PROTECTED"</js>)
+	 * 		.build();
+	 *	</p>
 	 */
 	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility.s";
 
@@ -315,7 +350,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanDictionary_remove = PREFIX + "beanDictionary.lc/remove";
 
 	/**
-	 * Configuration property:  Look for bean fields with the specified minimum visibility.
+	 * Configuration property:  Minimum bean field visibility.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -331,12 +366,33 @@ public class BeanContext extends Context {
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then the field
-	 * will not be interpreted as a bean property.
-	 *
+	 * Only look for bean fields with the specified minimum visibility.
+	 * 
 	 * <p>
-	 * Use {@link Visibility#NONE} to prevent bean fields from being interpreted as bean properties altogether.
+	 * This affects which fields on a bean class are considered bean properties.
+	 * <br>Normally only <jk>public</jk> fields are considered.
+	 * <br>Use this setting if you want to reduce the visibility requirement.
+	 * 
+	 *	<h5 class='section'>Example:</h5>
+	 *	<p class='bcode'>
+	 * 	<jc>// Create a serializer that looks for protected fields.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFieldVisibility(<jsf>PROTECTED</jsf>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_beanFieldVisibility</jsf>, <js>"PROTECTED"</js>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Disable using fields as properties entirely.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFieldVisibility(<jsf>NONE</jsf>)
+	 * 		.build();
+	 *	</p>
 	 */
 	public static final String BEAN_beanFieldVisibility = PREFIX + "beanFieldVisibility.s";
 
@@ -418,6 +474,47 @@ public class BeanContext extends Context {
 	 * Disabled by default because it introduces a slight performance penalty.
 	 */
 	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + "beanMapPutReturnsOldValue.b";
+
+	/**
+	 * Configuration property:  Minimum bean method visibility.
+	 *
+	 *	<h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanMethodVisibility(Visibility)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Description:</h5>
+	 * <p>
+	 * Only look for bean methods with the specified minimum visibility.
+	 * 
+	 * <p>
+	 * This affects which methods are detected as getters and setters on a bean class.
+	 * <br>Normally only <jk>public</jk> getters and setters are considered.
+	 * <br>Use this setting if you want to reduce the visibility requirement.
+	 * 
+	 *	<h5 class='section'>Example:</h5>
+	 *	<p class='bcode'>
+	 * 	<jc>// Create a serializer that looks for protected getters and setters.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanMethodVisibility(<jsf>PROTECTED</jsf>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_beanMethodVisibility</jsf>, <js>"PROTECTED"</js>)
+	 * 		.build();
+	 *	</p>
+	 */
+	public static final String BEAN_beanMethodVisibility = PREFIX + "beanMethodVisibility.s";
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
@@ -824,29 +921,6 @@ public class BeanContext extends Context {
 	public static final String BEAN_mediaType = PREFIX + "mediaType.s";
 
 	/**
-	 * Configuration property:  Look for bean methods with the specified minimum visibility.
-	 *
-	 *	<h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.methodVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b> 
-	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#methodVisibility(Visibility)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 *	<h5 class='section'>Description:</h5>
-	 * <p>
-	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then the method
-	 * will not be interpreted as a bean getter or setter.
-	 */
-	public static final String BEAN_methodVisibility = PREFIX + "methodVisibility.s";
-
-	/**
 	 * Configuration property:  Classes to be excluded from consideration as being beans.
 	 *
 	 *	<h5 class='section'>Property:</h5>
@@ -984,7 +1058,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.lc/remove";
 
 	/**
-	 * Configuration property:  Bean property namer
+	 * Configuration property:  Bean property namer.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -1234,7 +1308,7 @@ public class BeanContext extends Context {
 
 		beanConstructorVisibility = getProperty(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
 		beanClassVisibility = getProperty(BEAN_beanClassVisibility, Visibility.class, PUBLIC);
-		beanMethodVisibility = getProperty(BEAN_methodVisibility, Visibility.class, PUBLIC);
+		beanMethodVisibility = getProperty(BEAN_beanMethodVisibility, Visibility.class, PUBLIC);
 		beanFieldVisibility = getProperty(BEAN_beanFieldVisibility, Visibility.class, PUBLIC);
 
 		notBeanClasses = getClassArrayProperty(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);

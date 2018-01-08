@@ -134,8 +134,8 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public PlainTextParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

@@ -492,8 +492,8 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public SerializerGroupBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

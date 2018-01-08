@@ -134,8 +134,8 @@ public class JsoParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsoParserBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public JsoParserBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 

@@ -224,8 +224,8 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextSerializerBuilder methodVisibility(Visibility value) {
-		super.methodVisibility(value);
+	public PlainTextSerializerBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
 		return this;
 	}
 
