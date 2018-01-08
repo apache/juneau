@@ -58,26 +58,30 @@ public class UonParserBuilder extends ParserBuilder {
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
 	 * decoded before being passed to this parser.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>UON_decodeChars</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonParser#UON_decodeChars
 	 */
-	public UonParserBuilder decodeChars(boolean value) {
-		return set(UON_decodeChars, value);
+	public UonParserBuilder decoding(boolean value) {
+		return set(UON_decoding, value);
 	}
 
 	/**
 	 * Shortcut for calling <code>decodeChars(<jk>true</jk>)</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonParser#UON_decoding}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public UonParserBuilder decoding() {
-		return decodeChars(true);
+		return decoding(true);
 	}
 
 	@Override /* ParserBuilder */

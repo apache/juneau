@@ -81,13 +81,16 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_collectionFormat</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_collectionFormat}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_collectionFormat
 	 */
 	public RdfParserBuilder collectionFormat(RdfCollectionFormat value) {
 		return set(RDF_collectionFormat, value);
@@ -96,14 +99,13 @@ public class RdfParserBuilder extends ParserBuilder {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauBpNs</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RdfParser#RDF_juneauBpNs}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_juneauBpNs
 	 */
 	public RdfParserBuilder juneauBpNs(Namespace value) {
 		return set(RDF_juneauBpNs, value);
@@ -112,14 +114,13 @@ public class RdfParserBuilder extends ParserBuilder {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauNs</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_juneauNs
 	 */
 	public RdfParserBuilder juneauNs(Namespace value) {
 		return set(RDF_juneauNs, value);
@@ -158,14 +159,13 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_language</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_language
 	 */
 	public RdfParserBuilder language(String value) {
 		return set(RDF_language, value);
@@ -209,14 +209,13 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_looseCollections</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_looseCollections
 	 */
 	public RdfParserBuilder looseCollections(boolean value) {
 		return set(RDF_looseCollections, value);
@@ -224,6 +223,11 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -233,6 +237,11 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -246,14 +255,13 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_trimWhitespace</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfParser#RDF_trimWhitespace
 	 */
 	public RdfParserBuilder trimWhitespace(boolean value) {
 		return set(RDF_trimWhitespace, value);
@@ -261,6 +269,11 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -276,14 +289,13 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * inherited by the RDF parsers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_useXmlNamespaces</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RdfParser#RDF_useXmlNamespaces}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_useXmlNamespaces
 	 */
 	public RdfParserBuilder useXmlNamespaces(boolean value) {
 		return set(RDF_useXmlNamespaces, value);
@@ -291,6 +303,11 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -300,6 +317,11 @@ public class RdfParserBuilder extends ParserBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */

@@ -42,7 +42,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param encode Override the {@link UonSerializer#UON_encodeChars} setting.
+	 * @param encode Override the {@link UonSerializer#UON_encoding} setting.
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.

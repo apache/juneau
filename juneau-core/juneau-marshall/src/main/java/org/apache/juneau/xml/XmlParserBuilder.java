@@ -64,14 +64,13 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_eventAllocator</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_eventAllocator
 	 */
 	public XmlParserBuilder eventAllocator(XMLEventAllocator value) {
 		return set(XML_eventAllocator, value);
@@ -98,14 +97,13 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_preserveRootElement</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_preserveRootElement
 	 */
 	public XmlParserBuilder preserveRootElement(boolean value) {
 		return set(XML_preserveRootElement, value);
@@ -126,14 +124,13 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_reporter</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_reporter
 	 */
 	public XmlParserBuilder reporter(XMLReporter value) {
 		return set(XML_reporter, value);
@@ -149,14 +146,13 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_resolver</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_resolver
 	 */
 	public XmlParserBuilder resolver(XMLResolver value) {
 		return set(XML_resolver, value);
@@ -173,14 +169,13 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_validating</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link XmlParser#XML_validating}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlParser#XML_validating
 	 */
 	public XmlParserBuilder validating(boolean value) {
 		return set(XML_validating, value);

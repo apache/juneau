@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.uon.UonParser.*;
 import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
 
 import java.util.*;
@@ -84,22 +83,28 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * 		is added to it.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>URLENC_expandedParams</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UrlEncodingParser#URLENC_expandedParams
 	 */
 	public UrlEncodingParserBuilder expandedParams(boolean value) {
 		return set(URLENC_expandedParams, value);
 	}
 
 	@Override /* UonParserBuilder */
-	public UrlEncodingParserBuilder decodeChars(boolean value) {
-		return set(UON_decodeChars, value);
+	public UrlEncodingParserBuilder decoding() {
+		super.decoding();
+		return this;
+	}
+
+	@Override /* UonParserBuilder */
+	public UrlEncodingParserBuilder decoding(boolean value) {
+		super.decoding(value);
+		return this;
 	}
 
 	@Override /* ParserBuilder */

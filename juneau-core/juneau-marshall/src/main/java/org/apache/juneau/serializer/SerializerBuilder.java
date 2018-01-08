@@ -57,9 +57,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
 	 * this setting is disabled, but not added when it is enabled.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public SerializerBuilder abridged(boolean value) {
 		return set(SERIALIZER_abridged, value);
@@ -77,13 +81,16 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_addBeanTypeProperties</jsf>, value)</code>.
 	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
 	public SerializerBuilder addBeanTypeProperties(boolean value) {
 		return set(SERIALIZER_addBeanTypeProperties, value);
@@ -109,13 +116,16 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_detectRecursions</jsf>, value)</code>.
 	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
 	public SerializerBuilder detectRecursions(boolean value) {
 		return set(SERIALIZER_detectRecursions, value);
@@ -134,13 +144,16 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_ignoreRecursions</jsf>, value)</code>.
 	 * 	<li>Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 */
 	public SerializerBuilder ignoreRecursions(boolean value) {
 		return set(SERIALIZER_ignoreRecursions, value);
@@ -153,14 +166,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * The initial indentation level at the root.
 	 * Useful when constructing document fragments that need to be indented at a certain level.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_initialDepth</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_initialDepth
 	 */
 	public SerializerBuilder initialDepth(int value) {
 		return set(SERIALIZER_initialDepth, value);
@@ -172,6 +184,11 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
@@ -187,14 +204,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * If this depth is exceeded, an exception is thrown.
 	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_maxDepth</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public SerializerBuilder maxDepth(int value) {
 		return set(SERIALIZER_maxDepth, value);
@@ -206,14 +222,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_maxIndent</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public SerializerBuilder maxIndent(int value) {
 		return set(SERIALIZER_maxIndent, value);
@@ -225,14 +240,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * This is the character used for quoting attributes and values.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_quoteChar</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_quoteChar
 	 */
 	public SerializerBuilder quoteChar(char value) {
 		return set(SERIALIZER_quoteChar, value);
@@ -243,13 +257,16 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortCollections</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortCollections
 	 */
 	public SerializerBuilder sortCollections(boolean value) {
 		return set(SERIALIZER_sortCollections, value);
@@ -260,13 +277,16 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_sortMaps</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public SerializerBuilder sortMaps(boolean value) {
 		return set(SERIALIZER_sortMaps, value);
@@ -275,6 +295,11 @@ public class SerializerBuilder extends BeanContextBuilder {
 	/**
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder sq() {
@@ -289,7 +314,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimEmptyCollections</jsf>, value)</code>.
 	 * 	<li>Enabling this setting has the following effects on parsing:
 	 * 	<ul>
 	 * 		<li>Map entries with empty list values will be lost.
@@ -297,9 +321,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 */
 	public SerializerBuilder trimEmptyCollections(boolean value) {
 		return set(SERIALIZER_trimEmptyCollections, value);
@@ -313,16 +341,19 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimEmptyMaps</jsf>, value)</code>.
 	 * 	<li>Enabling this setting has the following effects on parsing:
 	 * 	<ul>
 	 * 		<li>Bean properties with empty map values will not be set.
 	 * 	</ul>
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 */
 	public SerializerBuilder trimEmptyMaps(boolean value) {
 		return set(SERIALIZER_trimEmptyMaps, value);
@@ -336,16 +367,19 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimNullProperties</jsf>, value)</code>.
 	 * 	<li>Enabling this setting has the following effects on parsing:
 	 * 	<ul>
 	 * 		<li>Map entries with <jk>null</jk> values will be lost.
 	 * 	</ul>
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimNullProperties
 	 */
 	public SerializerBuilder trimNullProperties(boolean value) {
 		return set(SERIALIZER_trimNullProperties, value);
@@ -357,14 +391,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_trimStrings</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimStrings
 	 */
 	public SerializerBuilder trimStrings(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
@@ -381,14 +414,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriContext</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriContext
 	 */
 	public SerializerBuilder uriContext(UriContext value) {
 		return set(SERIALIZER_uriContext, value);
@@ -414,14 +446,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 		- Relative URIs should be considered relative to the request URI.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriRelativity</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriRelativity
 	 */
 	public SerializerBuilder uriRelativity(UriRelativity value) {
 		return set(SERIALIZER_uriRelativity, value);
@@ -449,14 +480,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 		- Don't do any URL resolution.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriResolution</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriResolution
 	 */
 	public SerializerBuilder uriResolution(UriResolution value) {
 		return set(SERIALIZER_uriResolution, value);
@@ -468,14 +498,13 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_useWhitespace</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
 	public SerializerBuilder useWhitespace(boolean value) {
 		return set(SERIALIZER_useWhitespace, value);
@@ -484,6 +513,11 @@ public class SerializerBuilder extends BeanContextBuilder {
 	/**
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder ws() {

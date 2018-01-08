@@ -62,13 +62,16 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_addNamespaceUrisToRoot</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializer#XML_addNamespaceUrisToRoot
 	 */
 	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		return set(XML_addNamespaceUrisToRoot, value);
@@ -100,13 +103,16 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_autoDetectNamespaces</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializer#XML_autoDetectNamespaces
 	 */
 	public XmlSerializerBuilder autoDetectNamespaces(boolean value) {
 		return set(XML_autoDetectNamespaces, value);
@@ -120,13 +126,16 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_defaultNamespace</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializer#XML_defaultNamespace
 	 */
 	public XmlSerializerBuilder defaultNamespace(String value) {
 		return set(XML_defaultNamespace, value);
@@ -140,13 +149,16 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_enableNamespaces</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializer#XML_enableNamespaces
 	 */
 	public XmlSerializerBuilder enableNamespaces(boolean value) {
 		return set(XML_enableNamespaces, value);
@@ -160,13 +172,16 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_namespaces</jsf>, values)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_namespaces}
+	 * </ul>
+	 * 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializer#XML_namespaces
 	 */
 	public XmlSerializerBuilder namespaces(Namespace...values) {
 		return set(XML_namespaces, values);
@@ -175,6 +190,11 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Shortcut for calling <code>setEnableNamespaces(<jk>true</jk>)</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public XmlSerializerBuilder ns() {
@@ -190,13 +210,16 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>XML_xsNamespace</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_xsNamespace}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see XmlSerializer#XML_xsNamespace
 	 */
 	public XmlSerializerBuilder xsNamespace(Namespace value) {
 		return set(XML_xsNamespace, value);

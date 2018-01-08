@@ -273,7 +273,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	public UrlEncodingSerializer(PropertyStore ps, String produces, String...accept) {
 		super(
 			ps.builder()
-				.set(UON_encodeChars, true)
+				.set(UON_encoding, true)
 				.build(), 
 			produces, 
 			accept

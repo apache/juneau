@@ -64,14 +64,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanClassVisibility</jsf>, value)</code>.
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanClassVisibility
 	 */
 	public BeanContextBuilder beanClassVisibility(Visibility value) {
 		return set(BEAN_beanClassVisibility, value);
@@ -85,14 +83,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * For example, if the visibility is <code>PUBLIC</code> and the constructor is <jk>protected</jk>, then the
 	 * constructor will be ignored.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanConstructorVisibility</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanConstructorVisibility
 	 */
 	public BeanContextBuilder beanConstructorVisibility(Visibility value) {
 		return set(BEAN_beanConstructorVisibility, value);
@@ -101,11 +98,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean lookup dictionary.
 	 * 
-	 * <h6 class='figure'>Example:</h6>
-	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanDictionary</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 * 
 	 * @param append
@@ -122,7 +117,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		<li>Any array or collection of the types above:
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary
 	 */
 	public BeanContextBuilder beanDictionary(boolean append, Object...values) {
 		return set(append, BEAN_beanDictionary, values);
@@ -134,6 +128,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Same as calling {@link #beanDictionary(Object...)} but with an array of classes.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -152,43 +151,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * through reflection.
 	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
 	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	BeanContext bc = BeanContext.<jsf>create</jsf>().beanDictionary(Bar.<jk>class</jk>, Baz.<jk>class</jk>).build();
-	 * </p>
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Properties:
-	 * 		<ul> 	
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
-	 * 		</ul>
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link Bean#beanDictionary()}
-	 * 			<li>{@link BeanProperty#beanDictionary()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
-	 * 		</ul>
-	 * 	<li>Values can consist of any of the following types:
-	 *			<ul>
-	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
-	 * 				annotations.
-	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
-	 * 				annotations.
-	 * 		</ul>
-	 * 	<li>See <a class='doclink' href='../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
-	 * 		for more information.
-	 *	</ul>
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -205,10 +172,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		or <code>property(<jsf>BEAN_beanDictionary_remove</jsf>, values)</code>.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 * 
 	 * @param values The values to remove from this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanDictionary
-	 * @see BeanContext#BEAN_beanDictionary_remove
 	 */
 	public BeanContextBuilder beanDictionaryRemove(Object...values) {
 		return removeFrom(BEAN_beanDictionary, values);
@@ -228,9 +198,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li>Use {@link Visibility#NONE} to prevent bean fields from being interpreted as bean properties altogether.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFieldVisibility
 	 */
 	public BeanContextBuilder beanFieldVisibility(Visibility value) {
 		return set(BEAN_beanFieldVisibility, value);
@@ -257,16 +231,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		All other bean properties will be ignored.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanFilters</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
 	 */
 	public BeanContextBuilder beanFilters(boolean append, Object...values) {
 		return set(append, BEAN_beanFilters, values);
@@ -278,6 +251,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Same as {@link #beanFilters(Object...)} but takes in an array of classes.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
@@ -294,10 +272,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		or <code>property(<jsf>BEAN_beanFilters_add</jsf>, values)</code>.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 * @see BeanContext#BEAN_beanFilters_add
 	 */
 	public BeanContextBuilder beanFilters(Object...values) {
 		return addTo(BEAN_beanFilters, values);
@@ -312,10 +293,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		or <code>property(<jsf>BEAN_beanFilters_remove</jsf>, values)</code>.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * </ul>
+	 * 
 	 * @param values The values to remove from this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanFilters
-	 * @see BeanContext#BEAN_beanFilters_remove
 	 */
 	public BeanContextBuilder beanFiltersRemove(Object...values) {
 		return removeFrom(BEAN_beanFilters, values);
@@ -333,14 +317,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
 	 */
 	public BeanContextBuilder beanMapPutReturnsOldValue(boolean value) {
 		return set(BEAN_beanMapPutReturnsOldValue, value);
@@ -356,14 +339,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireDefaultConstructor</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
 	 */
 	public BeanContextBuilder beansRequireDefaultConstructor(boolean value) {
 		return set(BEAN_beansRequireDefaultConstructor, value);
@@ -379,14 +361,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireSerializable</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireSerializable
 	 */
 	public BeanContextBuilder beansRequireSerializable(boolean value) {
 		return set(BEAN_beansRequireSerializable, value);
@@ -399,14 +380,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * Otherwise, they will be ignored.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireSettersForGetters</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireSettersForGetters
 	 */
 	public BeanContextBuilder beansRequireSettersForGetters(boolean value) {
 		return set(BEAN_beansRequireSettersForGetters, value);
@@ -422,14 +402,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beansRequireSomeProperties</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSomeProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beansRequireSomeProperties
 	 */
 	public BeanContextBuilder beansRequireSomeProperties(boolean value) {
 		return set(BEAN_beansRequireSomeProperties, value);
@@ -438,14 +417,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Name to use for the bean type properties used to represent a bean type.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_beanTypePropertyName</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_beanTypePropertyName
 	 */
 	public BeanContextBuilder beanTypePropertyName(String value) {
 		return set(BEAN_beanTypePropertyName, value);
@@ -472,13 +450,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		in order to determine how that method was invoked.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_debug</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
 	 * </ul>
-	 *
+	 * 
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_debug
 	 */
 	public BeanContextBuilder debug() {
 		return set(BEAN_debug, true);
@@ -487,16 +464,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Exclude specified properties from beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_excludeProperties</jsf>, beanClass.getName(), properties)</code>
-	 * 		or <code>property(<jsf>BEAN_excludeProperties_put</jsf>, beanClass.getName(), properties)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param beanClass The bean class.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_excludeProperties
 	 */
 	public BeanContextBuilder excludeProperties(Class<?> beanClass, String properties) {
 		return addTo(BEAN_excludeProperties, beanClass.getName(), properties);
@@ -508,23 +483,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
 	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means don't serialize the <code>foo</code> and <code>bar</code>
-	 * properties on the specified bean.
-	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_excludeProperties</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_excludeProperties
 	 */
 	public BeanContextBuilder excludeProperties(Map<String,String> values) {
 		return set(BEAN_excludeProperties, values);
@@ -533,16 +498,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Exclude specified properties from beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_excludeProperties</jsf>, beanClassName, properties)</code>
-	 * 		or <code>property(<jsf>BEAN_excludeProperties_put</jsf>, beanClassName, properties)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_excludeProperties
 	 */
 	public BeanContextBuilder excludeProperties(String beanClassName, String properties) {
 		return addTo(BEAN_excludeProperties, beanClassName, properties);
@@ -555,14 +518,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
 	 */
 	public BeanContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
@@ -575,14 +537,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
 	 */
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
@@ -595,14 +556,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignorePropertiesWithoutSetters</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignorePropertiesWithoutSetters}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
 	 */
 	public BeanContextBuilder ignorePropertiesWithoutSetters(boolean value) {
 		return set(BEAN_ignorePropertiesWithoutSetters, value);
@@ -615,14 +575,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreUnknownBeanProperties
 	 */
 	public BeanContextBuilder ignoreUnknownBeanProperties(boolean value) {
 		return set(BEAN_ignoreUnknownBeanProperties, value);
@@ -635,14 +594,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_ignoreUnknownNullBeanProperties</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownNullBeanProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_ignoreUnknownNullBeanProperties
 	 */
 	public BeanContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		return set(BEAN_ignoreUnknownNullBeanProperties, value);
@@ -651,17 +609,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Implementation classes for interfaces and abstract classes.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_implClasses</jsf>, interfaceClass, implClass)</code>
-	 * 		or <code>property(<jsf>BEAN_implClasses_put</jsf>, interfaceClass, implClass)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
 	 * </ul>
-	 *
+	 * 
 	 * @param interfaceClass The interface class.
 	 * @param implClass The implementation class.
 	 * @param <I> The class type of the interface.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_implClasses
 	 */
 	public <I> BeanContextBuilder implClass(Class<I> interfaceClass, Class<? extends I> implClass) {
 		return addTo(BEAN_implClasses, interfaceClass.getName(), implClass);
@@ -675,14 +631,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 	 * parse).
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_implClasses</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_implClasses
 	 */
 	public BeanContextBuilder implClasses(Map<String,Class<?>> values) {
 		return set(BEAN_implClasses, values);
@@ -691,16 +646,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Explicitly specify visible bean properties.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_includeProperties</jsf>, beanClass.getName(), properties)</code>
-	 * 		or <code>property(<jsf>BEAN_includeProperties_put</jsf>, beanClass.getName(), properties)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param beanClass The bean class.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_includeProperties
 	 */
 	public BeanContextBuilder includeProperties(Class<?> beanClass, String properties) {
 		return addTo(BEAN_includeProperties, beanClass.getName(), properties);
@@ -712,23 +665,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies to only include the specified list of properties for the specified bean classes.
 	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>"foo,bar"</js>}</code> means only serialize the <code>foo</code> and <code>bar</code>
-	 * properties on the specified bean.
-	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_includeProperties</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_includeProperties
 	 */
 	public BeanContextBuilder includeProperties(Map<String,String> values) {
 		return set(BEAN_includeProperties, values);
@@ -737,16 +680,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Explicitly specify visible bean properties.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>putToProperty(<jsf>BEAN_includeProperties</jsf>, beanClassName, properties)</code>
-	 * 		or <code>property(<jsf>BEAN_includeProperties_put</jsf>, beanClassName, properties)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param beanClassName The bean class name.  Can be a simple name, fully-qualified name, or <js>"*"</js>.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_includeProperties
 	 */
 	public BeanContextBuilder includeProperties(String beanClassName, String properties) {
 		return addTo(BEAN_includeProperties, beanClassName, properties);
@@ -755,14 +696,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Locale.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_locale</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_locale
 	 */
 	public BeanContextBuilder locale(Locale value) {
 		return set(BEAN_locale, value);
@@ -774,14 +714,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_mediaType</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_mediaType
 	 */
 	public BeanContextBuilder mediaType(MediaType value) {
 		return set(BEAN_mediaType, value);
@@ -795,15 +734,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then the method
 	 * will not be interpreted as a bean getter or setter.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_methodVisibility</jsf>, value)</code>.
-	 * 	<li>Use {@link Visibility#NONE} to prevent bean methods from being interpreted as bean properties altogether.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_methodVisibility}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_methodVisibility
 	 */
 	public BeanContextBuilder methodVisibility(Visibility value) {
 		return set(BEAN_methodVisibility, value);
@@ -816,16 +753,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they appear to be
 	 * bean-like.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_notBeanClasses</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses
 	 */
 	public BeanContextBuilder notBeanClasses(boolean append, Object...values) {
 		return set(append, BEAN_notBeanClasses, values);
@@ -834,16 +770,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Add to classes that should not be considered beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanClasses</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_notBeanClasses_add</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses
-	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
 	public BeanContextBuilder notBeanClasses(Class<?>...values) {
 		return addTo(BEAN_notBeanClasses, values);
@@ -852,16 +785,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Add to classes that should not be considered beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanClasses</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_notBeanClasses_add</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses
-	 * @see BeanContext#BEAN_notBeanClasses_add
 	 */
 	public BeanContextBuilder notBeanClasses(Object...values) {
 		return addTo(BEAN_notBeanClasses, values);
@@ -870,16 +800,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Remove from classes that should not be considered beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_notBeanClasses</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_notBeanClasses_remove</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to remove from this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanClasses
-	 * @see BeanContext#BEAN_notBeanClasses_remove
 	 */
 	public BeanContextBuilder notBeanClassesRemove(Object...values) {
 		return removeFrom(BEAN_notBeanClasses, values);
@@ -891,22 +818,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
 	 *
-	 * <p>
-	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
-	 *
-	 * <p>
-	 * Note that you can specify prefix patterns to include all subpackages.
-	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_notBeanPackages</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
 	 */
 	public BeanContextBuilder notBeanPackages(boolean append, Object...values) {
 		return set(append, BEAN_notBeanPackages, values);
@@ -915,15 +835,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Add to packages whose classes should not be considered beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_notBeanPackages_add</jsf>, s)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public BeanContextBuilder notBeanPackages(Object...values) {
 		return addTo(BEAN_notBeanPackages, values);
@@ -932,15 +850,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Add to packages whose classes should not be considered beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_notBeanPackages_add</jsf>, s)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages_add
 	 */
 	public BeanContextBuilder notBeanPackages(String...values) {
 		return addTo(BEAN_notBeanPackages, values);
@@ -949,16 +865,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Remove from packages whose classes should not be considered beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_notBeanPackages</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_notBeanPackages_remove</jsf>, s)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to remove from this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_notBeanPackages
-	 * @see BeanContext#BEAN_notBeanPackages_remove
 	 */
 	public BeanContextBuilder notBeanPackagesRemove(Object...values) {
 		return removeFrom(BEAN_notBeanPackages, values);
@@ -974,16 +887,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li>Implementations of {@link Surrogate}.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_pojoSwaps</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
 	 */
 	public BeanContextBuilder pojoSwaps(boolean append, Object...values) {
 		return set(append, BEAN_pojoSwaps, values);
@@ -992,16 +904,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Add to POJO swaps.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_pojoSwaps</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_pojoSwaps_add</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
-	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
 	public BeanContextBuilder pojoSwaps(Class<?>...values) {
 		return addTo(BEAN_pojoSwaps, values);
@@ -1010,16 +919,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Add to POJO swaps.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>addToProperty(<jsf>BEAN_pojoSwaps</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_pojoSwaps_add</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
-	 * @see BeanContext#BEAN_pojoSwaps_add
 	 */
 	public BeanContextBuilder pojoSwaps(Object...values) {
 		return addTo(BEAN_pojoSwaps, values);
@@ -1028,16 +934,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Remove from POJO swaps.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_pojoSwaps</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_pojoSwaps_remove</jsf>, values)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 *
+	 * 
 	 * @param values The values to remove from this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_pojoSwaps
-	 * @see BeanContext#BEAN_pojoSwaps_remove
 	 */
 	public BeanContextBuilder pojoSwapsRemove(Object...values) {
 		return removeFrom(BEAN_pojoSwaps, values);
@@ -1048,6 +951,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * The class to use for calculating bean property names.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * </ul>
 	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
@@ -1062,22 +970,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
 	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>
-	 * 		This is equivalent to calling <code>property(<jsf>BEAN_sortProperties</jsf>, value)</code>.
-	 * 	<li>
-	 * 		This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
-	 * 		to force bean properties to be in a particular order and can just alter the order of the fields/methods
-	 * 		in the Java file.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_sortProperties
 	 */
 	public BeanContextBuilder sortProperties(boolean value) {
 		return set(BEAN_sortProperties, value);
@@ -1086,14 +986,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  TimeZone.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_timeZone</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_timeZone
 	 */
 	public BeanContextBuilder timeZone(TimeZone value) {
 		return set(BEAN_timeZone, value);
@@ -1106,14 +1005,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_useInterfaceProxies</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link BeanContext#BEAN_useInterfaceProxies}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_useInterfaceProxies
 	 */
 	public BeanContextBuilder useInterfaceProxies(boolean value) {
 		return set(BEAN_useInterfaceProxies, value);
@@ -1127,13 +1025,16 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <h5 class 'section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_useJavaBeanIntrospector</jsf>, value)</code>.
 	 * 	<li>Most {@link Bean @Bean} annotations will be ignored if you enable this setting.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_useJavaBeanIntrospector}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see BeanContext#BEAN_useJavaBeanIntrospector
 	 */
 	public BeanContextBuilder useJavaBeanIntrospector(boolean value) {
 		return set(BEAN_useJavaBeanIntrospector, value);

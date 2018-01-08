@@ -53,7 +53,7 @@ public class UonParserSession extends ReaderParserSession {
 	 */
 	protected UonParserSession(UonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		decodeChars = getProperty(UON_decodeChars, boolean.class, ctx.decodeChars);
+		decodeChars = getProperty(UON_decoding, boolean.class, ctx.decodeChars);
 	}
 
 	@Override /* Session */
@@ -68,7 +68,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * Create a specialized parser session for parsing URL parameters.
 	 *
 	 * <p>
-	 * The main difference is that characters are never decoded, and the {@link UonParser#UON_decodeChars}
+	 * The main difference is that characters are never decoded, and the {@link UonParser#UON_decoding}
 	 * property is always ignored.
 	 *
 	 * @param ctx

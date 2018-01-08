@@ -452,7 +452,7 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	@Test
 	public void testPlainTextParams() throws Exception {
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT.builder().plainTextParams().build();
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT.builder().paramFormatPlain().build();
 
 		assertEquals("_value=foo", s.serialize("foo"));
 		assertEquals("_value='foo'", s.serialize("'foo'"));

@@ -39,7 +39,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param encode Override the {@link UonSerializer#UON_encodeChars} setting.
+	 * @param encode Override the {@link UonSerializer#UON_encoding} setting.
 	 * @param args
 	 * 	Runtime arguments.
 	 * 	These specify session-level information such as locale and URI context.
@@ -48,7 +48,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	 */
 	public UonSerializerSession(UonSerializer ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
-		encodeChars = encode == null ? getProperty(UON_encodeChars, boolean.class, ctx.encodeChars) : encode;
+		encodeChars = encode == null ? getProperty(UON_encoding, boolean.class, ctx.encodeChars) : encode;
 		addBeanTypeProperties = getProperty(UON_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
 		plainTextParams = getProperty(UON_paramFormat, ParamFormat.class, ctx.paramFormat) == ParamFormat.PLAINTEXT;
 	}

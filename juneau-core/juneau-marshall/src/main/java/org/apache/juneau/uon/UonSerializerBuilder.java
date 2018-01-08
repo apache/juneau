@@ -64,16 +64,20 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>UON_encodeChars</jsf>, value)</code>.
+	 * 	<li>This is equivalent to calling <code>property(<jsf>UON_encoding</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonSerializer#UON_encodeChars
 	 */
-	public UonSerializerBuilder encodeChars(boolean value) {
-		return set(UON_encodeChars, value);
+	public UonSerializerBuilder encoding(boolean value) {
+		return set(UON_encoding, value);
 	}
 
 	/**
@@ -82,7 +86,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public UonSerializerBuilder encoding() {
-		return encodeChars(true);
+		return encoding(true);
 	}
 
 	/**
@@ -91,17 +95,33 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>UON_paramFormat</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonSerializer#UON_paramFormat
 	 */
 	public UonSerializerBuilder paramFormat(ParamFormat value) {
 		return set(UON_paramFormat, value);
+	}
+
+	/**
+	 * Configuration property:  Format to use for query/form-data/header values.
+	 *
+	 * <p>
+	 * Specifies the format to use for URL GET parameter keys and values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public UonSerializerBuilder paramFormatPlain() {
+		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
 	}
 
 	@Override /* SerializerBuilder */

@@ -63,8 +63,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_allowBodyParam} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
+	 * </ul>
 	 */
 	String allowBodyParam() default "";
 
@@ -87,8 +89,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_allowedMethodParams} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+	 * </ul>
 	 */
 	String allowedMethodParams() default "";
 
@@ -110,8 +114,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_allowHeaderParams} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
+	 * </ul>
 	 */
 	String allowHeaderParams() default "";
 
@@ -126,8 +132,10 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
 	 *
-	 * <p>
-	 * See {@link BeanContext#BEAN_beanFilters} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * </ul>
 	 */
 	Class<?>[] beanFilters() default {};
 
@@ -137,8 +145,10 @@ public @interface RestResource {
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_callHandler} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
+	 * </ul>
 	 */
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
 
@@ -148,8 +158,10 @@ public @interface RestResource {
 	 * <p>
 	 * Defines children of this resource.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_children} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * </ul>
 	 */
 	Class<?>[] children() default {};
 
@@ -159,8 +171,10 @@ public @interface RestResource {
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_classpathResourceFinder} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
+	 * </ul>
 	 */
 	Class<? extends ClasspathResourceFinder> classpathResourceFinder() default ClasspathResourceFinder.Null.class;
 
@@ -180,8 +194,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_clientVersionHeader} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * </ul>
 	 */
 	String clientVersionHeader() default "";
 
@@ -222,8 +238,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_contextPath} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_contextPath}
+	 * </ul>
 	 */
 	String contextPath() default "";
 
@@ -235,8 +253,10 @@ public @interface RestResource {
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
 	 * annotation.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_converters} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_converters}
+	 * </ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -256,8 +276,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_defaultCharset} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * </ul>
 	 */
 	String defaultCharset() default "";
 
@@ -277,8 +299,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_defaultRequestHeaders} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -298,8 +322,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_defaultResponseHeaders} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -351,8 +377,10 @@ public @interface RestResource {
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_encoders} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -381,8 +409,10 @@ public @interface RestResource {
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 * These guards get called immediately before execution of any REST method in this class.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_guards} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_guards}
+	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
@@ -436,8 +466,10 @@ public @interface RestResource {
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_infoProvider} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
+	 * </ul>
 	 */
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
 
@@ -447,8 +479,10 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the logger to use for logging.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_logger} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_logger}
+	 * </ul>
 	 */
 	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
 
@@ -469,8 +503,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_maxInput} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
+	 * </ul>
 	 */
 	String maxInput() default "";
 	
@@ -489,8 +525,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_messages} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_messages}
+	 * </ul>
 	 */
 	String messages() default "";
 
@@ -510,8 +548,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_mimeTypes} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
+	 * </ul>
 	 */
 	String[] mimeTypes() default {};
 
@@ -523,8 +563,10 @@ public @interface RestResource {
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
 	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_paramResolvers} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
+	 * </ul>
 	 */
 	Class<? extends RestParam>[] paramResolvers() default {};
 
@@ -534,8 +576,10 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
 	 *
-	 * <p>
-	 * See {@link Parser#PARSER_listener} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_listener}
+	 * </ul>
 	 */
 	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 
@@ -545,8 +589,10 @@ public @interface RestResource {
 	 * <p>
 	 * Adds class-level parsers to this resource.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_parsers} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * </ul>
 	 */
 	Class<? extends Parser>[] parsers() default {};
 
@@ -556,8 +602,10 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_partParser} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 */
 	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
 
@@ -567,8 +615,10 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_partSerializer} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
+	 * </ul>
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
 	
@@ -578,8 +628,10 @@ public @interface RestResource {
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_path} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_path}
+	 * </ul>
 	 */
 	String path() default "";
 
@@ -594,8 +646,10 @@ public @interface RestResource {
 	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
 	 *
-	 * <p>
-	 * See {@link BeanContext#BEAN_pojoSwaps} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
+	 * </ul>
 	 */
 	Class<?>[] pojoSwaps() default {};
 
@@ -652,8 +706,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_renderResponseStackTraces} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
+	 * </ul>
 	 */
 	String renderResponseStackTraces() default "";
 
@@ -663,8 +719,10 @@ public @interface RestResource {
 	 * <p>
 	 * The resolver used for resolving child resources.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_resourceResolver} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
+	 * </ul>
 	 */
 	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolverSimple.class;
 
@@ -675,8 +733,10 @@ public @interface RestResource {
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_responseHandlers} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * </ul>
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
 
@@ -686,8 +746,10 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
 	 *
-	 * <p>
-	 * See {@link Serializer#SERIALIZER_listener} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * </ul>
 	 */
 	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
 
@@ -697,8 +759,10 @@ public @interface RestResource {
 	 * <p>
 	 * Adds class-level serializers to this resource.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_serializers} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * </ul>
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -767,8 +831,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_staticFileResponseHeaders} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
+	 * </ul>
 	 */
 	String[] staticFileResponseHeaders() default {};
 	
@@ -788,8 +854,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_staticFiles} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
 	 */
 	String[] staticFiles() default {};
 	
@@ -809,8 +877,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_supportedAcceptTypes} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
+	 * </ul>
 	 */
 	String[] supportedAcceptTypes() default {};
 	
@@ -830,8 +900,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_supportedContentTypes} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
+	 * </ul>
 	 */
 	String[] supportedContentTypes() default {};
 	
@@ -919,8 +991,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_useClasspathResourceCaching} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_useClasspathResourceCaching}
+	 * </ul>
 	 */
 	String useClasspathResourceCaching() default "";
 	
@@ -941,8 +1015,10 @@ public @interface RestResource {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_useStackTraceHashes} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
+	 * </ul>
 	 */
 	String useStackTraceHashes() default "";
 }

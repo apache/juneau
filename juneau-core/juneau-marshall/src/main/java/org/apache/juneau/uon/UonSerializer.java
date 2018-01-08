@@ -156,13 +156,13 @@ public class UonSerializer extends WriterSerializer {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"UonSerializer.encodeChars.b"</js>
+	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonSerializerBuilder#encodeChars(boolean)}
+	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -175,7 +175,7 @@ public class UonSerializer extends WriterSerializer {
 	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
 	 * URL-encoding of non-valid URI characters.
 	 */
-	public static final String UON_encodeChars = PREFIX + "encodeChars.b";
+	public static final String UON_encoding = PREFIX + "encoding.b";
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
@@ -243,7 +243,7 @@ public class UonSerializer extends WriterSerializer {
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Encoding(PropertyStore ps) {
-			super(ps.builder().set(UON_encodeChars, true).build());
+			super(ps.builder().set(UON_encoding, true).build());
 		}
 	}
 
@@ -292,7 +292,7 @@ public class UonSerializer extends WriterSerializer {
 	 */
 	public UonSerializer(PropertyStore ps, String produces, String...accept) {
 		super(ps, produces, accept);
-		encodeChars = getProperty(UON_encodeChars, boolean.class, false);
+		encodeChars = getProperty(UON_encoding, boolean.class, false);
 		addBeanTypeProperties = getProperty(UON_addBeanTypeProperties, boolean.class, getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
 	}

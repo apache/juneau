@@ -57,14 +57,13 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_fileCharset</jsf>,value)</code>.
+	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_fileCharset
 	 */
 	public ParserBuilder fileCharset(String value) {
 		return set(PARSER_fileCharset, value);
@@ -79,14 +78,13 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_inputStreamCharset</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_inputStreamCharset
 	 */
 	public ParserBuilder inputStreamCharset(String value) {
 		return set(PARSER_inputStreamCharset, value);
@@ -98,9 +96,13 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_listener}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_listener
 	 */
 	public ParserBuilder listener(Class<? extends ParserListener> value) {
 		return set(PARSER_listener, value);
@@ -109,6 +111,11 @@ public class ParserBuilder extends BeanContextBuilder {
 	/**
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder strict() {
@@ -149,14 +156,13 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_strict</jsf>,value)</code>.
+	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_strict
 	 */
 	public ParserBuilder strict(boolean value) {
 		return set(PARSER_strict, value);
@@ -169,14 +175,13 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>PARSER_trimStrings</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_trimStrings
 	 */
 	public ParserBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);

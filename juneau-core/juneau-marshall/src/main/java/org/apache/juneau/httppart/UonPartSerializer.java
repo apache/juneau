@@ -48,7 +48,7 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 	public UonPartSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(UON_encodeChars, false)
+				.set(UON_encoding, false)
 				.build() 
 		);
 	}

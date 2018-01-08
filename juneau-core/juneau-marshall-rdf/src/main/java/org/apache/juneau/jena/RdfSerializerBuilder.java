@@ -64,9 +64,13 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_addLiteralTypes}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializer#RDF_addLiteralTypes
 	 */
 	public RdfSerializerBuilder addLiteralTypes(boolean value) {
 		return set(RDF_addLiteralTypes, value);
@@ -86,13 +90,16 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_addRootProperty</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializer#RDF_addRootProperty
 	 */
 	public RdfSerializerBuilder addRootProperty(boolean value) {
 		return set(RDF_addRootProperty, value);
@@ -110,13 +117,16 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_autoDetectNamespaces</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializer#RDF_autoDetectNamespaces
 	 */
 	public RdfSerializerBuilder autoDetectNamespaces(boolean value) {
 		return set(RDF_autoDetectNamespaces, value);
@@ -148,13 +158,16 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_collectionFormat</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_collectionFormat}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_collectionFormat
 	 */
 	public RdfSerializerBuilder collectionFormat(RdfCollectionFormat value) {
 		return set(RDF_collectionFormat, value);
@@ -165,13 +178,16 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauBpNs</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauBpNs}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_juneauBpNs
 	 */
 	public RdfSerializerBuilder juneauBpNs(Namespace value) {
 		return set(RDF_juneauBpNs, value);
@@ -182,13 +198,16 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_juneauNs</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauNs}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_juneauNs
 	 */
 	public RdfSerializerBuilder juneauNs(Namespace value) {
 		return set(RDF_juneauNs, value);
@@ -229,13 +248,16 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_language</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_language
 	 */
 	public RdfSerializerBuilder language(String value) {
 		return set(RDF_language, value);
@@ -279,14 +301,13 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_looseCollections</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_looseCollections
 	 */
 	public RdfSerializerBuilder looseCollections(boolean value) {
 		return set(RDF_looseCollections, value);
@@ -294,6 +315,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -313,9 +339,13 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
+	 * </ul>
+	 * 
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfSerializer#RDF_namespaces
 	 */
 	public RdfSerializerBuilder namespaces(Namespace...values) {
 		return set(RDF_namespaces, values);
@@ -323,6 +353,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -332,6 +367,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -349,13 +389,16 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_useXmlNamespaces</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RdfCommon#RDF_useXmlNamespaces
 	 */
 	public RdfSerializerBuilder useXmlNamespaces(boolean value) {
 		return set(RDF_useXmlNamespaces, value);
@@ -363,6 +406,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */
@@ -372,6 +420,11 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
+	 * </ul>
 	 * 
 	 * @return This object (for method chaining).
 	 */

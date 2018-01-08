@@ -133,9 +133,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_abridged
 	 */
 	public SerializerGroupBuilder abridged(boolean value) {
 		return set(SERIALIZER_abridged, value);
@@ -144,9 +148,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_addBeanTypeProperties
 	 */
 	public SerializerGroupBuilder addBeanTypeProperties(boolean value) {
 		return set(SERIALIZER_addBeanTypeProperties, value);
@@ -155,9 +163,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
 	public SerializerGroupBuilder detectRecursions(boolean value) {
 		return set(SERIALIZER_detectRecursions, value);
@@ -166,9 +178,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 */
 	public SerializerGroupBuilder ignoreRecursions(boolean value) {
 		return set(SERIALIZER_ignoreRecursions, value);
@@ -177,9 +193,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_initialDepth
 	 */
 	public SerializerGroupBuilder initialDepth(int value) {
 		return set(SERIALIZER_initialDepth, value);
@@ -188,9 +208,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_listener} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_listener
 	 */
 	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
 		return set(SERIALIZER_listener, value);
@@ -199,9 +223,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public SerializerGroupBuilder maxDepth(int value) {
 		return set(SERIALIZER_maxDepth, value);
@@ -210,9 +238,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public SerializerGroupBuilder maxIndent(boolean value) {
 		return set(SERIALIZER_maxIndent, value);
@@ -221,9 +253,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_quoteChar
 	 */
 	public SerializerGroupBuilder quoteChar(char value) {
 		return set(SERIALIZER_quoteChar, value);
@@ -232,9 +268,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortCollections
 	 */
 	public SerializerGroupBuilder sortCollections(boolean value) {
 		return set(SERIALIZER_sortCollections, value);
@@ -243,9 +283,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortMaps
 	 */
 	public SerializerGroupBuilder sortMaps(boolean value) {
 		return set(SERIALIZER_sortMaps, value);
@@ -254,6 +298,11 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder sq() {
@@ -263,9 +312,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 */
 	public SerializerGroupBuilder trimEmptyCollections(boolean value) {
 		return set(SERIALIZER_trimEmptyCollections, value);
@@ -274,9 +327,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 */
 	public SerializerGroupBuilder trimEmptyMaps(boolean value) {
 		return set(SERIALIZER_trimEmptyMaps, value);
@@ -285,9 +342,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimNullProperties
 	 */
 	public SerializerGroupBuilder trimNullProperties(boolean value) {
 		return set(SERIALIZER_trimNullProperties, value);
@@ -296,9 +357,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimStrings
 	 */
 	public SerializerGroupBuilder trimStrings(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
@@ -307,9 +372,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriContext
 	 */
 	public SerializerGroupBuilder uriContext(UriContext value) {
 		return set(SERIALIZER_uriContext, value);
@@ -318,9 +387,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriRelativity
 	 */
 	public SerializerGroupBuilder uriRelativity(UriRelativity value) {
 		return set(SERIALIZER_uriRelativity, value);
@@ -329,9 +402,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriResolution
 	 */
 	public SerializerGroupBuilder uriResolution(UriResolution value) {
 		return set(SERIALIZER_uriResolution, value);
@@ -340,9 +417,13 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_useWhitespace
 	 */
 	public SerializerGroupBuilder useWhitespace(boolean value) {
 		return set(SERIALIZER_useWhitespace, value);
@@ -351,6 +432,11 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder ws() {

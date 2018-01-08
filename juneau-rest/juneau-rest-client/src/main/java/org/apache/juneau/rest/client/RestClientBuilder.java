@@ -183,25 +183,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Set a root URL for this client.
-	 *
-	 * <p>
-	 * When set, URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
-	 * will be prefixed with the specified root.
-	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
-	 *
-	 * @param rootUrl
-	 * 	The root URL to prefix to relative URL strings.
-	 * 	Trailing slashes are trimmed.
-	 * 	Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder rootUrl(Object rootUrl) {
-		set(RESTCLIENT_rootUri, rootUrl);
-		return this;
-	}
-
-	/**
 	 * Enable SSL support on this client.
 	 *
 	 * @param opts
@@ -242,16 +223,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds an interceptor that gets called immediately after a connection is made.
-	 *
-	 * @param interceptor The interceptor.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder interceptor(RestCallInterceptor interceptor) {
-		return addTo(RESTCLIENT_interceptors, interceptor);
-	}
-
-	/**
 	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
 	 *
 	 * @param level The log level to log messages at.
@@ -263,23 +234,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Make HTTP calls retryable if an error response (>=400) is received.
-	 *
-	 * @param retries The number of retries to attempt.
-	 * @param interval The time in milliseconds between attempts.
-	 * @param retryOn
-	 * 	Optional object used for determining whether a retry should be attempted.
-	 * 	If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder retryable(int retries, int interval, RetryOn retryOn) {
-		set(RESTCLIENT_retries, retries);
-		set(RESTCLIENT_retryInterval, interval);
-		set(RESTCLIENT_retryOn, retryOn);
-		return this;
-	}
-
-	/**
 	 * When called, the {@link #createConnectionManager()} method will return a {@link PoolingHttpClientConnectionManager}
 	 * instead of a {@link BasicHttpClientConnectionManager}.
 	 *
@@ -288,73 +242,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder pooled() {
 		this.pooled = true;
 		return this;
-	}
-
-	/**
-	 * Sets the serializer used for serializing POJOs to the HTTP request message body.
-	 *
-	 * @param serializer The serializer.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder serializer(Serializer serializer) {
-		return set(RESTCLIENT_serializer, serializer);
-	}
-
-	/**
-	 * Same as {@link #serializer(Serializer)}, except takes in a serializer class that will be instantiated through a
-	 * no-arg constructor.
-	 *
-	 * @param serializerClass The serializer class.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder serializer(Class<? extends Serializer> serializerClass) {
-		return set(RESTCLIENT_serializer, serializerClass);
-	}
-
-	/**
-	 * Sets the parser used for parsing POJOs from the HTTP response message body.
-	 *
-	 * @param parser The parser.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder parser(Parser parser) {		
-		set(RESTCLIENT_parser, parser);
-		return this;
-	}
-
-	/**
-	 * Same as {@link #parser(Parser)}, except takes in a parser class that will be instantiated through a no-arg
-	 * constructor.
-	 *
-	 * @param parserClass The parser class.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder parser(Class<? extends Parser> parserClass) {
-		return set(RESTCLIENT_parser, parserClass);
-	}
-
-	/**
-	 * Sets the part serializer to use for converting POJOs to headers, query parameters, form-data parameters, and
-	 * path variables.
-	 *
-	 * @param partSerializer The part serializer instance.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder partSerializer(HttpPartSerializer partSerializer) {
-		return set(RESTCLIENT_partSerializer, partSerializer);
-	}
-
-	/**
-	 * Sets the part formatter to use for converting POJOs to headers, query parameters, form-data parameters, and
-	 * path variables.
-	 *
-	 * @param partSerializerClass
-	 * 	The part serializer class.
-	 * 	The class must have a no-arg constructor.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> partSerializerClass) {
-		return set(RESTCLIENT_partSerializer, partSerializerClass);
 	}
 
 	/**
@@ -385,32 +272,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder httpClient(CloseableHttpClient httpClient, boolean keepHttpClientOpen) {
 		this.httpClient = httpClient;
 		set(RESTCLIENT_keepHttpClientOpen, keepHttpClientOpen);
-		return this;
-	}
-
-	/**
-	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
-	 *
-	 * <p>
-	 * This executor service is used to create {@link Future} objects on the following methods:
-	 * <ul>
-	 * 	<li>{@link RestCall#runFuture()}
-	 * 	<li>{@link RestCall#getResponseFuture(Class)}
-	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
-	 * 	<li>{@link RestCall#getResponseAsString()}
-	 * </ul>
-	 *
-	 * <p>
-	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
-	 * and a queue size of 10.
-	 *
-	 * @param executorService The executor service.
-	 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
-		set(RESTCLIENT_executorService, executorService);
-		set(RESTCLIENT_executorServiceShutdownOnClose, shutdownOnClose);
 		return this;
 	}
 
@@ -682,6 +543,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * When called, <code>No-Trace: true</code> is added to requests.
+	 *
+	 * <p>
+	 * This gives the opportunity for the servlet to not log errors on invalid requests.
+	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
+	 * results of testing.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder noTrace() {
+		return header("No-Trace", true);
+	}
+
+	/**
 	 * Sets the value for the <code>Origin</code> request header.
 	 *
 	 * <p>
@@ -817,92 +692,51 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
+	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
 	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_abridged
-	 */
-	public RestClientBuilder abridged(boolean value) {
-		return set(SERIALIZER_abridged, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
+	 * <p>
+	 * This executor service is used to create {@link Future} objects on the following methods:
+	 * <ul>
+	 * 	<li>{@link RestCall#runFuture()}
+	 * 	<li>{@link RestCall#getResponseFuture(Class)}
+	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
+	 * 	<li>{@link RestCall#getResponseAsString()}
+	 * </ul>
 	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_addBeanTypeProperties
-	 */
-	public RestClientBuilder addBeanTypeProperties(boolean value) {
-		return set(SERIALIZER_addBeanTypeProperties, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
+	 * <p>
+	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
+	 * and a queue size of 10.
 	 *
-	 * @param value The new value for this property.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorService}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorServiceShutdownOnClose}
+	 * </ul>
+	 * 
+	 * @param executorService The executor service.
+	 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_detectRecursions
 	 */
-	public RestClientBuilder detectRecursions(boolean value) {
-		return set(SERIALIZER_detectRecursions, value);
-	}
-
-	/**
-	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_fileCharset
-	 */
-	public RestClientBuilder fileCharset(String value) {
-		return set(PARSER_fileCharset, value);
+	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
+		set(RESTCLIENT_executorService, executorService);
+		set(RESTCLIENT_executorServiceShutdownOnClose, shutdownOnClose);
+		return this;
 	}
 
 	/**
 	 * Configuration property:  Request headers.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
+	 * </ul>
+	 * 
 	 * @param key The header name.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
-	 * @see RestClient#RESTCLIENT_headers
 	 */
 	public RestClientBuilder header(String key, Object value) {
 		return addTo(RESTCLIENT_headers, key, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_ignoreRecursions
-	 */
-	public RestClientBuilder ignoreRecursions(boolean value) {
-		return set(SERIALIZER_ignoreRecursions, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_initialDepth
-	 */
-	public RestClientBuilder initialDepth(int value) {
-		return set(SERIALIZER_initialDepth, value);
-	}
-
-	/**
-	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_inputStreamCharset
-	 */
-	public RestClientBuilder inputStreamCharset(String value) {
-		return set(PARSER_inputStreamCharset, value);
 	}
 
 	/**
@@ -911,40 +745,277 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>set(<jsf>RESTCLIENT_keepHttpClientOpen</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see RestClient#RESTCLIENT_keepHttpClientOpen
 	 */
 	public RestClientBuilder keepHttpClientOpen(boolean value) {
 		return set(RESTCLIENT_keepHttpClientOpen, value);
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_listener} and {@link Parser#PARSER_listener} property on all
-	 * 	serializers and parsers in this group.
+	 * Adds an interceptor that gets called immediately after a connection is made.
 	 *
-	 * @param sl The new serializer listener.
-	 * @param pl The new parser listener.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
+	 * </ul>
+	 * 
+	 * @param interceptor The interceptor.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_abridged
 	 */
-	public RestClientBuilder listeners(Class<? extends SerializerListener> sl, Class<? extends ParserListener> pl) {
-		set(SERIALIZER_listener, sl);
-		set(PARSER_listener, pl);
+	public RestClientBuilder interceptor(RestCallInterceptor interceptor) {
+		return addTo(RESTCLIENT_interceptors, interceptor);
+	}
+
+	/**
+	 * Sets the parser used for parsing POJOs from the HTTP response message body.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
+	 * </ul>
+	 * 
+	 * @param parser The parser.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder parser(Parser parser) {		
+		return set(RESTCLIENT_parser, parser);
+	}
+
+	/**
+	 * Same as {@link #parser(Parser)}, except takes in a parser class that will be instantiated through a no-arg
+	 * constructor.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
+	 * </ul>
+	 * 
+	 * @param parserClass The parser class.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder parser(Class<? extends Parser> parserClass) {
+		return set(RESTCLIENT_parser, parserClass);
+	}
+
+	/**
+	 * Sets the part serializer to use for converting POJOs to headers, query parameters, form-data parameters, and
+	 * path variables.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
+	 * </ul>
+	 * 
+	 * @param partSerializer The part serializer instance.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder partSerializer(HttpPartSerializer partSerializer) {
+		return set(RESTCLIENT_partSerializer, partSerializer);
+	}
+
+	/**
+	 * Sets the part formatter to use for converting POJOs to headers, query parameters, form-data parameters, and
+	 * path variables.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
+	 * </ul>
+	 * 
+	 * @param partSerializerClass
+	 * 	The part serializer class.
+	 * 	The class must have a no-arg constructor.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> partSerializerClass) {
+		return set(RESTCLIENT_partSerializer, partSerializerClass);
+	}
+
+	/**
+	 * Make HTTP calls retryable if an error response (>=400) is received.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_retries}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_retryInterval}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_retryOn}
+	 * </ul>
+	 * 
+	 * @param retries The number of retries to attempt.
+	 * @param interval The time in milliseconds between attempts.
+	 * @param retryOn
+	 * 	Optional object used for determining whether a retry should be attempted.
+	 * 	If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder retryable(int retries, int interval, RetryOn retryOn) {
+		set(RESTCLIENT_retries, retries);
+		set(RESTCLIENT_retryInterval, interval);
+		set(RESTCLIENT_retryOn, retryOn);
 		return this;
+	}
+
+	/**
+	 * Set a root URL for this client.
+	 *
+	 * <p>
+	 * When set, URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
+	 * will be prefixed with the specified root.
+	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_rootUri}
+	 * </ul>
+	 * 
+	 * @param rootUrl
+	 * 	The root URL to prefix to relative URL strings.
+	 * 	Trailing slashes are trimmed.
+	 * 	Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder rootUrl(Object rootUrl) {
+		return set(RESTCLIENT_rootUri, rootUrl);
+	}
+
+	/**
+	 * Configuration property:  Request query parameters.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_query}
+	 * </ul>
+	 * 
+	 * @param key The query parameter name.
+	 * @param value The query parameter value value.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder query(String key, Object value) {
+		return addTo(RESTCLIENT_query, key, value);
+	}
+
+	/**
+	 * Sets the serializer used for serializing POJOs to the HTTP request message body.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
+	 * </ul>
+	 * 
+	 * @param serializer The serializer.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder serializer(Serializer serializer) {
+		return set(RESTCLIENT_serializer, serializer);
+	}
+
+	/**
+	 * Same as {@link #serializer(Serializer)}, except takes in a serializer class that will be instantiated through a
+	 * no-arg constructor.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
+	 * </ul>
+	 * 
+	 * @param serializerClass The serializer class.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder serializer(Class<? extends Serializer> serializerClass) {
+		return set(RESTCLIENT_serializer, serializerClass);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder abridged(boolean value) {
+		return set(SERIALIZER_abridged, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder addBeanTypeProperties(boolean value) {
+		return set(SERIALIZER_addBeanTypeProperties, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder detectRecursions(boolean value) {
+		return set(SERIALIZER_detectRecursions, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder ignoreRecursions(boolean value) {
+		return set(SERIALIZER_ignoreRecursions, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder initialDepth(int value) {
+		return set(SERIALIZER_initialDepth, value);
 	}
 
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxDepth
 	 */
 	public RestClientBuilder maxDepth(int value) {
 		return set(SERIALIZER_maxDepth, value);
@@ -953,26 +1024,271 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_maxIndent
 	 */
 	public RestClientBuilder maxIndent(boolean value) {
 		return set(SERIALIZER_maxIndent, value);
 	}
 
 	/**
-	 * When called, <code>No-Trace: true</code> is added to requests.
+	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
 	 *
-	 * <p>
-	 * This gives the opportunity for the servlet to not log errors on invalid requests.
-	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
-	 * results of testing.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder noTrace() {
-		return header("No-Trace", true);
+	public RestClientBuilder quoteChar(char value) {
+		return set(SERIALIZER_quoteChar, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_listener} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * </ul>
+	 * 
+	 * @param sl The new serializer listener.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder serializerListener(Class<? extends SerializerListener> sl) {
+		return set(SERIALIZER_listener, sl);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder sortCollections(boolean value) {
+		return set(SERIALIZER_sortCollections, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder sortMaps(boolean value) {
+		return set(SERIALIZER_sortMaps, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimEmptyCollections(boolean value) {
+		return set(SERIALIZER_trimEmptyCollections, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimEmptyMaps(boolean value) {
+		return set(SERIALIZER_trimEmptyMaps, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimNullProperties(boolean value) {
+		return set(SERIALIZER_trimNullProperties, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimStrings(boolean value) {
+		return set(SERIALIZER_trimStrings, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder uriContext(UriContext value) {
+		return set(SERIALIZER_uriContext, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder uriRelativity(UriRelativity value) {
+		return set(SERIALIZER_uriRelativity, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder uriResolution(UriResolution value) {
+		return set(SERIALIZER_uriResolution, value);
+	}
+
+	/**
+	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder useWhitespace(boolean value) {
+		return set(SERIALIZER_useWhitespace, value);
+	}
+	
+	/**
+	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder fileCharset(String value) {
+		return set(PARSER_fileCharset, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder inputStreamCharset(String value) {
+		return set(PARSER_inputStreamCharset, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_listener} property on all parsers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_listener}
+	 * </ul>
+	 * 
+	 * @param pl The new parser listener.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder parserListener(Class<? extends ParserListener> pl) {
+		return set(PARSER_listener, pl);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder strict(boolean value) {
+		return set(PARSER_strict, value);
+	}
+
+	/**
+	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimStringsP(boolean value) {
+		return set(PARSER_trimStrings, value);
 	}
 
 	/**
@@ -982,13 +1298,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * This overrides the behavior of the URL-encoding serializer to quote and escape characters in query names and
 	 * values that may be confused for UON notation (e.g. <js>"'(foo=123)'"</js>, <js>"'@(1,2,3)'"</js>).
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UonSerializer#UON_paramFormat
 	 */
 	public RestClientBuilder paramFormat(String value) {
-		super.set(UON_paramFormat, value);
-		return this;
+		return set(UON_paramFormat, value);
 	}
 
 	/**
@@ -1011,166 +1330,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The down-side to using plain text part serialization is that you cannot serialize arbitrary POJOs.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder plainTextParts() {
-		super.set(UON_paramFormat, "PLAINTEXT");
-		return this;
-	}
-
-	/**
-	 * Configuration property:  Request query parameters.
-	 *
-	 * @param key The query parameter name.
-	 * @param value The query parameter value value.
-	 * @return This object (for method chaining).
-	 * @see RestClient#RESTCLIENT_query
-	 */
-	public RestClientBuilder query(String key, Object value) {
-		return addTo(RESTCLIENT_query, key, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_quoteChar
-	 */
-	public RestClientBuilder quoteChar(char value) {
-		return set(SERIALIZER_quoteChar, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortCollections
-	 */
-	public RestClientBuilder sortCollections(boolean value) {
-		return set(SERIALIZER_sortCollections, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_sortMaps
-	 */
-	public RestClientBuilder sortMaps(boolean value) {
-		return set(SERIALIZER_sortMaps, value);
-	}
-
-	/**
-	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_strict
-	 */
-	public RestClientBuilder strict(boolean value) {
-		return set(PARSER_strict, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyCollections
-	 */
-	public RestClientBuilder trimEmptyCollections(boolean value) {
-		return set(SERIALIZER_trimEmptyCollections, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimEmptyMaps
-	 */
-	public RestClientBuilder trimEmptyMaps(boolean value) {
-		return set(SERIALIZER_trimEmptyMaps, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimNullProperties
-	 */
-	public RestClientBuilder trimNullProperties(boolean value) {
-		return set(SERIALIZER_trimNullProperties, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_trimStrings
-	 */
-	public RestClientBuilder trimStrings(boolean value) {
-		return set(SERIALIZER_trimStrings, value);
-	}
-
-	/**
-	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_trimStrings
-	 */
-	public RestClientBuilder trimStringsP(boolean value) {
-		return set(PARSER_trimStrings, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriContext
-	 */
-	public RestClientBuilder uriContext(UriContext value) {
-		return set(SERIALIZER_uriContext, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriRelativity
-	 */
-	public RestClientBuilder uriRelativity(UriRelativity value) {
-		return set(SERIALIZER_uriRelativity, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_uriResolution
-	 */
-	public RestClientBuilder uriResolution(UriResolution value) {
-		return set(SERIALIZER_uriResolution, value);
-	}
-
-	/**
-	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see Serializer#SERIALIZER_useWhitespace
-	 */
-	public RestClientBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
+		return set(UON_paramFormat, "PLAINTEXT");
 	}
 
 	@Override /* BeanContextBuilder */

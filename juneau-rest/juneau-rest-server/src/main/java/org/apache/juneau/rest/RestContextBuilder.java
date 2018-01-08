@@ -513,9 +513,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <br>
 	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_allowBodyParam} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -532,9 +534,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <br>
 	 * For example:  <js>"?method=OPTIONS"</js>
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_allowedMethodParams} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -550,9 +554,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * parameters.
 	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_allowHeaderParams} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -567,9 +573,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_callHandler} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -582,6 +590,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * Same as {@link #callHandler(Class)} except input is a pre-constructed instance.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
+	 * </ul>
 	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
@@ -600,8 +613,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * A REST child resource is simply another servlet that is initialized as part of the parent resource and has a
 	 * servlet path directly under the parent servlet path.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_children} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * </ul>
 	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
@@ -615,6 +630,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Same as {@link #children(Class...)} except input is pre-constructed instances.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * </ul>
 	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
@@ -632,8 +652,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * This can be used for resources that don't have a {@link RestResource#path()} annotation.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_children} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_children}
+	 * </ul>
 	 * 
 	 * @param path The child path relative to the parent resource URI.
 	 * @param child The child to add to this resource.
@@ -649,8 +671,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_classpathResourceFinder} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
+	 * </ul>
 	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
@@ -664,6 +688,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Same as {@link #classpathResourceFinder(ClasspathResourceFinder)} except input is a pre-constructed instance.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
+	 * </ul>
 	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
@@ -682,9 +711,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
 	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_clientVersionHeader} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -704,9 +735,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
 	 * will return this value instead of the actual context path of the web app.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_contextPath} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_contextPath}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -724,9 +757,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
 	 * annotation.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_converters} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_converters}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -740,6 +775,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #converters(Class...)} except input is pre-constructed instances.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_converters}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -753,9 +793,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_defaultCharset} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -769,9 +811,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Adds class-level default HTTP request headers to this resource.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_defaultRequestHeaders} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 * 
 	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
 	 * @return This object (for method chaining).
 	 * @throws RestServletException If malformed header is found.
@@ -792,6 +836,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #defaultRequestHeaders(String...)} but adds a single header name/value pair.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 * 
 	 * @param name The HTTP header name.
 	 * @param value The HTTP header value.
 	 * @return This object (for method chaining).
@@ -806,9 +855,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Specifies default values for response headers.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_defaultResponseHeaders} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 * 
 	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
 	 * @return This object (for method chaining).
 	 * @throws RestServletException If malformed header is found.
@@ -829,6 +880,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #defaultResponseHeaders(String...)} but adds a single header name/value pair.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * </ul>
+	 * 
 	 * @param name The HTTP header name.
 	 * @param value The HTTP header value.
 	 * @return This object (for method chaining).
@@ -843,9 +899,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_encoders} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -859,6 +917,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #encoders(Class...)} except input a pre-constructed instances.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -877,9 +940,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
 	 * for other purposes like pre-call validation of a request.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_guards} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_guards}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -893,6 +958,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #guards(Class...)} except input is pre-constructed instances.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_guards}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -906,9 +976,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_infoProvider} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -922,6 +994,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #infoProvider(Class)} except input is a pre-constructed instance.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -935,9 +1012,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Specifies the logger to use for logging.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_logger} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_logger}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.  Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
@@ -951,6 +1030,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #logger(Class)} except input is a pre-constructed instance.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_logger}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.  Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
@@ -965,9 +1049,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_maxInput} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -981,9 +1067,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Identifies the location of the resource bundle for this class.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_messages} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_messages}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -997,6 +1085,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #messages(MessageBundleLocation...)} except allows you to pass in the base class and bundle
 	 * path separately.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_messages}
+	 * </ul>
 	 * 
 	 * @param baseClass 
 	 * 	The base class that the bundle path is relative to.
@@ -1014,6 +1107,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #messages(Class,String)} except assumes the base class is the resource class itself.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_messages}
+	 * </ul>
+	 * 
 	 * @param bundlePath The bundle path relative to the base class.
 	 * @return This object (for method chaining).
 	 */
@@ -1027,9 +1125,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Defines MIME-type file type mappings.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_mimeTypes} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1045,9 +1145,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
 	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_paramResolvers} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1062,6 +1164,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #paramResolvers(Class...)} except input is pre-constructed instances.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1075,9 +1182,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
 	 *
-	 * <p>
-	 * See {@link Parser#PARSER_listener} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_listener}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1091,9 +1200,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Adds class-level parsers to this resource.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_parsers} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1106,6 +1217,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * Same as {@link #parsers(Class...)} except allows you to overwrite the previous value.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * </ul>
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
@@ -1126,6 +1242,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Parser instances are considered set-in-stone and do NOT inherit properties and transforms defined on the
 	 * resource class or method. 
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1139,9 +1260,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_partParser} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1155,6 +1278,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #partParser(Class)} except input is a pre-constructed instance.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1168,9 +1296,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_partSerializer} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1184,6 +1314,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #partSerializer(Class)} except input is a pre-constructed instance.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1197,9 +1332,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_path} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_path}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1216,9 +1353,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_renderResponseStackTraces} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1235,9 +1374,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_resourceResolver} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1251,6 +1392,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #resourceResolver(Class)} except input is a pre-constructed instance.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1265,9 +1411,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_responseHandlers} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1281,6 +1429,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #responseHandlers(Class...)} except input is pre-constructed instances.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1294,9 +1447,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
 	 *
-	 * <p>
-	 * See {@link Serializer#SERIALIZER_listener} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1310,9 +1465,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Adds class-level serializers to this resource.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_serializers} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1325,6 +1482,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * Same as {@link #serializers(Class...)} except allows you to overwrite the previous value.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * </ul>
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
@@ -1345,6 +1507,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Serializer instances are considered set-in-stone and do NOT inherit properties and transforms defined on the
 	 * resource class or method. 
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1358,8 +1525,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_staticFileResponseHeaders} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
+	 * </ul>
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
@@ -1376,6 +1545,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #staticFileResponseHeaders(boolean, Map)} with append=<jk>true</jk> except headers are strings 
 	 * composed of key/value pairs.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
+	 * </ul>
 	 * 
 	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
 	 * @return This object (for method chaining).
@@ -1397,6 +1571,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #staticFileResponseHeaders(String...)} except header is broken into name/value pair.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
+	 * </ul>
+	 * 
 	 * @param name The HTTP header name.
 	 * @param value The HTTP header value.
 	 * @return This object (for method chaining).
@@ -1411,9 +1590,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_staticFiles} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
+	 * 
 	 * @param values The values to append to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1432,6 +1613,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <ul>
 	 * 	<li><js>"path:location"</js> (e.g. <js>"foodocs:docs/foo"</js>)
 	 * 	<li><js>"path:location:headers-json"</js> (e.g. <js>"foodocs:docs/foo:{'Cache-Control':'max-age=86400, public'}"</js>)
+	 * </ul>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
 	 * </ul>
 	 * 
 	 * @param mappingString The static file mapping string.
@@ -1454,6 +1640,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li><js>"path:location:headers-json"</js> (e.g. <js>"foodocs:docs/foo:{'Cache-Control':'max-age=86400, public'}"</js>)
 	 * </ul>
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
+	 * 
 	 * @param baseClass 
 	 * 	Overrides the default class to use for retrieving the classpath resource. 
 	 * 	<br>If <jk>null<jk>, uses the REST resource class.
@@ -1469,6 +1660,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * Same as {@link #staticFiles(String)} except path and location are already split values.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
 	 * 
 	 * @param path 
 	 * 	The mapped URI path.
@@ -1487,6 +1683,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * Same as {@link #staticFiles(String,String)} except overrides the base class for retrieving the resource.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
+	 * </ul>
 	 * 
 	 * @param baseClass 
 	 * 	Overrides the default class to use for retrieving the classpath resource. 
@@ -1509,9 +1710,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_supportedAcceptTypes} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
+	 * </ul>
+	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param values The values to add to this setting.
@@ -1527,6 +1730,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #supportedAcceptTypes(boolean, String...)} except input is {@link MediaType} instances.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
+	 * </ul>
+	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param values The values to add to this setting.
@@ -1542,9 +1750,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_supportedContentTypes} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
+	 * </ul>
+	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param values The values to add to this setting.
@@ -1560,6 +1770,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #supportedContentTypes(boolean, String...)} except input is {@link MediaType} instances.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
+	 * </ul>
+	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
 	 * @param values The values to add to this setting.
@@ -1576,8 +1791,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * When enabled, resources retrieved via {@link RestContext#getClasspathResource(String, Locale)} (and related 
 	 * methods) will be cached in memory to speed subsequent lookups.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_useClasspathResourceCaching} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_useClasspathResourceCaching}
+	 * </ul>
 	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
@@ -1593,9 +1810,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
 	 *
-	 * <p>
-	 * See {@link RestContext#REST_useStackTraceHashes} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
+	 * </ul>
+	 * 
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1610,9 +1829,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_widgets} for more information.
-	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_widgets}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1627,6 +1848,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
 	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_widgets}
+	 * </ul>
+	 * 
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -1639,6 +1865,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Same as {@link #widgets(Widget...)} except allows you to overwrite the previous value.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_widgets}
+	 * </ul>
 	 * 
 	 * @param append 
 	 * 	If <jk>true</jk>, appends to the existing list of widgets.

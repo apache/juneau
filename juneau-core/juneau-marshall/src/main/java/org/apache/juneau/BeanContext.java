@@ -26,7 +26,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -40,14 +39,11 @@ import org.apache.juneau.transform.*;
  * 		Provides the ability to wrap beans inside {@link Map} interfaces.
  * 	<li>
  * 		Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter beanFilters},
- * 		{@link PropertyNamer property namers}, etc...  which are used to tailor how POJOs are serialized and parsed.
- * 	<li>
- * 		Serves as a common utility class for all {@link Serializer Serializers} and {@link Parser Parsers}
- * 		for serializing and parsing Java beans.
+ * 		{@link PropertyNamer propertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * </ul>
  *
  * <p>
- * All serializer and parser contexts extend from this context.
+ * All serializers and parsers extend from this context so that they can handle POJOs using a common framework.
  *
  * <h5 class='topic'>Bean Contexts</h5>
  *
@@ -187,24 +183,6 @@ import org.apache.juneau.transform.*;
  * <p>
  * See {@link BeanConstructor @BeanConstructor} for more information.
  *
- * <h5 class='topic'>BeanFilters and PojoSwaps</h5>
- *
- * 	{@link BeanFilter BeanFilters} and {@link PojoSwap PojoSwaps} are used to tailor how beans and POJOs are handled.
- * 	<ol class='spaced-list'>
- * 		<li>
- * 			{@link BeanFilter} - Allows you to tailor handling of bean classes.
- * 			This class can be considered a programmatic equivalent to the {@link Bean} annotation when
- * 			annotating classes are not possible (e.g. you don't have access to the source).
- * 			This includes specifying which properties are visible and the ability to programmatically override the
- * 			execution of properties.
- * 		<li>
- * 			{@link PojoSwap} - Allows you to swap out non-serializable objects with serializable replacements.
- * 	</ol>
- *
- * <p>
- * See <a class='doclink' href='transform/package-summary.html#TOC'>org.apache.juneau.transform</a> for more
- * information.
- *
  * <h5 class='topic'>ClassMetas</h5>
  *
  * The {@link ClassMeta} class is a wrapper around {@link Class} object that provides cached information about that
@@ -225,8 +203,9 @@ public class BeanContext extends Context {
 	static final String PREFIX = "BeanContext.";
 
 	/**
+	 * 
 	 * Configuration property:  Look for bean classes with the specified minimum visibility.
-	 *
+	 * 
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
@@ -238,12 +217,18 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanClassVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
-	 *
+	 * 
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class.
+	 * 
+	 *	<h5 class='section'>Example:</h5>
+	 *	<p class='bcode'>
+	 * 	<jc>// Create a serializer that serializes protected classes.</jc>
+	 * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanClassVisibility(<jsf>PROTECTED</jsf>).build();
+	 *	</p>
 	 */
 	public static final String BEAN_beanClassVisibility = PREFIX + "beanClassVisibility.s";
 

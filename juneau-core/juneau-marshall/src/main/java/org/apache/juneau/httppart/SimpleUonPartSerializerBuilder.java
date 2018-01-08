@@ -17,6 +17,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Builder class for building instances of {@link SimpleUonPartSerializer}.
@@ -50,20 +51,20 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* UonPartSerializerBuilder */
-	public SimpleUonPartSerializerBuilder paramFormat(String value) {
+	public SimpleUonPartSerializerBuilder paramFormat(ParamFormat value) {
 		super.paramFormat(value);
 		return this;
 	}
 
 	@Override /* UonPartSerializerBuilder */
-	public SimpleUonPartSerializerBuilder plainTextParams() {
-		super.plainTextParams();
+	public SimpleUonPartSerializerBuilder paramFormatPlain() {
+		super.paramFormatPlain();
 		return this;
 	}
 
 	@Override /* UonSerializerBuilder */
-	public SimpleUonPartSerializerBuilder encodeChars(boolean value) {
-		super.encodeChars(value);
+	public SimpleUonPartSerializerBuilder encoding(boolean value) {
+		super.encoding(value);
 		return this;
 	}
 

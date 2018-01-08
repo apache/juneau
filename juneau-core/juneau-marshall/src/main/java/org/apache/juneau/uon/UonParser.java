@@ -40,13 +40,13 @@ public class UonParser extends ReaderParser {
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"UonParser.decodeChars.b"</js>
+	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonParserBuilder#decodeChars(boolean)}
+	 * 			<li class='jm'>{@link UonParserBuilder#decoding(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -55,7 +55,7 @@ public class UonParser extends ReaderParser {
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * before being passed to this parser.
 	 */
-	public static final String UON_decodeChars = PREFIX + "decodeChars.b";
+	public static final String UON_decoding = PREFIX + "decoding.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ public class UonParser extends ReaderParser {
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Decoding(PropertyStore ps) {
-			super(ps.builder().set(UON_decodeChars, true).build());
+			super(ps.builder().set(UON_decoding, true).build());
 		}
 	}
 
@@ -114,7 +114,7 @@ public class UonParser extends ReaderParser {
 	 */
 	public UonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		this.decodeChars = getProperty(UON_decodeChars, boolean.class, false);
+		this.decodeChars = getProperty(UON_decoding, boolean.class, false);
 	}
 
 	@Override /* Context */

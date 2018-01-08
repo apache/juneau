@@ -23,10 +23,10 @@ import java.lang.reflect.*;
  * <p>
  * Used in conjunction with the following bean context properties:
  * <ul>
- * 	<li>{@link BeanContext#BEAN_beanConstructorVisibility}
- * 	<li>{@link BeanContext#BEAN_beanClassVisibility}
- * 	<li>{@link BeanContext#BEAN_beanFieldVisibility}
- * 	<li>{@link BeanContext#BEAN_methodVisibility}
+ * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
+ * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
+ * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
+ * 	<li class='jf'>{@link BeanContext#BEAN_methodVisibility}
  * </ul>
  */
 public enum Visibility {
@@ -50,12 +50,12 @@ public enum Visibility {
 	 * Identifies if the specified mod matches this visibility.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <code>
-	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//true</jk>
-	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//false</jk>
-	 * 	<jsf>PRIVATE</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//true</jk>
-	 * 	<jsf>NONE</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//false</jk>
-	 * </code>
+	 * <p class='bcode'>
+	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
+	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//false</jc>
+	 * 	<jsf>PRIVATE</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
+	 * 	<jsf>NONE</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//false</jc>
+	 * </p>
 	 *
 	 * @param mod The modifier from the object being tested (e.g. results from {@link Class#getModifiers()}.
 	 * @return <jk>true</jk> if this visibility matches the specified modifier attribute.

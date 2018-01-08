@@ -57,13 +57,16 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_addKeyValueTableHeaders</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializer#HTML_addKeyValueTableHeaders
 	 */
 	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		return set(HTML_addKeyValueTableHeaders, value);
@@ -78,13 +81,16 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_detectLinksInStrings</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializer#HTML_detectLinksInStrings
 	 */
 	public HtmlSerializerBuilder detectLinksInStrings(boolean value) {
 		return set(HTML_detectLinksInStrings, value);
@@ -95,13 +101,16 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_labelParameter</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializer#HTML_labelParameter
 	 */
 	public HtmlSerializerBuilder labelParameter(String value) {
 		return set(HTML_labelParameter, value);
@@ -118,13 +127,16 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_lookForLabelParameters</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_lookForLabelParameters}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializer#HTML_lookForLabelParameters
 	 */
 	public HtmlSerializerBuilder lookForLabelParameters(boolean value) {
 		return set(HTML_lookForLabelParameters, value);
@@ -140,14 +152,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * <p>
 	 * See the {@link AnchorText} enum for possible values.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>HTML_uriAnchorText</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see HtmlSerializer#HTML_uriAnchorText
 	 */
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
 		return set(HTML_uriAnchorText, value);

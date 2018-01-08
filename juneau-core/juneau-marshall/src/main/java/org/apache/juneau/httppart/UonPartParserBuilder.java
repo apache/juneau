@@ -53,8 +53,8 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	//--------------------------------------------------------------------------------
 
 	@Override /* UonParserBuilder */
-	public UonPartParserBuilder decodeChars(boolean value) {
-		return set(UON_decodeChars, value);
+	public UonPartParserBuilder decoding(boolean value) {
+		return set(UON_decoding, value);
 	}
 
 	@Override /* ParserBuilder */

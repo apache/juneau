@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.uon.UonSerializer.*;
 import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
 
 import java.util.*;
@@ -90,62 +89,39 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UrlEncodingSerializer#URLENC_expandedParams
 	 */
 	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
 		return set(URLENC_expandedParams, value);
 	}
 
-	/**
-	 * Configuration property:  Format to use for top-level query names and simple parameters.
-	 *
-	 * <p>
-	 * Specifies the format to use for URL GET parameter keys and values.
-	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"UON"</js> (default) - Use UON notation for values.
-	 * 		<br>String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
-	 * 		<br>Similarly, boolean and numeric values will also end up quoted.
-	 * 	<li>
-	 * 		<js>"PLAINTEXT"</js> (default) - Serialize as plain text.
-	 * 		<br>Strings will never be quoted or escaped.
-	 * 		<br>Note that this can cause errors during parsing if you're using the URL-encoding parser to parse
-	 * 		the results since UON constructs won't be differentiable.
-	 * 		<br>However, this is not an issue if you're simply creating queries or form posts against 3rd-party interfaces.
-	 * </ul>
-	 *
-	 * @param paramFormat The new value for this property.
-	 * @return This object (for method chaining).
-	 * @see UonSerializer#UON_paramFormat
-	 */
-	public UrlEncodingSerializerBuilder paramFormat(String paramFormat) {
-		return set(UON_paramFormat, paramFormat);
-	}
-
-	/**
-	 * Shortcut for calling <code>paramFormat(<js>"PLAINTEXT"</js>)</code>.
-	 *
-	 * @return This object (for method chaining).
-	 * @see UonSerializer#UON_paramFormat
-	 */
-	public UrlEncodingSerializerBuilder plainTextParams() {
-		return paramFormat("PLAINTEXT");
-	}
-
 	@Override /* UonSerializerBuilder */
-	public UrlEncodingSerializerBuilder encodeChars(boolean value) {
-		super.encodeChars(value);
+	public UrlEncodingSerializerBuilder encoding(boolean value) {
+		super.encoding(value);
 		return this;
 	}
 
 	@Override /* UonSerializerBuilder */
 	public UrlEncodingSerializerBuilder encoding() {
 		super.encoding();
+		return this;
+	}
+
+	@Override /* UonSerializerBuilder */
+	public UrlEncodingSerializerBuilder paramFormat(ParamFormat paramFormat) {
+		super.paramFormat(paramFormat);
+		return this;
+	}
+
+	@Override /* UonSerializerBuilder */
+	public UrlEncodingSerializerBuilder paramFormatPlain() {
+		super.paramFormatPlain();
 		return this;
 	}
 

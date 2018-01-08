@@ -41,8 +41,10 @@ public @interface RestMethod {
 	/**
 	 * Appends the specified bean filters to all serializers and parsers used by this method.
 	 * 
-	 * <p>
-	 * See {@link BeanContext#BEAN_beanFilters} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * </ul>
 	 */
 	Class<?>[] beanFilters() default {};
 
@@ -90,6 +92,11 @@ public @interface RestMethod {
 	 * 	bpi={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
 	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
 	 */
 	String[] bpi() default {};
 
@@ -136,6 +143,11 @@ public @interface RestMethod {
 	 * 	bpx={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
 	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * </p>
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
 	 */
 	String[] bpx() default {};
 
@@ -211,8 +223,10 @@ public @interface RestMethod {
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with this method.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_converters} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_converters}
+	 * </ul>
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -232,8 +246,10 @@ public @interface RestMethod {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_defaultCharset} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * </ul>
 	 */
 	String defaultCharset() default "";
 
@@ -329,8 +345,12 @@ public @interface RestMethod {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_defaultRequestHeaders} for more information.
+	 * @see RestContext#REST_defaultRequestHeaders
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -394,8 +414,10 @@ public @interface RestMethod {
 	 * <p>
 	 * Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_encoders} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_encoders}
+	 * </ul>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -413,8 +435,10 @@ public @interface RestMethod {
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_guards} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_guards}
+	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
@@ -491,8 +515,10 @@ public @interface RestMethod {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_maxInput} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
+	 * </ul>
 	 */
 	String maxInput() default "";
 
@@ -570,8 +596,10 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_parsers} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * </ul>
 	 */
 	Class<? extends Parser>[] parsers() default {};
 
@@ -600,9 +628,11 @@ public @interface RestMethod {
 
 	/**
 	 * Appends the specified POJO swaps to all serializers and parsers used by this method.
-	 *
-	 * <p>
-	 * See {@link BeanContext#BEAN_pojoSwaps} for more information.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
+	 * </ul>
 	 */
 	Class<?>[] pojoSwaps() default {};
 
@@ -655,8 +685,10 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_serializers} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * </ul>
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -722,8 +754,10 @@ public @interface RestMethod {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_supportedAcceptTypes} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedAcceptTypes}
+	 * </ul>
 	 */
 	String[] supportedAcceptTypes() default {};
 	
@@ -743,8 +777,10 @@ public @interface RestMethod {
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
 	 * 
-	 * <p>
-	 * See {@link RestContext#REST_supportedContentTypes} for more information.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_supportedContentTypes}
+	 * </ul>
 	 */
 	String[] supportedContentTypes() default {};
 

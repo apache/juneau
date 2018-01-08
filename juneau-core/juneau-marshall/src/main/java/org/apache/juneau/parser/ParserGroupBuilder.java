@@ -133,9 +133,13 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_fileCharset
 	 */
 	public ParserGroupBuilder fileCharset(String value) {
 		return set(PARSER_fileCharset, value);
@@ -144,9 +148,13 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_inputStreamCharset
 	 */
 	public ParserGroupBuilder inputStreamCharset(String value) {
 		return set(PARSER_inputStreamCharset, value);
@@ -155,9 +163,13 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Parser#PARSER_listener} property on all parsers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_listener}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_listener
 	 */
 	public ParserGroupBuilder listener(Class<? extends ParserListener> value) {
 		return set(PARSER_listener, value);
@@ -166,9 +178,13 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_strict
 	 */
 	public ParserGroupBuilder strict(boolean value) {
 		return set(PARSER_strict, value);
@@ -177,9 +193,13 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	/**
 	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see Parser#PARSER_trimStrings
 	 */
 	public ParserGroupBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);

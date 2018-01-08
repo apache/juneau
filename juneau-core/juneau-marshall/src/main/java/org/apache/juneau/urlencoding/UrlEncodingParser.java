@@ -96,7 +96,7 @@ public class UrlEncodingParser extends UonParser {
 	public UrlEncodingParser(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(UON_decodeChars, true)
+				.set(UON_decoding, true)
 				.build(), 
 			"application/x-www-form-urlencoded"
 		);

@@ -57,15 +57,18 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SOAPXML_SOAPAction</jsf>, value)</code>.
 	 * 	<li>This introduces a slight performance penalty.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link SoapXmlSerializer#SOAPXML_SOAPAction}
+	 * </ul>
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SoapXmlSerializer#SOAPXML_SOAPAction
 	 */
-	public SoapXmlSerializerBuilder uriAnchorText(String value) {
+	public SoapXmlSerializerBuilder soapAction(String value) {
 		return set(SOAPXML_SOAPAction, value);
 	}
 

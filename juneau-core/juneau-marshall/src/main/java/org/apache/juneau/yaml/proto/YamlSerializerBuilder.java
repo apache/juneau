@@ -60,14 +60,13 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to
 	 * serialize <xt>&lt;\/script&gt;</xt>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>JSON_escapeSolidus</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link YamlSerializer#YAML_escapeSolidus}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see #YAML_escapeSolidus
 	 */
 	public YamlSerializerBuilder escapeSolidus(boolean value) {
 		return set(YAML_escapeSolidus, value);
@@ -76,6 +75,11 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Shortcut for calling <code>setSimpleMode(<jk>true</jk>).sq()</code>.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link YamlSerializer#YAML_simpleMode}
+	 * </ul>
+	 * 
 	 * @return This object (for method chaining).
 	 */
 	public YamlSerializerBuilder simple() {
@@ -89,14 +93,13 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>JSON_simpleMode</jsf>, value)</code>.
+	 * 	<li class='jf'>{@link YamlSerializer#YAML_simpleMode}
 	 * </ul>
-	 *
+	 * 
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see #YAML_simpleMode
 	 */
 	public YamlSerializerBuilder simple(boolean value) {
 		return set(YAML_simpleMode, value);
