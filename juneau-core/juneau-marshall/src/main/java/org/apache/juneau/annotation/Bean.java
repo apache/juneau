@@ -287,46 +287,15 @@ public @interface Bean {
 
 
 	/**
-	 * Bean lookup dictionary.
+	 * Bean dictionary.
+	 *
+	 * <p>
+	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 	 * 
-	 * <p>
-	 * The list of classes that make up the bean dictionary for all properties of this bean or for subclasses of this
-	 * bean.
-	 *
-	 * <p>
-	 * This is a shorthand for setting the {@link BeanProperty#beanDictionary()} on all properties of the bean.
-	 *
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Properties:
-	 * 		<ul> 	
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
-	 * 		</ul>
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link Bean#beanDictionary()}
-	 * 			<li>{@link BeanProperty#beanDictionary()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
-	 * 		</ul>
-	 * 	<li>Values can consist of any of the following types:
-	 *			<ul>
-	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
-	 * 				annotations.
-	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
-	 * 				annotations.
-	 * 		</ul>
-	 * 	<li>See <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
-	 * 		for more information.
-	 *	</ul>
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
 	 */
 	Class<?>[] beanDictionary() default {};
 }

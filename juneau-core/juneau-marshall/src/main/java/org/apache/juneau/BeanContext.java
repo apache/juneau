@@ -285,7 +285,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility.s";
 
 	/**
-	 * Configuration property:  Bean lookup dictionary.
+	 * Configuration property:  Bean dictionary.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -300,11 +300,12 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
 	 * 			<li class='jm'>{@link BeanFilterBuilder#beanDictionary(Class...)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#beanDictionary(boolean,Class...)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -316,25 +317,45 @@ public class BeanContext extends Context {
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
 	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 * <br>For example, if a class <code>Foo</code> has a type-name of <js>"myfoo"</js>, then it would end up serialized
+	 * as <js>"{_type:'myfoo',...}"</js>.
 	 * 
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	BeanContext bc = BeanContext.<jsm>create</jsm>().beanDictionary(Bar.<jk>class</jk>, Baz.<jk>class</jk>).build();
-	 * </p>
-	 *
 	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Values can consist of any of the following types:
-	 *			<ul>
-	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
-	 * 				annotations.
-	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
-	 * 				annotations.
-	 * 		</ul>
-	 * 	<li>See <a class='doclink' href='../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
-	 * 		for more information.
+	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
+	 * 
+	 * <p>
+	 * Values can consist of any of the following types:
+	 *	<ul>
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<li>Any array or collection of the objects above.
+	 * </ul>
+	 *
+	 *	<h5 class='section'>Example:</h5>
+	 *	<p class='bcode'>
+	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
+	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
+	 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
+	 * 	<ja>@Bean</ja>(beanDictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 * 
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; Bean Names and Dictionaries</a>
 	 *	</ul>
 	 */
 	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";

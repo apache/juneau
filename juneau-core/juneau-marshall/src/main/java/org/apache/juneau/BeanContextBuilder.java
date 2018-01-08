@@ -98,37 +98,47 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean lookup dictionary.
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Adds to the list of classes that make up the bean dictionary in this bean context.
+	 * 
+	 * <p>
+	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+	 * through reflection.
+	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 * <br>For example, if a class <code>Foo</code> has a type-name of <js>"myfoo"</js>, then it would end up serialized
+	 * as <js>"{_type:'myfoo',...}"</js>.
+	 * 
+	 * <p>
+	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
+	 * 
+	 * <p>
+	 * Values can consist of any of the following types:
+	 *	<ul>
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<li>Any array or collection of the objects above.
+	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 * 
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
-	 * @param values 
-	 * 	The new value for this property.
-	 * 	<br>Values can be any of the following types:
-	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
-	 * 			annotations.
-	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
-	 * 			annotations.
-	 * 		<li>Any array or collection of the types above:
-	 * 	</ul>
+	 * @param values The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder beanDictionary(boolean append, Object...values) {
-		return set(append, BEAN_beanDictionary, values);
+	public BeanContextBuilder beanDictionary(Object...values) {
+		return addTo(BEAN_beanDictionary, values);
 	}
 
 	/**
-	 * Configuration property:  Bean lookup dictionary.
-	 * 
+	 * Configuration property:  Bean dictionary.
+	 *
 	 * <p>
-	 * Same as calling {@link #beanDictionary(Object...)} but with an array of classes.
+	 * Same as {@link #beanDictionary(Object...)} but takes in an array of classes.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -144,35 +154,29 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean lookup dictionary.
-	 *
-	 * <p>
-	 * The list of classes that make up the bean dictionary in this bean context.
 	 * 
 	 * <p>
-	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 * Same as {@link #beanDictionary(Object...)} but allows you to optionally overwrite the previous value.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 * 
-	 * @param values The values to add to this property.
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
+	 * @param values The new values for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder beanDictionary(Object...values) {
-		return addTo(BEAN_beanDictionary, values);
+	public BeanContextBuilder beanDictionary(boolean append, Object...values) {
+		return set(append, BEAN_beanDictionary, values);
 	}
 
 	/**
 	 * Configuration property:  Remove from bean dictionary.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>removeFromProperty(<jsf>BEAN_beanDictionary</jsf>, values)</code>
-	 * 		or <code>property(<jsf>BEAN_beanDictionary_remove</jsf>, values)</code>.
-	 * </ul>
+	 * 
+	 * <p>
+	 * Removes from the list of classes that make up the bean dictionary in this bean context.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

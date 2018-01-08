@@ -214,27 +214,42 @@ public abstract class BeanFilterBuilder {
 	}
 
 	/**
-	 * Sets the contents of this bean's bean dictionary.
+	 * Adds classes to this bean's bean dictionary.
 	 *
-	 * @param c The classes to set on this bean's bean dictionary.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 * 
+	 * @param values The classes to add to this bean's bean dictionary.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setBeanDictionary(Class<?>...c) {
-		beanDictionary = new ArrayList<>(Arrays.asList(c));
+	public BeanFilterBuilder beanDictionary(Class<?>...values) {
+		if (beanDictionary == null)
+			beanDictionary = new ArrayList<>(Arrays.asList(values));
+		else for (Class<?> cc : values)
+			beanDictionary.add(cc);
 		return this;
 	}
 
 	/**
-	 * Adds classes to this bean's bean dictionary.
+	 * Sets the contents of this bean's bean dictionary.
 	 *
-	 * @param c The classes to add to this bean's bean dictionary.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 * 
+	 * @param append
+	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced. 
+	 * @param values The classes to set on this bean's bean dictionary.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder beanDictionary(Class<?>...c) {
-		if (beanDictionary == null)
-			beanDictionary = new ArrayList<>(Arrays.asList(c));
-		else for (Class<?> cc : c)
-			beanDictionary.add(cc);
+	public BeanFilterBuilder beanDictionary(boolean append, Class<?>...values) {
+		if (append)
+			beanDictionary(values);
+		else
+			beanDictionary = new ArrayList<>(Arrays.asList(values));
 		return this;
 	}
 

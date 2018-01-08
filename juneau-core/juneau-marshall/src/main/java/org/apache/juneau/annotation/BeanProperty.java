@@ -234,47 +234,18 @@ public @interface BeanProperty {
 	String properties() default "";
 
 	/**
-	 * Bean lookup dictionary.
+	 * Bean dictionary.
+	 *
+	 * <p>
+	 * The list of classes that make up the bean dictionary this bean property.
 	 * 
 	 * <p>
-	 * The list of classes that make up the bean dictionary for this bean property.
+	 * Used in cases where a bean property consists of maps or collections of generic objects.
 	 * 
-	 * <p>
-	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
-	 * 
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Properties:
-	 * 		<ul> 	
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_add}
-	 * 			<li>{@link BeanContext#BEAN_beanDictionary_remove}
-	 * 		</ul>
-	 * 	<li>Annotations:  
-	 * 		<ul>
-	 * 			<li>{@link Bean#beanDictionary()}
-	 * 			<li>{@link BeanProperty#beanDictionary()}
-	 * 		</ul>
-	 * 	<li>Methods:  
-	 * 		<ul>
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
-	 * 			<li>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
-	 * 		</ul>
-	 * 	<li>Values can consist of any of the following types:
-	 *			<ul>
-	 * 			<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 			<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name
-	 * 				annotations.
-	 * 			<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name
-	 * 				annotations.
-	 * 		</ul>
-	 * 	<li>See <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a> 
-	 * 		for more information.
-	 *	</ul>
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
 	 */
 	Class<?>[] beanDictionary() default {};
 
