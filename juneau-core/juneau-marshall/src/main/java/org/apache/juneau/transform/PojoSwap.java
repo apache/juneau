@@ -26,8 +26,7 @@ import org.apache.juneau.serializer.*;
  * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during
  * parsing.
  *
- *
- * <h6 class='section'>Description:</h6>
+ * <h5 class='topic'>Description</h5>
  *
  * <p>
  * <code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle
@@ -41,10 +40,15 @@ import org.apache.juneau.serializer.*;
  * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
  *
  * <p>
- * <code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap
- * class to the {@link SerializerBuilder#pojoSwaps(Class...)} and {@link ParserBuilder#pojoSwaps(Class...)} methods.
- * <br>When associated with a bean context, fields of the specified type will automatically be converted when the
- * {@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.
+ * <code>PojoSwaps</code> are associated with serializers and parsers through the following:
+ * <ul>
+ * 	<li class='ja'>{@link Swap} 
+ * 	<li class='ja'>{@link Swaps} 
+ * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(boolean, Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
+ * </ul>
  *
  * <p>
  * <code>PojoSwaps</code> have two parameters:
@@ -62,8 +66,8 @@ import org.apache.juneau.serializer.*;
  *
  * The following abstract subclasses are provided for common swap types:
  * <ol>
- * 	<li>{@link StringSwap} - Objects swapped with strings.
- * 	<li>{@link MapSwap} - Objects swapped with {@link ObjectMap ObjectMaps}.
+ * 	<li class='jac'>{@link StringSwap} - Objects swapped with strings.
+ * 	<li class='jac'>{@link MapSwap} - Objects swapped with {@link ObjectMap ObjectMaps}.
  * </ol>
  *
  *
@@ -96,24 +100,27 @@ import org.apache.juneau.serializer.*;
  *
  *
  * <h6 class='topic'>Overview</h6>
- *
+ * 
+ * <p>
  * The following is an example of a swap that replaces byte arrays with BASE-64 encoded strings:
- *
+ * 
  * <p class='bcode'>
- * 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> PojoSwap<<jk>byte</jk>[],String> {
- *
- * 		<jk>public</jk> String swap(BeanSession session, <jk>byte</jk>[] b) <jk>throws</jk> SerializeException {
+ * 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> PojoSwap&lt;<jk>byte</jk>[],String&gt; {
+ * 		
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> String swap(BeanSession session, <jk>byte</jk>[] b) <jk>throws</jk> Exception {
  * 			<jk>return</jk> StringUtils.<jsm>base64Encode</jsm>(b);
  * 		}
- *
- * 		<jk>public byte</jk>[] unswap(BeanSession session, String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+ * 		
+ * 		<ja>@Override</ja>
+ * 		<jk>public byte</jk>[] unswap(BeanSession session, String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
  * 			<jk>return</jk> StringUtils.<jsm>base64Decode</jsm>(s);
  * 		}
  * 	}
  * </p>
  *
  * <p class='bcode'>
- * 	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.builder().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+ * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
  * 	String json = s.serialize(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
  *
@@ -148,11 +155,11 @@ import org.apache.juneau.serializer.*;
  * Note that while there is a unified interface for handling swaps during both serialization and parsing,
  * in many cases only one of the {@link #swap(BeanSession, Object)} or {@link #unswap(BeanSession, Object, ClassMeta)}
  * methods will be defined because the swap is one-way.
- * For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
+ * <br>For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
  * it's not possible to unswap an {@code Iterator}.
- * In that case, the {@code swap(Object}} method would be implemented, but the {@code unswap(ObjectMap)} object would
+ * <br>In that case, the {@code swap(Object}} method would be implemented, but the {@code unswap(ObjectMap)} object would
  * not, and the swap would be associated on the serializer, but not the parser.
- * Also, you may choose to serialize objects like {@code Dates} to readable {@code Strings}, in which case it's not
+ * <br>Also, you may choose to serialize objects like {@code Dates} to readable {@code Strings}, in which case it's not
  * possible to re-parse it back into a {@code Date}, since there is no way for the {@code Parser} to know it's a
  * {@code Date} from just the JSON or XML text.
  *
@@ -160,7 +167,7 @@ import org.apache.juneau.serializer.*;
  * <h6 class='topic'>Per media-type swaps</h6>
  * <p>
  * The {@link #forMediaTypes()} method can be overridden to provide a set of media types that the swap is invoked on.
- * It's also possible to define multiple swaps against the same POJO as long as they're differentiated by media type.
+ * <br>It's also possible to define multiple swaps against the same POJO as long as they're differentiated by media type.
  * When multiple swaps are defined, the best-match media type is used.
  *
  * <p>
@@ -311,9 +318,13 @@ import org.apache.juneau.serializer.*;
  * <code>Time-Zone</code> headers on the request.
  *
  *
- * <h6 class='section'>Additional information:</h6>
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; PojoSwaps</a>
+ *		<li><a class="doclink" href="package-summary.html#PojoSwaps">org.apache.juneau.transform &gt; PojoSwap Class</a>
+ *		<li><a class='doclink' href='org/apache/juneau/transform/package-summary.html#PojoSwaps_OneWay'>org.apache.juneau.transform &gt; One-Way PojoSwaps</a>
+ *	</ul>
  *
- * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
  *
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.

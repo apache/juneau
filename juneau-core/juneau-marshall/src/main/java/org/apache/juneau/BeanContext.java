@@ -426,6 +426,10 @@ public class BeanContext extends Context {
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b> 
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean} 
+	 * 		</ul>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Object...)}
@@ -479,8 +483,9 @@ public class BeanContext extends Context {
 	 * 
 	 *	<h5 class='section'>Documentation:</h5>
 	 *	<ul>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters and @Bean annotations</a>
-	 *		<li><a class="doclink" href="transform/package-summary.html#BeanFilters">org.apache.juneau.transform &gt; BeanFilter Class</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanAnnotation">Overview &gt; @Bean Annotation</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.StopClasses">Overview &gt; Stop Classes</a>
 	 *	</ul>
 	 */
 	public static final String BEAN_beanFilters = PREFIX + "beanFilters.lc";
@@ -1056,7 +1061,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_notBeanPackages_remove = PREFIX + "notBeanPackages.ss/remove";
 
 	/**
-	 * Configuration property:  POJO swaps to apply to Java objects.
+	 * Configuration property:  POJO swaps.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -1071,8 +1076,8 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(boolean, Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
 	 * 		</ul>
@@ -1080,16 +1085,67 @@ public class BeanContext extends Context {
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * There are two category of classes that can be passed in through this method:
-	 * <ul>
-	 * 	<li>Subclasses of {@link PojoSwap}.
-	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
-	 * </ul>
-	 *
+	 * POJO swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
+	 * and "swap in" the non-serializable class during parsing.
+	 * 
+	 * <p>
+	 * An example of a POJO swap would be a <code>Calendar</code> object that gets swapped out for an ISO8601 string.
+	 * 
 	 * <p>
 	 * Multiple POJO swaps can be associated with a single class.
-	 * When multiple swaps are applicable to the same class, the media type pattern defined by
+	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
 	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes()} are used to come up with the best match.
+	 * 
+	 * <p>
+	 * Values can consist of any of the following types:
+	 * <ul>
+	 * 	<li>Any subclass of {@link PojoSwap}.
+	 * 	<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 	<li>Any array or collection of the objects above.
+	 * </ul>
+	 * 
+	 *	<h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
+	 * 	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
+	 * 		<jc>// ISO8601 formatter.</jc>
+	 * 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
+	 * 		
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> String swap(BeanSession session, Date o) {
+	 * 			<jk>return</jk> <jf>format</jf>.format(o);
+	 * 		}
+	 * 		
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> Exception {
+	 * 			<jk>return</jk> <jf>format</jf>.parse(o);
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Sample bean with a Date field.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> Date <jf>date</jf> = <jk>new</jk> Date(112, 2, 3, 4, 5, 6);
+	 * 	}
+	 * 
+	 * 	<jc>// Create a new JSON serializer, associate our date swap with it, and serialize a sample bean.</jc>
+	 * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
+	 * 	
+	 * 	<jc>// Create a JSON parser, associate our date swap with it, and reconstruct our bean (including the date).</jc>
+	 * 	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
+	 * 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
+	 * </p>
+	 * 
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; PojoSwaps</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.OneWayPojoSwaps">Overview &gt; One-way PojoSwaps</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SwapMethods">Overview &gt; Swap Methods</a>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SurrogateClasses">Overview &gt; Surrogate Classes</a>
+	 *	</ul>
 	 */
 	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lc";
 

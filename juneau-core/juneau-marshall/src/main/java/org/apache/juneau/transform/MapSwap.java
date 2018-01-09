@@ -17,6 +17,27 @@ import org.apache.juneau.*;
 /**
  * Abstract subclass for POJO swaps that swap objects for object maps.
  *
+ * <h6 class='topic'>Example</h6>
+ * <p class='bcode'>
+ * 	<jc>// A swap that converts beans into generic maps.</jc>
+ * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> MapSwap&lt;<jk>byte</jk>[]&gt; {
+ * 		
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> ObjectMap swap(BeanSession session, MyBean myBean) <jk>throws</jk> Exception {
+ * 			<jk>return new</jk> ObjectMap().append(<js>"foo"</js>, myBean.getFoo());
+ * 		}
+ * 		
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> MyBean unswap(BeanSession session, ObjectMap m, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
+ * 			<jk>return new</jk> MyBean(m.get(<js>"foo"</js>));
+ * 		}
+ * 	}
+ * 
+ * 	<jc>// Use it to serialize a byte array.</jc>
+ * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+ * 	String json = s.serialize(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
+ * </p>
+ * 
  * @param <T> The normal form of the class.
  */
 public abstract class MapSwap<T> extends PojoSwap<T,ObjectMap> {
