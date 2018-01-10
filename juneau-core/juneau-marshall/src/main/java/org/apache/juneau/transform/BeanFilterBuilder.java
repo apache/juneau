@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.beans.*;
 import java.util.*;
 
@@ -24,27 +26,14 @@ import org.apache.juneau.*;
  * Bean filter builders must have a public no-arg constructor.
  * Builder settings should be set in the constructor using the provided setters on this class.
  *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- * 	<jc>// Create our serializer with a bean filter.</jc>
- * 	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(AddressFilter.<jk>class</jk>).build();
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
+ *	</ul>
  *
- * 	Address a = <jk>new</jk> Address();
- * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
- *
- * 	<jc>// Filter class defined via setters</jc>
- * 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilterBuilder {
- * 		<jk>public</jk> AddressFilter() {
- * 			super(Address.<jk>class</jk>);
- * 			setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
- * 		}
- * 	}
- * </p>
- *
- * <h5 class='section'>Additional information:</h5>
- * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
+ * @param <T> The bean type that this filter applies to. 
  */
-public abstract class BeanFilterBuilder {
+public class BeanFilterBuilder<T> {
 
 	Class<?> beanClass;
 	String typeName;
@@ -53,13 +42,24 @@ public abstract class BeanFilterBuilder {
 	boolean sortProperties;
 	Object propertyNamer;
 	List<Class<?>> beanDictionary;
+	Object propertyFilter;
+
+	/**
+	 * Constructor.
+	 * 
+	 * <p>
+	 * Bean class is determined through reflection of the parameter type.
+	 */
+	protected BeanFilterBuilder() {
+		beanClass = resolveParameterType(BeanFilterBuilder.class, 0, this.getClass());
+	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param beanClass The bean class that this filter applies to.
 	 */
-	public BeanFilterBuilder(Class<?> beanClass) {
+	protected BeanFilterBuilder(Class<?> beanClass) {
 		this.beanClass = beanClass;
 	}
 
@@ -69,7 +69,7 @@ public abstract class BeanFilterBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder typeName(String value) {
+	public BeanFilterBuilder<T> typeName(String value) {
 		this.typeName = value;
 		return this;
 	}
@@ -85,7 +85,7 @@ public abstract class BeanFilterBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder properties(String...value) {
+	public BeanFilterBuilder<T> properties(String...value) {
 		this.properties = value;
 		return this;
 	}
@@ -96,7 +96,7 @@ public abstract class BeanFilterBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder excludeProperties(String...value) {
+	public BeanFilterBuilder<T> excludeProperties(String...value) {
 		this.excludeProperties = value;
 		return this;
 	}
@@ -120,9 +120,8 @@ public abstract class BeanFilterBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Filter class</jc>
-	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilterBuilder {
+	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilterBuilder&lt;A&gt; {
 	 * 		<jk>public</jk> AFilter() {
-	 * 			super(A.<jk>class</jk>);
 	 * 			setInterfaceClass(A.<jk>class</jk>);
 	 * 		}
 	 * 	}
@@ -140,7 +139,7 @@ public abstract class BeanFilterBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder interfaceClass(Class<?> value) {
+	public BeanFilterBuilder<T> interfaceClass(Class<?> value) {
 		this.interfaceClass = value;
 		return this;
 	}
@@ -174,7 +173,7 @@ public abstract class BeanFilterBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder stopClass(Class<?> value) {
+	public BeanFilterBuilder<T> stopClass(Class<?> value) {
 		this.stopClass = value;
 		return this;
 	}
@@ -185,7 +184,7 @@ public abstract class BeanFilterBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder sortProperties(boolean value) {
+	public BeanFilterBuilder<T> sortProperties(boolean value) {
 		this.sortProperties = value;
 		return this;
 	}
@@ -196,7 +195,7 @@ public abstract class BeanFilterBuilder {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder propertyNamer(PropertyNamer value) {
+	public BeanFilterBuilder<T> propertyNamer(PropertyNamer value) {
 		this.propertyNamer = value;
 		return this;
 	}
@@ -208,7 +207,7 @@ public abstract class BeanFilterBuilder {
 	 * @return This object (for method chaining).
 	 * @throws Exception Thrown from constructor method.
 	 */
-	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> value) throws Exception {
+	public BeanFilterBuilder<T> propertyNamer(Class<? extends PropertyNamer> value) throws Exception {
 		this.propertyNamer = value;
 		return this;
 	}
@@ -224,7 +223,7 @@ public abstract class BeanFilterBuilder {
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder beanDictionary(Class<?>...values) {
+	public BeanFilterBuilder<T> beanDictionary(Class<?>...values) {
 		if (beanDictionary == null)
 			beanDictionary = new ArrayList<>(Arrays.asList(values));
 		else for (Class<?> cc : values)
@@ -245,11 +244,22 @@ public abstract class BeanFilterBuilder {
 	 * @param values The new values for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder beanDictionary(boolean append, Class<?>...values) {
+	public BeanFilterBuilder<T> beanDictionary(boolean append, Class<?>...values) {
 		if (append)
 			beanDictionary(values);
 		else
 			beanDictionary = new ArrayList<>(Arrays.asList(values));
+		return this;
+	}
+	
+	/**
+	 * The property filter to use for intercepting and altering getter and setter calls.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder<T> propertyFilter(Class<? extends PropertyFilter> value) {
+		this.propertyFilter = value;
 		return this;
 	}
 

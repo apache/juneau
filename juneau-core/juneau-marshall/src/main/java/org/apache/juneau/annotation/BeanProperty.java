@@ -23,32 +23,12 @@ import org.apache.juneau.*;
  * Used tailor how bean properties get interpreted by the framework.
  *
  * <p>
- * Can be used to do the following:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Override the name of a property.
- * 	<li>
- * 		Identify a getter or setter with a non-standard naming convention.
- * 	<li>
- * 		Identify a specific subclass for a property with a general class type.
- * 	<li>
- * 		Identify class types of elements in properties of type <code>Collection</code> or <code>Map</code>.
- * 	<li>
- * 		Hide properties during serialization.
- * 	<li>
- * 		Associate transforms with bean property values, such as a POJO swap to convert a <code>Calendar</code> field
- * 		to a string.
- * 	<li>
- * 		Override the list of properties during serialization on child elements of a property of type
- * 		<code>Collection</code> or <code>Map</code>.
- * 	<li>
- * 		Identify a property as the URL for a bean.
- * 	<li>
- * 		Identify a property as the ID for a bean.
- * </ul>
- *
- * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanPropertyAnnotation">Overview &gt; @BeanProperty Annotation</a>
+ *	</ul>
  */
 @Documented
 @Target({FIELD,METHOD})

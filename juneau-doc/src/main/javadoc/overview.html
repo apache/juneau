@@ -95,6 +95,7 @@
 				<li><p><a class='doclink' href='#juneau-marshall.PerMediaTypePojoSwaps'>Per-media-type PojoSwaps</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.OneWayPojoSwaps'>One-way PojoSwaps</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.SwapAnnotation'>@Swap Annotation</a></p>
+				<li><p><a class='doclink' href='#juneau-marshall.TemplatedSwaps'>Templated Swaps</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.SwapMethods'>Swap Methods</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.SurrogateClasses'>Surrogate Classes</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.BeanAnnotation'>@Bean Annotation</a></p>
@@ -832,15 +833,34 @@
 		</div>
 
 		<!-- ======================================================================================================= -->
-		<a id="juneau-marshall-ConfigurableProperties"></a>
+		<a id="juneau-marshall.ConfigurableProperties"></a>
 		<h4 class='topic' onclick='toggle(this)'>2.1.5 - Configurable Properties</h4>
 		<div class='topic'>
 			<p>
 				Serializers and parsers have a wide variety of configurable properties.
+				<br>They all extend from the {@link org.apache.juneau.BeanContextBuilder} class that allows you to easily construct
+				new instances from scratch or build upon existing instances.
 				<br>For example, the following code shows how to configure a JSON serializer:
 			</p>
 			<p class='bcode'>
-	JsonSerializer s = JsonSerializer.<jsm>create</jsm>().simple().ws().sq().build();
+	WriterSerializer s = JsonSerializer
+		.<jsm>create</jsm>()  <jc>// Create a JsonSerializerBuilder</jc>
+		.simple()  <jc>// Simple mode</jc>
+		.ws()  <jc>// Use whitespace</jc>
+		.sq()  <jc>// Use single quotes </jc>
+		.build();  <jc>// Create a JsonSerializer</jc>
+			</p>
+			<p>
+				Configurable settings can also be set declaratively.
+				<br>The following produces the same serializer.
+			</p>
+			<p class='bcode'>
+	WriterSerializer s = JsonSerializer
+		.<jsm>create</jsm>()
+		.set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
+		.set(<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+		.set(<jsf>SERIALIZER_quoteChar</jsf>, <js>"'"</js>)
+		.build();
 			</p>
 			<p>
 				However, each of the serializers and parsers already contain reusable instances with common configurations.
@@ -885,8 +905,8 @@
 			</p>
 			<p class='bcode'>
 	<jc>// Clone and customize an existing serializer.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>
-		.builder() 
+	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>
+		.builder()  <jc>// Create a new builder with copied settings.</jc>
 		.quoteChar(<js>'"'</js>)  <jc>// Use a different quote character.</jc>
 		.build();
 			</p>
@@ -969,12 +989,36 @@
 									- Configurable properties on the XML parser.
 							</ul>
 						</li>
+						<li class='jc'>
+							{@link org.apache.juneau.rest.RestContext} 
+							- Configurable properties on the REST servlet.
+						</li>
+						<li class='jc'>
+							{@link org.apache.juneau.rest.client.RestClient} 
+							- Configurable properties on the REST client.
+						</li>
 					</ul>
 				</li>
-				<li class='jc'>
-					{@link org.apache.juneau.rest.RestContext} 
-					- Configurable properties on the REST servlet.
-				</li>
+			</ul>
+			<p>
+				The following classes provide more information about the internal details of how configurable properties
+				are managed in serializers and parsers.
+			</p>
+			<ul class='doctree'>
+				<li class='jac'>{@link org.apache.juneau.Context} - Base class for all contexts.
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.BeanContext} - Base class for all serializers, parsers, and REST contexts.
+				</ul> 
+				<li class='jac'>{@link org.apache.juneau.ContextBuilder} - Builder class for {@link org.apache.juneau.Context} objects. 
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.BeanContextBuilder} - Builder class for {@link org.apache.juneau.BeanContext} objects.
+				</ul> 
+				<li class='jac'>{@link org.apache.juneau.Session} - Base class for all session objects. 
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.BeanSession} - Base class for serializer and parser sessions.
+				</ul> 
+				<li class='jc'>{@link org.apache.juneau.PropertyStore} - A set of configuration properties for a context. 
+				<li class='jc'>{@link org.apache.juneau.PropertyStoreBuilder} - Builder for  {@link org.apache.juneau.PropertyStore} objects.
 			</ul>
 		</div>
 		
@@ -987,16 +1031,16 @@
 				<br>However, two special classes are provided tailor how certain Java objects are handled by the framework.
 				<br>These classes are:
 			</p>
-			<ul>
+			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
 				<li class='jac'>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
 					serializable POJOs during serialization (and optionally vis-versa during parsing).
-					<ol>
+					<ul>
 						<li class='jc'>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert 
 							objects to strings.
 						<li class='jc'>{@link org.apache.juneau.transform.MapSwap} - Convenience subclass for swaps that convert 
 							objects to maps.
-					</ol>
+					</ul>
 				</li>
 			</ul>
 			<p>
@@ -1007,9 +1051,9 @@
 				<li class='jm'>{@link org.apache.juneau.BeanContext#BEAN_pojoSwaps}
 			</ul>
 			<p>
-				Annotations are also provided for specifying transforms directly on classes and methods:
+				Annotations are also provided for specifying transforms directly on classes and methods (all described in later sections):
 			</p>
-			<ul>
+			<ul class='doctree'>
 				<li class='ja'>
 					{@link org.apache.juneau.annotation.Swap @Swap} 
 					- Used to tailor how non-bean POJOs get interpreted by the framework.
@@ -1064,14 +1108,14 @@
 		<jc>// ISO8601 formatter.</jc>
 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
 		
-		<jd>/** Converts a Date object to an ISO8601 string. */</jd>
-		<ja>@Override</ja>
+		<jc>// Converts a Date object to an ISO8601 string.</jc>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 		<jk>public</jk> String swap(BeanSession session, Date o) {
 			<jk>return</jk> <jf>format</jf>.format(o);
 		}
 		
-		<jd>/** Converts an ISO8601 string to a Date object. */</jd>
-		<ja>@Override</ja>
+		<jc>// Converts an ISO8601 string to a Date object.</jc>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> Exception {
 			<jk>return</jk> <jf>format</jf>.parse(o);
 		}
@@ -1119,13 +1163,13 @@
 	<jk>int</jk> year = myBean.<jf>date</jf>.getYear(); 								<jc>// == 113</jc>
 			</p>
 			<p>
-				Another example of a <code>PojoSwap</code> is one that converts <code><jk>byte</jk>[]</code> arrays to '
+				Another example of a <code>PojoSwap</code> is one that converts <code><jk>byte</jk>[]</code> arrays to
 				BASE64-encoded strings:
 			</p>
 			<p class='bcode'>
 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
 	
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* StringSwap */</jc>
 		<jk>public</jk> String swap(<jk>byte</jk>[] b) <jk>throws</jk> Exception {
 			ByteArrayOutputStream baos = <jk>new</jk> ByteArrayOutputStream();
 			OutputStream b64os = MimeUtility.encode(baos, <js>"base64"</js>);
@@ -1134,7 +1178,7 @@
 			<jk>return new</jk> String(baos.toByteArray());
 		}
 		
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* StringSwap */</jc>
 		<jk>public byte</jk>[] unswap(String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
 			<jk>byte</jk>[] b = s.getBytes();
 			ByteArrayInputStream bais = <jk>new</jk> ByteArrayInputStream(b);
@@ -1192,6 +1236,15 @@
 					{@link org.apache.juneau.transforms.DateSwap} transforms provide a large number of customized swaps to 
 					ISO, RFC, or localized strings.
 				</p>
+				<p>
+					Swaps have access to the session locale and timezone through the {@link org.apache.juneau.BeanSession#getLocale()} and
+					{@link org.apache.juneau.BeanSession#getTimeZone()} methods.
+					<br>This allows you to specify localized swap values when needed.
+				</p>
+				<p>
+					If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and
+					<code>Time-Zone</code> headers on the request.
+				</p>
 				
 				<ul class='doctree'>
 					<li class='info'>
@@ -1205,8 +1258,10 @@
 			<h4 class='topic' onclick='toggle(this)'>2.1.6.2 - Per-media-type PojoSwaps</h4>
 			<div class='topic'>
 				<p>
-					Swaps can also be defined per-media-type.			
-					<br>The {@link org.apache.juneau.transform.PojoSwap#forMediaTypes()} method can be overridden to 
+					Swaps can also be defined per-media-type.		
+				</p>
+				<p>	
+					The {@link org.apache.juneau.transform.PojoSwap#forMediaTypes()} method can be overridden to 
 					provide a set of media types that the swap is invoked on.
 					<br>It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
 					by media type.
@@ -1222,33 +1277,33 @@
 		<jk>public static class</jk> MyPojo {}
 
 		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
-			<ja>@Override</ja>
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
 			}
-			<ja>@Override</ja>
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
 				<jk>return</jk> <js>"It's JSON!"</js>;
 			}
 		}
 
 		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
-			<ja>@Override</ja>
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/xml"</js>);
 			}
-			<ja>@Override</ja>
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
 				<jk>return</jk> <js>"It's XML!"</js>;
 			}
 		}
 
 		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
-			<ja>@Override</ja>
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/*"</js>);
 			}
-			<ja>@Override</ja>
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
 				<jk>return</jk> <js>"It's something else!"</js>;
 			}
@@ -1300,7 +1355,7 @@
 				</p>
 				<p class='bcode'>
 	<jk>public class</jk> IteratorSwap <jk>extends</jk> PojoSwap&lt;Iterator,List&gt; {
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 		<jk>public</jk> List swap(Iterator o) {
 			List l = <jk>new</jk> LinkedList();
 			<jk>while</jk> (o.hasNext())
@@ -1349,7 +1404,7 @@
 	<jc>// Sample swap for converting MyPojo classes to a simple string.</jc>
 	<jk>public class</jk> MyPojoSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
 		
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 		<jk>public</jk> String swap(BeanSession session, MyPojo o) {
 			<jk>return</jk> o.toSomeSerializableForm();
 		}
@@ -1386,9 +1441,53 @@
 				</p>
 			</div>
 
+			<!-- =================================================================================================== -->
+			<a id="juneau-marshall.TemplatedSwaps"></a>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.5 - Templated Swaps</h4>
+			<div class='topic'>
+				<p>
+					The {@link org.apache.juneau.annotation.Swap#template()} annotation allows you to associate
+					arbitrary contextual strings with swaps.
+					<br>The primary purpose is for providing template names, such as for Apache FreeMarker, therefore
+					the name 'template'.
+					<br>However, the usage of the string is open-ended.
+				</p>
+				<p>
+					For example, you could pair a template string like so:
+				</p>
+				<p class='bcode'>
+	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
+	<jk>public class</jk> MyPojo {}
+				</p>
+				<p>
+					The implementation of the FreeMarker swap would look something like this:
+				</p>
+				<p class='bcode'>
+	<jc>// Our templated swap class.</jc>
+	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
+
+		<jk>public</jk> MediaType[] forMediaTypes() {
+			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
+		}
+
+		<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
+			<jk>return</jk> getFreeMarkerReader(template, o);  <jc>// Some method that creates raw HTML.</jc>
+		}
+	}
+				</p>
+				<p>
+					The <ja>@Swap</ja> annotation can also be used on getters and setters as well to apply a swap
+					to individual property values
+				</p>
+				<p class='bcode'>
+	<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
+	<jk>public</jk> MyPojo getMyPojo();
+				</p>
+			</div>
+
 			<!-- ======================================================================================================= -->
 			<a id="juneau-marshall.SwapMethods"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.5 - Swap Methods</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.6 - Swap Methods</h4>
 			<div class='topic'>
 				<p>
 					Various methods can be defined on a class directly to affect how it gets serialized.
@@ -1532,7 +1631,7 @@
 	
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.SurrogateClasses"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.6 - Surrogate Classes</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.7 - Surrogate Classes</h4>
 			<div class='topic'>
 				<p>
 				<p>
@@ -1556,7 +1655,7 @@
 	}
 		
 	<jk>public class</jk> MySwap <jk>extends</jk> PojoSwap&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 		<jk>public</jk> MySerializableSurrogate swap(MyNonSerializableClass o) {
 			
 			<jc>// Create some serializable class and manually copy the data into it.</jc>
@@ -1594,7 +1693,7 @@
 	
 			<!-- ======================================================================================================= -->
 			<a id="juneau-marshall.BeanAnnotation"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.7 - @Bean Annotation</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.8 - @Bean Annotation</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.annotation.Bean @Bean} annotation is used to tailor how beans are 
@@ -1696,11 +1795,43 @@
 		<jk>public int</jk> getP3();
 	}
 				</p>
+				<p>
+					The {@link org.apache.juneau.annotation.Bean#propertyFilter() @Bean.propertyFilter()} annotation
+					and {@link org.apache.juneau.transform.PropertyFilter} class can be used to perform interception
+					and inline handling of bean getter and setter calls.
+				</p>
+				<p class='bcode'>
+	<jc>// Register filter on bean class.</jc>
+	<ja>@Bean</ja>(propertyFilter=AddressPropertyFilter.<jk>class</jk>)
+	<jk>public class</jk> Address {
+		<jk>public</jk> String getTaxInfo() {...}
+		<jk>public void</jk> setTaxInfo(String s) {...}
+	}
+				
+	<jc>// Property filter that strips out sensitive information in our bean.</jc>
+	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
+		
+		<ja>@Override</ja> <jc>/* PropertyFilter */</jc>
+		<jk>public</jk> Object readProperty(Object bean, String name, Object value) {
+			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
+				<jk>return</jk> <js>"redacted"</js>;
+			<jk>return</jk> value;
+		}
+
+		<ja>@Override</ja> <jc>/* PropertyFilter */</jc>
+		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
+			AddressBook a = (Address)bean;
+			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
+				<jk>return</jk> TaxInfoUtils.<jsm>lookUpByName</jsm>(a.getStreet(), a.getCity(), a.getState());
+			<jk>return</jk> value;
+		}
+	}	
+				</p>
 			</div>
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.BeanPropertyAnnotation"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.8 - @BeanProperty Annotation</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.9 - @BeanProperty Annotation</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation is used to tailor how 
@@ -1888,7 +2019,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.BeanConstructorAnnotation"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.9 - @BeanConstructor Annotation</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.10 - @BeanConstructor Annotation</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation is used to 
@@ -1936,7 +2067,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.BeanIgnoreAnnotation"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.10 - @BeanIgnore Annotation</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.11 - @BeanIgnore Annotation</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} annotation is used to
@@ -1969,7 +2100,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.NamePropertyAnnotation"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.11 - @NameProperty Annotation</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.12 - @NameProperty Annotation</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.annotation.NameProperty @NameProperty} annotation is used to
@@ -2001,7 +2132,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.ParentPropertyAnnotion"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.12 - @ParentProperty Annotation</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.13 - @ParentProperty Annotation</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.annotation.ParentProperty @ParentProperty} annotation is used to
@@ -2032,7 +2163,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.URIAnnotation"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.13 - @URI Annotation</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.14 - @URI Annotation</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.annotation.URI @URI} annotation is used to identify a class or bean 
@@ -2061,7 +2192,7 @@
 	<jc>// Applied to a class whose toString() method returns a URI.</jc>
 	<ja>@URI</ja>
 	<jk>public class</jk> MyURI {
-		<ja>@Override</ja>
+		<ja>@Override</ja> <jc>/* Object */</jc>
 		<jk>public</jk> String toString() {
 			<jk>return</jk> <js>"http://localhost:9080/foo/bar"</js>;
 		}
@@ -2083,7 +2214,7 @@
 
 			<!-- ======================================================================================================= -->
 			<a id="juneau-marshall.BeanFilters"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.14 - BeanFilter Class</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.15 - BeanFilter Class</h4>
 			<div class='topic'>
 				<p>
 					The {@link org.apache.juneau.transform.BeanFilter} class is the programmatic equivalent to the
@@ -2100,11 +2231,10 @@
 					The programmatic equivalent to the the annotation above would be:
 				</p>
 				<p class='bcode'>
-	<jk>public class</jk> MyAddressBeanFilter <jk>extends</jk> BeanFilterBuilder {
+	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilterBuilder&lt;Address&gt; {
 		
 		<jc>// Must provide a no-arg constructor!</jc>
-		<jk>public</jk> MyAddressBeanFilter() {
-			<jk>super</jk>(Address.<jk>class</jk>);  <jc>// The bean class that this filter applies to.</jc>
+		<jk>public</jk> AddressFilter() {
 			properties(<js>"street,city,state"</js>);  <jc>// The properties we want exposed.</jc>
 		}
 	}	
@@ -2115,7 +2245,7 @@
 				</p>
 				<p class='bcode'>			
 	<jc>// Create a new JSON serializer and associate a bean filter with it.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyAddressBeanFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(AddressFilter.<jk>class</jk>).build();
 				</p>
 				<p>
 					Note that if you use the annotation, you do NOT need to set anything on the serializers/parsers.
@@ -2143,12 +2273,12 @@
 	
 	<jc>// Create a new JSON serializer that only exposes street,city,state on Address bean.</jc>
 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(AddressInterface.<jk>class</jk>).build();
-				</p>				
+				</p>			
 			</div>
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.StopClasses"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.15 - Stop Classes</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.16 - Stop Classes</h4>
 			<div class='topic'>
 				<p>
 					Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
@@ -2176,7 +2306,7 @@
 				<p class='bcode'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;MyClass&gt; {
-		<jk>public</jk>  MyBeanFilter() {
+		<jk>public</jk> MyBeanFilter() {
 			interfaceClass(MyClass.<jk>class</jk>);
 		}
 	}
@@ -2222,7 +2352,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.SerializingToObjectMaps"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.16 - Serializing to ObjectMaps</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.17 - Serializing to ObjectMaps</h4>
 			<div class='topic'>
 				<p>
 					A shortcut method for transforming is provided that can often be simpler than defining transforms.
@@ -2252,7 +2382,7 @@
 
 			<!-- =================================================================================================== -->
 			<a id="juneau-marshall.SerializingReadersAndInputStreams"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.6.17 - Serializing Readers and InputStreams</h4>
+			<h4 class='topic' onclick='toggle(this)'>2.1.6.18 - Serializing Readers and InputStreams</h4>
 			<div class='topic'>
 				<p>
 					Juneau serializers treat instances of <code>Readers</code> and <code>InputStreams</code> special by 
@@ -10946,7 +11076,7 @@
 					<li>{@link org.apache.juneau.ObjectMap#postAt(String,Object)}
 					<li>{@link org.apache.juneau.ObjectMap#deleteAt(String)}
 				</ul>
-			<li>New {@link org.apache.juneau.annotation.ThreadSafe @ThreadSafe} annotation.
+			<li><code><del>@ThreadSafe</del></code> annotation.
 			<li>New <code>ClassFilter</code> class.
 			<li><del><code>ConfigFile.getResolving(StringVarResolver,boolean)</code></del> method.
 			<li><del><code>ConfigFile.getStringVar()</code></del> method.

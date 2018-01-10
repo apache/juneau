@@ -66,61 +66,61 @@ import org.apache.juneau.xml.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
+ * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
  *
- * 		<jc>// Create a custom serializer that doesn't use whitespace and newlines</jc>
- * 		HtmlSerializer serializer = <jk>new</jk> HtmlSerializerBuider().ws().build();
+ * 	<jc>// Create a custom serializer that doesn't use whitespace and newlines</jc>
+ * 	HtmlSerializer serializer = <jk>new</jk> HtmlSerializerBuider().ws().build();
  *
- * 		<jc>// Same as above, except uses cloning</jc>
- * 		HtmlSerializer serializer = HtmlSerializer.<jsf>DEFAULT</jsf>.builder().ws().build();
+ * 	<jc>// Same as above, except uses cloning</jc>
+ * 	HtmlSerializer serializer = HtmlSerializer.<jsf>DEFAULT</jsf>.builder().ws().build();
  *
- * 		<jc>// Serialize POJOs to HTML</jc>
+ * 	<jc>// Serialize POJOs to HTML</jc>
  *
- * 		<jc>// Produces: </jc>
- * 		<jc>// &lt;ul&gt;&lt;li&gt;1&lt;li&gt;2&lt;li&gt;3&lt;/ul&gt;</jc>
- * 		List l = new ObjectList(1, 2, 3);
- * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
+ * 	<jc>// Produces: </jc>
+ * 	<jc>// &lt;ul&gt;&lt;li&gt;1&lt;li&gt;2&lt;li&gt;3&lt;/ul&gt;</jc>
+ * 	List l = new ObjectList(1, 2, 3);
+ * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
  *
- * 		<jc>// Produces: </jc>
- * 		<jc>//    &lt;table&gt; </jc>
- * 		<jc>//       &lt;tr&gt;&lt;th&gt;firstName&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;/tr&gt; </jc>
- * 		<jc>//       &lt;tr&gt;&lt;td&gt;Bob&lt;/td&gt;&lt;td&gt;Costas&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//       &lt;tr&gt;&lt;td&gt;Billy&lt;/td&gt;&lt;td&gt;TheKid&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//       &lt;tr&gt;&lt;td&gt;Barney&lt;/td&gt;&lt;td&gt;Miller&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//    &lt;/table&gt; </jc>
- * 		l = <jk>new</jk> ObjectList();
- * 		l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Bob',lastName:'Costas'}"</js>));
- * 		l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>));
- * 		l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Barney',lastName:'Miller'}"</js>));
- * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
+ * 	<jc>// Produces: </jc>
+ * 	<jc>//    &lt;table&gt; </jc>
+ * 	<jc>//       &lt;tr&gt;&lt;th&gt;firstName&lt;/th&gt;&lt;th&gt;lastName&lt;/th&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//       &lt;tr&gt;&lt;td&gt;Bob&lt;/td&gt;&lt;td&gt;Costas&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//       &lt;tr&gt;&lt;td&gt;Billy&lt;/td&gt;&lt;td&gt;TheKid&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//       &lt;tr&gt;&lt;td&gt;Barney&lt;/td&gt;&lt;td&gt;Miller&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//    &lt;/table&gt; </jc>
+ * 	l = <jk>new</jk> ObjectList();
+ * 	l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Bob',lastName:'Costas'}"</js>));
+ * 	l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>));
+ * 	l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Barney',lastName:'Miller'}"</js>));
+ * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
  *
- * 		<jc>// Produces: </jc>
- * 		<jc>//    &lt;table&gt; </jc>
- * 		<jc>//       &lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt; </jc>
- * 		<jc>//       &lt;tr&gt;&lt;td&gt;foo&lt;/td&gt;&lt;td&gt;bar&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//       &lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//    &lt;/table&gt; </jc>
- * 		Map m = <jk>new</jk> ObjectMap(<js>"{foo:'bar',baz:123}"</js>);
- * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
+ * 	<jc>// Produces: </jc>
+ * 	<jc>//    &lt;table&gt; </jc>
+ * 	<jc>//       &lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//       &lt;tr&gt;&lt;td&gt;foo&lt;/td&gt;&lt;td&gt;bar&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//       &lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//    &lt;/table&gt; </jc>
+ * 	Map m = <jk>new</jk> ObjectMap(<js>"{foo:'bar',baz:123}"</js>);
+ * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  *
- * 		<jc>// HTML elements can be nested arbitrarily deep</jc>
- * 		<jc>// Produces: </jc>
- * 		<jc>//	&lt;table&gt; </jc>
- * 		<jc>//		&lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt; </jc>
- * 		<jc>//		&lt;tr&gt;&lt;td&gt;foo&lt;/td&gt;&lt;td&gt;bar&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//		&lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//		&lt;tr&gt;&lt;td&gt;someNumbers&lt;/td&gt;&lt;td&gt;&lt;ul&gt;&lt;li&gt;1&lt;li&gt;2&lt;li&gt;3&lt;/ul&gt;&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//		&lt;tr&gt;&lt;td&gt;someSubMap&lt;/td&gt;&lt;td&gt; </jc>
- * 		<jc>//			&lt;table&gt; </jc>
- * 		<jc>//				&lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt; </jc>
- * 		<jc>//				&lt;tr&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;b&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//			&lt;/table&gt; </jc>
- * 		<jc>//		&lt;/td&gt;&lt;/tr&gt; </jc>
- * 		<jc>//	&lt;/table&gt; </jc>
- * 		Map m = <jk>new</jk> ObjectMap(<js>"{foo:'bar',baz:123}"</js>);
- * 		m.put("someNumbers", new ObjectList(1, 2, 3));
- * 		m.put(<js>"someSubMap"</js>, new ObjectMap(<js>"{a:'b'}"</js>));
- * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
+ * 	<jc>// HTML elements can be nested arbitrarily deep</jc>
+ * 	<jc>// Produces: </jc>
+ * 	<jc>//	&lt;table&gt; </jc>
+ * 	<jc>//		&lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//		&lt;tr&gt;&lt;td&gt;foo&lt;/td&gt;&lt;td&gt;bar&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//		&lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//		&lt;tr&gt;&lt;td&gt;someNumbers&lt;/td&gt;&lt;td&gt;&lt;ul&gt;&lt;li&gt;1&lt;li&gt;2&lt;li&gt;3&lt;/ul&gt;&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//		&lt;tr&gt;&lt;td&gt;someSubMap&lt;/td&gt;&lt;td&gt; </jc>
+ * 	<jc>//			&lt;table&gt; </jc>
+ * 	<jc>//				&lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//				&lt;tr&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;b&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//			&lt;/table&gt; </jc>
+ * 	<jc>//		&lt;/td&gt;&lt;/tr&gt; </jc>
+ * 	<jc>//	&lt;/table&gt; </jc>
+ * 	Map m = <jk>new</jk> ObjectMap(<js>"{foo:'bar',baz:123}"</js>);
+ * 	m.put("someNumbers", new ObjectList(1, 2, 3));
+ * 	m.put(<js>"someSubMap"</js>, new ObjectMap(<js>"{a:'b'}"</js>));
+ * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
  */
 public class HtmlSerializer extends XmlSerializer {

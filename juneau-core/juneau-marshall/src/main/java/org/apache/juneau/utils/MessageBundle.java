@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 
 /**
  * Wraps a {@link ResourceBundle} to provide some useful additional functionality.
@@ -47,8 +46,12 @@ import org.apache.juneau.annotation.*;
  * 		For example, if the class is <code>MyClass</code> and the properties file contains <js>"MyClass.myMessage"</js>,
  * 		the message can be retrieved using <code>getString(<js>"myMessage"</js>)</code>.
  * </ul>
+ * 
+ *	<h5 class='section'>Notes:</h5>
+ *	<ul>
+ *		<li>This class is thread-safe.
+ *	</ul>
  */
-@ThreadSafe
 public class MessageBundle extends ResourceBundle {
 
 	private static final ThreadLocal<Locale> clientLocale = new ThreadLocal<>();

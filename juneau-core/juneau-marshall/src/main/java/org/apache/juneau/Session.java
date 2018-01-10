@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -288,7 +287,6 @@ public abstract class Session {
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
-	@Overrideable
 	public ObjectMap asMap() {
 		return new ObjectMap();
 	}

@@ -16,59 +16,18 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.net.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Used to identify a class or bean property as a URI.
  *
  * <p>
- * By default, instances of {@link URL} and {@link URI} are considered URIs during serialization, and are handled
- * differently depending on the serializer (e.g. <code>HtmlSerializer</code> creates a hyperlink,
- * <code>RdfXmlSerializer</code> creates an <code>rdf:resource</code> object, etc...).
- *
- * <p>
  * This annotation allows you to identify other classes that return URIs via <code>toString()</code> as URI objects.
  *
- * <p>
- * URIs are automatically resolved to absolute or root-relative form based on the serializer
- * {@link Serializer#SERIALIZER_uriResolution} and {@link Serializer#SERIALIZER_uriRelativity}
- * configuration settings, and the URI context defined by the {@link UriContext} that's part of the serializer
- * session.
- *
- * <p>
- * Refer to the {@link UriResolver} class for information about the types of URIs that can be resolved during
- * serialization.
- *
- * <p>
- * This annotation can be applied to classes, interfaces, or bean property methods for fields.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- *
- * 	<jc>// Applied to a class whose toString() method returns a URI.</jc>
- * 	<ja>@URI</ja>
- * 	<jk>public class</jk> MyURI {
- * 		<ja>@Override</ja>
- * 		<jk>public</jk> String toString() {
- * 			<jk>return</jk> <js>"http://localhost:9080/foo/bar"</js>;
- * 		}
- * 	}
- *
- * 	<jc>// Applied to bean properties</jc>
- * 	<jk>public class</jk> MyBean {
- *
- * 		<ja>@URI</ja>
- * 		<jk>public</jk> String <jf>beanUri</jf>;
- *
- * 		<ja>@URI</ja>
- * 		<jk>public</jk> String getParentUri() {
- * 			...
- * 		}
- * 	}
- * </p>
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIAnnotation">Overview &gt; @URI Annotation</a>
+ *	</ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})

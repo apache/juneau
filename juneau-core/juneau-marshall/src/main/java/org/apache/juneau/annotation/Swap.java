@@ -16,25 +16,11 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.util.*;
 
 import org.apache.juneau.transform.*;
 
 /**
  * Associates {@link PojoSwap} and {@link Surrogate} classes with POJOs and bean properties.
- *
- * <p>
- * A typical example is for rendering {@link Date Dates} and {@link Calendar Calendars} as a formatted string:
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- * 	<jk>public class</jk> MyClass {
- *
- * 		<jc>// During serialization, convert to ISO8601 date-time string.</jc>
- * 		<ja>@Swap</ja>(CalendarSwap.ISO8601DT.<jk>class</jk>)
- * 		<jk>public</jk> Calendar getTime();
- * 	}
- * </p>
  *
  * <p>
  * This annotation can be used in the following locations:
@@ -43,6 +29,11 @@ import org.apache.juneau.transform.*;
  * 	<li>Bean getters/setters/fields.
  * 	<li>Inside the {@link Swaps @Swaps} annotation.
  * </ul>
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
+ *	</ul>
  */
 @Documented
 @Target({TYPE,ANNOTATION_TYPE,FIELD,METHOD})
@@ -80,8 +71,8 @@ public @interface Swap {
 	 * The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
 	 *
 	 * <p class='bcode'>
-	 * 	<jc>// Our abstracted templated swap class.</jc>
-	 * 	<jk>public abstract class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
+	 * 	<jc>// Our templated swap class.</jc>
+	 * 	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
 	 *
 	 * 		<jk>public</jk> MediaType[] forMediaTypes() {
 	 * 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
@@ -96,6 +87,11 @@ public @interface Swap {
 	 * 	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
 	 * 	<jk>public class</jk> MyPojo {}
 	 * </p>
+	 * 
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
+	 *	</ul>
 	 */
 	String template() default "";
 
@@ -115,6 +111,11 @@ public @interface Swap {
 	 * 			}
 	 * 		}
 	 * </p>
+	 * 
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
+	 *	</ul>
 	 */
 	String[] mediaTypes() default {};
 }

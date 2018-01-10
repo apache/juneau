@@ -30,6 +30,11 @@ import java.lang.annotation.*;
  * 	)
  * 	<jk>public class</jk> MyPojo {}
  * </p>
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
+ *	</ul>
  */
 @Documented
 @Target({TYPE})

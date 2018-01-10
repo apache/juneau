@@ -27,6 +27,38 @@ import org.apache.juneau.transform.*;
 
 /**
  * Builder class for building instances of serializers, parsers, and bean contexts.
+ * 
+ * <p>
+ * All serializers and parsers extend from this class.
+ * 
+ * <p>
+ * Provides a base set of common config property setters that allow you to build up serializers and parsers.
+ * 
+ * <p class='bcode'>
+ * 	WriterSerializer s = JsonSerializer
+ * 		.<jsm>create</jsm>()
+ * 		.set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
+ * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+ * 		.set(<jsf>SERIALIZER_quoteChar</jsf>, <js>"'"</js>)
+ * 		.build();
+ * </p>
+ * 
+ * <p>
+ * Additional convenience methods are provided for setting properties using reduced syntax.
+ * 
+ * <p class='bcode'>
+ * 	WriterSerializer s = JsonSerializer
+ * 		.<jsm>create</jsm>()  <jc>// Create a JsonSerializerBuilder</jc>
+ * 		.simple()  <jc>// Simple mode</jc>
+ * 		.ws()  <jc>// Use whitespace</jc>
+ * 		.sq()  <jc>// Use single quotes </jc>
+ * 		.build();  <jc>// Create a JsonSerializer</jc>
+ * </p>
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.ConfigurableProperties">Overview &gt; Configurable Properties</a>
+ *	</ul>
  */
 public class BeanContextBuilder extends ContextBuilder {
 

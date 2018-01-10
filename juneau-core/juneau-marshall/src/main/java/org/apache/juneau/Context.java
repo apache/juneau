@@ -447,7 +447,6 @@ public abstract class Context {
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
-	@Overrideable
 	public ObjectMap asMap() {
 		return new ObjectMap();
 	}

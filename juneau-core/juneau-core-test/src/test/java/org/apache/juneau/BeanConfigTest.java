@@ -741,21 +741,9 @@ public class BeanConfigTest {
 	public static class DummyPojoSwapA extends MapSwap<A> {}
 	public static class DummyPojoSwapB extends MapSwap<B> {}
 	public static class DummyPojoSwapC extends MapSwap<C> {}
-	public static class DummyBeanFilterA extends BeanFilterBuilder {
-		public DummyBeanFilterA() {
-			super(A.class);
-		}
-	}
-	public static class DummyBeanFilterB extends BeanFilterBuilder {
-		public DummyBeanFilterB() {
-			super(B.class);
-		}
-	}
-	public static class DummyBeanFilterC extends BeanFilterBuilder {
-		public DummyBeanFilterC() {
-			super(C.class);
-		}
-	}
+	public static class DummyBeanFilterA extends BeanFilterBuilder<A> {}
+	public static class DummyBeanFilterB extends BeanFilterBuilder<B> {}
+	public static class DummyBeanFilterC extends BeanFilterBuilder<C> {}
 	public static class C {}
 
 	private void assertSameCache(ParserBuilder p1b, ParserBuilder p2b) {

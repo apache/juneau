@@ -274,7 +274,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 *	<h5 class='section'>Documentation:</h5>
 	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Children">Rest Resources &gt; Children</a>
+	 *		<li><a class="doclink" href="package-summary.html#RestResources.Children">org.apache.juneau.rest &gt; Children</a>
 	 *	</ul>
 	 */
 	public static final String REST_children = PREFIX + "children.lo";
@@ -407,7 +407,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 *	<h5 class='section'>Documentation:</h5>
 	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Converters">Converters</a>
+	 *		<li><a class="doclink" href="package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
 	 *	</ul>
 	 */
 	public static final String REST_converters = PREFIX + "converters.lo";
@@ -858,7 +858,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 *	<h5 class='section'>Documentation:</h5>
 	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Parsers">Parsers</a>
+	 *		<li><a class="doclink" href="package-summary.html#RestResources.Parsers">org.apache.juneau.rest &gt; Parsers</a>
 	 *	</ul>
 	 */
 	public static final String REST_parsers = PREFIX + "parsers.lo";
@@ -1106,7 +1106,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 *	<h5 class='section'>Documentation:</h5>
 	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Serializers">Serializers</a>
+	 *		<li><a class="doclink" href="package-summary.html#RestResources.Serializers">org.apache.juneau.rest &gt; Serializers</a>
 	 *	</ul>
 	 */
 	public static final String REST_serializers = PREFIX + "serializers.lo";

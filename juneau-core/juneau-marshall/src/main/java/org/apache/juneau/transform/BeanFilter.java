@@ -28,8 +28,13 @@ import org.apache.juneau.internal.*;
  * This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
  * Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
  * the ability to annotate those classes (e.g. you don't have access to the source code).
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
+ *	</ul>
  */
-public class BeanFilter {
+public final class BeanFilter {
 
 	private final Class<?> beanClass;
 	private final String[] properties, excludeProperties;
@@ -38,11 +43,12 @@ public class BeanFilter {
 	private final boolean sortProperties;
 	private final String typeName;
 	private final Class<?>[] beanDictionary;
+	private final PropertyFilter propertyFilter;
 
 	/**
 	 * Constructor.
 	 */
-	BeanFilter(BeanFilterBuilder builder) {
+	BeanFilter(BeanFilterBuilder<?> builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
 		this.properties = split(builder.properties, ',');
@@ -55,8 +61,22 @@ public class BeanFilter {
 			builder.beanDictionary == null
 			? null
 			: builder.beanDictionary.toArray(new Class<?>[builder.beanDictionary.size()]);
+		this.propertyFilter =
+			builder.propertyFilter == null
+			? PropertyFilter.DEFAULT
+			: ClassUtils.newInstance(PropertyFilter.class, builder.propertyFilter);
 	}
 
+	/**
+	 * Create a new bean filter builder.
+	 * 
+ 	 * @param beanClass The bean class that this filter applies to.
+	 * @return A new filter.
+	 */
+	public static <T> BeanFilterBuilder<T> create(Class<T> beanClass) {
+		return new BeanFilterBuilder<>(beanClass);
+	}
+	
 	/**
 	 * Returns the bean class that this filter applies to.
 	 *
@@ -145,7 +165,7 @@ public class BeanFilter {
 	}
 
 	/**
-	 * Subclasses can override this property to convert property values to some other object just before serialization.
+	 * Calls the {@link PropertyFilter#readProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
@@ -153,19 +173,18 @@ public class BeanFilter {
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
 	public Object readProperty(Object bean, String name, Object value) {
-		return value;
+		return propertyFilter.readProperty(bean, name, value);
 	}
 
 	/**
-	 * Subclasses can override this property to convert property values to some other object just before calling the
-	 * bean setter.
+	 * Calls the {@link PropertyFilter#writeProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
 	 * @param value The value just parsed.
-	 * @return <jk>true</jk> if we set the property, <jk>false</jk> if we should allow the framework to call the setter.
+	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
-	public boolean writeProperty(Object bean, String name, Object value) {
-		return false;
+	public Object writeProperty(Object bean, String name, Object value) {
+		return propertyFilter.writeProperty(bean, name, value);
 	}
 }

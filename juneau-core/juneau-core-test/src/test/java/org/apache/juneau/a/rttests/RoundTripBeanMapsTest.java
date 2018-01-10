@@ -351,9 +351,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
-	public static class CFilter extends BeanFilterBuilder {
+	public static class CFilter extends BeanFilterBuilder<C> {
 		public CFilter() {
-			super(C.class);
 			beanDictionary(CFilterDictionaryMap.class);
 		}
 	}
@@ -446,9 +445,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public String f2;
 	}
 
-	public static class CAFilter extends BeanFilterBuilder {
+	public static class CAFilter extends BeanFilterBuilder<CA> {
 		public CAFilter() {
-			super(CA.class);
 			beanDictionary(CAFilterDictionaryMap.class);
 		}
 	}
@@ -520,9 +518,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return this;
 		}
 	}
-	public static class D2Filter extends BeanFilterBuilder {
+	public static class D2Filter extends BeanFilterBuilder<D2> {
 		public D2Filter() {
-			super(D2.class);
 			properties("f3,f2");
 		}
 	}
@@ -583,9 +580,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return this;
 		}
 	}
-	public static class E2Filter extends BeanFilterBuilder {
+	public static class E2Filter extends BeanFilterBuilder<E2> {
 		public E2Filter() {
-			super(E2.class);
 			excludeProperties("f2");
 		}
 	}
@@ -676,16 +672,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return this;
 		}
 	}
-	public static class FB1Filter extends InterfaceBeanFilterBuilder {
-		public FB1Filter() {
-			super(FB1.class);
-		}
-	}
-	public static class FB2Filter extends InterfaceBeanFilterBuilder {
-		public FB2Filter() {
-			super(FB1.class);
-		}
-	}
+	public static class FB1Filter extends InterfaceBeanFilterBuilder<FB1> {}
+	public static class FB2Filter extends InterfaceBeanFilterBuilder<FB1> {}
 
 	//====================================================================================================
 	// testMemberClass

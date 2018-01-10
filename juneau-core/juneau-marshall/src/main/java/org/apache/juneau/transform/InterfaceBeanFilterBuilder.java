@@ -27,16 +27,32 @@ import org.apache.juneau.internal.*;
  * These objects are created when you pass in non-<code>BeanFilterBuilder</code> classes to
  * {@link BeanContextBuilder#beanFilters(Class...)}, and are equivalent to adding a
  * <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
+ * 
+ * @param <T> The interface class.
  */
-public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
+public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
+
+	/**
+	 * Constructor.
+	 * 
+	 * <p>
+	 * Interface class is determined through reflection.
+	 */
+	public InterfaceBeanFilterBuilder() {
+		init(beanClass);
+	}
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param interfaceClass The class to use as an interface on all child classes.
 	 */
-	public InterfaceBeanFilterBuilder(Class<?> interfaceClass) {
+	public InterfaceBeanFilterBuilder(Class<T> interfaceClass) {
 		super(interfaceClass);
+		init(interfaceClass);
+	}
+	
+	private void init(Class<?> interfaceClass) {
 		interfaceClass(interfaceClass);
 		Map<Class<?>,Bean> annotations = ReflectionUtils.findAnnotationsMap(Bean.class, interfaceClass);
 

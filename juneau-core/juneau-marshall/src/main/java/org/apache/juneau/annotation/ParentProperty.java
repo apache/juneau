@@ -22,27 +22,16 @@ import java.lang.annotation.*;
  *
  * <p>
  * Used by the parsers to add references to parent objects in child objects.
- * For example, the <code>Section</code> class cannot exist outside the scope of a parent <code>ConfigFileImpl</code> class, so
- * parsers will add a reference to the config file using the <code>Section.setParent(ConfigFileImpl)</code> method.
- *
- * <p>
- * A commonly-used case is when you're parsing beans, and a child bean has a reference to a parent bean.
- * <p class='bcode'>
- * 	<jk>public class</jk> AddressBook {
- * 		<jk>public</jk> List&lt;Person&gt; <jf>people</jf>;
- * 	}
- *
- * 	<jk>public class</jk> Person {
- * 		<ja>@ParentProperty</ja> <jk>public</jk> AddressBook <jf>addressBook</jf>;
- * 		<jk>public</jk> String <jf>name</jf>;
- * 		<jk>public char</jk> <jf>sex</jf>;
- * 	}
- * </p>
  *
  * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>The annotated field or method does not need to be public.
  * </ul>
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.NamePropertyAnnotation">Overview &gt; @NameProperty Annotation</a>
+ *	</ul>
  */
 @Target({METHOD,FIELD})
 @Retention(RUNTIME)

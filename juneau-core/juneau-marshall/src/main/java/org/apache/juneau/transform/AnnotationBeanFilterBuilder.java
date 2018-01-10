@@ -24,8 +24,10 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * <b>*** Internal class - Not intended for external use ***</b>
+ * 
+ * @param <T> Annotated bean class.
  */
-public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
+public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 	/**
 	 * Constructor.
@@ -35,7 +37,7 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 	 * 	The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 * @throws Exception Thrown from property namer constructor.
 	 */
-	public AnnotationBeanFilterBuilder(Class<?> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {
+	public AnnotationBeanFilterBuilder(Class<T> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {
 		super(annotatedClass);
 
 		ListIterator<Bean> li = new ArrayList<>(annotations.values()).listIterator(annotations.size());
@@ -65,6 +67,9 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 
 			if (b.beanDictionary().length > 0)
 				beanDictionary(b.beanDictionary());
+			
+			if (b.propertyFilter() != PropertyFilter.class)
+				propertyFilter(b.propertyFilter());
 		}
 	}
 }

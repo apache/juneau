@@ -29,36 +29,6 @@ import org.apache.juneau.*;
  * are available at runtime.
  *
  * <p>
- * The definition of a read-only bean is a bean with properties with only getters, like shown below...
- * <p class='bcode'>
- * 	<jk>public class</jk> Person {
- * 		<jk>private final</jk> String <jf>name</jf>;
- * 		<jk>private final int</jk> <jf>age</jf>;
- *
- * 		<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>})
- * 		<jk>public</jk> Person(String name, <jk>int</jk> age) {
- * 			<jk>this</jk>.<jf>name</jf> = name;
- * 			<jk>this</jk>.<jf>age</jf> = age;
- * 		}
- *
- * 		<jc>// Read only properties.</jc>
- *
- * 		<jk>public</jk> String getName() {
- * 			<jk>return</jk> <jf>name</jf>;
- * 		}
- *
- * 		<jk>public int</jk> getAge() {
- * 			<jk>return</jk> <jf>age</jf>;
- * 		}
- * 	}
- *
- * 	String json = <js>"{name:'John Smith',age:45}"</js>;
- * 	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json);
- * 	String name = p.getName();  <jc>// "John Smith"</jc>
- * 	<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
- * </p>
- *
- * <p>
  * This annotation can only be applied to constructors and can only be applied to one constructor per class.
  *
  * <p>
@@ -72,8 +42,10 @@ import org.apache.juneau.*;
  * will result in a {@link BeanRuntimeException} being thrown.
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
- * <p>
- * Beans can be defined with a combination of read-only and read-write properties.
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanConstructorAnnotation">Overview &gt; @BeanConstructor Annotation</a>
+ *	</ul>
  */
 @Documented
 @Target(CONSTRUCTOR)

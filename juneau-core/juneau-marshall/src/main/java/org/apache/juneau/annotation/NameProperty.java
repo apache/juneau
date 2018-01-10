@@ -20,33 +20,15 @@ import java.lang.annotation.*;
 /**
  * Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
  *
- * <p>
- * For example, the <code>Section</code> class must know the name it's known by it's parent <code>ConfigFileImpl</code> class,
- * so parsers will call this method with the section name using the <code>Section.setName(String)</code> method.
- * <p>
- * A commonly-used case is when you're parsing a JSON map containing beans where one of the bean properties is the key
- * used in the map.
- *
- * <p>
- * For example:
- * <p class='bcode'>
- * 	{
- * 		id1: {name: <js>'John Smith'</js>, sex:<js>'M'</js>},
- * 		id2: {name: <js>'Jane Doe'</js>, sex:<js>'F'</js>}
- * 	}
- * </p>
- * <p class='bcode'>
- * 	<jk>public class</jk> Person {
- * 		<ja>@NameProperty</ja> <jk>public</jk> String <jf>id</jf>;
- * 		<jk>public</jk> String <jf>name</jf>;
- * 		<jk>public char</jk> <jf>sex</jf>;
- * 	}
- * </p>
- *
  * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>The annotated field or method does not need to be public.
  * </ul>
+ * 
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.NamePropertyAnnotation">Overview &gt; @NameProperty Annotation</a>
+ *	</ul>
  */
 @Target({METHOD,FIELD})
 @Retention(RUNTIME)
