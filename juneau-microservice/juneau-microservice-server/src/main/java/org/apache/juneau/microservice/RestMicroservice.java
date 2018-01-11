@@ -139,11 +139,11 @@ public class RestMicroservice extends Microservice {
 
 	@Override /* Microservice */
 	public RestMicroservice stop() {
+		final Logger logger = getLogger();
 		final MessageBundle mb2 = mb;
 		Thread t = new Thread() {
 			@Override /* Thread */
 			public void run() {
-				Logger logger = getLogger();
 				try {
 					if (server.isStopping() || server.isStopped())
 						return;
@@ -161,7 +161,7 @@ public class RestMicroservice extends Microservice {
 		try {
 			t.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		super.stop();
 		return this;
