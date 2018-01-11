@@ -56,16 +56,15 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
-	 * The JSON specification allows for either format.
-	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to
-	 * serialize <xt>&lt;\/script&gt;</xt>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSerializerBuilder escapeSolidus(boolean value) {
@@ -73,7 +72,45 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>setSimpleMode(<jk>true</jk>).sq()</code>.
+	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>escapeSolidus(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public JsonSerializerBuilder escapeSolidus() {
+		return set(JSON_escapeSolidus, true);
+	}
+
+	/**
+	 * Configuration property:  Simple JSON mode.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
+	 * <br>Otherwise, they are always quoted.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSerializerBuilder simple(boolean value) {
+		return set(JSON_simpleMode, value);
+	}
+
+	/**
+	 * Shortcut for calling <code>simple(<jk>true</jk>).sq()</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -86,28 +123,15 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 		return simple(true).sq();
 	}
 
-	/**
-	 * Configuration property:  Simple JSON mode.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
-	 * Otherwise, they are always quoted.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
-	 * </ul>
-	 * 
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public JsonSerializerBuilder simple(boolean value) {
-		return set(JSON_simpleMode, value);
-	}
-
 	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder abridged() {
+		super.abridged();
 		return this;
 	}
 
@@ -124,11 +148,22 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -166,8 +201,20 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -184,8 +231,20 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -198,6 +257,12 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -226,6 +291,12 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -238,14 +309,32 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -258,6 +347,12 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -292,6 +387,12 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -300,6 +401,12 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -322,14 +429,32 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

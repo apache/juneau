@@ -56,6 +56,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* XmlSerializerBuilder */
+	public XmlSchemaSerializerBuilder addNamespaceUrisToRoot() {
+		super.addNamespaceUrisToRoot();
+		return this;
+	}
+
+	@Override /* XmlSerializerBuilder */
 	public XmlSchemaSerializerBuilder autoDetectNamespaces(boolean value) {
 		super.autoDetectNamespaces(value);
 		return this;
@@ -92,6 +98,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder abridged() {
+		super.abridged();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;
@@ -104,11 +116,22 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -146,8 +169,20 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -164,8 +199,20 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -178,6 +225,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -206,6 +259,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -218,14 +277,32 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -238,6 +315,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -272,6 +355,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -280,6 +369,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -302,14 +397,32 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

@@ -68,20 +68,26 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public YamlParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
 	public YamlParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
+	public YamlParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public YamlParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public YamlParserBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -92,14 +98,32 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -112,6 +136,12 @@ public class YamlParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public YamlParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -146,6 +176,12 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -154,6 +190,12 @@ public class YamlParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public YamlParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -176,14 +218,32 @@ public class YamlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

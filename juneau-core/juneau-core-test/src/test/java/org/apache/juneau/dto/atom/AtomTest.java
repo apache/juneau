@@ -96,7 +96,7 @@ public class AtomTest {
 			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
 			+"</feed>\n";
 
-		s = XmlSerializer.create().sq().ws().enableNamespaces(false).sortProperties(true).build();
+		s = XmlSerializer.create().sq().ws().enableNamespaces(false).sortProperties().build();
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
@@ -141,7 +141,7 @@ public class AtomTest {
 			+"	<atom:updated>2016-12-31T01:02:03-04:00</atom:updated>\n"
 			+"</atom:feed>\n";
 
-		s = XmlSerializer.create().sq().ws().enableNamespaces(true).addNamespaceUrisToRoot(true).sortProperties(true).build();
+		s = XmlSerializer.create().sq().ws().enableNamespaces(true).addNamespaceUrisToRoot().sortProperties().build();
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
@@ -186,7 +186,7 @@ public class AtomTest {
 			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
 			+"</feed>\n";
 
-		s = XmlSerializer.create().sq().ws().defaultNamespace("atom").enableNamespaces(true).addNamespaceUrisToRoot(true).sortProperties(true).build();
+		s = XmlSerializer.create().sq().ws().defaultNamespace("atom").enableNamespaces(true).addNamespaceUrisToRoot().sortProperties().build();
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);

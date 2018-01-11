@@ -17,7 +17,6 @@ import static org.apache.juneau.serializer.Serializer.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 
 /**
@@ -53,20 +52,35 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder abridged(boolean value) {
+		return set(SERIALIZER_abridged, value);
+	}
+
+	/**
+	 * Configuration property:  Abridged output.
+	 *
 	 * <p>
-	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
-	 * this setting is disabled, but not added when it is enabled.
+	 * Shortcut for calling <code>abridged(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerBuilder abridged(boolean value) {
-		return set(SERIALIZER_abridged, value);
+	public SerializerBuilder abridged() {
+		return set(SERIALIZER_abridged, true);
 	}
 
 	/**
@@ -75,21 +89,15 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
-	 * the value type.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Checking for recursion can cause a small performance penalty.
-	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder addBeanTypeProperties(boolean value) {
@@ -102,18 +110,6 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Specifies that recursions should be checked for during serialization.
 	 *
-	 * <p>
-	 * Recursions can occur when serializing models that aren't true trees, but rather contain loops.
-	 *
-	 * <p>
-	 * The behavior when recursions are detected depends on the value for
-	 * {@link Serializer#SERIALIZER_ignoreRecursions}.
-	 *
-	 * <p>
-	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
-	 * <code>{A:{B:{C:null}}}</code>
-	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Checking for recursion can cause a small performance penalty.
@@ -124,7 +120,9 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder detectRecursions(boolean value) {
@@ -132,11 +130,24 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore recursion errors.
+	 * Configuration property:  Automatically detect POJO recursions.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link Serializer#SERIALIZER_detectRecursions}.
-	 * Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
+	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder detectRecursions() {
+		return set(SERIALIZER_detectRecursions, true);
+	}
+
+	/**
+	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
@@ -152,7 +163,9 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder ignoreRecursions(boolean value) {
@@ -160,18 +173,36 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder ignoreRecursions() {
+		return set(SERIALIZER_ignoreRecursions, true);
+	}
+
+	/**
 	 * Configuration property:  Initial depth.
 	 *
 	 * <p>
 	 * The initial indentation level at the root.
-	 * Useful when constructing document fragments that need to be indented at a certain level.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>0</code>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder initialDepth(int value) {
@@ -189,7 +220,8 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder listener(Class<? extends SerializerListener> value) {
@@ -201,15 +233,17 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * Abort serialization if specified depth is reached in the POJO tree.
-	 * If this depth is exceeded, an exception is thrown.
-	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
+	 * <br>If this depth is exceeded, an exception is thrown.
+	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder maxDepth(int value) {
@@ -227,7 +261,9 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder maxIndent(int value) {
@@ -245,7 +281,9 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder quoteChar(char value) {
@@ -255,17 +293,17 @@ public class SerializerBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
+	 * <p>
+	 * Copies and sorts the contents of arrays and collections before serializing them.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder sortCollections(boolean value) {
@@ -273,19 +311,36 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder sortCollections() {
+		return set(SERIALIZER_sortCollections, true);
+	}
+
+	/**
 	 * Configuration property:  Sort maps alphabetically.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
+	 * <p>
+	 * Copies and sorts the contents of maps before serializing them.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder sortMaps(boolean value) {
@@ -293,6 +348,26 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Sort maps alphabetically.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder sortMaps() {
+		return set(SERIALIZER_sortMaps, true);
+	}
+
+	/**
+	 * Configuration property:  Quote character.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -312,25 +387,35 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>Enabling this setting has the following effects on parsing:
-	 * 	<ul>
-	 * 		<li>Map entries with empty list values will be lost.
-	 * 		<li>Bean properties with empty list values will not be set.
-	 * 	</ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder trimEmptyCollections(boolean value) {
+		return set(SERIALIZER_trimEmptyCollections, value);
+	}
+
+	/**
+	 * Configuration property:  Trim empty lists and arrays.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerBuilder trimEmptyCollections(boolean value) {
-		return set(SERIALIZER_trimEmptyCollections, value);
+	public SerializerBuilder trimEmptyCollections() {
+		return set(SERIALIZER_trimEmptyCollections, true);
 	}
 
 	/**
@@ -339,24 +424,35 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>Enabling this setting has the following effects on parsing:
-	 * 	<ul>
-	 * 		<li>Bean properties with empty map values will not be set.
-	 * 	</ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder trimEmptyMaps(boolean value) {
+		return set(SERIALIZER_trimEmptyMaps, value);
+	}
+
+	/**
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerBuilder trimEmptyMaps(boolean value) {
-		return set(SERIALIZER_trimEmptyMaps, value);
+	public SerializerBuilder trimEmptyMaps() {
+		return set(SERIALIZER_trimEmptyMaps, true);
 	}
 
 	/**
@@ -365,20 +461,14 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Enabling this setting has the following effects on parsing:
-	 * 	<ul>
-	 * 		<li>Map entries with <jk>null</jk> values will be lost.
-	 * 	</ul>
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder trimNullProperties(boolean value) {
@@ -396,7 +486,9 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder trimStrings(boolean value) {
@@ -404,15 +496,27 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Trim strings.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder trimStrings() {
+		return set(SERIALIZER_trimStrings, true);
+	}
+
+	/**
 	 * Configuration property:  URI context bean.
 	 *
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
-	 *
-	 * <h6 class='figure'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>
-	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -430,28 +534,16 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * Configuration property:  URI relativity.
 	 *
 	 * <p>
-	 * Defines what relative URIs are relative to when serializing any of the following:
-	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values are:
-	 * <ul>
-	 * 	<li>{@link UriRelativity#RESOURCE}
-	 * 		- Relative URIs should be considered relative to the servlet URI.
-	 * 	<li>{@link UriRelativity#PATH_INFO}
-	 * 		- Relative URIs should be considered relative to the request URI.
-	 * </ul>
+	 * Defines what relative URIs are relative to when serializing URI/URL objects.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder uriRelativity(UriRelativity value) {
@@ -462,30 +554,16 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * Configuration property:  URI resolution.
 	 *
 	 * <p>
-	 * Defines the resolution level for URIs when serializing any of the following:
-	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values are:
-	 * <ul>
-	 * 	<li>{@link UriResolution#ABSOLUTE}
-	 * 		- Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
-	 * 	<li>{@link UriResolution#ROOT_RELATIVE}
-	 * 		- Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
-	 * 	<li>{@link UriResolution#NONE}
-	 * 		- Don't do any URL resolution.
-	 * </ul>
+	 * Defines the resolution level for URIs when serializing URI/URL objects.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder uriResolution(UriResolution value) {
@@ -503,7 +581,9 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder useWhitespace(boolean value) {
@@ -511,6 +591,25 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder useWhitespace() {
+		return set(SERIALIZER_useWhitespace, true);
+	}
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -521,12 +620,18 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder ws() {
-		return useWhitespace(true);
+		return useWhitespace();
 	}
 
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
@@ -537,8 +642,20 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -551,6 +668,12 @@ public class SerializerBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -585,6 +708,12 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -593,6 +722,12 @@ public class SerializerBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -615,14 +750,32 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

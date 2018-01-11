@@ -978,6 +978,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b>  
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContextBuilder#renderResponseStackTraces(boolean)}
+	 * 			<li class='jm'>{@link RestContextBuilder#renderResponseStackTraces()}
 	 * 		</ul>
 	 * </ul>
 	 *

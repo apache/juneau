@@ -77,7 +77,7 @@ public class CognosXmlTest {
 			.sq()
 			.defaultNamespace("cognos")
 			.ns()
-			.addNamespaceUrisToRoot(true)
+			.addNamespaceUrisToRoot()
 			.build();
 
 		DataSet ds = new DataSet(c, rows, BeanContext.DEFAULT.createSession());

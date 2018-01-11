@@ -50,6 +50,20 @@ public interface RdfCommon {
 	 * 	<li><b>Name:</b>  <js>"Rdf.language.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"RDF/XML-ABBREV"</js>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#language(String)}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#n3()}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#ntriple()}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#turtle()}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#xml()}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#xmlabbrev()}
+	 * 			<li class='jm'>{@link RdfParserBuilder#language(String)}
+	 * 			<li class='jm'>{@link RdfParserBuilder#n3()}
+	 * 			<li class='jm'>{@link RdfParserBuilder#ntriple()}
+	 * 			<li class='jm'>{@link RdfParserBuilder#turtle()}
+	 * 			<li class='jm'>{@link RdfParserBuilder#xml()}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -59,7 +73,7 @@ public interface RdfCommon {
 	 * 	<li>
 	 * 		<js>"RDF/XML"</js>
 	 * 	<li>
-	 * 		<js>"RDF/XML-ABBREV"</js>
+	 * 		<js>"RDF/XML-ABBREV"</js> (default)
 	 * 	<li>
 	 * 		<js>"N-TRIPLE"</js>
 	 * 	<li>
@@ -93,6 +107,11 @@ public interface RdfCommon {
 	 * 	<li><b>Name:</b>  <js>"Rdf.juneauNs.s"</js>
 	 * 	<li><b>Data type:</b>  {@link Namespace}
 	 * 	<li><b>Default:</b>  <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#juneauNs(Namespace)}
+	 * 			<li class='jm'>{@link RdfParserBuilder#juneauNs(Namespace)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String RDF_juneauNs = PREFIX + "juneauNs.s";
@@ -105,6 +124,11 @@ public interface RdfCommon {
 	 * 	<li><b>Name:</b>  <js>"Rdf.juneauBpNs.s"</js>
 	 * 	<li><b>Data type:</b>  {@link Namespace}
 	 * 	<li><b>Default:</b>  <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#juneauBpNs(Namespace)}
+	 * 			<li class='jm'>{@link RdfParserBuilder#juneauBpNs(Namespace)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String RDF_juneauBpNs = PREFIX + "juneauBpNs.s";
@@ -117,6 +141,11 @@ public interface RdfCommon {
 	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#useXmlNamespaces(boolean)}
+	 * 			<li class='jm'>{@link RdfParserBuilder#useXmlNamespaces(boolean)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -635,6 +664,11 @@ public interface RdfCommon {
 	 * 	<li><b>Name:</b>  <js>"Rdf.collectionFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#collectionFormat(RdfCollectionFormat)}
+	 * 			<li class='jm'>{@link RdfParserBuilder#collectionFormat(RdfCollectionFormat)}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>
@@ -669,6 +703,13 @@ public interface RdfCommon {
 	 * 	<li><b>Name:</b>  <js>"Rdf.looseCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#looseCollections(boolean)}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#looseCollections()}
+	 * 			<li class='jm'>{@link RdfParserBuilder#looseCollections(boolean)}
+	 * 			<li class='jm'>{@link RdfParserBuilder#looseCollections()}
+	 * 		</ul>
 	 * </ul>
 	 * 
 	 *	<h5 class='section'>Description:</h5>

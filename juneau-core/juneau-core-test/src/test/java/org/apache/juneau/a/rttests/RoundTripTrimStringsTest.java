@@ -40,8 +40,8 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 		Parser p = getParser();
 		Object in, a, e;
 
-		Serializer s2 = s.builder().trimStrings(true).build();
-		Parser p2 = p.builder().trimStrings(true).build();
+		Serializer s2 = s.builder().trimStrings().build();
+		Parser p2 = p.builder().trimStrings().build();
 
 		in = " foo bar ";
 		e = "foo bar";

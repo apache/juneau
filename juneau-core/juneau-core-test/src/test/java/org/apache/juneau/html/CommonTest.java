@@ -33,7 +33,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true);
+		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -65,7 +65,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true);
+		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -77,6 +77,12 @@ public class CommonTest {
 		assertEqualObjects(t1, t2);
 
 		s.trimEmptyMaps(true);
+		r = s.build().serialize(t1);
+		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
+		t2 = p.parse(r, B.class);
+		assertNull(t2.f1);
+
+		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, B.class);
@@ -99,7 +105,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true);
+		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -111,6 +117,12 @@ public class CommonTest {
 		assertEqualObjects(t1, t2);
 
 		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
+		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table _type='array'><tr><th>s2</th></tr><tr><null/></tr><tr><td>s2</td></tr></table></td></tr></table>", r);
+		t2 = p.parse(r, C.class);
+		assertNull(t2.f1);
+
+		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table _type='array'><tr><th>s2</th></tr><tr><null/></tr><tr><td>s2</td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
@@ -133,7 +145,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true);
+		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -181,6 +193,26 @@ public class CommonTest {
 			r);
 		t2 = p.parse(r, D.class);
 		assertNull(t2.f1);
+
+		s.trimEmptyCollections();
+		r = s.build().serialize(t1);
+		assertEquals(
+			"<table>"
+				+"<tr><th>key</th><th>value</th></tr>"
+				+"<tr>"
+					+"<td>f2</td>"
+					+"<td>"
+						+"<table _type='array'>"
+							+"<tr><th>s2</th></tr>"
+							+"<tr><null/></tr>"
+							+"<tr><td>s2</td></tr>"
+						+"</table>"
+					+"</td>"
+				+"</tr>"
+			+"</table>",
+			r);
+		t2 = p.parse(r, D.class);
+		assertNull(t2.f1);
 	}
 
 	public static class D {
@@ -199,7 +231,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true).build();
+		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		E1 t = new E1();
 		String r;
 
@@ -347,7 +379,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true);
+		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -366,7 +398,7 @@ public class CommonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.detectRecursions(true);
+		s.detectRecursions();
 		try {
 			s.build().serialize(r1);
 			fail("Exception expected!");
@@ -378,7 +410,7 @@ public class CommonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.html.CommonTest$R1"));
 		}
 
-		s.ignoreRecursions(true);
+		s.ignoreRecursions();
 		assertEquals(
 			"<table><tr><th>key</th><th>value</th></tr><tr><td>name</td><td>foo</td></tr><tr><td>r2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>name</td><td>bar</td></tr><tr><td>r3</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>name</td><td>baz</td></tr></table></td></tr></table></td></tr></table>",
 			s.build().serialize(r1)
@@ -406,7 +438,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		WriterSerializer s = HtmlSerializer.create().sq().trimNullProperties(false).sortProperties(true).addKeyValueTableHeaders(true).build();
+		WriterSerializer s = HtmlSerializer.create().sq().trimNullProperties(false).sortProperties().addKeyValueTableHeaders().build();
 
 		J a = new J();
 		a.setF1("J");

@@ -135,6 +135,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus(boolean)}
+	 * 			<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -158,8 +159,8 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple()}
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple(boolean)}
+	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple()}
 	 * 		</ul>
 	 * </ul>
 	 *

@@ -43,7 +43,7 @@ public class CommonParserTest {
 	private RdfSerializerBuilder getBasicSerializer() {
 		return RdfSerializer.create()
 			.sq()
-			.addLiteralTypes(true)
+			.addLiteralTypes()
 			.useWhitespace(false)
 			.set(RDF_rdfxml_allowBadUris, true)
 			.set(RDF_rdfxml_showDoctypeDeclaration, false)
@@ -56,7 +56,7 @@ public class CommonParserTest {
 	@Test
 	public void testFromSerializer() throws Exception {
 		WriterSerializer s = getBasicSerializer().build();
-		ReaderParser p = RdfParser.create().xml().trimWhitespace(true).build();
+		ReaderParser p = RdfParser.create().xml().trimWhitespace().build();
 		Map m = null;
 		String in;
 		Integer one = Integer.valueOf(1);
@@ -139,7 +139,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = RdfParser.create().xml().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = RdfParser.create().xml().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
@@ -186,7 +186,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		RdfParser p = RdfParser.create().xml().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		RdfParser p = RdfParser.create().xml().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
 		p.parse(in, B.class);

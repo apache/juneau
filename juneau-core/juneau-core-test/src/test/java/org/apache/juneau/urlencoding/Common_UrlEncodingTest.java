@@ -79,6 +79,12 @@ public class Common_UrlEncodingTest {
 		assertEquals("f2=(f2a=null,f2b=(s2=s2))", r);
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
+
+		s.trimEmptyMaps();
+		r = s.build().serialize(t1);
+		assertEquals("f2=(f2a=null,f2b=(s2=s2))", r);
+		t2 = p.parse(r, B.class);
+		assertNull(t2.f1);
 	}
 
 	public static class B {
@@ -112,6 +118,12 @@ public class Common_UrlEncodingTest {
 		assertEquals("f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
+
+		s.trimEmptyCollections();
+		r = s.build().serialize(t1);
+		assertEquals("f2=@(null,(s2=s2))", r);
+		t2 = p.parse(r, C.class);
+		assertNull(t2.f1);
 	}
 
 	public static class C {
@@ -141,6 +153,12 @@ public class Common_UrlEncodingTest {
 		assertEqualObjects(t1, t2);
 
 		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
+		assertEquals("f2=@(null,(s2=s2))", r);
+		t2 = p.parse(r, D.class);
+		assertNull(t2.f1);
+
+		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
 		assertEquals("f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, D.class);
@@ -254,7 +272,7 @@ public class Common_UrlEncodingTest {
 		}
 
 		// Recursion detection, no ignore
-		s.detectRecursions(true);
+		s.detectRecursions();
 		try {
 			s.build().serialize(r1);
 			fail("Exception expected!");
@@ -266,7 +284,7 @@ public class Common_UrlEncodingTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"));
 		}
 
-		s.ignoreRecursions(true);
+		s.ignoreRecursions();
 		assertEquals("name=foo&r2=(name=bar,r3=(name=baz))", s.build().serialize(r1));
 	}
 

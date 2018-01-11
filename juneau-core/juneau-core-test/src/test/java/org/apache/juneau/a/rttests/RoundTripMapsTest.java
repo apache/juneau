@@ -116,7 +116,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = HtmlSerializer.create().sq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).addKeyValueTableHeaders(true).build();
+		s = HtmlSerializer.create().sq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).addKeyValueTableHeaders().build();
 		e = "<table><tr><th>key</th><th>value</th></tr><tr><td>AQID</td><td>a</td></tr><tr><td>BAUG</td><td><null/></td></tr><tr><td><null/></td><td>b</td></tr></table>";
 		r = s.serialize(t);
 		assertEquals(e, r);

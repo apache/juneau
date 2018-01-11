@@ -56,6 +56,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder abridged() {
+		super.abridged();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;
@@ -68,11 +74,22 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -110,8 +127,20 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -128,8 +157,20 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -142,6 +183,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -170,6 +217,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public JsoSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -182,14 +235,32 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -202,6 +273,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -236,6 +313,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -244,6 +327,12 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -266,14 +355,32 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

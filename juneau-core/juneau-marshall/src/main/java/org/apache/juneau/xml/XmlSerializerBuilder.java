@@ -57,24 +57,35 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
 	 *
-	 * <p>
-	 * This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
-	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
+	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
 	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
+		return set(XML_addNamespaceUrisToRoot, value);
+	}
+
+	/**
+	 * Configuration property:  Add namespace URLs to the root element.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>addNamespaceUrisToRoot(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
-		return set(XML_addNamespaceUrisToRoot, value);
+	public XmlSerializerBuilder addNamespaceUrisToRoot() {
+		return set(XML_addNamespaceUrisToRoot, true);
 	}
 
 	/**
@@ -83,35 +94,14 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Detect namespace usage before serialization.
 	 *
-	 * <p>
-	 * Used in conjunction with {@link XmlSerializer#XML_addNamespaceUrisToRoot} to reduce the list of namespace
-	 * URLs appended to the root element to only those that will be used in the resulting document.
-	 *
-	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
-	 * the root element is serialized.
-	 *
-	 * <p>
-	 * This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Auto-detection of namespaces can be costly performance-wise.
-	 * 		In high-performance environments, it's recommended that namespace detection be disabled, and that
-	 * 		namespaces be manually defined through the {@link XmlSerializer#XML_namespaces} property.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public XmlSerializerBuilder autoDetectNamespaces(boolean value) {
@@ -124,17 +114,14 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>"juneau: http://www.apache.org/2013/Juneau"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public XmlSerializerBuilder defaultNamespace(String value) {
@@ -147,17 +134,14 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public XmlSerializerBuilder enableNamespaces(boolean value) {
@@ -165,15 +149,44 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  Enable support for XML namespaces.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>enableNamespaces(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public XmlSerializerBuilder enableNamespaces() {
+		return set(XML_enableNamespaces, true);
+	}
+
+	/**
+	 * Configuration property:  Enable support for XML namespaces.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>enableNamespaces(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public XmlSerializerBuilder ns() {
+		return set(XML_enableNamespaces, true);
+	}
+
+	/**
 	 * Configuration property:  Default namespaces.
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -188,37 +201,20 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>setEnableNamespaces(<jk>true</jk>)</code>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
-	 * </ul>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public XmlSerializerBuilder ns() {
-		return enableNamespaces(true);
-	}
-
-	/**
 	 * Configuration property:  XMLSchema namespace.
 	 *
 	 * <p>
 	 * Specifies the namespace for the <code>XMLSchema</code> namespace, used by the schema generated by the
 	 * {@link XmlSchemaSerializer} class.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_xsNamespace}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>"xs: http://www.w3.org/2001/XMLSchema"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public XmlSerializerBuilder xsNamespace(Namespace value) {
@@ -228,6 +224,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder abridged() {
+		super.abridged();
 		return this;
 	}
 
@@ -244,11 +246,22 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -286,8 +299,20 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -304,8 +329,20 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -318,6 +355,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -346,6 +389,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public XmlSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -358,14 +407,32 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -378,6 +445,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -412,6 +485,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -420,6 +499,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -442,14 +527,32 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

@@ -126,20 +126,26 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
 	public UrlEncodingParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
+	public UrlEncodingParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public UrlEncodingParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UrlEncodingParserBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -150,14 +156,32 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -170,6 +194,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -204,6 +234,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -212,6 +248,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -234,14 +276,32 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

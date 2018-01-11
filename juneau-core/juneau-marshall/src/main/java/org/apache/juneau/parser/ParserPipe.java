@@ -192,7 +192,7 @@ public final class ParserPipe implements Closeable {
 			}
 		} else if (input instanceof File) {
 			CharsetDecoder cd = (
-				"default".equalsIgnoreCase(fileCharset)
+				"DEFAULT".equalsIgnoreCase(fileCharset)
 				? Charset.defaultCharset()
 				: Charset.forName(fileCharset)
 			).newDecoder();

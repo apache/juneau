@@ -95,6 +95,12 @@ public class CommonTest {
 		assertEquals("<rdf:Description><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
+
+		s.trimEmptyMaps();
+		r = s.build().serialize(t1);
+		assertEquals("<rdf:Description><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
+		t2 = p.parse(r, B.class);
+		assertNull(t2.f1);
 	}
 
 	public static class B {
@@ -130,6 +136,13 @@ public class CommonTest {
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
 		t2 = p.parse(r, C.class);
+
+		s.trimEmptyCollections();
+		r = s.build().serialize(t1);
+		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
+		t2 = p.parse(r, C.class);
+		assertNull(t2.f1);
+		t2 = p.parse(r, C.class);
 	}
 
 	public static class C {
@@ -160,6 +173,12 @@ public class CommonTest {
 		assertEqualObjects(t1, t2);
 
 		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
+		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
+		t2 = p.parse(r, D.class);
+		assertNull(t2.f1);
+
+		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, D.class);
@@ -299,7 +318,7 @@ public class CommonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.detectRecursions(true);
+		s.detectRecursions();
 		try {
 			s.build().serialize(r1);
 			fail("Exception expected!");
@@ -311,7 +330,7 @@ public class CommonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.jena.CommonTest$R1"));
 		}
 
-		s.ignoreRecursions(true);
+		s.ignoreRecursions();
 		String r = s.build().serialize(r1).replace("\r", "");
 		// Note...the order of the namespaces is not always the same depending on the JVM.
 		// The Jena libraries appear to use a hashmap for these.

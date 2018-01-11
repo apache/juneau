@@ -81,6 +81,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder abridged() {
+		super.abridged();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public SimpleUonPartSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;
@@ -93,11 +99,22 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public SimpleUonPartSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public SimpleUonPartSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -135,8 +152,20 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public SimpleUonPartSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -153,8 +182,20 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public SimpleUonPartSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -167,6 +208,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public SimpleUonPartSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -195,6 +242,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public SimpleUonPartSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public SimpleUonPartSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -207,14 +260,32 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -227,6 +298,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -261,6 +338,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -269,6 +352,12 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -291,14 +380,32 @@ public class SimpleUonPartSerializerBuilder extends UonPartSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SimpleUonPartSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SimpleUonPartSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

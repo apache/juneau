@@ -34,7 +34,7 @@ public class BasicHtmlTest {
 	private static final HtmlSerializer
 		s1 = HtmlSerializer.DEFAULT_SQ,
 		s2 = HtmlSerializer.DEFAULT_SQ_READABLE,
-		s3 = HtmlSerializer.DEFAULT_SQ.builder().abridged(true).build();
+		s3 = HtmlSerializer.DEFAULT_SQ.builder().abridged().build();
 	private static final HtmlParser parser = HtmlParser.DEFAULT;
 
 	@Parameterized.Parameters

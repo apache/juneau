@@ -174,7 +174,7 @@ public class RestClient extends BeanContext {
 	 * 	<li><b>Default:</b>  empty list.
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#interceptor(RestCallInterceptor)}
+	 * 			<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -350,8 +350,8 @@ public class RestClient extends BeanContext {
 	 * <p>
 	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
 	 * will be prefixed with the specified root.
-	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
-	 * Trailing slashes are trimmed.
+	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
+	 * <br>Trailing slashes are trimmed.
 	 */
 	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
 	

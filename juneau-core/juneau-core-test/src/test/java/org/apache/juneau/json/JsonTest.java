@@ -300,5 +300,11 @@ public class JsonTest {
 		assertEquals("\"foo\\/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);
 		assertEquals("foo/bar", r);
+
+		s = JsonSerializer.create().escapeSolidus().build();
+		r = s.serialize("foo/bar");
+		assertEquals("\"foo\\/bar\"", r);
+		r = JsonParser.DEFAULT.parse(r, String.class);
+		assertEquals("foo/bar", r);
 	}
 }

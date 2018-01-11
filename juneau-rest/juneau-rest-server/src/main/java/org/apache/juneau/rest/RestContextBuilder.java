@@ -518,7 +518,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder allowBodyParam(boolean value) {
@@ -539,7 +541,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <code>[<js>"HEAD"</js>,<js>"OPTIONS"</js>]</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder allowedMethodParams(String...value) {
@@ -559,7 +563,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder allowHeaderParams(boolean value) {
@@ -578,7 +584,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link RestCallHandler}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder callHandler(Class<? extends RestCallHandler> value) {
@@ -596,7 +604,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link RestCallHandler}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder callHandler(RestCallHandler value) {
@@ -676,7 +686,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link ClasspathResourceFinderBasic}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder classpathResourceFinder(Class<? extends ClasspathResourceFinder> value) {
@@ -694,7 +706,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link ClasspathResourceFinderBasic}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder classpathResourceFinder(ClasspathResourceFinder value) {
@@ -716,7 +730,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <js>"X-Client-Version"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder clientVersionHeader(String value) {
@@ -798,7 +814,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <js>"utf-8"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder defaultCharset(String value) {
@@ -981,7 +999,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link RestInfoProvider}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder infoProvider(Class<? extends RestInfoProvider> value) {
@@ -999,7 +1019,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link RestInfoProvider}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder infoProvider(RestInfoProvider value) {
@@ -1017,7 +1039,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.  Can be <jk>null</jk> to disable logging.
+	 * @param value 
+	 * 	The new value for this setting.  
+	 * 	<br>The default is {@link RestLogger.Normal}.
+	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder logger(Class<? extends RestLogger> value) {
@@ -1035,7 +1060,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.  Can be <jk>null</jk> to disable logging.
+	 * @param value 
+	 * 	The new value for this setting.  
+	 * 	<br>The default is {@link RestLogger.Normal}.
+	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder logger(RestLogger value) {
@@ -1054,7 +1082,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <js>"100M"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder maxInput(String value) {
@@ -1265,7 +1295,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link UonPartParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(Class<? extends HttpPartParser> value) {
@@ -1283,7 +1315,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link UonPartParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(HttpPartParser value) {
@@ -1301,7 +1335,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link SimpleUonPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
@@ -1319,7 +1355,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link SimpleUonPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(HttpPartSerializer value) {
@@ -1358,11 +1396,30 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder renderResponseStackTraces(boolean value) {
 		return set(REST_renderResponseStackTraces, value);
+	}
+
+	/**
+	 * Configuration property:  Render response stack traces in responses.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)<code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder renderResponseStackTraces() {
+		return set(REST_renderResponseStackTraces, true);
 	}
 
 	/**
@@ -1379,7 +1436,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link RestResourceResolverSimple}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder resourceResolver(Class<? extends RestResourceResolver> value) {
@@ -1397,7 +1456,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link RestResourceResolverSimple}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder resourceResolver(RestResourceResolver value) {
@@ -1532,7 +1593,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * @param append
 	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value. 
-	 * @param headers The headers to add to this list.
+	 * @param headers 
+	 * 	The headers to add to this list.
+	 * 	<br>The default is <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder staticFileResponseHeaders(boolean append, Map<String,String> headers) {
@@ -1796,7 +1859,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_useClasspathResourceCaching}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder useClasspathResourceCaching(boolean value) {
@@ -1815,7 +1880,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
 	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder useStackTraceHashes(boolean value) {
@@ -1888,14 +1955,32 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestContextBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestContextBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -1908,6 +1993,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -1942,6 +2033,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestContextBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -1950,6 +2047,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -1972,14 +2075,32 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestContextBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

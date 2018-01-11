@@ -68,20 +68,26 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public PlainTextParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
 	public PlainTextParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
+	public PlainTextParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public PlainTextParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public PlainTextParserBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -92,14 +98,32 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -112,6 +136,12 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -146,6 +176,12 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -154,6 +190,12 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -176,14 +218,32 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

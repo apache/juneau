@@ -76,20 +76,26 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public UonPartParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
 	public UonPartParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
+	public UonPartParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public UonPartParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UonPartParserBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -100,14 +106,32 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -120,6 +144,12 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -154,6 +184,12 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -162,6 +198,12 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -184,14 +226,32 @@ public class UonPartParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonPartParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonPartParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

@@ -37,7 +37,7 @@ public class BeanFilterBuilder<T> {
 
 	Class<?> beanClass;
 	String typeName;
-	String[] properties, excludeProperties;
+	String[] includeProperties, excludeProperties;
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties;
 	Object propertyNamer;
@@ -75,25 +75,40 @@ public class BeanFilterBuilder<T> {
 	}
 
 	/**
-	 * Specifies the set and order of names of properties associated with the bean class.
-	 *
+	 * Configuration property:  Bean property includes.
+	 * 
 	 * <p>
-	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
-	 * related methods.
-	 * Entries in the list can also contain comma-delimited lists that will be split.
-	 *
-	 * @param value The new value for this setting.
+	 * Specifies the set and order of names of properties associated with the bean class.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder<T> properties(String...value) {
-		this.properties = value;
+	public BeanFilterBuilder<T> includeProperties(String...value) {
+		this.includeProperties = value;
 		return this;
 	}
 
 	/**
-	 * Specifies the list of properties to ignore on a bean.
+	 * Configuration property:  Bean property excludes.
 	 *
-	 * @param value The new value for this setting.
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean class.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> excludeProperties(String...value) {
@@ -179,9 +194,20 @@ public class BeanFilterBuilder<T> {
 	}
 
 	/**
-	 * Sort properties in alphabetical order.
+	 * Configuration property:  Sort bean properties.
 	 *
-	 * @param value The new value for this setting.
+	 * <p>
+	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
+	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> sortProperties(boolean value) {
@@ -190,37 +216,57 @@ public class BeanFilterBuilder<T> {
 	}
 
 	/**
-	 * The property namer to use to name bean properties.
+	 * Configuration property:  Sort bean properties.
 	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public BeanFilterBuilder<T> propertyNamer(PropertyNamer value) {
-		this.propertyNamer = value;
-		return this;
-	}
-
-	/**
-	 * The property namer to use to name bean properties.
+	 * <p>
+	 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * </ul>
 	 * 
-	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
-	 * @throws Exception Thrown from constructor method.
 	 */
-	public BeanFilterBuilder<T> propertyNamer(Class<? extends PropertyNamer> value) throws Exception {
+	public BeanFilterBuilder<T> sortProperties() {
+		this.sortProperties = true;
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Bean property namer
+	 *
+	 * <p>
+	 * The class to use for calculating bean property names.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link PropertyNamerDefault}.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder<T> propertyNamer(Class<? extends PropertyNamer> value) {
 		this.propertyNamer = value;
 		return this;
 	}
 
 	/**
-	 * Adds classes to this bean's bean dictionary.
+	 * Configuration property:  Bean dictionary.
 	 *
+	 * <p>
+	 * Adds to the list of classes that make up the bean dictionary in this bean context.
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 * 
-	 * @param values The values to add to this setting.
+	 * @param values 
+	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> beanDictionary(Class<?>...values) {
@@ -232,8 +278,11 @@ public class BeanFilterBuilder<T> {
 	}
 
 	/**
-	 * Sets the contents of this bean's bean dictionary.
+	 * Configuration property:  Bean dictionary.
 	 *
+	 * <p>
+	 * Adds to the list of classes that make up the bean dictionary in this bean context.
+	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
@@ -255,7 +304,9 @@ public class BeanFilterBuilder<T> {
 	/**
 	 * The property filter to use for intercepting and altering getter and setter calls.
 	 *
-	 * @param value The new value for this setting.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link PropertyFilter}.
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> propertyFilter(Class<? extends PropertyFilter> value) {

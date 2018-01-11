@@ -73,20 +73,6 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>setSimpleMode(<jk>true</jk>).sq()</code>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link YamlSerializer#YAML_simpleMode}
-	 * </ul>
-	 * 
-	 * @return This object (for method chaining).
-	 */
-	public YamlSerializerBuilder simple() {
-		return simple(true).sq();
-	}
-
-	/**
 	 * Configuration property:  Simple JSON mode.
 	 *
 	 * <p>
@@ -105,9 +91,29 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 		return set(YAML_simpleMode, value);
 	}
 
+	/**
+	 * Shortcut for calling <code>setSimpleMode(<jk>true</jk>).sq()</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link YamlSerializer#YAML_simpleMode}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public YamlSerializerBuilder simple() {
+		return simple(true).sq();
+	}
+
 	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder abridged() {
+		super.abridged();
 		return this;
 	}
 
@@ -124,11 +130,22 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -166,8 +183,20 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -184,8 +213,20 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -198,6 +239,12 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -226,6 +273,12 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public YamlSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public YamlSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -238,14 +291,32 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -258,6 +329,12 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -292,6 +369,12 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -300,6 +383,12 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -322,14 +411,32 @@ public class YamlSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public YamlSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public YamlSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

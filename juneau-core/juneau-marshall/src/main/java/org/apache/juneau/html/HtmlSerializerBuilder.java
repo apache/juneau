@@ -55,21 +55,35 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
 	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
+		return set(HTML_addKeyValueTableHeaders, value);
+	}
+
+	/**
+	 * Configuration property:  Add key/value headers on bean/map tables.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>addKeyValueTableHeaders(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
-		return set(HTML_addKeyValueTableHeaders, value);
+	public HtmlSerializerBuilder addKeyValueTableHeaders() {
+		return set(HTML_addKeyValueTableHeaders, true);
 	}
 
 	/**
@@ -79,17 +93,15 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlSerializerBuilder detectLinksInStrings(boolean value) {
@@ -99,17 +111,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Configuration property:  The parameter name to use when using {@link HtmlSerializer#HTML_lookForLabelParameters}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>"label"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlSerializerBuilder labelParameter(String value) {
@@ -122,20 +131,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
-	 * <p>
-	 * The parameter name can be changed via the {@link HtmlSerializer#HTML_labelParameter} property.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_lookForLabelParameters}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlSerializerBuilder lookForLabelParameters(boolean value) {
@@ -149,15 +152,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
 	 * in HTML, this setting defines what to set the inner text to.
 	 *
-	 * <p>
-	 * See the {@link AnchorText} enum for possible values.
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link AnchorText#TO_STRING}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
@@ -167,6 +169,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* XmlSerializerBuilder */
 	public HtmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		super.addNamespaceUrisToRoot(value);
+		return this;
+	}
+
+	@Override /* XmlSerializerBuilder */
+	public HtmlSerializerBuilder addNamespaceUrisToRoot() {
+		super.addNamespaceUrisToRoot();
 		return this;
 	}
 
@@ -207,6 +215,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder abridged() {
+		super.abridged();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;
@@ -219,11 +233,22 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -261,8 +286,20 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -279,8 +316,20 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -293,6 +342,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -321,6 +376,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -333,14 +394,32 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -353,6 +432,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -387,6 +472,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -395,6 +486,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -417,14 +514,32 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

@@ -57,23 +57,14 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
-	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
-	 * URL-encoding of non-valid URI characters.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>UON_encoding</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public UonSerializerBuilder encoding(boolean value) {
@@ -81,12 +72,20 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>setEncodeChars(true)</code>.
+	 * Configuration property:  Encode non-valid URI characters.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>encoding(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
+	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public UonSerializerBuilder encoding() {
-		return encoding(true);
+		return set(UON_encoding, true);
 	}
 
 	/**
@@ -100,7 +99,9 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 *
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is {@link ParamFormat#UON}.
 	 * @return This object (for method chaining).
 	 */
 	public UonSerializerBuilder paramFormat(ParamFormat value) {
@@ -111,7 +112,7 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
 	 * <p>
-	 * Specifies the format to use for URL GET parameter keys and values.
+	 * Shortcut for calling <code>paramFormat(<jsf>PLAINTEXT</jsf>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -131,6 +132,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UonSerializerBuilder abridged() {
+		super.abridged();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UonSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;
@@ -143,11 +150,22 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UonSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UonSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public UonSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public UonSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -185,8 +203,20 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UonSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UonSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -203,8 +233,20 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UonSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UonSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -217,6 +259,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public UonSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -245,6 +293,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UonSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UonSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -257,14 +311,32 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -277,6 +349,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -311,6 +389,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -319,6 +403,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -341,14 +431,32 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

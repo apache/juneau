@@ -92,6 +92,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#addLiteralTypes(boolean)}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#addLiteralTypes()}
 	 * 		</ul>
 	 * </ul>
 	 */
@@ -109,6 +110,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfSerializerBuilder#addRootProperty(boolean)}
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#addRootProperty()}
 	 * 		</ul>
 	 * </ul>
 	 * 

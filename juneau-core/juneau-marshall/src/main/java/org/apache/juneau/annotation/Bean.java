@@ -43,54 +43,16 @@ public @interface Bean {
 	 *
 	 * <p>
 	 * The name is used to identify the class type during parsing when it cannot be inferred through reflection.
-	 * For example, if a bean property is of type <code>Object</code>, then the serializer will add the name to the
+	 * <br>For example, if a bean property is of type <code>Object</code>, then the serializer will add the name to the
 	 * output so that the class can be determined during parsing.
+	 * 
+	 * <p>
 	 * It is also used to specify element names in XML.
 	 *
-	 * <p>
-	 * The name is used in combination with the bean dictionary defined through {@link BeanProperty#beanDictionary()} or
-	 * {@link BeanContext#BEAN_beanDictionary}.
-	 * Together, they make up a simple name/value mapping of names to classes.
-	 * Names do not need to be universally unique.
-	 * However, they must be unique within a dictionary.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-	 * 	<jk>public class</jk> Foo {
-	 * 		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
-	 * 		<ja>@BeanProperty</ja>(beanDictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
-	 * 		<jk>public</jk> Object[] x = <jk>new</jk> Object[]{<jk>new</jk> Bar(), <jk>new</jk> Baz()};
-	 * 	}
-	 *
-	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-	 * 	<jk>public class</jk> Bar {}
-	 *
-	 * 	<ja>@Bean</ja>(typeName=<js>"baz"</js>)
-	 * 	<jk>public class</jk> Baz {}
-	 * </p>
-	 *
-	 * <p>
-	 * When serialized as XML, the bean is rendered as:
-	 * <p class='bcode'>
-	 * 	<xt>&lt;foo&gt;</xt>
-	 * 		<xt>&lt;x&gt;</xt>
-	 * 			<xt>&lt;bar/&gt;</xt>
-	 * 			<xt>&lt;baz/&gt;</xt>
-	 * 		<xt>&lt;/x&gt;</xt>
-	 * 	<xt>&lt;/foo&gt;</xt>
-	 * </p>
-	 *
-	 * <p>
-	 * When serialized as JSON, <js>'n'</js> attributes would be added when needed to infer the type during parsing:
-	 * <p class='bcode'>
-	 * 	{
-	 * 		x: [
-	 * 			{_type:<js>'bar'</js>},
-	 * 			{_type:<js>'baz'</js>}
-	 * 		]
-	 * 	}
-	 * </p>
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
 	 */
 	String typeName() default "";
 
@@ -99,38 +61,21 @@ public @interface Bean {
 	 * The property name to use for representing the type name.
 	 *
 	 * <p>
-	 * This can be used to override the name used for the <js>"_type"</js> property designated above.
-	 * Typically, you'll define this on an interface class so that it can apply to all subclasses.
-	 *
-	 * <p class='bcode'>
-	 * 	<ja>@Bean</ja>(typePropertyName=<js>"mytype"</js>, beanDictionary={MyClass1.<jk>class</jk>,MyClass2.<jk>class</jk>})
-	 * 	<jk>public interface</jk> MyInterface {...}
-	 *
-	 * 	<ja>@Bean</ja>(typeName=<js>"C1"</js>)
-	 * 	<jk>public class</jk> MyClass1 <jk>implements</jk> MyInterface {...}
-	 *
-	 * 	<ja>@Bean</ja>(typeName=<js>"C2"</js>)
-	 * 	<jk>public class</jk> MyClass2 <jk>implements</jk> MyInterface {...}
-	 *
-	 * 	MyInterface[] x = <jk>new</jk> MyInterface[]{ <jk>new</jk> MyClass1(), <jk>new</jk> MyClass2() };
-	 *
-	 *	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
-	 * 	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.serialize(x);
-	 * </p>
-	 *
-	 * <p>
-	 * This is similar in concept to the {@link BeanContext#BEAN_beanTypePropertyName} setting except this annotation
-	 * applies only to the annotated class and subclasses whereas the bean context property applies globally on
-	 * serializers and parsers.
+	 * This can be used to override the name used for the <js>"_type"</js> property used by the {@link #typeName()} setting.
 	 *
 	 * <ul class='doctree'>
 	 * 	<li class='warn'>
-	 * 		Be careful what value you specify for this.  It should not interfere with bean property names or
-	 * 		common HTML attribute names.
+	 * 		Be careful what value you specify for this.  
+	 * 		<br>It should not interfere with bean property names or common HTML attribute names.
 	 * </ul>
-	 *
-	 * The default value if not specified is <js>"_type"</js> unless overridden by the
-	 * {@link BeanContext#BEAN_beanTypePropertyName} setting.
+	 * 
+	 * <p>
+	 * The default value if not specified is <js>"_type"</js> .
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
+	 * </ul>
 	 */
 	String typePropertyName() default "";
 

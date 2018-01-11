@@ -219,9 +219,6 @@ public @interface BeanProperty {
 	 * <p>
 	 * The list of classes that make up the bean dictionary this bean property.
 	 * 
-	 * <p>
-	 * Used in cases where a bean property consists of maps or collections of generic objects.
-	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}

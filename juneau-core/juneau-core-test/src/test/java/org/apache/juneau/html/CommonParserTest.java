@@ -94,7 +94,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = HtmlParser.create().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = HtmlParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
@@ -142,7 +142,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		HtmlParser p = HtmlParser.create().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		HtmlParser p = HtmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		p.parse(in, B.class);

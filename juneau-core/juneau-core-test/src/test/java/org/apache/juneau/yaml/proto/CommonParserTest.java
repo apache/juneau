@@ -114,7 +114,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = YamlParser.create().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = YamlParser.create().ignoreUnknownBeanProperties().build();
 		B b;
 
 		String in =  "{a:1,unknown:3,b:2}";
@@ -161,7 +161,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		YamlParser p = YamlParser.create().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		YamlParser p = YamlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String json = "{a:1,unknownProperty:\"/foo\",b:2}";
 		p.parse(json, B.class);

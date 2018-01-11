@@ -46,6 +46,10 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	 * 	<li><b>Name:</b>  <js>"SoapXmlSerializer.SOAPAction.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"http://www.w3.org/2003/05/soap-envelope"</js>
+	 * 	<li><b>Methods:</b> 
+	 * 		<ul>
+	 * 			<li class='jm'>{@link SoapXmlSerializerBuilder#soapAction(String)}
+	 * 		</ul>
 	 * </ul>
 	 */
 	public static final String SOAPXML_SOAPAction = PREFIX + "SOAPAction.s";

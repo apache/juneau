@@ -158,6 +158,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot(boolean)}
+	 * 			<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot()}
 	 * 		</ul>
 	 * </ul>
 	 *

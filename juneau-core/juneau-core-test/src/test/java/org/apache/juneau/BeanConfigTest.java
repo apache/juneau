@@ -571,19 +571,19 @@ public class BeanConfigTest {
 		p2 = JsonParser.create();
 		assertSameCache(p1, p2);
 
-		p1.beansRequireDefaultConstructor(true);
+		p1.beansRequireDefaultConstructor();
 		assertDifferentCache(p1, p2);
-		p2.beansRequireDefaultConstructor(true);
+		p2.beansRequireDefaultConstructor();
 		assertSameCache(p1, p2);
 
-		p1.beansRequireSerializable(true);
+		p1.beansRequireSerializable();
 		assertDifferentCache(p1, p2);
-		p2.beansRequireSerializable(true);
+		p2.beansRequireSerializable();
 		assertSameCache(p1, p2);
 
-		p1.beansRequireSettersForGetters(true);
+		p1.beansRequireSettersForGetters();
 		assertDifferentCache(p1, p2);
-		p2.beansRequireSettersForGetters(true);
+		p2.beansRequireSettersForGetters();
 		assertSameCache(p1, p2);
 
 		p1.beansRequireSomeProperties(false);
@@ -591,9 +591,9 @@ public class BeanConfigTest {
 		p2.beansRequireSomeProperties(false);
 		assertSameCache(p1, p2);
 
-		p1.beanMapPutReturnsOldValue(true);
+		p1.beanMapPutReturnsOldValue();
 		assertDifferentCache(p1, p2);
-		p2.beanMapPutReturnsOldValue(true);
+		p2.beanMapPutReturnsOldValue();
 		assertSameCache(p1, p2);
 
 		p1.beanConstructorVisibility(Visibility.DEFAULT);
@@ -664,9 +664,9 @@ public class BeanConfigTest {
 		p2.beanMethodVisibility(Visibility.PROTECTED);
 		assertSameCache(p1, p2);
 
-		p1.useJavaBeanIntrospector(true);
+		p1.useJavaBeanIntrospector();
 		assertDifferentCache(p1, p2);
-		p2.useJavaBeanIntrospector(true);
+		p2.useJavaBeanIntrospector();
 		assertSameCache(p1, p2);
 
 		p1.useInterfaceProxies(false);
@@ -674,9 +674,9 @@ public class BeanConfigTest {
 		p2.useInterfaceProxies(false);
 		assertSameCache(p1, p2);
 
-		p1.ignoreUnknownBeanProperties(true);
+		p1.ignoreUnknownBeanProperties();
 		assertDifferentCache(p1, p2);
-		p2.ignoreUnknownBeanProperties(true);
+		p2.ignoreUnknownBeanProperties();
 		assertSameCache(p1, p2);
 
 		p1.ignoreUnknownNullBeanProperties(false);
@@ -689,14 +689,14 @@ public class BeanConfigTest {
 		p2.ignorePropertiesWithoutSetters(false);
 		assertSameCache(p1, p2);
 
-		p1.ignoreInvocationExceptionsOnGetters(true);
+		p1.ignoreInvocationExceptionsOnGetters();
 		assertDifferentCache(p1, p2);
-		p2.ignoreInvocationExceptionsOnGetters(true);
+		p2.ignoreInvocationExceptionsOnGetters();
 		assertSameCache(p1, p2);
 
-		p1.ignoreInvocationExceptionsOnSetters(true);
+		p1.ignoreInvocationExceptionsOnSetters();
 		assertDifferentCache(p1, p2);
-		p2.ignoreInvocationExceptionsOnSetters(true);
+		p2.ignoreInvocationExceptionsOnSetters();
 		assertSameCache(p1, p2);
 
 		p1.notBeanPackages("foo");

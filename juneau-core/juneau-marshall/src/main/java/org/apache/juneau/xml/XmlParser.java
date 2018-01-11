@@ -70,6 +70,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#preserveRootElement(boolean)}
+	 * 			<li class='jm'>{@link XmlParserBuilder#preserveRootElement()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -153,12 +154,15 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#validating(boolean)}
+	 * 			<li class='jm'>{@link XmlParserBuilder#validating()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
+	 * 
+	 * <p>
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 */
 	public static final String XML_validating = PREFIX + "validating.b";

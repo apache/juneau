@@ -60,6 +60,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* XmlParserBuilder */
+	public HtmlParserBuilder validating() {
+		super.validating();
+		return this;
+	}
+
+	@Override /* XmlParserBuilder */
 	public HtmlParserBuilder reporter(XMLReporter value) {
 		super.reporter(value);
 		return this;
@@ -96,20 +102,26 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public HtmlParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
 	public HtmlParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
+	public HtmlParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public HtmlParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public HtmlParserBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -120,14 +132,32 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -140,6 +170,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -174,6 +210,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -182,6 +224,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -204,14 +252,32 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

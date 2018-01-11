@@ -48,7 +48,7 @@ public class RdfParserTest {
 		RdfSerializer s = RdfSerializer.create().xmlabbrev()
 			.set(RDF_rdfxml_tab, 3)
 			.sq()
-			.addRootProperty(true)
+			.addRootProperty()
 			.build();
 
 		String expected =

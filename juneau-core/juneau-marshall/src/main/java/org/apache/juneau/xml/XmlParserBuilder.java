@@ -60,10 +60,6 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
@@ -83,26 +79,14 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key is
 	 * the root element name.
 	 *
-	 * Example:
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<td>XML</td>
-	 * 		<td>ObjectMap.toString(), preserveRootElement==false</td>
-	 * 		<td>ObjectMap.toString(), preserveRootElement==true</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt></code></td>
-	 * 		<td><code>{ a:<js>'foobar'</js> }</code></td>
-	 * 		<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
-	 * 	</tr>
-	 * </table>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public XmlParserBuilder preserveRootElement(boolean value) {
@@ -110,19 +94,27 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	/**
+	 * Configuration property:  Preserve root element during generalized parsing.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>preserveRootElement(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public XmlParserBuilder preserveRootElement() {
+		return set(XML_preserveRootElement, true);
+	}
+
+	/**
 	 * Configuration property:  XML reporter.
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Reporters are not copied to new parsers during a clone.
-	 * </ul>
-	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -142,10 +134,6 @@ public class XmlParserBuilder extends ParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
@@ -163,22 +151,36 @@ public class XmlParserBuilder extends ParserBuilder {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
-	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public XmlParserBuilder validating(boolean value) {
 		return set(XML_validating, value);
+	}
+
+	/**
+	 * Configuration property:  Enable validation.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>validating(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlParser#XML_validating}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public XmlParserBuilder validating() {
+		return set(XML_validating, true);
 	}
 
 	@Override /* ParserBuilder */
@@ -200,20 +202,26 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public XmlParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
 	public XmlParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
+	public XmlParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public XmlParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public XmlParserBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -224,14 +232,32 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -244,6 +270,12 @@ public class XmlParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -278,6 +310,12 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -286,6 +324,12 @@ public class XmlParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -308,14 +352,32 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

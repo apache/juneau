@@ -93,7 +93,7 @@ public class SSLOpts {
 	/**
 	 * Bean property setter:  <property>protocols</property>.
 	 *
-	 * @param protocols The new value for the <property>properties</property> property on this bean.
+	 * @param protocols The new value for the <property>protocols</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
 	public SSLOpts setProtocols(String protocols) {
@@ -113,7 +113,7 @@ public class SSLOpts {
 	/**
 	 * Bean property setter:  <property>certValidate</property>.
 	 *
-	 * @param certValidate The new value for the <property>properties</property> property on this bean.
+	 * @param certValidate The new value for the <property>certValidate</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
 	public SSLOpts setCertValidate(CertValidate certValidate) {
@@ -133,7 +133,7 @@ public class SSLOpts {
 	/**
 	 * Bean property setter:  <property>hostVerify</property>.
 	 *
-	 * @param hostVerify The new value for the <property>properties</property> property on this bean.
+	 * @param hostVerify The new value for the <property>hostVerify</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
 	public SSLOpts setHostVerify(HostVerify hostVerify) {

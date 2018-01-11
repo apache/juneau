@@ -20,6 +20,7 @@ import static org.apache.juneau.rest.client.RestClient.*;
 
 import java.lang.reflect.*;
 import java.net.*;
+import java.net.URI;
 import java.security.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -46,6 +47,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -230,7 +232,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder logTo(Level level, Logger log) {
-		return interceptor(new RestCallLogger(level, log));
+		return interceptors(new RestCallLogger(level, log));
 	}
 
 	/**
@@ -692,6 +694,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  Executor service.
+	 * 
+	 * <p>
 	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
 	 *
 	 * <p>
@@ -750,7 +755,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder keepHttpClientOpen(boolean value) {
@@ -758,6 +765,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Call interceptors.
+	 * 
+	 * <p>
 	 * Adds an interceptor that gets called immediately after a connection is made.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -765,76 +775,91 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
 	 * </ul>
 	 * 
-	 * @param interceptor The interceptor.
+	 * @param value The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder interceptor(RestCallInterceptor interceptor) {
-		return addTo(RESTCLIENT_interceptors, interceptor);
+	public RestClientBuilder interceptors(RestCallInterceptor...value) {
+		return addTo(RESTCLIENT_interceptors, value);
 	}
 
 	/**
-	 * Sets the parser used for parsing POJOs from the HTTP response message body.
+	 * Configuration property:  Parser.
+	 * 
+	 * <p>
+	 * The parser to use for parsing POJOs in response bodies.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
 	 * </ul>
 	 * 
-	 * @param parser The parser.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder parser(Parser parser) {		
-		return set(RESTCLIENT_parser, parser);
+	public RestClientBuilder parser(Class<? extends Parser> value) {
+		return set(RESTCLIENT_parser, value);
 	}
 
 	/**
-	 * Same as {@link #parser(Parser)}, except takes in a parser class that will be instantiated through a no-arg
-	 * constructor.
+	 * Configuration property:  Parser.
+	 * 
+	 * <p>
+	 * Same as {@link #parser(Parser)} except takes in a parser instance.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
 	 * </ul>
 	 * 
-	 * @param parserClass The parser class.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder parser(Class<? extends Parser> parserClass) {
-		return set(RESTCLIENT_parser, parserClass);
+	public RestClientBuilder parser(Parser value) {		
+		return set(RESTCLIENT_parser, value);
 	}
 
 	/**
-	 * Sets the part serializer to use for converting POJOs to headers, query parameters, form-data parameters, and
-	 * path variables.
+	 * Configuration property:  Part serializer.
+	 *
+	 * <p>
+	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
 	 * </ul>
 	 * 
-	 * @param partSerializer The part serializer instance.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link SimpleUonPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder partSerializer(HttpPartSerializer partSerializer) {
-		return set(RESTCLIENT_partSerializer, partSerializer);
+	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
+		return set(RESTCLIENT_partSerializer, value);
 	}
 
 	/**
-	 * Sets the part formatter to use for converting POJOs to headers, query parameters, form-data parameters, and
-	 * path variables.
+	 * Configuration property:  Part serializer.
+	 *
+	 * <p>
+	 * Same as {@link #partSerializer(Class)} but takes in a parser instance.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
 	 * </ul>
 	 * 
-	 * @param partSerializerClass
-	 * 	The part serializer class.
-	 * 	The class must have a no-arg constructor.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link SimpleUonPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> partSerializerClass) {
-		return set(RESTCLIENT_partSerializer, partSerializerClass);
+	public RestClientBuilder partSerializer(HttpPartSerializer value) {
+		return set(RESTCLIENT_partSerializer, value);
 	}
 
 	/**
@@ -862,26 +887,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Set a root URL for this client.
+	 * Configuration property:  Root URI.
 	 *
 	 * <p>
-	 * When set, URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
+	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
 	 * will be prefixed with the specified root.
-	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
+	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_rootUri}
 	 * </ul>
 	 * 
-	 * @param rootUrl
+	 * @param value
 	 * 	The root URL to prefix to relative URL strings.
-	 * 	Trailing slashes are trimmed.
-	 * 	Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
+	 * 	<br>Trailing slashes are trimmed.
+	 * 	<br>Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder rootUrl(Object rootUrl) {
-		return set(RESTCLIENT_rootUri, rootUrl);
+	public RestClientBuilder rootUrl(Object value) {
+		return set(RESTCLIENT_rootUri, value);
 	}
 
 	/**
@@ -901,45 +926,60 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the serializer used for serializing POJOs to the HTTP request message body.
+	 * Configuration property:  Serializer.
+	 *
+	 * <p>
+	 * The serializer to use for serializing POJOs in request bodies.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
 	 * </ul>
 	 * 
-	 * @param serializer The serializer.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder serializer(Serializer serializer) {
-		return set(RESTCLIENT_serializer, serializer);
+	public RestClientBuilder serializer(Class<? extends Serializer> value) {
+		return set(RESTCLIENT_serializer, value);
 	}
 
 	/**
-	 * Same as {@link #serializer(Serializer)}, except takes in a serializer class that will be instantiated through a
-	 * no-arg constructor.
+	 * Configuration property:  Serializer.
+	 *
+	 * <p>
+	 * Same as {@link #serializer(Class)} but takes in a serializer instance.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
 	 * </ul>
 	 * 
-	 * @param serializerClass The serializer class.
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder serializer(Class<? extends Serializer> serializerClass) {
-		return set(RESTCLIENT_serializer, serializerClass);
+	public RestClientBuilder serializer(Serializer value) {
+		return set(RESTCLIENT_serializer, value);
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
+	 * Configuration property:  Abridged output.
+	 *
+	 * <p>
+	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder abridged(boolean value) {
@@ -947,14 +987,37 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
+	 * Configuration property:  Abridged output.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>abridged(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder abridged() {
+		return set(SERIALIZER_abridged, true);
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder addBeanTypeProperties(boolean value) {
@@ -962,14 +1025,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
+	 * Configuration property:  Automatically detect POJO recursions.
+	 *
+	 * <p>
+	 * Specifies that recursions should be checked for during serialization.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder detectRecursions(boolean value) {
@@ -977,14 +1050,42 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
+	 * Configuration property:  Automatically detect POJO recursions.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder detectRecursions() {
+		return set(SERIALIZER_detectRecursions, true);
+	}
+
+	/**
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
+	 * Otherwise, an exception is thrown.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder ignoreRecursions(boolean value) {
@@ -992,14 +1093,36 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder ignoreRecursions() {
+		return set(SERIALIZER_ignoreRecursions, true);
+	}
+
+	/**
+	 * Configuration property:  Initial depth.
+	 *
+	 * <p>
+	 * The initial indentation level at the root.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>0</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder initialDepth(int value) {
@@ -1007,14 +1130,40 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
+	 * Configuration property:  Serializer listener.
+	 *
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during serialization.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder listenerS(Class<? extends SerializerListener> value) {
+		return set(SERIALIZER_listener, value);
+	}
+
+	/**
+	 * Configuration property:  Max serialization depth.
+	 *
+	 * <p>
+	 * Abort serialization if specified depth is reached in the POJO tree.
+	 * <br>If this depth is exceeded, an exception is thrown.
+	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder maxDepth(int value) {
@@ -1022,14 +1171,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
+	 * Configuration property:  Maximum indentation.
+	 *
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder maxIndent(boolean value) {
@@ -1037,14 +1191,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
+	 * Configuration property:  Quote character.
+	 *
+	 * <p>
+	 * This is the character used for quoting attributes and values.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder quoteChar(char value) {
@@ -1052,29 +1211,36 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_listener} property on all serializers in this group.
+	 * Configuration property:  Quote character.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
 	 * </ul>
 	 * 
-	 * @param sl The new serializer listener.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder serializerListener(Class<? extends SerializerListener> sl) {
-		return set(SERIALIZER_listener, sl);
+	public RestClientBuilder sq() {
+		return set(SERIALIZER_quoteChar, '\'');
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
+	 * Configuration property:  Sort arrays and collections alphabetically.
+	 *
+	 * <p>
+	 * Copies and sorts the contents of arrays and collections before serializing them.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder sortCollections(boolean value) {
@@ -1082,7 +1248,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder sortCollections() {
+		return set(SERIALIZER_sortCollections, true);
+	}
+
+	/**
 	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
+	 *
+	 * <p>
+	 * Copies and sorts the contents of maps before serializing them.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1097,14 +1283,36 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
+	 * Configuration property:  Sort maps alphabetically.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder sortMaps() {
+		return set(SERIALIZER_sortMaps, true);
+	}
+
+	/**
+	 * Configuration property:  Trim empty lists and arrays.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder trimEmptyCollections(boolean value) {
@@ -1112,14 +1320,36 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
+	 * Configuration property:  Trim empty lists and arrays.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimEmptyCollections() {
+		return set(SERIALIZER_trimEmptyCollections, true);
+	}
+
+	/**
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder trimEmptyMaps(boolean value) {
@@ -1127,14 +1357,36 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimEmptyMaps() {
+		return set(SERIALIZER_trimEmptyMaps, true);
+	}
+
+	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder trimNullProperties(boolean value) {
@@ -1142,22 +1394,47 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
+	 * Configuration property:  Trim strings.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder trimStrings(boolean value) {
+	public RestClientBuilder trimStringsS(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
+	 * Configuration property:  Trim strings.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimStringsS() {
+		return set(SERIALIZER_trimStrings, true);
+	}
+
+	/**
+	 * Configuration property:  URI context bean.
+	 *
+	 * <p>
+	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1172,14 +1449,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
+	 * Configuration property:  URI relativity.
+	 *
+	 * <p>
+	 * Defines what relative URIs are relative to when serializing URI/URL objects.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder uriRelativity(UriRelativity value) {
@@ -1187,14 +1469,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
+	 * Configuration property:  URI resolution.
+	 *
+	 * <p>
+	 * Defines the resolution level for URIs when serializing URI/URL objects.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder uriResolution(UriResolution value) {
@@ -1202,14 +1489,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder useWhitespace(boolean value) {
@@ -1217,14 +1509,52 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 	
 	/**
-	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder useWhitespace() {
+		return set(SERIALIZER_useWhitespace, true);
+	}
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder ws() {
+		return set(SERIALIZER_useWhitespace, true);
+	}
+
+	/**
+	 * Configuration property:  File charset.
+	 *
+	 * <p>
+	 * The character set to use for reading <code>Files</code> from the file system.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder fileCharset(String value) {
@@ -1232,14 +1562,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
+	 * Configuration property:  Input stream charset.
+	 *
+	 * <p>
+	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder inputStreamCharset(String value) {
@@ -1247,29 +1582,37 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_listener} property on all parsers in this group.
+	 * Configuration property:  Parser listener.
+	 *
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
 	 * 
-	 * @param pl The new parser listener.
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder parserListener(Class<? extends ParserListener> pl) {
-		return set(PARSER_listener, pl);
+	public RestClientBuilder listenerP(Class<? extends ParserListener> value) {
+		return set(PARSER_listener, value);
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
+	 * Configuration property:  Strict mode.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, strict mode for the parser is enabled.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder strict(boolean value) {
@@ -1277,14 +1620,37 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
+	 * Configuration property:  Strict mode.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder strict() {
+		return set(PARSER_strict, true);
+	}
+
+	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder trimStringsP(boolean value) {
@@ -1292,11 +1658,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link UonSerializer#UON_paramFormat} property on the URL-encoding serializers in this group.
+	 * Configuration property:  Trim parsed strings.
 	 *
 	 * <p>
-	 * This overrides the behavior of the URL-encoding serializer to quote and escape characters in query names and
-	 * values that may be confused for UON notation (e.g. <js>"'(foo=123)'"</js>, <js>"'@(1,2,3)'"</js>).
+	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder trimStringsP() {
+		return set(PARSER_trimStrings, true);
+	}
+
+	/**
+	 * XXX
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1311,24 +1690,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>paramFormat(<js>"PLAINTEXT"</js>)</code>.
-	 *
-	 * <p>
-	 * The default behavior is to serialize part values (query parameters, form data, headers, path variables) in UON
-	 * notation.
-	 * Calling this method forces plain-text to be used instead.
-	 *
-	 * <p>
-	 * Specifically, UON notation has the following effects:
-	 * <ul>
-	 * 	<li>Boolean strings (<js>"true"</js>/<js>"false"</js>) and numeric values (<js>"123"</js>) will be
-	 * 			quoted (<js>"'true'"</js>, <js>"'false'"</js>, <js>"'123'"</js>.
-	 * 		<br>This allows them to be differentiated from actual boolean and numeric values.
-	 * 	<li>String such as <js>"(foo='bar')"</js> that mimic UON structures will be quoted and escaped to
-	 * 		<js>"'(foo=bar~'baz~')'"</js>.
-	 * </ul>
-	 * <p>
-	 * The down-side to using plain text part serialization is that you cannot serialize arbitrary POJOs.
+	 * XXX
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1337,79 +1699,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder plainTextParts() {
+	public RestClientBuilder paramFormatPlain() {
 		return set(UON_paramFormat, "PLAINTEXT");
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
 	}
 
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
@@ -1420,8 +1722,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestClientBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -1432,106 +1746,32 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
+	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder debug() {
-		super.debug();
-		set(RESTCLIENT_debug, true);
-		header("Debug", true);
+	public RestClientBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
+	public RestClientBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
+	public RestClientBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder excludeProperties(String beanClassName, String properties) {
-		super.excludeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> RestClientBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder includeProperties(Class<?> beanClass, String properties) {
-		super.includeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder includeProperties(String beanClassName, String properties) {
-		super.includeProperties(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder mediaType(MediaType value) {
-		super.mediaType(value);
+	public RestClientBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
 		return this;
 	}
 
@@ -1542,32 +1782,80 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
+	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
+	public RestClientBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
+	public RestClientBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
+	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public RestClientBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 
@@ -1584,20 +1872,62 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanPackages(boolean append, Object...values) {
+		super.notBeanPackages(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public RestClientBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
+	public RestClientBuilder notBeanClasses(Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanClasses(boolean append, Object...values) {
+		super.notBeanClasses(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFilters(Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFilters(boolean append, Object...values) {
+		super.beanFilters(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -1608,14 +1938,68 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestClientBuilder pojoSwaps(Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder pojoSwaps(boolean append, Object...values) {
+		super.pojoSwaps(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
+	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public <T> RestClientBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionary(Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionary(boolean append, Object...values) {
+		super.beanDictionary(append, values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder locale(Locale value) {
+		super.locale(value);
 		return this;
 	}
 
@@ -1626,14 +2010,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
+	public RestClientBuilder mediaType(MediaType value) {
+		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
+	public RestClientBuilder debug() {
+		super.debug();
+		set(RESTCLIENT_debug, true);
+		header("Debug", true);
 		return this;
 	}
 
@@ -1676,6 +2062,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* ContextBuilder */
 	public RestClientBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestClientBuilder apply(PropertyStore copyFrom) {
+		super.apply(copyFrom);
 		return this;
 	}
 

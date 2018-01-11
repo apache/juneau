@@ -61,7 +61,7 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 			Bean b = li.previous();
 
 			if (! b.properties().isEmpty())
-				properties(split(b.properties()));
+				includeProperties(split(b.properties()));
 
 			if (! b.typeName().isEmpty())
 				typeName(b.typeName());

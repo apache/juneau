@@ -345,7 +345,7 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().expandedParams(true).build();
+		s = UrlEncodingSerializer.create().expandedParams().build();
 		r = s.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"
@@ -406,7 +406,7 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=a,b=1,c=true))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().expandedParams(true).build();
+		s = UrlEncodingSerializer.create().expandedParams().build();
 		r = s.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"

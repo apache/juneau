@@ -186,7 +186,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterHtml() throws Exception {
-		WriterSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true).build();
+		WriterSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		ReaderParser p = HtmlParser.DEFAULT;
 
 		Calendar c = testDate;

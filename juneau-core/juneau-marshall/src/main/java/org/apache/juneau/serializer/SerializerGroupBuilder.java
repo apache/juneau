@@ -131,14 +131,20 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_abridged} property on all serializers in this group.
+	 * Configuration property:  Abridged output.
+	 *
+	 * <p>
+	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder abridged(boolean value) {
@@ -146,14 +152,37 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
+	 * Configuration property:  Abridged output.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>abridged(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_abridged}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder abridged() {
+		return set(SERIALIZER_abridged, true);
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypeProperties}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder addBeanTypeProperties(boolean value) {
@@ -161,14 +190,24 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_detectRecursions} property on all serializers in this group.
+	 * Configuration property:  Automatically detect POJO recursions.
+	 *
+	 * <p>
+	 * Specifies that recursions should be checked for during serialization.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder detectRecursions(boolean value) {
@@ -176,14 +215,42 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_ignoreRecursions} property on all serializers in this group.
+	 * Configuration property:  Automatically detect POJO recursions.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder detectRecursions() {
+		return set(SERIALIZER_detectRecursions, true);
+	}
+
+	/**
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
+	 * Otherwise, an exception is thrown.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder ignoreRecursions(boolean value) {
@@ -191,14 +258,36 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_initialDepth} property on all serializers in this group.
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder ignoreRecursions() {
+		return set(SERIALIZER_ignoreRecursions, true);
+	}
+
+	/**
+	 * Configuration property:  Initial depth.
+	 *
+	 * <p>
+	 * The initial indentation level at the root.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>0</code>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder initialDepth(int value) {
@@ -206,14 +295,18 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_listener} property on all serializers in this group.
+	 * Configuration property:  Serializer listener.
+	 *
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
@@ -221,14 +314,21 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_maxDepth} property on all serializers in this group.
+	 * Configuration property:  Max serialization depth.
+	 *
+	 * <p>
+	 * Abort serialization if specified depth is reached in the POJO tree.
+	 * <br>If this depth is exceeded, an exception is thrown.
+	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder maxDepth(int value) {
@@ -236,29 +336,39 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_maxIndent} property on all serializers in this group.
+	 * Configuration property:  Maximum indentation.
+	 *
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxIndent}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerGroupBuilder maxIndent(boolean value) {
+	public SerializerGroupBuilder maxIndent(int value) {
 		return set(SERIALIZER_maxIndent, value);
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_quoteChar} property on all serializers in this group.
+	 * Configuration property:  Quote character.
+	 *
+	 * <p>
+	 * This is the character used for quoting attributes and values.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_quoteChar}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder quoteChar(char value) {
@@ -266,14 +376,16 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_sortCollections} property on all serializers in this group.
+	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder sortCollections(boolean value) {
@@ -281,14 +393,33 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
+	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder sortCollections() {
+		return set(SERIALIZER_sortCollections, true);
+	}
+
+	/**
+	 * Configuration property:  Sort maps alphabetically.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder sortMaps(boolean value) {
@@ -296,6 +427,26 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Sort maps alphabetically.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder sortMaps() {
+		return set(SERIALIZER_sortMaps, true);
+	}
+
+	/**
+	 * Configuration property:  Sort maps alphabetically.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -310,14 +461,19 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyCollections} property on all serializers in this group.
+	 * Configuration property:  Trim empty lists and arrays.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder trimEmptyCollections(boolean value) {
@@ -325,14 +481,36 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimEmptyMaps} property on all serializers in this group.
+	 * Configuration property:  Trim empty lists and arrays.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder trimEmptyCollections() {
+		return set(SERIALIZER_trimEmptyCollections, true);
+	}
+
+	/**
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder trimEmptyMaps(boolean value) {
@@ -340,14 +518,36 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimNullProperties} property on all serializers in this group.
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder trimEmptyMaps() {
+		return set(SERIALIZER_trimEmptyMaps, true);
+	}
+
+	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder trimNullProperties(boolean value) {
@@ -355,14 +555,19 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_trimStrings} property on all serializers in this group.
+	 * Configuration property:  Trim strings.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder trimStrings(boolean value) {
@@ -370,7 +575,27 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriContext} property on all serializers in this group.
+	 * Configuration property:  Trim strings.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder trimStrings() {
+		return set(SERIALIZER_trimStrings, true);
+	}
+
+	/**
+	 * Configuration property:  URI context bean.
+	 *
+	 * <p>
+	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -385,14 +610,19 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriRelativity} property on all serializers in this group.
+	 * Configuration property:  URI relativity.
+	 *
+	 * <p>
+	 * Defines what relative URIs are relative to when serializing URI/URL objects.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder uriRelativity(UriRelativity value) {
@@ -400,14 +630,19 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_uriResolution} property on all serializers in this group.
+	 * Configuration property:  URI resolution.
+	 *
+	 * <p>
+	 * Defines the resolution level for URIs when serializing URI/URL objects.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder uriResolution(UriResolution value) {
@@ -415,14 +650,19 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Serializer#SERIALIZER_useWhitespace} property on all serializers in this group.
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder useWhitespace(boolean value) {
@@ -430,6 +670,25 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * </ul>
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder useWhitespace() {
+		return set(SERIALIZER_useWhitespace, true);
+	}
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -440,12 +699,19 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder ws() {
-		return useWhitespace(true);
+		return useWhitespace();
 	}
+
 
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
@@ -456,8 +722,20 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -470,6 +748,12 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -504,6 +788,12 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -512,6 +802,12 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -534,14 +830,32 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

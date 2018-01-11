@@ -81,7 +81,7 @@ public class BeanSession extends Session {
 	 * The locale is determined in the following order:
 	 * <ol>
 	 * 	<li><code>locale</code> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_locale} entry in <code>properties</code> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_locale} entry in parameter passed in through constructor.
 	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
 	 * 	<li>Locale returned by {@link Locale#getDefault()}.
 	 * </ol>
@@ -99,7 +99,7 @@ public class BeanSession extends Session {
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><code>timeZone</code> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in <code>properties</code> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
 	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
 	 * </ol>
 	 *

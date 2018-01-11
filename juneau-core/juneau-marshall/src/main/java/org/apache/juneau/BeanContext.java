@@ -16,7 +16,6 @@ import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.beans.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -138,64 +137,10 @@ import org.apache.juneau.transform.*;
  * 	Person p = m2.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
- * <h5 class='topic'>Bean Annotations</h5>
- *
- * This package contains annotations that can be applied to class definitions to override what properties are detected
- * on a bean.
- *
- * <h5 class='section'>Example:</h5>
- *
- * <p class='bcode'>
- * 	<jc>// Bean class definition where only property 'name' is detected.</jc>
- * 	<ja>&#64;Bean</ja>(properties=<js>"name"</js>)
- * 	<jk>public class</jk> Person {
- * 		<jk>public</jk> String getName();
- * 		<jk>public void</jk> setName(String name);
- * 		<jk>public int</jk> getAge();
- * 		<jk>public void</jk> setAge(<jk>int</jk> age);
- * 	}
- * </p>
- *
- * <p>
- * See {@link Bean @Bean} and {@link BeanProperty @BeanProperty} for more information.
- *
- * <h5 class='topic'>Beans with read-only properties</h5>
- *
- * Bean maps can also be defined on top of beans with read-only properties by adding a
- * {@link BeanConstructor @BeanConstructor} annotation to one of the constructors on the
- * bean class.  This will allow read-only properties to be set through constructor arguments.
- *
- * <p>
- * When the <code>@BeanConstructor</code> annotation is present, bean instantiation is delayed until the call to
- * {@link BeanMap#getBean()}.
- * Until then, bean property values are stored in a local cache until <code>getBean()</code> is called.
- * Because of this additional caching step, parsing into read-only beans tends to be slower and use more memory than
- * parsing into beans with writable properties.
- *
- * <p>
- * Attempting to call {@link BeanMap#put(String,Object)} on a read-only property after calling {@link BeanMap#getBean()}
- * will result in a {@link BeanRuntimeException} being thrown.
- * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
- *
- * <p>
- * Beans can be defined with a combination of read-only and read-write properties.
- *
- * <p>
- * See {@link BeanConstructor @BeanConstructor} for more information.
- *
- * <h5 class='topic'>ClassMetas</h5>
- *
- * The {@link ClassMeta} class is a wrapper around {@link Class} object that provides cached information about that
- * class (e.g. whether it's a {@link Map} or {@link Collection} or bean).
- *
- * <p>
- * As a general rule, it's best to reuse bean contexts (and therefore serializers and parsers too) whenever possible
- * since it takes some time to populate the internal {@code ClassMeta} object cache.
- * By reusing bean contexts, the class type metadata only needs to be calculated once which significantly improves
- * performance.
- *
- * <p>
- * See {@link ClassMeta} for more information.
+ * <h6 class='topic'>Documentation</h6>
+ *	<ul>
+ *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.ContextsBuildersSessionsPropertyStores">Overview &gt; Contexts, Builders, Sessions, and PropertyStores</a>
+ *	</ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {
@@ -351,6 +296,12 @@ public class BeanContext extends Context {
 	 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
 	 * 	<ja>@Bean</ja>(beanDictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyBean {...}
+	 * 
+	 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
+	 * 	ReaderParser p = HtmlParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanDictionary(HtmlBeanDictionary.<jk>class</jk>)
+	 * 		.build();
 	 * </p>
 	 * 
 	 *	<h5 class='section'>Documentation:</h5>
@@ -464,7 +415,7 @@ public class BeanContext extends Context {
 	 * 		<jc>// Must provide a no-arg constructor!</jc>
 	 * 		<jk>public</jk> MyBeanFilter() {
 	 * 			<jk>super</jk>(MyBean.<jk>class</jk>);  <jc>// The bean class that this filter applies to.</jc>
-	 * 			properties(<js>"foo,bar,baz"</js>);  <jc>// The properties we want exposed.</jc>
+	 * 			includeProperties(<js>"foo,bar,baz"</js>);  <jc>// The properties we want exposed.</jc>
 	 * 		}
 	 * 	}	
 	 * 
@@ -501,8 +452,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanFilters_remove = PREFIX + "beanFilters.lc/remove";
 
 	/**
-	 * Configuration property:  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
-	 * value.
+	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -513,14 +463,16 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * values.
-	 *
+	 * 
 	 * <p>
 	 * Disabled by default because it introduces a slight performance penalty.
 	 */
@@ -579,6 +531,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -592,7 +545,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireDefaultConstructor = PREFIX + "beansRequireDefaultConstructor.b";
 
 	/**
-	 * Configuration property:  Beans require {@link Serializable} interface.
+	 * Configuration property:  Beans require Serializable interface.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -603,6 +556,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -627,6 +581,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -662,7 +617,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireSomeProperties = PREFIX + "beansRequireSomeProperties.b";
 
 	/**
-	 * Configuration property:  Name to use for the bean type properties used to represent a bean type.
+	 * Configuration property:  Bean type property name.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -679,6 +634,15 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanTypePropertyName(String)}
 	 * 		</ul>
 	 * </ul>
+	 * 
+	 * <p>
+	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
+	 * parser knows the data type to reconstruct.
+	 * 
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; Bean Names and Dictionaries</a>
+	 *	</ul>
 	 */
 	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName.s";
 
@@ -719,7 +683,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_debug = PREFIX + "debug.b";
 
 	/**
-	 * Configuration property:  Exclude specified properties from beans.
+	 * Configuration property:  Bean property excludes.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -770,6 +734,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -792,6 +757,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -836,6 +802,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -869,7 +836,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + "ignoreUnknownNullBeanProperties.b";
 
 	/**
-	 * Configuration property:  Implementation classes for interfaces and abstract classes.
+	 * Configuration property:  Implementation classes.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -893,11 +860,11 @@ public class BeanContext extends Context {
 	public static final String BEAN_implClasses = PREFIX + "implClasses.smc";
 
 	/**
-	 * Configuration property:  Explicitly specify visible bean properties.
+	 * Configuration property:  Bean property includes.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.includeProperties.sms"</js>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.properties.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
 	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
@@ -911,13 +878,13 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Class, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(String, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#properties(String...)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#includeProperties(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * Specifies to only include the specified list of properties for the specified bean classes.
+	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <p>
 	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
@@ -972,7 +939,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_mediaType = PREFIX + "mediaType.s";
 
 	/**
-	 * Configuration property:  Classes to be excluded from consideration as being beans.
+	 * Configuration property:  Bean class exclusions.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -1011,7 +978,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_notBeanClasses_remove = PREFIX + "notBeanClasses.sc/remove";
 
 	/**
-	 * Configuration property:  Packages whose classes should not be considered beans.
+	 * Configuration property:  Bean package exclusions.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -1175,7 +1142,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#propertyNamer(PropertyNamer)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#propertyNamer(Class)}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -1194,7 +1161,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_propertyNamer = PREFIX + "propertyNamer.c";
 
 	/**
-	 * Configuration property:  Sort bean properties in alphabetical order.
+	 * Configuration property:  Sort bean properties.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -1209,7 +1176,9 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#sortProperties(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#sortProperties()}
 	 * 			<li class='jm'>{@link BeanFilterBuilder#sortProperties(boolean)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#sortProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1271,7 +1240,7 @@ public class BeanContext extends Context {
 	public static final String BEAN_useInterfaceProxies = PREFIX + "useInterfaceProxies.b";
 
 	/**
-	 * Configuration property:  Use Java {@link Introspector} for determining bean properties.
+	 * Configuration property:  Use Java Introspector.
 	 *
 	 *	<h5 class='section'>Property:</h5>
 	 * <ul>
@@ -1282,6 +1251,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector(boolean)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1334,7 +1304,7 @@ public class BeanContext extends Context {
 	public static final BeanContext DEFAULT = BeanContext.create().build();
 
 	/** Default config.  All default settings except sort bean properties. */
-	public static final BeanContext DEFAULT_SORTED = BeanContext.create().sortProperties(true).build();
+	public static final BeanContext DEFAULT_SORTED = BeanContext.create().sortProperties().build();
 
 	final boolean
 		beansRequireDefaultConstructor,
@@ -2287,7 +2257,7 @@ public class BeanContext extends Context {
 				.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
 				.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
 				.append("implClasses", implClasses)
-				.append("properties", includeProperties)
+				.append("includeProperties", includeProperties)
 				.append("locale", locale)
 				.append("mediaType", mediaType)
 				.append("notBeanClasses", notBeanClasses)

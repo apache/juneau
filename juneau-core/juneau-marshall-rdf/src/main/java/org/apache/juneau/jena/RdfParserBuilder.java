@@ -73,17 +73,6 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get 
-	 * 		lost.
-	 * </ul>
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_collectionFormat}
@@ -104,7 +93,9 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauBpNs}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder juneauBpNs(Namespace value) {
@@ -119,7 +110,9 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
 	 * </ul>
 	 *
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder juneauNs(Namespace value) {
@@ -135,7 +128,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 	<li>
 	 * 		<js>"RDF/XML"</js>
 	 * 	<li>
-	 * 		<js>"RDF/XML-ABBREV"</js>
+	 * 		<js>"RDF/XML-ABBREV"</js> (default)
 	 * 	<li>
 	 * 		<js>"N-TRIPLE"</js>
 	 * 	<li>
@@ -178,43 +171,14 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 * 
-	 * <p>
-	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
-	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
-	 * when serialized as loose collections.
-	 * 
-	 * <p>
-	 * This setting is typically only useful if the beans being parsed into do not have a bean property
-	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	WriterSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev().looseCollections(<jk>true</jk>).build();
-	 * 	ReaderParser p = <jk>new</jk> RdfParserBuilder().xml().looseCollections(<jk>true</jk>).build();
-	 *
-	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(l);
-	 * 
-	 * 	<jc>// Parse back into a Java collection</jc>
-	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	MyBean[] b = createArrayOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(b);
-	 * 
-	 * 	<jc>// Parse back into a bean array</jc>
-	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
-	 * </p>
-	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder looseCollections(boolean value) {
@@ -222,6 +186,26 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>looseCollection(<jk>true</jk)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder looseCollections() {
+		return set(RDF_looseCollections, true);
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -236,6 +220,9 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	/**
+	 * Configuration property:  RDF language.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -260,11 +247,30 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder trimWhitespace(boolean value) {
 		return set(RDF_trimWhitespace, value);
+	}
+
+	/**
+	 * Configuration property:  Trim whitespace from text elements.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>trimWhitespace(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder trimWhitespace() {
+		return set(RDF_trimWhitespace, true);
 	}
 
 	/**
@@ -294,7 +300,9 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * 	<li class='jf'>{@link RdfParser#RDF_useXmlNamespaces}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfParserBuilder useXmlNamespaces(boolean value) {
@@ -348,20 +356,26 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public RdfParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
 	public RdfParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
+	public RdfParserBuilder strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* ParserBuilder */
 	public RdfParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public RdfParserBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -372,14 +386,32 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -392,6 +424,12 @@ public class RdfParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -426,6 +464,12 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -434,6 +478,12 @@ public class RdfParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -456,14 +506,32 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

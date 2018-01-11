@@ -67,7 +67,7 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			},
 			{ /* 3 */
 				"Xml DEFAULT w/namespaces,validation",
-				XmlSerializer.create().sq().ns().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
+				XmlSerializer.create().sq().ns().trimNullProperties(false).addNamespaceUrisToRoot().useWhitespace(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},

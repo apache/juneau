@@ -129,7 +129,7 @@ public class UonSerializer extends WriterSerializer {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
@@ -163,6 +163,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding(boolean)}
+	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -189,6 +190,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormat(ParamFormat)}
+	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormatPlain()}
 	 * 		</ul>
 	 * </ul>
 	 *

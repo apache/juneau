@@ -101,7 +101,7 @@ public class CommonParser_UonTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = UonParser.create().ignoreUnknownBeanProperties(true).build();
+		ReaderParser p = UonParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in =  "(a=1,unknown=3,b=2)";
@@ -150,7 +150,7 @@ public class CommonParser_UonTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		UonParser p = UonParser.create().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
+		UonParser p = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "(a=1,unknownProperty=foo,b=2)";
 		p.parse(in, B.class);

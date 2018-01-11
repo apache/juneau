@@ -35,6 +35,6 @@ public class UrlPathPatternTest {
 		l.add(new UrlPathPattern("/foo/{id}/bar/*"));
 
 		Collections.sort(l);
-		assertEquals("[{patternString:'/foo/bar',vars:[]},{patternString:'/foo/bar/*',vars:[]},{patternString:'/foo/{id}/bar',vars:['id']},{patternString:'/foo/{id}/bar/*',vars:['id']},{patternString:'/foo/{id}',vars:['id']},{patternString:'/foo/{id}/*',vars:['id']},{patternString:'/foo',vars:[]},{patternString:'/foo/*',vars:[]}]", JsonSerializer.DEFAULT_LAX.builder().sortProperties(true).build().serialize(l));
+		assertEquals("[{patternString:'/foo/bar',vars:[]},{patternString:'/foo/bar/*',vars:[]},{patternString:'/foo/{id}/bar',vars:['id']},{patternString:'/foo/{id}/bar/*',vars:['id']},{patternString:'/foo/{id}',vars:['id']},{patternString:'/foo/{id}/*',vars:['id']},{patternString:'/foo',vars:[]},{patternString:'/foo/*',vars:[]}]", JsonSerializer.DEFAULT_LAX.builder().sortProperties().build().serialize(l));
 	}
 }

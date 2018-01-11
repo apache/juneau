@@ -48,7 +48,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testAnchorTextOptions() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true).uriResolution(UriResolution.NONE);
+		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
 		TestURI t = new TestURI();
 		String r;
 		String expected = null;
@@ -209,7 +209,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testHtmlAnnotationAsPlainText() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true).build();
+		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
 
@@ -241,7 +241,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testHtmlAnnotationAsXml() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders(true).build();
+		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
 

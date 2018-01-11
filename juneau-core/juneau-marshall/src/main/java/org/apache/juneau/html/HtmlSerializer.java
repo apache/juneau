@@ -176,6 +176,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders(boolean)}
+	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders()}
 	 * 		</ul>
 	 * </ul>
 	 */

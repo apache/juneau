@@ -47,8 +47,8 @@ public class TestUtils {
 
 	private static JsonSerializer jsSorted = JsonSerializer.create()
 		.simple()
-		.sortCollections(true)
-		.sortMaps(true)
+		.sortCollections()
+		.sortMaps()
 		.trimNullProperties(false)
 		.build();
 
@@ -61,7 +61,7 @@ public class TestUtils {
 	private static JsonSerializer js3 = JsonSerializer.create()
 		.simple()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
-		.sortProperties(true)
+		.sortProperties()
 		.build();
 
 	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();
@@ -232,7 +232,7 @@ public class TestUtils {
 	 * Test whitespace and generated schema.
 	 */
 	public static void validateXml(Object o, XmlSerializer s) throws Exception {
-		s = s.builder().ws().ns().addNamespaceUrisToRoot(true).build();
+		s = s.builder().ws().ns().addNamespaceUrisToRoot().build();
 		String xml = s.serialize(o);
 
 		String xmlSchema = null;

@@ -65,6 +65,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RdfParserBuilder#trimWhitespace(boolean)}
+	 * 			<li class='jm'>{@link RdfParserBuilder#trimWhitespace()}
 	 * 		</ul>
 	 * </ul>
 	 * 

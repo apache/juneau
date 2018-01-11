@@ -131,14 +131,19 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Sets the {@link Parser#PARSER_fileCharset} property on all parsers in this group.
+	 * Configuration property:  File charset.
+	 *
+	 * <p>
+	 * The character set to use for reading <code>Files</code> from the file system.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder fileCharset(String value) {
@@ -146,14 +151,19 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_inputStreamCharset} property on all parsers in this group.
+	 * Configuration property:  Input stream charset.
+	 *
+	 * <p>
+	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder inputStreamCharset(String value) {
@@ -161,7 +171,10 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_listener} property on all parsers in this group.
+	 * Configuration property:  Parser listener.
+	 *
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -176,14 +189,19 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_strict} property on all parsers in this group.
+	 * Configuration property:  Strict mode.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, strict mode for the parsers are enabled.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder strict(boolean value) {
@@ -191,23 +209,69 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the {@link Parser#PARSER_trimStrings} property on all parsers in this group.
+	 * Configuration property:  Strict mode.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroupBuilder strict() {
+		return set(PARSER_strict, true);
+	}
+
+	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);
 	}
+	
+	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroupBuilder trimStrings() {
+		return set(PARSER_trimStrings, true);
+	}
 
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
@@ -218,8 +282,20 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -232,6 +308,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -266,6 +348,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -274,6 +362,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -296,14 +390,32 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 

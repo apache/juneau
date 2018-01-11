@@ -146,7 +146,7 @@ public abstract class Parser extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  <js>"default"</js>
+	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
@@ -222,8 +222,8 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#strict()}
 	 * 			<li class='jm'>{@link ParserBuilder#strict(boolean)}
+	 * 			<li class='jm'>{@link ParserBuilder#strict()}
 	 * 		</ul>
 	 * </ul>
 	 * 
@@ -273,6 +273,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#trimStrings(boolean)}
+	 * 			<li class='jm'>{@link ParserBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -308,7 +309,7 @@ public abstract class Parser extends BeanContext {
 		trimStrings = getProperty(PARSER_trimStrings, boolean.class, false);
 		strict = getProperty(PARSER_strict, boolean.class, false);
 		inputStreamCharset = getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
-		fileCharset = getProperty(PARSER_fileCharset, String.class, "default");
+		fileCharset = getProperty(PARSER_fileCharset, String.class, "DEFAULT");
 		listener = getClassProperty(PARSER_listener, ParserListener.class, null);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {

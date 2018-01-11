@@ -57,6 +57,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#abridged(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#abridged()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -90,6 +91,8 @@ public abstract class Serializer extends BeanContext {
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
+	 * 
+	 * <p>
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
 	 * the value type.
@@ -108,6 +111,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -145,13 +149,14 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
 	 * Used in conjunction with {@link #SERIALIZER_detectRecursions}.
-	 * Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
+	 * <br>Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
@@ -261,6 +266,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#quoteChar(char)}
+	 * 			<li class='jm'>{@link SerializerBuilder#sq()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -285,10 +291,15 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * Copies and sorts the contents of arrays and collections before serializing them.
+	 * 
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
@@ -306,10 +317,15 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * Copies and sorts the contents of maps before serializing them.
+	 * 
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 */
@@ -327,10 +343,12 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 *	<h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
@@ -357,6 +375,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -413,6 +432,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -532,6 +552,8 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#useWhitespace(boolean)}
+	 * 			<li class='jm'>{@link SerializerBuilder#useWhitespace()}
+	 * 			<li class='jm'>{@link SerializerBuilder#ws()}
 	 * 		</ul>
 	 * </ul>
 	 *

@@ -40,7 +40,7 @@ public class JsonConfigurationExample {
 		// the output will be padded with spaces after format characters
 		System.out.println(withWhitespace);
 
-		String escaped = JsonSerializer.create().escapeSolidus(true).build().serialize(aPojo);
+		String escaped = JsonSerializer.create().escapeSolidus().build().serialize(aPojo);
 		// the output will have escaped /
 		System.out.println(escaped);
 	}

@@ -129,6 +129,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UrlEncodingSerializerBuilder#expandedParams(boolean)}
+	 * 			<li class='jm'>{@link UrlEncodingSerializerBuilder#expandedParams()}
 	 * 		</ul>
 	 * </ul>
 	 *

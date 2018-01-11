@@ -18,7 +18,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
 
 /**
  * Builder class for building instances of parsers.
@@ -51,18 +50,14 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
 	 *
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <p>
-	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder fileCharset(String value) {
@@ -75,15 +70,14 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 *
-	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder inputStreamCharset(String value) {
@@ -109,6 +103,29 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Strict mode.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, strict mode for the parser is enabled.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_strict}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ParserBuilder strict(boolean value) {
+		return set(PARSER_strict, value);
+	}
+
+	/**
+	 * Configuration property:  Strict mode.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -119,53 +136,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder strict() {
-		return strict(true);
-	}
-
-	/**
-	 * Configuration property:  Strict mode.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, strict mode for the parser is enabled.
-	 *
-	 * <p>
-	 * Strict mode can mean different things for different parsers.
-	 *
-	 * <table class='styled'>
-	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
-	 * 	<tr>
-	 * 		<td>All reader-based parsers</td>
-	 * 		<td>
-	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
-	 * 			Otherwise, malformed input is ignored.
-	 * 		</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>{@link JsonParser}</td>
-	 * 		<td>
-	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
-	 * 			<ul>
-	 * 				<li>Unquoted attributes.
-	 * 				<li>Missing attribute values.
-	 * 				<li>Concatenated strings.
-	 * 				<li>Javascript comments.
-	 * 				<li>Numbers and booleans when Strings are expected.
-	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
-	 * 			</ul>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Parser#PARSER_strict}
-	 * </ul>
-	 * 
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParserBuilder strict(boolean value) {
-		return set(PARSER_strict, value);
+		return set(PARSER_strict, true);
 	}
 
 	/**
@@ -180,11 +151,30 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);
+	}
+
+	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public ParserBuilder trimStrings() {
+		return set(PARSER_trimStrings, true);
 	}
 
 	@Override /* BeanContextBuilder */
@@ -260,8 +250,20 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
@@ -272,8 +274,20 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -302,8 +316,20 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
@@ -316,6 +342,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -434,6 +466,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserBuilder sortProperties() {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
@@ -448,6 +486,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
 		return this;
 	}
 

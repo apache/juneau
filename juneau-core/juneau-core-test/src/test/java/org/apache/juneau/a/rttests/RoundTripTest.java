@@ -67,7 +67,7 @@ public abstract class RoundTripTest {
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				XmlSerializer.create().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
+				XmlSerializer.create().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot().useWhitespace(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
@@ -91,7 +91,7 @@ public abstract class RoundTripTest {
 			},
 			{ /* 7 */
 				"Html - with key/value headers",
-				HtmlSerializer.create().addKeyValueTableHeaders(true),
+				HtmlSerializer.create().addKeyValueTableHeaders(),
 				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
@@ -127,37 +127,37 @@ public abstract class RoundTripTest {
 			},
 			{ /* 13 */
 				"UrlEncoding - expanded params",
-				UrlEncodingSerializer.create().expandedParams(true),
+				UrlEncodingSerializer.create().expandedParams(),
 				UrlEncodingParser.create().expandedParams(true),
 				0
 			},
 			{ /* 14 */
 				"Rdf.Xml",
-				RdfSerializer.create().trimNullProperties(false).addLiteralTypes(true),
+				RdfSerializer.create().trimNullProperties(false).addLiteralTypes(),
 				RdfParser.create().xml(),
 				0
 			},
 			{ /* 15 */
 				"Rdf.XmlAbbrev",
-				RdfSerializer.create().xmlabbrev().trimNullProperties(false).addLiteralTypes(true),
+				RdfSerializer.create().xmlabbrev().trimNullProperties(false).addLiteralTypes(),
 				RdfParser.create().xml(),
 				0
 			},
 			{ /* 16 */
 				"Rdf.Turtle",
-				RdfSerializer.create().turtle().trimNullProperties(false).addLiteralTypes(true),
+				RdfSerializer.create().turtle().trimNullProperties(false).addLiteralTypes(),
 				RdfParser.create().turtle(),
 				0
 			},
 			{ /* 17 */
 				"Rdf.NTriple",
-				RdfSerializer.create().ntriple().trimNullProperties(false).addLiteralTypes(true),
+				RdfSerializer.create().ntriple().trimNullProperties(false).addLiteralTypes(),
 				RdfParser.create().ntriple(),
 				0
 			},
 			{ /* 18 */
 				"Rdf.N3",
-				RdfSerializer.create().n3().trimNullProperties(false).addLiteralTypes(true),
+				RdfSerializer.create().n3().trimNullProperties(false).addLiteralTypes(),
 				RdfParser.create().n3(),
 				0
 			},

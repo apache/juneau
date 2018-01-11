@@ -35,7 +35,7 @@ public class RdfTest {
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
 			.set(RDF_rdfxml_tab, 3)
 			.sq()
-			.addRootProperty(true);
+			.addRootProperty();
 		RdfParser p = RdfParser.create().xml().build();
 
 		//--------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ public class RdfTest {
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
 			.set(RDF_rdfxml_tab, 3)
 			.sq()
-			.addRootProperty(true);
+			.addRootProperty();
 		RdfParser p = RdfParser.DEFAULT_XML;
 
 		//--------------------------------------------------------------------------------
@@ -428,7 +428,7 @@ public class RdfTest {
 		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev()
 			.set(RDF_rdfxml_tab, 3)
 			.sq()
-			.addRootProperty(true);
+			.addRootProperty();
 		RdfParser p = RdfParser.DEFAULT_XML;
 
 		//--------------------------------------------------------------------------------
@@ -524,8 +524,8 @@ public class RdfTest {
 
 	@Test
 	public void testLooseCollectionsOfBeans() throws Exception {
-		WriterSerializer s = RdfSerializer.create().xmlabbrev().looseCollections(true).build();
-		ReaderParser p = RdfParser.create().xml().looseCollections(true).build();
+		WriterSerializer s = RdfSerializer.create().xmlabbrev().looseCollections().build();
+		ReaderParser p = RdfParser.create().xml().looseCollections().build();
 		String rdfXml, expected;
 
 		List<D> l = new LinkedList<D>();

@@ -59,46 +59,35 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
-	 * 		<jk>public</jk> List&lt;String&gt; f2 = <jk>new</jk> LinkedList&lt;String&gt;(Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>}));
-	 * 	}
-	 *
-	 * 	UrlEncodingSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();
-	 *
-	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-	 * </p>
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
+		return set(URLENC_expandedParams, value);
+	}
+
+	/**
+	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * This option only applies to beans.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
-	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 		is added to it.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>URLENC_expandedParams</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
+	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
-		return set(URLENC_expandedParams, value);
+	public UrlEncodingSerializerBuilder expandedParams() {
+		return set(URLENC_expandedParams, true);
 	}
 
 	@Override /* UonSerializerBuilder */
@@ -132,6 +121,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder abridged() {
+		super.abridged();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;
@@ -144,11 +139,22 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -186,8 +192,20 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -204,8 +222,20 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -218,6 +248,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -246,6 +282,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -258,14 +300,32 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -278,6 +338,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -312,6 +378,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -320,6 +392,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -342,14 +420,32 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 
@@ -547,6 +643,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	@Override /* ContextBuilder */
 	public UrlEncodingSerializerBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 

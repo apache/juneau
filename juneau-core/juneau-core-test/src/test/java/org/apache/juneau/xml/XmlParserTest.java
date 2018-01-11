@@ -82,7 +82,7 @@ public class XmlParserTest {
 	public void testPreserveRootElement() throws Exception {
 		String xml;
 		ObjectMap m;
-		ReaderParser p = XmlParser.create().preserveRootElement(true).build();
+		ReaderParser p = XmlParser.create().preserveRootElement().build();
 
 		xml = "<A><B><C>c</C></B></A>";
 		m = p.parse(xml, ObjectMap.class);

@@ -68,7 +68,7 @@ public class FormDataTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPlainTextParams() throws Exception {
-		RestClient c = TestMicroservice.client(UrlEncodingSerializer.class, UrlEncodingParser.class).plainTextParts().build();
+		RestClient c = TestMicroservice.client(UrlEncodingSerializer.class, UrlEncodingParser.class).paramFormatPlain().build();
 		try {
 			String r;
 

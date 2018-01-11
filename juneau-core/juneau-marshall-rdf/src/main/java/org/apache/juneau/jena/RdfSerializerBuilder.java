@@ -58,18 +58,14 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_addLiteralTypes</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addLiteralTypes}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder addLiteralTypes(boolean value) {
@@ -77,32 +73,58 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>addLiteralTypes(<jk>true</jk>)</code>.
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfSerializerBuilder addLiteralTypes() {
+		return set(RDF_addLiteralTypes, true);
+	}
+
+	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
 	 * 
 	 * <p>
-	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of 
-	 * <js>"true"</js> to identify the root node in the graph.
+	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * to identify the root node in the graph.
 	 * This helps locate the root node during parsing.
 	 * 
 	 * <p>
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to 
 	 * identify root notes, which can introduce a considerable performance degradation.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder addRootProperty(boolean value) {
 		return set(RDF_addRootProperty, value);
+	}
+
+	/**
+	 * Configuration property:  Add RDF root identifier property to root node.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>addRootProperty(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfSerializerBuilder addRootProperty() {
+		return set(RDF_addRootProperty, true);
 	}
 
 	/**
@@ -111,21 +133,14 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Detect namespace usage before serialization.
 	 * 
-	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before 
-	 * the root element is serialized.
-	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder autoDetectNamespaces(boolean value) {
@@ -136,19 +151,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * Configuration property:  RDF format for representing collections and arrays.
 	 * 
 	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li>
-	 * 		<js>"BAG"</js> - RDF Bag container.
-	 * 	<li>
-	 * 		<js>"LIST"</js> - RDF List container.
-	 * 	<li>
-	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * </ul>
 	 * 
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -156,17 +158,21 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 		lost.
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_collectionFormat}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Possible values:
+	 * 	<ul'>
+	 * 		<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+	 * 		<li><js>"SEQ"</js> - RDF Sequence container.
+	 * 		<li><js>"BAG"</js> - RDF Bag container.
+	 * 		<li><js>"LIST"</js> - RDF List container.
+	 * 		<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder collectionFormat(RdfCollectionFormat value) {
@@ -176,17 +182,14 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauBpNs}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder juneauBpNs(Namespace value) {
@@ -196,17 +199,14 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauNs}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder juneauNs(Namespace value) {
@@ -222,7 +222,7 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 	<li>
 	 * 		<js>"RDF/XML"</js>
 	 * 	<li>
-	 * 		<js>"RDF/XML-ABBREV"</js>
+	 * 		<js>"RDF/XML-ABBREV"</js> (default)
 	 * 	<li>
 	 * 		<js>"N-TRIPLE"</js>
 	 * 	<li>
@@ -246,17 +246,13 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder language(String value) {
@@ -270,43 +266,14 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 * 
-	 * <p>
-	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
-	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
-	 * when serialized as loose collections.
-	 * 
-	 * <p>
-	 * This setting is typically only useful if the beans being parsed into do not have a bean property
-	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	WriterSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev().looseCollections(<jk>true</jk>).build();
-	 * 	ReaderParser p = <jk>new</jk> RdfParserBuilder().xml().looseCollections(<jk>true</jk>).build();
-	 *
-	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(l);
-	 *
-	 * 	<jc>// Parse back into a Java collection</jc>
-	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	MyBean[] b = createArrayOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(b);
-	 *
-	 * 	<jc>// Parse back into a bean array</jc>
-	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
-	 * </p>
-	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder looseCollections(boolean value) {
@@ -314,6 +281,26 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * 
+	 * <p>
+	 * Shortcut for <code>looseCollections(<jk>true</jk>)</code>.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public RdfSerializerBuilder looseCollections() {
+		return set(RDF_looseCollections, true);
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -333,12 +320,6 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>RDF_namespaces</jsf>, values)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
@@ -352,6 +333,9 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  RDF language.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -366,6 +350,9 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  RDF language.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -387,17 +374,14 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	 * inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
 	 * 
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public RdfSerializerBuilder useXmlNamespaces(boolean value) {
@@ -405,6 +389,9 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  RDF language.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -419,6 +406,9 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  RDF language.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
@@ -439,6 +429,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder abridged() {
+		super.abridged();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder addBeanTypeProperties(boolean value) {
 		super.addBeanTypeProperties(value);
 		return this;
@@ -451,11 +447,22 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
 	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
@@ -493,8 +500,20 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder sortCollections() {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder sortMaps() {
+		super.sortMaps();
 		return this;
 	}
 
@@ -511,8 +530,20 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder trimEmptyCollections() {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder trimEmptyMaps() {
+		super.trimEmptyMaps();
 		return this;
 	}
 
@@ -525,6 +556,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder trimStrings() {
+		super.trimStrings();
 		return this;
 	}
 
@@ -553,6 +590,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public RdfSerializerBuilder ws() {
 		super.ws();
 		return this;
@@ -565,14 +608,32 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -585,6 +646,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
@@ -619,6 +686,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -627,6 +700,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
@@ -649,14 +728,32 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfSerializerBuilder sortProperties() {
+		super.sortProperties();
 		return this;
 	}
 
