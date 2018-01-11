@@ -67,7 +67,7 @@ public abstract class Serializer extends BeanContext {
 	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
 	 * <p>
-	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js> will be added when
+	 * For example, when serializing a POJO with a {@link Bean#typeName() @Bean.typeName()} value, a <js>"_type"</js> will be added when
 	 * this setting is disabled, but not added when it is enabled.
 	 */
 	public static final String SERIALIZER_abridged = PREFIX + "abridged.b";

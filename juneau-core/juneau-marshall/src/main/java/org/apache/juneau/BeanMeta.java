@@ -465,7 +465,7 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName()} annotation.
+	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean.typeName()} annotation.
 	 *
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */

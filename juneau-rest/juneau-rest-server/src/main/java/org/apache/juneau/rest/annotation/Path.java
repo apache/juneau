@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.httppart.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as a variable
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a variable
  * in a URL path pattern converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>

@@ -409,7 +409,7 @@ public final class BeanPropertyMeta {
 	 * <p>
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary()}.
+	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary() @BeanProperty.beanDictionary()}.
 	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_beanDictionary} context property.
 	 * </ol>
 	 *
@@ -426,8 +426,8 @@ public final class BeanPropertyMeta {
 	 * A bean property can be considered a URI if any of the following are true:
 	 * <ul>
 	 * 	<li>Property class type is {@link URL} or {@link URI}.
-	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.URI}.
-	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.URI}.
+	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.URI @URI}.
+	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.URI @URI}.
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if this bean property is a URI.
@@ -446,7 +446,7 @@ public final class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the override list of properties defined through a {@link BeanProperty#properties()} annotation
+	 * Returns the override list of properties defined through a {@link BeanProperty#properties() @BeanProperty.properties()} annotation
 	 * on this property.
 	 *
 	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.

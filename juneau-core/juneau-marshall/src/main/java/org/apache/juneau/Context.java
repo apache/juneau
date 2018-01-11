@@ -24,13 +24,19 @@ import org.apache.juneau.serializer.*;
  * objects.
  *
  * <p>
- * Contexts are created through the {@link ContextBuilder#build()} method.
+ * Contexts are created through the {@link ContextBuilder#build()} method (and subclasses of {@link ContextBuilder}).
  *
  * <p>
- * Subclasses MUST implement a constructor method that takes in a {@link PropertyStore} parameter.
+ * Subclasses MUST implement the following constructor:
+ * 
+ * <p class='bcode'>
+ * 	<jk>public</jk> T(PropertyStore);
+ * </p>
+ * 
+ * <p>
  * Besides that restriction, a context object can do anything you desire.
- * However, it MUST be thread-safe and all fields should be declared final to prevent modification.
- * It should NOT be used for storing temporary or state information.
+ * <br>However, it MUST be thread-safe and all fields should be declared final to prevent modification.
+ * <br>It should NOT be used for storing temporary or state information.
  *
  * @see PropertyStore
  */

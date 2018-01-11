@@ -31,15 +31,15 @@ import org.apache.juneau.remoteable.*;
  * <p>
  * This class is used in the following locations:
  * <ul>
- * 	<li>{@link FormData#serializer()}
- * 	<li>{@link FormDataIfNE#serializer()}
- * 	<li>{@link Query#serializer()}
- * 	<li>{@link QueryIfNE#serializer()}
- * 	<li>{@link Header#serializer()}
- * 	<li>{@link HeaderIfNE#serializer()}
- * 	<li>{@link Path#serializer()}
- * 	<li>{@link RequestBean#serializer()}
- * 	<li><code>RestClientBuilder.partSerializer(Class)</code>
+ * 	<li class='ja'>{@link FormData#serializer()}
+ * 	<li class='ja'>{@link FormDataIfNE#serializer()}
+ * 	<li class='ja'>{@link Query#serializer()}
+ * 	<li class='ja'>{@link QueryIfNE#serializer()}
+ * 	<li class='ja'>{@link Header#serializer()}
+ * 	<li class='ja'>{@link HeaderIfNE#serializer()}
+ * 	<li class='ja'>{@link Path#serializer()}
+ * 	<li class='ja'>{@link RequestBean#serializer()}
+ * 	<li class='jc'><code>RestClientBuilder.partSerializer(Class)</code>
  * </ul>
  *
  * <p>

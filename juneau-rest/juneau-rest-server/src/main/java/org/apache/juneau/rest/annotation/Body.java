@@ -19,7 +19,7 @@ import java.io.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as the HTTP
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the HTTP
  * request body converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>

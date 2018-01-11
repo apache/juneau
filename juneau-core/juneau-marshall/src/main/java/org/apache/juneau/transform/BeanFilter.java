@@ -25,9 +25,8 @@ import org.apache.juneau.internal.*;
  * Bean filters are used to control aspects of how beans are handled during serialization and parsing.
  *
  * <p>
- * This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
- * Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
- * the ability to annotate those classes (e.g. you don't have access to the source code).
+ * Bean filters are created by {@link BeanFilterBuilder} which is the programmatic equivalent to the {@link Bean @Bean} 
+ * annotation.
  * 
  * <h6 class='topic'>Documentation</h6>
  *	<ul>

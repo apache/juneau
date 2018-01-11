@@ -855,7 +855,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars
-	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
+	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter @Parameter} variables will be
 	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
 	 * 	<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
@@ -878,7 +878,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars
-	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be
+	 * 	If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter @Parameter} variables will be
 	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
 	 * 	<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.

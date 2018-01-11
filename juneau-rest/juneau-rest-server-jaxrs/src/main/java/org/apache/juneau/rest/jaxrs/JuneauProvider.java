@@ -83,7 +83,7 @@ public @interface JuneauProvider {
 	 * Property values will be converted to the appropriate type.
 	 * 
 	 * <p>
-	 * These properties can be augmented/overridden through the {@link RestMethod#properties()} annotation on the REST method.
+	 * These properties can be augmented/overridden through the {@link RestMethod#properties() @RestMethod.properties()} annotation on the REST method.
 	 */
 	Property[] properties() default {};
 

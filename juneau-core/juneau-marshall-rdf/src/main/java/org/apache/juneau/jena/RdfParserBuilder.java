@@ -291,9 +291,9 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 * 
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs} and {@link org.apache.juneau.xml.annotation.Xml} will be 
+	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be 
 	 * inherited by the RDF parsers.
-	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
+	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

@@ -2602,15 +2602,6 @@
  	<ja>@Bean</ja>(typeName=<js>"baz"</js>)
  	<jk>public class</jk> Baz {}
 	 		</p>
-	 		
-	 		<p class='bcode'>
-	 WriterSerializer s = JsonSerializer
-	 	.create()
-	 	.addBeanTypeProperties()
-	 			
-	 		
-	 		
-	 		</p>
 	 		<p>
 	 			When serialized as JSON, <js>"_type"</js> attributes would be added when needed to infer the type during 
 	 			parsing:
@@ -5574,7 +5565,7 @@
 			</p>
 			<p>
 				Child resources must also be subclasses of {@link org.apache.juneau.rest.RestServlet}, and
-				must specify a {@link org.apache.juneau.rest.annotation.RestResource#path()} annotation to 
+				must specify a {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource.path()} annotation to 
 				identify the subpath of the child.
 				For example, the <l>HelloWorldResource</l> class is annotated as follows:
 			</p>
@@ -9098,7 +9089,7 @@
 			<li>
 				Support for static files has been simplified and improved.
 				<ul>
-					<li>Syntax on {@link org.apache.juneau.rest.annotation.RestResource#staticFiles()} has been simplified, and
+					<li>Syntax on {@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()} has been simplified, and
 						now allows you to specify response headers in the strings.
 					<li>Response headers for static files can also be configured through 
 						{@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}.
@@ -9115,7 +9106,7 @@
 				<code>@RestResource.allowMethodParam</code> renamed to {@link org.apache.juneau.rest.annotation.RestResource#allowedMethodParams}.
 			<li>
 				<code>@RestMethod.serializersInherit</code> and <code>@RestMethod.parsersInherit</code> replaced with
-				simplified {@link org.apache.juneau.rest.annotation.RestMethod#inherit()}. 
+				simplified {@link org.apache.juneau.rest.annotation.RestMethod#inherit() @RestMethod.inherit()}. 
 			<li>
 				Changes to {@link org.apache.juneau.rest.RequestFormData}:
 				<ul>
@@ -9162,12 +9153,12 @@
 						{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
 				</ul>
 			<li>
-				Changes to {@link org.apache.juneau.rest.annotation.RestResource}:
+				Changes to {@link org.apache.juneau.rest.annotation.RestResource @RestResource}:
 				<ul>
 					<li>New {@link org.apache.juneau.rest.annotation.RestResource#mimeTypes() mimeTypes()} annotation.
 				</ul>
 			<li>
-				Changes to {@link org.apache.juneau.rest.annotation.RestMethod}:
+				Changes to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
 				<ul>
 					<li>New {@link org.apache.juneau.rest.annotation.RestMethod#supportedAcceptTypes() supportedAcceptTypes()} and
 						{@link org.apache.juneau.rest.annotation.RestMethod#supportedContentTypes() supportedContentTypes()}
@@ -9388,7 +9379,7 @@
 			<li>
 				Annotation <code><ja>@HtmlDoc</ja>(links)</code> renamed to {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks}.
 			<li>
-				New annotation {@link org.apache.juneau.rest.annotation.HtmlDoc#head()}.
+				New annotation {@link org.apache.juneau.rest.annotation.HtmlDoc#head() @HtmlDoc.head()}.
 				<br>Allows you to specify arbitrary HTML content in the <xt>&lt;head&gt;</xt> section of the page.
 			<li>
 				Removed annotation <code><ja>@HtmlDoc</ja>(favIcon)</code>.
@@ -10040,7 +10031,7 @@
 				</ul>
 		
 			<li>
-				Bug fix with {@link org.apache.juneau.rest.annotation.HtmlDoc#nowrap()} so that the setting only applies
+				Bug fix with {@link org.apache.juneau.rest.annotation.HtmlDoc#nowrap() @HtmlDoc.nowrap()} so that the setting only applies
 				to the data contents, not the whole page.
 			<li>
 				Two convenience methods added to {@link org.apache.juneau.rest.RestRequest}:
@@ -10052,16 +10043,16 @@
 			<li>
 				Annotations added:
 				<ul>
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#siteName()}
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#flags()}
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#flags()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#siteName() @RestResource.siteName()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#flags() @RestResource.flags()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#flags() @RestMethod.flags()}
 				</ul>
 			</li>
 			<li>
 				Eliminated the <code>@RestResource.stylesheet()</code> annotation.  
 				It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
 			<li>
-				Eliminated the following annotations since they are now redundant with {@link org.apache.juneau.rest.annotation.HtmlDoc#header()}:
+				Eliminated the following annotations since they are now redundant with {@link org.apache.juneau.rest.annotation.HtmlDoc#header() @HtmlDoc.header()}:
 				<ul>
 					<li><code>title()</code>
 					<li><code>description()</code>
@@ -10214,7 +10205,7 @@
 						<li><code><del>SerializerContext.SERIALIZER_uriResolution</del></code>
 						<li><code><del>SerializerContext.SERIALIZER_maxIndent</del></code>
 				</ul>
-			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#value()}.
+			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#value() @BeanProperty.value()}.
 				<br>The following two annotations are considered equivalent:
 				<p class='bcode'>
 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
@@ -10229,11 +10220,11 @@
 				<ul>
 					<li>{@link org.apache.juneau.serializer.SerializerListener}
 					<li>{@link org.apache.juneau.serializer.SerializerBuilder#listener(Class)}
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener() @RestResource.serializerListener()}
 					<li><code><del>RestConfig.serializerListener(Class)</del></code>
 					<li>{@link org.apache.juneau.parser.ParserListener}
 					<li>{@link org.apache.juneau.parser.ParserBuilder#listener(Class)}
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener() @RestResource.parserListener()}
 					<li><code><del>RestConfig.parserListener(Class)</del></code>
 					<li><code><del>RestClientBuilder.listeners(Class,Class)</del></code>
 				</ul>
@@ -10272,7 +10263,7 @@
 					<li>{@link org.apache.juneau.BeanContext#BEAN_includeProperties BEAN_includeProperties}
 					<li>{@link org.apache.juneau.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
 				</ul>
-			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#format()}.
+			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty.format()}.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -10720,7 +10711,7 @@
 	RestClient client = RestClient.<jsm>create</jsm>().rootUrl(<jf>samplesUrl</jf>).build();			
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>, <js>"/addressBook/myproxy"</js>);
 			</p>
-				See {@link org.apache.juneau.rest.annotation.RestMethod#name()} for more information.
+				See {@link org.apache.juneau.rest.annotation.RestMethod#name() @RestMethod.name()} for more information.
 			<li>{@link org.apache.juneau.rest.RestRequest#toString()} can be called at any time to view the headers and content of the request
 				without affecting functionality.  Very useful for debugging.
 			<li>You can now use numeric values in path annotations.  
@@ -10982,12 +10973,12 @@
 			<li>General improvements to Bean Dictionary support.
 				<ul>
 					<li>New {@link org.apache.juneau.BeanDictionaryList} class can be used for defining reusable sets of bean dictionaries consisting
-						of classes annotated with {@link org.apache.juneau.annotation.Bean#typeName()}.
+						of classes annotated with {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()}.
 					<li>New {@link org.apache.juneau.BeanDictionaryMap} class can be used for defining reusable sets of bean dictionaries consisting
-						of classes not annotated with {@link org.apache.juneau.annotation.Bean#typeName()}.
-					<li>New {@link org.apache.juneau.annotation.Bean#beanDictionary()} annotation.
+						of classes not annotated with {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()}.
+					<li>New {@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean.beanDictionary()} annotation.
 				</ul>
-			<li>Removed restriction on getters and setters to be prefixed with "getX/setX/isX" if a {@link org.apache.juneau.annotation.BeanProperty#name()} annotation is used.
+			<li>Removed restriction on getters and setters to be prefixed with "getX/setX/isX" if a {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()} annotation is used.
 			<li>Improvements to ATOM DTO:
 				<ul>
 					<li>New {@link org.apache.juneau.dto.atom.AtomBuilder} class.
@@ -11636,7 +11627,7 @@
 				</ul>
 			<li>New methods in {@link org.apache.juneau.rest.RestServlet}:
 				<ul>
-					<li><code><del>RestServlet.getChildClasses()</del></code>  - Programmatic equivalent to {@link org.apache.juneau.rest.annotation.RestResource#children()} annotation.
+					<li><code><del>RestServlet.getChildClasses()</del></code>  - Programmatic equivalent to {@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource.children()} annotation.
 					<li><code><del>RestServlet.shouldLog(HttpServletRequest,HttpServletResponse,RestException)</del></code> 
 					<li><code><del>RestServlet.shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)</del></code> 
 					<li><code><del>RestServlet.logObjects(Level,String,Object[])</del></code> 
@@ -11650,12 +11641,12 @@
 				from {@link org.apache.juneau.rest.RestServletDefault} and <code><del>RestServletJenaDefault</del></code>.  
 				These may represent a security risk if not handled correctly, so removed
 				them as a precaution.
-			<li>Removed <code>RestServletProperties.REST_htDocsFolder</code>.  Replaced with {@link org.apache.juneau.rest.annotation.RestResource#staticFiles()}.
-			<li>New annotations on {@link org.apache.juneau.rest.annotation.RestResource}.
+			<li>Removed <code>RestServletProperties.REST_htDocsFolder</code>.  Replaced with {@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()}.
+			<li>New annotations on {@link org.apache.juneau.rest.annotation.RestResource @RestResource}.
 				<ul>
 					<li><code><del>RestResource.stylesheet()</del></code>
 					<li><code><del>RestResource.favicon()</del></code>
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#staticFiles()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()}
 				</ul>
 			<li>Eliminated <code>org.apache.juneau.rest.jaxrs.JsonProvider</code> class.  
 				Some JAX-RS implementations use code scanning to find providers, so if you were using <code>DefaultJenaProvider</code>, it would
@@ -11990,8 +11981,8 @@
 				want to provide labels in resource bundles.
 				<ul>
 					<li><del><code>RestResource.label()</code></del>
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#description()}
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#description()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}
 					<li><del><code>RestMethod#responses()</code></del>
 					<li><del><code>Attr.description()</code></del>
 					<li><del><code>Content.description()</code></del>
@@ -12181,7 +12172,7 @@
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.rest.RestConverter} API fixed to handle the existence of POJO filters.
 				{@link org.apache.juneau.rest.converters.Introspectable}/{@link org.apache.juneau.rest.converters.Queryable}/{@link org.apache.juneau.rest.converters.Traversable} classes can now work with filtered POJOs.  
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#messages()} annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
+			<li>{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages()} annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
 			<li>Performance improvements in <code>RestServletNls</code> class. 
 			<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
 		</ul>
@@ -12497,7 +12488,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.rest.Redirect} class that simplifies performing redirections in REST methods.
-			<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers()} annotation
+			<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} annotation
 				for defining customer response handlers for special kinds of POJOs.
 			<li>New method <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
 			<li>New method <code><del>RestRequest.getServletURIBuilder()</del></code> for construcing servlet-based URLs more efficiently.
@@ -13659,10 +13650,10 @@
 		<ul class='spaced-list'>
 			<li>Build-in default <code>OPTIONS</code> pages.</li>
 			<li>New {@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders} and {@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders} annotations.</li>
-			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#serializers() @RestMethod.serializers} and {@link org.apache.juneau.rest.annotation.RestMethod#parsers() @RestMethod.parsers} annotations.</li>
-			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties} annotation.</li>
-			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#defaultRequestHeaders() @RestMethod.defaultRequestHeaders} annotation.</li>
-			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#matchers() @RestMethod.matchers} annotation and {@link org.apache.juneau.rest.RestMatcher} class.</li>
+			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#serializers() @RestMethod.serializers()} and {@link org.apache.juneau.rest.annotation.RestMethod#parsers() @RestMethod.parsers()} annotations.</li>
+			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties()} annotation.</li>
+			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#defaultRequestHeaders() @RestMethod.defaultRequestHeaders()} annotation.</li>
+			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#matchers() @RestMethod.matchers()} annotation and {@link org.apache.juneau.rest.RestMatcher} class.</li>
 			<li><code>Readers</code> and <code>InputStreams</code> can be specified on <del><code>@Content</code></del> annotated parameters.</li>
 			<li>New <del><code>@HasParam</code></del> annotation.</li>
 			<li>Full RFC2616 support for matching <code>Accept</code> headers to serializers.</li>		
@@ -13775,7 +13766,7 @@
 						Used by RDF/XML serializer to construct <code>rdf:resource</code> attributes.
 					</li>
 					<li>
-						New {@link org.apache.juneau.annotation.BeanProperty#properties() @BeanProperty.properties} annotation.
+						New {@link org.apache.juneau.annotation.BeanProperty#properties() @BeanProperty.properties()} annotation.
 						Used for limiting properties on child elements.
 					</li>	
 				</ul>
@@ -13819,7 +13810,7 @@
 				Several new annotations on REST methods:
 				<ul>
 					<li><code>@RestMethod.filters()</code> - Associate post-formatting filters on a method level.</li>
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#guards() @RestMethod.guards} - Associate method-level guards.</li>
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#guards() @RestMethod.guards()} - Associate method-level guards.</li>
 				</ul>
 			</li>
 			<li>				

@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as the
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as the
  * resource bundle for the request locale.
  *
  * <p>

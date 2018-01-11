@@ -1476,7 +1476,7 @@
 				The {@link org.apache.juneau.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
 				of type array/Collection.
 				<br>This causes the child objects to be serialized directly inside the bean element.
-				<br>This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName()}
+				<br>This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml.childName()}
 				to differentiate which collection the values came from if you plan on parsing the output back into beans.
 				<br>Note that child names must not conflict with other property names.
 			</p>
@@ -2104,8 +2104,8 @@
 			href='annotation/package-summary.html#TOC'>org.apache.juneau.xml.annotation</a> package.
 			<br>Other XML annotations are also modeled after JAXB. 
 			However, since many of the features of JAXB are already implemented for all serializers and parsers
-			at a higher level through various general annotations such as {@link org.apache.juneau.annotation.Bean} 
-			and {@link org.apache.juneau.annotation.BeanProperty} it was decided to maintain separate Juneau XML 
+			at a higher level through various general annotations such as {@link org.apache.juneau.annotation.Bean @Bean} 
+			and {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} it was decided to maintain separate Juneau XML 
 			annotations instead of reusing JAXB annotations.
 			<br>This may change in some future implementation, but for now it was decided that having separate Juneau XML 
 			annotations was less confusing.
@@ -2256,7 +2256,7 @@
 	<xt>&lt;/per:person&gt;</xt>
 		</p>
 		<p>
-			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer()} annotation that 
+			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer() @Bean.propertyNamer()} annotation that 
 			allows you to plug in your own logic for determining bean property names.
 			<br>The {@link org.apache.juneau.PropertyNamerDLC} is an example of an alternate property namer.
 			It converts bean property names to lowercase-dashed format.

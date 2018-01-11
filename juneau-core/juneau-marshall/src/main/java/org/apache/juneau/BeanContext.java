@@ -37,8 +37,8 @@ import org.apache.juneau.transform.*;
  * 	<li>
  * 		Provides the ability to wrap beans inside {@link Map} interfaces.
  * 	<li>
- * 		Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter beanFilters},
- * 		{@link PropertyNamer propertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
+ * 		Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter BeanFilters},
+ * 		{@link PropertyNamer PropertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * </ul>
  *
  * <p>
@@ -46,8 +46,8 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Bean Contexts</h5>
  *
- * Bean contexts are created through the {@link BeanContext#create()} and {@link BeanContextBuilder#build()} methods.
- * These context objects are read-only, reusable, and thread-safe.
+ * Bean contexts are created through the {@link BeanContext#create() BeanContext.create()} and {@link BeanContextBuilder#build()} methods.
+ * <br>These context objects are read-only, reusable, and thread-safe.
  *
  * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
@@ -91,7 +91,8 @@ import org.apache.juneau.transform.*;
  *
  * <p class='bcode'>
  * 	<jc>// Construct a context from scratch.</jc>
- * 	BeanContext beanContext = BeanContext.<jsm>create</jsm>()
+ * 	BeanContext beanContext = BeanContext
+ * 		.<jsm>create</jsm>()
  * 		.set(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
  * 		.notBeanClasses(Foo.<jk>class</jk>)
  * 		.build();
@@ -261,7 +262,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
+	 * <br>The names are defined through the {@link Bean#typeName() @Bean.typeName()} annotation defined on the bean class.
 	 * <br>For example, if a class <code>Foo</code> has a type-name of <js>"myfoo"</js>, then it would end up serialized
 	 * as <js>"{_type:'myfoo',...}"</js>.
 	 * 
@@ -1061,7 +1062,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Multiple POJO swaps can be associated with a single class.
 	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
-	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes()} are used to come up with the best match.
+	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap.mediaTypes()} are used to come up with the best match.
 	 * 
 	 * <p>
 	 * Values can consist of any of the following types:

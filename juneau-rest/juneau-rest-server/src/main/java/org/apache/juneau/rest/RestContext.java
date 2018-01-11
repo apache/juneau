@@ -231,7 +231,7 @@ public final class RestContext extends BeanContext {
 	 * large numbers of servlets.
 	 *
 	 * <p>
-	 * Child resources must specify a value for {@link RestResource#path()} that identifies the subpath of the child resource
+	 * Child resources must specify a value for {@link RestResource#path() @RestResource.path()} that identifies the subpath of the child resource
 	 * relative to the parent path.
 	 *
 	 * <p>
@@ -340,7 +340,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod.clientVersion()} annotation.
 	 */
 	public static final String REST_clientVersionHeader = PREFIX + "clientVersionHeader.s";
 
@@ -956,7 +956,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
 	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
 	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
-	 * 		{@link RestResource#children()} annotation.
+	 * 		{@link RestResource#children() @RestResource.children()} annotation.
 	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
 	 *	</ul>
 	 */
@@ -1839,7 +1839,7 @@ public final class RestContext extends BeanContext {
 	 * The resource resolver is used for instantiating child resource classes.
 	 *
 	 * <p>
-	 * Unless overridden via the {@link RestResource#resourceResolver()} annotation or the {@link RestContextBuilder#resourceResolver(Class)}
+	 * Unless overridden via the {@link RestResource#resourceResolver() @RestResource.resourceResolver()} annotation or the {@link RestContextBuilder#resourceResolver(Class)}
 	 * method, this value is always inherited from parent to child.
 	 * This allows a single resource resolver to be passed in to the top-level servlet to handle instantiation of all
 	 * child resources.
@@ -1875,7 +1875,7 @@ public final class RestContext extends BeanContext {
 	 * </p>
 	 *
 	 * <p>
-	 * A typical usage pattern involves using variables inside the {@link HtmlDoc} annotation:
+	 * A typical usage pattern involves using variables inside the {@link HtmlDoc @HtmlDoc} annotation:
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>,
@@ -2116,7 +2116,7 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the path for this resource as defined by the {@link RestResource#path()} annotation or
+	 * Returns the path for this resource as defined by the {@link RestResource#path() @RestResource.path()} annotation or
 	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
 	 *
 	 * <p>
@@ -2135,7 +2135,7 @@ public final class RestContext extends BeanContext {
 	 * The widgets used for resolving <js>"$W{...}"<js> variables.
 	 *
 	 * <p>
-	 * Defined by the {@link HtmlDoc#widgets()} annotation or {@link RestContextBuilder#widgets(Class...)} method.
+	 * Defined by the {@link HtmlDoc#widgets() @HtmlDoc.widgets()} annotation or {@link RestContextBuilder#widgets(Class...)} method.
 	 *
 	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
 	 */
@@ -2363,45 +2363,45 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the value of the {@link RestResource#renderResponseStackTraces()} setting.
+	 * TODO
 	 *
-	 * @return The value of the {@link RestResource#renderResponseStackTraces()} setting.
+	 * @return TODO
 	 */
 	protected boolean isRenderResponseStackTraces() {
 		return renderResponseStackTraces;
 	}
 
 	/**
-	 * Returns the value of the {@link RestResource#allowHeaderParams()} setting.
+	 * TODO
 	 *
-	 * @return The value of the {@link RestResource#allowHeaderParams()} setting.
+	 * @return TODO
 	 */
 	protected boolean isAllowHeaderParams() {
 		return allowHeaderParams;
 	}
 
 	/**
-	 * Returns the value of the {@link RestResource#allowBodyParam()} setting.
+	 * TODO
 	 *
-	 * @return The value of the {@link RestResource#allowBodyParam()} setting.
+	 * @return TODO
 	 */
 	protected boolean isAllowBodyParam() {
 		return allowBodyParam;
 	}
 
 	/**
-	 * Returns the value of the {@link RestResource#defaultCharset()} setting.
+	 * TODO
 	 *
-	 * @return The value of the {@link RestResource#defaultCharset()} setting.
+	 * @return TODO
 	 */
 	protected String getDefaultCharset() {
 		return defaultCharset;
 	}
 
 	/**
-	 * Returns the value of the {@link RestResource#maxInput()} setting.
+	 * TODO
 	 *
-	 * @return The value of the {@link RestResource#maxInput()} setting.
+	 * @return TODO
 	 */
 	protected long getMaxInput() {
 		return maxInput;
@@ -2888,10 +2888,9 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the context path of the resource if it's specified via the {@link RestResource#contextPath()} setting
-	 * on this or a parent resource.
+	 * TODO
 	 *
-	 * @return The {@link RestResource#contextPath()} setting value, or <jk>null</jk> if it's not specified.
+	 * @return TODO
 	 */
 	protected String getContextPath() {
 		if (contextPath != null)

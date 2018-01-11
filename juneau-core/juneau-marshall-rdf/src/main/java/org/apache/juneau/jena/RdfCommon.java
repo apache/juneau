@@ -150,8 +150,8 @@ public interface RdfCommon {
 	 * 
 	 *	<h5 class='section'>Description:</h5>
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
-	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
+	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
 	public static final String RDF_useXmlNamespaces = PREFIX + "useXmlNamespaces.b";
 

@@ -22,8 +22,37 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * In general, this approach for defining dictionary names for classes is used when it's not possible to use the
- * {@link Bean#typeName()} annotation.
+ * {@link Bean#typeName() @Bean.typeName()} annotation.
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<jc>// A bean dictionary map consisting of classes without @Bean.typeName() annotations</jc>
+ * 	<jc>// that require type names to be explicitly specified.</jc>
+ * 	<jk>public class</jk> MyBeanDictionaryMap <jk>extends</jk> BeanDictionaryMap {
+ * 		
+ * 		<jc>// Must provide a no-arg constructor!</jc>
+ * 		<jk>public</jk> MyBeanDictionaryMap() {
+ * 			addClass(<js>"MyBean"</js>, MyBean.<jk>class</jk>);
+ * 			addClass(<js>"MyBeanArray"</js>, MyBean[].<jk>class</jk>);
+ * 			addClass(<js>"StringArray"</js>, String[].<jk>class</jk>);
+ * 			addClass(<js>"String2dArray"</js>, String[][].<jk>class</jk>);
+ * 			addClass(<js>"IntArray"</js>, <jk>int</jk>[].<jk>class</jk>);
+ * 			addClass(<js>"Int2dArray"</js>, <jk>int</jk>[][].<jk>class</jk>);
+ * 			addClass(<js>"LinkedList"</js>, LinkedList.<jk>class</jk>);
+ * 			addClass(<js>"TreeMap"</js>, TreeMap.<jk>class</jk>);
+ * 			addCollectionClass(<js>"LinkedListOfInts"</js>, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
+ * 			addCollectionClass(<js>"LinkedListOfR1"</js>, LinkedList.<jk>class</jk>, R1.<jk>class</jk>);
+ * 			addCollectionClass(<js>"LinkedListOfCalendar"</js>, LinkedList.<jk>class</jk>, Calendar.<jk>class</jk>);
+ * 		}
+ * 	}
+ * 
+ * 	<jc>// Use it in a parser.</jc>
+ * 	ReaderParser p = JsonParser
+ * 		.<jsm>create</jsm>()
+ * 		.beanDictionary(MyBeanDictionaryMap.<jk>class</jk>)
+ * 		.build();
+ * </p>
+ * 
  * <p>
  * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
  */

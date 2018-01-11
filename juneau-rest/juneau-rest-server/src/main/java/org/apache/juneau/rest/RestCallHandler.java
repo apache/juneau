@@ -278,7 +278,7 @@ public class RestCallHandler {
 	 *
 	 * <p>
 	 * The default implementation renders a plain text English message, optionally with a stack trace if
-	 * {@link RestResource#renderResponseStackTraces()} is enabled.
+	 * {@link RestResource#renderResponseStackTraces() @RestResource.renderResponseStackTraces()} is enabled.
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.

@@ -48,6 +48,17 @@ public @interface Bean {
 	 * 
 	 * <p>
 	 * It is also used to specify element names in XML.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
+	 * 	<jc>// All other properties are ignored.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean { ... }
+	 * 
+	 * 	<jc>// Produces:  "{_type:'mybean', ...}"</jc>
+	 * 	String json JsonSerializer.<jsf>DEFAULT_LAX</jsf>.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

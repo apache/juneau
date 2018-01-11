@@ -35,9 +35,9 @@ public class YamlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Json} annotation defined on the class.
+	 * Returns the {@link Json @Json} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Json} annotation, or <jk>null</jk> if not specified.
+	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Json getAnnotation() {
 		return json;

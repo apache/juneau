@@ -145,11 +145,8 @@ public class RestException extends FormattedRuntimeException {
 	/**
 	 * Returns the number of times this exception occurred on this servlet.
 	 *
-	 * <p>
-	 * This only gets set if {@link RestResource#useStackTraceHashes()} is enabled on the servlet.
-	 *
 	 * @return
-	 * 	The occurrence number if {@link RestResource#useStackTraceHashes()} is enabled, or <code>0</code> otherwise.
+	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource.useStackTraceHashes()} is enabled, or <code>0</code> otherwise.
 	 */
 	public int getOccurrence() {
 		return occurrence;

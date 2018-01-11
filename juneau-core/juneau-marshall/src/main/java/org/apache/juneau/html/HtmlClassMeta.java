@@ -50,54 +50,54 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Html} annotation defined on the class.
+	 * Returns the {@link Html @Html} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Html} annotation, or <jk>null</jk> if not specified.
+	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected Html getAnnotation() {
 		return html;
 	}
 
 	/**
-	 * Returns the {@link Html#asXml()} annotation defined on the class.
+	 * Returns the {@link Html#asXml() @Html.asXml()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Html#asXml()} annotation.
+	 * @return The value of the annotation.
 	 */
 	protected boolean isAsXml() {
 		return asXml;
 	}
 
 	/**
-	 * Returns the {@link Html#asPlainText()} annotation defined on the class.
+	 * Returns the {@link Html#asPlainText() @Html.asPlainText()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Html#asPlainText()} annotation.
+	 * @return The value of the annotation.
 	 */
 	protected boolean isAsPlainText() {
 		return asPlainText;
 	}
 
 	/**
-	 * Returns the {@link Html#noTables()} annotation defined on the class.
+	 * Returns the {@link Html#noTables() @Html.noTables()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Html#noTables()} annotation.
+	 * @return The value of the annotation.
 	 */
 	protected boolean isNoTables() {
 		return noTables;
 	}
 
 	/**
-	 * Returns the {@link Html#noTableHeaders()} annotation defined on the class.
+	 * Returns the {@link Html#noTableHeaders() @Html.noTableHeaders()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Html#noTableHeaders()} annotation.
+	 * @return The value of the annotation.
 	 */
 	public boolean isNoTableHeaders() {
 		return noTableHeaders;
 	}
 
 	/**
-	 * Returns the {@link Html#render()} annotation defined on the class.
+	 * Returns the {@link Html#render() @Html.render()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Html#render()} annotation.
+	 * @return The value of the annotation.
 	 */
 	public HtmlRender<?> getRender() {
 		return render;

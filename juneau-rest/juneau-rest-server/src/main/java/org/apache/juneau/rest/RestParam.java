@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
  * Used to resolve instances of classes being passed to Java REST methods.
  *
  * <p>
- * This class is associated with REST classes via the {@link RestResource#paramResolvers()} annotation and
+ * This class is associated with REST classes via the {@link RestResource#paramResolvers() @RestResource.paramResolvers()} annotation and
  * {@link RestContextBuilder#paramResolvers(Class...)} method.
  */
 public abstract class RestParam {

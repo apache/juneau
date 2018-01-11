@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
  * after invocation of the REST method.
  *
  * <p>
- * Converters are associated with REST methods through the {@link RestMethod#converters()} annotation.
+ * Converters are associated with REST methods through the {@link RestMethod#converters() @RestMethod.converters()} annotation.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -41,7 +41,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <p>
- * Converters can also be associated at the servlet level using the {@link RestResource#converters()} annotation.
+ * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource.converters()} annotation.
  * Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  *
  * <h6 class='topic'>How to implement</h6>

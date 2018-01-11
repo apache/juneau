@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Annotation used in conjunction with {@link MethodSwagger#responses()} to identify possible responses by the method.
+ * Annotation used in conjunction with {@link MethodSwagger#responses() @MethodSwagger.responses()} to identify possible responses by the method.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

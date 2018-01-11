@@ -13,7 +13,7 @@
 package org.apache.juneau.remoteable;
 
 /**
- * Possible values for the {@link RemoteMethod#returns()} annotation.
+ * Possible values for the {@link RemoteMethod#returns() @RemoteMethod.returns()} annotation.
  */
 public enum ReturnValue {
 

@@ -148,9 +148,9 @@ public class RemoteableMethodMeta {
 	}
 
 	/**
-	 * Returns the value of the {@link RemoteMethod#httpMethod()} annotation on this Java method.
+	 * Returns the value of the {@link RemoteMethod#httpMethod() @RemoteMethod.httpMethod()} annotation on this Java method.
 	 *
-	 * @return The value of the {@link RemoteMethod#httpMethod()} annotation, never <jk>null</jk>.
+	 * @return The value of the annotation, never <jk>null</jk>.
 	 */
 	public String getHttpMethod() {
 		return httpMethod;

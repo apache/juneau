@@ -18,8 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation used in conjunction with {@link MethodSwagger#parameters()} to identify content and header descriptions
- * on specific method requests.
+ * Annotation used in conjunction with {@link MethodSwagger#parameters() @MethodSwagger.parameters()} to identify 
+ * content and header descriptions on specific method requests.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

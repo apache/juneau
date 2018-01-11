@@ -21,7 +21,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as a form post
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a form post
  * entry converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>

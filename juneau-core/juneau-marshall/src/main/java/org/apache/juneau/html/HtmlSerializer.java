@@ -256,7 +256,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Annotations:</b> 
 	 * 		<ul>
-	 * 			<li class='jm'>{@link Html#anchorText()}
+	 * 			<li class='ja'>{@link Html#anchorText()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>

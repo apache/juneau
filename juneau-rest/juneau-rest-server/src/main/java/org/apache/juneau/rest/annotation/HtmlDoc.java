@@ -21,8 +21,8 @@ import org.apache.juneau.rest.widget.*;
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
  *
  * <p>
- * Used with {@link RestResource#htmldoc()} and {@link RestMethod#htmldoc()} to customize the HTML view of serialized
- * POJOs.
+ * Used with {@link RestResource#htmldoc() @RestResource.htmldoc()} and {@link RestMethod#htmldoc() @RestMethod.htmldoc()} 
+ * to customize the HTML view of serialized POJOs.
  *
  * <p>
  * All annotations specified here have no effect on any serializers other than {@link HtmlDocSerializer} and is
@@ -534,13 +534,13 @@ public @interface HtmlDoc {
 	 * 	<li>Property:  {@link RestContext#REST_widgets}
 	 * 	<li>Annotations: 
 	 * 		<ul>
-	 * 			<li>{@link HtmlDoc#widgets()} 
+	 * 			<li class='ja'>{@link HtmlDoc#widgets()} 
 	 * 		</ul>
 	 * 	<li>Methods: 
 	 * 		<ul>
-	 * 			<li>{@link RestContextBuilder#widgets(Class...)}
-	 * 			<li>{@link RestContextBuilder#widgets(Widget...)}
-	 * 			<li>{@link RestContextBuilder#widgets(boolean,Widget...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#widgets(boolean,Widget...)}
 	 * 		</ul>
 	 * 	<li>Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 * 	<li>Values are appended to the existing list.

@@ -20,7 +20,7 @@ import java.util.regex.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * A parsed path pattern constructed from a {@link RestMethod#path()} value.
+ * A parsed path pattern constructed from a {@link RestMethod#path() @RestMethod.path()} value.
  *
  * <p>
  * Handles aspects of matching and precedence ordering.
@@ -35,7 +35,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	/**
 	 * Constructor.
 	 *
-	 * @param patternString The raw pattern string from the {@link RestMethod#path()} annotation.
+	 * @param patternString The raw pattern string from the {@link RestMethod#path() @RestMethod.path()} annotation.
 	 */
 	public UrlPathPattern(String patternString) {
 		this.patternString = patternString;

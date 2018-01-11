@@ -114,7 +114,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * Triggers bean creation if bean has read-only properties set through a constructor defined by the
-	 * {@link BeanConstructor} annotation.
+	 * {@link BeanConstructor @BeanConstructor} annotation.
 	 *
 	 * @return The inner bean object.
 	 */
@@ -143,7 +143,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * If <code>create</code> is <jk>false</jk>, then this method may return <jk>null</jk> if the bean has read-only
-	 * properties set through a constructor defined by the {@link BeanConstructor} annotation.
+	 * properties set through a constructor defined by the {@link BeanConstructor @BeanConstructor} annotation.
 	 *
 	 * <p>
 	 * This method does NOT always return the bean in it's final state.
@@ -238,7 +238,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * As a general rule, adding to arrays is not recommended since the array must be recreate each time this method is
 	 * called.
 	 *
-	 * @param property Property name or child-element name (if {@link Xml#childName()} is specified).
+	 * @param property Property name or child-element name (if {@link Xml#childName() @Xml.childName()} is specified).
 	 * @param value The value to add to the collection or array.
 	 */
 	public void add(String property, Object value) {

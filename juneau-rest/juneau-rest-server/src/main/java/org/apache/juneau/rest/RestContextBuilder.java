@@ -381,7 +381,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Sets a property on this resource.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#properties()} annotation.
+	 * This is the programmatic equivalent to the {@link RestResource#properties() @RestResource.properties()} annotation.
 	 *
 	 * @param key The property name.
 	 * @param value The property value.
@@ -458,7 +458,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Returns the configuration properties for this resource.
 	 *
 	 * <p>
-	 * The configuration properties are determined via the {@link RestResource#properties()} annotation on the resource.
+	 * The configuration properties are determined via the {@link RestResource#properties() @RestResource.properties()} annotation on the resource.
 	 *
 	 * <p>
 	 * The configuration properties can be augmented programmatically by adding the following method to your resource:
@@ -660,7 +660,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Shortcut for adding a single child to this resource.
 	 * 
 	 * <p>
-	 * This can be used for resources that don't have a {@link RestResource#path()} annotation.
+	 * This can be used for resources that don't have a {@link RestResource#path() @RestResource.path()} annotation.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -723,7 +723,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestMethod#clientVersion()} annotation.
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod.clientVersion()} annotation.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

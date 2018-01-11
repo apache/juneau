@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify whether or not
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify whether or not
  * the request has the specified multipart form POST parameter.
  *
  * <p>

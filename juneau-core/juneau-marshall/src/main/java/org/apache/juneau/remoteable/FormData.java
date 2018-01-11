@@ -213,7 +213,7 @@ public @interface FormData {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
+	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
 	 * then on the client which by default is {@link UrlEncodingSerializer}.
 	 *
 	 * <p>

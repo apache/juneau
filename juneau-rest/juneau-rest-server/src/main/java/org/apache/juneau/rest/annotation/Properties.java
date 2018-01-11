@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify the
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify the
  * request-duration properties object for the current request.
  *
  * <h5 class='section'>Example:</h5>

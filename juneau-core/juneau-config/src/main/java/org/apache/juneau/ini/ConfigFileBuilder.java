@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
 /**
  * Builder for creating instances of {@link ConfigFile ConfigFiles}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h5 class='topic'>Example</h5>
  * <p class='bcode'>
  * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
  * 	String setting = cf.get(<js>"MySection/mysetting"</js>);

@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.httppart.*;
 
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method to identify it as a HTTP
+ * Annotation that can be applied to a parameter of a {@link RestMethod @RestMethod} annotated method to identify it as a HTTP
  * request header converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>

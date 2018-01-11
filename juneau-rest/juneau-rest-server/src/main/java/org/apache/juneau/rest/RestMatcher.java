@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Class used for defining method-level matchers using the {@link RestMethod#matchers()} annotation.
+ * Class used for defining method-level matchers using the {@link RestMethod#matchers() @RestMethod.matchers()} annotation.
  *
  * <p>
  * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
@@ -29,7 +29,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * When multiple matchers are specified on a method, only one matcher is required to match.
- * This is opposite from the {@link RestMethod#guards()} annotation, where all guards are required to match in order to
+ * This is opposite from the {@link RestMethod#guards() @RestMethod.guards()} annotation, where all guards are required to match in order to
  * execute the method.
  *
  * <h5 class='section'>Example:</h5>

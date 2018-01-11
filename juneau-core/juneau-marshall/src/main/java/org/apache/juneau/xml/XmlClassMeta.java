@@ -53,28 +53,28 @@ public class XmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Xml} annotation defined on the class.
+	 * Returns the {@link Xml @Xml} annotation defined on the class.
 	 *
 	 * @return
-	 * 	The value of the {@link Xml} annotation defined on the class, or <jk>null</jk> if annotation is not specified.
+	 * 	The value of the annotation defined on the class, or <jk>null</jk> if annotation is not specified.
 	 */
 	protected Xml getAnnotation() {
 		return xml;
 	}
 
 	/**
-	 * Returns the {@link Xml#format()} annotation defined on the class.
+	 * Returns the {@link Xml#format() @Xml.format()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Xml#format()} annotation, or {@link XmlFormat#DEFAULT} if not specified.
+	 * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.
 	 */
 	protected XmlFormat getFormat() {
 		return format;
 	}
 
 	/**
-	 * Returns the {@link Xml#childName()} annotation defined on the class.
+	 * Returns the {@link Xml#childName() @Xml.childName()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Xml#childName()} annotation, or <jk>null</jk> if not specified.
+	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
 	protected String getChildName() {
 		return childName;
@@ -84,14 +84,14 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 * Returns the XML namespace associated with this class.
 	 *
 	 * <p>
-	 * Namespace is determined in the following order:
+	 * Namespace is determined in the following order of {@link Xml#prefix() @Xml.prefix()} annotation:
 	 * <ol>
-	 * 	<li>{@link Xml#prefix()} annotation defined on class.
-	 * 	<li>{@link Xml#prefix()} annotation defined on package.
-	 * 	<li>{@link Xml#prefix()} annotation defined on superclasses.
-	 * 	<li>{@link Xml#prefix()} annotation defined on superclass packages.
-	 * 	<li>{@link Xml#prefix()} annotation defined on interfaces.
-	 * 	<li>{@link Xml#prefix()} annotation defined on interface packages.
+	 * 	<li>Class.
+	 * 	<li>Package.
+	 * 	<li>Superclasses.
+	 * 	<li>Superclass packages.
+	 * 	<li>Interfaces.
+	 * 	<li>Interface packages.
 	 * </ol>
 	 *
 	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.

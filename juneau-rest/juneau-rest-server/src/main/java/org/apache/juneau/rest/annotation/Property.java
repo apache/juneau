@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Property name/value pair used in the {@link RestResource#properties()} annotation.
+ * Property name/value pair used in the {@link RestResource#properties() @RestResource.properties()} annotation.
  *
  * <p>
  * Any of the properties defined on any of the serializers or parsers can be defined.

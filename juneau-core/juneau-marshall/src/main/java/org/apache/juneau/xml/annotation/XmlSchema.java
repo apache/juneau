@@ -40,7 +40,7 @@ public @interface XmlSchema {
 	 *
 	 * <p>
 	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #xmlNs()} mapping with the same
-	 * {@link XmlNs#namespaceURI} value.
+	 * {@link XmlNs#namespaceURI() @XmlNs.namespaceURI()} value.
 	 */
 	public String namespace() default "";
 
@@ -49,7 +49,7 @@ public @interface XmlSchema {
 	 *
 	 * <p>
 	 * The purpose of this annotation is to allow namespace mappings to be defined in a single location and referred
-	 * to by name through just the {@link Xml#prefix()} annotation.
+	 * to by name through just the {@link Xml#prefix() @Xml.prefix()} annotation.
 	 *
 	 * <p>
 	 * Inherited by child packages.

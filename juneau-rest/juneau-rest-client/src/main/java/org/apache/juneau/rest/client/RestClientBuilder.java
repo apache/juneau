@@ -1675,7 +1675,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * XXX
+	 * TODO
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1690,7 +1690,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * XXX
+	 * TODO
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
