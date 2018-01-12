@@ -43,33 +43,45 @@ import java.lang.annotation.*;
 public @interface Parameter {
 
 	/**
-	 * The location of the parameter.
+	 * Declares the value of the parameter that the server will use if none is provided.
+	 *
+	 * <p>
+	 * For example a "count" to control the number of results per page might default to 100 if not supplied by the
+	 * client in the request.
+	 * (Note: "default" has no meaning for required parameters.)
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">
+	 * http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
+	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 */
+	String _default() default "";
+
+	/**
+	 * Sets the ability to pass empty-valued parameters.
+	 *
+	 * <p>
+	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
+	 * parameter with a name only or an empty value.
+	 * Default value is <jk>false</jk>.
+	 */
+	boolean allowEmptyValue() default false;
+
+	/**
+	 * Determines the format of the array if type array is used.
 	 *
 	 * <p>
 	 * Possible values are:
 	 * <ul>
-	 * 	<li><js>"query"</js>
-	 * 	<li><js>"header"</js>
-	 * 	<li><js>"path"</js>
-	 * 	<li><js>"formData"</js>
-	 * 	<li><js>"body"</js>
+	 * 	<li><js>"csv"</js> - comma separated values <js>"foo,bar"</js>.
+	 * 	<li><js>"ssv"</js> - space separated values <js>"foo bar"</js>.
+	 * 	<li><js>"tsv"</js> - tab separated values <js>"foo\tbar"</js>.
+	 * 	<li><js>"pipes"</js> - pipe separated values <js>"foo|bar"</js>.
+	 * 	<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single
+	 * 		instance <js>"foo=bar&amp;foo=baz"</js>.
+	 * 		This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
 	 * </ul>
+	 * Default value is <js>"csv"</js>.
 	 */
-	String in() default "";
-
-	/**
-	 * The name of the parameter (e.g. <js>"Content-Range"</js>).
-	 *
-	 * <p>
-	 * Parameter names are case sensitive.
-	 * If <code>in</code> is <js>"path"</js>, the name field MUST correspond to the associated path segment from the
-	 * <code>path</code> field in the <a class="doclink"
-	 * href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
-	 * See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further
-	 * information.
-	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 */
-	String name() default "";
+	String collectionFormat() default "";
 
 	/**
 	 * Parameter description (e.g. <js>"Indicates the range returned when Range header is present in the request"</js>).
@@ -86,6 +98,69 @@ public @interface Parameter {
 	 * <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
 	 */
 	String description() default "";
+
+	/**
+	 * The extending format for the previously mentioned <code>type</code>.
+	 *
+	 * <p>
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
+	 * details.
+	 */
+	String format() default "";
+
+	/**
+	 * The location of the parameter.
+	 *
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li><js>"query"</js>
+	 * 	<li><js>"header"</js>
+	 * 	<li><js>"path"</js>
+	 * 	<li><js>"formData"</js>
+	 * 	<li><js>"body"</js>
+	 * </ul>
+	 */
+	String in() default "";
+
+	/**
+	 * Required if <code>type</code> is <js>"array"</js>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		parameters={
+	 * 			<ja>@Parameter</ja>(
+	 * 				in=<js>"header"</js>,
+	 * 				name=<js>"Foo"</js>,
+	 * 				type=<js>"array"</js>,
+	 * 				items=<js>"{type:'string',collectionFormat:'csv'}"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public void</jk> doAnything() {
+	 * </p>
+	 *
+	 * <p>
+	 * See <a class="doclink" href="http://swagger.io/specification/#itemsObject">Items Object</a> for further details.
+	 */
+	String items() default "";
+
+	/**
+	 * The name of the parameter (e.g. <js>"Content-Range"</js>).
+	 *
+	 * <p>
+	 * Parameter names are case sensitive.
+	 * If <code>in</code> is <js>"path"</js>, the name field MUST correspond to the associated path segment from the
+	 * <code>path</code> field in the <a class="doclink"
+	 * href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
+	 * See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further
+	 * information.
+	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
+	 */
+	String name() default "";
 
 	/**
 	 * Determines whether this parameter is mandatory.
@@ -130,79 +205,4 @@ public @interface Parameter {
 	 * <js>"application/x-www-form-urlencoded"</js> or both and the parameter MUST be in <js>"formData"</js>.
 	 */
 	String type() default "string";
-
-	/**
-	 * The extending format for the previously mentioned <code>type</code>.
-	 *
-	 * <p>
-	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further
-	 * details.
-	 */
-	String format() default "";
-
-	/**
-	 * Sets the ability to pass empty-valued parameters.
-	 *
-	 * <p>
-	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
-	 * parameter with a name only or an empty value.
-	 * Default value is <jk>false</jk>.
-	 */
-	boolean allowEmptyValue() default false;
-
-	/**
-	 * Required if <code>type</code> is <js>"array"</js>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		parameters={
-	 * 			<ja>@Parameter</ja>(
-	 * 				in=<js>"header"</js>,
-	 * 				name=<js>"Foo"</js>,
-	 * 				type=<js>"array"</js>,
-	 * 				items=<js>"{type:'string',collectionFormat:'csv'}"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public void</jk> doAnything() {
-	 * </p>
-	 *
-	 * <p>
-	 * See <a class="doclink" href="http://swagger.io/specification/#itemsObject">Items Object</a> for further details.
-	 */
-	String items() default "";
-
-	/**
-	 * Determines the format of the array if type array is used.
-	 *
-	 * <p>
-	 * Possible values are:
-	 * <ul>
-	 * 	<li><js>"csv"</js> - comma separated values <js>"foo,bar"</js>.
-	 * 	<li><js>"ssv"</js> - space separated values <js>"foo bar"</js>.
-	 * 	<li><js>"tsv"</js> - tab separated values <js>"foo\tbar"</js>.
-	 * 	<li><js>"pipes"</js> - pipe separated values <js>"foo|bar"</js>.
-	 * 	<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single
-	 * 		instance <js>"foo=bar&amp;foo=baz"</js>.
-	 * 		This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
-	 * </ul>
-	 * Default value is <js>"csv"</js>.
-	 */
-	String collectionFormat() default "";
-
-	/**
-	 * Declares the value of the parameter that the server will use if none is provided.
-	 *
-	 * <p>
-	 * For example a "count" to control the number of results per page might default to 100 if not supplied by the
-	 * client in the request.
-	 * (Note: "default" has no meaning for required parameters.)
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">
-	 * http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
-	 */
-	String _default() default "";
 }

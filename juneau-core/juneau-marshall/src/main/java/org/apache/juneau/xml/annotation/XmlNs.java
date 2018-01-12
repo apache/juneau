@@ -29,12 +29,12 @@ import java.lang.annotation.*;
 public @interface XmlNs {
 
 	/**
-	 * XML namespace prefix.
-	 */
-	String prefix();
-
-	/**
 	 * XML namespace URL.
 	 */
 	String namespaceURI();
+
+	/**
+	 * XML namespace prefix.
+	 */
+	String prefix();
 }

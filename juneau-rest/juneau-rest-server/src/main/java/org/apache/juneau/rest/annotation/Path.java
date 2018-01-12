@@ -81,14 +81,6 @@ public @interface Path {
 	 * Optional if the attributes are specified in the same order as in the URL path pattern.
 	 */
 	String name() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 */
-	String value() default "";
 	
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
@@ -98,4 +90,12 @@ public @interface Path {
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+
+	/**
+	 * A synonym for {@link #name()}.
+	 *
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+	String value() default "";
 }

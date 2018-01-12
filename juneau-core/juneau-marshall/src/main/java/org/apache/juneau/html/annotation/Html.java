@@ -29,12 +29,23 @@ import org.apache.juneau.html.*;
 public @interface Html {
 
 	/**
-	 * Treat as XML.
+	 * Use the specified anchor text when serializing a URI.
 	 *
 	 * <p>
-	 * Useful when creating beans that model HTML elements.
+	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
+	 *
+	 * <h6 class='figure'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> FileSpace {
+	 *
+	 * 		<ja>@Html</ja>(anchorText=<js>"drive/{drive}"</js>)
+	 * 		<jk>public</jk> String getDrive() {
+	 * 			...;
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
-	boolean asXml() default false;
+	String anchorText() default "";
 
 	/**
 	 * Treat as plain text.
@@ -46,29 +57,12 @@ public @interface Html {
 	boolean asPlainText() default false;
 
 	/**
-	 * When <jk>true</jk>, collections of beans should be rendered as trees instead of tables.
+	 * Treat as XML.
 	 *
 	 * <p>
-	 * Default is <jk>false</jk>.
+	 * Useful when creating beans that model HTML elements.
 	 */
-	boolean noTables() default false;
-
-	/**
-	 * When <jk>true</jk>, don't add headers to tables.
-	 *
-	 * <p>
-	 * Default is <jk>false</jk>.
-	 */
-	boolean noTableHeaders() default false;
-
-	/**
-	 * Associates an {@link HtmlRender} with a bean property for custom HTML rendering of the property.
-	 *
-	 * <p>
-	 * This annotation applies to bean properties and classes.
-	 */
-	@SuppressWarnings("rawtypes")
-	Class<? extends HtmlRender> render() default HtmlRender.class;
+	boolean asXml() default false;
 
 	/**
 	 * Adds a hyperlink to a bean property when rendered as HTML.
@@ -100,21 +94,27 @@ public @interface Html {
 	String link() default "";
 
 	/**
-	 * Use the specified anchor text when serializing a URI.
+	 * When <jk>true</jk>, don't add headers to tables.
 	 *
 	 * <p>
-	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
-	 *
-	 * <h6 class='figure'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> FileSpace {
-	 *
-	 * 		<ja>@Html</ja>(anchorText=<js>"drive/{drive}"</js>)
-	 * 		<jk>public</jk> String getDrive() {
-	 * 			...;
-	 * 		}
-	 * 	}
-	 * </p>
+	 * Default is <jk>false</jk>.
 	 */
-	String anchorText() default "";
+	boolean noTableHeaders() default false;
+
+	/**
+	 * When <jk>true</jk>, collections of beans should be rendered as trees instead of tables.
+	 *
+	 * <p>
+	 * Default is <jk>false</jk>.
+	 */
+	boolean noTables() default false;
+	
+	/**
+	 * Associates an {@link HtmlRender} with a bean property for custom HTML rendering of the property.
+	 *
+	 * <p>
+	 * This annotation applies to bean properties and classes.
+	 */
+	@SuppressWarnings("rawtypes")
+	Class<? extends HtmlRender> render() default HtmlRender.class;
 }

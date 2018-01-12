@@ -37,7 +37,7 @@ package org.apache.juneau.transform;
  *			<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
  *				AddressBook a = (Address)bean;
  *				<jk>if</jk> (<js>"taxInfo"</js>.equals(name) && <js>"redacted"</js>.equals(value))
- *					<jk>return</jk> TaxInfoUtils.<jsm>lookUpByName</jsm>(a.getStreet(), a.getCity(), a.getState());
+ *					<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
  *				<jk>return</jk> value;
  *			}
  *		}
@@ -54,15 +54,23 @@ package org.apache.juneau.transform;
  *	<p class='bcode'>
  *		<jc>// Register filter on bean class.</jc>
  *		<ja>@Bean</ja>(propertyFilter=AddressPropertyFilter.<jk>class</jk>)
- *		<jk>public class Address {
+ *		<jk>public class</jk> Address {
  *			<jk>public</jk> String getTaxInfo() {...}
  *			<jk>public void</jk> setTaxInfo(String s) {...}
  *		}
  *
+ *		<jc>// Or define a bean filter.</jc>
+ *		<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;Address&gt; {
+ *			<jk>public</jk> MyFilter() {
+ *				<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
+ *				propertyFilter(AddressPropertyFilter.<jk>class</jk>);
+ *			}
+ *		}	
+ *
  *		<jc>// Register filter on serializer or parser.</jc>
  *		WriterSerializer s = JsonSerializer
  *			.<jsm>create</jsm>()
- *			.beanFilters(BeanFilter.<jsm>create</jsm>().propertyFilter(AddressPropertyFilter.<jk>class</jk>))
+ *			.beanFilters(MyFilter.<jk>class</jk>)
  *			.build();
  *	</p>
  */
@@ -116,7 +124,7 @@ public class PropertyFilter {
 	 *			<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
 	 *				AddressBook a = (Address)bean;
 	 *				<jk>if</jk> (<js>"taxInfo"</js>.equals(name) && <js>"redacted"</js>.equals(value))
-	 *					<jk>return</jk> TaxInfoUtils.<jsm>lookUpByName</jsm>(a.getStreet(), a.getCity(), a.getState());
+	 *					<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
 	 *				<jk>return</jk> value;
 	 *			}
 	 *		}

@@ -38,7 +38,7 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 	 * <p>
 	 * Interface class is determined through reflection.
 	 */
-	public InterfaceBeanFilterBuilder() {
+	protected InterfaceBeanFilterBuilder() {
 		init(beanClass);
 	}
 

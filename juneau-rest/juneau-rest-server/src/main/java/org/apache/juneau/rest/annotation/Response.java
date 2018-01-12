@@ -46,11 +46,6 @@ import org.apache.juneau.rest.*;
 public @interface Response {
 
 	/**
-	 * HTTP response code.
-	 */
-	int value();
-
-	/**
 	 * Optional description.
 	 *
 	 * <p>
@@ -66,6 +61,16 @@ public @interface Response {
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/responses/{code}/description</code>.
 	 */
 	String description() default "";
+
+	/**
+	 * Optional response headers.
+	 *
+	 * <p>
+	 * Response variables can also be defined in the servlet resource bundle.
+	 * (e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or
+	 * <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
+	 */
+	Parameter[] headers() default {};
 
 	/**
 	 * A definition of the response structure.
@@ -91,12 +96,7 @@ public @interface Response {
 	String schema() default "";
 
 	/**
-	 * Optional response headers.
-	 *
-	 * <p>
-	 * Response variables can also be defined in the servlet resource bundle.
-	 * (e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or
-	 * <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
+	 * HTTP response code.
 	 */
-	Parameter[] headers() default {};
+	int value();
 }

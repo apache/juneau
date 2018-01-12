@@ -62,17 +62,9 @@ import org.apache.juneau.rest.*;
 public @interface FormData {
 
 	/**
-	 * FORM parameter name.
+	 * The default value for this form-data parameter if it's not present in the request.
 	 */
-	String name() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 */
-	String value() default "";
+	String def() default "";
 
 	/**
 	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
@@ -89,6 +81,11 @@ public @interface FormData {
 	boolean multipart() default false;
 
 	/**
+	 * FORM parameter name.
+	 */
+	String name() default "";
+
+	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
 	 *
 	 * <p>
@@ -98,7 +95,10 @@ public @interface FormData {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
-	 * The default value for this form-data parameter if it's not present in the request.
+	 * A synonym for {@link #name()}.
+	 *
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
 	 */
-	String def() default "";
+	String value() default "";
 }

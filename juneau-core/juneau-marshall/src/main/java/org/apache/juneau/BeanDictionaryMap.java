@@ -59,6 +59,11 @@ import org.apache.juneau.annotation.*;
 @SuppressWarnings("rawtypes")
 public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Constructor.
+	 */
+	protected BeanDictionaryMap() {}
 
 	/**
 	 * Add a dictionary name mapping for the specified class.

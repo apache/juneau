@@ -59,7 +59,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 	 * 	Classes must either specify a {@link Bean#typeName() @Bean.typeName()} value or be another subclass of
 	 * 	<code>BeanDictionaryList</code>.
 	 */
-	public BeanDictionaryList(Class<?>...c) {
+	protected BeanDictionaryList(Class<?>...c) {
 		append(c);
 	}
 

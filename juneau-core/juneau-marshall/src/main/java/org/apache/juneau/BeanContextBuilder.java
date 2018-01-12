@@ -314,10 +314,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * values.
-	 * Otherwise, it returns <jk>null</jk>.
-	 *
-	 * <p>
-	 * Disabled by default because it introduces a slight performance penalty.
+	 * <br>Otherwise, it returns <jk>null</jk>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -375,10 +372,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
-	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
+	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -416,10 +410,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
-	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
+	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -457,7 +448,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
-	 * Otherwise, they will be ignored.
+	 * <br>Otherwise, they will be ignored.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -495,10 +486,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
-	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
+	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

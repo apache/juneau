@@ -38,31 +38,6 @@ import org.apache.juneau.jena.*;
 public @interface Rdf {
 
 	/**
-	 * Sets the XML prefix of this property or class.
-	 * 
-	 * <p>
-	 * Must either be matched to a {@link #namespace() @Rdf.namespace()} annotation on the same object, parent object, or a {@link RdfNs @RdfNs} 
-	 * with the same name through the {@link RdfSchema#rdfNs() @RdfSchema.rdfNs()} annotation on the package.
-	 */
-	String prefix() default "";
-
-	/**
-	 * Sets the namespace URI of this property or class.
-	 * 
-	 * <p>
-	 * Must be matched with a {@link #prefix() @Rdf.prefix()} annotation on this object, a parent object, or a {@link RdfNs @RdfNs} with the 
-	 * same name through the {@link RdfSchema#rdfNs() @RdfSchema.rdfNs()} annotation on the package.
-	 */
-	String namespace() default "";
-
-	/**
-	 * The format for how collections (e.g. lists and arrays) are serialized in RDF.
-	 * 
-	 * @see RdfCollectionFormat
-	 */
-	RdfCollectionFormat collectionFormat() default RdfCollectionFormat.DEFAULT;
-
-	/**
 	 * Marks a bean property as a resource URI identifier for the bean.
 	 * 
 	 * <p>
@@ -74,4 +49,29 @@ public @interface Rdf {
 	 * </ul>
 	 */
 	boolean beanUri() default false;
+
+	/**
+	 * The format for how collections (e.g. lists and arrays) are serialized in RDF.
+	 * 
+	 * @see RdfCollectionFormat
+	 */
+	RdfCollectionFormat collectionFormat() default RdfCollectionFormat.DEFAULT;
+
+	/**
+	 * Sets the namespace URI of this property or class.
+	 * 
+	 * <p>
+	 * Must be matched with a {@link #prefix() @Rdf.prefix()} annotation on this object, a parent object, or a {@link RdfNs @RdfNs} with the 
+	 * same name through the {@link RdfSchema#rdfNs() @RdfSchema.rdfNs()} annotation on the package.
+	 */
+	String namespace() default "";
+
+	/**
+	 * Sets the XML prefix of this property or class.
+	 * 
+	 * <p>
+	 * Must either be matched to a {@link #namespace() @Rdf.namespace()} annotation on the same object, parent object, or a {@link RdfNs @RdfNs} 
+	 * with the same name through the {@link RdfSchema#rdfNs() @RdfSchema.rdfNs()} annotation on the package.
+	 */
+	String prefix() default "";
 }

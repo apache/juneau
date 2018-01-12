@@ -76,33 +76,6 @@ public @interface Xml {
 	String childName() default "";
 
 	/**
-	 * Sets the XML prefix of this property or class.
-	 *
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When applied to a {@link ElementType#TYPE}, namespace is applied to all properties in the class, and all
-	 * 		subclasses of the class.
-	 * 	<li>
-	 * 		When applied to bean properties on {@link ElementType#METHOD} and {@link ElementType#FIELD}, applies
-	 * 		to the bean property.
-	 * </ul>
-	 *
-	 * <p>
-	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a
-	 * {@link XmlNs @XmlNs} with the same name through the {@link XmlSchema#xmlNs() @XmlSchema.xmlNs()} annotation on the package.
-	 */
-	String prefix() default "";
-
-	/**
-	 * Sets the namespace URI of this property or class.
-	 *
-	 * <p>
-	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link XmlNs @XmlNs} with the
-	 * same name through the {@link XmlSchema#xmlNs() @XmlSchema.xmlNs()} annotation on the package.
-	 */
-	String namespace() default "";
-
-	/**
 	 * The {@link XmlFormat} to use for serializing this object type.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -150,4 +123,31 @@ public @interface Xml {
 	 * </p>
 	 */
 	XmlFormat format() default XmlFormat.DEFAULT;
+
+	/**
+	 * Sets the namespace URI of this property or class.
+	 *
+	 * <p>
+	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link XmlNs @XmlNs} with the
+	 * same name through the {@link XmlSchema#xmlNs() @XmlSchema.xmlNs()} annotation on the package.
+	 */
+	String namespace() default "";
+
+	/**
+	 * Sets the XML prefix of this property or class.
+	 *
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When applied to a {@link ElementType#TYPE}, namespace is applied to all properties in the class, and all
+	 * 		subclasses of the class.
+	 * 	<li>
+	 * 		When applied to bean properties on {@link ElementType#METHOD} and {@link ElementType#FIELD}, applies
+	 * 		to the bean property.
+	 * </ul>
+	 *
+	 * <p>
+	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a
+	 * {@link XmlNs @XmlNs} with the same name through the {@link XmlSchema#xmlNs() @XmlSchema.xmlNs()} annotation on the package.
+	 */
+	String prefix() default "";
 }

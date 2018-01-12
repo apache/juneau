@@ -45,18 +45,33 @@ public @interface Swap {
 	 * The {@link PojoSwap} and {@link Surrogate} class.
 	 *
 	 * <p>
-	 * A synonym for {@link #impl()}.
-	 */
-	Class<?> value() default Null.class;
-
-	/**
-	 * The {@link PojoSwap} and {@link Surrogate} class.
-	 *
-	 * <p>
 	 * A synonym for {@link #value()}.
 	 */
 	Class<?> impl() default Null.class;
 
+	/**
+	 * Identifies the media types that this swap is applicable for.
+	 *
+	 * <p>
+	 * In the following example, the swap is only invoked by the JSON serializer:
+	 *
+	 * <p class='bcode'>
+	 * 	<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
+	 * 	<jk>public class</jk> MyBean { ... }
+	 *
+	 * 	<jk>public class</jk> ToStringSwap <jk>extends</jk> PojoSwap&lt;Object,String&gt; {
+	 * 			<jk>public</jk> String swap(BeanSession session, Object o) <jk>throws</jk> Exception {
+	 * 				<jk>return</jk> o.toString();
+	 * 			}
+	 * 		}
+	 * </p>
+	 * 
+	 *	<h5 class='section'>Documentation:</h5>
+	 *	<ul>
+	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
+	 *	</ul>
+	 */
+	String[] mediaTypes() default {};
 
 	/**
 	 * Identifies a template string along with this swap.
@@ -96,26 +111,10 @@ public @interface Swap {
 	String template() default "";
 
 	/**
-	 * Identifies the media types that this swap is applicable for.
+	 * The {@link PojoSwap} and {@link Surrogate} class.
 	 *
 	 * <p>
-	 * In the following example, the swap is only invoked by the JSON serializer:
-	 *
-	 * <p class='bcode'>
-	 * 	<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
-	 * 	<jk>public class</jk> MyBean { ... }
-	 *
-	 * 	<jk>public class</jk> ToStringSwap <jk>extends</jk> PojoSwap&lt;Object,String&gt; {
-	 * 			<jk>public</jk> String swap(BeanSession session, Object o) <jk>throws</jk> Exception {
-	 * 				<jk>return</jk> o.toString();
-	 * 			}
-	 * 		}
-	 * </p>
-	 * 
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
-	 *	</ul>
+	 * A synonym for {@link #impl()}.
 	 */
-	String[] mediaTypes() default {};
+	Class<?> value() default Null.class;
 }

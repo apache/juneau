@@ -77,146 +77,6 @@ import org.apache.juneau.rest.widget.*;
 public @interface HtmlDoc {
 
 	/**
-	 * Sets the HTML header section contents.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * The page header normally contains the title and description, but this value can be used to override the contents
-	 * to be whatever you want.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			header={
-	 * 				<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <h6 class='topic'>Other Notes</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		A value of <js>"NONE"</js> can be used to force no header.
-	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * 	<li>
-	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#header(Object[])} method.
-	 * 	<li>
-	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
-	 * 	<li>
-	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
-	 * 		parent class if not overridden.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * </ul>
-	 */
-	String[] header() default {};
-
-	/**
-	 * Sets the links in the HTML nav section.
-	 *
-	 * <p>
-	 * The value is an array of strings with two possible values:
-	 * <ul>
-	 * 	<li>A key-value pair representing a hyperlink label and href:
-	 * 		<br><js>"google: http://google.com"</js>
-	 * 	<li>Arbitrary HTML.
-	 * </ul>
-	 *
-	 * <p>
-	 * The page links are positioned immediately under the title and text.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			navlinks={
-	 * 				<js>"up: request:/.."</js>,
-	 * 				<js>"options: servlet:/?method=OPTIONS"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <h6 class='topic'>Other Notes</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * 	<li>
-	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
-	 * 		This field can also use URIs of any support type in {@link UriResolver}.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#navlinks(Object[])} method.
-	 * 	<li>
-	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
-	 * 	<li>
-	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
-	 * 		parent class.
-	 * 	<li>
-	 * 		The parent links can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
-	 * 		to place a link inside the list of parent links.
-	 * </ul>
-	 */
-	String[] navlinks() default {};
-
-	/**
-	 * Sets the HTML nav section contents.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <p>
-	 * The nav section of the page contains the links.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav={
-	 * 				<js>"&lt;p&gt;Custom nav content&lt;/p&gt;"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <h6 class='topic'>Other Notes</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When a value is specified, the {@link #navlinks()} value will be ignored.
-	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * 	<li>
-	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
-	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#nav(Object[])} method.
-	 * 	<li>
-	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
-	 * 	<li>
-	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
-	 * 		parent class.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * </ul>
-	 */
-	String[] nav() default {};
-
-	/**
 	 * Sets the HTML aside section contents.
 	 *
 	 * <p>
@@ -301,6 +161,239 @@ public @interface HtmlDoc {
 	String[] footer() default {};
 
 	/**
+	 * Adds arbitrary content to the HTML <xt>&lt;head&gt;</xt> element on the page.
+	 *
+	 * <p>
+	 * The format of this value is HTML.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			head={
+	 * 				<jc>// Add a shortcut link in the browser tab</jc>
+	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>,
+	 *
+	 * 				<jc>// Reload the page every 5 seconds </jc>
+	 * 				<js>"<meta http-equiv='refresh' content='5'>"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#head(Object[])} method.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
+	 */
+	String[] head() default {};
+
+	/**
+	 * Sets the HTML header section contents.
+	 *
+	 * <p>
+	 * The format of this value is HTML.
+	 *
+	 * <p>
+	 * The page header normally contains the title and description, but this value can be used to override the contents
+	 * to be whatever you want.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			header={
+	 * 				<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no header.
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#header(Object[])} method.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class if not overridden.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 */
+	String[] header() default {};
+
+	/**
+	 * Sets the HTML nav section contents.
+	 *
+	 * <p>
+	 * The format of this value is HTML.
+	 *
+	 * <p>
+	 * The nav section of the page contains the links.
+	 *
+	 * <p>
+	 * The format of this value is HTML.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			nav={
+	 * 				<js>"&lt;p&gt;Custom nav content&lt;/p&gt;"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When a value is specified, the {@link #navlinks()} value will be ignored.
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#nav(Object[])} method.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 */
+	String[] nav() default {};
+
+	/**
+	 * Sets the links in the HTML nav section.
+	 *
+	 * <p>
+	 * The value is an array of strings with two possible values:
+	 * <ul>
+	 * 	<li>A key-value pair representing a hyperlink label and href:
+	 * 		<br><js>"google: http://google.com"</js>
+	 * 	<li>Arbitrary HTML.
+	 * </ul>
+	 *
+	 * <p>
+	 * The page links are positioned immediately under the title and text.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			navlinks={
+	 * 				<js>"up: request:/.."</js>,
+	 * 				<js>"options: servlet:/?method=OPTIONS"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		This field can also use URIs of any support type in {@link UriResolver}.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#navlinks(Object[])} method.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		The parent links can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
+	 * 		to place a link inside the list of parent links.
+	 * </ul>
+	 */
+	String[] navlinks() default {};
+
+	/**
+	 * Specifies the text to display when serializing an empty array or collection.
+	 */
+	String noResultsMessage() default "no results";
+
+	/**
+	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
+	 *
+	 * <p>
+	 * This only applies to the rendered data portion of the page.
+	 */
+	boolean nowrap() default false;
+
+	/**
+	 * Sets the HTML script section contents.
+	 *
+	 * <p>
+	 * The format of this value is Javascript.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			script={
+	 * 				<js>"alert('Hello!')"</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <h6 class='topic'>Other Notes</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#script(Object[])} method.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * </ul>
+	 */
+	String[] script() default {};
+
+	/**
 	 * Sets the HTML CSS style section contents.
 	 *
 	 * <p>
@@ -377,99 +470,6 @@ public @interface HtmlDoc {
 	 * </ul>
 	 */
 	String[] stylesheet() default {};
-
-	/**
-	 * Sets the HTML script section contents.
-	 *
-	 * <p>
-	 * The format of this value is Javascript.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			script={
-	 * 				<js>"alert('Hello!')"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <h6 class='topic'>Other Notes</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * 	<li>
-	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
-	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#script(Object[])} method.
-	 * 	<li>
-	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
-	 * 	<li>
-	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
-	 * 		parent class.
-	 * 	<li>
-	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * </ul>
-	 */
-	String[] script() default {};
-
-	/**
-	 * Adds arbitrary content to the HTML <xt>&lt;head&gt;</xt> element on the page.
-	 *
-	 * <p>
-	 * The format of this value is HTML.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			head={
-	 * 				<jc>// Add a shortcut link in the browser tab</jc>
-	 * 				<js>"<link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'>"</js>,
-	 *
-	 * 				<jc>// Reload the page every 5 seconds </jc>
-	 * 				<js>"<meta http-equiv='refresh' content='5'>"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <h6 class='topic'>Other Notes</h6>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 		<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 * 	<li>
-	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
-	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
-	 * 		The programmatic equivalent to this annotation is the {@link HtmlDocBuilder#head(Object[])} method.
-	 * 	<li>
-	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
-	 * 	<li>
-	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the
-	 * 		parent class.
-	 * </ul>
-	 */
-	String[] head() default {};
-
-	/**
-	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
-	 *
-	 * <p>
-	 * This only applies to the rendered data portion of the page.
-	 */
-	boolean nowrap() default false;
-
-	/**
-	 * Specifies the text to display when serializing an empty array or collection.
-	 */
-	String noResultsMessage() default "no results";
 
 	/**
 	 * Specifies the template class to use for rendering the HTML page.

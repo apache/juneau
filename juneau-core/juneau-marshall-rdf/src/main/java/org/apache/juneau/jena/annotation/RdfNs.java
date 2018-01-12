@@ -29,12 +29,12 @@ import java.lang.annotation.*;
 public @interface RdfNs {
 
 	/**
-	 * RDF namespace prefix.
-	 */
-	String prefix();
-
-	/**
 	 * RDF namespace URL.
 	 */
 	String namespaceURI();
+
+	/**
+	 * RDF namespace prefix.
+	 */
+	String prefix();
 }

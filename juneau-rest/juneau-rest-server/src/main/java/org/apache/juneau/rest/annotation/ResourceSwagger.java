@@ -18,28 +18,6 @@ import org.apache.juneau.rest.*;
  * Extended annotation for {@link RestResource#swagger() @RestResource.swagger()}.
  */
 public @interface ResourceSwagger {
-	/**
-	 * Optional servlet terms-of-service for this API.
-	 *
-	 * <p>
-	 * It is used to populate the Swagger terms-of-service field.
-	 *
-	 * <p>
-	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
-	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)}
-	 * method.
-	 */
-	String termsOfService() default "";
 
 	/**
 	 * Optional contact information for the exposed API.
@@ -84,6 +62,48 @@ public @interface ResourceSwagger {
 	String contact() default "";
 
 	/**
+	 * Optional external documentation information for the exposed API.
+	 *
+	 * <p>
+	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
+	 *
+	 * <p>
+	 * A simplified JSON string with the following fields:
+	 * <p class='bcode'>
+	 * 	{
+	 * 		description: string,
+	 * 		url: string
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
+	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
+	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 *
+	 * <p>
+	 * Corresponds to the swagger field <code>/tags</code>.
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)}
+	 * method.
+	 */
+	String externalDocs() default "";
+
+	/**
 	 * Optional license information for the exposed API.
 	 *
 	 * <p>
@@ -123,28 +143,6 @@ public @interface ResourceSwagger {
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getLicense(RestRequest)} method.
 	 */
 	String license() default "";
-
-	/**
-	 * Provides the version of the application API (not to be confused with the specification version).
-	 *
-	 * <p>
-	 * It is used to populate the Swagger version field and to display on HTML pages.
-	 *
-	 * <p>
-	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
-	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/version</code>.
-	 *
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getVersion(RestRequest)} method.
-	 */
-	String version() default "";
 
 	/**
 	 * Optional tagging information for the exposed API.
@@ -192,46 +190,49 @@ public @interface ResourceSwagger {
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTags(RestRequest)} method.
 	 */
 	String tags() default "";
-
+	
 	/**
-	 * Optional external documentation information for the exposed API.
+	 * Optional servlet terms-of-service for this API.
 	 *
 	 * <p>
-	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
+	 * It is used to populate the Swagger terms-of-service field.
 	 *
 	 * <p>
-	 * A simplified JSON string with the following fields:
-	 * <p class='bcode'>
-	 * 	{
-	 * 		description: string,
-	 * 		url: string
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
-	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
-	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		swagger=<ja>@MethodSwagger</ja>(
-	 * 			externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>
-	 * 		)
-	 * 	)
-	 * </p>
+	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
+	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 *
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 *
 	 * <p>
-	 * Corresponds to the swagger field <code>/tags</code>.
+	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)}
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)}
 	 * method.
 	 */
-	String externalDocs() default "";
+	String termsOfService() default "";
+
+	/**
+	 * Provides the version of the application API (not to be confused with the specification version).
+	 *
+	 * <p>
+	 * It is used to populate the Swagger version field and to display on HTML pages.
+	 *
+	 * <p>
+	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
+	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 *
+	 * <p>
+	 * Corresponds to the swagger field <code>/info/version</code>.
+	 *
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getVersion(RestRequest)} method.
+	 */
+	String version() default "";
 }

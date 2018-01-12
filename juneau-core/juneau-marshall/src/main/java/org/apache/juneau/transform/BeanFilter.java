@@ -67,16 +67,6 @@ public final class BeanFilter {
 	}
 
 	/**
-	 * Create a new bean filter builder.
-	 * 
- 	 * @param beanClass The bean class that this filter applies to.
-	 * @return A new filter.
-	 */
-	public static <T> BeanFilterBuilder<T> create(Class<T> beanClass) {
-		return new BeanFilterBuilder<>(beanClass);
-	}
-	
-	/**
 	 * Returns the bean class that this filter applies to.
 	 *
 	 * @return The bean class that this filter applies to.

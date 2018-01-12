@@ -2365,24 +2365,33 @@
 		
 		<jc>// Must provide a no-arg constructor!</jc>
 		<jk>public</jk> AddressFilter() {
-			properties(<js>"street,city,state"</js>);  <jc>// The properties we want exposed.</jc>
+			includeProperties(<js>"street,city,state"</js>);  <jc>// The properties we want exposed.</jc>
 		}
 	}	
 				</p>		
 				<p>
-					Bean filters are added to serializers and parsers using the <code>beanFilters(Object...)</code> method.
-					<br>For example:
+					Bean filters are added to serializers and parsers using the following:
+				</p>
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters}
+					<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)}
+				</ul>
+				<p>
+					For example:
 				</p>
 				<p class='bcode'>			
 	<jc>// Create a new JSON serializer and associate a bean filter with it.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(AddressFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer
+		.<jsm>create</jsm>()
+		.beanFilters(AddressFilter.<jk>class</jk>)
+		.build();
 				</p>
 				<p>
 					Note that if you use the annotation, you do NOT need to set anything on the serializers/parsers.
 					<br>The annotations will be detected and bean filters will automatically be created for them.
 				</p>
 				<p>
-					The <code>beanFilter(Class...)</code> method also allows you to pass in interfaces.
+					The {@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)} method also allows you to pass in interfaces.
 					<br>Any class that's not a subclass of {@link org.apache.juneau.transform.BeanFilterBuilder} get interpreted 
 					as bean interface classes.
 					<br>These cause bean implementations of those interfaces to only expose the properties defined on the 
@@ -2398,11 +2407,18 @@
 	
 	<jc>// Our bean implementation.</jc>
 	<jk>public class</jk> Address <jk>implements</jk> AddressInterface {
-		...
+		<jk>public</jk> String getStreet() {...};
+		<jk>public</jk> String getCity() {...};
+		<jk>public</jk> String getState() {...};
+		<jk>public</jk> String getCountry() {...};
 	}
 	
 	<jc>// Create a new JSON serializer that only exposes street,city,state on Address bean.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(AddressInterface.<jk>class</jk>).build();
+	<jc>// The 'country' field will be ignored.</jc>
+	WriterSerializer s = JsonSerializer
+		.<jsm>create</jsm>()
+		.beanFilters(AddressInterface.<jk>class</jk>)
+		.build();
 				</p>			
 			</div>
 
@@ -2423,7 +2439,7 @@
 		<jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
 	}
 
-	<jc>// Subclass 1</jc>
+	<jc>// Subclass</jc>
 	<jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
 		<jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
 	}
@@ -2445,8 +2461,12 @@
 					When serialized, the serialized bean will only include properties defined on the parent class.
 				</p>
 				<p class='bcode'>
-	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().beanFilters(MyBeanFilter.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer
+		.<jsm>create</jsm>()
+		.simple()
+		.beanFilters(MyBeanFilter.<jk>class</jk>)
+		.build();
+		
 	MyClass c = <jk>new</jk> MyClassBar();
 	String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
 				</p>	
@@ -2454,6 +2474,7 @@
 					The equivalent can be done through an annotation on the parent class, which applies to all child classes:
 				</p>
 				<p class='bcode'>
+	<jc>// All subclasses of MyClass should only show the 'foo' property.</jc>
 	<ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
 	<jk>public abstract class</jk> MyClass {
 		<jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
@@ -2463,6 +2484,7 @@
 					The annotation can also be applied on the individual child classes, like so...
 				</p>
 				<p class='bcode'>
+	<jc>// Only serialize 'foo' property from parent class.</jc>
 	<ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
 	<jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
 		<jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
@@ -2475,9 +2497,16 @@
 					passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
 				</p>
 				<p class='bcode'>
-	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().beanFilters(MyClass.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer
+		.<jsm>create</jsm>()
+		.beanFilters(MyClass.<jk>class</jk>)  <jc>Shortcut!</jc>
+		.build();
 				</p>
+				<p>
+					The {@link org.apache.juneau.transform.BeanFilterBuilder#stopClass(Class)} method and 
+					{@link org.apache.juneau.annotation.Bean#stopClass() @Bean.stopClass()} annotation are equivalent,
+					but filters from the other direction.
+					<br>(i.e. filter out properties found on parent classes and interfaces)
 			</div>
 
 			<!-- =================================================================================================== -->

@@ -27,15 +27,6 @@ import java.lang.annotation.*;
 public @interface RdfSchema {
 
 	/**
-	 * Sets the default RDF prefix for all classes in this and child packages.
-	 * 
-	 * <p>
-	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #rdfNs()} mapping with the same 
-	 * {@link RdfNs#prefix} value.
-	 */
-	public String prefix() default "";
-
-	/**
 	 * Sets the default RDF namespace URL for all classes in this and child packages.
 	 * 
 	 * <p>
@@ -43,6 +34,15 @@ public @interface RdfSchema {
 	 * {@link RdfNs#namespaceURI() @RdfNs.namespaceURI()} value.
 	 */
 	public String namespace() default "";
+
+	/**
+	 * Sets the default RDF prefix for all classes in this and child packages.
+	 * 
+	 * <p>
+	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #rdfNs()} mapping with the same 
+	 * {@link RdfNs#prefix} value.
+	 */
+	public String prefix() default "";
 
 	/**
 	 * Lists all namespace mappings to be used on all classes within this package.

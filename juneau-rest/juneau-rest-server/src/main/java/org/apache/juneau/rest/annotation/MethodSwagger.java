@@ -20,6 +20,35 @@ import org.apache.juneau.rest.*;
 public @interface MethodSwagger {
 
 	/**
+	 * Optional deprecated flag for the exposed API.
+	 *
+	 * <p>
+	 * Used to populate the Swagger deprecated field.
+	 *
+	 * <p>
+	 * The default value pulls the description from the <code>(className.?)[javaMethodName].deprecated</code> entry in
+	 * the servlet resource bundle.
+	 * (e.g. <js>"MyClass.myMethod.deprecated = true"</js> or <js>"myMethod.deprecated = foo,bar"</js>).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			deprecated=<jk>true</jk>
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 *
+	 * <p>
+	 * Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
+	 */
+	boolean deprecated() default false;
+
+	/**
 	 * Optional external documentation information for the exposed API.
 	 *
 	 * <p>
@@ -57,68 +86,6 @@ public @interface MethodSwagger {
 	 * Corresponds to the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
 	 */
 	String externalDocs() default "";
-
-	/**
-	 * Optional tagging information for the exposed API.
-	 *
-	 * <p>
-	 * Used to populate the Swagger tags field.
-	 *
-	 * <p>
-	 * A comma-delimited list of tags for API documentation control.
-	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 *
-	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].tags</code> entry in the
-	 * servlet resource bundle.
-	 * (e.g. <js>"MyClass.myMethod.tags = foo,bar"</js> or <js>"myMethod.tags = foo,bar"</js>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		swagger=<ja>@MethodSwagger</ja>(
-	 * 			tags=<js>"foo,bar"</js>
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
-	 */
-	String tags() default "";
-
-	/**
-	 * Optional deprecated flag for the exposed API.
-	 *
-	 * <p>
-	 * Used to populate the Swagger deprecated field.
-	 *
-	 * <p>
-	 * The default value pulls the description from the <code>(className.?)[javaMethodName].deprecated</code> entry in
-	 * the servlet resource bundle.
-	 * (e.g. <js>"MyClass.myMethod.deprecated = true"</js> or <js>"myMethod.deprecated = foo,bar"</js>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		swagger=<ja>@MethodSwagger</ja>(
-	 * 			deprecated=<jk>true</jk>
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
-	 *
-	 * <p>
-	 * Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
-	 */
-	boolean deprecated() default false;
 
 	/**
 	 * Optional parameter descriptions.
@@ -211,4 +178,37 @@ public @interface MethodSwagger {
 	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 */
 	Response[] responses() default {};
+
+	/**
+	 * Optional tagging information for the exposed API.
+	 *
+	 * <p>
+	 * Used to populate the Swagger tags field.
+	 *
+	 * <p>
+	 * A comma-delimited list of tags for API documentation control.
+	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * <p>
+	 * The default value pulls the description from the <code>(className.?)[javaMethodName].tags</code> entry in the
+	 * servlet resource bundle.
+	 * (e.g. <js>"MyClass.myMethod.tags = foo,bar"</js> or <js>"myMethod.tags = foo,bar"</js>).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		swagger=<ja>@MethodSwagger</ja>(
+	 * 			tags=<js>"foo,bar"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <br>See {@link RestContext#getVarResolver()} for the list of supported variables.
+	 *
+	 * <p>
+	 * Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
+	 */
+	String tags() default "";
 }

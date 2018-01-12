@@ -48,22 +48,14 @@ import org.apache.juneau.httppart.*;
 public @interface Header {
 
 	/**
-	 * HTTP header name.
-	 */
-	String name() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 */
-	String value() default "";
-
-	/**
 	 * The default value for this header if it's not present in the request.
 	 */
 	String def() default "";
+
+	/**
+	 * HTTP header name.
+	 */
+	String name() default "";
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
@@ -73,4 +65,12 @@ public @interface Header {
 	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+
+	/**
+	 * A synonym for {@link #name()}.
+	 *
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+	String value() default "";
 }
