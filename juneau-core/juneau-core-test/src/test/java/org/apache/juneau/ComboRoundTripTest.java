@@ -279,7 +279,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// JSON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonT = JsonSerializer.create().simple().beanTypePropertyName("t").build();
+	WriterSerializer sJsonT = JsonSerializer.create().ssq().beanTypePropertyName("t").build();
 	ReaderParser pJsonT = JsonParser.create().beanTypePropertyName("t").build();
 
 	@Test

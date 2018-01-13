@@ -64,6 +64,12 @@ public class UonParser extends ReaderParser {
 	 * 		.decoding()
 	 * 		.build();
 	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = UonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>UON_decoding</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
 	 *	<jc>// Produces: ["foo bar", "baz quz"].</jc>
 	 * 	String[] foo = p.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
 	 * </p>

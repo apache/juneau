@@ -78,7 +78,7 @@ public class XmlTest {
 			+"</object>\n";
 
 		ObjectMap m = (ObjectMap) XmlParser.DEFAULT.parse(xml1, Object.class);
-		String json2 = JsonSerializer.create().simple().ws().quoteChar('"').trimNullProperties(false).build().serialize(m);
+		String json2 = JsonSerializer.create().simple().ws().trimNullProperties(false).build().serialize(m);
 		assertEquals(json1, json2);
 
 		m = (ObjectMap) JsonParser.DEFAULT.parse(json1, Object.class);

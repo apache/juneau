@@ -33,8 +33,8 @@ public class JsonTest {
 		Map<String,Object> m = new LinkedHashMap<String,Object>();
 		List<Object> l = new LinkedList<Object>();
 
-		WriterSerializer s1 = JsonSerializer.create().simple().trimNullProperties(false).build();
-		WriterSerializer s2 = JsonSerializer.create().simple().trimNullProperties(false).quoteChar('"').build();
+		WriterSerializer s1 = JsonSerializer.create().ssq().trimNullProperties(false).build();
+		WriterSerializer s2 = JsonSerializer.create().simple().trimNullProperties(false).build();
 		String r;
 
 		// Null keys and values
@@ -109,7 +109,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testBackslashesInStrings() throws Exception {
-		JsonSerializer s = JsonSerializer.create().simple().trimNullProperties(false).quoteChar('"').build();
+		JsonSerializer s = JsonSerializer.create().simple().trimNullProperties(false).build();
 		String r, r2;
 
 		// [\\]

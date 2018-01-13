@@ -168,7 +168,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// JSON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonT = JsonSerializer.create().simple().beanTypePropertyName("t").build();
+	WriterSerializer sJsonT = JsonSerializer.create().ssq().beanTypePropertyName("t").build();
 
 	@Test
 	public void a21_serializeJsonT() throws Exception {

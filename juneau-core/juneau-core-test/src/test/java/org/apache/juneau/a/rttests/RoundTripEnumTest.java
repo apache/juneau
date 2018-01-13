@@ -27,7 +27,6 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"javadoc"})
 public class RoundTripEnumTest extends RoundTripTest {
 
 	public RoundTripEnumTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
@@ -47,7 +46,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 
 	@Test
 	public void testEnumB() throws Exception {
-		WriterSerializer s = JsonSerializer.create().simple().beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).build();
+		WriterSerializer s = JsonSerializer.create().ssq().beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).build();
 		BEnum t = BEnum.FOO;
 		assertEquals("'xfoo'", s.serialize(t));
 		t = roundTrip(t, BEnum.class);

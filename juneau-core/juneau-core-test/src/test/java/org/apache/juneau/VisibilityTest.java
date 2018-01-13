@@ -27,10 +27,10 @@ public class VisibilityTest {
 	//====================================================================================================
 	@Test
 	public void testClassDefault() throws Exception {
-		JsonSerializerBuilder s1 = JsonSerializer.create().simple().beansRequireSomeProperties(false);
-		JsonSerializerBuilder s2 = JsonSerializer.create().simple().beansRequireSomeProperties(false).beanClassVisibility(PROTECTED);
-		JsonSerializerBuilder s3 = JsonSerializer.create().simple().beansRequireSomeProperties(false).beanClassVisibility(Visibility.DEFAULT);
-		JsonSerializerBuilder s4 = JsonSerializer.create().simple().beansRequireSomeProperties(false).beanClassVisibility(PRIVATE);
+		JsonSerializerBuilder s1 = JsonSerializer.create().ssq().beansRequireSomeProperties(false);
+		JsonSerializerBuilder s2 = JsonSerializer.create().ssq().beansRequireSomeProperties(false).beanClassVisibility(PROTECTED);
+		JsonSerializerBuilder s3 = JsonSerializer.create().ssq().beansRequireSomeProperties(false).beanClassVisibility(Visibility.DEFAULT);
+		JsonSerializerBuilder s4 = JsonSerializer.create().ssq().beansRequireSomeProperties(false).beanClassVisibility(PRIVATE);
 
 		A1 a1 = A1.create();
 		String r;

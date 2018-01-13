@@ -55,13 +55,13 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			},
 			{ /* 1 */
 				"Json DEFAULT_LAX",
-				JsonSerializer.create().simple().trimNullProperties(false),
+				JsonSerializer.create().ssq().trimNullProperties(false),
 				JsonParser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json DEFAULT_SQ",
-				JsonSerializer.create().simple().trimNullProperties(false),
+				JsonSerializer.create().ssq().trimNullProperties(false),
 				JsonParser.create(),
 				0
 			},

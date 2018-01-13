@@ -55,13 +55,13 @@ public abstract class RoundTripTest {
 			},
 			{ /* 1 */
 				"Json - lax",
-				JsonSerializer.create().simple().trimNullProperties(false),
+				JsonSerializer.create().ssq().trimNullProperties(false),
 				JsonParser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json - lax, readable",
-				JsonSerializer.create().simple().ws().trimNullProperties(false),
+				JsonSerializer.create().ssq().ws().trimNullProperties(false),
 				JsonParser.create(),
 				0
 			},

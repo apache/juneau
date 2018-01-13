@@ -77,7 +77,7 @@ import org.apache.juneau.serializer.*;
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
  *
  * 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
- * 	JsonSerializer serializer = <jk>new</jk> JsonSerializerBuilder().simple().sq().build();
+ * 	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
  *
  * 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
  * 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
@@ -113,9 +113,6 @@ public class JsonSerializer extends WriterSerializer {
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
-	 * the value type.
 	 *
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
@@ -143,8 +140,28 @@ public class JsonSerializer extends WriterSerializer {
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 * The JSON specification allows for either format.
-	 * However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
+	 * <br>However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
 	 * <xt>&lt;\/script&gt;</xt>.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a JSON serializer that escapes solidus characters.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.simple()
+	 * 		.escapeSolidus()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.simple()
+	 * 		.set(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Produces: "{foo:'&lt;\/bar&gt;'"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> ObjectMap().append(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
+	 * </p>
 	 */
 	public static final String JSON_escapeSolidus = PREFIX + "escapeSolidus.b";
 
@@ -161,13 +178,73 @@ public class JsonSerializer extends WriterSerializer {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple(boolean)}
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple()}
+	 * 			<li class='jm'>{@link JsonSerializerBuilder#ssq()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
-	 * Otherwise, they are always quoted.
+	 * <br>Otherwise, they are always quoted.
+	 * 
+	 * <p>
+	 * Attributes do not need to be quoted when they conform to the following:
+	 * <ol class='spaced-list'>
+	 * 	<li>They start with an ASCII character or <js>'_'</js>.
+	 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
+	 * 	<li>They are not one of the following reserved words:
+	 * 		<p class='bcode'>
+	 * 	arguments, break, case, catch, class, const, continue, debugger, default, 
+	 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function, 
+	 * 	if, implements, import, in, instanceof, interface, let, new, null, package,
+	 * 	private, protected, public, return, static, super, switch, this, throw,
+	 * 	true, try, typeof, var, void, while, with, undefined, yield
+	 * 		</p>
+	 * </ol>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a JSON serializer in normal mode.</jc>
+	 * 	WriterSerializer s1 = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Create a JSON serializer in simple mode.</jc>
+	 * 	WriterSerializer s2 = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.simple()
+	 * 		.build();
+	 * 	
+	 * 	ObjectMap m = <jk>new</jk> ObjectMap()
+	 * 		.append(<js>"foo"</js>, <js>"x1"</js>)
+	 * 		.append(<js>"_bar"</js>, <js>"x2"</js>)
+	 * 		.append(<js>" baz "</js>, <js>"x3"</js>)
+	 * 		.append(<js>"123"</js>, <js>"x4"</js>)
+	 * 		.append(<js>"return"</js>, <js>"x5"</js>);
+	 * 		.append(<js>""</js>, <js>"x6"</js>);
+	 * 
+	 * 	<jc>// Produces:</jc>
+	 * 	<jc>// {</jc>
+	 * 	<jc>// 	"foo": "x1"</jc>
+	 * 	<jc>// 	"_bar": "x2"</jc>
+	 * 	<jc>// 	" baz ": "x3"</jc>
+	 * 	<jc>// 	"123": "x4"</jc>
+	 * 	<jc>// 	"return": "x5"</jc>
+	 * 	<jc>// 	"": "x6"</jc>
+	 * 	<jc>// }</jc>
+	 * 	String json1 = s1.serialize(m);
+	 * 
+	 * 	<jc>// Produces:</jc>
+	 * 	<jc>// {</jc>
+	 * 	<jc>// 	foo: "x1"</jc>
+	 * 	<jc>// 	_bar: "x2"</jc>
+	 * 	<jc>// 	" baz ": "x3"</jc>
+	 * 	<jc>// 	"123": "x4"</jc>
+	 * 	<jc>// 	"return": "x5"</jc>
+	 * 	<jc>// 	"": "x6"</jc>
+	 * 	<jc>// }</jc>
+	 * 	String json2 = s2.serialize(m);
+	 * </p>
 	 */
 	public static final String JSON_simpleMode = PREFIX + "simpleMode.b";
 

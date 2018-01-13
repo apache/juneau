@@ -36,7 +36,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 			EnumerationSwap.class,
 			IteratorSwap.class
 		)
-		.simple()
+		.ssq()
 		.build();
 
 	private static final ConcurrentHashMap<Class<?>,String> rbMap = new ConcurrentHashMap<>();

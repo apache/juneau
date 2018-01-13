@@ -106,7 +106,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(new byte[]{4,5,6}, null);
 		t.put(null, "b");
 
-		s = JsonSerializer.create().simple().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
+		s = JsonSerializer.create().ssq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
 		e = "{AQID:'a',BAUG:null,null:'b'}";
 		r = s.serialize(t);
 		assertEquals(e, r);

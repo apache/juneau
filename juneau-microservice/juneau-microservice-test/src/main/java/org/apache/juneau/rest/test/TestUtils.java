@@ -28,7 +28,7 @@ import junit.framework.*;
 public class TestUtils {
 
 	private static JsonSerializer js2 = JsonSerializer.create()
-		.simple()
+		.ssq()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.build();
 

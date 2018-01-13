@@ -76,9 +76,17 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create an RDF parser that trims whitespace.</jc>
-	 * 	ReaderParser p = RdfParser.Xml
+	 * 	ReaderParser p = RdfParser
 	 * 		.<jsm>create</jsm>()
+	 * 		.xml()
 	 * 		.trimWhitespace()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = RdfParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.xml()
+	 * 		.set(<jsf>RDF_trimWhitespace</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 * </p>
 	 */

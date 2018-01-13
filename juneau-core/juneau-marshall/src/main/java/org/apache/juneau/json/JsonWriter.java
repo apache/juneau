@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
  */
 public final class JsonWriter extends SerializerWriter {
 
-	private final boolean laxMode, escapeSolidus;
+	private final boolean simpleMode, escapeSolidus;
 
 	// Characters that trigger special handling of serializing attribute values.
 	private static final AsciiSet
@@ -61,14 +61,14 @@ public final class JsonWriter extends SerializerWriter {
 	 * @param maxIndent The maximum indentation level.
 	 * @param escapeSolidus If <jk>true</jk>, forward slashes should be escaped in the output.
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
-	 * @param laxMode If <jk>true</jk>, JSON attributes will only be quoted when necessary.
+	 * @param simpleMode If <jk>true</jk>, JSON attributes will only be quoted when necessary.
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
 	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar,
-			boolean laxMode, boolean trimStrings, UriResolver uriResolver) {
+			boolean simpleMode, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
-		this.laxMode = laxMode;
+		this.simpleMode = simpleMode;
 		this.escapeSolidus = escapeSolidus;
 		this.ec = escapeSolidus ? encodedChars2 : encodedChars;
 	}
@@ -130,10 +130,10 @@ public final class JsonWriter extends SerializerWriter {
 	public JsonWriter attr(String s) throws IOException {
 		/*
 		 * Converts a Java string to an acceptable JSON attribute name. If
-		 * useStrictJson is false, then quotes will only be used if the attribute
+		 * simpleMode is true, then quotes will only be used if the attribute
 		 * name consists of only alphanumeric characters.
 		 */
-		boolean doConvert = trimStrings || ! laxMode;		// Always convert when not in lax mode.
+		boolean doConvert = trimStrings || ! simpleMode;		// Always convert when not in lax mode.
 
 		// If the attribute is null, it must always be printed as null without quotes.
 		// Technically, this isn't part of the JSON spec, but it does allow for null key values.

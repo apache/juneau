@@ -33,7 +33,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testJson() throws Exception {
-		JsonSerializer s = JsonSerializer.create().simple().pojoSwaps(ReaderSwap.Json.class).build();
+		JsonSerializer s = JsonSerializer.create().ssq().pojoSwaps(ReaderSwap.Json.class).build();
 
 		Reader r;
 		Map<String,Object> m;

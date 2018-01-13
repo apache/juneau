@@ -593,13 +593,13 @@ public class UriResolutionTest {
 
 	@Test
 	public void a1_testJsonSerialize() throws Exception {
-		Serializer s = JsonSerializer.create().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.json);
 	}
 
 	@Test
 	public void a2_testJsonParse() throws Exception {
-		Serializer s = JsonSerializer.create().simple().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, JsonParser.DEFAULT);
 	}
 

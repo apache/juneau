@@ -216,7 +216,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingAnnotation() throws Exception {
-		JsonSerializer js = JsonSerializer.create().simple().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		JsonSerializer js = JsonSerializer.create().ssq().pojoSwaps(XMLGregorianCalendarSwap.class).build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
@@ -289,7 +289,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().simple().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		JsonSerializer js = JsonSerializer.create().ssq().pojoSwaps(XMLGregorianCalendarSwap.class).build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
@@ -493,7 +493,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPropertiesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().simple().beanFilters(D2Filter.class).build();
+		JsonSerializer js = JsonSerializer.create().ssq().beanFilters(D2Filter.class).build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())

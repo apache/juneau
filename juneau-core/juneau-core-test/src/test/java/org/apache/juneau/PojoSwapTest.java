@@ -29,7 +29,7 @@ public class PojoSwapTest {
 	//====================================================================================================
 	@Test
 	public void testSameType() throws Exception {
-		JsonSerializer s = JsonSerializer.create().simple().pojoSwaps(ASwap.class).build();
+		JsonSerializer s = JsonSerializer.create().ssq().pojoSwaps(ASwap.class).build();
 		JsonParser p = JsonParser.create().pojoSwaps(ASwap.class).build();
 		String r;
 

@@ -110,7 +110,10 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Shortcut for calling <code>simple(<jk>true</jk>).sq()</code>.
+	 * Configuration property:  Simple JSON mode.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -120,9 +123,27 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public JsonSerializerBuilder simple() {
-		return simple(true).sq();
+		return simple(true);
 	}
 
+	/**
+	 * Configuration property:  Simple JSON mode and single quote.
+	 * 
+	 * <p>
+	 * Shortcut for calling <code>simple().sq()</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
+	 * 	<li class='jf'>{@link JsonSerializer#SERIALIZER_quoteChar}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public JsonSerializerBuilder ssq() {
+		return simple().sq();
+	}
+	
 	@Override /* SerializerBuilder */
 	public JsonSerializerBuilder abridged(boolean value) {
 		super.abridged(value);

@@ -667,7 +667,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testParseISO8601Date() throws Exception {
-		WriterSerializer s = JsonSerializer.create().simple().pojoSwaps(DateSwap.ISO8601DTPZ.class).timeZone(TimeZone.getTimeZone("GMT")).build();
+		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(DateSwap.ISO8601DTPZ.class).timeZone(TimeZone.getTimeZone("GMT")).build();
 
 		assertNull(parseISO8601Date(null));
 		assertNull(parseISO8601Date(""));

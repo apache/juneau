@@ -75,7 +75,7 @@ public class PojoQueryTest {
 	@Test
 	public void testFilterCollectionDateSearchOneLevel() throws Exception {
 		BeanSession session = BeanContext.DEFAULT.createSession();
-		WriterSerializer s = JsonSerializer.create().simple().pojoSwaps(CalendarSwap.DateTimeSimple.class).build();
+		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(CalendarSwap.DateTimeSimple.class).build();
 		B[] in;
 		PojoQuery q;
 		SearchArgs sa;
@@ -360,7 +360,7 @@ public class PojoQueryTest {
 	@Test
 	public void testSorting() throws Exception {
 		BeanSession session = BeanContext.DEFAULT.createSession();
-		WriterSerializer s = JsonSerializer.create().simple().pojoSwaps(CalendarSwap.DateTimeSimple.class).build();
+		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(CalendarSwap.DateTimeSimple.class).build();
 		SearchArgs sa;
 		List results;
 

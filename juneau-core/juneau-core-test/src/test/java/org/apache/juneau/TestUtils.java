@@ -41,12 +41,12 @@ import org.xml.sax.*;
 public class TestUtils {
 
 	private static JsonSerializer js = JsonSerializer.create()
-		.simple()
+		.ssq()
 		.trimNullProperties(false)
 		.build();
 
 	private static JsonSerializer jsSorted = JsonSerializer.create()
-		.simple()
+		.ssq()
 		.sortCollections()
 		.sortMaps()
 		.trimNullProperties(false)
@@ -54,12 +54,12 @@ public class TestUtils {
 
 
 	private static JsonSerializer js2 = JsonSerializer.create()
-		.simple()
+		.ssq()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.build();
 
 	private static JsonSerializer js3 = JsonSerializer.create()
-		.simple()
+		.ssq()
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
 		.build();

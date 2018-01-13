@@ -73,6 +73,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
+	@Override /* JsonSerializerBuilder */
+	public JsonSchemaSerializerBuilder ssq() {
+		super.ssq();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
