@@ -57,7 +57,7 @@ public @interface BeanProperty {
 	 * beans.
 	 *
 	 * <p>
-	 *	The following examples show how to define dynamic bean properties.
+	 * The following examples show how to define dynamic bean properties.
 	 * <p class='bcode'>
 	 * 	<jc>// Option #1 - A simple public Map field.
 	 * 	// The field name can be anything.</jc>

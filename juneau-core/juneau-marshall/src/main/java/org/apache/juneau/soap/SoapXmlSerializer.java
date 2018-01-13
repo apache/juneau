@@ -41,7 +41,7 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	/**
 	 * Configuration property:  The <code>SOAPAction</code> HTTP header value to set on responses.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"SoapXmlSerializer.SOAPAction.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>

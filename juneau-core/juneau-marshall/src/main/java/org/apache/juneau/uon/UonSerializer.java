@@ -125,7 +125,7 @@ public class UonSerializer extends WriterSerializer {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -137,7 +137,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
@@ -154,7 +154,7 @@ public class UonSerializer extends WriterSerializer {
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -167,7 +167,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 *
@@ -181,7 +181,7 @@ public class UonSerializer extends WriterSerializer {
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.paramFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link ParamFormat})
@@ -194,7 +194,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 */

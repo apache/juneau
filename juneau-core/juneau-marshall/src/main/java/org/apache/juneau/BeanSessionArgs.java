@@ -26,31 +26,81 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	public static final BeanSessionArgs DEFAULT = new BeanSessionArgs(ObjectMap.EMPTY_MAP, null, null, null);
 
-	final Locale locale;
-	final TimeZone timeZone;
-	final MediaType mediaType;
+	Locale locale;
+	TimeZone timeZone;
+	MediaType mediaType;
 
+	/**
+	 * Constructor
+	 */
+	public BeanSessionArgs() {}
+	
 	/**
 	 * Constructor.
 	 *
 	 * @param properties
 	 * 	Session-level properties.
-	 * 	These override context-level properties.
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>These override context-level properties.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param locale
 	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone
 	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public BeanSessionArgs(ObjectMap properties, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(properties);
 		this.locale = locale;
 		this.timeZone = timeZone;
 		this.mediaType = mediaType;
+	}
+	
+	/**
+	 * The session locale.
+	 *
+	 * @param locale
+	 * 	The session locale.
+	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+	 * @return This object (for method chaining).
+	 */
+	public BeanSessionArgs locale(Locale locale) {
+		this.locale = locale;
+		return this;
+	}
+	
+	/**
+	 * The session timezone.
+	 *
+	 * @param timeZone
+	 * 	The session timezone.
+	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @return This object (for method chaining).
+	 */
+	public BeanSessionArgs timeZone(TimeZone timeZone) {
+		this.timeZone = timeZone;
+		return this;
+	}
+	
+	/**
+	 * The session media type.
+	 *
+	 * @param mediaType
+	 * 	The session media type (e.g. <js>"application/json"</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public BeanSessionArgs mediaType(MediaType mediaType) {
+		this.mediaType = mediaType;
+		return this;
+	}
+	
+	@Override /* SessionArgs */
+	public BeanSessionArgs properties(ObjectMap properties) {
+		super.properties(properties);
+		return this;
 	}
 }

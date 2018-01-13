@@ -87,18 +87,18 @@ public class PropertyFilter {
 	 * <p>
 	 * Subclasses can override this property to convert property values to some other object just before serialization.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
-	 *		<jc>// Address filter that strips out sensitive information.</jc>
-	 *		<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Address filter that strips out sensitive information.</jc>
+	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
 	 *
-	 *			<jk>public</jk> Object readProperty(Object bean, String name, Object value) {
-	 *				<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
-	 *					<jk>return</jk> <js>"redacted"</js>;
-	 *				<jk>return</jk> value;
-	 *			}
-	 *		}
-	 *	</p>	
+	 * 		<jk>public</jk> Object readProperty(Object bean, String name, Object value) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
+	 * 				<jk>return</jk> <js>"redacted"</js>;
+	 * 			<jk>return</jk> value;
+	 * 		}
+	 * 	}
+	 * </p>	
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
@@ -116,19 +116,19 @@ public class PropertyFilter {
 	 * Subclasses can override this property to convert property values to some other object just before calling the
 	 * bean setter.
 	 *
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
-	 *		<jc>// Address filter that strips out sensitive information.</jc>
-	 *		<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Address filter that strips out sensitive information.</jc>
+	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
 	 *
-	 *			<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
-	 *				AddressBook a = (Address)bean;
-	 *				<jk>if</jk> (<js>"taxInfo"</js>.equals(name) && <js>"redacted"</js>.equals(value))
-	 *					<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
-	 *				<jk>return</jk> value;
-	 *			}
-	 *		}
-	 *	</p>	
+	 * 		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
+	 * 			AddressBook a = (Address)bean;
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) && <js>"redacted"</js>.equals(value))
+	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
+	 * 			<jk>return</jk> value;
+	 * 		}
+	 * 	}
+	 * </p>	
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.

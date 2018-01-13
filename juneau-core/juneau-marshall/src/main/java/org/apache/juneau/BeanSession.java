@@ -248,7 +248,7 @@ public class BeanSession extends Session {
 	 * 			<br>{@code List<X[]>}
 	 * 			<br>{@code List[]<X>}
 	 * 		</td>
-	 *			<td>&nbsp;</td>
+	 * 		<td>&nbsp;</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
@@ -293,7 +293,7 @@ public class BeanSession extends Session {
 	 * 			<br>
 	 * 		</td>
 	 * 	</tr>
-	 *	</table>
+	 * </table>
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to be converted.

@@ -153,7 +153,7 @@ public @interface RestResource {
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
 
 	/**
-	 *	Children.
+	 * Children.
 	 *
 	 * <p>
 	 * Defines children of this resource.

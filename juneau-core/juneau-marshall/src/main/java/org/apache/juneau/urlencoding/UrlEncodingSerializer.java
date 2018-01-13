@@ -120,7 +120,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.expandedParams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -133,7 +133,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.

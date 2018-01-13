@@ -73,7 +73,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Debug.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -84,7 +84,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Enable debug mode.
 	 */
@@ -93,7 +93,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Executor service.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
@@ -104,8 +104,8 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 *	<p>
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
 	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
 	 *
 	 * <p>
@@ -126,7 +126,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Shut down executor service on close.</b>  
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorServiceShutdownOnClose.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -137,7 +137,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 	 */
@@ -146,7 +146,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Request headers.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeader.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
@@ -158,7 +158,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Headers to add to every request.
 	 */
@@ -167,7 +167,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Call interceptors.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor | RestCallInterceptor</code>&gt;</code>
@@ -178,8 +178,8 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 *	<p>
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
 	 * Interceptors that get called immediately after a connection is made.
 	 */
 	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.lo";
@@ -192,7 +192,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Keep HttpClient open.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -203,7 +203,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
 	 */
@@ -212,7 +212,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Parser.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
@@ -224,7 +224,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The parser to use for parsing POJOs in response bodies.
 	 */
@@ -233,7 +233,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Part serializer.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.urlEncodingSerializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
@@ -245,7 +245,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
 	 */
@@ -254,7 +254,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Request query parameters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
@@ -265,7 +265,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Query parameters to add to every request.
 	 */
@@ -274,7 +274,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Number of retries to attempt.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retries.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
@@ -285,7 +285,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The number of retries to attempt when the connection cannot be made or a <code>&gt;400</code> response is received.
 	 */
@@ -294,7 +294,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  The time in milliseconds between retry attempts.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryInterval.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
@@ -305,7 +305,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The time in milliseconds between retry attempts.
 	 * <code>-1</code> means retry immediately.
@@ -315,7 +315,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Retry-on determination object.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryOn.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends {@link RetryOn}</code> or {@link RetryOn}
@@ -326,7 +326,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Object used for determining whether a retry should be attempted.
 	 */
@@ -335,7 +335,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Root URI.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.rootUri.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -346,7 +346,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#doGet(Object)}
 	 * will be prefixed with the specified root.
@@ -358,7 +358,7 @@ public class RestClient extends BeanContext {
 	/**
 	 * Configuration property:  Serializer.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.serializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Serializer&gt;</code> or {@link Serializer}.
@@ -370,7 +370,7 @@ public class RestClient extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The serializer to use for serializing POJOs in request bodies.
 	 */

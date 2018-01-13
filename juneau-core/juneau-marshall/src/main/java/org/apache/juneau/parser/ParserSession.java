@@ -747,4 +747,24 @@ public abstract class ParserSession extends BeanSession {
 				m.set(o, name);
 		}
 	}
+	
+	/**
+	 * Returns the listener associated with this session.
+	 * 
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
+	 */
+	public ParserListener getListener() {
+		return listener;
+	}
+
+	/**
+	 * Returns the listener associated with this session.
+	 * 
+	 * @param c The listener class to cast to. 
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ParserListener> T getListener(Class<T> c) {
+		return (T)listener;
+	}
 }

@@ -134,7 +134,7 @@ public class HtmlSerializer extends XmlSerializer {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -146,7 +146,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
@@ -163,7 +163,7 @@ public class HtmlSerializer extends XmlSerializer {
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -185,7 +185,7 @@ public class HtmlSerializer extends XmlSerializer {
 	/**
 	 * Configuration property:  Look for URLs in {@link String Strings}.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -197,7 +197,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
@@ -207,7 +207,7 @@ public class HtmlSerializer extends XmlSerializer {
 	/**
 	 * Configuration property:  The parameter name to use when using {@link #HTML_lookForLabelParameters}.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -224,7 +224,7 @@ public class HtmlSerializer extends XmlSerializer {
 	/**
 	 * Configuration property:  Look for link labels in the <js>"label"</js> parameter of the URL.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.lookForLabelParameters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -236,7 +236,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
@@ -248,7 +248,7 @@ public class HtmlSerializer extends XmlSerializer {
 	/**
 	 * Configuration property:  Anchor text source.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link AnchorText})
@@ -264,7 +264,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.

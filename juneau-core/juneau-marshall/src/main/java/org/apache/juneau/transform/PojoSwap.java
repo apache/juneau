@@ -152,9 +152,9 @@ public abstract class PojoSwap<T,S> {
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap.mediaTypes()} annotation.
 	 *
 	 * <h6 class='topic'>Documentation</h6>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
-	 *	</ul>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
+	 * </ul>
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
 	 */
 	public MediaType[] forMediaTypes() {
@@ -173,10 +173,10 @@ public abstract class PojoSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap.template()} annotation.
 	 *
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
+	 * </ul>
 	 *
 	 * @return Additional context information, or <jk>null</jk> if not specified.
 	 */
@@ -188,9 +188,9 @@ public abstract class PojoSwap<T,S> {
 	 * Sets the media types that this swap is associated with.
 	 *
 	 * <h6 class='topic'>Documentation</h6>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
-	 *	</ul>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
+	 * </ul>
 	 *
 	 * @param mediaTypes The media types that this swap is associated with.
 	 * @return This object (for method chaining).
@@ -203,10 +203,10 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * Sets the template string on this swap.
 	 *
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.TemplatedSwaps">Overview &gt; Templated Swaps</a>
+	 * </ul>
 	 *
 	 * @param template The template string on this swap.
 	 * @return This object (for method chaining).

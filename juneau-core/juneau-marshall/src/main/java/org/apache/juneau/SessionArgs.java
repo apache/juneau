@@ -22,17 +22,37 @@ public class SessionArgs {
 	 */
 	public static final SessionArgs DEFAULT = new SessionArgs(ObjectMap.EMPTY_MAP);
 	
-	final ObjectMap properties;
+	ObjectMap properties;
+
+	/**
+	 * Constructor.
+	 */
+	public SessionArgs() {}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param properties
 	 * 	Session-level properties.
-	 * 	These override context-level properties.
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>These override context-level properties.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public SessionArgs(ObjectMap properties) {
 		this.properties = properties != null ? properties : ObjectMap.EMPTY_MAP;
 	}
+
+	/**
+	 * Session-level properties.
+	 * 
+	 * @param properties
+	 * 	Session-level properties.
+	 * 	<br>These override context-level properties.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SessionArgs properties(ObjectMap properties) {
+		this.properties = properties != null ? properties : ObjectMap.EMPTY_MAP;
+		return this;
+	}
+	
 }

@@ -105,11 +105,11 @@
 				<li><p><a class='doclink' href='#juneau-marshall.BeanIgnoreAnnotation'>@BeanIgnore Annotation</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.NamePropertyAnnotation'>@NameProperty Annotation</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.ParentPropertyAnnotation'>@ParentProperty Annotation</a></p>
-				<li><p><a class='doclink' href='#juneau-marshall.URIAnnotation'>@URI Annotation</a></p>
+				<li><p><a class='doclink' href='#juneau-marshall.URIs'>URIs</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.BeanFilters'>BeanFilters</a></p>
+				<li><p><a class='doclink' href='#juneau-marshall.InterfaceFilters'>Interface filters</a></p>
 				<li><p><a class='doclink' href='#juneau-marshall.StopClasses'>Stop Classes</a></p>
-				<li><p><a class='doclink' href='#juneau-marshall.SerializingToObjectMaps'>Serializing to ObjectMaps</a></p>
-				<li><p><a class='doclink' href='#juneau-marshall.SerializingReadersAndInputStreams'>Serializing Readers and InputStreams</a></p>
+				<li><p><a class='doclink' href='#juneau-marshall.BypassSerialization'>Bypass Serialization using Readers and InputStreams</a></p>
 			</ol>
 			<li><p><a class='doclink' href='#juneau-marshall.BeanDictionaries'>Bean Name and Dictionaries</a></p>
 			<ol>
@@ -2283,31 +2283,109 @@
 			</div>
 
 			<!-- =================================================================================================== -->
-			<a id="juneau-marshall.URIAnnotation"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.14 - @URI Annotation</h4>
+			<a id="juneau-marshall.URIs"></a>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.14 - URIs</h4>
 			<div class='topic'>
 				<p>
-					The {@link org.apache.juneau.annotation.URI @URI} annotation is used to identify a class or bean 
-					property as a URI.
+					Juneau serializers have sophisticated support for transforming relative URIs to absolute form.
 				</p>
 				<p>
-					By default, instances of {@link java.net.URL} and {@link java.net.URI} are considered URIs during serialization and 
-					are handled differently depending on the serializer (e.g. <code>HtmlSerializer</code> creates a 
-					hyperlink, <code>RdfXmlSerializer</code> creates an <code>rdf:resource</code> object, etc...).
-					<br>This annotation allows you to identify other classes that return URIs via <code>toString()</code> 
-					as URI objects.
+					The following example shows a bean containing URIs of various forms and how they end up serialized. 
+				</p>
+				<p class='bcode'>
+	<jc>// Our bean with properties containing various kinds of URIs.</jc>
+	<jk>public class</jk> TestURIs {
+		<jk>public</jk> URI
+			<jf>f1a</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/f1a"</js>),
+			<jf>f1b</jf> = URI.<jsm>create</jsm>(<js>"/f1b"</js>),
+			<jf>f1c</jf> = URI.<jsm>create</jsm>(<js>"/f1c/x/y"</js>),
+			<jf>f1d</jf> = URI.<jsm>create</jsm>(<js>"f1d"</js>),
+			<jf>f1e</jf> = URI.<jsm>create</jsm>(<js>"f1e/x/y"</js>),
+			<jf>f1f</jf> = URI.<jsm>create</jsm>(<js>""</js>),
+			<jf>f2a</jf> = URI.<jsm>create</jsm>(<js>"context:/f2a/x"</js>),
+			<jf>f2b</jf> = URI.<jsm>create</jsm>(<js>"context:/f2b"</js>),
+			<jf>f2c</jf> = URI.<jsm>create</jsm>(<js>"context:/"</js>),
+			<jf>f2d</jf> = URI.<jsm>create</jsm>(<js>"context:/.."</js>),
+			<jf>f3a</jf> = URI.<jsm>create</jsm>(<js>"servlet:/f3a/x"</js>),
+			<jf>f3b</jf> = URI.<jsm>create</jsm>(<js>"servlet:/f3b"</js>),
+			<jf>f3c</jf> = URI.<jsm>create</jsm>(<js>"servlet:/"</js>),
+			<jf>f3d</jf> = URI.<jsm>create</jsm>(<js>"servlet:/.."</js>),
+			<jf>f4a</jf> = URI.<jsm>create</jsm>(<js>"request:/f4a/x"</js>),
+			<jf>f4b</jf> = URI.<jsm>create</jsm>(<js>"request:/f4b"</js>),
+			<jf>f4c</jf> = URI.<jsm>create</jsm>(<js>"request:/"</js>),
+			<jf>f4d</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>),
+			<jf>f5 </jf> = <jk>null</jk>;
+	}	
+	
+	<jc>// Create a serializer.</jc>
+	WriterSerializer s = JsonSerializer
+		<jsm>create</jsm>()
+		.simple()
+		.uriContext(<js>"{authority:'http://foo.com:123',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/myPath'}"</js>)
+		.uriResolution(<jsf>ABSOLUTE</jsf>)
+		.uriRelativity(<jsf>RESOURCE</jsf>)
+		.build();
+		
+	<jc>// Produces:</jc>
+	<jc>// {</jc>
+	<jc>//	f1a:'http://www.apache.org/f1a',</jc>
+	<jc>//	f1b:'http://foo.com:123/f1b',</jc>
+	<jc>//	f1c:'http://foo.com:123/f1c/x/y',</jc>
+	<jc>//	f1d:'http://foo.com:123/myContext/myServlet/f1d',</jc>
+	<jc>//	f1e:'http://foo.com:123/myContext/myServlet/f1e/x/y',</jc>
+	<jc>//	f1f:'http://foo.com:123/myContext/myServlet',</jc>
+	<jc>//	f2a:'http://foo.com:123/myContext/f2a/x',</jc>
+	<jc>//	f2b:'http://foo.com:123/myContext/f2b',</jc>
+	<jc>//	f2c:'http://foo.com:123/myContext',</jc>
+	<jc>//	f2d:'http://foo.com:123'</jc>
+	<jc>//	f3a:'http://foo.com:123/myContext/myServlet/f3a/x',</jc>
+	<jc>//	f3b:'http://foo.com:123/myContext/myServlet/f3b',</jc>
+	<jc>//	f3c:'http://foo.com:123/myContext/myServlet',</jc>
+	<jc>//	f3d:'http://foo.com:123/myContext',</jc>
+	<jc>//	f4a:'http://foo.com:123/myContext/myServlet/myPath/f4a/x',</jc>
+	<jc>//	f4b:'http://foo.com:123/myContext/myServlet/myPath/f4b',</jc>
+	<jc>//	f4c:'http://foo.com:123/myContext/myServlet/myPath',</jc>
+	<jc>//	f4d:'http://foo.com:123/myContext/myServlet',</jc>
+	<jc>// }</jc>
+	String json = s.serialize(<jk>new</jk> TestURIs());
 				</p>
 				<p>
-					URIs are automatically resolved to absolute or root-relative form based on the serializer
-					{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution} and 
-					{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}
-					configuration settings, and the URI context defined by the {@link org.apache.juneau.UriContext} that's part of the 
-					serializer session.
-					<br>Refer to the {@link org.apache.juneau.UriResolver} class for information about the types of URIs that can be 
-					resolved during serialization.
+					URI resolution is controlled by the following settings:
 				</p>
+				<ul class='doctree'>
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
+						<br>Setting that defines the URI contextual information used to resolve relative URIs.
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}
+						<br>Setting that defines how relative URIs should be interpreted.
+						<br>Possible values:
+						<ul>
+							<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
+								<br>Relative URIs should be considered relative to the servlet URI.
+								<br>(e.g. <js>"http://host:port/context-root/servlet-path"</js>).
+							<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
+								<br>Relative URIs should be considered relative to the request URI.
+								<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+						</ul>
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution}
+						<br>Setting that defines the final format of serialized URIs.
+						<br>Possible values:
+						<ul>
+							<li class='jf'>{@link org.apache.juneau.UriResolution#ABSOLUTE}
+								<br>Resolve to an absolute URL.
+								<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+							<li class='jf'>{@link org.apache.juneau.UriResolution#ROOT_RELATIVE}
+								<br>Resolve to a root-relative URL.
+								<br>(e.g. <js>"/context-root/servlet-path/path-info"</js>).
+							<li class='jf'>{@link org.apache.juneau.UriResolution#NONE}
+								<br>Don't do any URL resolution.
+						</ul>
+				</ul>
 				<p>
-					This annotation can be applied to classes, interfaces, or bean property methods for fields.
+					Juneau automatically interprets any {@link java.net.URL} and {@link java.net.URI} objects as URIs and will
+					resolve them accordingly.
+					<br>The {@link org.apache.juneau.annotation.URI @URI} annotation can be used to extend that to other bean 
+					properties and class types so that they also get interpreted as URIs.
+					<br>For example:
 				</p>
 				<p class='bcode'>
 	<jc>// Applied to a class whose toString() method returns a URI.</jc>
@@ -2423,133 +2501,163 @@
 			</div>
 
 			<!-- =================================================================================================== -->
-			<a id="juneau-marshall.StopClasses"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.16 - Stop Classes</h4>
+			<a id="juneau-marshall.InterfaceFilters"></a>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.16 - Interface Filters</h4>
 			<div class='topic'>
 				<p>
 					Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
-					<br>There are a couple of ways of doing this.
+					<br>This is accomplished through interface filters.
 				</p>
 				<p>
-					For example, let's define the following parent class and subclass:
+					Interface filters are defined through the following:
+				</p>
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters}
+					<li class='ja'>{@link org.apache.juneau.annotation.Bean#interfaceClass() @Bean.interfaceClass()}
+					<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#interfaceClass(Class)}
+				</ul>
+				<p>
+					For example, let's define the following interface and implementation:
 				</p>
 				<p class='bcode'>
-	<jc>// Abstract parent class</jc>
-	<jk>public abstract class</jk> MyClass {
-		<jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
+	<jc>// Interface</jc>
+	<jk>public class</jk> MyInterface {
+		<jk>public</jk> String getFoo();
 	}
 
-	<jc>// Subclass</jc>
-	<jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
-		<jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
+	<jc>// Implementation</jc>
+	<jk>public class</jk> MyInterfaceImpl <jk>implements</jk> MyInterface {
+		<jk>public</jk> String getFoo() {...}
+		<jk>public</jk> String getBar() {...}
 	}
 				</p>
 				<p>
-					Suppose we only want to render the properties defined on <code>MyClass</code>, not those defined on 
-					child classes. 
+					Suppose we only want to render the properties defined on our interface, not the implementation. 
 					<br>To do so, we can define the following bean filter:
 				</p>
 				<p class='bcode'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
-	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;MyClass&gt; {
-		<jk>public</jk> MyBeanFilter() {
-			interfaceClass(MyClass.<jk>class</jk>);
+	<jk>public class</jk> MyInterfaceFilter <jk>extends</jk> BeanFilter&lt;MyInterface&gt; {
+		<jk>public</jk> MyInterfaceFilter() {
+			interfaceClass(MyInterface.<jk>class</jk>);
 		}
 	}
 				</p>
 				<p>
-					When serialized, the serialized bean will only include properties defined on the parent class.
+					When serialized, the serialized bean will only include properties defined on the interface.
 				</p>
 				<p class='bcode'>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()
 		.simple()
-		.beanFilters(MyBeanFilter.<jk>class</jk>)
+		.beanFilters(MyInterfaceFilter.<jk>class</jk>)
 		.build();
 		
-	MyClass c = <jk>new</jk> MyClassBar();
-	String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
+	MyInterface o = <jk>new</jk> MyInterfaceImpl();
+	
+	<jc>// Prints "{foo:'foo'}"</jc>
+	<jc>// bar is ignored because it's not on the interface</jc>
+	String json = s.serialize(o);  
 				</p>	
 				<p>
-					The equivalent can be done through an annotation on the parent class, which applies to all child classes:
-				</p>
-				<p class='bcode'>
-	<jc>// All subclasses of MyClass should only show the 'foo' property.</jc>
-	<ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
-	<jk>public abstract class</jk> MyClass {
-		<jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
-	}
-				</p>
-				<p>
-					The annotation can also be applied on the individual child classes, like so...
-				</p>
-				<p class='bcode'>
-	<jc>// Only serialize 'foo' property from parent class.</jc>
-	<ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
-	<jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
-		<jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
-	}
-				</p>
-				<p>
-					Also, the <code>beanFilters()</code> methods will automatically interpret any non-<code>BeanFilter</code> 
-					classes passed in as meaning interface classes. 
+					The {@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
+					non-<code>BeanFilter</code> classes passed in as meaning interface classes. 
 					<br>So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
-					passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
+					passing in <code>MyInterface.<jk>class</jk></code> to the serializer, like so:
 				</p>
 				<p class='bcode'>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()
-		.beanFilters(MyClass.<jk>class</jk>)  <jc>Shortcut!</jc>
+		.beanFilters(MyInterface.<jk>class</jk>)  <jc>Shortcut!</jc>
 		.build();
 				</p>
 				<p>
-					The {@link org.apache.juneau.transform.BeanFilterBuilder#stopClass(Class)} method and 
-					{@link org.apache.juneau.annotation.Bean#stopClass() @Bean.stopClass()} annotation are equivalent,
-					but filters from the other direction.
-					<br>(i.e. filter out properties found on parent classes and interfaces)
+					The annotation equivalent is {@link org.apache.juneau.annotation.Bean#interfaceClass() Bean#interfaceClass()}.
+				</p>
+				<p class='bcode'>
+	<ja>@Bean</ja>(interfaceClass=MyInterface.<jk>class</jk>)
+	<jk>public class</jk> MyInterfaceImpl <jk>implements</jk> MyInterface {
+		<jk>public</jk> String getFoo() {...}
+		<jk>public</jk> String getBar() {...}
+	}
+				</p>
+				<p>
+					The annotation can be used in a couple of ways.
+				</p>
+				<p>
+					Using the annotation on an interface will be inherited by all children.
+				</p>
+				<p class='bcode'>
+	<ja>@Bean</ja>(interfaceClass=MyInterface.<jk>class</jk>)
+	<jk>public class</jk> MyInterface {
+		<jk>public</jk> String getFoo();
+	}
+				</p>
+				<p>
+					The annotation can be used on parent classes as well.
+					<br>Child beans will only serialize properties defined on the parent class.
+				<p class='bcode'>
+	<ja>@Bean</ja>(interfaceClass=MyAbstractClass.<jk>class</jk>)
+	<jk>public abstract class</jk> MyAbstractClass {
+		<jk>public</jk> String getFoo() {...};
+	}
+				</p>
 			</div>
-
+			
 			<!-- =================================================================================================== -->
-			<a id="juneau-marshall.SerializingToObjectMaps"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.17 - Serializing to ObjectMaps</h4>
+			<a id="juneau-marshall.StopClasses"></a>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.17 - Stop Classes</h4>
 			<div class='topic'>
 				<p>
-					A shortcut method for transforming is provided that can often be simpler than defining transforms.
-					In this case, we add methods to our class to serialize to {@link org.apache.juneau.ObjectMap ObjectMaps}
+					Whereas interface filters limit properties defined on child classes, stop filters 
+					do the opposite and limit properties defined on parent classes.
 				</p>
 				<p>
+					Stop classes are defined through the following:
+				</p>
+				<ul>
+					<li class='ja'>{@link org.apache.juneau.annotation.Bean#stopClass() @Bean.stopClass()}
+					<li class='jf'>{@link org.apache.juneau.transform.BeanFilterBuilder#stopClass(Class)}
+				</ul>
+				<p>
+					Stop classes are identical in purpose to the stop class specified by {@link java.beans.Introspector#getBeanInfo(Class, Class)}.
+					<br>Any properties in the stop class or in its base classes will be ignored during serialization.
+				</p>
+				<p>
+					For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
+					but not <code>p1</code> or <code>p2</code>.
+				</p>
 				<p class='bcode'>
-	<jk>public class</jk> MyClass {
-		<jk>private</jk> String <jf>f1</jf>;
-		
-		<jc>// Constructor that takes in an ObjectMap</jc>
-		<jk>public</jk> MyClass(ObjectMap m) {
-			<jf>f1</jf> = m.getString(<js>"f1"</js>);
-		}
-		
-		<jc>// Method that converts object to an ObjectMap</jc>
-		<jk>public</jk> ObjectMap toObjectMap() {
-			<jk>return new</jk> ObjectMap().append(<js>"f1"</js>, <jf>f1</jf>);
-		}
-				</p>
-				<p>
-					The <code>toObjectMap()</code> method will automatically be used during serialization, and 
-					the constructor will automatically be used during parsing.
-					This will work for all serializers and parsers.
+	<jk>public class</jk> C1 {
+		<jk>public int</jk> getP1();
+	}
+
+	<jk>public class</jk> C2 <jk>extends</jk> C1 {
+		<jk>public int</jk> getP2();
+	}
+
+	<ja>@Bean</ja>(stopClass=C2.<jk>class</jk>)
+	<jk>public class</jk> C3 <jk>extends</jk> C2 {
+		<jk>public int</jk> getP3();
+	}
+	
+	<jc>// Serializes property 'p3', but NOT 'p1' or 'p2'.</jc>
+	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> C3());
 				</p>
 			</div>
 
 			<!-- =================================================================================================== -->
-			<a id="juneau-marshall.SerializingReadersAndInputStreams"></a>
-			<h4 class='topic' onclick='toggle(this)'>2.1.7.18 - Serializing Readers and InputStreams</h4>
+			<a id="juneau-marshall.BypassSerialization"></a>
+			<h4 class='topic' onclick='toggle(this)'>2.1.7.18 - Bypass Serialization using Readers and InputStreams</h4>
 			<div class='topic'>
 				<p>
 					Juneau serializers treat instances of <code>Readers</code> and <code>InputStreams</code> special by 
 					simply serializing their contents directly to the output stream or writer.
-					This allows you to embed fully customized serializer output.
+					<br>This allows you to embed fully customized serializer output.
 				</p>
 				<p class='bcode'>
 	<jk>public class</jk> MyBean {
+		<jc>// A bean property that produces raw JSON.</jc>
 		<jk>public</jk> Reader f1 = <jk>new</jk> StringReader(<js>"{'foo':'bar'}"</js>);	
 	}	
 	
@@ -2570,6 +2678,8 @@
 	<ja>@Swap</ja>(MyBeanSwapSometimes.<jk>class</jk>)
 	<jk>public class</jk> MyBean {...}
 	
+	<jc>// A swap that produces specialized output for JSON, but default serialization for</jc>
+	<jc>// all other media types.</jc>
 	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> PojoSwap&lt;MyBean,Object&gt; {
 		<jk>public</jk> Object swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
 			MediaType mt = session.getMediaType();
@@ -9028,14 +9138,27 @@
 				Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
 			<li>	
 				<code>ContextBuilder.property(String,Object)</code> renamed to {@link org.apache.juneau.ContextBuilder#set(String,Object)}.
-			<li><code>ResourceFinder</code> class has been replaced with the following:
+			<li>
+				<code>ResourceFinder</code> class has been replaced with the following:
 				<ul>
 					<li>{@link org.apache.juneau.utils.ClasspathResourceFinder}
 					<li>{@link org.apache.juneau.utils.ClasspathResourceFinderSimple}
 					<li>{@link org.apache.juneau.utils.ClasspathResourceFinderBasic}
 					<li>{@link org.apache.juneau.utils.ClasspathResourceFinderRecursive}
 					<li>{@link org.apache.juneau.utils.ClasspathResourceManager}
-				</ul>	
+				</ul>
+			<li>
+				New methods on {@link org.apache.juneau.serializer.SerializerSession}:
+				<ul>
+					<li>{@link org.apache.juneau.serializer.SerializerSession#getListener() getListener()}
+					<li>{@link org.apache.juneau.serializer.SerializerSession#getListener(Class) getListener(Class)}
+				</ul>
+			<li>
+				New methods on {@link org.apache.juneau.parser.ParserSession}:
+				<ul>
+					<li>{@link org.apache.juneau.parser.ParserSession#getListener() getListener()}
+					<li>{@link org.apache.juneau.parser.ParserSession#getListener(Class) getListener(Class)}
+				</ul>
 		</ul>
 
 		<h6 class='topic'>juneau-rest-server</h6>

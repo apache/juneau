@@ -151,7 +151,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Minimum bean class visibility.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
@@ -163,7 +163,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 * 
@@ -172,8 +172,8 @@ public class BeanContext extends Context {
 	 * will not be interpreted as a bean class and be serialized as a string.
 	 * <br>Use this setting to reduce the visibility requirement.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that serializes protected classes.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -185,14 +185,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beanClassVisibility</jsf>, <js>"PROTECTED"</js>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beanClassVisibility = PREFIX + "beanClassVisibility.s";
 
 	/**
 	 * Configuration property:  Minimum bean constructor visibility.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
@@ -204,7 +204,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Only look for constructors with the specified minimum visibility.
 	 * 
@@ -213,8 +213,8 @@ public class BeanContext extends Context {
 	 * <br>Normally, only <jk>public</jk> no-arg constructors are used.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that looks for protected no-arg constructors.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -226,14 +226,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beanConstructorVisibility</jsf>, <js>"PROTECTED"</js>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility.s";
 
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
@@ -254,7 +254,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The list of classes that make up the bean dictionary in this bean context.
 	 * 
@@ -270,15 +270,15 @@ public class BeanContext extends Context {
 	 * 
 	 * <p>
 	 * Values can consist of any of the following types:
-	 *	<ul>
+	 * <ul>
 	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
 	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -304,10 +304,10 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 * 
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; Bean Names and Dictionaries</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; Bean Names and Dictionaries</a>
+	 * </ul>
 	 */
 	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";
 
@@ -324,7 +324,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Minimum bean field visibility.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
@@ -336,7 +336,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Only look for bean fields with the specified minimum visibility.
 	 * 
@@ -345,8 +345,8 @@ public class BeanContext extends Context {
 	 * <br>Normally only <jk>public</jk> fields are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that looks for protected fields.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -364,14 +364,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanFieldVisibility(<jsf>NONE</jsf>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beanFieldVisibility = PREFIX + "beanFieldVisibility.s";
 
 	/**
 	 * Configuration property:  Bean filters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
@@ -386,7 +386,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
 	 * <br>It's useful when you want to use the <code>@Bean</code> annotation functionality, but you don't have the ability to alter 
@@ -404,7 +404,7 @@ public class BeanContext extends Context {
 	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Example:</h5>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Create a bean filter for the MyBean class.</jc>
 	 * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
@@ -428,11 +428,11 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>		
 	 * 
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.StopClasses">Overview &gt; Stop Classes</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.InterfaceFilters">Overview &gt; Interface Filters</a>
+	 * </ul>
 	 */
 	public static final String BEAN_beanFilters = PREFIX + "beanFilters.lc";
 
@@ -449,7 +449,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -462,7 +462,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
@@ -470,10 +470,10 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, it returns <jk>null</jk>.
 	 * 
 	 * <p>
-	 * Disabled by default because it introduces a slight performance penalty during serilalization.
+	 * Disabled by default because it introduces a slight performance penalty during serialization.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that creates BeanMaps with normal put() behavior.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -489,14 +489,14 @@ public class BeanContext extends Context {
 	 * 	BeanMap&lt;MyBean&gt; bm = s.createSession().toBeanMap(<jk>new</jk> MyBean());
 	 * 	bm.put(<js>"foo"</js>, <js>"bar"</js>);
 	 * 	Object oldValue = bm.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + "beanMapPutReturnsOldValue.b";
 
 	/**
 	 * Configuration property:  Minimum bean method visibility.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
@@ -508,7 +508,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Only look for bean methods with the specified minimum visibility.
 	 * 
@@ -517,8 +517,8 @@ public class BeanContext extends Context {
 	 * <br>Normally only <jk>public</jk> getters and setters are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that looks for protected getters and setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -530,14 +530,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beanMethodVisibility</jsf>, <js>"PROTECTED"</js>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beanMethodVisibility = PREFIX + "beanMethodVisibility.s";
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireDefaultConstructor.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -550,7 +550,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -558,8 +558,8 @@ public class BeanContext extends Context {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -571,14 +571,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beansRequireDefaultConstructor = PREFIX + "beansRequireDefaultConstructor.b";
 
 	/**
 	 * Configuration property:  Beans require Serializable interface.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSerializable.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -591,7 +591,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -599,8 +599,8 @@ public class BeanContext extends Context {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -612,14 +612,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beansRequireSerializable = PREFIX + "beansRequireSerializable.b";
 
 	/**
 	 * Configuration property:  Beans require setters for getters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSettersForGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -632,13 +632,13 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * <br>Otherwise, they will be ignored.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -650,14 +650,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beansRequireSettersForGetters</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beansRequireSettersForGetters = PREFIX + "beansRequireSettersForGetters.b";
 
 	/**
 	 * Configuration property:  Beans require at least one property.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSomeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -669,7 +669,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -677,8 +677,8 @@ public class BeanContext extends Context {
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -690,14 +690,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beansRequireSomeProperties</jsf>, <jk>false</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_beansRequireSomeProperties = PREFIX + "beansRequireSomeProperties.b";
 
 	/**
 	 * Configuration property:  Bean type property name.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -717,8 +717,8 @@ public class BeanContext extends Context {
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
 	 * parser knows the data type to reconstruct.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses 'type' instead of '_type' for dictionary names.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -730,19 +730,19 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beanTypePropertyName</jsf>, <js>"type"</js>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 *
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; Bean Names and Dictionaries</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; Bean Names and Dictionaries</a>
+	 * </ul>
 	 */
 	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName.s";
 
 	/**
 	 * Configuration property:  Debug mode.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -755,7 +755,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Enables the following additional information during serialization:
 	 * <ul class='spaced-list'>
@@ -774,8 +774,8 @@ public class BeanContext extends Context {
 	 * 		in order to determine how that method was invoked.
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer with debug enabled.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -787,14 +787,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_debug = PREFIX + "debug.b";
 
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.excludeProperties.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
@@ -813,7 +813,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean class.
 	 *
@@ -829,8 +829,8 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -848,14 +848,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_excludeProperties</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.sms";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -868,13 +868,13 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -886,14 +886,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_ignoreInvocationExceptionsOnGetters = PREFIX + "ignoreInvocationExceptionsOnGetters.b";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -906,13 +906,13 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -924,14 +924,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + "ignoreInvocationExceptionsOnSetters.b";
 
 	/**
 	 * Configuration property:  Ignore properties without setters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -943,13 +943,13 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -961,14 +961,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignorePropertiesWithoutSetters</jsf>, <jk>false</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + "ignorePropertiesWithoutSetters.b";
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -981,13 +981,13 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that ignores missing bean properties.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -999,14 +999,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + "ignoreUnknownBeanProperties.b";
 
 	/**
 	 * Configuration property:  Ignore unknown properties with null values.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -1018,13 +1018,13 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1036,14 +1036,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreUnknownNullBeanProperties</jsf>, <jk>false</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + "ignoreUnknownNullBeanProperties.b";
 
 	/**
 	 * Configuration property:  Implementation classes.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.implClasses.smc"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Class&gt;</code>
@@ -1056,14 +1056,14 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 	 * parse).
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeanInterfaces.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1075,14 +1075,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, MyBeanInterface.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_implClasses = PREFIX + "implClasses.smc";
 
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.properties.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
@@ -1098,17 +1098,17 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Class, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(String, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#includeProperties(String...)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#properties(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <p>
 	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 *	names.
+	 * names.
 	 * The key <js>"*"</js> means all bean classes.
 	 *
 	 * <p>
@@ -1118,8 +1118,8 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1137,14 +1137,14 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_includeProperties</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
-	public static final String BEAN_includeProperties = PREFIX + "properties.sms";
+	public static final String BEAN_includeProperties = PREFIX + "includeProperties.sms";
 
 	/**
 	 * Configuration property:  Locale.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.locale.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
@@ -1153,11 +1153,12 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
+	 * 			<li class='jm'>{@link BeanSessionArgs#locale(Locale)}
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses the specified locale if it's not passed in through session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1169,14 +1170,20 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_locale</jsf>, Locale.<jsf>UK</jsf>)
 	 * 		.build();
-	 *	</p>
+	 * 	
+	 * 	<jc>// Define on session-args instead.</jc>
+	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
+	 * 		...
+	 * 	}
+	 * </p>
 	 */
 	public static final String BEAN_locale = PREFIX + "locale.s";
 
 	/**
 	 * Configuration property:  Media type.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.mediaType.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link MediaType})
@@ -1185,15 +1192,16 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
+	 * 			<li class='jm'>{@link BeanSessionArgs#mediaType(MediaType)}
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that uses the specified media type if it's not passed in through session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1205,14 +1213,20 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_mediaType</jsf>, MediaType.<jsf>JSON</jsf>)
 	 * 		.build();
-	 *	</p>
+	 * 	
+	 * <jc>// Define on session-args instead.</jc>
+	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
+	 * 		...
+	 * 	}
+	 * </p>
 	 */
 	public static final String BEAN_mediaType = PREFIX + "mediaType.s";
 
 	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
 	 * 	<li><b>Data type:</b>  <code>Set&lt;Class&gt;</code>
@@ -1231,13 +1245,20 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Not-bean classes are converted to <code>Strings</code> during serialization even if they appear to be
-	 * bean-like.
+	 * List of classes that should not be treated as beans even if they appear to be bean-like.
+	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <p>
+	 * Values can consist of any of the following types:
+	 * <ul>
+	 * 	<li>Classes.
+	 * 	<li>Arrays and collections of classes.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that doesn't treat MyBean as a bean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1249,7 +1270,7 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_notBeanClasses</jsf>, MyBean.<jk>class</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_notBeanClasses = PREFIX + "notBeanClasses.sc";
 
@@ -1266,7 +1287,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
 	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
@@ -1291,7 +1312,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
 	 *
@@ -1301,8 +1322,15 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Note that you can specify suffix patterns to include all subpackages.
 	 * 
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <p>
+	 * Values can consist of any of the following types:
+	 * <ul>
+	 * 	<li>Strings.
+	 * 	<li>Arrays and collections of strings.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Create a serializer that ignores beans in the specified packages.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1315,7 +1343,7 @@ public class BeanContext extends Context {
 	 * 		.addTo(<jsf>BEAN_notBeanPackages</jsf>, <js>"org.apache.foo"</js>)
 	 * 		.addTo(<jsf>BEAN_notBeanPackages</jsf>, <js>"org.apache.bar.*"</js>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 */
 	public static final String BEAN_notBeanPackages = PREFIX + "notBeanPackages.ss";
 
@@ -1332,7 +1360,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  POJO swaps.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lc"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
@@ -1352,7 +1380,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * POJO swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
 	 * and "swap in" the non-serializable class during parsing.
@@ -1373,7 +1401,7 @@ public class BeanContext extends Context {
 	 * 	<li>Any array or collection of the objects above.
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Example:</h5>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
 	 * 	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
@@ -1421,15 +1449,15 @@ public class BeanContext extends Context {
 	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
 	 * 
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; PojoSwaps</a>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.OneWayPojoSwaps">Overview &gt; One-way PojoSwaps</a>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SwapMethods">Overview &gt; Swap Methods</a>
-	 *		<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SurrogateClasses">Overview &gt; Surrogate Classes</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.PojoSwaps">Overview &gt; PojoSwaps</a>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.PerMediaTypePojoSwaps">Overview &gt; Per-media-type PojoSwaps</a>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.OneWayPojoSwaps">Overview &gt; One-way PojoSwaps</a>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SwapAnnotation">Overview &gt; @Swap Annotation</a>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SwapMethods">Overview &gt; Swap Methods</a>
+	 * 	<li><a class="doclink" href="../../../overview-summary.html#juneau-marshall.SurrogateClasses">Overview &gt; Surrogate Classes</a>
+	 * </ul>
 	 */
 	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lc";
 
@@ -1446,7 +1474,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Bean property namer.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> {@link PropertyNamer}&gt;</code>
@@ -1463,7 +1491,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The class to use for calculating bean property names.
 	 * 
@@ -1496,7 +1524,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Sort bean properties.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -1515,7 +1543,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
 	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
@@ -1547,7 +1575,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  TimeZone.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link TimeZone})
@@ -1556,6 +1584,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
+	 * 			<li class='jm'>{@link BeanSessionArgs#timeZone(TimeZone)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1572,6 +1601,12 @@ public class BeanContext extends Context {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_timeZone</jsf>, TimeZone.<jsf>GMT</jsf>)
 	 * 		.build();
+	 * 
+	 * 	<jc>// Define on session-args instead.</jc>
+	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession ss = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(sessionArgs)) {
+	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	}
 	 * </p>
 	 */
 	public static final String BEAN_timeZone = PREFIX + "timeZone.s";
@@ -1579,7 +1614,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Use interface proxies.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -1591,7 +1626,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
@@ -1617,7 +1652,7 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Use Java Introspector.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -1630,7 +1665,7 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * <br>Most {@link Bean @Bean} annotations will be ignored.

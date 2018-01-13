@@ -351,7 +351,7 @@ public class MessageBundle extends ResourceBundle {
 	 *
 	 * <p>
 	 * Useful for debugging purposes.
-	 * Note that any class that implements a <code>toObjectMap()</code> method will automatically be serialized by
+	 * Note that any class that implements a <code>swap()</code> method will automatically be serialized by
 	 * calling this method and serializing the result.
 	 *
 	 * <p>
@@ -359,7 +359,7 @@ public class MessageBundle extends ResourceBundle {
 	 *
 	 * @return A new map containing all the keys and values in this bundle.
 	 */
-	public ObjectMap toObjectMap() {
+	public ObjectMap swap() {
 		ObjectMap om = new ObjectMap();
 		for (String k : allKeys)
 			om.put(k, getString(k));

@@ -65,7 +65,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Allow body URL parameter.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -81,7 +81,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
@@ -92,14 +92,14 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>Parameter name is case-insensitive.
 	 * 	<li>Useful for debugging PUT and POST methods using only a browser.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_allowBodyParam = PREFIX + "allowBodyParam.b";
 	
 	/**
 	 * Configuration property:  Allowed method parameters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodParams.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -115,7 +115,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
@@ -127,7 +127,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
 	 * 	<li>Parameter name is case-insensitive.
 	 * 	<li>Use <js>"*"</js> to represent all methods.
-	 *	</ul>
+	 * </ul>
 	 *
 	 * <p>
 	 * Note that per the <a class="doclink"
@@ -139,7 +139,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Allow header URL parameters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowHeaderParams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -155,7 +155,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
@@ -166,14 +166,14 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>Parameter name is case-insensitive.
 	 * 	<li>Useful for debugging REST interface using only a browser.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_allowHeaderParams = PREFIX + "allowHeaderParams.b";
 	
 	/**
 	 * Configuration property:  REST call handler.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt; | {@link RestCallHandler}</code>
@@ -190,7 +190,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
@@ -200,7 +200,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Children.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.children.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class | Object | {@link RestChild}&gt;</code>
@@ -218,7 +218,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines children of this resource.
 	 *
@@ -270,19 +270,19 @@ public final class RestContext extends BeanContext {
 	 * 			<li><code><jk>public</jk> T(RestContextBuilder)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
 	 * 		</ul>
-	 *	</ul>
+	 * </ul>
 	 *
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Children">org.apache.juneau.rest &gt; Children</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Children">org.apache.juneau.rest &gt; Children</a>
+	 * </ul>
 	 */
 	public static final String REST_children = PREFIX + "children.lo";
 
 	/**
 	 * Configuration property:  Classpath resource finder. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.classpathResourceFinder.o"</js>
 	 * 	<li><b>Data type:</b>  {@link ClasspathResourceFinder}
@@ -299,7 +299,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
 	 * 
@@ -318,7 +318,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Client version header.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.clientVersionHeader.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -334,7 +334,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 *
@@ -347,7 +347,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Resource context path. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.contextPath.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -363,7 +363,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
 	 *
@@ -378,7 +378,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Class-level response converters.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.converters.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestConverter} | Class&lt;? <jk>extends</jk> {@link RestConverter}&gt;&gt;</code>
@@ -396,7 +396,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
 	 * These converters get called immediately after execution of the REST method in the same order specified in the
@@ -405,17 +405,17 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Can be used for performing post-processing on the response object before serialization.
 	 *
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
+	 * </ul>
 	 */
 	public static final String REST_converters = PREFIX + "converters.lo";
 
 	/**
 	 * Configuration property:  Default character encoding.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -432,7 +432,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 */
@@ -441,7 +441,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Default request headers.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultRequestHeaders.smo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
@@ -459,7 +459,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies default values for request headers.
 	 *
@@ -468,14 +468,14 @@ public final class RestContext extends BeanContext {
 	 * 	<li>Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
 	 * 	<li>The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
 	 * 		specified so that a particular default {@link Serializer} is picked.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_defaultRequestHeaders = PREFIX + "defaultRequestHeaders.smo";
 
 	/**
 	 * Configuration property:  Default response headers.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultResponseHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
@@ -492,8 +492,8 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 *	<p>
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
 	 * Specifies default values for response headers.
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -501,14 +501,14 @@ public final class RestContext extends BeanContext {
 	 * 	<li>This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of 
 	 * 		the Java methods.
 	 * 	<li>The header value will not be set if the header value has already been specified (hence the 'default' in the name).
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_defaultResponseHeaders = PREFIX + "defaultResponseHeaders.omo";
 
 	/**
 	 * Configuration property:  Compression encoders. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.encoders.o"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class &lt;? <jk>extends</jk> Encoder&gt; | Encoder&gt;</code>
@@ -526,7 +526,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
@@ -551,7 +551,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Class-level guards.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.guards.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;RestGuard | Class&lt;? <jk>extends</jk> RestGuard&gt;&gt;</code>
@@ -569,7 +569,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 * These guards get called immediately before execution of any REST method in this class.
@@ -581,14 +581,14 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link RestGuard} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_guards = PREFIX + "guards.lo";
 
 	/**
 	 * Configuration property:  REST info provider. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.infoProvider.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestInfoProvider&gt; | RestInfoProvider</code>
@@ -605,7 +605,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
@@ -617,7 +617,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  REST logger.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.logger.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestLogger&gt; | RestLogger</code>
@@ -634,7 +634,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the logger to use for logging.
 	 * 
@@ -643,14 +643,14 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>Property:  {@link RestContext#REST_logger}
 	 * 	<li>The {@link RestLogger.Normal} logger can be used to provide basic error logging to the Java logger.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_logger = PREFIX + "logger.o";
 
 	/**
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.maxInput.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -667,7 +667,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
@@ -678,14 +678,14 @@ public final class RestContext extends BeanContext {
 	 * 	<li>Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:  
 	 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
 	 * 	<li>A value of <js>"-1"</js> can be used to represent no limit.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_maxInput = PREFIX + "maxInput.s";
 	
 	/**
 	 * Configuration property:  Messages. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;MessageBundleLocation&gt;</code>
@@ -703,7 +703,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Identifies the location of the resource bundle for this class.
 	 *
@@ -732,7 +732,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  MIME types. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.mimeTypes.ss"</js>
 	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
@@ -748,7 +748,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines MIME-type file type mappings.
 	 * 
@@ -775,7 +775,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Java method parameter resolvers.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.paramResolvers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;RestParam | Class&lt;? <jk>extends</jk> RestParam&gt;&gt;</code>
@@ -791,7 +791,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
@@ -820,14 +820,14 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link RestParam} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
 
 	/**
 	 * Configuration property:  Parsers. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.parsers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class &lt;? <jk>extends</jk> Parser&gt; | Parser&gt;</code>
@@ -846,7 +846,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds class-level parsers to this resource.
 	 * 
@@ -856,17 +856,17 @@ public final class RestContext extends BeanContext {
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Parsers">org.apache.juneau.rest &gt; Parsers</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Parsers">org.apache.juneau.rest &gt; Parsers</a>
+	 * </ul>
 	 */
 	public static final String REST_parsers = PREFIX + "parsers.lo";
 
 	/**
 	 * Configuration property:  HTTP part parser. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.partParser.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class &lt;? <jk>extends</jk> HttpPartParser&gt; | HttpPartParser</code>
@@ -883,7 +883,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 * 
@@ -898,7 +898,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  HTTP part serializer. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.partSerializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class &lt;? <jk>extends</jk> HttpPartSerializer&gt; | HttpPartSerializer</code>
@@ -915,7 +915,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 *
@@ -930,7 +930,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Resource path.   
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.path.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -946,7 +946,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
 	 *
@@ -958,14 +958,14 @@ public final class RestContext extends BeanContext {
 	 * 	<li>Typically, this setting is only applicable to resources defined as children through the 
 	 * 		{@link RestResource#children() @RestResource.children()} annotation.
 	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_path = PREFIX + "path.s";
 
 	/**
 	 * Configuration property:  Render response stack traces in responses.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.renderResponseStackTraces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -982,7 +982,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 *
@@ -990,14 +990,14 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
 	 * 		caution when enabling.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
 	
 	/**
 	 * Configuration property:  REST resource resolver.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.resourceResolver.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> RestResourceResolver&gt; | RestResourceResolver</code>
@@ -1014,8 +1014,8 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
-	 *	<p>
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
 	 * The resolver used for resolving child resources.
 	 * 
 	 * <p>
@@ -1025,14 +1025,14 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Unless overridden, resource resolvers are inherited from parent resources.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
 
 	/**
 	 * Configuration property:  Response handlers.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.responseHandlers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>extends</jk> ResponseHandler&gt;&gt;</code>
@@ -1049,7 +1049,7 @@ public final class RestContext extends BeanContext {
 				</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
@@ -1069,14 +1069,14 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link ResponseHandler} classes must have either a no-arg or {@link PropertyStore} argument constructors.
-	 *	</ul>
+	 * </ul>
 	 */
 	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
 
 	/**
 	 * Configuration property:  Serializers. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.serializers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class &lt;? <jk>extends</jk> Serializer&gt; | Serializer&gt;</code>
@@ -1095,7 +1095,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Adds class-level serializers to this resource.
 	 * 
@@ -1105,17 +1105,17 @@ public final class RestContext extends BeanContext {
 	 * 	<li>When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Documentation:</h5>
-	 *	<ul>
-	 *		<li><a class="doclink" href="package-summary.html#RestResources.Serializers">org.apache.juneau.rest &gt; Serializers</a>
-	 *	</ul>
+	 * <h5 class='section'>Documentation:</h5>
+	 * <ul>
+	 * 	<li><a class="doclink" href="package-summary.html#RestResources.Serializers">org.apache.juneau.rest &gt; Serializers</a>
+	 * </ul>
 	 */
 	public static final String REST_serializers = PREFIX + "serializers.lo";
 
 	/**
 	 * Configuration property:  Static file response headers. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFileResponseHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
@@ -1133,7 +1133,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 */
@@ -1142,7 +1142,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Static file mappings. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;StaticFileMapping&gt;</code>
@@ -1162,7 +1162,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
 	 * 
@@ -1207,7 +1207,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Supported accept media types.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.supportedAcceptTypes.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
@@ -1225,7 +1225,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 * 
@@ -1238,7 +1238,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Supported content media types.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.supportedContentTypes.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
@@ -1256,7 +1256,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
@@ -1269,7 +1269,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Use classpath resource caching. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.useClasspathResourceCaching.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -1285,7 +1285,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, resources retrieved via {@link RestContext#getClasspathResource(String, Locale)} (and related 
 	 * methods) will be cached in memory to speed subsequent lookups.
@@ -1295,7 +1295,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Use stack trace hashes.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.useStackTraceHashes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -1311,7 +1311,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
@@ -1321,7 +1321,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  HTML Widgets. 
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.widgets.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>extends</jk> Widget&gt; | Widget&gt;</code>
@@ -1339,7 +1339,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.

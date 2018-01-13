@@ -124,12 +124,12 @@ public final class RestCall extends BeanSession {
 	 *
 	 * <p>
 	 * Can be any of the following types:
-	 *	<ul>
-	 *		<li>{@link URI}
-	 *		<li>{@link URL}
-	 *		<li>{@link URIBuilder}
-	 *		<li>Anything else converted to a string using {@link Object#toString()}.
-	 *	</ul>
+	 * <ul>
+	 * 	<li>{@link URI}
+	 * 	<li>{@link URL}
+	 * 	<li>{@link URIBuilder}
+	 * 	<li>Anything else converted to a string using {@link Object#toString()}.
+	 * </ul>
 	 *
 	 * <p>
 	 * Relative URL strings will be interpreted as relative to the root URL defined on the client.

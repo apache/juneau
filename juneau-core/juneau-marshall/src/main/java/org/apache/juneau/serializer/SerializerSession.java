@@ -672,7 +672,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI.
 	 * 		<li><js>"context:/"</js> - Context-root URI.
 	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
-	 *			<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 		<li><js>"servlet:/"</js> - Servlet-path URI.
 	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI.
 	 * 		<li><js>"request:/"</js> - Request-path URI.
 	 * 		<li><js>"foo"</js> - Path-info-relative URI.
@@ -791,8 +791,8 @@ public abstract class SerializerSession extends BeanSession {
 	 *
 	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
 	 */
-	protected final Map<String,Object> getLastLocation() {
-		Map<String,Object> m = new LinkedHashMap<>();
+	protected final ObjectMap getLastLocation() {
+		ObjectMap m = new ObjectMap();
 		if (currentClass != null)
 			m.put("currentClass", currentClass);
 		if (currentProperty != null)
@@ -896,5 +896,26 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	public Map<String,String> getResponseHeaders() {
 		return Collections.emptyMap();
+	}
+	
+	
+	/**
+	 * Returns the listener associated with this session.
+	 * 
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
+	 */
+	public SerializerListener getListener() {
+		return listener;
+	}
+
+	/**
+	 * Returns the listener associated with this session.
+	 * 
+	 * @param c The listener class to cast to. 
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends SerializerListener> T getListener(Class<T> c) {
+		return (T)listener;
 	}
 }

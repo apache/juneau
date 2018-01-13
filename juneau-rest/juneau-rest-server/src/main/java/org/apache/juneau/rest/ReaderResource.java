@@ -72,7 +72,7 @@ public class ReaderResource implements Writable {
 	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
 	 * 		<li><code>File</code>
 	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-	 *		</ul>
+	 * 	</ul>
 	 * @throws IOException
 	 */
 	public ReaderResource(MediaType mediaType, Map<String,String> headers, VarResolverSession varSession, Object...contents) throws IOException {
@@ -149,7 +149,7 @@ public class ReaderResource implements Writable {
 		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
 		 * 		<li><code>File</code>
 		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-		 *		</ul>
+		 * 	</ul>
 		 * @return This object (for method chaining).
 		 */
 		public Builder contents(Object...contents) {

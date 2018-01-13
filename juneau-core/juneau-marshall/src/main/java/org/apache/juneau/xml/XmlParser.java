@@ -40,7 +40,7 @@ public class XmlParser extends ReaderParser {
 	/**
 	 * Configuration property:  XML event allocator.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlParser.eventAllocator.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLEventAllocator}&gt;</code>
@@ -52,7 +52,7 @@ public class XmlParser extends ReaderParser {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 */
@@ -61,7 +61,7 @@ public class XmlParser extends ReaderParser {
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlParser.preserveRootElement.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -74,12 +74,12 @@ public class XmlParser extends ReaderParser {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
 	 * is the root element name.
 	 *
-	 *	<h5 class='section'>Example:</h5>
+	 * <h5 class='section'>Example:</h5>
 	 * <table class='styled'>
 	 * 	<tr>
 	 * 		<td>XML</td>
@@ -98,7 +98,7 @@ public class XmlParser extends ReaderParser {
 	/**
 	 * Configuration property:  XML reporter.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
@@ -110,7 +110,7 @@ public class XmlParser extends ReaderParser {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
@@ -124,7 +124,7 @@ public class XmlParser extends ReaderParser {
 	/**
 	 * Configuration property:  XML resolver.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
@@ -136,7 +136,7 @@ public class XmlParser extends ReaderParser {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 */
@@ -145,7 +145,7 @@ public class XmlParser extends ReaderParser {
 	/**
 	 * Configuration property:  Enable validation.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -158,7 +158,7 @@ public class XmlParser extends ReaderParser {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
 	 * 

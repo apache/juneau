@@ -45,7 +45,7 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF language.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.language.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -66,7 +66,7 @@ public interface RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
@@ -102,7 +102,7 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.juneauNs.s"</js>
 	 * 	<li><b>Data type:</b>  {@link Namespace}
@@ -119,7 +119,7 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.juneauBpNs.s"</js>
 	 * 	<li><b>Data type:</b>  {@link Namespace}
@@ -136,7 +136,7 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -148,7 +148,7 @@ public interface RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
@@ -158,14 +158,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>iri_rules</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.iri-rules.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"lax"</js>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Set the engine for checking and resolving.
 	 * 
@@ -189,14 +189,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>error-mode</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.error-mode.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"lax"</js>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
 	 * 
@@ -230,14 +230,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>embedding</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.embedding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 * 
@@ -253,13 +253,13 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>ERR_xxx</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.ERR_"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Provides fine-grained control over detected error conditions.
 	 * 
@@ -286,13 +286,13 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>WARN_xxx</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.WARN_"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * See {@link #RDF_arp_err_} for details.
 	 */
@@ -301,13 +301,13 @@ public interface RdfCommon {
 	/**
 	 * RDF/XML ARP property: <code>IGN_xxx</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.IGN_"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * See {@link #RDF_arp_err_} for details.
 	 */
@@ -316,14 +316,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>xmlbase</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.xmlbase.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 */
@@ -332,14 +332,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>longId</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.longId.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Whether to use long ID's for anon resources.
 	 * Short ID's are easier to read, but can run out of memory on very large models.
@@ -349,14 +349,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>allowBadURIs</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.allowBadURIs.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
 	 */
@@ -365,14 +365,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>relativeURIs</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.relativeURIs.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"same-document, absolute, relative, parent"</js>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * What sort of relative URIs should be used.
 	 * 
@@ -403,14 +403,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>showXmlDeclaration</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.showXmlDeclaration.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"default"</js>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -429,14 +429,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>showDoctypeDeclaration</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.showDoctypeDeclaration.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If true, an XML doctype declaration is included in the output.
 	 * This declaration includes a <code>!ENTITY</code> declaration for each prefix mapping in the model, and any 
@@ -448,14 +448,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>tab</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.tab.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>2</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
 	 */
@@ -464,14 +464,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>attributeQuoteChar</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.attributeQuoteChar.s"</js>
 	 * 	<li><b>Data type:</b>  <code>Character</code>
 	 * 	<li><b>Default:</b>  <js>'"'</js>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The XML attribute quote character.
 	 */
@@ -480,14 +480,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF/XML property: <code>blockRules</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.blockRules.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>""</js>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from 
 	 * <a class="doclink" href="http://www.w3.org/TR/rdf-syntax-grammar">RDF Syntax Grammar</a> indicating grammar 
@@ -498,14 +498,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>minGap</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.minGap.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>1</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Minimum gap between items on a line.
 	 */
@@ -514,14 +514,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>objectLists</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.objectLists.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Print object lists as comma separated lists.
 	 */
@@ -530,14 +530,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>subjectColumn</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.subjectColumn.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  indentProperty
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
 	 */
@@ -546,14 +546,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>propertyColumn</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.propertyColumn.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>8</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Width of the property column.
 	 */
@@ -562,14 +562,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>indentProperty</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.indentProperty.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>6</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Width to indent properties.
 	 */
@@ -578,14 +578,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>widePropertyLen</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.widePropertyLen.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>20</code>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Width of the property column.
 	 * Must be longer than <code>propertyColumn</code>.
@@ -595,14 +595,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>abbrevBaseURI</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.abbrevBaseURI.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Control whether to use abbreviations <code>&lt;&gt;</code> or <code>&lt;#&gt;</code>.
 	 */
@@ -611,14 +611,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>usePropertySymbols</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.usePropertySymbols.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Control whether to use <code>a</code>, <code>=</code> and <code>=&gt;</code> in output
 	 */
@@ -627,14 +627,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>useTripleQuotedStrings</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.useTripleQuotedStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allow the use of <code>"""</code> to delimit long strings.
 	 */
@@ -643,14 +643,14 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  N3/Turtle property: <code>useDoubles</code>.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.useDoubles.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Allow the use doubles as <code>123.456</code>.
 	 */
@@ -659,7 +659,7 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.collectionFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -671,7 +671,7 @@ public interface RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>
@@ -698,7 +698,7 @@ public interface RdfCommon {
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.looseCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -712,7 +712,7 @@ public interface RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).

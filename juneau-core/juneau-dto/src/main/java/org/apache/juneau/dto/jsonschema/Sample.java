@@ -48,6 +48,7 @@ class Sample {
 		};
 
 		// Get schema from the schema map.
+		@SuppressWarnings("unlikely-arg-type")
 		Schema purchaseOrderSchema = schemaMap.get("http://www.apache.org/purchase-order/PurchaseOrder#");
 
 		JsonType streetType = purchaseOrderSchema

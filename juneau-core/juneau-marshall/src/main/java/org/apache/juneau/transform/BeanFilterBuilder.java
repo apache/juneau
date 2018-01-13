@@ -50,9 +50,9 @@ import org.apache.juneau.annotation.*;
  * </p>		
  *
  * <h6 class='topic'>Documentation</h6>
- *	<ul>
- *		<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
- *	</ul>
+ * <ul>
+ *.	<li><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; BeanFilters</a>
+ *.</ul>
  *
  * @param <T> The bean type that this filter applies to. 
  */
@@ -94,7 +94,7 @@ public class BeanFilterBuilder<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 *		<jc>// Define our filter.</jc>
+	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
 	 * 			typeName(<js>"mybean"</js>);
@@ -160,7 +160,7 @@ public class BeanFilterBuilder<T> {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder<T> includeProperties(String...value) {
+	public BeanFilterBuilder<T> properties(String...value) {
 		this.includeProperties = value;
 		return this;
 	}
@@ -476,8 +476,8 @@ public class BeanFilterBuilder<T> {
 	 * <p>
 	 * The property filter to use for intercepting and altering getter and setter calls.
 	 *
-	 *	<h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -491,7 +491,7 @@ public class BeanFilterBuilder<T> {
 	 * 		.<jsm>create</jsm>()
 	 * 		.beanFilters(MyFilter.<jk>class</jk>)
 	 * 		.build();
-	 *	</p>
+	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

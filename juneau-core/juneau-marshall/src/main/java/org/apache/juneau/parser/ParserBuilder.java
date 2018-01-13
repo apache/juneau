@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.Parser.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -65,6 +66,26 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  File charset.
+	 *
+	 * <p>
+	 * The character set to use for reading <code>Files</code> from the file system.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_fileCharset}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
+	 * @return This object (for method chaining).
+	 */
+	public ParserBuilder fileCharset(Charset value) {
+		return set(PARSER_fileCharset, value);
+	}
+
+	/**
 	 * Configuration property:  Input stream charset.
 	 *
 	 * <p>
@@ -81,6 +102,26 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder inputStreamCharset(String value) {
+		return set(PARSER_inputStreamCharset, value);
+	}
+
+	/**
+	 * Configuration property:  Input stream charset.
+	 *
+	 * <p>
+	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Parser#PARSER_inputStreamCharset}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default value is <js>"UTF-8"</js>.
+	 * @return This object (for method chaining).
+	 */
+	public ParserBuilder inputStreamCharset(Charset value) {
 		return set(PARSER_inputStreamCharset, value);
 	}
 

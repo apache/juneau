@@ -59,7 +59,7 @@ public @interface RestMethod {
 	 * In the example below, our 'summary' view is a list of beans where we only want to show the ID property,
 	 * and our detail view is a single bean where we want to expose different fields:
 	 * <p class='bcode'>
-	 *	<jc>// Our bean</jc>
+	 * <jc>// Our bean</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Summary properties</jc>
@@ -70,11 +70,11 @@ public @interface RestMethod {
 	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
 	 * 	}
 	 *
-	 *	<jc>// Only render "id" property.</jc>
+	 * <jc>// Only render "id" property.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpi=<js>"MyBean: id"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
 	 *
-	 *	<jc>// Only render "a" and "b" properties.</jc>
+	 * <jc>// Only render "a" and "b" properties.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>, bpi=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
 	 * </p>
@@ -110,7 +110,7 @@ public @interface RestMethod {
 	 * <p>
 	 * In the example below, our 'summary' view is a list of beans where we want to exclude some properties:
 	 * <p class='bcode'>
-	 *	<jc>// Our bean</jc>
+	 * <jc>// Our bean</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Summary properties</jc>
@@ -121,11 +121,11 @@ public @interface RestMethod {
 	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
 	 * 	}
 	 *
-	 *	<jc>// Don't show "a" and "b" properties.</jc>
+	 * <jc>// Don't show "a" and "b" properties.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpx=<js>"MyBean: a,b"</js>)
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary();
 	 *
-	 *	<jc>// Render all properties.</jc>
+	 * <jc>// Render all properties.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>)
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id);
 	 * </p>
@@ -218,7 +218,7 @@ public @interface RestMethod {
 	String clientVersion() default "";
 
 	/**
-	 *	Class-level response converters.
+	 * Class-level response converters.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with this method.

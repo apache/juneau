@@ -26,35 +26,90 @@ import org.apache.juneau.http.*;
  */
 public final class SerializerSessionArgs extends BeanSessionArgs {
 
-	final Method javaMethod;
-	final UriContext uriContext;
+	Method javaMethod;
+	UriContext uriContext;
+
+	/**
+	 * Constructor
+	 */
+	public SerializerSessionArgs() {}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param properties
 	 * 	Session-level properties.
-	 * 	These override context-level properties.
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>These override context-level properties.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param javaMethod
 	 * 	The java method that called this serializer, usually the method in a REST servlet.
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param locale
 	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone
 	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param uriContext
 	 * 	The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
 	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(properties, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.uriContext = uriContext;
+	}
+	
+	/**
+	 * The java method that called this serializer, usually the method in a REST servlet.
+	 *
+	 * @param javaMethod
+	 * 	The java method that called this serializer, usually the method in a REST servlet.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSessionArgs javaMethod(Method javaMethod) {
+		this.javaMethod = javaMethod;
+		return this;
+	}
+
+	/**
+	 * The URI context.
+	 *
+	 * @param uriContext
+	 * 	The URI context.
+	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSessionArgs uriContext(UriContext uriContext) {
+		this.uriContext = uriContext;
+		return this;
+	}
+
+	@Override /* BeanSessionArgs */
+	public SerializerSessionArgs locale(Locale locale) {
+		super.locale(locale);
+		return this;
+	}
+	
+	@Override /* BeanSessionArgs */
+	public SerializerSessionArgs timeZone(TimeZone timeZone) {
+		super.timeZone(timeZone);
+		return this;
+	}
+	
+	@Override /* BeanSessionArgs */
+	public SerializerSessionArgs mediaType(MediaType mediaType) {
+		super.mediaType(mediaType);
+		return this;
+	}
+	
+	@Override /* SessionArgs */
+	public SerializerSessionArgs properties(ObjectMap properties) {
+		super.properties(properties);
+		return this;
 	}
 }

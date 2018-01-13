@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -97,7 +98,8 @@ import org.apache.juneau.utils.*;
  * following syntax...
  * <p class='bcode'>
  * 	Calendar c = parser.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
- *
+ * </p>
+ * 
  * <p>
  * If <code>Object.<jk>class</jk></code> is specified as the target type, then the parser automatically determines the
  * data types and generates the following object types...
@@ -110,26 +112,6 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>boolean</td><td>{@link Boolean}</td></tr>
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
- *
- * <a id='SupportedTypes'></a>
- * <h6 class='topic'>Supported types</h6>
- *
- * Several of the methods below take {@link Type} parameters to identify the type of object to create.
- * Any of the following types can be passed in to these methods...
- * <ul>
- * 	<li>{@link ClassMeta}
- * 	<li>{@link Class}
- * 	<li>{@link ParameterizedType}
- * 	<li>{@link GenericArrayType}
- * </ul>
- *
- * <p>
- * However, {@code ParameterizedTypes} and {@code GenericArrayTypes} should not contain
- * {@link WildcardType WildcardTypes} or {@link TypeVariable TypeVariables}.
- *
- * <p>
- * Passing in <jk>null</jk> or <code>Object.<jk>class</jk></code> typically signifies that it's up to the parser
- * to determine what object type is being parsed parsed based on the rules above.
  */
 public abstract class Parser extends BeanContext {
 
@@ -142,7 +124,7 @@ public abstract class Parser extends BeanContext {
 	/**
 	 * Configuration property:  File charset.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -151,10 +133,11 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#fileCharset(String)}
+	 * 			<li class='jm'>{@link ParserBuilder#fileCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
 	 *
@@ -162,14 +145,32 @@ public abstract class Parser extends BeanContext {
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
 	 *
 	 * <p>
-	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
+	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.fileCharset(<js>"UTF-8"</js>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>PARSER_fileCharset</jsf>, <js>"UTF-8"</js>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
+	 * 	MyBean myBean = p.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+	 * </p>
 	 */
 	public static final String PARSER_fileCharset = PREFIX + "fileCharset.s";
 
 	/**
 	 * Configuration property:  Input stream charset.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.inputStreamCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
@@ -178,22 +179,41 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#inputStreamCharset(String)}
+	 * 			<li class='jm'>{@link ParserBuilder#inputStreamCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 *
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.inputStreamCharset(<js>"UTF-8"</js>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>PARSER_inputStreamCharset</jsf>, <js>"UTF-8"</js>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
+	 * 	MyBean myBean = p.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+	 * </p>
 	 */
 	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
 
 	/**
 	 * Configuration property:  Parser listener.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
@@ -205,16 +225,58 @@ public abstract class Parser extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Define our parser listener.</jc>
+	 * 	<jc>// Simply captures all unknown bean property events.</jc>
+	 * 	<jk>public class</jk> MyParserListener <jk>extends</jk> ParserListener {
+	 * 
+	 * 		<jc>// A simple property to store our events.</jc>
+	 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
+	 * 
+	 * 		<ja>@Override</ja> 
+	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class&lt;T&gt; beanClass, T bean, <jk>int</jk> line, <jk>int</jk> col) {
+	 * 			<jf>events</jf>.add(propertyName + <js>","</js> + line + <js>","</js> + col);
+	 * 		}
+	 * 	}
+	 * 
+	 * 	<jc>// Create a parser using our listener.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.listener(MyParserListener.<jk>class</jk>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>PARSER_listener</jsf>, MyParserListener.<jk>class</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Create a session object.</jc>
+	 * 	<jc>// Needed because listeners are created per-session.</jc>
+	 * 	<jk>try</jk> (ReaderParserSession s = p.createSession()) {
+	 * 		
+	 * 		<jc>// Parse some JSON object.</jc>
+	 * 		MyBean myBean = s.parse(<js>"{...}"</js>, MyBean.<jk>class</jk>);
+	 * 
+	 * 		<jc>// Get the listener.</jc>
+	 * 		MyParserListener l = s.getListener(MyParserListener.<jk>class</jk>);
+	 * 
+	 * 		<jc>// Dump the results to the console.</jc>
+	 * 		JsonSerializer.<jsf>DEFAULT_LAX</jsf>.println(l.<jf>events</jf>);
+	 * 	}
+	 * </p>
 	 */
 	public static final String PARSER_listener = PREFIX + "listener.c";
 
 	/**
 	 * Configuration property:  Strict mode.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -227,7 +289,7 @@ public abstract class Parser extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
 	 *
@@ -258,13 +320,36 @@ public abstract class Parser extends BeanContext {
 	 * 		</td>
 	 * 	</tr>
 	 * </table>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.strict()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>PARSER_strict</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Use it.</jc>
+	 *  	<jk>try</jk> {
+	 *  		String json = <js>"{unquotedAttr:'value'}"</js>;
+	 * 		MyBean myBean = p.parse(json, MyBean.<jk>class</jk>);
+	 *  	} <jk>catch</jk> (ParseException e) {
+	 *  		<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
+	 *  	}
+	 * </p>
 	 */
 	public static final String PARSER_strict = PREFIX + "strict.b";
 
 	/**
 	 * Configuration property:  Trim parsed strings.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -277,10 +362,30 @@ public abstract class Parser extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimStrings()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>PARSER_trimStrings</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * 
+	 * 	<jc>// Use it.</jc>
+	 *  	String json = <js>"{foo:' bar '}"</js>;
+	 * 	Map&lt;String,String&gt; m = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, m.get(<js>"foo"</js>));
+	 * </p>
 	 */
 	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
 

@@ -157,8 +157,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 *
 	 * @return
 	 * 	The {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
-	 *		<jk>null</jk> if not specified.
-	 *		Never an empty map.
+	 * 	<jk>null</jk> if not specified.
+	 * 	Never an empty map.
 	 */
 	public final String[] getNavLinks() {
 		return navlinks;

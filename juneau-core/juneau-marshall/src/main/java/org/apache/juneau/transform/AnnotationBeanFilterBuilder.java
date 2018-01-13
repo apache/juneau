@@ -45,7 +45,7 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 			Bean b = li.previous();
 
 			if (! b.properties().isEmpty())
-				includeProperties(split(b.properties()));
+				properties(split(b.properties()));
 
 			if (! b.typeName().isEmpty())
 				typeName(b.typeName());

@@ -44,7 +44,7 @@ public class UrlEncodingParser extends UonParser {
 	/**
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -56,7 +56,7 @@ public class UrlEncodingParser extends UonParser {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
 	 *

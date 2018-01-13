@@ -344,7 +344,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},
-	 *		{@link GenericArrayType}
+	 * 	{@link GenericArrayType}
 	 * @param args
 	 * 	The type arguments of the class if it's a collection or map.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType},

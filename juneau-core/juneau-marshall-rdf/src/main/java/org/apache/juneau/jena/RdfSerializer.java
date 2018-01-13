@@ -54,7 +54,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -66,7 +66,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred 
 	 * through reflection.
@@ -83,7 +83,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addLiteralTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -101,7 +101,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addRootProperty.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -114,7 +114,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * to identify the root node in the graph.
@@ -129,7 +129,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.autoDetectNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -141,7 +141,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Detect namespace usage before serialization.
 	 * 
@@ -154,7 +154,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	/**
 	 * Configuration property:  Default namespaces.
 	 * 
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.namespaces.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code> (serialized {@link Namespace} objects)
@@ -170,7 +170,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 * 
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */

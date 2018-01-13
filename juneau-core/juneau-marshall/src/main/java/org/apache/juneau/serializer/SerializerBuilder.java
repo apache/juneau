@@ -531,6 +531,32 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  URI context bean.
+	 *
+	 * <p>
+	 * Same as {@link #uriContext(UriContext)} but allows you to pass in a JSON string.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
+	 * </ul>
+	 * 
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder uriContext(String value) {
+		return set(SERIALIZER_uriContext, value);
+	}
+
+	/**
 	 * Configuration property:  URI relativity.
 	 *
 	 * <p>
@@ -551,6 +577,34 @@ public class SerializerBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  URI relativity.
+	 *
+	 * <p>
+	 * Same as {@link #uriRelativity(UriRelativity)} but allows you to pass in a string.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.uriRelativity(<js>"PATH_INFO"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriRelativity#RESOURCE}
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder uriRelativity(String value) {
+		return set(SERIALIZER_uriRelativity, value);
+	}
+	
+	/**
 	 * Configuration property:  URI resolution.
 	 *
 	 * <p>
@@ -567,6 +621,34 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerBuilder uriResolution(UriResolution value) {
+		return set(SERIALIZER_uriResolution, value);
+	}
+
+	/**
+	 * Configuration property:  URI resolution.
+	 *
+	 * <p>
+	 * Same as {@link #uriResolution(UriResolution)} but allows you to pass in a string.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.uriResolution(<js>"ROOT_RELATIVE"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link UriResolution#NONE}
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder uriResolution(String value) {
 		return set(SERIALIZER_uriResolution, value);
 	}
 

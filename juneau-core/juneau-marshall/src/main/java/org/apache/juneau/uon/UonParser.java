@@ -38,7 +38,7 @@ public class UonParser extends ReaderParser {
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
-	 *	<h5 class='section'>Property:</h5>
+	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
@@ -50,7 +50,7 @@ public class UonParser extends ReaderParser {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 *	<h5 class='section'>Description:</h5>
+	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * before being passed to this parser.

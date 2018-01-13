@@ -23,28 +23,33 @@ import org.apache.juneau.http.*;
  */
 public final class ParserSessionArgs extends BeanSessionArgs {
 
-	final Method javaMethod;
-	final Object outer;
+	Method javaMethod;
+	Object outer;
+
+	/**
+	 * Constructor
+	 */
+	public ParserSessionArgs() {}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param properties
 	 * 	Session-level properties.
-	 * 	These override context-level properties.
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>These override context-level properties.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param javaMethod
 	 * 	The java method that called this serializer, usually the method in a REST servlet.
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param locale
 	 * 	The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone
 	 * 	The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param outer
 	 * 	The outer object for instantiating top-level non-static inner classes.
 	 */
@@ -52,5 +57,55 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 		super(properties, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.outer = outer;
+	}
+	
+	
+	/**
+	 * The java method that called this serializer, usually the method in a REST servlet.
+	 *
+	 * @param javaMethod
+	 * 	The java method that called this serializer, usually the method in a REST servlet.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ParserSessionArgs javaMethod(Method javaMethod) {
+		this.javaMethod = javaMethod;
+		return this;
+	}
+
+	/**
+	 * 	The outer object for instantiating top-level non-static inner classes.
+	 *
+	 * @param outer
+	 * 	The outer object for instantiating top-level non-static inner classes.
+	 * @return This object (for method chaining).
+	 */
+	public ParserSessionArgs outer(Object outer) {
+		this.outer = outer;
+		return this;
+	}
+
+	@Override /* BeanSessionArgs */
+	public ParserSessionArgs locale(Locale locale) {
+		super.locale(locale);
+		return this;
+	}
+	
+	@Override /* BeanSessionArgs */
+	public ParserSessionArgs timeZone(TimeZone timeZone) {
+		super.timeZone(timeZone);
+		return this;
+	}
+	
+	@Override /* BeanSessionArgs */
+	public ParserSessionArgs mediaType(MediaType mediaType) {
+		super.mediaType(mediaType);
+		return this;
+	}
+	
+	@Override /* SessionArgs */
+	public ParserSessionArgs properties(ObjectMap properties) {
+		super.properties(properties);
+		return this;
 	}
 }

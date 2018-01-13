@@ -520,7 +520,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class D2Filter extends BeanFilterBuilder<D2> {
 		public D2Filter() {
-			includeProperties("f3,f2");
+			properties("f3,f2");
 		}
 	}
 

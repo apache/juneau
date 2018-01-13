@@ -54,7 +54,7 @@ public class StreamResource implements Streamable {
 	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
 	 * 		<li><code>File</code>
 	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-	 *		</ul>
+	 * 	</ul>
 	 * @throws IOException
 	 */
 	public StreamResource(MediaType mediaType, Object...contents) throws IOException {
@@ -76,7 +76,7 @@ public class StreamResource implements Streamable {
 	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
 	 * 		<li><code>File</code>
 	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-	 *		</ul>
+	 * 	</ul>
 	 * @throws IOException
 	 */
 	public StreamResource(MediaType mediaType, Map<String,Object> headers, Object...contents) throws IOException {
@@ -154,7 +154,7 @@ public class StreamResource implements Streamable {
 		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
 		 * 		<li><code>File</code>
 		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
-		 *		</ul>
+		 * 	</ul>
 		 * @return This object (for method chaining).
 		 */
 		public Builder contents(Object...contents) {
