@@ -189,7 +189,7 @@ public class RdfParserBuilder extends ParserBuilder {
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
 	 * 
 	 * <p>
-	 * Shortcut for calling <code>looseCollection(<jk>true</jk)</code>.
+	 * Shortcut for calling <code>looseCollection(<jk>true</jk>)</code>.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

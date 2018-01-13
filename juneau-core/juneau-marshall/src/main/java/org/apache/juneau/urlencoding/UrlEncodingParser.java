@@ -15,6 +15,7 @@ package org.apache.juneau.urlencoding;
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.annotation.*;
 
 /**
  * Parses URL-encoded text into POJO models.
@@ -53,6 +54,8 @@ public class UrlEncodingParser extends UonParser {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams(boolean)}
+	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams()}
+	 * 			<li class='ja'>{@link UrlEncoding#expandedParams()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -61,11 +64,30 @@ public class UrlEncodingParser extends UonParser {
 	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
 	 *
 	 * <p>
+	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> String[] f1;
+	 * 		<jk>public</jk> List&lt;String&gt; f2;
+	 * 	}
+	 *
+	 * 	UrlEncodingParser p1 = UrlEncodingParser.<jsf>DEFAULT</jsf>;
+	 * 	UrlEncodingParser p2 = UrlEncodingParser.<jsm>create</jsm>().expandedParams().build();
+	 * 	
+	 * 	A a1 = p1.parse(<js>"f1=@(a,b)&amp;f2=@(c,d)"</js>, A.<jk>class</jk>); 
+	 * 	
+	 * 	A a2 = p2.parse(<js>"f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</js>, A.<jk>class</jk>); 
+	 * </p>
+	 *
+	 * <p>
 	 * This option only applies to beans.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>
+	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
 	 * </ul>

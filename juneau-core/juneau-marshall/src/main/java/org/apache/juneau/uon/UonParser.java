@@ -47,6 +47,7 @@ public class UonParser extends ReaderParser {
 	 * 	<li><b>Methods:</b> 
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonParserBuilder#decoding(boolean)}
+	 * 			<li class='jm'>{@link UonParserBuilder#decoding()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -54,6 +55,18 @@ public class UonParser extends ReaderParser {
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * before being passed to this parser.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a decoding UON parser.</jc>
+	 * 	ReaderParser p = UonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.decoding()
+	 * 		.build();
+	 * 	
+	 *	<jc>// Produces: ["foo bar", "baz quz"].</jc>
+	 * 	String[] foo = p.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
+	 * </p>
 	 */
 	public static final String UON_decoding = PREFIX + "decoding.b";
 

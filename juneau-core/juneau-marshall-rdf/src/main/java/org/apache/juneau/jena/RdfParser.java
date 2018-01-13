@@ -72,6 +72,15 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create an RDF parser that trims whitespace.</jc>
+	 * 	ReaderParser p = RdfParser.Xml
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimWhitespace()
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace.b";
 

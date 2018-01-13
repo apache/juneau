@@ -80,18 +80,27 @@ public class XmlParser extends ReaderParser {
 	 * is the root element name.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<td>XML</td>
-	 * 		<td>ObjectMap.toString(), preserveRootElement==false</td>
-	 * 		<td>ObjectMap.toString(), preserveRootElement==true</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt></code></td>
-	 * 		<td><code>{ a:<js>'foobar'</js> }</code></td>
-	 * 		<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
-	 * 	</tr>
-	 * </table>
+	 * <p class='bcode'>
+	 * 	<jc>// Parser with preserve-root-element.</jc>
+	 * 	ReaderParser p1 = XmlParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.preserveRootElement(<jk>true</jk>)
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Parser without preserve-root-element (the default behavior).</jc>
+	 * 	ReaderParser p2 = XmlParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.preserveRootElement(<jk>false</jk>)
+	 * 		.build();
+	 * 	
+	 * 	String xml = <js>"&lt;root&gt;&lt;a&gt;foobar&lt;/a&gt;&lt;/root&gt;"</js>;
+	 * 
+	 * 	<jc>// Produces:  "{ root: { a:'foobar' }}"</jc>
+	 * 	ObjectMap m1 = p1.parse(xml, ObjectMap.<jk>class</jk>);
+	 * 
+	 * 	<jc>// Produces:  "{ a:'foobar' }"</jc>
+	 * 	ObjectMap m2 = p2.parse(xml, ObjectMap.<jk>class)</jk>;
+	 * </p>
 	 */
 	public static final String XML_preserveRootElement = PREFIX + "preserveRootElement.b";
 

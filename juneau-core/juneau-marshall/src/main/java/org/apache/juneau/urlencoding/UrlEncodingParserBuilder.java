@@ -56,43 +56,37 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
-	 * 		<jk>public</jk> List&lt;String&gt; f2 = <jk>new</jk> LinkedList&lt;String&gt;(Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>}));
-	 * 	}
-	 *
-	 * 	UrlEncodingSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();
-	 *
-	 * 	String ss1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String ss2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-	 * </p>
-	 *
-	 * <p>
-	 * This option only applies to beans.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
-	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 		is added to it.
-	 * </ul>
+	 * This is the parser-side equivalent of the {@link UrlEncodingParser#URLENC_expandedParams} setting.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public UrlEncodingParserBuilder expandedParams(boolean value) {
 		return set(URLENC_expandedParams, value);
+	}
+
+	/**
+	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
+	 * </ul>
+	 * 
+	 * @return This object (for method chaining).
+	 */
+	public UrlEncodingParserBuilder expandedParams() {
+		return set(URLENC_expandedParams, true);
 	}
 
 	@Override /* UonParserBuilder */

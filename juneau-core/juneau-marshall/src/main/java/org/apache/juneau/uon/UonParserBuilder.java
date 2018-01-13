@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.urlencoding.*;
 
 /**
  * Builder class for building instances of UON parsers.
@@ -63,7 +64,9 @@ public class UonParserBuilder extends ParserBuilder {
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
 	 * 
-	 * @param value The new value for this property.
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * @return This object (for method chaining).
 	 */
 	public UonParserBuilder decoding(boolean value) {
@@ -71,6 +74,9 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	/**
+	 * Configuration property: Decode <js>"%xx"</js> sequences.
+	 * 
+	 * <p>
 	 * Shortcut for calling <code>decodeChars(<jk>true</jk>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
