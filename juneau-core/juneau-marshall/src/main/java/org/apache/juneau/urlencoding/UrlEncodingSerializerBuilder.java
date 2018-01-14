@@ -57,7 +57,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

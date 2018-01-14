@@ -430,7 +430,7 @@ public class RestClient extends BeanContext {
 	 * 
 	 *
 	 * <p>
-	 * Shortcut for calling <code><jk>new</jk> RestClientBuilder().serializer(s).parser(p);</code>
+	 * Shortcut for calling <code>RestClient.<jsm>create</jsm>().serializer(s).parser(p);</code>
 	 *
 	 * @param s The serializer class to use for output.
 	 * @param p The parser class to use for input.
@@ -909,18 +909,21 @@ public class RestClient extends BeanContext {
 	 * 	<jk>public interface</jk> MyInterface3 { ... }
 	 *
 	 * 	<jc>// Resolves to "http://localhost/resturl/myinterface1"</jc>
-	 * 	MyInterface1 i1 = <jk>new</jk> RestClientBuilder()
+	 * 	MyInterface1 i1 = RestClient
+	 * 		.<jsm>create</jsm>()
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface1.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturl/myinterface2"</jc>
-	 * 	MyInterface2 i2 = <jk>new</jk> RestClientBuilder()
+	 * 	MyInterface2 i2 = RestClient
+	 * 		.<jsm>create</jsm>()
 	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface2.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturl/org.apache.foo.MyInterface3"</jc>
-	 * 	MyInterface3 i3 = <jk>new</jk> RestClientBuilder()
+	 * 	MyInterface3 i3 = RestClient
+	 * 		.<jsm>create</jsm>()
 	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface3.<jk>class</jk>);

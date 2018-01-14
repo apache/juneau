@@ -50,7 +50,7 @@ import org.apache.juneau.http.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new parser group builder</jc>
- * 	ParserGroupBuilder b = <jk>new</jk> ParserGroupBuilder();
+ * 	ParserGroupBuilder b = ParserGroup.<jsm>create</jsm>();
  *
  * 	<jc>// Add some parsers to it</jc>
  * 	b.append(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);

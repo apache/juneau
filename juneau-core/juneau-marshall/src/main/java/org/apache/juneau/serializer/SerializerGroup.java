@@ -48,7 +48,7 @@ import org.apache.juneau.http.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new serializer group</jc>
- * 	SerializerGroup g = <jk>new</jk> SerializerGroupBuilder();
+ * 	SerializerGroup g = SerializerGroup.<jsm>create</jsm>();
  * 		.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>); <jc>// Add some serializers to it</jc>
  * 		.ws().pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>) <jc>// Change settings for all serializers in the group.</jc>
  * 		.build();

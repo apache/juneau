@@ -34,11 +34,12 @@ public enum ParamFormat {
 	 *
 	 * <p>
 	 * Strings will never be quoted or escaped.
+	 * <br>Maps and array constructs (<js>"(...)"</js>, <js>"@(...)"</js>) will never be used.
 	 *
 	 * <p>
 	 * Note that this can cause errors during parsing if you're using the URL-encoding parser to parse the results since
 	 * UON constructs won't be differentiable.
-	 * However, this is not an issue if you're simply creating queries or form posts against 3rd-party interfaces.
+	 * <br>However, this is not an issue if you're simply creating queries or form posts against 3rd-party interfaces.
 	 */
 	PLAINTEXT;
 }

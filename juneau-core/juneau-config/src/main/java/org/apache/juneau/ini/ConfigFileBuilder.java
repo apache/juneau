@@ -31,7 +31,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='topic'>Example</h5>
  * <p class='bcode'>
- * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+ * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
  * 	String setting = cf.get(<js>"MySection/mysetting"</js>);
  * </p>
  */

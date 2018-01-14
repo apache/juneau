@@ -728,8 +728,8 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	WriterSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev().looseCollections(<jk>true</jk>).build();
-	 * 	ReaderParser p = <jk>new</jk> RdfParserBuilder().xml().looseCollections(<jk>true</jk>).build();
+	 * 	WriterSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev().looseCollections(<jk>true</jk>).build();
+	 * 	ReaderParser p = RdfParser.<jsm>create</jsm>().xml().looseCollections(<jk>true</jk>).build();
 	 *
 	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
 	 *

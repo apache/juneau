@@ -141,9 +141,6 @@ public class UonSerializer extends WriterSerializer {
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from
-	 * the value type.
 	 *
 	 * <p>
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypeProperties} setting and is
@@ -173,8 +170,30 @@ public class UonSerializer extends WriterSerializer {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
-	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
+	 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
 	 * URL-encoding of non-valid URI characters.
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a non-encoding UON serializer.</jc>
+	 * 	UonSerializer s1 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Create an encoding UON serializer.</jc>
+	 * 	UonSerializer s2 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.encoding()
+	 * 		.build();
+	 * 	
+	 * 	ObjectMap m = <jk>new</jk> ObjectMap().append("foo", "foo bar");
+	 * 	
+	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
+	 * 	String uon1 = s1.serialize(m)
+	 * 	
+	 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
+	 * 	String uon2 = s2.serialize(m)
+	 * </p>
 	 */
 	public static final String UON_encoding = PREFIX + "encoding.b";
 
@@ -197,6 +216,37 @@ public class UonSerializer extends WriterSerializer {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
+	 * 
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li class='jf'>{@link ParamFormat#UON} - Use UON notation for parameters.
+	 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
+	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Create a normal UON serializer.</jc>
+	 * 	UonSerializer s1 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 * 	
+	 * 	<jc>// Create a plain-text UON serializer.</jc>
+	 * 	UonSerializer s2 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
+	 * 		.build();
+	 * 	
+	 * 	ObjectMap m = <jk>new</jk> ObjectMap()
+	 * 		.append(<js>"foo"</js>, <js>"bar"</js>);
+	 * 		.append(<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>});
+	 * 	
+	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
+	 * 	String uon1 = s1.serialize(m)
+	 * 	
+	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
+	 * 	String uon2 = s2.serialize(m)
+	 * </p>
 	 */
 	public static final String UON_paramFormat = PREFIX + "paramFormat.s";
 
@@ -220,7 +270,7 @@ public class UonSerializer extends WriterSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializerBuilder().ws().build();</code>.
+	 * Equivalent to <code>UonSerializer.<jsm>create</jsm>().ws().build();</code>.
 	 */
 	public static class Readable extends UonSerializer {
 
@@ -235,7 +285,7 @@ public class UonSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializerBuilder().encoding().build();</code>.
+	 * Equivalent to <code>UonSerializer.<jsm>create</jsm>().encoding().build();</code>.
 	 */
 	public static class Encoding extends UonSerializer {
 
@@ -328,15 +378,6 @@ public class UonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new UonSerializerSession(this, null, args);
-	}
-	
-	/**
-	 * Returns the value of the {@link UonSerializer#UON_paramFormat} setting.
-	 *
-	 * @return The value of the {@link UonSerializer#UON_paramFormat} setting.
-	 */
-	public ParamFormat getParamFormat() {
-		return paramFormat;
 	}
 	
 	@Override /* Context */

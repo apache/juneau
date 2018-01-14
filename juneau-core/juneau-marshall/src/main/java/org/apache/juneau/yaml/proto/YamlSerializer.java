@@ -67,7 +67,7 @@ import org.apache.juneau.serializer.*;
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
  *
  * 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
- * 	JsonSerializer serializer = <jk>new</jk> JsonSerializerBuilder().simple().sq().build();
+ * 	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
  *
  * 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
  * 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();

@@ -304,7 +304,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = cf.getObject(<js>"MySection/myListOfStrings"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
@@ -390,7 +390,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	 *
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = cf.getObject(<js>"MySection/mySimpleString"</js>, String.<jk>class</jk>);
@@ -950,7 +950,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * <h6 class='figure'>Example usage</h6>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
 	 * </p>
 	 *
@@ -1024,7 +1024,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * <h6 class='figure'>Example usage</h6>
 	 * <p class='bcode'>
-	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	 * 	ConfigFile cf = ConfigFile.<jsm>create</jsm>().build(<js>"MyConfig.cfg"</js>);
 	 *
 	 * 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
 	 *

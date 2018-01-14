@@ -136,22 +136,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 *
-	 * <p>
-	 * Example:
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
-	 * 		<jk>public</jk> List&lt;String&gt; f2 = <jk>new</jk> LinkedList&lt;String&gt;(Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>}));
-	 * 	}
-	 *
-	 * 	UrlEncodingSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();
-	 *
-	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-	 * </p>
+	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
 	 * <p>
 	 * This option only applies to beans.
@@ -162,6 +147,28 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
 	 * </ul>
+	 * 
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// A sample bean.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
+	 * 		<jk>public</jk> List&lt;String&gt; f2 = Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>});
+	 * 	}
+	 *
+	 * 	<jc>// Normal serializer.</jc>
+	 * 	WriterSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
+	 * 	
+	 * 	<jc>// Expanded-params serializer.</jc>
+	 * 	WriterSerializer s2 = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
+	 *	
+	 *	<jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
+	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); 
+	 * 
+	 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
+	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>
+	 * </p>
+	 *
 	 */
 	public static final String URLENC_expandedParams = PREFIX + "expandedParams.b";
 	
@@ -188,7 +195,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();</code>.
+	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();</code>.
 	 */
 	public static class Expanded extends UrlEncodingSerializer {
 
@@ -203,7 +210,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializerBuilder().useWhitespace(<jk>true</jk>).build();</code>.
+	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().useWhitespace().build();</code>.
 	 */
 	public static class Readable extends UrlEncodingSerializer {
 
@@ -218,7 +225,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializerBuilder().plainTextParts().build();</code>.
+	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().plainTextParts().build();</code>.
 	 */
 	public static class PlainText extends UrlEncodingSerializer {
 

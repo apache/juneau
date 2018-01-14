@@ -72,8 +72,8 @@ import org.apache.juneau.*;
  * <p class='bcode'>
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> test() <jk>throws</jk> Exception {
- * 		JsonSerializer s = <jk>new</jk> JsonSerializerBuilder().simple().pojoSwaps(MySurrogate.<jk>class</jk>).build();
- * 		JsonParser p = <jk>new</jk> JsonParserBuilder().pojoSwaps(MySurrogate.<jk>class</jk>).build();
+ * 		JsonSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MySurrogate.<jk>class</jk>).build();
+ * 		JsonParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(MySurrogate.<jk>class</jk>).build();
  * 		String r;
  * 		Normal n = Normal.<jsm>create</jsm>();
  *
