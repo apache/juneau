@@ -100,7 +100,7 @@ public final class ClasspathResourceManager {
 		if (! useCache)
 			return resourceFinder.findResource(baseClass, name, locale);
 
-		ResourceKey key = new ResourceKey(name, locale);;
+		ResourceKey key = new ResourceKey(name, locale);
 		
 		byte[] r = byteCache.get(key);
 		if (r == null) {

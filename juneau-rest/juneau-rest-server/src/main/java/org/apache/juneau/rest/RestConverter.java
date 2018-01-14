@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.serializer.*;
@@ -25,7 +24,14 @@ import org.apache.juneau.serializer.*;
  * after invocation of the REST method.
  * 
  * <p>
- * Converters are associated with REST methods through the {@link RestMethod#converters() @RestMethod.converters()} annotation.
+ * Converters are associated with REST methods through the following:
+ * <ul>
+ * 	<li class='ja'>{@link RestResource#converters()}
+ * 	<li class='ja'>{@link RestMethod#converters()}
+ * 	<li class='jf'>{@link RestContext#REST_converters}
+ * 	<li class='jm'>{@link RestContextBuilder#converters(Class...)}
+ * 	<li class='jm'>{@link RestContextBuilder#converters(RestConverter...)}
+ * </ul>
  * 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -42,34 +48,40 @@ import org.apache.juneau.serializer.*;
  * 
  * <p>
  * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource.converters()} annotation.
- * Applying converters at the resource level is equivalent to applying converters to each resource method individually.
+ * <br>Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  * 
  * <h6 class='topic'>How to implement</h6>
  * 
- * Implementers should simply implement the {@link #convert(RestRequest, Object, ClassMeta)} and return back a
- * 'converted' object.
- * It's up to the implementer to decide what this means.
+ * Implementers should simply implement the {@link #convert(RestRequest, Object)} and return back a 'converted' object.
+ * <br>It's up to the implementer to decide what this means.
  * 
  * <p>
  * Subclasses must implement one of the following constructors:
  * <ul>
- * 	<li><jk>public</jk> T();  <jk>// No-arg constructor</jk>
- * 	<li><jk>public</jk> T(PropertyStore);  <jk>// Property store of the RestContext</jk>
+ * 	<li><jk>public</jk> T();  <jc>// No-arg constructor</jc>
+ * 	<li><jk>public</jk> T(PropertyStore);  <jc>// Property store of the RestContext</jc>
  * </ul>
  * 
  * <p>
  * Subclasses can also be defined as inner classes of the resource class.
  * 
- * <h6 class='topic'>Predefined converters</h6>
+ * <h5 class='topic'>Predefined converters</h5>
+ * <ul>
+ * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
+ * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
+ * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
+ * </ul>
  * 
- * The following converters are available by default.
- * <ul class='spaced-list'>
- * 	<li>
- * 		{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
- * 	<li>
- * 		{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
- * 	<li>
- * 		{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
+ * 
+ * <h5 class='topic'>See Also</h5>
+ * <ul>
+ * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
+ * </ul>
+ * 
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
  * </ul>
  */
 public interface RestConverter {
@@ -79,12 +91,9 @@ public interface RestConverter {
 	 * 
 	 * @param req The servlet request.
 	 * @param res The response object set by the REST method through the {@link RestResponse#setOutput(Object)} method.
-	 * @param cm
-	 * 	The {@link ClassMeta} on the object from the bean context of the servlet.
-	 * 	Can be used to check if the object has any filters.
 	 * @return The converted object.
 	 * @throws RestException Thrown if any errors occur during conversion.
 	 * @throws SerializeException
 	 */
-	public Object convert(RestRequest req, Object res, ClassMeta<?> cm) throws RestException, SerializeException;
+	public Object convert(RestRequest req, Object res) throws RestException, SerializeException;
 }

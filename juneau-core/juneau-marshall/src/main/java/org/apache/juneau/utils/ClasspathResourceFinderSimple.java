@@ -55,7 +55,7 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	 * @param name The resource name.
 	 * @param locale 
 	 * 	The resource locale.
-	 * 	<br>Can be <jk>null</jk>.  
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
 	 * @throws IOException
 	 */
@@ -86,7 +86,9 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	 * If the locale is <jk>null</jk>, then it will only return <js>"MyResource.txt"</js>.
 	 * 
 	 * @param fileName The name of the file to get candidate file names on.
-	 * @param l The locale.
+	 * @param l 
+	 * 	The locale.
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return An iterator of file names to look at.
 	 */
 	protected static Iterable<String> getCandidateFileNames(final String fileName, final Locale l) {

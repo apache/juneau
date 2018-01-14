@@ -54,7 +54,7 @@ public interface ClasspathResourceFinder {
 	 * 	See {@link Class#getResource(String)} for format.
 	 * @param locale 
 	 * 	The locale of the resource to retrieve.
-	 * 	Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
 	 * @throws IOException
 	 */

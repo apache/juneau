@@ -851,7 +851,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			if (res.hasOutput()) {
 				output = res.getOutput();
 				for (RestConverter converter : converters)
-					output = converter.convert(req, output, beanContext.getClassMetaForObject(output));
+					output = converter.convert(req, output);
 				res.setOutput(output);
 			}
 		} catch (IllegalArgumentException e) {

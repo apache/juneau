@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converters;
 
-import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
@@ -30,17 +29,26 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		<code>&amp;s=</code> Search arguments.
  * 		<br>Comma-delimited list of key/value pairs representing column names and search tokens.
- * 		<br>Example:  <js>"&amp;s=name=Bill*,birthDate&gt;2000"</js>
+ * 		<br>Example:
+ * 		<p class='bcode'>
+ * 	&amp;s=name=Bill*,birthDate&gt;2000
+ * 		</p>
  * 	<li>
  * 		<code>&amp;v=</code> Visible columns.
  * 		<br>Comma-delimited list of column names to display.
- * 		<br>Example:  <js>"&amp;v=name,birthDate"</js>
+ * 		<br>Example:
+ * 		<p class='bcode'>
+ * 	&amp;v=name,birthDate
+ * 		</p>
  * 	<li>
  * 		<code>&amp;o=</code> Sort commands.
  * 		<br>Comma-delimited list of columns to sort by.
  * 		<br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
  * 		<br>The default is ascending order.
- * 		<br>Example:  <js>"&amp;o=name,birthDate-"</js>
+ * 		<br>Example: 
+ * 		<p class='bcode'>
+ * 	&amp;o=name,birthDate-
+ * 		</p>
  * 	<li>
  * 		<code>&amp;i=</code> Case-insensitive parameter.
  * 		<br>Boolean flag for case-insensitive matching on the search parameters.
@@ -54,13 +62,22 @@ import org.apache.juneau.utils.*;
  * 		<br>Default is {@code 0} (meaning return all rows).
  * </ul>
  * 
- * <p>
- * See {@link PojoQuery} for additional information on filtering POJO models.
+ * <h5 class='topic'>See Also</h5>
+ * <ul>
+ * 	<li class='jc'>{@link PojoQuery} - Additional information on filtering POJO models.
+ * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
+ * </ul>
+ * 
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
+ * </ul>
  */
 public final class Queryable implements RestConverter {
 
 	@Override /* RestConverter */
-	public Object convert(RestRequest req, Object o, ClassMeta<?> cm) {
+	public Object convert(RestRequest req, Object o) {
 		if (o == null)
 			return null;
 		SearchArgs searchArgs = req.getQuery().getSearchArgs();

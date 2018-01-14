@@ -324,7 +324,7 @@ public @interface RestMethod {
 	 * Default request headers.
 	 * 
 	 * <p>
-	 * Specifies default values for request headers.
+	 * Specifies default values for request headers if they're not passed in through the request.
 	 * 
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -344,8 +344,6 @@ public @interface RestMethod {
 	 * {@link IfVar $IF}
 	 * {@link SystemPropertiesVar $S}
 	 * {@link SwitchVar $SW}
-	 * 
-	 * @see RestContext#REST_defaultRequestHeaders
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

@@ -41,25 +41,37 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  * 
- * <p>
- * See {@link PojoRest} for additional information on addressing elements in a POJO tree using URL notation.
+ * 
+ * <h5 class='topic'>See Also</h5>
+ * <ul>
+ * 	<li class='jc'>{@link PojoRest} - Additional information on addressing elements in a POJO tree using URL notation.
+ * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
+ * </ul>
+ * 
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
+ * </ul>
  */
 public final class Traversable implements RestConverter {
 
 	@Override /* RestConverter */
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public Object convert(RestRequest req, Object o, ClassMeta cm) throws RestException {
+	public Object convert(RestRequest req, Object o) throws RestException {
 		if (o == null)
 			return null;
+		
+		String pathRemainder = req.getPathMatch().getRemainder();
 
-		if (req.getPathMatch().getRemainder() != null) {
+		if (pathRemainder != null) {
 			try {
 				BeanSession bs = req.getBeanSession();
-				PojoSwap swap = cm.getPojoSwap(bs);
+				PojoSwap swap = bs.getClassMetaForObject(o).getPojoSwap(bs);
 				if (swap != null)
 					o = swap.swap(bs, o);
 				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());
-				o = p.get(req.getPathMatch().getRemainder());
+				o = p.get(pathRemainder);
 			} catch (PojoRestException e) {
 				throw new RestException(e.getStatus(), e);
 			} catch (Exception e) {

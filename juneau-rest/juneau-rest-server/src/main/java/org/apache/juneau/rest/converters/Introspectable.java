@@ -42,21 +42,31 @@ import org.apache.juneau.utils.*;
  * 		<code>&amp;invokeArgs</code> - The arguments as a JSON array.
  * </ul>
  * 
- * <p>
- * See {@link PojoIntrospector} for additional information on introspection of POJO methods.
+ * 
+ * <h5 class='topic'>See Also</h5>
+ * <ul>
+ * 	<li class='jc'>{@link PojoIntrospector} - Additional information on introspection of POJO methods.
+ * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
+ * </ul>
+ * 
+ * 
+ * <h5 class='topic'>Documentation</h5>
+ * <ul>
+ * 	<li><a class="doclink" href="../package-summary.html#RestResources.Converters">org.apache.juneau.rest &gt; Converters</a>
+ * </ul>
  */
 public final class Introspectable implements RestConverter {
 
 	@Override /* RestConverter */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public Object convert(RestRequest req, Object o, ClassMeta cm) throws RestException {
+	public Object convert(RestRequest req, Object o) throws RestException {
 		String method = req.getQuery().getString("invokeMethod");
 		String args = req.getQuery().getString("invokeArgs");
 		if (method == null)
 			return o;
 		try {
 			BeanSession bs = req.getBeanSession();
-			PojoSwap swap = cm.getPojoSwap(bs);
+			PojoSwap swap = bs.getClassMetaForObject(o).getPojoSwap(bs);
 			if (swap != null)
 				o = swap.swap(bs, o);
 			return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);

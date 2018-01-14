@@ -31,13 +31,18 @@ import org.apache.juneau.rest.vars.*;
  * 
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST calls are handled.
- * Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
+ * <br>Subclasses MUST implement a public constructor that takes in a {@link RestContext} object.
  * 
  * <p>
  * RestCallHandlers are associated with servlets/resources in one of the following ways:
  * <ul>
  * 	<li>The {@link RestResource#callHandler @RestResource.callHandler()} annotation.
  * 	<li>The {@link RestContextBuilder#callHandler(Class)} method.
+ * </ul>
+ * 
+ * <h5 class='topic'>Additional Information</h5>
+ * <ul>
+ * 	<li class='jf'>{@link RestContext#REST_callHandler}
  * </ul>
  */
 public class RestCallHandler {
@@ -169,7 +174,7 @@ public class RestCallHandler {
 
 				// Do any class-level transforming.
 				for (RestConverter converter : context.getConverters())
-					output = converter.convert(req, output, context.getBeanContext().getClassMetaForObject(output));
+					output = converter.convert(req, output);
 
 				res.setOutput(output);
 
@@ -328,7 +333,7 @@ public class RestCallHandler {
 	 * @param req The REST request.
 	 * @return The session objects for that request.
 	 */
-	public Map<String,Object> getSessionObjects(RestRequest req) {
+	protected Map<String,Object> getSessionObjects(RestRequest req) {
 		Map<String,Object> m = new HashMap<>();
 		m.put(RequestVar.SESSION_req, req);
 		return m;

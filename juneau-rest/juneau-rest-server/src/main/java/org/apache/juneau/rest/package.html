@@ -1812,9 +1812,9 @@
 	<jc>// Define a guard that only lets Billy make a request</jc>
 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
 
-	<ja>@Override</ja>
+		<ja>@Override</ja>
 		<jk>public boolean</jk> isRequestAllowed(RestRequest req) {
-			return req.getUserPrincipal().getName().equals(<js>"Billy"</js>);
+			<jk>return</jk> req.getUserPrincipal().getName().equals(<js>"Billy"</js>);
 		}
 	}
 		</p>
@@ -1837,23 +1837,40 @@
 		</p>
 		<p>
 			A guard failure results in an <l>HTTP 401 Unauthorized</l> response.
-			However, this can be configured by overriding the 
+			<br>However, this can be configured by overriding the 
 			{@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
 			yourself.
+		</p>
+		<p class='bcode'>
+	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
+		<ja>@Override</ja>
+		<jk>public boolean</jk> guard(RestRequest req, RestResponse res) <jk>throws</jk> RestException {
+			<jk>if</jk> (! isOkay(req))
+				<jk>throw new</jk> RestException(<jsf>SC_FORBIDDEN</jsf>, <js>"Access denied!!!"</js>);
+			<jk>return true</jk>;
+		}
+	}
 		</p>
 		<p>
 			When guards are associated at the class-level, it's equivalent to associating guards on all Java methods on 
 			the servlet.
+			<br>If multiple guards are present, ALL guards must pass.
 		</p>
+		
 		<p>
-			Class-level guards can also be created programmatically by overriding the 
-			{@link org.apache.juneau.rest.RestContextBuilder#guards(Class[])} method.
+			Guards are registered through the following:
 		</p>
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_guards}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#guards()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#guards()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(Class...)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(RestGuard...)}
+		</ul>
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='jac'>
-				{@link org.apache.juneau.rest.RestGuard} 
+			<li class='jac'>{@link org.apache.juneau.rest.RestGuard} 
 		</ul>
 	</div>
 	
@@ -1885,8 +1902,8 @@
 	<jc>// Traversable conversion enabled to allow nodes in returned POJO tree to be addressed.</jc>
 	<jc>// Queryable conversion enabled to allow returned POJO to be searched/viewed/sorted.</jc>
 	<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>,
-			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
+		name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>,
+		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
 	)
 	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) {
 		<jk>return</jk> findPerson(id);
@@ -1908,18 +1925,23 @@
 	<jk>public class</jk> Traversable <jk>implements</jk> RestConverter {
 	
 		<ja>@Override</ja>
-		<jk>public</jk> Object convert(RestServlet resource, RestRequest req, Object o) {
+		<jk>public</jk> Object convert(RestRequest req, Object o) <jk>throws</jk> RestException, SerializeException {
 			if (o == <jk>null</jk>)
 				<jk>return null</jk>;
 	
-			BeanContext beanContext = resource.getBeanContext();
-			
-			<jk>if</jk> (req.getRemainder() != <jk>null</jk>) {
-				PojoRest p = <jk>new</jk> PojoRest(o, beanContext);
+			String pathRemainder = req.getPathMatch().getRemainder();
+	
+			<jk>if</jk> (pathRemainder != <jk>null</jk>) {
 				<jk>try</jk> {
-					o = p.get(req.getRemainder());
+				
+					<jc>// Use the PojoRest class to traverse our POJO model.</jc> 
+					PojoRest p = <jk>new</jk> PojoRest(o);
+					o = p.get(pathRemainder);
+				
 				} <jk>catch</jk> (PojoRestException e) {
-					<jk>throw new</jk> RestException(e.getStatus(), e.getMessage(), e);
+					<jk>throw new</jk> RestException(e.getStatus(), e);
+				} <jk>catch</jk> (Exception e) {
+					<jk>throw new</jk> RestException(HttpServletResponse.<jsf>SC_INTERNAL_SERVER_ERROR</jsf>, e);
 				}
 			}
 			
@@ -1949,20 +1971,19 @@
 			</ul>
 		</ul>
 		<p>
-			Class-level converters can be created programmatically by overriding the 
-			{@link org.apache.juneau.rest.RestContextBuilder#converters(Class[])} method.
+			Converters are registered through the following:
 		</p>
-		<p>
-			Note that from the example above, you can specify more than one converter.
-			When multiple converters are used, they're executed in the order they're specified in the annotation
-			(e.g. first the results will be traversed, then the resulting node will be searched/sorted).
-			
-		</p>
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_converters}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#converters()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#converters()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(Class...)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(RestConverter...)}
+		</ul>
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
-			<li class='jic'>
-				{@link org.apache.juneau.rest.RestConverter} 
+			<li class='jic'>{@link org.apache.juneau.rest.RestConverter} 
 		</ul>
 	</div>
 
@@ -1986,9 +2007,9 @@
 		<p class='bcode'>
 	<jd>/** Child Resource */</jd>
  	<ja>@RestResource</ja>(
-		path=<js>"/foo"</js>  // Path relative to parent resource.
+		path=<js>"/foo"</js>  <jc>// Path relative to parent resource.</jc>
 	)
-	<jk>public</jk> FooResource <jk>extends</jk> RestServlet {
+	<jk>public</jk> FooResource {
 		...
 		</p>
 		<p>
@@ -2067,21 +2088,12 @@
 		<p>
 			Children are defined through the following:
 		</p>
-		<ul class='spaced-list'>
-			<li><b>Properties:</b>
-			<ul>
-				 <li>{@link org.apache.juneau.rest.RestContext#REST_children}
-			</ul>
-			<li><b>Annotations:</b>  
-			<ul>
-				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#children()}
-			</ul>
-			<li><b>Methods:</b> 
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#child(String,Object)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Class...)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Object...)}
-			</ul>
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_children}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#children()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#child(String,Object)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Class...)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Object...)}
 		</ul>
 	</div>
 	

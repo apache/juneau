@@ -20,6 +20,7 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.lang.reflect.Method;
+import java.nio.charset.*;
 import java.util.*;
 
 import javax.servlet.*;
@@ -511,7 +512,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
 	 * <br>
-	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
+	 * For example: 
+	 * <p class='bcode'>
+	 *  ?body=(name='John%20Smith',age=45)
+	 * </p>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -534,7 +538,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
 	 * <br>
-	 * For example:  <js>"?method=OPTIONS"</js>
+	 * For example: 
+	 * <p class='bcode'>
+	 *  ?method=OPTIONS
+	 * </p>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -544,6 +551,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param value 
 	 * 	The new value for this setting.
 	 * 	<br>The default is <code>[<js>"HEAD"</js>,<js>"OPTIONS"</js>]</code>.
+	 * 	<br>Individual values can also be comma-delimited lists.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder allowedMethodParams(String...value) {
@@ -556,7 +564,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
-	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 * <br>
+	 * For example: 
+	 * <p class='bcode'>
+	 *  ?Accept=text/json&amp;Content-Type=text/json
+	 * </p>
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -748,8 +760,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <p>
 	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
 	 * the context path is not actually specified on the servlet container.
-	 * The net effect is that the {@link RestRequest#getContextPath()} and {@link RestRequest#getServletPath()} methods
-	 * will return this value instead of the actual context path of the web app.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -770,8 +780,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 * These converters get called immediately after execution of the REST method in the same order specified in the
-	 * annotation.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -824,10 +832,30 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Default character encoding.
+	 * 
+	 * <p>
+	 * Same as {@link #defaultCharset(Charset)} but takes in an instance of {@link Charset}.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this setting.
+	 * 	<br>The default is <js>"utf-8"</js>.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder defaultCharset(Charset value) {
+		return set(REST_defaultCharset, value);
+	}
+
+	/**
 	 * Configuration property:  Default request headers.
 	 * 
 	 * <p>
-	 * Adds class-level default HTTP request headers to this resource.
+	 * Specifies default values for request headers if they're not passed in through the request.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -871,7 +899,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Default response headers.
 	 * 
 	 * <p>
-	 * Specifies default values for response headers.
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -952,11 +980,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
-	 * These guards get called immediately before execution of any REST method in this class.
-	 * 
-	 * <p>
-	 * Typically, guards will be used for permissions checking on the user making the request, but it can also be used
-	 * for other purposes like pre-call validation of a request.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

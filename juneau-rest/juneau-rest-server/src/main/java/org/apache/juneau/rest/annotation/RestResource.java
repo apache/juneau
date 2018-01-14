@@ -51,7 +51,10 @@ public @interface RestResource {
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
 	 * URL parameter.
 	 * <br>
-	 * For example:  <js>"?body=(name='John%20Smith',age=45)"</js>
+	 * For example:  
+	 * <p class='bcode'>
+	 *  ?body=(name='John%20Smith',age=45)
+	 * </p>
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
@@ -77,7 +80,10 @@ public @interface RestResource {
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
 	 * GET request.
 	 * <br>
-	 * For example:  <js>"?method=OPTIONS"</js>
+	 * For example: 
+	 * <p class='bcode'>
+	 *  ?method=OPTIONS
+	 * </p>
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
@@ -102,7 +108,11 @@ public @interface RestResource {
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
-	 * <br>For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
+	 * <br>
+	 * For example: 
+	 * <p class='bcode'>
+	 *  ?Accept=text/json&amp;Content-Type=text/json
+	 * </p>
 	 * 
 	 * <p>
 	 * Value can contain any of the following variables:  
@@ -250,8 +260,6 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
-	 * These converters get called immediately after execution of the REST method in the same order specified in the
-	 * annotation.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -287,7 +295,7 @@ public @interface RestResource {
 	 * Default request headers.
 	 * 
 	 * <p>
-	 * Specifies default values for request headers.
+	 * Specifies default values for request headers if they're not passed in through the request.
 	 * 
 	 * <p>
 	 * Values can contain any of the following variables:  
@@ -310,7 +318,7 @@ public @interface RestResource {
 	 * Default response headers.
 	 * 
 	 * <p>
-	 * Specifies default values for response headers.
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 * 
 	 * <p>
 	 * Values can contain any of the following variables:  
@@ -407,7 +415,6 @@ public @interface RestResource {
 	 * 
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
-	 * These guards get called immediately before execution of any REST method in this class.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
