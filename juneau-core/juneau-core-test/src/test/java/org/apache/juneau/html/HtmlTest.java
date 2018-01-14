@@ -174,7 +174,7 @@ public class HtmlTest {
 			assertEquals(expected, r);
 
 			s.detectLinksInStrings(true);
-			s.lookForLabelParameters(false);
+			s.detectLabelParameters(false);
 			r = strip(s.build().serialize(t));
 			expected = ""
 				+"\n[f0]=<a href='f0/x0'>f0/x0</a>"

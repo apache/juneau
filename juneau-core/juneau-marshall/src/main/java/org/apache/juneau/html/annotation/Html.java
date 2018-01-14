@@ -96,8 +96,10 @@ public @interface Html {
 	/**
 	 * When <jk>true</jk>, don't add headers to tables.
 	 * 
-	 * <p>
-	 * Default is <jk>false</jk>.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
+	 * </ul>
 	 */
 	boolean noTableHeaders() default false;
 

@@ -109,7 +109,10 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  The parameter name to use when using {@link HtmlSerializer#HTML_lookForLabelParameters}.
+	 * Configuration property:  Link label parameter name.
+	 * 
+	 * <p>
+	 * The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -126,14 +129,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Look for link labels in the <js>"label"</js> parameter of the URL.
+	 * Configuration property:  Look for link labels in URIs.
 	 * 
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 * 
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_lookForLabelParameters}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLabelParameters}
 	 * </ul>
 	 * 
 	 * @param value 
@@ -141,8 +144,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public HtmlSerializerBuilder lookForLabelParameters(boolean value) {
-		return set(HTML_lookForLabelParameters, value);
+	public HtmlSerializerBuilder detectLabelParameters(boolean value) {
+		return set(HTML_detectLabelParameters, value);
 	}
 
 	/**
@@ -163,6 +166,26 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
+		return set(HTML_uriAnchorText, value);
+	}
+
+	/**
+	 * Configuration property:  Anchor text source.
+	 * 
+	 * <p>
+	 * Same as {@link #uriAnchorText(AnchorText)} but takes in a string.
+	 * 
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}
+	 * </ul>
+	 * 
+	 * @param value 
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link AnchorText#TO_STRING}.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlSerializerBuilder uriAnchorText(String value) {
 		return set(HTML_uriAnchorText, value);
 	}
 

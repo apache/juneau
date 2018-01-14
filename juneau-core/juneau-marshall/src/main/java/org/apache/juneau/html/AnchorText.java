@@ -18,17 +18,20 @@ package org.apache.juneau.html;
 public enum AnchorText {
 
 	/**
-	 * Set to the bean property name.
-	 */
-	PROPERTY_NAME,
-
-	/**
 	 * Set to whatever is returned by {@link #toString()} on the object.
 	 */
 	TO_STRING,
 
 	/**
+	 * Set to the bean property name.
+	 */
+	PROPERTY_NAME,
+
+	/**
 	 * Set to the URI value.
+	 * 
+	 * <p>
+	 * This is the same as {@link #TO_STRING} but strips off the anchor tag if present.
 	 */
 	URI,
 

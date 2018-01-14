@@ -617,13 +617,13 @@ public class UriResolutionTest {
 
 	@Test
 	public void c1_testHtmlSerialize() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().lookForLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = HtmlSerializer.create().sq().detectLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.html);
 	}
 
 	@Test
 	public void c2_testHtmlParse() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().lookForLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = HtmlSerializer.create().sq().detectLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, HtmlParser.DEFAULT);
 	}
 

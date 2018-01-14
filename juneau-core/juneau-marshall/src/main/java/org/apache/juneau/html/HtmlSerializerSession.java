@@ -62,7 +62,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		super(ctx, args);
 		anchorText = getProperty(HTML_uriAnchorText, AnchorText.class, ctx.uriAnchorText);
 		detectLinksInStrings = getProperty(HTML_detectLinksInStrings, boolean.class, ctx.detectLinksInStrings);
-		lookForLabelParameters = getProperty(HTML_lookForLabelParameters, boolean.class, ctx.lookForLabelParameters);
+		lookForLabelParameters = getProperty(HTML_detectLabelParameters, boolean.class, ctx.lookForLabelParameters);
 		addKeyValueTableHeaders = getProperty(HTML_addKeyValueTableHeaders, boolean.class, ctx.addKeyValueTableHeaders);
 		addBeanTypeProperties = getProperty(HTML_addBeanTypeProperties, boolean.class, ctx.addBeanTypeProperties);
 		String labelParameter = getProperty(HTML_labelParameter, String.class, ctx.labelParameter);
