@@ -90,7 +90,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * Configuration property:  Look for URLs in {@link String Strings}.
 	 * 
 	 * <p>
-	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
+	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>), then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 * 
 	 * 

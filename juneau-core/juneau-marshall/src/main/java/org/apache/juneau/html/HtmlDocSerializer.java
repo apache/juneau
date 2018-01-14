@@ -67,8 +67,8 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the
  * <code>messages</code> annotation.
- * These variables are replaced at runtime based on the HTTP request locale.
- * Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
+ * <br>These variables are replaced at runtime based on the HTTP request locale.
+ * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  */
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
